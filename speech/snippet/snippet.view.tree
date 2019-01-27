@@ -1,0 +1,19 @@
+$piterjs_speech_snippet $mol_link
+	arg *
+		speech <= id \
+	speech *
+		id \staticscript
+		title \Разработка компилятора на LLVM#2 — StaticScript
+		speaker \
+	speaker!id *
+		id \
+		title \
+		photo \
+	sub /
+		<= Photo $mol_image
+			uri <= photo \
+		<= Info $mol_list sub /
+			<= Description $mol_view
+				sub / <= description \
+			<= Speaker $mol_view
+				sub / <= title \

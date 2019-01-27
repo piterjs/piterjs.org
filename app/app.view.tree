@@ -1,0 +1,74 @@
+$piterjs_app $mol_book
+	attr * mol_theme \$mol_theme_dark
+	pages /
+		<= Menu $mol_page
+			title \PiterJS
+			minimal_width 200
+			event_top?val <=> event_front_up?val
+			body /
+				<= Meetings $mol_list rows <= menu_meetings /
+		<= Meeting $piterjs_meeting_page
+			event_top?val <=> event_front_up?val
+			meeting <= meeting *
+				id \
+				title \
+				description \
+				speeches /
+			speech!id <= meeting_speech!id *
+				id \
+				title \
+				description \
+				speaker \
+			speaker!id <= speech_speaker!id
+		<= Speech $piterjs_speech_page
+			event_top?val <=> event_front_up?val
+			speech <= speech *
+				id \
+				title \
+				description \
+				speaker \
+			speaker!id <= speech_speaker!id *
+				id \
+				title \
+				description \
+				photo \
+	Menu_meeting!id $piterjs_meeting_snippet
+		meeting <= menu_meeting!id *
+			id \
+			title \
+	meetings /
+		*
+			id \sweetshot
+			title \Свитшот
+			description \В эту холодную зиму, давайте порадуем друг друга оригинальными и тёплыми свитшотами. Пусть будет свитшотная вечеринка!
+			speeches /
+		*
+			id \compilers
+			title \Компиляй!
+			description \Кто бы не хотел создать свой язык программирования со встроенной статически проверяемой безопасной авторизацией? Поговорим о том, как и для чего это делать.
+			speeches /
+				\static-script
+				\auth-security
+	speeches /
+		*
+			id \static-script
+			title \Разработка компилятора на LLVM#2 — StaticScript
+			description \Это второй доклад из серии докладов которые будут посвящены разработке компилятора “TypeScript” используя LLVM в качестве backend, и TypeScript в качестве frontend.
+			speaker \dmitriy_patcura
+		*
+			id \auth-security
+			title \Анализ уязвимостей процесса аутентификации
+			description \Рассмотрим несколько векторов атаки на процесс аутентификации для получения данных о пользователях системы, некоторые ошибочные подходы в контексте node.js и попытаемся поразмышлять об оптимальных способах защиты от утечки информации. В частности, поговорим про post vs get, crypto vs bcrypt, юзабилити vs безопасность.
+			speaker \vadim_garbachev
+	speakers /
+		*
+			id \vadim_garbachev
+			title \Вадим Горбачев
+			description \Ведущий эксперт в области безопасности аутентификации
+			photo \https://cdn-images-1.medium.com/max/900/1*At6SZoVHWTSTZsvtucfiYw.png
+		*
+			id \dmitriy_patcura
+			title \Дмитрий Пацура
+			description \Разработчик компиляторов со стажем
+			photo \https://uploads-ssl.webflow.com/57d56d9306a91cb76ab1a654/5a09a411d65a2f0001bd16b2_pacura_crop-p-500.jpeg
+

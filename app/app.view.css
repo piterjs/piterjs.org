@@ -1,0 +1,20 @@
+[piterjs_app] {
+	--mol_theme_current: hsla(53, 93%, 34%, .5);
+	--mol_theme_control: hsla(53, 93%, 54%, 1);
+}
+
+[piterjs_app] [mol_theme="$mol_theme_base"] {
+	--mol_theme_back: hsla(53, 93%, 54%, 1);
+	--mol_theme_text: black;
+	--mol_theme_control: black;
+	font-weight: bolder;
+	stroke: currentColor;
+}
+
+[piterjs_app_menu] {
+	flex: 0 0 200px;
+}
+
+[piterjs_app_meetings] {
+	padding: .5rem;
+}

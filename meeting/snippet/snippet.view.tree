@@ -1,0 +1,8 @@
+$piterjs_meeting_snippet $mol_link
+	arg *
+		meeting <= id \
+	meeting *
+		id \
+		title \
+	sub /
+		<= title \

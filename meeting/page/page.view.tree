@@ -1,0 +1,21 @@
+$piterjs_meeting_page $mol_page
+	meeting *
+		id \
+		title \
+		description \
+		speeches /
+	minimal_width 400
+	body /
+		<= Description $mol_text
+			text <= description \
+		<= Speeches $mol_list rows <= speeches /
+	Speech!id $piterjs_speech_snippet
+		speech <= speech!id *
+			id \
+			title \
+			speaker \
+		speaker!id <= speaker!id *
+			id \
+			title \
+			photo \
+

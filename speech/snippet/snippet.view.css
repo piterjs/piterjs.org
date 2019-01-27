@@ -1,0 +1,26 @@
+[piterjs_speech_snippet] {
+	display: flex;
+	padding: .5rem;
+}
+
+[piterjs_speech_snippet_photo] {
+	width: 6rem;
+	height: 6rem;
+	margin: .5rem;
+}
+
+[piterjs_speech_snippet_info] {
+	flex: 16rem 1 1 ;
+	padding: .25rem;
+}
+
+[piterjs_speech_snippet_speaker] {
+	padding: .25rem;
+	display: block;
+	color: var(--mol_theme_shade);
+}
+
+[piterjs_speech_snippet_description] {
+	display: block;
+	padding: .25rem;
+}

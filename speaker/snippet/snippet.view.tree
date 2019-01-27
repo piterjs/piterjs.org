@@ -1,0 +1,14 @@
+$piterjs_speaker_snippet $mol_view
+	speaker *
+		id \
+		title \
+		description \
+		photo \
+	sub /
+		<= Photo $mol_image
+			uri <= photo \
+		<= Info $mol_list sub /
+			<= Title $mol_view
+				sub / <= title \
+			<= Description $mol_text
+				text <= description \

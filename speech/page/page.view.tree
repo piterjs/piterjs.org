@@ -1,0 +1,26 @@
+$piterjs_speech_page $mol_page
+	speech *
+		id \
+		title \
+		description \
+		speaker \
+	speaker!id *
+		id \
+		title \
+		description \
+		photo \
+	minimal_width 400
+	tools /
+		<= Speech_close $mol_link
+			arg * speech null
+			sub /
+				<= Speech_close_icon $mol_icon_cross
+	body /
+		<= Description $mol_text
+			text <= description \
+		<= Speaker $piterjs_speaker_snippet
+			speaker <= speech_speaker *
+				id \
+				title \
+				description \
+				photo \
