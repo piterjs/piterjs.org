@@ -1,22 +1,25 @@
 [piterjs_speaker_snippet] {
 	display: flex;
+	align-items: flex-start;
+	flex-wrap: wrap;
 	padding: .5rem;
 }
 
 [piterjs_speaker_snippet_photo] {
-	width: 6rem;
-	height: 6rem;
+	width: 8rem;
+	flex: 1 1 auto;
 	margin: .5rem;
 }
 
 [piterjs_speaker_snippet_info] {
 	display: flex;
 	flex-direction: column;
-	flex: 16rem 1 1 ;
+	flex: 16rem 1 1;
+	padding: .25rem;
 }
 
 [piterjs_speaker_snippet_title] {
-	padding: .5rem;
+	padding: .25rem;
 	font-weight: bolder;
 }
 
@@ -24,4 +27,8 @@
 	margin: 0;
 	padding: 0;
 	box-shadow: none;
+}
+
+[piterjs_speaker_snippet_description_row] {
+	margin: .25rem;
 }
