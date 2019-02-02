@@ -1,0 +1,8 @@
+include \/mol/offline/install
+
+deploy \/piterjs/app/manifest.json
+deploy \/piterjs/logo/logo_48.png
+deploy \/piterjs/logo/logo_96.png
+deploy \/piterjs/logo/logo_128.png
+deploy \/piterjs/logo/logo_192.png
+deploy \/piterjs/logo/logo_512.png
