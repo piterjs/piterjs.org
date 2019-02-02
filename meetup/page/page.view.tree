@@ -1,5 +1,5 @@
-$piterjs_meeting_page $mol_page
-	meeting *
+$piterjs_meetup_page $mol_page
+	meetup *
 		id \
 		title \
 		description \

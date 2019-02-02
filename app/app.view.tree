@@ -1,42 +1,39 @@
 $piterjs_app $mol_book
 	attr * mol_theme \$mol_theme_dark
 	pages /
-		<= Menu $mol_page
-			title \PiterJS
-			minimal_width 200
-			event_top?val <=> event_front_up?val
-			body /
-				<= Meetings $mol_list rows <= menu_meetings /
-		<= Meeting $piterjs_meeting_page
-			event_top?val <=> event_front_up?val
-			meeting <= meeting *
-				id \
-				title \
-				description \
-				speeches /
-			speech!id <= meeting_speech!id *
-				id \
-				title \
-				description \
-				speaker \
-			speaker!id <= speech_speaker!id
-		<= Speech $piterjs_speech_page
-			event_top?val <=> event_front_up?val
-			speech <= speech *
-				id \
-				title \
-				description \
-				speaker \
-			speaker!id <= speech_speaker!id *
-				id \
-				title \
-				description \
-				photo \
-	Menu_meeting!id $piterjs_meeting_snippet
-		meeting <= menu_meeting!id *
-			id \
-			title \
-	meetings /
+	Menu $mol_page
+		title \PiterJS
+		minimal_width 200
+		event_top?val <=> event_front_up?val
+		body /
+			<= Meetups $mol_list rows <= menu_meetups /
+	meetup!id *
+		id \
+		title \
+		description \
+		speeches /
+	Meetup!id $piterjs_meetup_page
+		event_top?val <=> event_front_up?val
+		meetup <= meetup!id
+		speech!id <= speech!id
+		speaker!id <= speaker!id
+	speech!id *
+		id \
+		title \
+		description \
+		speaker \
+	Speech!id $piterjs_speech_page
+		event_top?val <=> event_front_up?val
+		speech <= speech!id
+		speaker!id <= speaker!id
+	speaker!id *
+		id \
+		title \
+		description \
+		photo \
+	Menu_meetup!id $piterjs_meetup_snippet
+		meetup <= meetup!id
+	meetups /
 		*
 			id \turn
 			title \Вот это поворот!

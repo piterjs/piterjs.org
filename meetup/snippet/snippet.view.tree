@@ -1,0 +1,8 @@
+$piterjs_meetup_snippet $mol_link
+	arg *
+		meetup <= id \
+	meetup *
+		id \
+		title \
+	sub /
+		<= title \

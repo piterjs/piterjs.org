@@ -11,10 +11,14 @@
 	stroke: currentColor;
 }
 
+[piterjs_app] > *:not([mol_book_page_visible]):not([mol_book_page_focused]) + *:before {
+	color: black;
+}
+
 [piterjs_app_menu] {
 	flex: 0 0 200px;
 }
 
-[piterjs_app_meetings] {
+[piterjs_app_meetups] {
 	padding: .5rem;
 }

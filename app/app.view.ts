@@ -1,27 +1,26 @@
 namespace $.$$ {
 
 	export class $piterjs_app extends $.$piterjs_app {
-
-		speaker_id( next? : string ) { return this.$.$mol_state_arg.value( 'speaker' , next ) }
 		
-		meeting_id( next? : string ) { return this.$.$mol_state_arg.value( 'meeting' , next ) || this.meetings()[0].id }
-		meeting() { return this.meetings().find( meeting => meeting.id === this.meeting_id() ) }
-		meeting_speech( id : string ) { return this.speeches().find( speech => speech.id === id ) }
+		meetup_id( next? : string ) { return this.$.$mol_state_arg.value( 'meetup' , next ) || this.meetups()[0].id }
+		meetup( id : string ) { return this.meetups().find( meetup => meetup.id === id ) }
 		
 		speech_id( next? : string ) { return this.$.$mol_state_arg.value( 'speech' , next ) }
-		speech() { return this.speeches().find( speech => speech.id === this.speech_id() ) }
-		speech_speaker( id : string ) { return this.speakers().find( speaker => speaker.id === id ) }
+		speech( id : string ) { return this.speeches().find( speech => speech.id === id ) }
+		
+		speaker_id( next? : string ) { return this.$.$mol_state_arg.value( 'speaker' , next ) }
+		speaker( id : string ) { return this.speakers().find( speaker => speaker.id === id ) }
 
 		pages() {
 			return [
 				this.Menu() ,
-				this.Meeting() ,
-				... this.speech() ? [ this.Speech() ] : [] ,
+				this.Meetup( this.meetup_id() ) ,
+				... this.speech_id() ? [ this.Speech( this.speech_id() ) ] : [] ,
 			]
 		}
 
-		menu_meetings() { return this.meetings().map( meetings => this.Menu_meeting( meetings.id ) ) }
-		menu_meeting( id : string ) { return this.meetings().find( meeting => meeting.id === id ) }
+		menu_meetups() { return this.meetups().map( meetups => this.Menu_meetup( meetups.id ) ) }
+		menu_meetup( id : string ) { return this.meetups().find( meetup => meetup.id === id ) }
 
 	}
 
