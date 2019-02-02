@@ -9,7 +9,7 @@ $piterjs_speech_page $mol_page
 		title \
 		description \
 		photo \
-	minimal_width 400
+	minimal_width 600
 	tools /
 		<= Speech_close $mol_link
 			arg * speech null
