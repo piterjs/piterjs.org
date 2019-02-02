@@ -6,6 +6,7 @@ $piterjs_speaker_snippet $mol_view
 		photo \
 	sub /
 		<= Photo $mol_image
+			title \
 			uri <= photo \
 		<= Info $mol_list sub /
 			<= Title $mol_view

@@ -11,7 +11,15 @@ namespace $.$$ {
 		speech_start( id : string ) {
 			const speech_ids = this.meetup().speeches
 			const prev_ids = speech_ids.slice( 0 , speech_ids.indexOf( id ) )
-			return prev_ids.reduce( ( start , id )=> start.shift( this.speech( id ).duration ) , this.start() )
+			const now = new $mol_time_moment
+			return prev_ids.reduce( ( start , id )=> start.shift( this.speech( id ).duration ) , this.start().toOffset( now.offset ) )
+		}
+
+		body() {
+			return [
+				... this.description() ? [ this.Description() ] : [] ,
+				this.Speeches() ,
+			]
 		}
 
 	}

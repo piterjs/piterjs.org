@@ -5,7 +5,7 @@ namespace $.$$ {
 		id() { return this.meetup().id }
 		start() { return new $mol_time_moment( this.meetup().start ) }
 		title() { return this.meetup().title }
-		date() { return this.start().toString( 'MM.YY' ) }
+		date() { return this.start().toString( "Month'YY" ) }
 
 	}
 
