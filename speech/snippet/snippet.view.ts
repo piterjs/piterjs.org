@@ -4,9 +4,9 @@ namespace $.$$ {
 
 		id() { return this.speech().id }
 		photo() { return this.speech_speaker().photo }
-		title() { return this.speech_speaker().title }
-		description() { return this.speech().title }
-
+		speaker_title() { return this.speech_speaker().title }
+		title() { return this.speech().title }
+		time() { return this.start().toString( 'hh:mm' ) }
 		speech_speaker() { return this.speaker( this.speech().speaker ) }
 
 	}

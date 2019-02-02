@@ -3,8 +3,12 @@ $piterjs_meetup_page $mol_page
 		id \
 		title \
 		description \
+		start \
 		speeches /
 	minimal_width 400
+	tools /
+		<= Date $mol_view
+			sub / <= date \
 	body /
 		<= Description $mol_text
 			text <= description \
@@ -14,8 +18,10 @@ $piterjs_meetup_page $mol_page
 			id \
 			title \
 			speaker \
+			duration \
 		speaker!id <= speaker!id *
 			id \
 			title \
 			photo \
+		start <= speech_start!id $mol_time_moment
 

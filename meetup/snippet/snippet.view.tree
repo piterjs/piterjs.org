@@ -4,5 +4,7 @@ $piterjs_meetup_snippet $mol_link
 	meetup *
 		id \
 		title \
+		start \
 	sub /
-		<= title \
+		<= Title $mol_view sub / <= title \
+		<= Date $mol_view sub / <= date \

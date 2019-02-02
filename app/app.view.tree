@@ -11,6 +11,7 @@ $piterjs_app $mol_book
 		id \
 		title \
 		description \
+		start \
 		speeches /
 	Meetup!id $piterjs_meetup_page
 		event_top?val <=> event_front_up?val
@@ -22,6 +23,7 @@ $piterjs_app $mol_book
 		title \
 		description \
 		speaker \
+		duration \
 	Speech!id $piterjs_speech_page
 		event_top?val <=> event_front_up?val
 		speech <= speech!id
@@ -38,6 +40,7 @@ $piterjs_app $mol_book
 			id \turn
 			title \Вот это поворот!
 			description \Поговорим про тестирование, улучшение механизмов ревью, Gatsby и пиратское интернет-радио.
+			start \2019-02-20T19:15+03:00
 			speeches /
 				\tests_speedup
 				\no_to_reviewer
@@ -47,6 +50,7 @@ $piterjs_app $mol_book
 			id \compilers
 			title \Компиляй!
 			description \Кто бы не хотел создать свой язык программирования со встроенной статически проверяемой безопасной авторизацией? Поговорим о том, как и для чего это делать.
+			start \2019-01-17T19:15+03:00
 			speeches /
 				\static_script
 				\auth_security
@@ -56,32 +60,43 @@ $piterjs_app $mol_book
 			title \Разработка компилятора на LLVM#2 — StaticScript
 			description \Это второй доклад из серии докладов которые будут посвящены разработке компилятора “TypeScript” используя LLVM в качестве backend, и TypeScript в качестве frontend.
 			speaker \dmitriy_patcura
+			duration \PT40m
 		*
 			id \auth_security
 			title \Анализ уязвимостей процесса аутентификации
 			description \Рассмотрим несколько векторов атаки на процесс аутентификации для получения данных о пользователях системы, некоторые ошибочные подходы в контексте node.js и попытаемся поразмышлять об оптимальных способах защиты от утечки информации. В частности, поговорим про post vs get, crypto vs bcrypt, юзабилити vs безопасность.
 			speaker \vadim_garbachev
+			duration \PT40m
 		*
 			id \tests_speedup
 			title \Ускорение разработки с помощью тестов
 			description \В докладе будет рассматриваться подход к тестированию приложения на Node.js самим разработчиком в процессе написания кода (условный TDD). Как, снизив уровень формализации, достигнуть повышения качества кода. Как написание теста ускоряет разработку и дальнейшую отладку. Почему разработчику выгодно самому тестировать свой код.
 			speaker \svetlana_avdey
+			duration \PT30m
 		*
 			id \no_to_reviewer
 			title \Скажи ревьюеру “Нет!”
 			description \Не переделывать код — круто. Как разработчику отстоять свое мнение на ревью? Как мотивировать остальную команду писать классно, одинаково и одинаково классно? История о том, как мы избавились от однотипных замечаний и снизили порог входа в свои проекты. Почему субъективный ревьюер — плохо, зачем контрибьютить в best-практики и как разработчику наладить такой процесс в команде.
 			speaker \pavel_gerasimov
+			duration \PT35m
 		*
 			id \gatsby_is_more
 			title \Гатсби — больше чем генератор сайтов
 			description \Гатсби — это генератор статических сайтов, который создает сайты с учетом всех лучших практик по перфомансу. Доклад расскажет, как Гатсби это делает и почему вам стоит его использовать в своем проекте.
 			speaker \michail_novikov
+			duration \PT30m
 		*
 			id \pirate_radio
 			title \Пиратское радио на NodeJS
 			description \Гатсби — это генератор статических сайтов, который создает сайты с учетом всех лучших практик по перфомансу. Доклад расскажет, как Гатсби это делает и почему вам стоит его использовать в своем проекте.
 			speaker \grigoriy_gorshkov
+			duration \PT30m
 	speakers /
+		*
+			id \
+			title \Перерыв
+			description \
+			photo \
 		*
 			id \vadim_garbachev
 			title \Вадим Горбачев

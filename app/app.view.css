@@ -6,6 +6,7 @@
 [piterjs_app] [mol_theme="$mol_theme_base"] {
 	--mol_theme_back: hsla(53, 93%, 54%, 1);
 	--mol_theme_text: black;
+	--mol_theme_shade: rgba( 0 , 0 , 0 , .5 );
 	--mol_theme_control: black;
 	font-weight: bolder;
 	stroke: currentColor;
@@ -16,7 +17,7 @@
 }
 
 [piterjs_app_menu] {
-	flex: 0 0 200px;
+	flex: 0 0 auto;
 }
 
 [piterjs_app_meetups] {

@@ -14,13 +14,24 @@
 	padding: .25rem;
 }
 
-[piterjs_speech_snippet_speaker] {
-	padding: .25rem;
+[piterjs_speech_snippet_title] {
 	display: block;
-	color: var(--mol_theme_shade);
+	padding: .25rem;
 }
 
-[piterjs_speech_snippet_description] {
-	display: block;
+[piterjs_speech_snippet_addon] {
+	display: flex;
+}
+
+[piterjs_speech_snippet_speaker_title] {
 	padding: .25rem;
+	/* color: var(--mol_theme_shade); */
+	color: var(--mol_theme_text);
+	flex: 1 1 auto;
+}
+
+[piterjs_speech_snippet_time] {
+	padding: .25rem;
+	color: var(--mol_theme_text);
+	white-space: nowrap;
 }

@@ -1,9 +1,10 @@
 $piterjs_speech_snippet $mol_link
 	arg *
 		speech <= id \
+	start $mol_time_moment
 	speech *
-		id \staticscript
-		title \Разработка компилятора на LLVM#2 — StaticScript
+		id \
+		title \
 		speaker \
 	speaker!id *
 		id \
@@ -13,7 +14,9 @@ $piterjs_speech_snippet $mol_link
 		<= Photo $mol_image
 			uri <= photo \
 		<= Info $mol_list sub /
-			<= Description $mol_view
-				sub / <= description \
-			<= Speaker $mol_view
+			<= Addon $mol_view sub /
+				<= Speaker_title $mol_view
+					sub / <= speaker_title \
+				<= Time $mol_view sub / <= time \
+			<= Title $mol_view
 				sub / <= title \
