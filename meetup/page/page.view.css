@@ -2,6 +2,10 @@
 	flex: 1 1 400px;
 }
 
+[piterjs_meetup_page_title] {
+	flex: 1000 1 auto;
+}
+
 [piterjs_meetup_page_date] {
 	padding: .5rem;
 	font-weight: normal;
