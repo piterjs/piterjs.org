@@ -1,6 +1,7 @@
 [piterjs_now_body] {
 	display: flex;
-    justify-content: center;
+	flex-direction: column;
+	justify-content: center;
 	align-items: center;
 	padding: 2rem;
 }
@@ -9,4 +10,10 @@
 	box-shadow: none;
 	max-width: 50vmin;
 	max-height: 50vmin;
+}
+
+[piterjs_now_links] {
+	flex: 0 0 auto;
+	display: flex;
+	flex-wrap: wrap;
 }
