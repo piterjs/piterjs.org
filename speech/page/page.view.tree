@@ -11,10 +11,10 @@ $piterjs_speech_page $mol_page
 		photo \
 	minimal_width 600
 	tools /
-		<= Speech_close $mol_link
+		<= Close $mol_link
 			arg * speech null
 			sub /
-				<= Speech_close_icon $mol_icon_cross
+				<= Close_icon $mol_icon_cross
 	body /
 		<= Description $mol_text
 			text <= description \

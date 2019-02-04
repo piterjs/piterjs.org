@@ -1,0 +1,12 @@
+[piterjs_now_body] {
+	display: flex;
+    justify-content: center;
+	align-items: center;
+	padding: 2rem;
+}
+
+[piterjs_now_logo] {
+	box-shadow: none;
+	max-width: 50vmin;
+	max-height: 50vmin;
+}

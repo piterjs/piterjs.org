@@ -101,6 +101,9 @@ namespace $.$$ {
 		}
 		
 		@ $mol_mem
+		now( next? : string ) { return this.$.$mol_state_arg.value( 'now' , next ) }
+
+		@ $mol_mem
 		meetup_id( next? : string ) { return this.$.$mol_state_arg.value( 'meetup' , next ) }
 		meetup( id : string ) { return this.meetups().find( meetup => meetup.id === id ) }
 		
@@ -114,6 +117,7 @@ namespace $.$$ {
 		pages() {
 			return [
 				this.Menu() ,
+				... !this.meetup_id() ? [ this.Now() ] : [] ,
 				... this.meetup_id() ? [ this.Meetup( this.meetup_id() ) ] : [] ,
 				... this.speech_id() ? [ this.Speech( this.speech_id() ) ] : [] ,
 			]

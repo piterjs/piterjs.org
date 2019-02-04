@@ -1,6 +1,7 @@
 $piterjs_app $mol_book
 	attr * mol_theme \$mol_theme_dark
-	pages /
+	Now $piterjs_now
+		event_top?val <=> event_front_up?val
 	Menu $mol_page
 		title \PiterJS
 		minimal_width 200

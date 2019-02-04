@@ -1,10 +1,10 @@
 [piterjs_app] {
 	--mol_theme_current: hsla(53, 93%, 34%, .5);
-	--mol_theme_control: hsla(53, 93%, 54%, 1);
+	--mol_theme_control: #F7DF1E;
 }
 
 [piterjs_app] [mol_theme="$mol_theme_base"] {
-	--mol_theme_back: hsla(53, 93%, 54%, 1);
+	--mol_theme_back: #F7DF1E;
 	--mol_theme_text: black;
 	--mol_theme_shade: rgba( 0 , 0 , 0 , .5 );
 	--mol_theme_control: black;

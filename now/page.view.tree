@@ -1,0 +1,10 @@
+$piterjs_now $mol_page
+	title \Митапы
+	meetups /
+	minimal_width 1900
+	- attr *
+		^
+		mol_theme \$mol_theme_base
+	body /
+		<= Logo $mol_image
+			uri \piterjs/logo/logo_512.png

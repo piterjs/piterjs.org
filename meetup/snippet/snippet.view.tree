@@ -2,6 +2,7 @@ $piterjs_meetup_snippet $mol_link
 	arg *
 		meetup <= id \
 		speech null
+		now null
 	meetup *
 		id \
 		title \
