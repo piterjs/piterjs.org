@@ -11,7 +11,7 @@ install:
 script:
   - npm start piterjs/app
   - rm piterjs/.gitignore
-  - mv piterjs/- piterjs.org
+  - mv piterjs piterjs.org
 deploy:
   provider: pages
   skip_cleanup: true
