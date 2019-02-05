@@ -3,6 +3,7 @@ node_js:
   - "9"
 install:
   - cd ..
+  - mv piterjs.org piterjs
   - git init
   - git remote add origin https://github.com/eigenmethod/mam.git
   - git pull origin master
@@ -10,6 +11,7 @@ install:
 script:
   - npm start piterjs/app
   - rm piterjs/.gitignore
+  - mv piterjs/- piterjs.org
 deploy:
   provider: pages
   skip_cleanup: true
