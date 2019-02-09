@@ -1,3 +1,7 @@
+[piterjs_now_title] {
+	flex: 1000 1 auto;
+}
+
 [mol_view][piterjs_now_body] {
 	display: flex;
 	flex-direction: column;
@@ -8,8 +12,7 @@
 
 [piterjs_now_logo] {
 	box-shadow: none;
-	max-width: 60vmin;
-	max-height: 60vmin;
+	width: 50vmin;
 }
 
 [piterjs_now_links] {
