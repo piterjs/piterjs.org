@@ -18,7 +18,23 @@ namespace $.$$ {
 			}> }
 
 			return data.records
-			.filter( ({ fields }) => fields[ 'Event number' ] && fields[ 'Speeches' ] )
+			.filter( ({ fields }) => {
+				
+				if( !fields[ 'Date from' ] ) return false
+				if( !fields[ 'Event number' ] ) return false
+				if( !fields[ 'Speeches' ] ) return false
+
+				for( const id of fields[ 'Speeches' ] ) {
+					const speech = this.speech( id )
+
+					if( !speech.description ) return false
+
+					const speaker = this.speaker( speech.speaker )
+					if( !speaker.photo ) return false
+				}
+				
+				return true
+			} )
 			.map( ({ id , fields }) => ({
 				id ,
 				start : fields[ 'Date from' ] ,
@@ -95,7 +111,7 @@ namespace $.$$ {
 				id ,
 				title : fields[ 'Name' ] ,
 				description : fields[ 'Notes' ] || '' ,
-				photo : fields[ 'Photo' ] && fields[ 'Photo' ][0].thumbnails.large.url || 'piterjs/logo/logo_512.png' ,
+				photo : fields[ 'Photo' ] && fields[ 'Photo' ][0].thumbnails.large.url , // || 'piterjs/logo/logo_512.png' ,
 			}) )
 
 		}

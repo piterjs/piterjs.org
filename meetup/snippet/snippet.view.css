@@ -10,6 +10,6 @@
 }
 
 [piterjs_meetup_snippet_date] {
-	color: var(--mol_theme_shade);
+	color: var(--mol_theme_text);
 	padding: .5rem;
 }
