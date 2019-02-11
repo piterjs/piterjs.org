@@ -25,7 +25,7 @@ namespace $.$$ {
 				if( !fields[ 'Speeches' ] ) return false
 
 				for( const id of fields[ 'Speeches' ] ) {
-					const speech = this.speech( id )
+					const speech = this.speech( id.split('').slice(-3).join('') )
 
 					if( !speech.description ) return false
 
@@ -36,11 +36,11 @@ namespace $.$$ {
 				return true
 			} )
 			.map( ({ id , fields }) => ({
-				id ,
+				id : `${ fields[ 'Event number' ] }`,
 				start : fields[ 'Date from' ] ,
 				title : '#' + fields[ 'Event number' ] ,
 				description : '' ,
-				speeches : fields[ 'Speeches' ] ,
+				speeches : fields[ 'Speeches' ].map( id => id.split('').slice(-3).join('') ) ,
 			}) )
 			.sort( ( a , b )=> new $mol_time_moment( b.start ).valueOf() - new $mol_time_moment( a.start ).valueOf() )
 
@@ -63,7 +63,7 @@ namespace $.$$ {
 
 			return data.records
 			.map( ({ id , fields }) => ({
-				id ,
+				id : id.split('').slice(-3).join('') ,
 				title : fields[ 'Name' ] ,
 				description : fields[ 'Description' ] || '' ,
 				speaker : fields[ 'Speakers' ][0] ,
