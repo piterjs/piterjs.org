@@ -1,7 +1,4 @@
 $piterjs_app $mol_book
-	attr * mol_theme \$mol_theme_dark
-	Now $piterjs_now
-		event_top?val <=> event_front_up?val
 	Menu $mol_page
 		title \PiterJS
 		minimal_width 200
@@ -36,3 +33,11 @@ $piterjs_app $mol_book
 		photo \
 	Menu_meetup!id $piterjs_meetup_snippet
 		meetup <= meetup!id
+	Now $piterjs_now
+		event_top?val <=> event_front_up?val
+		minimal_width 100000
+	Placeholder $piterjs_now
+		event_top?val <=> event_front_up?val
+		minimal_width 600
+		title \
+		body /

@@ -1,3 +1,11 @@
 [piterjs_speech_page] {
 	flex: 1 1 600px;
 }
+
+[piterjs_speech_page_body] {
+	padding: .5rem;
+}
+
+[piterjs_speech_page_description] {
+	box-shadow: none;
+}

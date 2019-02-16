@@ -1,7 +1,7 @@
 [piterjs_meetup_snippet] {
 	display: flex;
 	white-space: nowrap;
-	padding: 0;
+	padding: 0 .5rem;
 }
 
 [piterjs_meetup_snippet_title] {
