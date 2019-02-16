@@ -51,4 +51,4 @@ $piterjs_now $mol_page
 		<= Join $mol_link
 			uri \https://docs.google.com/forms/d/e/1FAIpQLSe7lb5LFc0LaaJu9POvlIAw8Te0g46xSmYZr7FwuCWg2saYmA/viewform
 			sub /
-				<= Join_button $mol_button_major title \Подать заявку на доклад
+				<= Join_button $mol_button_minor title \Подать заявку на доклад

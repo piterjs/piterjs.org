@@ -1,5 +1,5 @@
 [piterjs_app] {
-	--mol_theme_current: #f7df1e;
+	--mol_theme_current: hsla(53, 93%, 68%, 1);
 	--mol_theme_control: hsl(233, 53%, 30%);
 }
 
@@ -63,4 +63,14 @@
 
 [piterjs_app_meetups] {
 	padding: .5rem;
+}
+
+[piterjs_app] [mol_button_minor] {
+	font-weight: bolder;
+	color: var(--mol_theme_text);
+	box-shadow: 0 0 0 2px #f7df1e;
+}
+
+[piterjs_app] [mol_button_minor]:hover {
+	background: #f7df1e;
 }
