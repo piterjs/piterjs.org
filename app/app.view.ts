@@ -49,13 +49,14 @@ namespace $.$$ {
 		@ $mol_mem
 		speeches() {
 			
-			// https://api.airtable.com/v0/app23d1bSu43arYuu/Speeches?fields[]=Description&fields[]=Name&fields[]=Slides&fields[]=Speakers&fields[]=Topics&api_key=
+			// https://api.airtable.com/v0/app23d1bSu43arYuu/Speeches?fields[]=Description&fields[]=Name&fields[]=Slides&fields[]=Video&fields[]=Speakers&fields[]=Topics&api_key=
 			const data = this.$.$mol_http.resource( 'piterjs/speech/speech.data.json' ).json() as { records : Array<{
 				id : string
 				fields : {
 					'Description' : string
 					'Name' : string
 					'Slides' : string
+					'Video' : string
 					'Speakers' : string[]
 					'Topics' : string[]
 				}
@@ -68,6 +69,8 @@ namespace $.$$ {
 				description : fields[ 'Description' ] || '' ,
 				speaker : fields[ 'Speakers' ][0] ,
 				duration : 'PT40m' ,
+				slides : fields[ 'Slides' ] ,
+				video : fields[ 'Video' ] ,
 			}) )
 
 		}

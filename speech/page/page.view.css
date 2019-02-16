@@ -9,3 +9,11 @@
 [piterjs_speech_page_description] {
 	box-shadow: none;
 }
+
+[piterjs_speech_page_links] {
+	padding: 0;
+}
+
+[piterjs_speech_page_links] > * {
+	margin: .5rem 1rem;
+}

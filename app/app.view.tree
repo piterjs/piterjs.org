@@ -22,6 +22,8 @@ $piterjs_app $mol_book
 		description \
 		speaker \
 		duration \
+		slides \
+		video \
 	Speech!id $piterjs_speech_page
 		event_top?val <=> event_front_up?val
 		speech <= speech!id
