@@ -10,6 +10,7 @@
 
 [piterjs_now_title] {
 	flex: 1000 1 auto;
+	padding-right: 0;
 }
 
 [mol_view][piterjs_now_body] {

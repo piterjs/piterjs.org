@@ -1,6 +1,6 @@
 [piterjs_app] {
 	--mol_theme_current: #f7df1e;
-	--mol_theme_control: #3d7ab6;
+	--mol_theme_control: hsl(233, 53%, 30%);
 }
 
 [piterjs_app] [mol_theme="$mol_theme_base"] {
@@ -14,7 +14,7 @@
 [piterjs_app] [mol_theme="$mol_theme_accent"] {
 	--mol_theme_back: #f7df1e;
 	--mol_theme_text: black;
-	--mol_theme_hover: hsl(53, 93%, 44%);;
+	--mol_theme_hover: hsl(53, 93%, 44%);
 	stroke: currentColor;
 }
 
