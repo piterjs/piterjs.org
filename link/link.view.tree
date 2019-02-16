@@ -1,0 +1,4 @@
+$piterjs_link $mol_link
+	sub /
+		<= Button $mol_button_minor
+			title <= title
