@@ -133,9 +133,9 @@ namespace $.$$ {
 		pages() {
 			return [
 				this.Menu() ,
-				... !this.meetup_id() ? [ this.Now() ] : [] ,
-				... this.meetup_id() ? [ this.Meetup( this.meetup_id() ) ] : [] ,
-				... this.speech_id() ? [ this.Speech( this.speech_id() ) ] : [] ,
+				... !this.meetup( this.meetup_id() ) ? [ this.Now() ] : [] ,
+				... this.meetup( this.meetup_id() ) ? [ this.Meetup( this.meetup_id() ) ] : [] ,
+				... this.speech( this.speech_id() ) ? [ this.Speech( this.speech_id() ) ] : [] ,
 			]
 		}
 
