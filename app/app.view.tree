@@ -40,6 +40,6 @@ $piterjs_app $mol_book
 		minimal_width 100000
 	Placeholder $piterjs_now
 		event_top?val <=> event_front_up?val
-		minimal_width 600
+		minimal_width 400
 		title \
 		body /
