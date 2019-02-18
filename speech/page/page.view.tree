@@ -21,10 +21,10 @@ $piterjs_speech_page $mol_page
 		<= Description $mol_text
 			text <= description \
 		<= Links $mol_row sub <= links /
-			<= Slides $piterjs_link
+			<= Slides $mol_link
 				uri <= slides \
 				title \Слайды
-			<= Video $piterjs_link
+			<= Video $mol_link
 				uri <= video \
 				title \Видео
 		<= Speaker $piterjs_speaker_snippet

@@ -6,7 +6,7 @@
 }
 
 [piterjs_speaker_snippet_photo] {
-	width: 8rem;
+	width: 6rem;
 	flex: 1 1 auto;
 	padding: 0;
 	margin: .25rem;
@@ -46,13 +46,13 @@
 [piterjs_speaker_snippet_info] {
 	display: flex;
 	flex-direction: column;
-	flex: 2 1 16rem;
+	flex: 2 1 20rem;
 	padding: .25rem;
 }
 
 [piterjs_speaker_snippet_title] {
 	padding: .25rem;
-	font-weight: bolder;
+	font-size: 1.25em;
 }
 
 [piterjs_speaker_snippet_description] {

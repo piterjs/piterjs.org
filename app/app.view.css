@@ -1,6 +1,6 @@
 [piterjs_app] {
 	--mol_theme_current: hsla(53, 93%, 68%, 1);
-	--mol_theme_control: hsl(233, 53%, 30%);
+	--mol_theme_control: hsl(233, 63%, 20%);
 }
 
 [piterjs_app] [mol_theme="$mol_theme_base"] {

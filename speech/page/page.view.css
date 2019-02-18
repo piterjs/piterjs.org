@@ -11,9 +11,10 @@
 }
 
 [piterjs_speech_page_links] {
-	padding: 0;
+	margin: -1rem 0 0;
+	font-weight: 600;
 }
 
 [piterjs_speech_page_links] > * {
-	margin: .5rem 1rem;
+	margin: 0;
 }
