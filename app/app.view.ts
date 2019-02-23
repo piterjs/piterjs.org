@@ -5,7 +5,6 @@ namespace $.$$ {
 		@ $mol_mem
 		meetups() {
 			
-			// https://api.airtable.com/v0/app23d1bSu43arYuu/Events?fields[]=Date%20from&fields[]=Event%20number&fields[]=Place&fields[]=Speakers&fields[]=Speeches&api_key=
 			const data = this.$.$mol_http.resource( 'piterjs/meetup/meetup.data.json' ).json() as { records : Array<{
 				id : string
 				fields : {
@@ -19,18 +18,34 @@ namespace $.$$ {
 
 			return data.records
 			.filter( ({ fields }) => {
+
+				const numb = fields[ 'Event number' ]
 				
-				if( !fields[ 'Date from' ] ) return false
-				if( !fields[ 'Event number' ] ) return false
-				if( !fields[ 'Speeches' ] ) return false
+				if( !numb ) return false
+				
+				if( !fields[ 'Date from' ] ) {
+					console.warn( `#${ numb } has no "Date from"` )
+					return false
+				}
+				
+				if( !fields[ 'Speeches' ] ) {
+					console.warn( `#${ numb } has no "Speeches"` )
+					return false
+				}
 
 				for( const id of fields[ 'Speeches' ] ) {
 					const speech = this.speech( id.split('').slice(-3).join('') )
 
-					if( !speech.description ) return false
+					if( !speech.description ) {
+						console.warn( `#${ numb }/${ speech.id } has no "Description"` )
+						return false
+					}
 
 					const speaker = this.speaker( speech.speaker )
-					if( !speaker.photo ) return false
+					if( !speaker.photo ) {
+						console.warn( `#${ numb }/${ speech.id } has no "Photo"` )
+						return false
+					}
 				}
 				
 				return true
@@ -49,7 +64,6 @@ namespace $.$$ {
 		@ $mol_mem
 		speeches() {
 			
-			// https://api.airtable.com/v0/app23d1bSu43arYuu/Speeches?fields[]=Description&fields[]=Name&fields[]=Slides&fields[]=Video&fields[]=Speakers&fields[]=Topics&api_key=
 			const data = this.$.$mol_http.resource( 'piterjs/speech/speech.data.json' ).json() as { records : Array<{
 				id : string
 				fields : {
@@ -78,7 +92,6 @@ namespace $.$$ {
 		@ $mol_mem
 		speakers() {
 			
-			// https://api.airtable.com/v0/app23d1bSu43arYuu/Speakers?fields[]=Company%20%26%20position&fields[]=Name&fields[]=Notes&fields[]=Photo&api_key=
 			const data = this.$.$mol_http.resource( 'piterjs/speaker/speaker.data.json' ).json() as { records : Array<{
 				id : string
 				fields : {
