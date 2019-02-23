@@ -1,0 +1,48 @@
+[piterjs_now] {
+	font-size: 1em;
+	padding: 0;
+	align-items: stretch;
+	background: none;
+	flex: 1000 1000 400px;
+	position: relative;
+	animation: none !important;
+}
+
+[piterjs_now_title] {
+	flex: 1000 1 auto;
+	padding-right: 0;
+}
+
+[mol_view][piterjs_now_body] {
+	display: flex;
+	flex-direction: column;
+	justify-content: space-evenly;
+	align-items: center;
+	padding: 1rem;
+}
+
+[piterjs_now_logo] {
+	box-shadow: none;
+	width: 30vmin;
+	margin: 1rem;
+	animation: piterjs_now_logo_show .250s ease-out;
+}
+
+[piterjs_now_links] {
+	flex: 0 0 auto;
+	display: flex;
+	flex-wrap: wrap;
+}
+
+[piterjs_app_now_join] {
+	padding: 0;
+	margin: 1rem;
+}
+
+@keyframes piterjs_now_logo_show {
+	from {
+		transform: scale(2);
+		opacity: 0;
+		z-index: -1;
+	}
+}

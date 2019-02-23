@@ -6,7 +6,7 @@
 
 [piterjs_speech_snippet_photo] {
 	width: 6rem;
-	margin: .5rem;
+	margin: .25rem;
 }
 
 [piterjs_speech_snippet_info] {
@@ -17,6 +17,7 @@
 [piterjs_speech_snippet_title] {
 	display: block;
 	padding: .25rem;
+	font-weight: 600;
 }
 
 [piterjs_speech_snippet_addon] {

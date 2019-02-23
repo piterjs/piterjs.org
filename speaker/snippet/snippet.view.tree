@@ -5,9 +5,7 @@ $piterjs_speaker_snippet $mol_view
 		description \
 		photo \
 	sub /
-		<= Photo $mol_image
-			title \
-			uri <= photo \
+		<= Photo $piterjs_image link <= photo \
 		<= Info $mol_list sub /
 			<= Title $mol_view
 				sub / <= title \

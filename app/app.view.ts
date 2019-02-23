@@ -5,7 +5,6 @@ namespace $.$$ {
 		@ $mol_mem
 		meetups() {
 			
-			// https://api.airtable.com/v0/app23d1bSu43arYuu/Events?fields[]=Date%20from&fields[]=Event%20number&fields[]=Place&fields[]=Speakers&fields[]=Speeches&api_key=
 			const data = this.$.$mol_http.resource( 'piterjs/meetup/meetup.data.json' ).json() as { records : Array<{
 				id : string
 				fields : {
@@ -18,13 +17,45 @@ namespace $.$$ {
 			}> }
 
 			return data.records
-			.filter( ({ fields }) => fields[ 'Event number' ] && fields[ 'Speeches' ] )
+			.filter( ({ fields }) => {
+
+				const numb = fields[ 'Event number' ]
+				
+				if( !numb ) return false
+				
+				if( !fields[ 'Date from' ] ) {
+					console.warn( `#${ numb } has no "Date from"` )
+					return false
+				}
+				
+				if( !fields[ 'Speeches' ] ) {
+					console.warn( `#${ numb } has no "Speeches"` )
+					return false
+				}
+
+				for( const id of fields[ 'Speeches' ] ) {
+					const speech = this.speech( id.split('').slice(-3).join('') )
+
+					if( !speech.description ) {
+						console.warn( `#${ numb }/${ speech.id } has no "Description"` )
+						return false
+					}
+
+					const speaker = this.speaker( speech.speaker )
+					if( !speaker.photo ) {
+						console.warn( `#${ numb }/${ speech.id } has no "Photo"` )
+						return false
+					}
+				}
+				
+				return true
+			} )
 			.map( ({ id , fields }) => ({
-				id ,
+				id : `${ fields[ 'Event number' ] }`,
 				start : fields[ 'Date from' ] ,
 				title : '#' + fields[ 'Event number' ] ,
 				description : '' ,
-				speeches : fields[ 'Speeches' ] ,
+				speeches : fields[ 'Speeches' ].map( id => id.split('').slice(-3).join('') ) ,
 			}) )
 			.sort( ( a , b )=> new $mol_time_moment( b.start ).valueOf() - new $mol_time_moment( a.start ).valueOf() )
 
@@ -33,13 +64,13 @@ namespace $.$$ {
 		@ $mol_mem
 		speeches() {
 			
-			// https://api.airtable.com/v0/app23d1bSu43arYuu/Speeches?fields[]=Description&fields[]=Name&fields[]=Slides&fields[]=Speakers&fields[]=Topics&api_key=
 			const data = this.$.$mol_http.resource( 'piterjs/speech/speech.data.json' ).json() as { records : Array<{
 				id : string
 				fields : {
 					'Description' : string
 					'Name' : string
 					'Slides' : string
+					'Video' : string
 					'Speakers' : string[]
 					'Topics' : string[]
 				}
@@ -47,11 +78,13 @@ namespace $.$$ {
 
 			return data.records
 			.map( ({ id , fields }) => ({
-				id ,
+				id : id.split('').slice(-3).join('') ,
 				title : fields[ 'Name' ] ,
 				description : fields[ 'Description' ] || '' ,
 				speaker : fields[ 'Speakers' ][0] ,
 				duration : 'PT40m' ,
+				slides : fields[ 'Slides' ] ,
+				video : fields[ 'Video' ] ,
 			}) )
 
 		}
@@ -59,7 +92,6 @@ namespace $.$$ {
 		@ $mol_mem
 		speakers() {
 			
-			// https://api.airtable.com/v0/app23d1bSu43arYuu/Speakers?fields[]=Company%20%26%20position&fields[]=Name&fields[]=Notes&fields[]=Photo&api_key=
 			const data = this.$.$mol_http.resource( 'piterjs/speaker/speaker.data.json' ).json() as { records : Array<{
 				id : string
 				fields : {
@@ -95,7 +127,7 @@ namespace $.$$ {
 				id ,
 				title : fields[ 'Name' ] ,
 				description : fields[ 'Notes' ] || '' ,
-				photo : fields[ 'Photo' ] && fields[ 'Photo' ][0].thumbnails.large.url || 'piterjs/logo/logo_512.png' ,
+				photo : fields[ 'Photo' ] && fields[ 'Photo' ][0].thumbnails.large.url , // || 'piterjs/logo/logo_512.png' ,
 			}) )
 
 		}
@@ -117,9 +149,9 @@ namespace $.$$ {
 		pages() {
 			return [
 				this.Menu() ,
-				... !this.meetup_id() ? [ this.Now() ] : [] ,
-				... this.meetup_id() ? [ this.Meetup( this.meetup_id() ) ] : [] ,
-				... this.speech_id() ? [ this.Speech( this.speech_id() ) ] : [] ,
+				... !this.meetup( this.meetup_id() ) ? [ this.Now() ] : [] ,
+				... this.meetup( this.meetup_id() ) ? [ this.Meetup( this.meetup_id() ) ] : [] ,
+				... this.speech( this.speech_id() ) ? [ this.Speech( this.speech_id() ) ] : [] ,
 			]
 		}
 

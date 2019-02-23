@@ -1,19 +1,60 @@
 [piterjs_app] {
-	--mol_theme_current: hsla(53, 100%, 40%, .5);
-	--mol_theme_control: #F7DF1E;
+	--mol_theme_current: hsla(53, 93%, 78%, 1);
+	--mol_theme_control: hsl(233, 63%, 20%);
 }
 
 [piterjs_app] [mol_theme="$mol_theme_base"] {
-	--mol_theme_back: #F7DF1E;
-	--mol_theme_text: black;
+	--mol_theme_back: black;
+	--mol_theme_text: white;
 	--mol_theme_shade: rgba( 0 , 0 , 0 , .5 );
-	--mol_theme_control: black;
-	font-weight: bolder;
+	--mol_theme_control: white;
 	stroke: currentColor;
 }
 
+[piterjs_app] [mol_theme="$mol_theme_accent"] {
+	--mol_theme_back: #f7df1e;
+	--mol_theme_text: black;
+	--mol_theme_hover: hsl(53, 93%, 44%);
+	stroke: currentColor;
+}
+
+[piterjs_app]:before {
+	content: '';
+	position: absolute;
+	left: 0;
+	top: 3.5rem;
+	background: no-repeat left 0 url('piterjs/app/app_lines.svg');
+	pointer-events: none;
+	width: 60vmin;
+	height: 60vmin;
+	z-index: -1;
+	background-size: 50%;
+}
+
+[piterjs_app]:after {
+	content: '';
+	position: absolute;
+	right: 0;
+	bottom: 0;
+	background: no-repeat left 0 url('piterjs/app/app_lines.svg');
+	transform: rotate(180deg);
+	pointer-events: none;
+	width: 60vmin;
+	height: 60vmin;
+	z-index: -1;
+	background-size: 50%;
+}
+
 [piterjs_app] > *:not([mol_book_page_visible]):not([mol_book_page_focused]) + *:before {
-	color: black;
+	left: .25rem;
+}
+
+[piterjs_app] > [mol_page] {
+	box-shadow: none;
+}
+
+[piterjs_app] [mol_page_head] {
+	padding: .5rem 1rem;
 }
 
 [piterjs_app_menu] {
@@ -22,4 +63,14 @@
 
 [piterjs_app_meetups] {
 	padding: .5rem;
+}
+
+[piterjs_app] [mol_button_minor] {
+	font-weight: bolder;
+	color: var(--mol_theme_text);
+	box-shadow: 0 0 0 2px #f7df1e;
+}
+
+[piterjs_app] [mol_button_minor]:hover {
+	background: #f7df1e;
 }

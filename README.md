@@ -1,5 +1,33 @@
 # PiterJS Apps
 
+# Production build
+
+```
+git clone https://github.com/eigenmethod/mam.git ./mam && cd mam
+npm install
+npm start piterjs/app
+```
+
+Application will be bundled to `piterjs/app/-`
+
+# Developer environment
+
+```
+git clone https://github.com/eigenmethod/mam.git ./mam && cd mam
+npm install
+npm start
+```
+
+Application will be accessible at `http://localhost:8080/piterjs/app/-/index.html`
+
+You can change source files (`./piterjs/**`) and reload page to view result.
+
+# Update data
+
+1. Store API key from https://airtable.com/account to AIRTABLE_KEY env variable.
+2. Call 'update.sh` to download and commit new data.
+2. Push to origin repo.
+
 # BrowserStack
 
 We use it for crossbrowser testing.

@@ -1,15 +1,16 @@
 [piterjs_meetup_snippet] {
 	display: flex;
 	white-space: nowrap;
-	padding: 0;
+	padding: 0 .5rem;
 }
 
 [piterjs_meetup_snippet_title] {
 	padding: .5rem;
 	flex: 1 1 auto;
+	font-weight: 600;
 }
 
 [piterjs_meetup_snippet_date] {
-	color: var(--mol_theme_shade);
+	color: var(--mol_theme_text);
 	padding: .5rem;
 }

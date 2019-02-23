@@ -4,6 +4,8 @@ $piterjs_speech_page $mol_page
 		title \
 		description \
 		speaker \
+		slides \
+		video \
 	speaker!id *
 		id \
 		title \
@@ -18,6 +20,13 @@ $piterjs_speech_page $mol_page
 	body /
 		<= Description $mol_text
 			text <= description \
+		<= Links $mol_row sub <= links /
+			<= Slides $mol_link
+				uri <= slides \
+				title \Слайды
+			<= Video $mol_link
+				uri <= video \
+				title \Видео
 		<= Speaker $piterjs_speaker_snippet
 			speaker <= speech_speaker *
 				id \
