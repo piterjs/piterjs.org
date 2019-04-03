@@ -1,51 +1,75 @@
-pipeline:
-  build:
+kind: pipeline
+name: default
+
+steps:
+  - name: build
     image: node:10
-    secrets: [ AIRTABLE_KEY ]
+    environment: 
+      AIRTABLE_KEY:
+        from_secret: AIRTABLE_KEY
     commands:
       - sh update.sh
-      - cd ..
+      - mkdir piterjs
+      - mv * piterjs/ || echo "move files to subfolder"
+      - rm -rf .git
+      - rm -rf .gitignore
       - git init
       - git remote add origin https://github.com/eigenmethod/mam.git
       - git pull origin master
       - npm install
       - npm start piterjs/app
-      - cd piterjs
+      - mv piterjs/app app
+      - mv piterjs/Dockerfile Dockerfile
+      - mv piterjs/deployment.yml deployment.yml
 
-  docker:
+  - name: docker
     image: plugins/docker
-    repo: piterjs/piterjs.org
-    dockerfile: Dockerfile
-    tags: v2.0.0-${DRONE_COMMIT}
-    secrets: [ docker_username, docker_password ]
+    settings: 
+      repo: piterjs/piterjs.org
+      dockerfile: Dockerfile
+      tags: v2.0.0-${DRONE_COMMIT}
+      username:
+        from_secret: docker_username
+      password:
+        from_secret: docker_password
     when:
       event: push
       branch: master
 
-  kube:
+  - name: kube
     image: vallard/drone-kube
-    template: deployment.yaml
-    namespace: piterjs-org
-    secrets: [ KUBE_TOKEN, KUBE_SERVER, KUBE_CA ]
+    environment: 
+      KUBE_SERVER:
+        from_secret: kube_server
+      KUBE_TOKEN:
+        from_secret: kube_token
+      KUBE_CA:
+        from_secret: kube_ca
+    settings:
+      template: deployment.yml
+      namespace: piterjs-org
     when:
       event: push
       branch: master
 
-  notify:
+  - name: notify
     image: appleboy/drone-telegram
-    format: markdown
-    message: >
-     {{#success build.status}}✅{{else}}❌{{/success}} Build {{build.status}}: *{{repo.owner}}/{{repo.name}}*
-     build: {{build.number}}
-     commit: {{commit.branch}}:{{commit.sha}}
-     By: {{commit.author}}
-     {{commit.message}}
-     {{build.link}}
-    secrets:
-      - source: telegram_token
-        target: telegram_token
-      - source: telegram_to
-        target: telegram_to
+    settings:
+      format: markdown
+      token:
+        from_secret: telegram_token
+      to:
+        from_secret: telegram_to
+      message: >
+       {{#success build.status}}✅{{else}}❌{{/success}} Build {{build.status}}: *{{repo.owner}}/{{repo.name}}*
+       build: {{build.number}}
+       commit: {{commit.branch}}:{{commit.sha}}
+       By: {{commit.author}}
+       {{commit.message}}
+       {{build.link}}
     when:
-      event: push
-      branch: master
+      status:
+        - success
+        - failure
+
+
