@@ -1,4 +1,5 @@
-# PiterJS Apps
+# PiterJS
+[![Build Status](https://ci.piterjs.org/api/badges/piterjs/piterjs/status.svg)](https://ci.piterjs.org/piterjs/piterjs)
 
 # Production build
 

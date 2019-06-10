@@ -1,0 +1,75 @@
+kind: pipeline
+name: default
+
+steps:
+  - name: build
+    image: node:10
+    environment: 
+      AIRTABLE_KEY:
+        from_secret: AIRTABLE_KEY
+    commands:
+      - sh update.sh
+      - mkdir piterjs
+      - mv * piterjs/ || echo "move files to subfolder"
+      - rm -rf .git
+      - rm -rf .gitignore
+      - git init
+      - git remote add origin https://github.com/eigenmethod/mam.git
+      - git pull origin master
+      - npm install
+      - npm start piterjs/app
+      - mv piterjs/app app
+      - mv piterjs/Dockerfile Dockerfile
+      - mv piterjs/deployment.yml deployment.yml
+
+  - name: docker
+    image: plugins/docker
+    settings: 
+      repo: piterjs/piterjs.org
+      dockerfile: Dockerfile
+      tags: v2.0.0-${DRONE_COMMIT}
+      username:
+        from_secret: docker_username
+      password:
+        from_secret: docker_password
+    when:
+      event: push
+      branch: master
+
+  - name: kube
+    image: vallard/drone-kube
+    environment: 
+      KUBE_SERVER:
+        from_secret: kube_server
+      KUBE_TOKEN:
+        from_secret: kube_token
+      KUBE_CA:
+        from_secret: kube_ca
+    settings:
+      template: deployment.yml
+      namespace: piterjs-org
+    when:
+      event: push
+      branch: master
+
+  - name: notify
+    image: appleboy/drone-telegram
+    settings:
+      format: markdown
+      token:
+        from_secret: telegram_token
+      to:
+        from_secret: telegram_to
+      message: >
+       {{#success build.status}}✅{{else}}❌{{/success}} Build {{build.status}}: *{{repo.owner}}/{{repo.name}}*
+       build: {{build.number}}
+       commit: {{commit.branch}}:{{commit.sha}}
+       By: {{commit.author}}
+       {{commit.message}}
+       {{build.link}}
+    when:
+      status:
+        - success
+        - failure
+
+
