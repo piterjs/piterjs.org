@@ -1,13 +1,11 @@
 $piterjs_speech_page $mol_page
 	speech *
-		id \
 		title \
 		description \
 		speaker \
 		slides \
 		video \
 	speaker!id *
-		id \
 		title \
 		description \
 		photo \
@@ -29,7 +27,6 @@ $piterjs_speech_page $mol_page
 				title \Видео
 		<= Speaker $piterjs_speaker_snippet
 			speaker <= speech_speaker *
-				id \
 				title \
 				description \
 				photo \

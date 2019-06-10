@@ -4,7 +4,6 @@ $piterjs_meetup_snippet $mol_link
 		speech null
 		now null
 	meetup *
-		id \
 		title \
 		start \
 	sub /

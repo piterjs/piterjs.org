@@ -6,7 +6,6 @@ $piterjs_app $mol_book
 		body /
 			<= Meetups $mol_list rows <= menu_meetups /
 	meetup!id *
-		id \
 		title \
 		description \
 		start \
@@ -17,7 +16,6 @@ $piterjs_app $mol_book
 		speech!id <= speech!id
 		speaker!id <= speaker!id
 	speech!id *
-		id \
 		title \
 		description \
 		speaker \
@@ -29,11 +27,11 @@ $piterjs_app $mol_book
 		speech <= speech!id
 		speaker!id <= speaker!id
 	speaker!id *
-		id \
 		title \
 		description \
 		photo \
 	Menu_meetup!id $piterjs_meetup_snippet
+		id <= menu_meetup_id!id \
 		meetup <= meetup!id
 	Now $piterjs_now
 		event_top?val <=> event_front_up?val

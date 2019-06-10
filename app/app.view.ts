@@ -7,130 +7,43 @@ namespace $.$$ {
 		@ $mol_mem
 		meetups() {
 			
-			const data = this.$.$mol_http.resource( 'piterjs/meetup/meetup.data.json' ).json() as { records : Array<{
-				id : string
-				fields : {
-					'Date from' : string
-					'Event number' : number
-					'Place' : string[]
-					'Speakers' : string[]
-					'Speeches' : string[]
-				}
-			}> }
+			const tree = $mol_tree.fromString( this.$.$mol_http.resource( 'piterjs/meetup/meetup.data.tree' ).text() )
 
-			return data.records
-			.filter( ({ fields }) => {
-
-				const numb = fields[ 'Event number' ]
-				
-				if( !numb ) return false
-				
-				if( !fields[ 'Date from' ] ) {
-					console.warn( `#${ numb } has no "Date from"` )
-					return false
-				}
-				
-				if( !fields[ 'Speeches' ] ) {
-					console.warn( `#${ numb } has no "Speeches"` )
-					return false
-				}
-
-				for( const id of fields[ 'Speeches' ] ) {
-					const speech = this.speech( id.split('').slice(-3).join('') )
-
-					if( !speech.description ) {
-						console.warn( `#${ numb }/${ speech.id } has no "Description"` )
-						return false
-					}
-
-					const speaker = this.speaker( speech.speaker )
-					if( !speaker.photo ) {
-						console.warn( `#${ numb }/${ speech.id } has no "Photo"` )
-						return false
-					}
-				}
-				
-				return true
-			} )
-			.map( ({ id , fields }) => ({
-				id : `${ fields[ 'Event number' ] }`,
-				start : fields[ 'Date from' ] ,
-				title : '#' + fields[ 'Event number' ] ,
-				description : '' ,
-				speeches : fields[ 'Speeches' ].map( id => id.split('').slice(-3).join('') ) ,
-			}) )
-			.sort( ( a , b )=> new $mol_time_moment( b.start ).valueOf() - new $mol_time_moment( a.start ).valueOf() )
+			return new $mol_tree({ type : '*' , sub : tree.sub }).toJSON() as Record< string , {
+				start : string
+				title : string
+				description : string
+				speeches : string[]
+			} >
 
 		}
 		
 		@ $mol_mem
 		speeches() {
 			
-			const data = this.$.$mol_http.resource( 'piterjs/speech/speech.data.json' ).json() as { records : Array<{
-				id : string
-				fields : {
-					'Description' : string
-					'Name' : string
-					'Slides' : string
-					'Video' : string
-					'Speakers' : string[]
-					'Topics' : string[]
-				}
-			}> }
+			const tree = $mol_tree.fromString( this.$.$mol_http.resource( 'piterjs/speech/speech.data.tree' ).text() )
 
-			return data.records
-			.map( ({ id , fields }) => ({
-				id : id.split('').slice(-3).join('') ,
-				title : fields[ 'Name' ] ,
-				description : fields[ 'Description' ] || '' ,
-				speaker : fields[ 'Speakers' ][0] ,
-				duration : 'PT40m' ,
-				slides : fields[ 'Slides' ] ,
-				video : fields[ 'Video' ] ,
-			}) )
+			return new $mol_tree({ type : '*' , sub : tree.sub }).toJSON() as Record< string , {
+				title : string
+				description : string
+				speaker : string
+				duration : string
+				slides : string
+				video : string
+			} >
 
 		}
 		
 		@ $mol_mem
 		speakers() {
 			
-			const data = this.$.$mol_http.resource( 'piterjs/speaker/speaker.data.json' ).json() as { records : Array<{
-				id : string
-				fields : {
-					'Company & position' : string
-					'Name' : string
-					'Notes' : string
-					'Photo' : Array<{
-						id : string
-						url : string
-						thumbnails : {
-							full : {
-								width : number
-								height : number
-								url : string
-							}
-							large : {
-								width : number
-								height : number
-								url : string
-							}
-							small : {
-								width : number
-								height : number
-								url : string
-							}
-						}
-					}>
-				}
-			}> }
+			const tree = $mol_tree.fromString( this.$.$mol_http.resource( 'piterjs/speaker/speaker.data.tree' ).text() )
 
-			return data.records
-			.map( ({ id , fields }) => ({
-				id ,
-				title : fields[ 'Name' ] ,
-				description : fields[ 'Notes' ] || '' ,
-				photo : fields[ 'Photo' ] && fields[ 'Photo' ][0].thumbnails.large.url , // || 'piterjs/logo/logo_512.png' ,
-			}) )
+			return new $mol_tree({ type : '*' , sub : tree.sub }).toJSON() as Record< string , {
+				title : string
+				description : string
+				photo : string
+			} >
 
 		}
 		
@@ -139,13 +52,13 @@ namespace $.$$ {
 
 		@ $mol_mem
 		meetup_id( next? : string ) { return this.$.$mol_state_arg.value( 'meetup' , next ) }
-		meetup( id : string ) { return this.meetups().find( meetup => meetup.id === id ) }
+		meetup( id : string ) { return this.meetups()[ id ] }
 		
 		speech_id( next? : string ) { return this.$.$mol_state_arg.value( 'speech' , next ) }
-		speech( id : string ) { return this.speeches().find( speech => speech.id === id ) }
+		speech( id : string ) { return this.speeches()[ id ] }
 		
 		speaker_id( next? : string ) { return this.$.$mol_state_arg.value( 'speaker' , next ) }
-		speaker( id : string ) { return this.speakers().find( speaker => speaker.id === id ) }
+		speaker( id : string ) { return this.speakers()[ id ] }
 
 		@ $mol_mem
 		pages() {
@@ -157,8 +70,45 @@ namespace $.$$ {
 			]
 		}
 
-		menu_meetups() { return this.meetups().map( meetups => this.Menu_meetup( meetups.id ) ) }
-		menu_meetup( id : string ) { return this.meetups().find( meetup => meetup.id === id ) }
+		@ $mol_mem
+		menu_meetups() {
+			return Object.keys( this.meetups() )
+			.filter( meetup_id => {
+
+				const meetup = this.meetup( meetup_id )
+
+				if( !meetup.start ) {
+					console.warn( `Meetup ${ meetup_id } has no "start"` )
+					return false
+				}
+				
+				if( !meetup.speeches || !meetup.speeches.length ) {
+					console.warn( `Meetup ${ meetup_id } has no "speeches"` )
+					return false
+				}
+
+				for( const speech_id of meetup.speeches ) {
+					const speech = this.speech( speech_id )
+
+					if( !speech.description ) {
+						console.warn( `Speech ${ speech_id } has no "description"` )
+						return false
+					}
+
+					const speaker = this.speaker( speech.speaker )
+					if( !speaker.photo ) {
+						console.warn( `Speaker ${ speech.speaker } has no "photo"` )
+						return false
+					}
+				}
+				
+				return true
+			} )
+			.sort( ( a , b )=> new $mol_time_moment( this.meetup( b ).start ).valueOf() - new $mol_time_moment( this.meetup( a ).start ).valueOf() )
+			.map( id => this.Menu_meetup( id ) )
+		}
+		menu_meetup( id : string ) { return this.meetup( id ) }
+		menu_meetup_id( id : string ) { return id }
 
 	}
 
