@@ -1,5 +1,7 @@
 namespace $.$$ {
 
+	$mol_tree
+
 	export class $piterjs_app extends $.$piterjs_app {
 
 		@ $mol_mem
