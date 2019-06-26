@@ -1,6 +1,5 @@
 $piterjs_speaker_snippet $mol_view
 	speaker *
-		id \
 		title \
 		description \
 		photo \

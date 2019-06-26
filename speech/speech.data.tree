@@ -1,0 +1,220 @@
+285 *
+	title \Пиратское радио на NodeJS
+	description \
+	speaker \recIY5ZAjN7crAxZ8
+	duration \PT40m
+	slides \https://fs.piterjs.org/events/34/gorshkov.pdf
+t8T *
+	title \HTML формы как таковые
+	description \
+	speaker \recvlQCn9XmdavSGc
+	duration \PT40m
+	video \https://www.youtube.com/watch?v=TO5kl_GBQ20
+DQ6 *
+	title \Тулинг для разработки на Vue
+	description \Поднятие проекта на Vue требует сборки через webpack, сервер разработки с HMR, бандлинг приложения, линтинг, и много других вещей, отвлекающих от написания самого приложения. В докладе обсудим доступный тулинг для решения этих задач и что в нем можно улучшить. А также как настроить его под себя, чтобы получать удовольствие от разработки.
+	speaker \recfz0dnUIt21jmSY
+	duration \PT40m
+	slides \https://fs.piterjs.org/events/30/kopylov/index.html
+PB0 *
+	title \A headless butler
+	description \
+	speaker \recFU3I8wHQ84UeHN
+	duration \PT40m
+YAQ *
+	title \Cache it right
+	description \O современных практиках по работе c различными ресурсами в веб-пространстве. Как, с одной стороны, сделать пользовательский опыт максимально позитивным, а с другой стороны – приложение, которое при этом будет очень быстро работать? 
+	speaker \recgGeg88qh0RjWHR
+	duration \PT40m
+FaK *
+	title \Трансдьюсеры в JS
+	description \
+	speaker \recMyhW0lj70UfzWh
+	duration \PT40m
+	video \https://www.youtube.com/watch?v=CzY1fBeT0kY
+6sj *
+	title \Puppeteer SSR как способ отказаться от React и двигаться дальше
+	description \
+	speaker \recKmgePAocZHwGim
+	duration \PT40m
+	video \https://www.youtube.com/watch?v=bcNDItJjnmk
+BsQ *
+	title \React Native Desktop
+	description \
+	speaker \recJyeOUmJEYzF5pQ
+	duration \PT40m
+	video \https://www.youtube.com/watch?v=3lSUKW6KK0I
+jQW *
+	title \React Hooks: Bump or Sage
+	description \Кратко обсудим что такое React Hooks, для чего они нужны, что привносят. И постараемся ответить на вопрос,  это прорыв или провал.
+	speaker \rec7uZUA6k33fG0Yz
+	duration \PT40m
+YxX *
+	title \Vue.js higher order components
+	description \
+	speaker \recUgle4hH2aCoUVk
+	duration \PT40m
+	video \https://www.youtube.com/watch?v=tU3YIENFU3E
+YJq *
+	title \Скажи ревьюеру “Нет!”
+	description \
+	speaker \rec9hJg8f4sIfUnAS
+	duration \PT40m
+	slides \https://fs.piterjs.org/events/34/gerasimov.pdf
+GWi *
+	title \Изоморфные приложения на Vue
+	description \
+	speaker \recNAhJ2NdfwOIJF1
+	duration \PT40m
+	video \https://www.youtube.com/watch?v=UhPuIahns18
+YOr *
+	title \Гатсби — больше чем генератор сайтов
+	description \
+	speaker \recjo6MB9fFVjpBj8
+	duration \PT40m
+	slides \https://fs.piterjs.org/events/34/novikov.pdf
+ZxX *
+	title \Как я начал любить Vue
+	description \
+	speaker \recYz08iYOUsb801P
+	duration \PT40m
+7wy *
+	title \Микросервисы на Node.js: как сохранить себя
+	description \
+		\Две истории про разработку на микросервисах: одна закончилась провалом, другая — success story. Из доклада можно будет узнать различные варианты перехода с монолита на микросервисы и организации инфраструктуры микросервисов, несколько способов сэкономить нервы при написании кода микросервиса, а также некоторые проблемы и преимущества Node.js. В конце — вывод, почему микросервисы можно применять и когда это дает результат.
+		\
+		\Технологии: Node.js, RabbitMQ, REST API, Mongo, PostgreSQL.
+	speaker \recNuTExXo6paisad
+	duration \PT40m
+	slides \https://dl.airtable.com/pVzTr7x6QAaiNMCUMEGz_Kirill_Sergeev_Mikroservisi_na_Nodejs_kak_sohranit_sebya.pdf
+	video \https://youtu.be/8cZVglIbS0U
+VSc *
+	title \Анализ уязвимостей процесса аутентификации
+	description \Рассмотрим несколько векторов атаки на процесс аутентификации для получения данных о пользователях системы, некоторые ошибочные подходы в контексте node.js и попытаемся поразмышлять об оптимальных способах защиты от утечки информации. В частности, поговорим про post vs get, crypto vs bcrypt, юзабилити vs безопасность.
+	speaker \recN6GhIZP9QQ7Fo9
+	duration \PT40m
+	slides \https://fs.piterjs.org/events/33/gorbachev.pdf
+	video \https://ok.ru/live/1113612426810¡
+FKb *
+	title \JavaScript в большом проекте: основные проблемы и наш рецепт их решения
+	description \
+	speaker \recv7r5J5T7Sh1GyR
+	duration \PT40m
+	video \https://www.youtube.com/watch?v=Ak6dI1_ZaEI
+xsC *
+	title \Разработка компилятора на LLVM#2 — StaticScript
+	description \Это второй доклад из серии докладов которые будут посвящены разработке компилятора “TypeScript” используя LLVM в качестве backend, и TypeScript в качестве frontend.
+	speaker \recX0NdhNVdZ2s18p
+	duration \PT40m
+	slides \https://fs.piterjs.org/events/33/patsura.pdf
+fLz *
+	title \Типизация Rest API
+	description \
+	speaker \receifdi4FmxwH3nF
+	duration \PT40m
+cu5 *
+	title \Broccoli — функциональный ассет-менеджмент веб приложений
+	description \
+	speaker \recPlcsUKJ6w7MPgg
+	duration \PT40m
+	slides \https://fs.piterjs.org/events/31/kanunnikov.pdf
+T4i *
+	title \Исчезающие фреймворк
+	description \Разберемся, зачем в действительности мы используем фреймворки, и почему классические фреймворки подходят не для всех проектов. Поговорим о новом тренде "исчезающих фреймворков" на примере SvelteJS, и почему это не «yet another javascript framework».
+	speaker \recCbrhFv0SUAL2d3
+	duration \PT40m
+MZ5 *
+	title \Стабильно работающий код
+	description \
+	speaker \recHfk5ryFmvkmfoG
+	duration \PT40m
+	slides \https://fs.piterjs.org/events/34/avdey.pdf
+KW7 *
+	title \Как я начал любить Vue
+	description \
+	speaker \rectujLHstJe4RG99
+	duration \PT40m
+	video \https://www.youtube.com/watch?v=9wHZuPE4Nl0
+RcA *
+	title \Vue в ecommerce-системах для малого и среднего бизнеса
+	description \Расскажу про то, как можно использовать Vue в ecommerce при низком бюджете и о том, с какими подводными камнями придется столкнуться.
+	speaker \recFFfDnmdRM5Sybp
+	duration \PT40m
+	slides \https://fs.piterjs.org/events/30/ulyanov.pdf
+ttR *
+	title \Качество кода: внедрение проверок в legacy
+	description \
+	speaker \rec9eJ0naBFJQ0vHg
+	duration \PT40m
+Cl4 *
+	title \Разработка компилятора на LLVM#1
+	description \
+	speaker \recX0NdhNVdZ2s18p
+	duration \PT40m
+	slides \https://fs.piterjs.org/events/31/patsura.pdf
+DQF *
+	title \Nuxt ^2.7: хороший и плохой
+	description \
+	speaker \recaWGjJjWTwTCEeS
+	duration \PT40m
+MPo *
+	title \Vue: что такое хорошо и что такое плохо
+	description \Все программисты стараются писать хорошо, в меру собственного разумения. У кого-то получается лучше, у кого-то хуже, но ошибки делают все. Vue.js - фреймворк, дружественный к новичкам, и прощает многое. За два с половиной года в крупном проекте на Vue, который делался в основном начинающими - выплывало многое. В этом докладе я рассмотрю типичные ошибки в использовании Vue.js, и как их избежать и сделать всё правильно.
+	speaker \recn5LnSfVTaawFAX
+	duration \PT40m
+	slides \https://dl.airtable.com/caYMml4ASHioLj3NXOUS_zlygin.pdf
+1gV *
+	title \Собираем свой Google Static Maps
+	description \
+	speaker \recNAZ79tUcjJtZMM
+	duration \PT40m
+	video \https://www.youtube.com/watch?v=kDFEsjaRScM
+WIQ *
+	title \i18n без боли
+	description \
+	speaker \rec8HARMrfaU3kvEX
+	duration \PT40m
+uAC *
+	title \Этот безумный, безумный, безумный, безумный инпут. Часть 1
+	description \
+		\Строка поиска — самый распространенный и удобный способ навигации по сайту. Казалось бы, что может быть проще? Но на практике создание такой строки в приложении, написанном на React, оказывается не самой простой задачей, ведь поиск должен работать на мобильных устройствах и быть доступным.
+		\
+		\В этом докладе Роман расскажет про свой опыт создания компонента поисковой строки, начиная с привычек и ожиданий пользователей и продолжая архитектурой всего компонента.
+	speaker \recO0fk2FEJbcvhcG
+	duration \PT40m
+	slides \https://dl.airtable.com/JGdHBMpETA2DG7eEch4v_Roman_Prudnikov_It_s_a_mad_mad_mad_mad_search_bar_pt_1.pdf
+	video \https://youtu.be/r8UTkmx_LBY
+9CO *
+	title \ФРП, биология, фронтенд
+	description \Все, что вы хотели узнать о функционально-реактивном программировании во фронтенде, но боялись спросить — понятным и доступным языком на примере библиотеки RxJS. Поговорим о том, как фронтенд делает жизнь биологов проще, а ФРП делает проще жизнь фронтендера, и посмотрим на применение функционально-реактивной парадигмы в наших приложениях.
+	speaker \recesVf2H9nqo8cIk
+	duration \PT40m
+	slides \https://fs.piterjs.org/events/31/yarantseva.pdf
+acQ *
+	title \Application deployment with Firebase platform
+	description \
+		\Основная цель доклада — ознакомить разработчиков со всеми преимуществами платформы Google Firebase. Мы опишем основные отличия таких продуктов, как Cloud Firestore vs Realtime Database. Покажем, какие возможности проектирования БД Cloud Firestore на примере реального приложения. Также покажем, как построить микросервисы с помощью Firebase Cloud Functions и Cloud Hosting на примере реального приложения.
+		\
+		\Стек технологий при проведении доклада:
+		\
+		\Angular 4+;
+		\FireBase platform;
+		\nodes.
+	speaker \recV2XkmYneUMvLVQ
+	duration \PT40m
+1nm *
+	title \Полный стек технологий БЭМ
+	description \
+	speaker \recHBjBpHVYHBeG0m
+	duration \PT40m
+	video \https://www.youtube.com/watch?v=VsGl-xZtxFg
+0GJ *
+	title \Svelte
+	description \
+	speaker \recimZihpaesmiYqG
+	duration \PT40m
+86e *
+	title \Storybook или Как фронтендеры изобретали чистые функции с TDD
+	description \
+	speaker \recBvy9W7RkucECri
+	duration \PT40m

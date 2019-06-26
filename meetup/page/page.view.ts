@@ -8,6 +8,7 @@ namespace $.$$ {
 		date() { return this.start().toString( 'DD Month YYYY' ) }
 		speeches() { return this.meetup().speeches.map( id => this.Speech( id ) ) }
 		
+		speech_id( id : string ) { return id }
 		speech_start( id : string ) {
 			const speech_ids = this.meetup().speeches
 			const prev_ids = speech_ids.slice( 0 , speech_ids.indexOf( id ) )

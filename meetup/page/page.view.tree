@@ -1,6 +1,5 @@
 $piterjs_meetup_page $mol_page
 	meetup *
-		id \
 		title \
 		description \
 		start \
@@ -20,13 +19,12 @@ $piterjs_meetup_page $mol_page
 			text <= description \
 		<= Speeches $mol_list rows <= speeches /
 	Speech!id $piterjs_speech_snippet
+		id <= speech_id!id \
 		speech <= speech!id *
-			id \
 			title \
 			speaker \
 			duration \
 		speaker!id <= speaker!id *
-			id \
 			title \
 			photo \
 		start <= speech_start!id $mol_time_moment

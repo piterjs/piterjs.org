@@ -2,7 +2,6 @@ namespace $.$$ {
 
 	export class $piterjs_speech_snippet extends $.$piterjs_speech_snippet {
 
-		id() { return this.speech().id }
 		photo() { return this.speech_speaker().photo }
 		speaker_title() { return this.speech_speaker().title }
 		title() { return this.speech().title }

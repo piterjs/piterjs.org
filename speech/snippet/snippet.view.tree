@@ -3,11 +3,9 @@ $piterjs_speech_snippet $mol_link
 		speech <= id \
 	start $mol_time_moment
 	speech *
-		id \
 		title \
 		speaker \
 	speaker!id *
-		id \
 		title \
 		photo \
 	sub /
