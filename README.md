@@ -23,11 +23,30 @@ Application will be accessible at `http://localhost:8080/piterjs/app/-/index.htm
 
 You can change source files (`./piterjs/**`) and reload page to view result.
 
-# Update data
+# Внесение данных
 
-1. Store API key from https://airtable.com/account to AIRTABLE_KEY env variable.
-2. Call 'update.sh` to download and commit new data.
-2. Push to origin repo.
+Всё данные находятся в data.[tree](https://github.com/nin-jin/tree.d) конфигах. Для отступов используются табы, юниксовые переводы строк. После обновления данных нужно открыть [piterjs.org](https://piterjs.org/). Если будут какие-либо ошибки или данные не появятся, то в консоли разработчика (Ctrl+Shit+I) будет написано в чём проблема. 
+
+## Добавление докладчика
+
+1. Открываем [speaker/speaker.data.tree](speaker/speaker.data.tree)
+2. Поиском проверяем, что этого докладчика ещё нет.
+3. Если есть - обновляем его данные, если надо.
+4. Если нет - придумываем ему красивый идентификатор. Например - первые слога фамилии и имени транслитом. Или широко известный никнейм докладчика. Проверяем, что этот идентификатор ещё никем не занят.
+5. Добавляем данные о нём по аналогии с остальными.
+
+## Добавление выступления
+
+1. Открываем [speech/speech.data.tree](speech/speech.data.tree)
+2. Придумываем выступлению красивый идентификатор. Желательно не слишком длинный. Проверяем, что других докладов с этим идентификатором ещё нет.
+3. Добавляем данные о нём по аналогии с остальными.
+4. В поле `speaker` указываем идентификаторы докладчиков. В поле `duration` (продолжительность доклада) используется [ISO8601](https://en.wikipedia.org/wiki/ISO_8601#Durations).
+
+## Добавление митапа
+
+1. Открываем [meetup/meetup.data.tree](meetup/meetup.data.tree)
+2. Добавляем данные о нём по аналогии с остальными.
+4. В поле `speeches` указываем идентификаторы выступлений. В поле `start` (время начала митапа)  используется [ISO8601](https://en.wikipedia.org/wiki/ISO_8601).
 
 # BrowserStack
 
