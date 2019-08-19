@@ -38,4 +38,4 @@ $piterjs_now $mol_page
 			title \Подать заявку на доклад
 		<= Patreon $piterjs_link
 			uri \https://www.patreon.com/bePatron?u=16938072
-			title \Поддержать
+			title \Поддержать PiterJS рублём
