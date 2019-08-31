@@ -218,3 +218,18 @@ acQ *
 	description \
 	speaker \recBvy9W7RkucECri
 	duration \PT40m
+slides *
+	title \Презентация приложения для проведения презентаций
+	description \Расскажу сколько всего умеет, как работает, и как сделать своё за один беспокойный вечер.
+	speaker \rec1qqsT1cczrE6dH
+	duration \PT40m
+webgl-planet *
+	title \Планета на WebGL
+	description \Доклад для уставших от “формочек и кнопочек”. Расскажу немного основ по компьютерной графике и о том, как написать простой 3d рендер на WebGL без использования фреймворков и библиотек.
+	speaker \vola
+	duration \PT40m
+css-types *
+	title \Типы данных в CSS
+	description \Расскажу про типы данных в CSS3 и язык их описания. Будет много формального синтаксиса и интересных деталей.
+	speaker \vals
+	duration \PT40m

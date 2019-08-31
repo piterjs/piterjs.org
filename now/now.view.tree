@@ -36,3 +36,6 @@ $piterjs_now $mol_page
 		<= Join $piterjs_link
 			uri \https://docs.google.com/forms/d/e/1FAIpQLSe7lb5LFc0LaaJu9POvlIAw8Te0g46xSmYZr7FwuCWg2saYmA/viewform
 			title \Подать заявку на доклад
+		<= Patreon $piterjs_link
+			uri \https://www.patreon.com/bePatron?u=16938072
+			title \Поддержать PiterJS рублём
