@@ -1,3 +1,11 @@
+zona *
+	title \Александр Зонов
+	description \T-SYSTEMS RUS, Frontend Developer
+	photo \https://habrastorage.org/webt/ss/so/kc/sssokclyb2i9lvt2uiazr99gqs4.jpeg
+iosa *
+	title \Александр Иосса
+	description \Руководитель Frontend разработки, ведущий канала о Software engineering, где пишет о боли и радостях настоящих инженеров. Член ПК Dump и It Nights. Коренной Петербуржец, но сейчас живёт в Иннополисе, куда сдауншифтил 4 года назад. Готов рассказать о том, что ловить в этом странном IT-городе.
+	photo \https://habrastorage.org/webt/qu/gq/jo/qugqjolcu995odvlc9ncas5ap3q.jpeg
 rec0ovuZOK9kvhkGL *
 	title \Михаил Андриевский
 	description \
@@ -109,7 +117,7 @@ recMyhW0lj70UfzWh *
 	description \
 recN6GhIZP9QQ7Fo9 *
 	title \Вадим Горбачев
-	description \
+	description \Фронтендер, один из организаторов PiterJS, ex-участник ПК HolyJS. Прошел тернистые круги IT: передовой саппорта, демонов и слонов администрирования, питоньи клубы магических методов. В настоящий момент разрабатывает интерфейсы в сфере процессинга на JavaScript с использованием AngularJS. В содеянном не раскаивается.
 	photo \https://dl.airtable.com/.attachmentThumbnails/07011a7e9b042780c7a06ac19eb154a3/71c57c70
 recNAZ79tUcjJtZMM *
 	title \Михаил Баранов
