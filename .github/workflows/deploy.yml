@@ -22,6 +22,7 @@ jobs:
       uses: hyoo-ru/mam_build@master
       with:
         module: 'piterjs/app'
+        package: 'piterjs'
     
     - name: Deploy on GitHub Pages
       uses: alex-page/blazing-fast-gh-pages-deploy@v1.0.1
