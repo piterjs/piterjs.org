@@ -238,11 +238,13 @@ react-ssr-wat *
 	description \Клиентский портал крупного европейского телекома. Разметка рендерится на Java бэкенде, а фронтенд - набор jQuery плагинов. Разработчики хотят изменений, но бизнес не заинтересован в радикальных изменениях. Как начать использовать React, чтобы никого не спугнуть? Как добавить к нему SSR, если большая часть портала все еще не на React?
 	speaker \zona
 	duration \PT40m
+	slides \https://github.com/piterjs/slides/blob/master/meetup=41/speech=react-ssr-wat.pdf
 bdd-e2e *
 	title \BDD e2e тестирование
 	description \Рассмотрим, что такое BDD тестирование, и как оно помогает писать e2e тесты дешевле и быстрее. Рассмотрим, как сделать тесты понятными не только для разработчиков, но и для тестировщиков с менеджерами, используя Gherkin синтаксис в связке с Cypress. Определим место acceptance тестов в CI/CD пайплайне. Обсудим, когда стоит писать такие тесты, и кто может это делать.
 	speaker \iosa
 	duration \PT40m
+	slides \https://github.com/piterjs/slides/blob/master/meetup=41/speech=bdd-e2e.pdf
 event-loop-details *
 	title \Event-Driven Architecture: детали реализаций Event Loop
 	description \
