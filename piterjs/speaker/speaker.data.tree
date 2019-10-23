@@ -1,0 +1,330 @@
+zona *
+	title \Александр Зонов
+	description \T-SYSTEMS RUS, Frontend Developer
+	photo \https://habrastorage.org/webt/ss/so/kc/sssokclyb2i9lvt2uiazr99gqs4.jpeg
+iosa *
+	title \Александр Иосса
+	description \Руководитель Frontend разработки, ведущий канала о Software engineering, где пишет о боли и радостях настоящих инженеров. Член ПК Dump и It Nights. Коренной Петербуржец, но сейчас живёт в Иннополисе, куда сдауншифтил 4 года назад. Готов рассказать о том, что ловить в этом странном IT-городе.
+	photo \https://habrastorage.org/webt/qu/gq/jo/qugqjolcu995odvlc9ncas5ap3q.jpeg
+rec0ovuZOK9kvhkGL *
+	title \Михаил Андриевский
+	description \
+rec1eXgzQiWZgyDeH *
+	title \Александр Фёдоров
+	description \
+rec1gF5Ph0VV73XAd *
+	title \Варя Степанова
+	description \var_ya
+rec1qqsT1cczrE6dH *
+	title \Дмитрий Карловский
+	description \Больше 10 лет во фронтенде. Увлекаюсь БДСМ. Даже фреймворк свой запилил со связыванием данных и жёсткими ограничениями.
+	photo \https://habrastorage.org/webt/ae/1b/c_/ae1bc_91m_ctzx5cj44zjea3ylg.jpeg
+vola *
+	title \Анна Волкова
+	description \Люблю спорт, в котором можно кататься на доске.
+	photo \https://habrastorage.org/webt/rp/hx/ul/rphxul1e1hwgsezloj39pywjq8g.jpeg
+vals *
+	title \София Валитова
+	description \Чуть большое года во фронтенде, до этого работала в области астрономии. Люблю звезды, кигуруми и глубокие технические детали.
+	photo \https://habrastorage.org/webt/n5/4t/ws/n54twsordq5kxme2sspco2va8wm.jpeg
+rec2yVPfPFPFgK9YA *
+	title \Андрей Складчиков
+	description \
+rec40LEfSU5GWU7HD *
+	title \Максим Гребенщиков
+	description \
+rec7uZUA6k33fG0Yz *
+	title \Алексей Балканский
+	description \
+	photo \https://dl.airtable.com/LDlLLIruRFCaVtSYaY3E_large_14237609_10210746339959783_6826457900374560015_n%20-%20Alexey%20Balkanskiy.jpg
+rec8BOsJzsH3FfkVs *
+	title \Виктор Грищенко
+	description \
+rec8HARMrfaU3kvEX *
+	title \Антон Ляпцев
+	description \
+		\Если вы заинтересовались этим названием, то наверняка вы когда-нибудь произносили что-то вроде:
+		\«Сейчас русский текст напишу, потом добавлю все ключи»
+		\«Опять искать в коде непонятно что»
+		\«Слишком много действий для удаления одного ключика»
+		\и прочие радости работы с переводами.
+		\В этом докладе я поделюсь своим опытом работы с i18n и расскажу, что можно сделать, чтобы вставка очередного ключа не доставляла хлопот и как всегда держать свои переводы в актуальном состоянии
+	photo \https://dl.airtable.com/.attachmentThumbnails/994712e8ae2dc36e01ae90000d0766b6/381b0242
+rec9eJ0naBFJQ0vHg *
+	title \Алексей Щербаков
+	description \Legacy - старый, объемный и не всегда понятный код. Переписывать дорого, поддерживать надо, при этом хочется иметь одинаковый набор правил для всей кодовой базы вне зависимости от того, legacy ли он или нет. Обсудим, как минимизировать болевые ощущения от внедрения Eslint, отбиться от предложения использовать SonarQube и оставить задел на внедрение единых правил на уровне компании.
+	photo \https://dl.airtable.com/.attachmentThumbnails/fe5a5d51eb7b198fdccf01b0779ce4e6/5e9d4186
+rec9hJg8f4sIfUnAS *
+	title \Павел Герасимов
+	description \
+	photo \https://dl.airtable.com/.attachmentThumbnails/4d4a1b0cab6ea57d084501774cf6da38/d8ac9478
+recAtTH2SPt6gPfd4 *
+	title \Алексей Соболев
+	description \
+recBvy9W7RkucECri *
+	title \Дима Богер
+	description \Чуть больше года я увлекаюсь фронтендом и по выходным пишу пет-проект на Vue.js. На работе я пишу на Python и обожаю его интерактивность, возможность удобно выполнять любой код в любом окружении и играться в песочнице, мне хотелось такого же в моём проекте и я открыл для себя Storybook и концепцию визуального TDD. Проведу аналогии с бекенд-разработкой на Python, разберу основные концепции, библиотеки и инструменты, покажу и расскажу где находить годную информацию.
+	photo \https://dl.airtable.com/.attachmentThumbnails/6b8eed048829ec671165f9c93e1532fe/831f3605
+recCC53xjGU5fg8u3 *
+	title \Михаил Ковалев
+	description \
+recCbrhFv0SUAL2d3 *
+	title \Павел Малышев
+	description \Опытный fullstack-разработчик с более чем 10-летним стажем, а также руководитель проектов и предприниматель.
+	photo \https://dl.airtable.com/mt35DBuR84Han0fRshnw_large_916d72d391a246a69eae4877c561d-fit-265x265-0%20-%20Pavel%20Malyshev.png
+recEIRk150bdNh8ED *
+	title \Олег Подсечин
+	description \
+recFF8cr19COwTNmL *
+	title \Майкл Башуров
+	description \
+recFFfDnmdRM5Sybp *
+	title \Ульянов Владимир
+	description \Меня зовут Владимир, работаю fullstack разработчиком в ecommerce в highload-проектов. Но когда я начинал работать, я очень не любил фронтенд, и я считаю что Vue мог бы стать там волшебной пилюлей.
+	photo \https://dl.airtable.com/22siLVakTLKf9m002GMJ_large_img-profile%20-%20%D0%92%D0%BB%D0%B0%D0%B4%D0%B8%D0%BC%D0%B8%D1%80%20%D0%A3%D0%BB%D1%8C%D1%8F%D0%BD%D0%BE%D0%B2.jpg
+recFU3I8wHQ84UeHN *
+	title \Вячеслав Москаленко
+	description \Я с удовольствием занимаюсь веб-разработкой уже 6 лет.
+	photo \https://dl.airtable.com/T0qwnqI1Rou0yl5MzbSE_large_IMG_5923%20-%20Viacheslav%20Moskalenko.jpg
+recHBjBpHVYHBeG0m *
+	title \Александр Баумгертнер
+	description \
+recHfk5ryFmvkmfoG *
+	title \Светлана Авдей
+	description \
+	photo \https://dl.airtable.com/.attachmentThumbnails/24d0e4e1877f9ff374a2b4bb1029a944/c2ffc9ab
+recIY5ZAjN7crAxZ8 *
+	title \Григорий Горшков
+	description \
+	photo \https://dl.airtable.com/.attachmentThumbnails/bbdc16bf727cb4fbfc5fcdd9996e2c37/3463d9ee
+recIiIBxYZ3PQtvnf *
+	title \Никита Ульшин
+	description \
+recJeio2gbdMPRMHU *
+	title \Артём Пендюрин
+	description \
+recJyeOUmJEYzF5pQ *
+	title \Дмитрий Локтев
+	description \
+recKmgePAocZHwGim *
+	title \Антон Плешивцев
+	description \
+recLnxBUmCqmLrDiw *
+	title \Михаил Колвалев
+	description \
+recMyhW0lj70UfzWh *
+	title \Игорь Коновалов
+	description \
+recN6GhIZP9QQ7Fo9 *
+	title \Вадим Горбачев
+	description \Фронтендер, один из организаторов PiterJS, ex-участник ПК HolyJS. Прошел тернистые круги IT: передовой саппорта, демонов и слонов администрирования, питоньи клубы магических методов. В настоящий момент разрабатывает интерфейсы в сфере процессинга на JavaScript с использованием AngularJS. В содеянном не раскаивается.
+	photo \https://dl.airtable.com/.attachmentThumbnails/07011a7e9b042780c7a06ac19eb154a3/71c57c70
+recNAZ79tUcjJtZMM *
+	title \Михаил Баранов
+	description \
+recNAhJ2NdfwOIJF1 *
+	title \Николай Говоров
+	description \
+recNY9uEJPTE8B09s *
+	title \Mikko Lehmuskoski
+	description \
+recNuTExXo6paisad *
+	title \Кирилл Сергеев
+	description \Закончил университет по специальности «Защита информации». Программирует бэкенд больше 10 лет. Долгое время писал на PHP, пробовал языки Rust, Go, Python. Больше 3 лет пишет на Node.js. В основном принимал участие в проектах, где на бэкенд возложены крупные задачи по бизнес-логике.
+recO0fk2FEJbcvhcG *
+	title \Роман Прудников
+	description \Роман — фронтенд-разработчик из холодной Сибири, любящий красивые интерфейсы и рок-музыку. Он уже четыре года работает фронтенд-разработчиком, выбрав этот путь только из-за его «графичности». Начинал в маленькой компании, где делал веб-сайты для региональной сети, теперь работает в лучшей геоинформационной службе из всех виденных им — 2ГИС. Эта компания разрабатывает цифровые карты и путеводители по городам. Когда Роман не пишет код, он поет в рок-группе. Он играет на гитаре, пианино и немного на барабанах.
+	photo \https://dl.airtable.com/wVLc3gmTNiecPPIPyiRK_large_rp%401x.jpg
+recPjpTpJ5l36n1Qb *
+	title \Виталий Галахов
+	description \
+recPlcsUKJ6w7MPgg *
+	title \Александр Канунников
+	description \
+	photo \https://dl.airtable.com/.attachmentThumbnails/af7855a5e0a3d59549bdbd7da77eb9fa/ea1ad610
+recQb67IefsqmuRRC *
+	title \Антон Коренюшкин
+	description \
+recSJkANJgoAHmRu9 *
+	title \Максим Ерехинский
+	description \
+recSQItQIMMbpmeoH *
+	title \Евгений Щепотьев
+	description \
+recTDdiuIgmS4QAHW *
+	title \Арсений Васильев
+	description \
+recTDuzmIyURUh40v *
+	title \Станислав Краснояров
+	description \
+recTlmQOhBvJZrd4r *
+	title \Андрей Ситник
+	description \
+recUgle4hH2aCoUVk *
+	title \Алексей Мохнаткин
+	description \
+recV2XkmYneUMvLVQ *
+	title \Станислав Черноморенко
+	description \
+recWep0H5Vx7CW7nL *
+	title \Андрей Логинов
+	description \
+recX0NdhNVdZ2s18p *
+	title \Дмитрий Пацура
+	description \
+	photo \https://dl.airtable.com/.attachmentThumbnails/f274c082fe738649eb7b89d64bda5247/ae7617f2
+recYz08iYOUsb801P *
+	title \Игорь Минин
+	description \
+recZc428mVP1k9ARf *
+	title \Тим Маринин
+	description \
+recZt43jdnXYagcmK *
+	title \Ville Immonen
+	description \
+reca6tgDtAUQcCd9N *
+	title \Максим Пикуль
+	description \
+recaWGjJjWTwTCEeS *
+	title \Никита Соболев
+	description \
+		\Современные технологии постоянно забывают рассказывать про свои минусы. Наверное, случайно. Хорошо, что есть такие ворчуны как я. Уж они-то не забудут про все проблемы!
+		\
+		\Но, чтобы было справедливо, необходимо рассказать и про плюсы. Коих немало! 
+		\
+		\План такой:
+		\- Что вообще такое Nuxt? И откуда украли идею
+		\- В чем прибавил за последнее время
+		\- Где все еще плохо
+		\- Где плохо и ничего не изменится
+		\
+		\Холиварно, резко, справедливо.
+	photo \https://dl.airtable.com/.attachmentThumbnails/fb266550c1f8feb9ec79484b9fd6cd86/87f4b80c
+recbwB3bh9CmzFTr3 *
+	title \Artur Stambultsian
+	description \
+recby7uMW0ZeHPQJJ *
+	title \Алексей Золотых
+	description \
+reccgH5crHrxVlFie * description \
+recci8hC1YSbPzjR9 *
+	title \Альберт Кайгородов
+	description \
+recdCLoopbOeVXpzh *
+	title \Максим Рыжиков
+	description \
+receifdi4FmxwH3nF *
+	title \Шкарбалюк Максим
+	description \
+		\В моем докладе я хочу поделиться опытом создания статически типизированного Rest API и автоматической генерации кода для клиентов. Я расскажу о таких инструментах как Swagger, NSwag, Typescript и спецификации OpenAPI.  
+		\Покажу как мы избавились от использования fetch/axios и других библиотек для ajax запросов, а также получили строгую типизацию и используем одни типы и на фронтенде и на бекенде.
+	photo \https://dl.airtable.com/.attachmentThumbnails/543459e3944943af408618d23b74f454/5c35a872
+recesVf2H9nqo8cIk *
+	title \Инна Яранцева
+	description \Биолог по образованию, разработчик фронтенда по призванию. Уже полгода как делаю приложения для биологов и химиков, активно используя функциональный и функционально-реактивный подход в разработке.
+	photo \https://dl.airtable.com/hv9h2tIAQsyjWgN3Thv2_large_photo_2018-05-20_19-35-48%20-%20Inna%20Yarantseva.webp
+recfRf5oe6WxigkCP *
+	title \Сергей Новиков
+	description \
+recfyE1HOKqL0mIgh *
+	title \Mike Bradshaw
+	description \
+recfyra5GYtwuVXt1 *
+	title \Илья Кашлаков
+	description \
+recfz0dnUIt21jmSY *
+	title \Сергей Копылов
+	description \Занимаюсь full-stack веб разработкой в небольших стартапах 10 лет. Последние 1.5 года работаю с Vue.
+	photo \https://dl.airtable.com/xjDUVGkQPqWyRkcwHQuQ_large_doklad-avatar%20-%20Sergey%20Kopylov.jpg
+recg7jKOx9qpfXBIg *
+	title \Антон Лобов
+	description \
+recgGeg88qh0RjWHR *
+	title \Семён Целищев
+	description \Занимаюсь разработкой архитектуры SPA на React и performance  является одной из самых важных не функциональных характеристик от текущего заказчика
+	photo \https://dl.airtable.com/C6hYeVXRqSu0eC07xW0W_large_photo%20-%20%D0%A1%D0%B5%D0%BC%D1%91%D0%BD%20%D0%A6%D0%B5%D0%BB%D0%B8%D1%89%D0%B5%D0%B2.gif
+recgx3ywf6EvwO32v *
+	title \Иван Метелев
+	description \
+rechFipaymAS0xypx *
+	title \Сергей Густун
+	description \
+rechaFwT0IeylDK6S *
+	title \Максим Казунка
+	description \
+reciWpiufAQ4kXuoV *
+	title \Кирилл Овчинников
+	description \
+recikQyc1yXfzaUCB * description \
+recimZihpaesmiYqG *
+	title \Владилен Минин
+	description \
+	photo \https://dl.airtable.com/.attachmentThumbnails/c50f6021a3f2cc3b3334d3ec7e86e766/7a1b7921
+recjgKRCegcZo8uhU *
+	title \Игнат Толчанов
+	description \
+recjo6MB9fFVjpBj8 *
+	title \Михаил Новиков
+	description \
+	photo \https://dl.airtable.com/.attachmentThumbnails/b4dd64091c27616008692d1f68f44d0a/71db8fda
+reckj98BKYeDDSrkr *
+	title \Артем Марченко
+	description \
+recn46C8JMKUWnZw8 *
+	title \Сергей Чикуёнок
+	description \
+recn5LnSfVTaawFAX *
+	title \Дмитрий Злыгин
+	description \Разрабатываю на Vue.js более 3 лет. С javascript с переменным успехом уже 20 лет, повидал и Netscape Navigator, и IE 4.0. Именно с появлением Vue забросил бэкенд и перешел в стан фронтендеров. Сейчас выпускаю подкаст "Недельный Vue" с новостями из мира фреймворка.
+	photo \https://dl.airtable.com/QdOfvS2CRCObEBwm2ZYY_large_IMG_0075%20-%20Dmitry%20Zlygin.JPG
+recnC7VZ2yKjdJEEm *
+	title \Тимофей Ковалев
+	description \
+recnPY6ruhczVNXYn *
+	title \Михаил Полубояринов
+	description \
+recogXI5sJYBnvotq *
+	title \Tero Parviainen
+	description \
+recolJ9aFfjCUICXs *
+	title \Juho Vepsäläinen
+	description \
+recpSWOUa40gisHhE *
+	title \Андрей Мелихов
+	description \
+recplOPTzk8YyxWxe *
+	title \Залим Башоров
+	description \
+recqIsUgOHdHIl1w2 *
+	title \Андрей Гершун
+	description \
+recr4WBGSe075WW0F *
+	title \Антон Кошкин
+	description \
+rectVrCtLdwTqv6c8 *
+	title \Дмитрий Махнёв
+	description \
+rectujLHstJe4RG99 *
+	title \Игорь Минин
+	description \
+reculiH8LFFcwVkJX *
+	title \Владислав Ватрушкин
+	description \
+recv7r5J5T7Sh1GyR *
+	title \Евгений Кот
+	description \
+recvNMMeKeqww9oEj *
+	title \Николай Рыжиков
+	description \
+recvlQCn9XmdavSGc *
+	title \Артем Пендюрин
+	description \
+recxWhewmOxqrvBS6 *
+	title \Александр Чистяков
+	description \
+recy7rqo5q9uVWGff *
+	title \Виктор Исаев
+	description \
+reczrfuZN6XeQfnuh *
+	title \Geertjan Wielenga
+	description \

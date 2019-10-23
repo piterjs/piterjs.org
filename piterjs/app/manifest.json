@@ -1,0 +1,35 @@
+{
+	"short_name": "PiterJS",
+	"name": "PiterJS",
+	"icons": [
+		{
+			"src": "../../piterjs/logo/logo_48.png",
+			"type": "image/png",
+			"sizes": "48x48"
+		},
+		{
+			"src": "../../piterjs/logo/logo_96.png",
+			"type": "image/png",
+			"sizes": "96x96"
+		},
+		{
+			"src": "../../piterjs/logo/logo_128.png",
+			"type": "image/png",
+			"sizes": "128x128"
+		},
+		{
+			"src": "../../piterjs/logo/logo_192.png",
+			"type": "image/png",
+			"sizes": "192x192"
+		},
+		{
+			"src": "../../piterjs/logo/logo_512.png",
+			"type": "image/png",
+			"sizes": "512x512"
+		}
+	],
+	"start_url": "../..",
+	"background_color": "#000000",
+	"theme_color": "#000000",
+	"display": "standalone"
+}

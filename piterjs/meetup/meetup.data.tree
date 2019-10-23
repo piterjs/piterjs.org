@@ -1,0 +1,244 @@
+0 *
+	title \#0
+	description \
+	speeches /
+1 *
+	start \2015-05-14T16:00:00.000Z
+	title \#1
+	description \
+	speeches /
+2 *
+	start \2015-06-06T08:00:00.000Z
+	title \#2
+	description \
+	speeches /
+3 *
+	start \2015-08-06T16:00:00.000Z
+	title \#3
+	description \
+	speeches /
+4 *
+	start \2015-10-12T16:00:00.000Z
+	title \#4
+	description \
+	speeches /
+5 *
+	start \2015-11-28T08:00:00.000Z
+	title \#5
+	description \
+	speeches /
+6 *
+	start \2016-02-03T16:00:00.000Z
+	title \#6
+	description \
+	speeches /
+		\FKb
+		\1nm
+		\BsQ
+8 *
+	start \2016-07-23T08:00:00.000Z
+	title \#8
+	description \
+	speeches /
+9 *
+	start \2016-09-22T18:12:00.000Z
+	title \#9
+	description \
+	speeches /
+10 *
+	start \2016-11-03T16:00:00.000Z
+	title \#10
+	description \
+	speeches /
+11 *
+	start \2016-12-03T08:00:00.000Z
+	title \#11
+	description \
+	speeches /
+12 *
+	start \2017-02-09T16:00:00.000Z
+	title \#12
+	description \
+	speeches /
+13 *
+	start \2017-03-23T16:00:00.000Z
+	title \#13
+	description \
+	speeches /
+14 *
+	start \2017-04-27T16:00:00.000Z
+	title \#14
+	description \
+	speeches /
+15 *
+	start \2017-05-14T07:00:00.000Z
+	title \#15
+	description \
+	speeches /
+16 *
+	start \2017-08-29T16:00:00.000Z
+	title \#16
+	description \
+	speeches /
+17 *
+	start \2017-09-21T16:00:00.000Z
+	title \#17
+	description \
+	speeches /
+18 *
+	start \2017-10-28T08:00:00.000Z
+	title \#18
+	description \
+	speeches /
+19 *
+	start \2017-12-01T17:00:00.000Z
+	title \#19
+	description \
+	speeches /
+20 *
+	start \2017-12-21T17:00:00.000Z
+	title \#20
+	description \
+	speeches /
+21 *
+	start \2018-01-18T16:00:00.000Z
+	title \#21
+	description \
+	speeches /
+22 *
+	start \2018-02-15T16:00:00.000Z
+	title \#22
+	description \
+	speeches /
+23 *
+	start \2018-03-17T08:00:00.000Z
+	title \#23
+	description \
+	speeches /
+24 *
+	start \2018-04-11T16:00:00.000Z
+	title \#24
+	description \
+	speeches /
+		\t8T
+		\FaK
+		\1gV
+25 *
+	start \2018-05-10T16:00:00.000Z
+	title \#25
+	description \
+	speeches /
+		\YxX
+		\GWi
+		\KW7
+		\ZxX
+26 *
+	start \2018-06-14T17:00:00.000Z
+	title \#26
+	description \
+	speeches /
+27 *
+	start \2018-07-28T07:00:00.000Z
+	title \#27
+	description \
+	speeches /
+28 *
+	start \2018-08-16T16:00:00.000Z
+	title \#28
+	description \
+	speeches / \6sj
+28.5 *
+	start \2018-09-01T07:30:00.000Z
+	title \#28.5
+	description \
+	speeches /
+		\uAC
+		\acQ
+		\7wy
+29 *
+	start \2018-09-20T16:30:00.000Z
+	title \#29
+	description \
+	speeches /
+30 *
+	start \2018-10-25T16:30:00.000Z
+	title \#30
+	description \
+	speeches /
+		\MPo
+		\RcA
+		\DQ6
+31 *
+	start \2018-11-15T16:00:00.000Z
+	title \#31
+	description \
+	speeches /
+		\9CO
+		\cu5
+		\Cl4
+31.5 *
+	start \2018-11-24T06:00:00.000Z
+	title \#31.5
+	description \
+	speeches /
+32 *
+	start \2018-12-19T16:00:00.000Z
+	title \#32
+	description \
+	speeches /
+		\YAQ
+		\jQW
+33 *
+	start \2019-01-17T16:00:00.000Z
+	title \#33
+	description \
+	speeches /
+		\VSc
+		\xsC
+34 *
+	start \2019-02-20T16:00:00.000Z
+	title \#34
+	description \
+	speeches /
+		\MZ5
+		\YJq
+		\YOr
+		\285
+36 *
+	start \2019-04-18T16:00:00.000Z
+	title \#36
+	description \
+	speeches /
+36.5 *
+	start \2019-04-26T16:00:00.000Z
+	title \#36.5
+	description \
+	speeches /
+37 *
+	title \#37
+	description \
+	speeches /
+38 *
+	title \#38
+	description \
+	speeches /
+39 *
+	title \#39
+	description \
+	speeches /
+40 *
+	start \2019-08-16T16:00:00.000Z
+	title \#40
+	description \
+	speeches /
+		\slides
+		\webgl-planet
+		\css-types
+41 *
+	start \2019-10-10T16:15:00.000Z
+	title \#41
+	description \На повестке дня SSR на React, разработка на Vue.js с использованием StoryBook и концепции визуального TDD по аналогии с бэкенд-разработкой на Python, а также про детали реализаций event loop в различных системах.
+	speeches /
+		\react-ssr-wat
+		\bdd-e2e
+		\event-loop-details
