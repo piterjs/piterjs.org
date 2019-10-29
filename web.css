@@ -1021,6 +1021,17 @@ monospace;
 	--mol_theme_control: hsl(233, 63%, 20%);
 }
 
+[piterjs_app]:before {
+	content: '';
+	display: block;
+	height: 3.5rem;
+	background: black;
+	left: 0;
+	width: 100%;
+	top: 0;
+	position: absolute;
+}
+
 [piterjs_app] [mol_theme="$mol_theme_base"] {
 	--mol_theme_back: black;
 	--mol_theme_text: white;
