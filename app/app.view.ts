@@ -70,20 +70,27 @@ namespace $.$$ {
 			]
 		}
 
+		Placeholder() {
+			return this.meetup( this.meetup_id() ) ? super.Placeholder() : null
+		}
+
 		@ $mol_mem
 		menu_meetups() {
+			
+			const warn = $mol_fiber_solid.func( console.warn )
+			
 			return Object.keys( this.meetups() )
 			.filter( meetup_id => {
 
 				const meetup = this.meetup( meetup_id )
 
 				if( !meetup.start ) {
-					console.warn( `Meetup ${ meetup_id } has no "start"` )
+					warn( `Meetup ${ meetup_id } has no "start"` )
 					return false
 				}
 				
 				if( !meetup.speeches || !meetup.speeches.length ) {
-					console.warn( `Meetup ${ meetup_id } has no "speeches"` )
+					warn( `Meetup ${ meetup_id } has no "speeches"` )
 					return false
 				}
 
@@ -91,13 +98,13 @@ namespace $.$$ {
 					const speech = this.speech( speech_id )
 
 					if( !speech.description ) {
-						console.warn( `Speech ${ speech_id } has no "description"` )
+						warn( `Speech ${ speech_id } has no "description"` )
 						return false
 					}
 
 					const speaker = this.speaker( speech.speaker )
 					if( !speaker.photo ) {
-						console.warn( `Speaker ${ speech.speaker } has no "photo"` )
+						warn( `Speaker ${ speech.speaker } has no "photo"` )
 						return false
 					}
 				}

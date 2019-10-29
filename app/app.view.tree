@@ -35,7 +35,7 @@ $piterjs_app $mol_book
 		meetup <= meetup!id
 	Now $piterjs_now
 		event_top?val <=> event_front_up?val
-		minimal_width 100000
+		minimal_width 600
 	Placeholder $piterjs_now
 		event_top?val <=> event_front_up?val
 		minimal_width 400
