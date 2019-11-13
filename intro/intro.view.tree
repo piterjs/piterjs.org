@@ -19,7 +19,7 @@ $piterjs_intro $mol_view
 				\PiterJS **Conf** - конференции
 				\PiterJS **Code+Learn** - воркшопы
 		roles_org <= Roles_org $piterjs_intro_page
-			title \Орг роли
+			title \Роли организаторов
 			text \
 				\Программный комитет
 				\Фандрайзер
