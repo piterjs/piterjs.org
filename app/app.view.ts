@@ -51,6 +51,9 @@ namespace $.$$ {
 		now( next? : string ) { return this.$.$mol_state_arg.value( 'now' , next ) }
 
 		@ $mol_mem
+		intro( next? : string ) { return this.$.$mol_state_arg.value( 'intro' , next ) }
+
+		@ $mol_mem
 		meetup_id( next? : string ) { return this.$.$mol_state_arg.value( 'meetup' , next ) }
 		meetup( id : string ) { return this.meetups()[ id ] }
 		
@@ -62,6 +65,7 @@ namespace $.$$ {
 
 		@ $mol_mem
 		pages() {
+			if( this.intro() != null ) return [ this.Intro() ]
 			return [
 				this.Menu() ,
 				... !this.meetup( this.meetup_id() ) ? [ this.Now() ] : [] ,

@@ -1,0 +1,112 @@
+$piterjs_intro $mol_view
+	title \PiterJS Вступление
+	meetups /
+	page?val \
+	pages *
+		main <= Main $piterjs_intro_main
+		about <= About $piterjs_intro_page
+			title \Кто мы?
+			text \
+				\Обсуждаем JS и всё, что в него компилируется
+				\Проводим митапы в Питере каждый месяц с мая 2015
+				\Без отпусков. Без перерывов. Без каникул.
+				\Нам и этого стало мало...
+		projects <= Projects $piterjs_intro_page
+			title \Наши проекты
+			text \
+				\PiterJS **Meetups** - митапы в Петербурге
+				\PiterJS **Tour** - митапы в других городах
+				\PiterJS **Conf** - конференции
+				\PiterJS **Code+Learn** - воркшопы
+		roles_org <= Roles_org $piterjs_intro_page
+			title \Орг роли
+			text \
+				\Программный комитет
+				\Фандрайзер
+				\Видео-мастер 🔥
+				\Дизайнер 🔥
+				\Комьюнити-менеджер
+				\Менеджер
+		roles_place <= Roles_place $piterjs_intro_page
+			title \Роли на площадке
+			text \
+				\Техник
+				\Видео-оператор
+				\Фотограф 🔥
+				\Ведущий трансляции
+				\Ведущий мероприятия
+		speakers <= Speakers $piterjs_intro_page
+			title \Докладчики
+			text \
+				\Нужны всегда
+				\Даже если боишься
+				\Поможем с темой
+				\Поможем с подготовкой
+				\Пиши на hi@piterjs.org
+		place <= Place $piterjs_intro_page
+			title \Мы в JetBrains
+			text \
+				\Вайфая, туалетов - нет
+				\Курить - на улицу
+				\Чай, кофе - за углом
+		schedule <= Schedule $piterjs_intro_page
+			title \Сегодня
+			text \
+				\19:15 – Кирилл Сергеев
+				\**Логирование на JS**
+				\
+				\20:10 – Светлана Авдей
+				\**Документация к API - делай это понтяно**
+				\
+				\20:55 – Максим Ерехинский
+				\**Взаимодействие с iBeaсon в React Native**
+		profit <= Proft $piterjs_intro_page
+			title \Бонусы
+			text \
+				\За лучшие вопросы - призы
+				\Мы ведём трансляцию
+				\И записываем видео
+				\Улыбайтесь фотографу
+		info <= Info $piterjs_intro_page
+			title \Твой вклад
+			text \
+				\patreon.com/piterjs
+				\github.com/piterjs
+				\hi@piterjs.org
+		follow <= Follow $piterjs_intro_page
+			title \Следите за новостями
+			text \
+				\medium.com/piterjs
+				\twitter.com/gopiterjs
+				\vk.com/piterjs
+				\t.me/piterjs
+				\youtube.com/piterjs
+				\piterjs.org
+		beer <= Beer $piterjs_intro_page
+			title \Го в бар!
+			text \
+				\t.me/beerjs_spb
+	sub /
+		<= Lines_open $piterjs_intro_lines color <= brand_1 \#C14989
+		<= Lines_close $piterjs_intro_lines color <= brand_2 \#E8863F
+		<= Page $mol_view
+	plugins /
+		<= Nav $mol_nav
+			keys_x <= page_ids /string
+			keys_y <= page_ids /string
+			current_x?val <=> page?val
+			current_y?val <=> page?val
+
+
+$piterjs_intro_page $mol_view
+	sub /
+		<= Head $mol_view sub <= head /
+			<= Title $mol_view sub / <= title \PiterJS
+		<= Text $mol_text text <= text \
+
+$piterjs_intro_main $piterjs_intro_page
+	title \PiterJS #42
+	head /
+		<= Logo $piterjs_image link \piterjs/logo/logo.svg
+		<= Title
+

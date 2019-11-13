@@ -36,6 +36,9 @@ $piterjs_app $mol_book
 	Now $piterjs_now
 		event_top?val <=> event_front_up?val
 		minimal_width 600
+	Intro $piterjs_intro
+		page?val <=> intro?val \
+		minimal_width 9000
 	Placeholder $piterjs_now
 		event_top?val <=> event_front_up?val
 		minimal_width 400
