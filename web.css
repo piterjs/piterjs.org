@@ -626,32 +626,6 @@ sans-serif;
 	vertical-align: inherit;
 }
 
-[mol_image] {
-	box-shadow: 0 0 0 1px var(--mol_theme_line);
-	border-radius: 0px;
-	border-radius: var(--mol_skin_round);
-	overflow: hidden;
-	flex: 0 1 auto;
-	max-width: 100%;
-}
-
-[mol_link_iconed] {
-	align-items: center;
-	color: #3a8ccb;
-	color: var(--mol_skin_base);
-}
-
-[mol_link_iconed_icon] {
-	box-shadow: none;
-	margin-right: 2px;
-	height: 1em;
-	vertical-align: -10%;
-}
-
-[mol_theme="$mol_theme_dark"] [mol_link_iconed_icon] {
-	filter: invert(1);
-}
-
 [mol_text] {
 	line-height: 1.5;
 	box-sizing: border-box;
@@ -1014,6 +988,96 @@ monospace;
 [piterjs_meetup_snippet_date] {
 	color: var(--mol_theme_text);
 	padding: .5rem;
+}
+
+[piterjs_intro_lines] {
+	width: 25%;
+	pointer-events: none;
+	position: absolute;
+	z-index: -1;
+}
+
+[piterjs_intro_lines_open] {
+	left: 0;
+	top: 0;
+}
+
+[piterjs_intro_lines_close] {
+	right: 0;
+	bottom: 0;
+	transform: rotate(180deg);
+}
+
+/* cyrillic */
+
+@font-face {
+	font-family: 'Fira Sans';
+	font-style: normal;
+	font-weight: 400;
+	font-display: swap;
+	src: local('Fira Sans Regular'), local('FiraSans-Regular'), url(https://fonts.gstatic.com/s/firasans/v10/va9E4kDNxMZdWfMOD5Vvk4jLeTY.woff2) format('woff2');
+	unicode-range: U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116;
+}
+
+/* latin */
+
+@font-face {
+	font-family: 'Fira Sans';
+	font-style: normal;
+	font-weight: 400;
+	font-display: swap;
+	src: local('Fira Sans Regular'), local('FiraSans-Regular'), url(https://fonts.gstatic.com/s/firasans/v10/va9E4kDNxMZdWfMOD5Vvl4jL.woff2) format('woff2');
+	unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+2000-206F, U+2074, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+
+@keyframes piterjs_intro_page_show {
+	from {
+		transform: rotateY( 90deg );
+		opacity: 0;
+	}
+}
+
+[piterjs_intro] {
+	font-family: "Fira Sans", "Verdana", sans-serif;
+	background: var(--mol_theme_back);
+	flex: auto;
+	display: flex;
+	font-size: 5vmin;
+}
+
+[piterjs_intro_page] {
+	flex: auto;
+	display: flex;
+	align-items: center;
+	align-content: center;
+	justify-content: center;
+	flex-direction: column;
+	animation: piterjs_intro_page_show .25s ease-out forwards;
+}
+
+[piterjs_intro_page_head] {
+	display: flex;
+	align-items: center;
+}
+
+[piterjs_intro_main_logo] {
+	display: block;
+	width: 15vmin;
+	box-shadow: none;
+	margin: 1.5vmin;
+}
+
+[piterjs_intro_page_title] {
+	font-size: 2em;
+	margin: 2vmin;
+	font-weight: 600;
+	line-height: 1;
+}
+
+[piterjs_intro_page_text] {
+	margin: 2vmin;
+	box-shadow: none;
+	max-width: none;
 }
 
 [piterjs_app] {

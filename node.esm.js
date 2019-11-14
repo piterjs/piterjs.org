@@ -5974,148 +5974,6 @@ var $;
 "use strict";
 var $;
 (function ($) {
-    class $mol_image extends $.$mol_view {
-        /**
-         *  ```
-         *  dom_name \img
-         *  ```
-         **/
-        dom_name() {
-            return "img";
-        }
-        /**
-         *  ```
-         *  field *
-         *  	^
-         *  	src <= uri
-         *  	alt <= title
-         *  ```
-         **/
-        field() {
-            return (Object.assign(Object.assign({}, super.field()), { "src": this.uri(), "alt": this.title() }));
-        }
-        /**
-         *  ```
-         *  uri \
-         *  ```
-         **/
-        uri() {
-            return "";
-        }
-    }
-    $.$mol_image = $mol_image;
-})($ || ($ = {}));
-//image.view.tree.js.map
-;
-"use strict";
-var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
-    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
-    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
-    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
-    return c > 3 && r && Object.defineProperty(target, key, r), r;
-};
-var $;
-(function ($) {
-    class $mol_link_iconed extends $.$mol_link {
-        /**
-         *  ```
-         *  sub / <= Icon
-         *  ```
-         **/
-        sub() {
-            return [this.Icon()];
-        }
-        /**
-         *  ```
-         *  Icon $mol_image uri <= icon
-         *  ```
-         **/
-        Icon() {
-            return ((obj) => {
-                obj.uri = () => this.icon();
-                return obj;
-            })(new this.$.$mol_image());
-        }
-        /**
-         *  ```
-         *  icon \
-         *  ```
-         **/
-        icon() {
-            return "";
-        }
-        /**
-         *  ```
-         *  content / <= title
-         *  ```
-         **/
-        content() {
-            return [this.title()];
-        }
-        /**
-         *  ```
-         *  title <= uri
-         *  ```
-         **/
-        title() {
-            return this.uri();
-        }
-        /**
-         *  ```
-         *  host \
-         *  ```
-         **/
-        host() {
-            return "";
-        }
-    }
-    __decorate([
-        $.$mol_mem
-    ], $mol_link_iconed.prototype, "Icon", null);
-    $.$mol_link_iconed = $mol_link_iconed;
-})($ || ($ = {}));
-//iconed.view.tree.js.map
-;
-"use strict";
-var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
-    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
-    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
-    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
-    return c > 3 && r && Object.defineProperty(target, key, r), r;
-};
-var $;
-(function ($) {
-    var $$;
-    (function ($$) {
-        class $mol_link_iconed extends $.$mol_link_iconed {
-            icon() {
-                return `https://favicon.yandex.net/favicon/${this.host()}?color=0,0,0,0&size=32&stub=1`;
-            }
-            host() {
-                const url = new URL(this.uri());
-                return url.hostname;
-            }
-            title() {
-                return decodeURIComponent(this.uri().split(this.host(), 2)[1]);
-            }
-            sub() {
-                return [this.Icon(), ...this.content()];
-            }
-        }
-        __decorate([
-            $.$mol_mem
-        ], $mol_link_iconed.prototype, "host", null);
-        __decorate([
-            $.$mol_mem
-        ], $mol_link_iconed.prototype, "title", null);
-        $$.$mol_link_iconed = $mol_link_iconed;
-    })($$ = $.$$ || ($.$$ = {}));
-})($ || ($ = {}));
-//iconed.view.js.map
-;
-"use strict";
-var $;
-(function ($) {
     $.$mol_syntax_md_flow = new $.$mol_syntax({
         'quote': /^((?:(?:> )(?:[^]*?)$(\r?\n?))+)([\n\r]*)/,
         'header': /^(#+)(\s*)(.*?)$([\n\r]*)/,
@@ -6550,7 +6408,7 @@ var $;
     $.$mol_text_span = $mol_text_span;
 })($ || ($ = {}));
 (function ($) {
-    class $mol_text_link extends $.$mol_link_iconed {
+    class $mol_text_link extends $.$mol_link {
         /**
          *  ```
          *  attr *
@@ -6584,6 +6442,14 @@ var $;
          **/
         link(val, force) {
             return (val !== void 0) ? val : "";
+        }
+        /**
+         *  ```
+         *  sub <= content?val
+         *  ```
+         **/
+        sub() {
+            return this.content();
         }
         /**
          *  ```
@@ -8533,6 +8399,916 @@ var $;
 //snippet.view.js.map
 ;
 "use strict";
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var $;
+(function ($) {
+    class $piterjs_intro_lines extends $.$mol_svg_root {
+        /**
+         *  ```
+         *  style * fill <= color
+         *  ```
+         **/
+        style() {
+            return ({
+                "fill": this.color(),
+            });
+        }
+        /**
+         *  ```
+         *  color \#FFE515
+         *  ```
+         **/
+        color() {
+            return "#FFE515";
+        }
+        /**
+         *  ```
+         *  view_box \0 0 310 246
+         *  ```
+         **/
+        view_box() {
+            return "0 0 310 246";
+        }
+        /**
+         *  ```
+         *  sub /
+         *  	<= First
+         *  	<= Second
+         *  	<= Third
+         *  ```
+         **/
+        sub() {
+            return [this.First(), this.Second(), this.Third()];
+        }
+        /**
+         *  ```
+         *  First $mol_svg_path geometry \M56 9.00002L-1.5605e-05 67.5L-1.31571e-05 95.5L56 36.5L56 9.00002Z
+         *  ```
+         **/
+        First() {
+            return ((obj) => {
+                obj.geometry = () => "M56 9.00002L-1.5605e-05 67.5L-1.31571e-05 95.5L56 36.5L56 9.00002Z ";
+                return obj;
+            })(new this.$.$mol_svg_path());
+        }
+        /**
+         *  ```
+         *  Second $mol_svg_path geometry \M148.5 1.40751e-05L-7.6932e-06 158L0 246L238 6.25073e-06L148.5 1.40751e-05Z
+         *  ```
+         **/
+        Second() {
+            return ((obj) => {
+                obj.geometry = () => "M148.5 1.40751e-05L-7.6932e-06 158L0 246L238 6.25073e-06L148.5 1.40751e-05Z";
+                return obj;
+            })(new this.$.$mol_svg_path());
+        }
+        /**
+         *  ```
+         *  Third $mol_svg_path geometry \M167.5 152.5L167.5 108L268 3.62805e-06L309.5 0L167.5 152.5Z
+         *  ```
+         **/
+        Third() {
+            return ((obj) => {
+                obj.geometry = () => "M167.5 152.5L167.5 108L268 3.62805e-06L309.5 0L167.5 152.5Z";
+                return obj;
+            })(new this.$.$mol_svg_path());
+        }
+    }
+    __decorate([
+        $.$mol_mem
+    ], $piterjs_intro_lines.prototype, "First", null);
+    __decorate([
+        $.$mol_mem
+    ], $piterjs_intro_lines.prototype, "Second", null);
+    __decorate([
+        $.$mol_mem
+    ], $piterjs_intro_lines.prototype, "Third", null);
+    $.$piterjs_intro_lines = $piterjs_intro_lines;
+})($ || ($ = {}));
+//intro.view.tree.js.map
+;
+"use strict";
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var $;
+(function ($) {
+    class $mol_nav extends $.$mol_plugin {
+        /**
+         *  ```
+         *  cycle?val false
+         *  ```
+         **/
+        cycle(val, force) {
+            return (val !== void 0) ? val : false;
+        }
+        /**
+         *  ```
+         *  mod_ctrl false
+         *  ```
+         **/
+        mod_ctrl() {
+            return false;
+        }
+        /**
+         *  ```
+         *  mod_shift false
+         *  ```
+         **/
+        mod_shift() {
+            return false;
+        }
+        /**
+         *  ```
+         *  mod_alt false
+         *  ```
+         **/
+        mod_alt() {
+            return false;
+        }
+        /**
+         *  ```
+         *  keys_x?val /
+         *  ```
+         **/
+        keys_x(val, force) {
+            return (val !== void 0) ? val : [];
+        }
+        /**
+         *  ```
+         *  keys_y?val /
+         *  ```
+         **/
+        keys_y(val, force) {
+            return (val !== void 0) ? val : [];
+        }
+        /**
+         *  ```
+         *  current_x?val \
+         *  ```
+         **/
+        current_x(val, force) {
+            return (val !== void 0) ? val : "";
+        }
+        /**
+         *  ```
+         *  current_y?val \
+         *  ```
+         **/
+        current_y(val, force) {
+            return (val !== void 0) ? val : "";
+        }
+        /**
+         *  ```
+         *  event_up?event null
+         *  ```
+         **/
+        event_up(event, force) {
+            return (event !== void 0) ? event : null;
+        }
+        /**
+         *  ```
+         *  event_down?event null
+         *  ```
+         **/
+        event_down(event, force) {
+            return (event !== void 0) ? event : null;
+        }
+        /**
+         *  ```
+         *  event_left?event null
+         *  ```
+         **/
+        event_left(event, force) {
+            return (event !== void 0) ? event : null;
+        }
+        /**
+         *  ```
+         *  event_right?event null
+         *  ```
+         **/
+        event_right(event, force) {
+            return (event !== void 0) ? event : null;
+        }
+        /**
+         *  ```
+         *  event *
+         *  	^
+         *  	keydown?event <=> event_key?event
+         *  ```
+         **/
+        event() {
+            return (Object.assign(Object.assign({}, super.event()), { "keydown": (event) => this.event_key(event) }));
+        }
+        /**
+         *  ```
+         *  event_key?event null
+         *  ```
+         **/
+        event_key(event, force) {
+            return (event !== void 0) ? event : null;
+        }
+    }
+    __decorate([
+        $.$mol_mem
+    ], $mol_nav.prototype, "cycle", null);
+    __decorate([
+        $.$mol_mem
+    ], $mol_nav.prototype, "keys_x", null);
+    __decorate([
+        $.$mol_mem
+    ], $mol_nav.prototype, "keys_y", null);
+    __decorate([
+        $.$mol_mem
+    ], $mol_nav.prototype, "current_x", null);
+    __decorate([
+        $.$mol_mem
+    ], $mol_nav.prototype, "current_y", null);
+    __decorate([
+        $.$mol_mem
+    ], $mol_nav.prototype, "event_up", null);
+    __decorate([
+        $.$mol_mem
+    ], $mol_nav.prototype, "event_down", null);
+    __decorate([
+        $.$mol_mem
+    ], $mol_nav.prototype, "event_left", null);
+    __decorate([
+        $.$mol_mem
+    ], $mol_nav.prototype, "event_right", null);
+    __decorate([
+        $.$mol_mem
+    ], $mol_nav.prototype, "event_key", null);
+    $.$mol_nav = $mol_nav;
+})($ || ($ = {}));
+//nav.view.tree.js.map
+;
+"use strict";
+var $;
+(function ($) {
+    var $$;
+    (function ($$) {
+        class $mol_nav extends $.$mol_nav {
+            event_key(event) {
+                if (event.defaultPrevented)
+                    return;
+                if (this.mod_ctrl() && !event.ctrlKey)
+                    return;
+                if (this.mod_shift() && !event.shiftKey)
+                    return;
+                if (this.mod_alt() && !event.altKey)
+                    return;
+                switch (event.keyCode) {
+                    case $.$mol_keyboard_code.up: return this.event_up(event);
+                    case $.$mol_keyboard_code.down: return this.event_down(event);
+                    case $.$mol_keyboard_code.left: return this.event_left(event);
+                    case $.$mol_keyboard_code.right: return this.event_right(event);
+                    case $.$mol_keyboard_code.pageUp: return this.event_up(event);
+                    case $.$mol_keyboard_code.pageDown: return this.event_down(event);
+                }
+            }
+            event_up(event) {
+                const keys = this.keys_y();
+                if (keys.length < 2)
+                    return;
+                const index_y = this.index_y();
+                const index_old = index_y === null ? 0 : index_y;
+                const index_new = (index_old + keys.length - 1) % keys.length;
+                event.preventDefault();
+                if (index_old === 0 && !this.cycle())
+                    return;
+                this.current_y(this.keys_y()[index_new]);
+            }
+            event_down(event) {
+                const keys = this.keys_y();
+                if (keys.length < 2)
+                    return;
+                const index_y = this.index_y();
+                const index_old = index_y === null ? keys.length - 1 : index_y;
+                const index_new = (index_old + 1) % keys.length;
+                event.preventDefault();
+                if (index_new === 0 && !this.cycle())
+                    return;
+                this.current_y(this.keys_y()[index_new]);
+            }
+            event_left(event) {
+                const keys = this.keys_x();
+                if (keys.length < 2)
+                    return;
+                const index_x = this.index_x();
+                const index_old = index_x === null ? 0 : index_x;
+                const index_new = (index_old + keys.length - 1) % keys.length;
+                event.preventDefault();
+                if (index_old === 0 && !this.cycle())
+                    return;
+                this.current_x(this.keys_x()[index_new]);
+            }
+            event_right(event) {
+                const keys = this.keys_x();
+                if (keys.length < 2)
+                    return;
+                const index_x = this.index_x();
+                const index_old = index_x === null ? keys.length - 1 : index_x;
+                const index_new = (index_old + 1) % keys.length;
+                event.preventDefault();
+                if (index_new === 0 && !this.cycle())
+                    return;
+                this.current_x(this.keys_x()[index_new]);
+            }
+            index_y() {
+                let index = this.keys_y().indexOf(this.current_y());
+                if (index < 0)
+                    return null;
+                return index;
+            }
+            index_x() {
+                let index = this.keys_x().indexOf(this.current_x());
+                if (index < 0)
+                    return null;
+                return index;
+            }
+        }
+        $$.$mol_nav = $mol_nav;
+    })($$ = $.$$ || ($.$$ = {}));
+})($ || ($ = {}));
+//nav.view.js.map
+;
+"use strict";
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var $;
+(function ($) {
+    class $piterjs_intro extends $.$mol_view {
+        /**
+         *  ```
+         *  title \PiterJS Вступление
+         *  ```
+         **/
+        title() {
+            return "PiterJS Вступление";
+        }
+        /**
+         *  ```
+         *  meetups /
+         *  ```
+         **/
+        meetups() {
+            return [];
+        }
+        /**
+         *  ```
+         *  page?val \
+         *  ```
+         **/
+        page(val, force) {
+            return (val !== void 0) ? val : "";
+        }
+        /**
+         *  ```
+         *  pages *
+         *  	main <= Main
+         *  	about <= About
+         *  	projects <= Projects
+         *  	roles_org <= Roles_org
+         *  	roles_place <= Roles_place
+         *  	speakers <= Speakers
+         *  	place <= Place
+         *  	schedule <= Schedule
+         *  	profit <= Proft
+         *  	info <= Info
+         *  	follow <= Follow
+         *  	beer <= Beer
+         *  ```
+         **/
+        pages() {
+            return ({
+                "main": this.Main(),
+                "about": this.About(),
+                "projects": this.Projects(),
+                "roles_org": this.Roles_org(),
+                "roles_place": this.Roles_place(),
+                "speakers": this.Speakers(),
+                "place": this.Place(),
+                "schedule": this.Schedule(),
+                "profit": this.Proft(),
+                "info": this.Info(),
+                "follow": this.Follow(),
+                "beer": this.Beer(),
+            });
+        }
+        /**
+         *  ```
+         *  Main $piterjs_intro_main
+         *  ```
+         **/
+        Main() {
+            return ((obj) => {
+                return obj;
+            })(new this.$.$piterjs_intro_main());
+        }
+        /**
+         *  ```
+         *  About $piterjs_intro_page
+         *  	title \Кто мы?
+         *  	text \
+         *  		\Обсуждаем JS и всё, что в него компилируется
+         *  		\Проводим митапы в Питере каждый месяц с мая 2015
+         *  		\Без отпусков. Без перерывов. Без каникул.
+         *  		\Нам и этого стало мало...
+         *  ```
+         **/
+        About() {
+            return ((obj) => {
+                obj.title = () => "Кто мы?";
+                obj.text = () => "Обсуждаем JS и всё, что в него компилируется\nПроводим митапы в Питере каждый месяц с мая 2015\nБез отпусков. Без перерывов. Без каникул.\nНам и этого стало мало...";
+                return obj;
+            })(new this.$.$piterjs_intro_page());
+        }
+        /**
+         *  ```
+         *  Projects $piterjs_intro_page
+         *  	title \Наши проекты
+         *  	text \
+         *  		\PiterJS **Meetups** - митапы в Петербурге
+         *  		\PiterJS **Tour** - митапы в других городах
+         *  		\PiterJS **Conf** - конференции
+         *  		\PiterJS **Code+Learn** - воркшопы
+         *  ```
+         **/
+        Projects() {
+            return ((obj) => {
+                obj.title = () => "Наши проекты";
+                obj.text = () => "PiterJS **Meetups** - митапы в Петербурге\nPiterJS **Tour** - митапы в других городах\nPiterJS **Conf** - конференции\nPiterJS **Code+Learn** - воркшопы";
+                return obj;
+            })(new this.$.$piterjs_intro_page());
+        }
+        /**
+         *  ```
+         *  Roles_org $piterjs_intro_page
+         *  	title \Роли организаторов
+         *  	text \
+         *  		\Программный комитет
+         *  		\Фандрайзер
+         *  		\Видео-мастер 🔥
+         *  		\Дизайнер 🔥
+         *  		\Комьюнити-менеджер
+         *  		\Менеджер
+         *  ```
+         **/
+        Roles_org() {
+            return ((obj) => {
+                obj.title = () => "Роли организаторов";
+                obj.text = () => "Программный комитет\nФандрайзер\nВидео-мастер 🔥\nДизайнер 🔥\nКомьюнити-менеджер\nМенеджер";
+                return obj;
+            })(new this.$.$piterjs_intro_page());
+        }
+        /**
+         *  ```
+         *  Roles_place $piterjs_intro_page
+         *  	title \Роли на площадке
+         *  	text \
+         *  		\Техник
+         *  		\Видео-оператор
+         *  		\Фотограф 🔥
+         *  		\Ведущий трансляции
+         *  		\Ведущий мероприятия
+         *  ```
+         **/
+        Roles_place() {
+            return ((obj) => {
+                obj.title = () => "Роли на площадке";
+                obj.text = () => "Техник\nВидео-оператор\nФотограф 🔥\nВедущий трансляции\nВедущий мероприятия";
+                return obj;
+            })(new this.$.$piterjs_intro_page());
+        }
+        /**
+         *  ```
+         *  Speakers $piterjs_intro_page
+         *  	title \Докладчики
+         *  	text \
+         *  		\Нужны всегда
+         *  		\Даже если боишься
+         *  		\Поможем с темой
+         *  		\Поможем с подготовкой
+         *  		\Пиши на hi@piterjs.org
+         *  ```
+         **/
+        Speakers() {
+            return ((obj) => {
+                obj.title = () => "Докладчики";
+                obj.text = () => "Нужны всегда\nДаже если боишься\nПоможем с темой\nПоможем с подготовкой\nПиши на hi@piterjs.org";
+                return obj;
+            })(new this.$.$piterjs_intro_page());
+        }
+        /**
+         *  ```
+         *  Place $piterjs_intro_page
+         *  	title \Мы в JetBrains
+         *  	text \
+         *  		\WiFi - JetBrains-Open
+         *  		\Курить - на улицу
+         *  		\Чай, кофе - за углом
+         *  ```
+         **/
+        Place() {
+            return ((obj) => {
+                obj.title = () => "Мы в JetBrains";
+                obj.text = () => "WiFi - JetBrains-Open\nКурить - на улицу\nЧай, кофе - за углом";
+                return obj;
+            })(new this.$.$piterjs_intro_page());
+        }
+        /**
+         *  ```
+         *  Schedule $piterjs_intro_page
+         *  	title \Сегодня
+         *  	text \
+         *  		\19:15 – Кирилл Сергеев
+         *  		\**Логирование на JS**
+         *  		\
+         *  		\20:10 – Светлана Авдей
+         *  		\**Документация к API - делай это понятно**
+         *  		\
+         *  		\20:55 – Максим Ерехинский
+         *  		\**Взаимодействие с iBeaсon в React Native**
+         *  ```
+         **/
+        Schedule() {
+            return ((obj) => {
+                obj.title = () => "Сегодня";
+                obj.text = () => "19:15 – Кирилл Сергеев\n**Логирование на JS**\n\n20:10 – Светлана Авдей\n**Документация к API - делай это понятно**\n\n20:55 – Максим Ерехинский\n**Взаимодействие с iBeaсon в React Native**";
+                return obj;
+            })(new this.$.$piterjs_intro_page());
+        }
+        /**
+         *  ```
+         *  Proft $piterjs_intro_page
+         *  	title \Бонусы
+         *  	text \
+         *  		\За лучшие вопросы - призы
+         *  		\Мы ведём трансляцию
+         *  		\И записываем видео
+         *  		\Улыбайтесь фотографу
+         *  ```
+         **/
+        Proft() {
+            return ((obj) => {
+                obj.title = () => "Бонусы";
+                obj.text = () => "За лучшие вопросы - призы\nМы ведём трансляцию\nИ записываем видео\nУлыбайтесь фотографу";
+                return obj;
+            })(new this.$.$piterjs_intro_page());
+        }
+        /**
+         *  ```
+         *  Info $piterjs_intro_page
+         *  	title \Твой вклад
+         *  	text \
+         *  		\patreon.com/piterjs
+         *  		\github.com/piterjs
+         *  		\hi@piterjs.org
+         *  ```
+         **/
+        Info() {
+            return ((obj) => {
+                obj.title = () => "Твой вклад";
+                obj.text = () => "patreon.com/piterjs\ngithub.com/piterjs\nhi@piterjs.org";
+                return obj;
+            })(new this.$.$piterjs_intro_page());
+        }
+        /**
+         *  ```
+         *  Follow $piterjs_intro_page
+         *  	title \Следите за новостями
+         *  	text \
+         *  		\medium.com/piterjs
+         *  		\twitter.com/gopiterjs
+         *  		\vk.com/piterjs
+         *  		\t.me/piterjs
+         *  		\youtube.com/piterjs
+         *  		\piterjs.org
+         *  ```
+         **/
+        Follow() {
+            return ((obj) => {
+                obj.title = () => "Следите за новостями";
+                obj.text = () => "medium.com/piterjs\ntwitter.com/gopiterjs\nvk.com/piterjs\nt.me/piterjs\nyoutube.com/piterjs\npiterjs.org";
+                return obj;
+            })(new this.$.$piterjs_intro_page());
+        }
+        /**
+         *  ```
+         *  Beer $piterjs_intro_page
+         *  	title \Го в бар!
+         *  	text \
+         *  		\O'Hooligans
+         *  		\Приморский 137/1
+         *  		\t.me/beerjs_spb
+         *  ```
+         **/
+        Beer() {
+            return ((obj) => {
+                obj.title = () => "Го в бар!";
+                obj.text = () => "O'Hooligans\nПриморский 137/1\nt.me/beerjs_spb";
+                return obj;
+            })(new this.$.$piterjs_intro_page());
+        }
+        /**
+         *  ```
+         *  sub /
+         *  	<= Lines_open
+         *  	<= Lines_close
+         *  	<= Page
+         *  ```
+         **/
+        sub() {
+            return [this.Lines_open(), this.Lines_close(), this.Page()];
+        }
+        /**
+         *  ```
+         *  Lines_open $piterjs_intro_lines color <= brand_1
+         *  ```
+         **/
+        Lines_open() {
+            return ((obj) => {
+                obj.color = () => this.brand_1();
+                return obj;
+            })(new this.$.$piterjs_intro_lines());
+        }
+        /**
+         *  ```
+         *  brand_1 \#C14989
+         *  ```
+         **/
+        brand_1() {
+            return "#C14989";
+        }
+        /**
+         *  ```
+         *  Lines_close $piterjs_intro_lines color <= brand_2
+         *  ```
+         **/
+        Lines_close() {
+            return ((obj) => {
+                obj.color = () => this.brand_2();
+                return obj;
+            })(new this.$.$piterjs_intro_lines());
+        }
+        /**
+         *  ```
+         *  brand_2 \#E8863F
+         *  ```
+         **/
+        brand_2() {
+            return "#E8863F";
+        }
+        /**
+         *  ```
+         *  Page $mol_view
+         *  ```
+         **/
+        Page() {
+            return ((obj) => {
+                return obj;
+            })(new this.$.$mol_view());
+        }
+        /**
+         *  ```
+         *  plugins / <= Nav
+         *  ```
+         **/
+        plugins() {
+            return [this.Nav()];
+        }
+        /**
+         *  ```
+         *  Nav $mol_nav
+         *  	keys_x <= page_ids
+         *  	keys_y <= page_ids
+         *  	current_x?val <=> page?val
+         *  	current_y?val <=> page?val
+         *  ```
+         **/
+        Nav() {
+            return ((obj) => {
+                obj.keys_x = () => this.page_ids();
+                obj.keys_y = () => this.page_ids();
+                obj.current_x = (val) => this.page(val);
+                obj.current_y = (val) => this.page(val);
+                return obj;
+            })(new this.$.$mol_nav());
+        }
+        /**
+         *  ```
+         *  page_ids /string
+         *  ```
+         **/
+        page_ids() {
+            return [];
+        }
+    }
+    __decorate([
+        $.$mol_mem
+    ], $piterjs_intro.prototype, "page", null);
+    __decorate([
+        $.$mol_mem
+    ], $piterjs_intro.prototype, "Main", null);
+    __decorate([
+        $.$mol_mem
+    ], $piterjs_intro.prototype, "About", null);
+    __decorate([
+        $.$mol_mem
+    ], $piterjs_intro.prototype, "Projects", null);
+    __decorate([
+        $.$mol_mem
+    ], $piterjs_intro.prototype, "Roles_org", null);
+    __decorate([
+        $.$mol_mem
+    ], $piterjs_intro.prototype, "Roles_place", null);
+    __decorate([
+        $.$mol_mem
+    ], $piterjs_intro.prototype, "Speakers", null);
+    __decorate([
+        $.$mol_mem
+    ], $piterjs_intro.prototype, "Place", null);
+    __decorate([
+        $.$mol_mem
+    ], $piterjs_intro.prototype, "Schedule", null);
+    __decorate([
+        $.$mol_mem
+    ], $piterjs_intro.prototype, "Proft", null);
+    __decorate([
+        $.$mol_mem
+    ], $piterjs_intro.prototype, "Info", null);
+    __decorate([
+        $.$mol_mem
+    ], $piterjs_intro.prototype, "Follow", null);
+    __decorate([
+        $.$mol_mem
+    ], $piterjs_intro.prototype, "Beer", null);
+    __decorate([
+        $.$mol_mem
+    ], $piterjs_intro.prototype, "Lines_open", null);
+    __decorate([
+        $.$mol_mem
+    ], $piterjs_intro.prototype, "Lines_close", null);
+    __decorate([
+        $.$mol_mem
+    ], $piterjs_intro.prototype, "Page", null);
+    __decorate([
+        $.$mol_mem
+    ], $piterjs_intro.prototype, "Nav", null);
+    $.$piterjs_intro = $piterjs_intro;
+})($ || ($ = {}));
+(function ($) {
+    class $piterjs_intro_page extends $.$mol_view {
+        /**
+         *  ```
+         *  sub /
+         *  	<= Head
+         *  	<= Text
+         *  ```
+         **/
+        sub() {
+            return [this.Head(), this.Text()];
+        }
+        /**
+         *  ```
+         *  Head $mol_view sub <= head
+         *  ```
+         **/
+        Head() {
+            return ((obj) => {
+                obj.sub = () => this.head();
+                return obj;
+            })(new this.$.$mol_view());
+        }
+        /**
+         *  ```
+         *  head / <= Title
+         *  ```
+         **/
+        head() {
+            return [this.Title()];
+        }
+        /**
+         *  ```
+         *  Title $mol_view sub / <= title
+         *  ```
+         **/
+        Title() {
+            return ((obj) => {
+                obj.sub = () => [this.title()];
+                return obj;
+            })(new this.$.$mol_view());
+        }
+        /**
+         *  ```
+         *  title \PiterJS
+         *  ```
+         **/
+        title() {
+            return "PiterJS";
+        }
+        /**
+         *  ```
+         *  Text $mol_text text <= text
+         *  ```
+         **/
+        Text() {
+            return ((obj) => {
+                obj.text = () => this.text();
+                return obj;
+            })(new this.$.$mol_text());
+        }
+        /**
+         *  ```
+         *  text \
+         *  ```
+         **/
+        text() {
+            return "";
+        }
+    }
+    __decorate([
+        $.$mol_mem
+    ], $piterjs_intro_page.prototype, "Head", null);
+    __decorate([
+        $.$mol_mem
+    ], $piterjs_intro_page.prototype, "Title", null);
+    __decorate([
+        $.$mol_mem
+    ], $piterjs_intro_page.prototype, "Text", null);
+    $.$piterjs_intro_page = $piterjs_intro_page;
+})($ || ($ = {}));
+(function ($) {
+    class $piterjs_intro_main extends $.$piterjs_intro_page {
+        /**
+         *  ```
+         *  title \PiterJS #42
+         *  ```
+         **/
+        title() {
+            return "PiterJS #42";
+        }
+        /**
+         *  ```
+         *  head /
+         *  	<= Logo
+         *  	<= Title
+         *  ```
+         **/
+        head() {
+            return [this.Logo(), this.Title()];
+        }
+        /**
+         *  ```
+         *  Logo $piterjs_image link \piterjs/logo/logo.svg
+         *  ```
+         **/
+        Logo() {
+            return ((obj) => {
+                obj.link = () => "piterjs/logo/logo.svg";
+                return obj;
+            })(new this.$.$piterjs_image());
+        }
+    }
+    __decorate([
+        $.$mol_mem
+    ], $piterjs_intro_main.prototype, "Logo", null);
+    $.$piterjs_intro_main = $piterjs_intro_main;
+})($ || ($ = {}));
+//intro.view.tree.js.map
+;
+"use strict";
+var $;
+(function ($) {
+    var $$;
+    (function ($$) {
+        class $piterjs_intro extends $.$piterjs_intro {
+            page_ids() {
+                return Object.keys(this.pages());
+            }
+            Page() {
+                return this.pages()[this.page() || 'main'];
+            }
+        }
+        $$.$piterjs_intro = $piterjs_intro;
+    })($$ = $.$$ || ($.$$ = {}));
+})($ || ($ = {}));
+//intro.view.js.map
+;
+"use strict";
 var $;
 (function ($) {
     function $mol_typeof(value) {
@@ -9264,6 +10040,28 @@ var $;
         }
         /**
          *  ```
+         *  Intro $piterjs_intro
+         *  	page?val <=> intro?val
+         *  	minimal_width 9000
+         *  ```
+         **/
+        Intro() {
+            return ((obj) => {
+                obj.page = (val) => this.intro(val);
+                obj.minimal_width = () => 9000;
+                return obj;
+            })(new this.$.$piterjs_intro());
+        }
+        /**
+         *  ```
+         *  intro?val \
+         *  ```
+         **/
+        intro(val, force) {
+            return (val !== void 0) ? val : "";
+        }
+        /**
+         *  ```
          *  Placeholder $piterjs_now
          *  	event_top?val <=> event_front_up?val
          *  	minimal_width 400
@@ -9301,6 +10099,12 @@ var $;
     ], $piterjs_app.prototype, "Now", null);
     __decorate([
         $.$mol_mem
+    ], $piterjs_app.prototype, "Intro", null);
+    __decorate([
+        $.$mol_mem
+    ], $piterjs_app.prototype, "intro", null);
+    __decorate([
+        $.$mol_mem
     ], $piterjs_app.prototype, "Placeholder", null);
     $.$piterjs_app = $piterjs_app;
 })($ || ($ = {}));
@@ -9332,6 +10136,7 @@ var $;
                 return new $.$mol_tree({ type: '*', sub: tree.sub }).toJSON();
             }
             now(next) { return this.$.$mol_state_arg.value('now', next); }
+            intro(next) { return this.$.$mol_state_arg.value('intro', next); }
             meetup_id(next) { return this.$.$mol_state_arg.value('meetup', next); }
             meetup(id) { return this.meetups()[id]; }
             speech_id(next) { return this.$.$mol_state_arg.value('speech', next); }
@@ -9339,6 +10144,8 @@ var $;
             speaker_id(next) { return this.$.$mol_state_arg.value('speaker', next); }
             speaker(id) { return this.speakers()[id]; }
             pages() {
+                if (this.intro() != null)
+                    return [this.Intro()];
                 return [
                     this.Menu(),
                     ...!this.meetup(this.meetup_id()) ? [this.Now()] : [],
@@ -9394,6 +10201,9 @@ var $;
         __decorate([
             $.$mol_mem
         ], $piterjs_app.prototype, "now", null);
+        __decorate([
+            $.$mol_mem
+        ], $piterjs_app.prototype, "intro", null);
         __decorate([
             $.$mol_mem
         ], $piterjs_app.prototype, "meetup_id", null);

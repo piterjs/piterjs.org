@@ -23,9 +23,9 @@ declare namespace $ {
 declare namespace $ {
     class $mol_object2 extends Object {
         static $: $mol_ambient_context;
-        static readonly $$: $mol_ambient_context;
+        static get $$(): $mol_ambient_context;
         $: typeof $mol_object2.$;
-        readonly $$: $mol_ambient_context;
+        get $$(): $mol_ambient_context;
         constructor(init?: (obj: any) => void);
         static make<Instance>(this: new (init?: (instance: any) => void) => Instance, init?: (instance: Instance) => void): Instance;
         static toString(): any;
@@ -40,8 +40,8 @@ declare namespace $ {
         static wrap: (task: (...ags: any[]) => any) => (...ags: any[]) => any;
         static run<Result>(task: () => Result): Result;
         static func<Args extends any[], Result, Host = void>(func: (this: Host, ...args: Args) => Result): (this: Host, ...args: Args) => Result;
-        static readonly class: <Class extends new (...args: any[]) => any>(Class: Class) => Class;
-        static readonly method: <Host, Field extends keyof Host, Args extends any[], Result>(obj: Host, name: Field, descr: TypedPropertyDescriptor<(this: Host, ...args: Args) => Result>) => TypedPropertyDescriptor<(this: Host, ...args: Args) => Result>;
+        static get class(): <Class extends new (...args: any[]) => any>(Class: Class) => Class;
+        static get method(): <Host, Field extends keyof Host, Args extends any[], Result>(obj: Host, name: Field, descr: TypedPropertyDescriptor<(this: Host, ...args: Args) => Result>) => TypedPropertyDescriptor<(this: Host, ...args: Args) => Result>;
     }
 }
 
@@ -209,7 +209,7 @@ declare namespace $ {
         static func<This, Args extends any[], Result>(task: (this: This, ...args: Args) => Result): (this: This, ...args: Args) => Result;
     }
     class $mol_fiber<Value = any> extends $mol_wrapper {
-        static wrap<This, Args extends any[], Result>(task: (this: This, ...args: Args) => Result): (this: This, ...args: Args) => any;
+        static wrap<Func extends (...args: any[]) => any>(task: Func): (this: ThisParameterType<Func>, ...args: Parameters<Func>) => any;
         static quant: number;
         static deadline: number;
         static liveline: number;
@@ -234,7 +234,8 @@ declare namespace $ {
         update(): void;
         get(): Value;
         limit(): void;
-        master: $mol_fiber;
+        get master(): $mol_fiber;
+        set master(next: $mol_fiber);
         rescue(master: $mol_fiber, master_index: number): void;
         obey(master: $mol_fiber, master_index: number): number;
         lead(slave: $mol_fiber, master_index: number): number;
@@ -272,7 +273,7 @@ declare namespace $ {
 declare namespace $ {
     function $mol_atom2_value<Value>(task: () => Value): Value;
     class $mol_atom2<Value = any> extends $mol_fiber<Value> {
-        static readonly current: $mol_atom2<any>;
+        static get current(): $mol_atom2<any>;
         static cached: boolean;
         static reap_task: $mol_fiber<any>;
         static reap_queue: $mol_atom2<any>[];
@@ -282,9 +283,11 @@ declare namespace $ {
         get(): Value;
         pull(): void | Value;
         _value: Value;
-        value: Value;
+        get value(): Value;
+        set value(next: Value);
         _error: Error | PromiseLike<Value>;
-        error: null | Error | PromiseLike<Value>;
+        get error(): null | Error | PromiseLike<Value>;
+        set error(next: null | Error | PromiseLike<Value>);
         put(next: Value): Value;
         complete_master(master_index: number): void;
         obey(master: $mol_fiber, master_index: number): number;
@@ -294,9 +297,9 @@ declare namespace $ {
         doubt(master_index?: number): void;
         obsolete_slaves(): void;
         doubt_slaves(): void;
-        readonly fresh: (this: void) => void;
-        readonly alone: boolean;
-        readonly derived: boolean;
+        get fresh(): (this: void) => void;
+        get alone(): boolean;
+        get derived(): boolean;
         destructor(): void;
     }
     let $mol_atom2_token_revalidation: $mol_log2_token;
@@ -324,10 +327,11 @@ declare namespace $ {
     const $mol_object_field: unique symbol;
     class $mol_object extends Object {
         static $: $mol_ambient_context;
-        static readonly $$: $mol_ambient_context;
+        static get $$(): $mol_ambient_context;
         _$: $mol_ambient_context;
-        $: $mol_ambient_context;
-        readonly $$: $mol_ambient_context;
+        get $(): $mol_ambient_context;
+        set $(next: $mol_ambient_context);
+        get $$(): $mol_ambient_context;
         static make<Instance>(this: {
             new (): Instance;
         }, config: Partial<Instance>): Instance;
@@ -798,7 +802,7 @@ declare namespace $ {
 
 declare namespace $.$$ {
     class $mol_touch extends $.$mol_touch {
-        rect(): ClientRect | DOMRect;
+        rect(): DOMRect;
         event_start(event: TouchEvent | MouseEvent): void;
         event_leave(event: TouchEvent | MouseEvent): void;
         event_move(event: TouchEvent | MouseEvent): void;
@@ -1312,7 +1316,7 @@ declare namespace $.$$ {
         scroll_bottom(next?: number): number;
         scroll_right(next?: number): number;
         event_scroll(next?: Event): void;
-        readonly $$: $mol_ambient_context;
+        get $$(): $mol_ambient_context;
         strut_transform(): string;
         sub_visible(): readonly (string | number | boolean | Node | $mol_view)[];
     }
@@ -2385,86 +2389,7 @@ declare namespace $.$$ {
         }, next?: boolean): boolean;
     }
     class $mol_grid_table extends $.$mol_grid_table {
-        readonly $$: $mol_ambient_context;
-    }
-}
-
-declare namespace $ {
-    class $mol_image extends $mol_view {
-        /**
-         *  ```
-         *  dom_name \img
-         *  ```
-         **/
-        dom_name(): string;
-        /**
-         *  ```
-         *  field *
-         *  	^
-         *  	src <= uri
-         *  	alt <= title
-         *  ```
-         **/
-        field(): {
-            "src": string;
-            "alt": string;
-        };
-        /**
-         *  ```
-         *  uri \
-         *  ```
-         **/
-        uri(): string;
-    }
-}
-
-declare namespace $ {
-    class $mol_link_iconed extends $mol_link {
-        /**
-         *  ```
-         *  sub / <= Icon
-         *  ```
-         **/
-        sub(): readonly any[];
-        /**
-         *  ```
-         *  Icon $mol_image uri <= icon
-         *  ```
-         **/
-        Icon(): $mol_image;
-        /**
-         *  ```
-         *  icon \
-         *  ```
-         **/
-        icon(): string;
-        /**
-         *  ```
-         *  content / <= title
-         *  ```
-         **/
-        content(): readonly any[];
-        /**
-         *  ```
-         *  title <= uri
-         *  ```
-         **/
-        title(): string;
-        /**
-         *  ```
-         *  host \
-         *  ```
-         **/
-        host(): string;
-    }
-}
-
-declare namespace $.$$ {
-    class $mol_link_iconed extends $.$mol_link_iconed {
-        icon(): string;
-        host(): string;
-        title(): string;
-        sub(): any[];
+        get $$(): $mol_ambient_context;
     }
 }
 
@@ -2725,7 +2650,7 @@ declare namespace $ {
     }
 }
 declare namespace $ {
-    class $mol_text_link extends $mol_link_iconed {
+    class $mol_text_link extends $mol_link {
         /**
          *  ```
          *  attr *
@@ -2759,6 +2684,12 @@ declare namespace $ {
          *  ```
          **/
         link(val?: any, force?: $mol_mem_force): any;
+        /**
+         *  ```
+         *  sub <= content?val
+         *  ```
+         **/
+        sub(): any;
         /**
          *  ```
          *  content?val /
@@ -2907,11 +2838,11 @@ declare namespace $ {
         readonly minute: number | undefined;
         readonly second: number | undefined;
         readonly offset: $mol_time_duration | undefined;
-        readonly weekday: number;
+        get weekday(): number;
         private _native;
-        readonly native: Date;
+        get native(): Date;
         private _normal;
-        readonly normal: $mol_time_moment;
+        get normal(): $mol_time_moment;
         merge(config: $mol_time_moment_config): $mol_time_moment;
         shift(config: $mol_time_duration_config): $mol_time_moment;
         toOffset(config: $mol_time_duration_config): $mol_time_moment;
@@ -3635,6 +3566,502 @@ declare namespace $.$$ {
 }
 
 declare namespace $ {
+    class $piterjs_intro_lines extends $mol_svg_root {
+        /**
+         *  ```
+         *  style * fill <= color
+         *  ```
+         **/
+        style(): {
+            "fill": string;
+        };
+        /**
+         *  ```
+         *  color \#FFE515
+         *  ```
+         **/
+        color(): string;
+        /**
+         *  ```
+         *  view_box \0 0 310 246
+         *  ```
+         **/
+        view_box(): string;
+        /**
+         *  ```
+         *  sub /
+         *  	<= First
+         *  	<= Second
+         *  	<= Third
+         *  ```
+         **/
+        sub(): readonly any[];
+        /**
+         *  ```
+         *  First $mol_svg_path geometry \M56 9.00002L-1.5605e-05 67.5L-1.31571e-05 95.5L56 36.5L56 9.00002Z
+         *  ```
+         **/
+        First(): $mol_svg_path;
+        /**
+         *  ```
+         *  Second $mol_svg_path geometry \M148.5 1.40751e-05L-7.6932e-06 158L0 246L238 6.25073e-06L148.5 1.40751e-05Z
+         *  ```
+         **/
+        Second(): $mol_svg_path;
+        /**
+         *  ```
+         *  Third $mol_svg_path geometry \M167.5 152.5L167.5 108L268 3.62805e-06L309.5 0L167.5 152.5Z
+         *  ```
+         **/
+        Third(): $mol_svg_path;
+    }
+}
+
+declare namespace $ {
+    class $mol_nav extends $mol_plugin {
+        /**
+         *  ```
+         *  cycle?val false
+         *  ```
+         **/
+        cycle(val?: any, force?: $mol_mem_force): any;
+        /**
+         *  ```
+         *  mod_ctrl false
+         *  ```
+         **/
+        mod_ctrl(): boolean;
+        /**
+         *  ```
+         *  mod_shift false
+         *  ```
+         **/
+        mod_shift(): boolean;
+        /**
+         *  ```
+         *  mod_alt false
+         *  ```
+         **/
+        mod_alt(): boolean;
+        /**
+         *  ```
+         *  keys_x?val /
+         *  ```
+         **/
+        keys_x(val?: any, force?: $mol_mem_force): any;
+        /**
+         *  ```
+         *  keys_y?val /
+         *  ```
+         **/
+        keys_y(val?: any, force?: $mol_mem_force): any;
+        /**
+         *  ```
+         *  current_x?val \
+         *  ```
+         **/
+        current_x(val?: any, force?: $mol_mem_force): any;
+        /**
+         *  ```
+         *  current_y?val \
+         *  ```
+         **/
+        current_y(val?: any, force?: $mol_mem_force): any;
+        /**
+         *  ```
+         *  event_up?event null
+         *  ```
+         **/
+        event_up(event?: any, force?: $mol_mem_force): any;
+        /**
+         *  ```
+         *  event_down?event null
+         *  ```
+         **/
+        event_down(event?: any, force?: $mol_mem_force): any;
+        /**
+         *  ```
+         *  event_left?event null
+         *  ```
+         **/
+        event_left(event?: any, force?: $mol_mem_force): any;
+        /**
+         *  ```
+         *  event_right?event null
+         *  ```
+         **/
+        event_right(event?: any, force?: $mol_mem_force): any;
+        /**
+         *  ```
+         *  event *
+         *  	^
+         *  	keydown?event <=> event_key?event
+         *  ```
+         **/
+        event(): {
+            "keydown": (event?: any) => any;
+        };
+        /**
+         *  ```
+         *  event_key?event null
+         *  ```
+         **/
+        event_key(event?: any, force?: $mol_mem_force): any;
+    }
+}
+
+declare namespace $.$$ {
+    class $mol_nav extends $.$mol_nav {
+        event_key(event?: KeyboardEvent): void;
+        event_up(event?: KeyboardEvent): void;
+        event_down(event?: KeyboardEvent): void;
+        event_left(event: KeyboardEvent): void;
+        event_right(event: KeyboardEvent): void;
+        index_y(): any;
+        index_x(): any;
+    }
+}
+
+declare namespace $ {
+    class $piterjs_intro extends $mol_view {
+        /**
+         *  ```
+         *  title \PiterJS Вступление
+         *  ```
+         **/
+        title(): string;
+        /**
+         *  ```
+         *  meetups /
+         *  ```
+         **/
+        meetups(): readonly any[];
+        /**
+         *  ```
+         *  page?val \
+         *  ```
+         **/
+        page(val?: any, force?: $mol_mem_force): any;
+        /**
+         *  ```
+         *  pages *
+         *  	main <= Main
+         *  	about <= About
+         *  	projects <= Projects
+         *  	roles_org <= Roles_org
+         *  	roles_place <= Roles_place
+         *  	speakers <= Speakers
+         *  	place <= Place
+         *  	schedule <= Schedule
+         *  	profit <= Proft
+         *  	info <= Info
+         *  	follow <= Follow
+         *  	beer <= Beer
+         *  ```
+         **/
+        pages(): {
+            "main": $piterjs_intro_main;
+            "about": $piterjs_intro_page;
+            "projects": $piterjs_intro_page;
+            "roles_org": $piterjs_intro_page;
+            "roles_place": $piterjs_intro_page;
+            "speakers": $piterjs_intro_page;
+            "place": $piterjs_intro_page;
+            "schedule": $piterjs_intro_page;
+            "profit": $piterjs_intro_page;
+            "info": $piterjs_intro_page;
+            "follow": $piterjs_intro_page;
+            "beer": $piterjs_intro_page;
+        };
+        /**
+         *  ```
+         *  Main $piterjs_intro_main
+         *  ```
+         **/
+        Main(): $piterjs_intro_main;
+        /**
+         *  ```
+         *  About $piterjs_intro_page
+         *  	title \Кто мы?
+         *  	text \
+         *  		\Обсуждаем JS и всё, что в него компилируется
+         *  		\Проводим митапы в Питере каждый месяц с мая 2015
+         *  		\Без отпусков. Без перерывов. Без каникул.
+         *  		\Нам и этого стало мало...
+         *  ```
+         **/
+        About(): $piterjs_intro_page;
+        /**
+         *  ```
+         *  Projects $piterjs_intro_page
+         *  	title \Наши проекты
+         *  	text \
+         *  		\PiterJS **Meetups** - митапы в Петербурге
+         *  		\PiterJS **Tour** - митапы в других городах
+         *  		\PiterJS **Conf** - конференции
+         *  		\PiterJS **Code+Learn** - воркшопы
+         *  ```
+         **/
+        Projects(): $piterjs_intro_page;
+        /**
+         *  ```
+         *  Roles_org $piterjs_intro_page
+         *  	title \Роли организаторов
+         *  	text \
+         *  		\Программный комитет
+         *  		\Фандрайзер
+         *  		\Видео-мастер 🔥
+         *  		\Дизайнер 🔥
+         *  		\Комьюнити-менеджер
+         *  		\Менеджер
+         *  ```
+         **/
+        Roles_org(): $piterjs_intro_page;
+        /**
+         *  ```
+         *  Roles_place $piterjs_intro_page
+         *  	title \Роли на площадке
+         *  	text \
+         *  		\Техник
+         *  		\Видео-оператор
+         *  		\Фотограф 🔥
+         *  		\Ведущий трансляции
+         *  		\Ведущий мероприятия
+         *  ```
+         **/
+        Roles_place(): $piterjs_intro_page;
+        /**
+         *  ```
+         *  Speakers $piterjs_intro_page
+         *  	title \Докладчики
+         *  	text \
+         *  		\Нужны всегда
+         *  		\Даже если боишься
+         *  		\Поможем с темой
+         *  		\Поможем с подготовкой
+         *  		\Пиши на hi@piterjs.org
+         *  ```
+         **/
+        Speakers(): $piterjs_intro_page;
+        /**
+         *  ```
+         *  Place $piterjs_intro_page
+         *  	title \Мы в JetBrains
+         *  	text \
+         *  		\WiFi - JetBrains-Open
+         *  		\Курить - на улицу
+         *  		\Чай, кофе - за углом
+         *  ```
+         **/
+        Place(): $piterjs_intro_page;
+        /**
+         *  ```
+         *  Schedule $piterjs_intro_page
+         *  	title \Сегодня
+         *  	text \
+         *  		\19:15 – Кирилл Сергеев
+         *  		\**Логирование на JS**
+         *  		\
+         *  		\20:10 – Светлана Авдей
+         *  		\**Документация к API - делай это понятно**
+         *  		\
+         *  		\20:55 – Максим Ерехинский
+         *  		\**Взаимодействие с iBeaсon в React Native**
+         *  ```
+         **/
+        Schedule(): $piterjs_intro_page;
+        /**
+         *  ```
+         *  Proft $piterjs_intro_page
+         *  	title \Бонусы
+         *  	text \
+         *  		\За лучшие вопросы - призы
+         *  		\Мы ведём трансляцию
+         *  		\И записываем видео
+         *  		\Улыбайтесь фотографу
+         *  ```
+         **/
+        Proft(): $piterjs_intro_page;
+        /**
+         *  ```
+         *  Info $piterjs_intro_page
+         *  	title \Твой вклад
+         *  	text \
+         *  		\patreon.com/piterjs
+         *  		\github.com/piterjs
+         *  		\hi@piterjs.org
+         *  ```
+         **/
+        Info(): $piterjs_intro_page;
+        /**
+         *  ```
+         *  Follow $piterjs_intro_page
+         *  	title \Следите за новостями
+         *  	text \
+         *  		\medium.com/piterjs
+         *  		\twitter.com/gopiterjs
+         *  		\vk.com/piterjs
+         *  		\t.me/piterjs
+         *  		\youtube.com/piterjs
+         *  		\piterjs.org
+         *  ```
+         **/
+        Follow(): $piterjs_intro_page;
+        /**
+         *  ```
+         *  Beer $piterjs_intro_page
+         *  	title \Го в бар!
+         *  	text \
+         *  		\O'Hooligans
+         *  		\Приморский 137/1
+         *  		\t.me/beerjs_spb
+         *  ```
+         **/
+        Beer(): $piterjs_intro_page;
+        /**
+         *  ```
+         *  sub /
+         *  	<= Lines_open
+         *  	<= Lines_close
+         *  	<= Page
+         *  ```
+         **/
+        sub(): readonly any[];
+        /**
+         *  ```
+         *  Lines_open $piterjs_intro_lines color <= brand_1
+         *  ```
+         **/
+        Lines_open(): $piterjs_intro_lines;
+        /**
+         *  ```
+         *  brand_1 \#C14989
+         *  ```
+         **/
+        brand_1(): string;
+        /**
+         *  ```
+         *  Lines_close $piterjs_intro_lines color <= brand_2
+         *  ```
+         **/
+        Lines_close(): $piterjs_intro_lines;
+        /**
+         *  ```
+         *  brand_2 \#E8863F
+         *  ```
+         **/
+        brand_2(): string;
+        /**
+         *  ```
+         *  Page $mol_view
+         *  ```
+         **/
+        Page(): $mol_view;
+        /**
+         *  ```
+         *  plugins / <= Nav
+         *  ```
+         **/
+        plugins(): readonly any[];
+        /**
+         *  ```
+         *  Nav $mol_nav
+         *  	keys_x <= page_ids
+         *  	keys_y <= page_ids
+         *  	current_x?val <=> page?val
+         *  	current_y?val <=> page?val
+         *  ```
+         **/
+        Nav(): $$.$mol_nav;
+        /**
+         *  ```
+         *  page_ids /string
+         *  ```
+         **/
+        page_ids(): readonly string[];
+    }
+}
+declare namespace $ {
+    class $piterjs_intro_page extends $mol_view {
+        /**
+         *  ```
+         *  sub /
+         *  	<= Head
+         *  	<= Text
+         *  ```
+         **/
+        sub(): readonly any[];
+        /**
+         *  ```
+         *  Head $mol_view sub <= head
+         *  ```
+         **/
+        Head(): $mol_view;
+        /**
+         *  ```
+         *  head / <= Title
+         *  ```
+         **/
+        head(): readonly any[];
+        /**
+         *  ```
+         *  Title $mol_view sub / <= title
+         *  ```
+         **/
+        Title(): $mol_view;
+        /**
+         *  ```
+         *  title \PiterJS
+         *  ```
+         **/
+        title(): string;
+        /**
+         *  ```
+         *  Text $mol_text text <= text
+         *  ```
+         **/
+        Text(): $$.$mol_text;
+        /**
+         *  ```
+         *  text \
+         *  ```
+         **/
+        text(): string;
+    }
+}
+declare namespace $ {
+    class $piterjs_intro_main extends $piterjs_intro_page {
+        /**
+         *  ```
+         *  title \PiterJS #42
+         *  ```
+         **/
+        title(): string;
+        /**
+         *  ```
+         *  head /
+         *  	<= Logo
+         *  	<= Title
+         *  ```
+         **/
+        head(): readonly any[];
+        /**
+         *  ```
+         *  Logo $piterjs_image link \piterjs/logo/logo.svg
+         *  ```
+         **/
+        Logo(): $piterjs_image;
+    }
+}
+
+declare namespace $.$$ {
+    class $piterjs_intro extends $.$piterjs_intro {
+        page_ids(): string[];
+        Page(): any;
+    }
+}
+
+declare namespace $ {
     function $mol_typeof(value: any): any;
 }
 
@@ -3671,10 +4098,10 @@ declare namespace $ {
         }): $mol_tree;
         static fromString(str: string, baseUri?: string): $mol_tree;
         static fromJSON(json: any, baseUri?: string): $mol_tree;
-        readonly uri: string;
+        get uri(): string;
         toString(prefix?: string): string;
         toJSON(): any;
-        readonly value: string;
+        get value(): string;
         insert(value: $mol_tree, ...path: $mol_tree_path): $mol_tree;
         select(...path: $mol_tree_path): $mol_tree;
         filter(path: string[], value?: string): $mol_tree;
@@ -3858,6 +4285,20 @@ declare namespace $ {
         Now(): $$.$piterjs_now;
         /**
          *  ```
+         *  Intro $piterjs_intro
+         *  	page?val <=> intro?val
+         *  	minimal_width 9000
+         *  ```
+         **/
+        Intro(): $$.$piterjs_intro;
+        /**
+         *  ```
+         *  intro?val \
+         *  ```
+         **/
+        intro(val?: any, force?: $mol_mem_force): any;
+        /**
+         *  ```
          *  Placeholder $piterjs_now
          *  	event_top?val <=> event_front_up?val
          *  	minimal_width 400
@@ -3891,6 +4332,7 @@ declare namespace $.$$ {
             photo: string;
         }>;
         now(next?: string): string;
+        intro(next?: string): string;
         meetup_id(next?: string): string;
         meetup(id: string): {
             start: string;
@@ -3913,7 +4355,7 @@ declare namespace $.$$ {
             description: string;
             photo: string;
         };
-        pages(): ($mol_page | $piterjs_meetup_page | $piterjs_speech_page | $piterjs_now)[];
+        pages(): $piterjs_intro[] | ($mol_page | $piterjs_meetup_page | $piterjs_speech_page | $piterjs_now)[];
         Placeholder(): $piterjs_now;
         menu_meetups(): $piterjs_meetup_snippet[];
         menu_meetup(id: string): {
