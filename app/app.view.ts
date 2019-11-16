@@ -14,6 +14,7 @@ namespace $.$$ {
 				title : string
 				description : string
 				speeches : string[]
+				translation : string
 			} >
 
 		}

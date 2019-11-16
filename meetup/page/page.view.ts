@@ -7,6 +7,7 @@ namespace $.$$ {
 		start() { return new $mol_time_moment( this.meetup().start ) }
 		date() { return this.start().toString( 'DD Month YYYY' ) }
 		speeches() { return this.meetup().speeches.map( id => this.Speech( id ) ) }
+		translation() { return this.meetup().translation }
 		
 		speech_id( id : string ) { return id }
 		speech_start( id : string ) {
@@ -16,9 +17,17 @@ namespace $.$$ {
 			return prev_ids.reduce( ( start , id )=> start.shift( this.speech( id ).duration ) , this.start().toOffset( now.offset ) )
 		}
 
-		body() {
+		@ $mol_mem
+		info() {
 			return [
 				... this.description() ? [ this.Description() ] : [] ,
+				... this.translation() ? [ this.Translation() ] : [] ,
+			]
+		}
+
+		body() {
+			return [
+				... this.info().length ? [ this.Info() ] : [] ,
 				this.Speeches() ,
 			]
 		}

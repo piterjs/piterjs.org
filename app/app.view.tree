@@ -10,6 +10,7 @@ $piterjs_app $mol_book
 		description \
 		start \
 		speeches /
+		translation \
 	Meetup!id $piterjs_meetup_page
 		event_top?val <=> event_front_up?val
 		meetup <= meetup!id

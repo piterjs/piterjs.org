@@ -2,6 +2,23 @@
 	flex: 1 1 400px;
 }
 
+[piterjs_meetup_page_info] {
+	display: flex;
+	flex-direction: column;
+	box-shadow: 0 0 0 1px var(--mol_theme_line);
+	padding: .5rem;
+}
+
+[piterjs_meetup_page_description] {
+	box-shadow: none;
+	margin: 0 .5rem;
+	padding: 0;
+}
+
+[piterjs_meetup_page_translation] {
+	margin: 0 .5rem;
+}
+
 [piterjs_meetup_page_title] {
 	flex: 1000 1 auto;
 }
