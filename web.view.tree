@@ -368,6 +368,21 @@ $mol_text_image $mol_view
 	sub /
 		<= title?val \
 
+$mol_image $mol_view
+	dom_name \img
+	field *
+		^
+		src <= uri \
+		alt <= title
+
+$mol_link_iconed $mol_link
+	sub /
+		<= Icon $mol_image
+			uri <= icon \
+	content /
+		<= title <= uri
+	host \
+
 $mol_image2 $mol_view
 	links /
 	aspect 1
@@ -407,6 +422,7 @@ $piterjs_meetup_page $mol_page
 		description \
 		start \
 		speeches /
+		translation \
 	minimal_width 400
 	tools /
 		<= Date $mol_view
@@ -418,8 +434,13 @@ $piterjs_meetup_page $mol_page
 			sub /
 				<= Close_icon $mol_icon_cross
 	body /
-		<= Description $mol_text
-			text <= description \
+		<= Info $mol_view sub <= info / 
+			<= Description $mol_text
+				text <= description \
+			<= Translation $mol_link_iconed
+				uri <= translation \
+				target \_blank
+				title \Трансляция
 		<= Speeches $mol_list rows <= speeches /
 	Speech!id $piterjs_speech_snippet
 		id <= speech_id!id \
@@ -651,6 +672,7 @@ $piterjs_app $mol_book
 		description \
 		start \
 		speeches /
+		translation \
 	Meetup!id $piterjs_meetup_page
 		event_top?val <=> event_front_up?val
 		meetup <= meetup!id

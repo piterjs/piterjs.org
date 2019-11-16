@@ -2800,6 +2800,85 @@ declare namespace $.$$ {
 }
 
 declare namespace $ {
+    class $mol_image extends $mol_view {
+        /**
+         *  ```
+         *  dom_name \img
+         *  ```
+         **/
+        dom_name(): string;
+        /**
+         *  ```
+         *  field *
+         *  	^
+         *  	src <= uri
+         *  	alt <= title
+         *  ```
+         **/
+        field(): {
+            "src": string;
+            "alt": string;
+        };
+        /**
+         *  ```
+         *  uri \
+         *  ```
+         **/
+        uri(): string;
+    }
+}
+
+declare namespace $ {
+    class $mol_link_iconed extends $mol_link {
+        /**
+         *  ```
+         *  sub / <= Icon
+         *  ```
+         **/
+        sub(): readonly any[];
+        /**
+         *  ```
+         *  Icon $mol_image uri <= icon
+         *  ```
+         **/
+        Icon(): $mol_image;
+        /**
+         *  ```
+         *  icon \
+         *  ```
+         **/
+        icon(): string;
+        /**
+         *  ```
+         *  content / <= title
+         *  ```
+         **/
+        content(): readonly any[];
+        /**
+         *  ```
+         *  title <= uri
+         *  ```
+         **/
+        title(): string;
+        /**
+         *  ```
+         *  host \
+         *  ```
+         **/
+        host(): string;
+    }
+}
+
+declare namespace $.$$ {
+    class $mol_link_iconed extends $.$mol_link_iconed {
+        icon(): string;
+        host(): string;
+        title(): string;
+        sub(): any[];
+    }
+}
+
+declare namespace $ {
     class $mol_time_base {
         static patterns: any;
         static formatter(pattern: string): any;
@@ -3117,6 +3196,7 @@ declare namespace $ {
          *  	description \
          *  	start \
          *  	speeches /
+         *  	translation \
          *  ```
          **/
         meetup(): {
@@ -3124,6 +3204,7 @@ declare namespace $ {
             "description": string;
             "start": string;
             "speeches": readonly any[];
+            "translation": string;
         };
         /**
          *  ```
@@ -3170,11 +3251,25 @@ declare namespace $ {
         /**
          *  ```
          *  body /
-         *  	<= Description
+         *  	<= Info
          *  	<= Speeches
          *  ```
          **/
         body(): readonly any[];
+        /**
+         *  ```
+         *  Info $mol_view sub <= info
+         *  ```
+         **/
+        Info(): $mol_view;
+        /**
+         *  ```
+         *  info /
+         *  	<= Description
+         *  	<= Translation
+         *  ```
+         **/
+        info(): readonly any[];
         /**
          *  ```
          *  Description $mol_text text <= description
@@ -3187,6 +3282,21 @@ declare namespace $ {
          *  ```
          **/
         description(): string;
+        /**
+         *  ```
+         *  Translation $mol_link_iconed
+         *  	uri <= translation
+         *  	target \_blank
+         *  	title \Трансляция
+         *  ```
+         **/
+        Translation(): $$.$mol_link_iconed;
+        /**
+         *  ```
+         *  translation \
+         *  ```
+         **/
+        translation(): string;
         /**
          *  ```
          *  Speeches $mol_list rows <= speeches
@@ -3255,9 +3365,11 @@ declare namespace $.$$ {
         start(): $mol_time_moment;
         date(): string;
         speeches(): $piterjs_speech_snippet[];
+        translation(): string;
         speech_id(id: string): string;
         speech_start(id: string): any;
-        body(): ($mol_list | $mol_text)[];
+        info(): ($mol_text | $mol_link_iconed)[];
+        body(): ($mol_view | $mol_list)[];
     }
 }
 
@@ -4228,6 +4340,7 @@ declare namespace $ {
          *  	description \
          *  	start \
          *  	speeches /
+         *  	translation \
          *  ```
          **/
         meetup(id: any): {
@@ -4235,6 +4348,7 @@ declare namespace $ {
             "description": string;
             "start": string;
             "speeches": readonly any[];
+            "translation": string;
         };
         /**
          *  ```
@@ -4343,6 +4457,7 @@ declare namespace $.$$ {
             title: string;
             description: string;
             speeches: string[];
+            translation: string;
         }>;
         speeches(): Record<string, {
             title: string;
@@ -4365,6 +4480,7 @@ declare namespace $.$$ {
             title: string;
             description: string;
             speeches: string[];
+            translation: string;
         };
         speech_id(next?: string): string;
         speech(id: string): {
@@ -4389,6 +4505,7 @@ declare namespace $.$$ {
             title: string;
             description: string;
             speeches: string[];
+            translation: string;
         };
         menu_meetup_id(id: string): string;
     }

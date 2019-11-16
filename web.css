@@ -787,6 +787,32 @@ monospace;
 	opacity: .75;
 }
 
+[mol_image] {
+	box-shadow: 0 0 0 1px var(--mol_theme_line);
+	border-radius: 0px;
+	border-radius: var(--mol_skin_round);
+	overflow: hidden;
+	flex: 0 1 auto;
+	max-width: 100%;
+}
+
+[mol_link_iconed] {
+	align-items: center;
+	color: #3a8ccb;
+	color: var(--mol_skin_base);
+}
+
+[mol_link_iconed_icon] {
+	box-shadow: none;
+	margin-right: 2px;
+	height: 1em;
+	vertical-align: -10%;
+}
+
+[mol_theme="$mol_theme_dark"] [mol_link_iconed_icon] {
+	filter: invert(1);
+}
+
 [mol_image2] {
 	flex: 0 1 auto;
 	max-width: 100%;
@@ -843,6 +869,23 @@ monospace;
 
 [piterjs_meetup_page] {
 	flex: 1 1 400px;
+}
+
+[piterjs_meetup_page_info] {
+	display: flex;
+	flex-direction: column;
+	box-shadow: 0 0 0 1px var(--mol_theme_line);
+	padding: .5rem;
+}
+
+[piterjs_meetup_page_description] {
+	box-shadow: none;
+	margin: 0 .5rem;
+	padding: 0;
+}
+
+[piterjs_meetup_page_translation] {
+	margin: 0 .5rem;
 }
 
 [piterjs_meetup_page_title] {

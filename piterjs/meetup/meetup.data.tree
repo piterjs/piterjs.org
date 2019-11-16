@@ -234,6 +234,7 @@
 		\slides
 		\webgl-planet
 		\css-types
+	translation \https://www.youtube.com/watch?v=4giWGkd7WSQ
 41 *
 	start \2019-10-10T16:15:00.000Z
 	title \#41
@@ -242,6 +243,7 @@
 		\react-ssr-wat
 		\bdd-e2e
 		\event-loop-details
+	translation \https://www.youtube.com/watch?v=J0RLSBGorMY
 42 *
 	start \2019-11-14T19:15:00+03
 	title \#42
@@ -250,3 +252,4 @@
 		\js-logging
 		\api-documenting
 		\ibeacon-with-react-native
+	translation \https://www.youtube.com/watch?v=EoMd-8w-DfA

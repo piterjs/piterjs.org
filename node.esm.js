@@ -6721,6 +6721,148 @@ var $;
 "use strict";
 var $;
 (function ($) {
+    class $mol_image extends $.$mol_view {
+        /**
+         *  ```
+         *  dom_name \img
+         *  ```
+         **/
+        dom_name() {
+            return "img";
+        }
+        /**
+         *  ```
+         *  field *
+         *  	^
+         *  	src <= uri
+         *  	alt <= title
+         *  ```
+         **/
+        field() {
+            return (Object.assign(Object.assign({}, super.field()), { "src": this.uri(), "alt": this.title() }));
+        }
+        /**
+         *  ```
+         *  uri \
+         *  ```
+         **/
+        uri() {
+            return "";
+        }
+    }
+    $.$mol_image = $mol_image;
+})($ || ($ = {}));
+//image.view.tree.js.map
+;
+"use strict";
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var $;
+(function ($) {
+    class $mol_link_iconed extends $.$mol_link {
+        /**
+         *  ```
+         *  sub / <= Icon
+         *  ```
+         **/
+        sub() {
+            return [this.Icon()];
+        }
+        /**
+         *  ```
+         *  Icon $mol_image uri <= icon
+         *  ```
+         **/
+        Icon() {
+            return ((obj) => {
+                obj.uri = () => this.icon();
+                return obj;
+            })(new this.$.$mol_image());
+        }
+        /**
+         *  ```
+         *  icon \
+         *  ```
+         **/
+        icon() {
+            return "";
+        }
+        /**
+         *  ```
+         *  content / <= title
+         *  ```
+         **/
+        content() {
+            return [this.title()];
+        }
+        /**
+         *  ```
+         *  title <= uri
+         *  ```
+         **/
+        title() {
+            return this.uri();
+        }
+        /**
+         *  ```
+         *  host \
+         *  ```
+         **/
+        host() {
+            return "";
+        }
+    }
+    __decorate([
+        $.$mol_mem
+    ], $mol_link_iconed.prototype, "Icon", null);
+    $.$mol_link_iconed = $mol_link_iconed;
+})($ || ($ = {}));
+//iconed.view.tree.js.map
+;
+"use strict";
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var $;
+(function ($) {
+    var $$;
+    (function ($$) {
+        class $mol_link_iconed extends $.$mol_link_iconed {
+            icon() {
+                return `https://favicon.yandex.net/favicon/${this.host()}?color=0,0,0,0&size=32&stub=1`;
+            }
+            host() {
+                const url = new URL(this.uri());
+                return url.hostname;
+            }
+            title() {
+                return decodeURIComponent(this.uri().split(this.host(), 2)[1]);
+            }
+            sub() {
+                return [this.Icon(), ...this.content()];
+            }
+        }
+        __decorate([
+            $.$mol_mem
+        ], $mol_link_iconed.prototype, "host", null);
+        __decorate([
+            $.$mol_mem
+        ], $mol_link_iconed.prototype, "title", null);
+        $$.$mol_link_iconed = $mol_link_iconed;
+    })($$ = $.$$ || ($.$$ = {}));
+})($ || ($ = {}));
+//iconed.view.js.map
+;
+"use strict";
+var $;
+(function ($) {
     class $mol_time_base {
         static formatter(pattern) {
             if (this.patterns[pattern])
@@ -7553,6 +7695,7 @@ var $;
          *  	description \
          *  	start \
          *  	speeches /
+         *  	translation \
          *  ```
          **/
         meetup() {
@@ -7561,6 +7704,7 @@ var $;
                 "description": "",
                 "start": "",
                 "speeches": [],
+                "translation": "",
             });
         }
         /**
@@ -7632,12 +7776,33 @@ var $;
         /**
          *  ```
          *  body /
-         *  	<= Description
+         *  	<= Info
          *  	<= Speeches
          *  ```
          **/
         body() {
-            return [this.Description(), this.Speeches()];
+            return [this.Info(), this.Speeches()];
+        }
+        /**
+         *  ```
+         *  Info $mol_view sub <= info
+         *  ```
+         **/
+        Info() {
+            return ((obj) => {
+                obj.sub = () => this.info();
+                return obj;
+            })(new this.$.$mol_view());
+        }
+        /**
+         *  ```
+         *  info /
+         *  	<= Description
+         *  	<= Translation
+         *  ```
+         **/
+        info() {
+            return [this.Description(), this.Translation()];
         }
         /**
          *  ```
@@ -7656,6 +7821,30 @@ var $;
          *  ```
          **/
         description() {
+            return "";
+        }
+        /**
+         *  ```
+         *  Translation $mol_link_iconed
+         *  	uri <= translation
+         *  	target \_blank
+         *  	title \Трансляция
+         *  ```
+         **/
+        Translation() {
+            return ((obj) => {
+                obj.uri = () => this.translation();
+                obj.target = () => "_blank";
+                obj.title = () => "Трансляция";
+                return obj;
+            })(new this.$.$mol_link_iconed());
+        }
+        /**
+         *  ```
+         *  translation \
+         *  ```
+         **/
+        translation() {
             return "";
         }
         /**
@@ -7753,7 +7942,13 @@ var $;
     ], $piterjs_meetup_page.prototype, "Close_icon", null);
     __decorate([
         $.$mol_mem
+    ], $piterjs_meetup_page.prototype, "Info", null);
+    __decorate([
+        $.$mol_mem
     ], $piterjs_meetup_page.prototype, "Description", null);
+    __decorate([
+        $.$mol_mem
+    ], $piterjs_meetup_page.prototype, "Translation", null);
     __decorate([
         $.$mol_mem
     ], $piterjs_meetup_page.prototype, "Speeches", null);
@@ -7768,6 +7963,12 @@ var $;
 //page.view.tree.js.map
 ;
 "use strict";
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
 var $;
 (function ($) {
     var $$;
@@ -7778,6 +7979,7 @@ var $;
             start() { return new $.$mol_time_moment(this.meetup().start); }
             date() { return this.start().toString('DD Month YYYY'); }
             speeches() { return this.meetup().speeches.map(id => this.Speech(id)); }
+            translation() { return this.meetup().translation; }
             speech_id(id) { return id; }
             speech_start(id) {
                 const speech_ids = this.meetup().speeches;
@@ -7785,13 +7987,22 @@ var $;
                 const now = new $.$mol_time_moment;
                 return prev_ids.reduce((start, id) => start.shift(this.speech(id).duration), this.start().toOffset(now.offset));
             }
-            body() {
+            info() {
                 return [
                     ...this.description() ? [this.Description()] : [],
+                    ...this.translation() ? [this.Translation()] : [],
+                ];
+            }
+            body() {
+                return [
+                    ...this.info().length ? [this.Info()] : [],
                     this.Speeches(),
                 ];
             }
         }
+        __decorate([
+            $.$mol_mem
+        ], $piterjs_meetup_page.prototype, "info", null);
         $$.$piterjs_meetup_page = $piterjs_meetup_page;
     })($$ = $.$$ || ($.$$ = {}));
 })($ || ($ = {}));
@@ -9923,6 +10134,7 @@ var $;
          *  	description \
          *  	start \
          *  	speeches /
+         *  	translation \
          *  ```
          **/
         meetup(id) {
@@ -9931,6 +10143,7 @@ var $;
                 "description": "",
                 "start": "",
                 "speeches": [],
+                "translation": "",
             });
         }
         /**
