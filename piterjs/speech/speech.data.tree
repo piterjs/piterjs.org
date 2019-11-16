@@ -255,3 +255,24 @@ event-loop-details *
 		\Также рассмотрим детали реализации event loop и microtasks. Заглянем в libuv, tokio.rs и chromuim. И разберем, как браузер держит TCP-соединение с сервером и как это контролировать.
 	speaker \recN6GhIZP9QQ7Fo9
 	duration \PT40m
+js-logging *
+	title \Логирование на JS
+	description \
+		\Опишу четыре основных способа для логирования. Их плюсы и минусы. Расскажу, какие на мой взгляд тулзы самые важные для этого, сравню их и дам дельные советы.
+	speaker \recNuTExXo6paisad
+	duration \PT55m
+	slides \https://github.com/piterjs/slides/blob/master/meetup=42/speech=js-logging.pdf
+api-documenting *
+	title \Документация к API — делай это понятно
+	description \
+		\Тому, кто пишет backend на Node.js придется рано или поздно столкнуться с задачей документирования/описания API. Какие подходы существуют, какой инструмент выбрать? Стоит ли документировать, если проект маленький? Как актуализировать, поддерживать, хранить?
+	speaker \recHfk5ryFmvkmfoG
+	duration \PT45m
+	slides \https://github.com/piterjs/slides/blob/master/meetup=42/speech=api-documenting.pdf
+ibeacon-with-react-native *
+	title \Взаимодействие с iBeacons в React Native
+	description \
+		\Многие JS разработчики зачастую думают что для реализации проектов, связанных с реальным физическим миром, их знаний и технологий не достаточно. Хочу в очередной раз переубедить вас в этом и рассказать о том, как мы сделали проход в офис JetBrains с помощью BLE маяков и JS.
+	speaker \recSJkANJgoAHmRu9
+	duration \PT40m
+	slides \https://github.com/piterjs/slides/blob/master/meetup=42/speech=ibeacon-with-react-native.pdf
