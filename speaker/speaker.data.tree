@@ -1,3 +1,7 @@
+carv *
+	title \Вадим Царегородцев
+	description \Старший разработчик, очень часто приходится работать с абстракциями и выделять общие паттерны. Интересна область разработки дизайн-систем и проблем, которые вместе с этим появляются на пути реализации.
+	photo \https://habrastorage.org/webt/69/vr/-2/69vr-2meqitmbhwq8gwmgr5p814.jpeg
 zona *
 	title \Александр Зонов
 	description \T-SYSTEMS RUS, Frontend Developer
@@ -42,14 +46,8 @@ rec8BOsJzsH3FfkVs *
 	description \
 rec8HARMrfaU3kvEX *
 	title \Антон Ляпцев
-	description \
-		\Если вы заинтересовались этим названием, то наверняка вы когда-нибудь произносили что-то вроде:
-		\«Сейчас русский текст напишу, потом добавлю все ключи»
-		\«Опять искать в коде непонятно что»
-		\«Слишком много действий для удаления одного ключика»
-		\и прочие радости работы с переводами.
-		\В этом докладе я поделюсь своим опытом работы с i18n и расскажу, что можно сделать, чтобы вставка очередного ключа не доставляла хлопот и как всегда держать свои переводы в актуальном состоянии
-	photo \https://dl.airtable.com/.attachmentThumbnails/994712e8ae2dc36e01ae90000d0766b6/381b0242
+	description \Серийный причинитель непоправимой пользы фронтенду в eLama. Делаю биллинг и дизайн-систему. Много рефлексирую по процессам взаимодействия разработчиков и дизайнеров.
+	photo \https://habrastorage.org/webt/1l/nr/u3/1lnru3tl1vlbib7_j-hzl2dykne.jpeg
 rec9eJ0naBFJQ0vHg *
 	title \Алексей Щербаков
 	description \Legacy - старый, объемный и не всегда понятный код. Переписывать дорого, поддерживать надо, при этом хочется иметь одинаковый набор правил для всей кодовой базы вне зависимости от того, legacy ли он или нет. Обсудим, как минимизировать болевые ощущения от внедрения Eslint, отбиться от предложения использовать SonarQube и оставить задел на внедрение единых правил на уровне компании.
@@ -173,8 +171,8 @@ recWep0H5Vx7CW7nL *
 	description \
 recX0NdhNVdZ2s18p *
 	title \Дмитрий Пацура
-	description \
-	photo \https://dl.airtable.com/.attachmentThumbnails/f274c082fe738649eb7b89d64bda5247/ae7617f2
+	description \Лесничий из Амурской области, исполняю JS в сознании, притворяюсь разработчиком, работаю топором и лопатой.
+	photo \https://habrastorage.org/webt/d9/e5/gu/d9e5gu8cxrywbdnrefeqcxxh4by.jpeg
 recYz08iYOUsb801P *
 	title \Игорь Минин
 	description \
@@ -207,7 +205,8 @@ recbwB3bh9CmzFTr3 *
 	description \
 recby7uMW0ZeHPQJJ *
 	title \Алексей Золотых
-	description \
+	description \Тимлид в Infobip. Люблю Dart, Vim и готовить.
+	photo \https://habrastorage.org/webt/bg/lw/t3/bglwt32q5t_jbuli2xvt5iemx2i.jpeg
 reccgH5crHrxVlFie * description \
 recci8hC1YSbPzjR9 *
 	title \Альберт Кайгородов
