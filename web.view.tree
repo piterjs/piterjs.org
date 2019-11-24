@@ -151,27 +151,6 @@ $mol_page $mol_view
 			attr * mol_theme \$mol_theme_base
 			sub <= foot /$mol_view
 
-$mol_list $mol_view
-	sub <= rows /$mol_view
-	Empty null
-
-$mol_link $mol_view
-	minimal_height 40
-	dom_name \a
-	attr *
-		^
-		href <= uri \
-		title <= hint \
-		target <= target \_self
-		download <= file_name \
-		mol_link_current <= current false
-	sub /$mol_view_content
-		<= title
-	arg *
-	event *
-		^
-		click?event <=> click?event <=> event_click?event null
-
 $mol_svg $mol_view
 	dom_name \svg
 	dom_name_space \http://www.w3.org/2000/svg
@@ -193,17 +172,22 @@ $mol_svg_path $mol_svg
 		d <= geometry \
 
 
-$mol_icon $mol_svg_root
-	view_box \0 0 24 24
-	minimal_width 16
-	minimal_height 16
+$piterjs_screen_lines $mol_svg_root
+	style * fill <= color \#FFE515
+	view_box \0 0 310 246
 	sub /
-		<= Path $mol_svg_path
-			geometry <= path \
+		<= First $mol_svg_path geometry \M56 9.00002L-1.5605e-05 67.5L-1.31571e-05 95.5L56 36.5L56 9.00002Z 
+		<= Second $mol_svg_path geometry \M148.5 1.40751e-05L-7.6932e-06 158L0 246L238 6.25073e-06L148.5 1.40751e-05Z
+		<= Third $mol_svg_path geometry \M167.5 152.5L167.5 108L268 3.62805e-06L309.5 0L167.5 152.5Z
 
-$mol_icon_cross $mol_icon path \M19 6.41L17.59 5L12 10.59L6.41 5L5 6.41L10.59 12L5 17.59L6.41 19L12 13.41L17.59 19L19 17.59L13.41 12L19 6.41Z
-
-$mol_float $mol_view
+$piterjs_screen $mol_view
+	place $piterjs_place
+	sub /
+		<= Open $piterjs_screen_lines
+			color <= color_open \#FFE515
+		<= Close $piterjs_screen_lines
+			color <= color_close \#FFE515
+	content /$mol_view
 
 $mol_check $mol_button_minor
 	attr *
@@ -217,6 +201,39 @@ $mol_check $mol_button_minor
 			<= Title $mol_view
 				sub /
 					<= title \
+
+$mol_list $mol_view
+	sub <= rows /$mol_view
+	Empty null
+
+$mol_link $mol_view
+	minimal_height 40
+	dom_name \a
+	attr *
+		^
+		href <= uri \
+		title <= hint \
+		target <= target \_self
+		download <= file_name \
+		mol_link_current <= current false
+	sub /$mol_view_content
+		<= title
+	arg *
+	event *
+		^
+		click?event <=> click?event <=> event_click?event null
+
+$mol_icon $mol_svg_root
+	view_box \0 0 24 24
+	minimal_width 16
+	minimal_height 16
+	sub /
+		<= Path $mol_svg_path
+			geometry <= path \
+
+$mol_icon_cross $mol_icon path \M19 6.41L17.59 5L12 10.59L6.41 5L5 6.41L10.59 12L5 17.59L6.41 19L12 13.41L17.59 19L19 17.59L13.41 12L19 6.41Z
+
+$mol_float $mol_view
 
 $mol_icon_tick $mol_icon path \M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z
 
@@ -400,12 +417,7 @@ $piterjs_speech_snippet $mol_link
 	arg *
 		speech <= id \
 	start $mol_time_moment
-	speech *
-		title \
-		speaker \
-	speaker!id *
-		title \
-		photo \
+	speech $piterjs_speech
 	sub /
 		<= Photo $piterjs_image link <= photo \
 		<= Info $mol_list sub /
@@ -417,12 +429,7 @@ $piterjs_speech_snippet $mol_link
 				sub / <= title \
 
 $piterjs_meetup_page $mol_page
-	meetup *
-		title \
-		description \
-		start \
-		speeches /
-		translation \
+	meetup $piterjs_meetup
 	minimal_width 400
 	tools /
 		<= Date $mol_view
@@ -442,16 +449,9 @@ $piterjs_meetup_page $mol_page
 				target \_blank
 				title \Трансляция
 		<= Speeches $mol_list rows <= speeches /
-	Speech!id $piterjs_speech_snippet
-		id <= speech_id!id \
-		speech <= speech!id *
-			title \
-			speaker \
-			duration \
-		speaker!id <= speaker!id *
-			title \
-			photo \
-		start <= speech_start!id $mol_time_moment
+	Speech!index $piterjs_speech_snippet
+		speech <= speech!index $piterjs_speech
+		start <= speech_start!index $mol_time_moment
 
 
 $mol_row $mol_view
@@ -459,12 +459,10 @@ $mol_row $mol_view
 $mol_row_sub $mol_view
 
 $piterjs_speaker_snippet $mol_view
-	speaker *
-		title \
-		description \
-		photo \
+	speaker $piterjs_speaker
 	sub /
-		<= Photo $piterjs_image link <= photo \
+		<= Photo $piterjs_image
+			link <= photo \
 		<= Info $mol_list sub /
 			<= Title $mol_view
 				sub / <= title \
@@ -472,16 +470,7 @@ $piterjs_speaker_snippet $mol_view
 				text <= description \
 
 $piterjs_speech_page $mol_page
-	speech *
-		title \
-		description \
-		speaker \
-		slides \
-		video \
-	speaker!id *
-		title \
-		description \
-		photo \
+	speech $piterjs_speech
 	minimal_width 600
 	tools /
 		<= Close $mol_link
@@ -499,30 +488,19 @@ $piterjs_speech_page $mol_page
 				uri <= video \
 				title \Видео
 		<= Speaker $piterjs_speaker_snippet
-			speaker <= speech_speaker *
-				title \
-				description \
-				photo \
+			speaker <= speaker $piterjs_speaker
 
 $piterjs_meetup_snippet $mol_link
 	arg *
 		meetup <= id \
 		speech null
 		now null
-	meetup *
-		title \
-		start \
+	meetup $piterjs_meetup
 	sub /
-		<= Title $mol_view sub / <= title \
-		<= Date $mol_view sub / <= date \
-
-$piterjs_intro_lines $mol_svg_root
-	style * fill <= color \#FFE515
-	view_box \0 0 310 246
-	sub /
-		<= First $mol_svg_path geometry \M56 9.00002L-1.5605e-05 67.5L-1.31571e-05 95.5L56 36.5L56 9.00002Z 
-		<= Second $mol_svg_path geometry \M148.5 1.40751e-05L-7.6932e-06 158L0 246L238 6.25073e-06L148.5 1.40751e-05Z
-		<= Third $mol_svg_path geometry \M167.5 152.5L167.5 108L268 3.62805e-06L309.5 0L167.5 152.5Z
+		<= Title $mol_view
+			sub / <= title \
+		<= Date $mol_view
+			sub / <= date \
 
 $mol_nav $mol_plugin
 	cycle?val false
@@ -547,10 +525,10 @@ $mol_nav $mol_plugin
 
 $piterjs_intro $mol_view
 	title \PiterJS Вступление
-	meetups /
+	meetup $piterjs_meetup
 	page?val \
 	pages *
-		main <= Main $piterjs_intro_main
+		main <= Main $piterjs_intro_main meetup <= meetup
 		about <= About $piterjs_intro_page
 			title \Кто мы?
 			text \
@@ -591,11 +569,8 @@ $piterjs_intro $mol_view
 				\Поможем с подготовкой
 				\Пиши на hi@piterjs.org
 		place <= Place $piterjs_intro_page
-			title \Мы в JetBrains
-			text \
-				\WiFi - JetBrains-Open
-				\Курить - на улицу
-				\Чай, кофе - за углом
+			title <= place_title \Мы в {place}
+			text <= place_notes \
 		schedule <= Schedule $piterjs_intro_page
 			title \Сегодня
 			text \
@@ -629,16 +604,14 @@ $piterjs_intro $mol_view
 				\t.me/piterjs
 				\youtube.com/piterjs
 				\piterjs.org
-		beer <= Beer $piterjs_intro_page
+		afterparty <= Afterparty $piterjs_intro_page
 			title \Го в бар!
-			text \
-				\O'Hooligans
-				\Приморский 137/1
-				\t.me/beerjs_spb
+			text <= afterparty \
 	sub /
-		<= Lines_open $piterjs_intro_lines color <= brand_1 \#C14989
-		<= Lines_close $piterjs_intro_lines color <= brand_2 \#E8863F
-		<= Page $mol_view
+		<= Screen $piterjs_screen
+			place <= place $piterjs_place
+			content /
+				<= Page $mol_view
 	plugins /
 		<= Nav $mol_nav
 			keys_x <= page_ids /string
@@ -646,72 +619,57 @@ $piterjs_intro $mol_view
 			current_x?val <=> page?val
 			current_y?val <=> page?val
 
-
 $piterjs_intro_page $mol_view
 	sub /
 		<= Head $mol_view sub <= head /
 			<= Title $mol_view sub / <= title \PiterJS
 		<= Text $mol_text text <= text \
 
-$piterjs_intro_main $piterjs_intro_page
-	title \PiterJS #42
-	head /
-		<= Logo $piterjs_image link \piterjs/logo/logo.svg
-		<= Title
 
-
-$piterjs_app $mol_book
+$piterjs_app $mol_view
+	sub /
+		<= Screen $piterjs_screen
+			place <= place $piterjs_place
+			Open null
+			content /
+				<= Book $mol_book
+					pages <= pages /any
+					event_front_up?val => event_front_up?val
+					Placeholder <= Placeholder $piterjs_now
+						event_top?val <=> event_front_up?val
+						minimal_width 400
+						place <= place $piterjs_place
+						title \
+						body /
+		<= Toggle_intro $mol_check
+			checked?val <=> toggle_intro?val false
 	Menu $mol_page
 		title \PiterJS
 		minimal_width 200
 		event_top?val <=> event_front_up?val
 		body /
 			<= Meetups $mol_list rows <= menu_meetups /
-	meetup!id *
-		title \
-		description \
-		start \
-		speeches /
-		translation \
 	Meetup!id $piterjs_meetup_page
 		event_top?val <=> event_front_up?val
-		meetup <= meetup!id
-		speech!id <= speech!id
-		speaker!id <= speaker!id
-	speech!id *
-		title \
-		description \
-		speaker \
-		duration \
-		slides \
-		video \
+		meetup <= meetup!id $piterjs_meetup
 	Speech!id $piterjs_speech_page
 		event_top?val <=> event_front_up?val
-		speech <= speech!id
-		speaker!id <= speaker!id
-	speaker!id *
-		title \
-		description \
-		photo \
+		speech <= speech!id $piterjs_speech
 	Menu_meetup!id $piterjs_meetup_snippet
-		id <= menu_meetup_id!id \
-		meetup <= meetup!id
+		meetup <= meetup!id $piterjs_meetup
 	Now $piterjs_now
 		event_top?val <=> event_front_up?val
 		minimal_width 600
+		place <= place $piterjs_place
 	Intro $piterjs_intro
+		meetup <= meetup_current $piterjs_meetup
 		page?val <=> intro?val \
 		minimal_width 9000
-	Placeholder $piterjs_now
-		event_top?val <=> event_front_up?val
-		minimal_width 400
-		title \
-		body /
 
 $piterjs_link $mol_link
 	target \_blank
 	sub /
-		<= Button $mol_button_minor
+		<= Button $mol_button_major
 			title <= title
 
 $piterjs_now $mol_page
@@ -748,10 +706,22 @@ $piterjs_now $mol_page
 					view_box \0 0 1000 1000
 					path \M336.5,240.2v641.5c0,9.1-2.3,16.9-6.8,23.2s-11.2,9.6-20,9.6c-6.2,0-12.2-1.5-18-4.4L37.3,782.7c-7.7-3.6-14.1-9.8-19.4-18.3S10,747.4,10,739V115.5c0-7.3,1.8-13.5,5.5-18.6c3.6-5.1,8.9-7.7,15.9-7.7c5.1,0,13.1,2.7,24.1,8.2l279.5,140C335.9,238.6,336.5,239.5,336.5,240.2L336.5,240.2z M371.5,295.5l292,473.6l-292-145.5V295.5z M990,305.3v576.4c0,9.1-2.6,16.5-7.7,22.1c-5.1,5.7-12,8.5-20.8,8.5s-17.3-2.4-25.7-7.1L694.7,784.9L990,305.3z M988.4,239.7c0,1.1-46.8,77.6-140.3,229.4C754.6,621,699.8,709.8,683.8,735.7L470.5,389l177.2-288.2c6.2-10.2,15.7-15.3,28.4-15.3c5.1,0,9.8,1.1,14.2,3.3l295.9,147.7C987.6,237.1,988.4,238.2,988.4,239.7L988.4,239.7z
 	body /
+		<= Screen $piterjs_screen
+			place <= place $piterjs_place
+			Close null
+			content /
+				<= Logo $piterjs_image link \piterjs/logo/logo.svg
+				<= Join $piterjs_link
+					uri \https://docs.google.com/forms/d/e/1FAIpQLSe7lb5LFc0LaaJu9POvlIAw8Te0g46xSmYZr7FwuCWg2saYmA/viewform
+					title \Подать заявку на доклад
+				<= Patreon $piterjs_link
+					uri \https://www.patreon.com/bePatron?u=16938072
+					title \Поддержать PiterJS рублём
+
+$piterjs_intro_main $piterjs_intro_page
+	meetup $piterjs_meetup
+	title \PiterJS {title}
+	head /
 		<= Logo $piterjs_image link \piterjs/logo/logo.svg
-		<= Join $piterjs_link
-			uri \https://docs.google.com/forms/d/e/1FAIpQLSe7lb5LFc0LaaJu9POvlIAw8Te0g46xSmYZr7FwuCWg2saYmA/viewform
-			title \Подать заявку на доклад
-		<= Patreon $piterjs_link
-			uri \https://www.patreon.com/bePatron?u=16938072
-			title \Поддержать PiterJS рублём
+		<= Title
+
