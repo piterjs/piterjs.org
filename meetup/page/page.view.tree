@@ -1,10 +1,5 @@
 $piterjs_meetup_page $mol_page
-	meetup *
-		title \
-		description \
-		start \
-		speeches /
-		translation \
+	meetup $piterjs_meetup
 	minimal_width 400
 	tools /
 		<= Date $mol_view
@@ -24,14 +19,7 @@ $piterjs_meetup_page $mol_page
 				target \_blank
 				title \Трансляция
 		<= Speeches $mol_list rows <= speeches /
-	Speech!id $piterjs_speech_snippet
-		id <= speech_id!id \
-		speech <= speech!id *
-			title \
-			speaker \
-			duration \
-		speaker!id <= speaker!id *
-			title \
-			photo \
-		start <= speech_start!id $mol_time_moment
+	Speech!index $piterjs_speech_snippet
+		speech <= speech!index $piterjs_speech
+		start <= speech_start!index $mol_time_moment
 

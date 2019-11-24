@@ -2,19 +2,35 @@ namespace $.$$ {
 
 	export class $piterjs_meetup_page extends $.$piterjs_meetup_page {
 
-		title() { return this.meetup().title }
-		description() { return this.meetup().description }
-		start() { return new $mol_time_moment( this.meetup().start ) }
-		date() { return this.start().toString( 'DD Month YYYY' ) }
-		speeches() { return this.meetup().speeches.map( id => this.Speech( id ) ) }
-		translation() { return this.meetup().translation }
+		title() {
+			return this.meetup().title()
+		}
+
+		description() {
+			return this.meetup().description()
+		}
+
+		@ $mol_mem
+		date() {
+			return this.meetup().start().toString( 'DD Month YYYY' )
+		}
+
+		translation() {
+			return this.meetup().translation()
+		}
 		
-		speech_id( id : string ) { return id }
-		speech_start( id : string ) {
-			const speech_ids = this.meetup().speeches
-			const prev_ids = speech_ids.slice( 0 , speech_ids.indexOf( id ) )
+		@ $mol_mem_key
+		speech_start( index : number ) {
+			
+			const meetup = this.meetup()
+			const speeches = meetup.speeches().slice( 0 , index + 1 )
 			const now = new $mol_time_moment
-			return prev_ids.reduce( ( start , id )=> start.shift( this.speech( id ).duration ) , this.start().toOffset( now.offset ) )
+
+			return speeches.reduce(
+				( start , speech )=> start.shift( speech.duration() ) ,
+				meetup.start().toOffset( now.offset ) ,
+			)
+
 		}
 
 		@ $mol_mem
@@ -25,6 +41,7 @@ namespace $.$$ {
 			]
 		}
 
+		@ $mol_mem
 		body() {
 			return [
 				... this.info().length ? [ this.Info() ] : [] ,
@@ -32,6 +49,17 @@ namespace $.$$ {
 			]
 		}
 
+		@ $mol_mem
+		speeches() {
+			return this.meetup().speeches().map(
+				( speech , index )=> this.Speech( index )
+			)
+		}
+
+		speech( index : number ) {
+			return this.meetup().speeches()[ index ]
+		}
+		
 	}
 
 }

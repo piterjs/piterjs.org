@@ -2,12 +2,7 @@ $piterjs_speech_snippet $mol_link
 	arg *
 		speech <= id \
 	start $mol_time_moment
-	speech *
-		title \
-		speaker \
-	speaker!id *
-		title \
-		photo \
+	speech $piterjs_speech
 	sub /
 		<= Photo $piterjs_image link <= photo \
 		<= Info $mol_list sub /

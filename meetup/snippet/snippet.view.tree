@@ -3,9 +3,9 @@ $piterjs_meetup_snippet $mol_link
 		meetup <= id \
 		speech null
 		now null
-	meetup *
-		title \
-		start \
+	meetup $piterjs_meetup
 	sub /
-		<= Title $mol_view sub / <= title \
-		<= Date $mol_view sub / <= date \
+		<= Title $mol_view
+			sub / <= title \
+		<= Date $mol_view
+			sub / <= date \
