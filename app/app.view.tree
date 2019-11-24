@@ -1,4 +1,18 @@
-$piterjs_app $mol_book
+$piterjs_app $mol_view
+	sub /
+		<= Screen $piterjs_screen
+			place <= place $piterjs_place
+			Open null
+			content /
+				<= Book $mol_book
+					pages <= pages /any
+					event_front_up?val => event_front_up?val
+					Placeholder <= Placeholder $piterjs_now
+						event_top?val <=> event_front_up?val
+						minimal_width 400
+						place <= place $piterjs_place
+						title \
+						body /
 	Menu $mol_page
 		title \PiterJS
 		minimal_width 200
@@ -16,11 +30,8 @@ $piterjs_app $mol_book
 	Now $piterjs_now
 		event_top?val <=> event_front_up?val
 		minimal_width 600
+		place <= place $piterjs_place
 	Intro $piterjs_intro
+		meetup <= meetup_last $piterjs_meetup
 		page?val <=> intro?val \
 		minimal_width 9000
-	Placeholder $piterjs_now
-		event_top?val <=> event_front_up?val
-		minimal_width 400
-		title \
-		body /

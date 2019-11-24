@@ -1,0 +1,42 @@
+piterjs *
+	title \PiterJS
+	description \Неизвестная площадка
+	site \https://piterjs.org/
+	address \Неизвестное место
+	colors /
+		\#FFE515
+dataart *
+	title \DataArt
+	description \DataArt — IT-консалтинг и разработка решений — вакансии в России, Украине, Польше, Болгарии, новости, IT-образование
+	site \https://dataart.ua/
+	address \Большой Сампсониевский пр., 60А, (вход с Гельсингфорсской ул.), БЦ «Телеком СПб», конференц-зал DataArt, 1-й этаж
+	colors /
+		\#04a87d
+		\#35baf2
+dins *
+	title \DINS
+	description \Cоздает лучший в мире телекоммуникационный сервис
+	site \https://www.dins.ru/
+	address \Санкт-Петербург, Старо-Петергофский проспект, д. 19 (Бизнес-центр “Петергофский”)
+	colors /
+		\#6160ab
+		\#3bc6f4
+jetbrains *
+	title \JetBrains
+	description \Ведущий мировой производитель профессиональных средств разработки
+	site \https://jetbrains.ru/
+	address \Санкт-Петербург, Приморский проспект, дом 70, строение 1
+	colors /
+		\#C14989
+		\#E8863F
+	notes \
+		\WiFi - JetBrains-Open
+		\Курить - на улицу
+		\Чай, кофе - за углом
+infobip *
+	title \Infobip
+	description \Платформа мобильных рассылок для бизнеса
+	site \https://www.infobip.com/
+	address \Санкт-Петербург, 2-я Советская, д 7А
+	colors /
+		\#ff6002

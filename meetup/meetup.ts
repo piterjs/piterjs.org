@@ -32,6 +32,16 @@ namespace $ {
 			return this.$.$piterjs_speech.list()( this.data().speeches )
 		}
 
+		@ $mol_mem
+		place() {
+			return this.$.$piterjs_place.item( this.data().place )
+		}
+
+		@ $mol_mem
+		afterparty() {
+			return $mol_data_optional( $mol_data_string )( this.data().afterparty ) || ''
+		}
+
 	}
 
 }

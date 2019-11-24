@@ -31,7 +31,7 @@
 		\uAC
 		\acQ
 		\7wy
-30 *
+- 30 *
 	start \2018-10-25T16:30:00.000Z
 	title \#30
 	description \
@@ -39,6 +39,7 @@
 		\MPo
 		\RcA
 		\DQ6
+	place \piterjs
 - 31 *
 	start \2018-11-15T16:00:00.000Z
 	title \#31
@@ -47,20 +48,22 @@
 		\9CO
 		\cu5
 		\Cl4
-32 *
+- 32 *
 	start \2018-12-19T16:00:00.000Z
 	title \#32
 	description \
 	speeches /
 		\YAQ
 		\jQW
-33 *
+	place \piterjs
+- 33 *
 	start \2019-01-17T16:00:00.000Z
 	title \#33
 	description \
 	speeches /
 		\VSc
 		\xsC
+	place \piterjs
 - 34 *
 	start \2019-02-20T16:00:00.000Z
 	title \#34
@@ -79,6 +82,7 @@
 		\webgl-planet
 		\css-types
 	translation \https://www.youtube.com/watch?v=4giWGkd7WSQ
+	place \dataart
 41 *
 	start \2019-10-10T16:15:00.000Z
 	title \#41
@@ -88,6 +92,7 @@
 		\bdd-e2e
 		\event-loop-details
 	translation \https://www.youtube.com/watch?v=J0RLSBGorMY
+	place \dins
 42 *
 	start \2019-11-14T19:15:00+03
 	title \#42
@@ -97,3 +102,8 @@
 		\api-documenting
 		\ibeacon-with-react-native
 	translation \https://www.youtube.com/watch?v=EoMd-8w-DfA
+	place \jetbrains
+	afterparty \
+		\O'Hooligans
+		\Приморский 137/1
+		\t.me/beerjs_spb

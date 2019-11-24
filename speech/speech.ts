@@ -41,7 +41,6 @@ namespace $ {
 		
 		@ $mol_mem
 		speaker() {
-			this.$.$piterjs_speaker.data()
 			return this.$.$piterjs_speaker.item( this.data().speaker )
 		}
 

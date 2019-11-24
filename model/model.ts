@@ -16,7 +16,6 @@ namespace $ {
 		
 		@ $mol_mem
 		static list< Model extends typeof $piterjs_model >( this : Model ) {
-			this.data()
 			return $mol_data_array(
 				id => this.item( id ) as InstanceType< Model >
 			)
@@ -35,17 +34,14 @@ namespace $ {
 			const tree = $mol_tree.fromString( this.$.$mol_http.resource( this.uri() ).text() )
 			const json = new $mol_tree({ type : '*' , sub : tree.sub }).toJSON()
 
-			for( const id in json ) {
-				this.item( id ).data( json[ id ] )
-			}
-
 			return json
 
 		}
 
 		@ $mol_mem
 		data( next? : any ) {
-			return next
+			const Model = this.constructor as typeof $piterjs_model
+			return Model.data()[ this.id() ]
 		}
 
 	}

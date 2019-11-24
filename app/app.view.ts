@@ -36,10 +36,25 @@ namespace $.$$ {
 		}
 
 		@ $mol_mem
-		menu_meetups() {
+		meetups() {
 			return this.$.$piterjs_meetup.all().slice()
 			.sort( ( a , b )=> b.start().valueOf() - a.start().valueOf() )
-			.map( meetup => this.Menu_meetup( meetup.id() ) )
+		}
+
+		meetup_last() {
+			return this.meetups()[0]
+		}
+
+		@ $mol_mem
+		place() {
+			const id = this.meetup_id()
+			const meetup = id ? this.meetup( id ) : this.meetup_last()
+			return meetup.place()
+		}
+
+		@ $mol_mem
+		menu_meetups() {
+			return this.meetups().map( meetup => this.Menu_meetup( meetup.id() ) )
 		}
 		menu_meetup( id : string ) { return this.meetup( id ) }
 		menu_meetup_id( id : string ) { return id }
