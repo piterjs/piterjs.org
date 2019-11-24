@@ -13,6 +13,8 @@ $piterjs_app $mol_view
 						place <= place $piterjs_place
 						title \
 						body /
+		<= Toggle_intro $mol_check
+			checked?val <=> toggle_intro?val false
 	Menu $mol_page
 		title \PiterJS
 		minimal_width 200
@@ -32,6 +34,6 @@ $piterjs_app $mol_view
 		minimal_width 600
 		place <= place $piterjs_place
 	Intro $piterjs_intro
-		meetup <= meetup_last $piterjs_meetup
+		meetup <= meetup_current $piterjs_meetup
 		page?val <=> intro?val \
 		minimal_width 9000

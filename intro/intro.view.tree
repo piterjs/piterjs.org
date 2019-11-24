@@ -3,7 +3,7 @@ $piterjs_intro $mol_view
 	meetup $piterjs_meetup
 	page?val \
 	pages *
-		main <= Main $piterjs_intro_main
+		main <= Main $piterjs_intro_main meetup <= meetup
 		about <= About $piterjs_intro_page
 			title \Кто мы?
 			text \
@@ -99,10 +99,4 @@ $piterjs_intro_page $mol_view
 		<= Head $mol_view sub <= head /
 			<= Title $mol_view sub / <= title \PiterJS
 		<= Text $mol_text text <= text \
-
-$piterjs_intro_main $piterjs_intro_page
-	title \PiterJS #42
-	head /
-		<= Logo $piterjs_image link \piterjs/logo/logo.svg
-		<= Title
 

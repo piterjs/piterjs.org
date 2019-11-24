@@ -52,16 +52,25 @@
 	padding: .5rem;
 }
 
-[piterjs_app] [mol_button_minor] {
+[piterjs_app] [mol_button_major] {
 	font-weight: bolder;
 	color: var(--mol_theme_text);
 	box-shadow: 0 0 0 2px #f7df1e;
+	background: none;
 }
 
-[piterjs_app] [mol_button_minor]:hover {
+[piterjs_app] [mol_button_major]:hover {
 	background: #f7df1e;
 }
 
 [piterjs_app_book_placeholder] {
 	background: none;
+}
+
+[piterjs_app_toggle_intro] {
+	position: absolute;
+	bottom: 0;
+	right: 0;
+	width: 2rem;
+	height: 2rem;
 }

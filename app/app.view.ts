@@ -41,15 +41,16 @@ namespace $.$$ {
 			.sort( ( a , b )=> b.start().valueOf() - a.start().valueOf() )
 		}
 
-		meetup_last() {
-			return this.meetups()[0]
+		@ $mol_mem
+		meetup_current() {
+			const id = this.meetup_id()
+			const meetup = id ? this.meetup( id ) : this.meetups()[0]
+			return meetup
 		}
 
 		@ $mol_mem
 		place() {
-			const id = this.meetup_id()
-			const meetup = id ? this.meetup( id ) : this.meetup_last()
-			return meetup.place()
+			return this.meetup_current().place()
 		}
 
 		@ $mol_mem
@@ -58,6 +59,22 @@ namespace $.$$ {
 		}
 		menu_meetup( id : string ) { return this.meetup( id ) }
 		menu_meetup_id( id : string ) { return id }
+
+		toggle_intro( next? : boolean ) {
+			
+			if( next !== undefined ) {
+
+				if( this.intro() ) {
+					this.intro( null )
+				} else {
+					this.intro( 'main' )
+				}
+				
+			}
+
+			return Boolean( this.intro() )
+
+		}
 
 	}
 
