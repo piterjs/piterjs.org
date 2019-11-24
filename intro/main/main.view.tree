@@ -1,0 +1,7 @@
+$piterjs_intro_main $piterjs_intro_page
+	meetup $piterjs_meetup
+	title \PiterJS {title}
+	head /
+		<= Logo $piterjs_image link \piterjs/logo/logo.svg
+		<= Title
+

@@ -1,9 +1,10 @@
 [piterjs_app] {
 	--mol_theme_current: hsla(53, 93%, 78%, 1);
 	--mol_theme_control: hsl(233, 63%, 20%);
+	display: flex;;
 }
 
-[piterjs_app]:before {
+[piterjs_app_screen]:before {
 	content: '';
 	display: block;
 	height: 3.5rem;
@@ -29,33 +30,6 @@
 	stroke: currentColor;
 }
 
-[piterjs_app_now]:after {
-	content: '';
-	position: absolute;
-	left: 0;
-	top: 3.5rem;
-	background: no-repeat left 0 url('piterjs/app/app_lines.svg');
-	pointer-events: none;
-	width: 60vmin;
-	height: 60vmin;
-	z-index: -1;
-	background-size: 50%;
-}
-
-[piterjs_app]:after {
-	content: '';
-	position: absolute;
-	right: 0;
-	bottom: 0;
-	background: no-repeat left 0 url('piterjs/app/app_lines.svg');
-	transform: rotate(180deg);
-	pointer-events: none;
-	width: 60vmin;
-	height: 60vmin;
-	z-index: -1;
-	background-size: 50%;
-}
-
 [piterjs_app] > *:not([mol_book_page_visible]):not([mol_book_page_focused]) + *:before {
 	left: .25rem;
 }
@@ -63,6 +37,7 @@
 [piterjs_app] [mol_page] ,
 [piterjs_app] [mol_page_body] {
 	box-shadow: none;
+	background: none;
 }
 
 [piterjs_app] [mol_page_head] {
@@ -77,12 +52,25 @@
 	padding: .5rem;
 }
 
-[piterjs_app] [mol_button_minor] {
+[piterjs_app] [mol_button_major] {
 	font-weight: bolder;
 	color: var(--mol_theme_text);
 	box-shadow: 0 0 0 2px #f7df1e;
+	background: none;
 }
 
-[piterjs_app] [mol_button_minor]:hover {
+[piterjs_app] [mol_button_major]:hover {
 	background: #f7df1e;
+}
+
+[piterjs_app_book_placeholder] {
+	background: none;
+}
+
+[piterjs_app_toggle_intro] {
+	position: absolute;
+	bottom: 0;
+	right: 0;
+	width: 2rem;
+	height: 2rem;
 }

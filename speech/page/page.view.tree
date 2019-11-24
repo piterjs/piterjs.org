@@ -1,14 +1,5 @@
 $piterjs_speech_page $mol_page
-	speech *
-		title \
-		description \
-		speaker \
-		slides \
-		video \
-	speaker!id *
-		title \
-		description \
-		photo \
+	speech $piterjs_speech
 	minimal_width 600
 	tools /
 		<= Close $mol_link
@@ -26,7 +17,4 @@ $piterjs_speech_page $mol_page
 				uri <= video \
 				title \Видео
 		<= Speaker $piterjs_speaker_snippet
-			speaker <= speech_speaker *
-				title \
-				description \
-				photo \
+			speaker <= speaker $piterjs_speaker

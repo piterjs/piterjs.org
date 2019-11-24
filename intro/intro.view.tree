@@ -1,9 +1,9 @@
 $piterjs_intro $mol_view
 	title \PiterJS Вступление
-	meetups /
+	meetup $piterjs_meetup
 	page?val \
 	pages *
-		main <= Main $piterjs_intro_main
+		main <= Main $piterjs_intro_main meetup <= meetup
 		about <= About $piterjs_intro_page
 			title \Кто мы?
 			text \
@@ -44,11 +44,8 @@ $piterjs_intro $mol_view
 				\Поможем с подготовкой
 				\Пиши на hi@piterjs.org
 		place <= Place $piterjs_intro_page
-			title \Мы в JetBrains
-			text \
-				\WiFi - JetBrains-Open
-				\Курить - на улицу
-				\Чай, кофе - за углом
+			title <= place_title \Мы в {place}
+			text <= place_notes \
 		schedule <= Schedule $piterjs_intro_page
 			title \Сегодня
 			text \
@@ -82,16 +79,14 @@ $piterjs_intro $mol_view
 				\t.me/piterjs
 				\youtube.com/piterjs
 				\piterjs.org
-		beer <= Beer $piterjs_intro_page
+		afterparty <= Afterparty $piterjs_intro_page
 			title \Го в бар!
-			text \
-				\O'Hooligans
-				\Приморский 137/1
-				\t.me/beerjs_spb
+			text <= afterparty \
 	sub /
-		<= Lines_open $piterjs_intro_lines color <= brand_1 \#C14989
-		<= Lines_close $piterjs_intro_lines color <= brand_2 \#E8863F
-		<= Page $mol_view
+		<= Screen $piterjs_screen
+			place <= place $piterjs_place
+			content /
+				<= Page $mol_view
 	plugins /
 		<= Nav $mol_nav
 			keys_x <= page_ids /string
@@ -99,16 +94,9 @@ $piterjs_intro $mol_view
 			current_x?val <=> page?val
 			current_y?val <=> page?val
 
-
 $piterjs_intro_page $mol_view
 	sub /
 		<= Head $mol_view sub <= head /
 			<= Title $mol_view sub / <= title \PiterJS
 		<= Text $mol_text text <= text \
-
-$piterjs_intro_main $piterjs_intro_page
-	title \PiterJS #42
-	head /
-		<= Logo $piterjs_image link \piterjs/logo/logo.svg
-		<= Title
 

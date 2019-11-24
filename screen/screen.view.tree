@@ -1,0 +1,8 @@
+$piterjs_screen $mol_view
+	place $piterjs_place
+	sub /
+		<= Open $piterjs_screen_lines
+			color <= color_open \#FFE515
+		<= Close $piterjs_screen_lines
+			color <= color_close \#FFE515
+	content /$mol_view

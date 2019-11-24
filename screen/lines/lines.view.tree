@@ -1,4 +1,4 @@
-$piterjs_intro_lines $mol_svg_root
+$piterjs_screen_lines $mol_svg_root
 	style * fill <= color \#FFE515
 	view_box \0 0 310 246
 	sub /

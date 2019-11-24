@@ -13,12 +13,17 @@
 	padding-right: 0;
 }
 
-[mol_view][piterjs_now_body] {
+[piterjs_now_body] {
+	display: flex;
+}
+
+[piterjs_now_screen] {
 	display: flex;
 	flex-direction: column;
 	justify-content: space-evenly;
 	align-items: center;
 	padding: 1rem;
+	background: none;
 }
 
 [piterjs_now_logo] {
