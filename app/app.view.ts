@@ -69,7 +69,7 @@ namespace $.$$ {
 				} else {
 					this.intro( 'main' )
 				}
-				
+
 			}
 
 			return Boolean( this.intro() )

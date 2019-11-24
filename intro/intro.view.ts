@@ -2,6 +2,12 @@ namespace $.$$ {
 
 	export class $piterjs_intro extends $.$piterjs_intro {
 
+		@ $mol_mem
+		dom_node() {
+			$mol_fiber_defer( ()=> this.focused( true ) )
+			return super.dom_node()
+		}
+
 		page_ids() {
 			return Object.keys( this.pages() )
 		}
