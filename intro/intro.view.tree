@@ -46,17 +46,9 @@ $piterjs_intro $mol_view
 		place <= Place $piterjs_intro_page
 			title <= place_title \Мы в {place}
 			text <= place_notes \
-		schedule <= Schedule $piterjs_intro_page
+		schedule <= Schedule $piterjs_schedule
+			meetup <= meetup
 			title \Сегодня
-			text \
-				\19:15 – Кирилл Сергеев
-				\**Логирование на JS**
-				\
-				\20:10 – Светлана Авдей
-				\**Документация к API - делай это понятно**
-				\
-				\20:55 – Максим Ерехинский
-				\**Взаимодействие с iBeaсon в React Native**
 		profit <= Proft $piterjs_intro_page
 			title \Бонусы
 			text \
@@ -93,10 +85,3 @@ $piterjs_intro $mol_view
 			keys_y <= page_ids /string
 			current_x?val <=> page?val
 			current_y?val <=> page?val
-
-$piterjs_intro_page $mol_view
-	sub /
-		<= Head $mol_view sub <= head /
-			<= Title $mol_view sub / <= title \PiterJS
-		<= Text $mol_text text <= text \
-

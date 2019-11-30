@@ -1,42 +1,16 @@
-@keyframes piterjs_intro_page_show {
-	from {
-		transform: rotateY( 90deg );
-		opacity: 0;
-	}
-}
-
 [piterjs_intro] {
 	flex: auto;
 	display: flex;
 	font-size: 5vmin;
 }
 
-[piterjs_intro_page] {
-	flex: auto;
-	display: flex;
-	align-items: center;
-	align-content: center;
-	justify-content: center;
-	flex-direction: column;
-	animation: piterjs_intro_page_show .25s ease-out forwards;
+@keyframes piterjs_intro_screen_show {
+	from {
+		transform: rotateY( 90deg );
+		opacity: 0;
+	}
 }
 
-[piterjs_intro_page_head] {
-	display: flex;
-	align-items: center;
-	text-align: center;
-}
-
-
-[piterjs_intro_page_title] {
-	font-size: 2em;
-	margin: 2vmin;
-	font-weight: 600;
-	line-height: 1;
-}
-
-[piterjs_intro_page_text] {
-	margin: 2vmin;
-	box-shadow: none;
-	max-width: none;
+[piterjs_intro_screen] > *:not([piterjs_screen_lines]) {
+	animation: piterjs_intro_screen_show .25s ease-out forwards;
 }

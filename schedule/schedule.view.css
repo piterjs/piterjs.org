@@ -1,0 +1,35 @@
+[piterjs_schedule] {
+	flex: auto;
+	flex-wrap: wrap;
+	display: flex;
+	justify-content: space-between;
+	font-size: 4vmin;
+}
+
+[piterjs_schedule_speeches] {
+	margin: auto;
+	display: flex;
+	flex-direction: column;
+	padding: .5em 5vw;
+	align-content: center;
+	align-items: flex-start;
+}
+
+[piterjs_schedule_speech] {
+	margin: .5em;
+}
+
+[piterjs_schedule_speech_interval] {
+	font-weight: bolder;
+}
+
+[piterjs_schedule_speech_title] {
+	padding: 0 .5em;
+	margin-left: 10vmin;
+}
+
+[piterjs_schedule_speech_speaker] {
+	padding: 0 .5em;
+	margin-left: 10vmin;
+	color: var(--mol_theme_shade);
+}

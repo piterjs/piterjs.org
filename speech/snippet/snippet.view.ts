@@ -20,7 +20,7 @@ namespace $.$$ {
 
 		@ $mol_mem
 		time() {
-			return this.start().toString( 'hh:mm' )
+			return this.speech().interval().start.toString( 'hh:mm' )
 		}
 
 	}

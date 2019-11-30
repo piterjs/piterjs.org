@@ -21,5 +21,4 @@ $piterjs_meetup_page $mol_page
 		<= Speeches $mol_list rows <= speeches /
 	Speech!index $piterjs_speech_snippet
 		speech <= speech!index $piterjs_speech
-		start <= speech_start!index $mol_time_moment
 

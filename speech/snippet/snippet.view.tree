@@ -1,7 +1,6 @@
 $piterjs_speech_snippet $mol_link
 	arg *
 		speech <= id \
-	start $mol_time_moment
 	speech $piterjs_speech
 	sub /
 		<= Photo $piterjs_image link <= photo \
