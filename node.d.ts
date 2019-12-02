@@ -971,35 +971,20 @@ declare namespace $ {
 
 declare namespace $ {
     type $mol_tree_path = Array<string | number | null>;
-    type $mol_tree_hack = (input: $mol_tree, context: $mol_tree_context) => $mol_tree[];
+    type $mol_tree_hack = (input: $mol_tree, context: $mol_tree_context) => readonly $mol_tree[];
     type $mol_tree_context = Record<string, $mol_tree_hack>;
     type $mol_tree_library = Record<string, $mol_tree_context>;
     class $mol_tree {
-        type: string;
-        data: string;
-        sub: $mol_tree[];
-        baseUri: string;
-        row: number;
-        col: number;
-        constructor(config?: {
-            type?: string;
-            value?: string;
-            data?: string;
-            sub?: $mol_tree[];
-            baseUri?: string;
-            row?: number;
-            col?: number;
-        });
+        readonly type: string;
+        readonly data: string;
+        readonly sub: readonly $mol_tree[];
+        readonly baseUri: string;
+        readonly row: number;
+        readonly col: number;
+        constructor(config?: Partial<$mol_tree>);
         static values(str: string, baseUri?: string): $mol_tree[];
-        clone(config: {
-            type?: string;
-            value?: string;
-            data?: string;
-            sub?: $mol_tree[];
-            baseUri?: string;
-            row?: number;
-            col?: number;
-        }): $mol_tree;
+        clone(config?: Partial<$mol_tree>): $mol_tree;
+        make(config: Partial<$mol_tree>): $mol_tree;
         static fromString(str: string, baseUri?: string): $mol_tree;
         static fromJSON(json: any, baseUri?: string): $mol_tree;
         get uri(): string;
@@ -1218,6 +1203,25 @@ declare namespace $ {
 }
 
 declare namespace $ {
+    type $mol_time_interval_config = string | {
+        start?: $mol_time_moment_config;
+        end?: $mol_time_moment_config;
+        duration?: $mol_time_duration_config;
+    };
+    class $mol_time_interval extends $mol_time_base {
+        constructor(config: $mol_time_interval_config);
+        private _start;
+        get start(): $mol_time_moment;
+        private _end;
+        get end(): $mol_time_moment;
+        private _duration;
+        get duration(): $mol_time_duration;
+        toJSON(): string;
+        toString(): string;
+    }
+}
+
+declare namespace $ {
     class $piterjs_speaker extends $piterjs_model {
         static uri(): string;
         title(): string;
@@ -1235,6 +1239,8 @@ declare namespace $ {
         description(): string;
         slides(): string;
         video(): string;
+        previous(): $piterjs_speech;
+        interval(): $mol_time_interval;
         duration(): $mol_time_duration;
         speaker(): $piterjs_speaker;
     }
@@ -1887,7 +1893,6 @@ declare namespace $ {
             "speech": string;
         };
         id(): string;
-        start(): $mol_time_moment;
         speech(): $piterjs_speech;
         sub(): readonly any[];
         Photo(): $piterjs_image;
@@ -1933,7 +1938,6 @@ declare namespace $ {
         speeches(): readonly any[];
         Speech(index: any): $$.$piterjs_speech_snippet;
         speech(index: any): $piterjs_speech;
-        speech_start(index: any): $mol_time_moment;
     }
 }
 
@@ -1943,7 +1947,6 @@ declare namespace $.$$ {
         description(): string;
         date(): string;
         translation(): string;
-        speech_start(index: number): $mol_time_moment;
         info(): ($mol_text | $mol_link_iconed)[];
         body(): ($mol_view | $mol_list)[];
         speeches(): $piterjs_speech_snippet[];
@@ -2048,6 +2051,64 @@ declare namespace $.$$ {
 }
 
 declare namespace $ {
+    class $piterjs_intro_page extends $mol_view {
+        sub(): readonly any[];
+        Head(): $mol_view;
+        head(): readonly any[];
+        Title(): $mol_view;
+        title(): string;
+        Text(): $$.$mol_text;
+        text(): string;
+    }
+}
+
+declare namespace $ {
+    class $piterjs_logo extends $piterjs_image {
+        link(): string;
+    }
+}
+
+declare namespace $ {
+    class $piterjs_intro_main extends $piterjs_intro_page {
+        meetup(): $piterjs_meetup;
+        title(): string;
+        head(): readonly any[];
+        Logo(): $piterjs_logo;
+    }
+}
+
+declare namespace $.$$ {
+    class $piterjs_intro_main extends $.$piterjs_intro_main {
+        title(): string;
+    }
+}
+
+declare namespace $ {
+    class $piterjs_schedule extends $mol_view {
+        meetup(): $piterjs_meetup;
+        sub(): readonly any[];
+        Speeches(): $$.$mol_list;
+        speeches(): readonly any[];
+        Speech(index: any): $$.$mol_list;
+        Speech_interval(index: any): $mol_view;
+        speech_interval(index: any): string;
+        Speech_title(index: any): $mol_view;
+        speech_title(index: any): string;
+        Speech_speaker(index: any): $mol_view;
+        speech_speaker(index: any): string;
+    }
+}
+
+declare namespace $.$$ {
+    class $piterjs_schedule extends $.$piterjs_schedule {
+        speeches(): $mol_list[];
+        speech_interval(index: number): string;
+        speech_title(index: number): string;
+        speech_speaker(index: number): string;
+    }
+}
+
+declare namespace $ {
     class $mol_nav extends $mol_plugin {
         cycle(val?: any, force?: $mol_mem_force): any;
         mod_ctrl(): boolean;
@@ -2093,7 +2154,7 @@ declare namespace $ {
             "roles_place": $piterjs_intro_page;
             "speakers": $piterjs_intro_page;
             "place": $piterjs_intro_page;
-            "schedule": $piterjs_intro_page;
+            "schedule": $$.$piterjs_schedule;
             "profit": $piterjs_intro_page;
             "info": $piterjs_intro_page;
             "follow": $piterjs_intro_page;
@@ -2108,7 +2169,7 @@ declare namespace $ {
         Place(): $piterjs_intro_page;
         place_title(): string;
         place_notes(): string;
-        Schedule(): $piterjs_intro_page;
+        Schedule(): $$.$piterjs_schedule;
         Proft(): $piterjs_intro_page;
         Info(): $piterjs_intro_page;
         Follow(): $piterjs_intro_page;
@@ -2121,17 +2182,6 @@ declare namespace $ {
         plugins(): readonly any[];
         Nav(): $$.$mol_nav;
         page_ids(): readonly string[];
-    }
-}
-declare namespace $ {
-    class $piterjs_intro_page extends $mol_view {
-        sub(): readonly any[];
-        Head(): $mol_view;
-        head(): readonly any[];
-        Title(): $mol_view;
-        title(): string;
-        Text(): $$.$mol_text;
-        text(): string;
     }
 }
 
@@ -2233,20 +2283,5 @@ declare namespace $ {
 
 declare namespace $.$$ {
     class $piterjs_now extends $.$piterjs_now {
-    }
-}
-
-declare namespace $ {
-    class $piterjs_intro_main extends $piterjs_intro_page {
-        meetup(): $piterjs_meetup;
-        title(): string;
-        head(): readonly any[];
-        Logo(): $piterjs_image;
-    }
-}
-
-declare namespace $.$$ {
-    class $piterjs_intro_main extends $.$piterjs_intro_main {
-        title(): string;
     }
 }

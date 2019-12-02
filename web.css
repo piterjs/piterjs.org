@@ -505,6 +505,10 @@ sans-serif;
 	display: block;
 }
 
+[mol_list] > * {
+	display: block;
+}
+
 [mol_link] {
 	text-decoration: none;
 	color: var(--mol_theme_control);
@@ -1081,19 +1085,6 @@ monospace;
 	padding: .5rem;
 }
 
-@keyframes piterjs_intro_page_show {
-	from {
-		transform: rotateY( 90deg );
-		opacity: 0;
-	}
-}
-
-[piterjs_intro] {
-	flex: auto;
-	display: flex;
-	font-size: 5vmin;
-}
-
 [piterjs_intro_page] {
 	flex: auto;
 	display: flex;
@@ -1101,7 +1092,6 @@ monospace;
 	align-content: center;
 	justify-content: center;
 	flex-direction: column;
-	animation: piterjs_intro_page_show .25s ease-out forwards;
 }
 
 [piterjs_intro_page_head] {
@@ -1121,6 +1111,66 @@ monospace;
 	margin: 2vmin;
 	box-shadow: none;
 	max-width: none;
+}
+
+[piterjs_logo] {
+	display: block;
+	width: 15vmin;
+	box-shadow: none;
+	margin: 1.5vmin;
+}
+
+[piterjs_schedule] {
+	flex: auto;
+	flex-wrap: wrap;
+	display: flex;
+	justify-content: space-between;
+	font-size: 4vmin;
+}
+
+[piterjs_schedule_speeches] {
+	margin: auto;
+	display: flex;
+	flex-direction: column;
+	padding: .5em 5vw;
+	align-content: center;
+	align-items: flex-start;
+}
+
+[piterjs_schedule_speech] {
+	margin: .5em;
+}
+
+[piterjs_schedule_speech_interval] {
+	font-weight: bolder;
+}
+
+[piterjs_schedule_speech_title] {
+	padding: 0 .5em;
+	margin-left: 10vmin;
+}
+
+[piterjs_schedule_speech_speaker] {
+	padding: 0 .5em;
+	margin-left: 10vmin;
+	color: var(--mol_theme_shade);
+}
+
+[piterjs_intro] {
+	flex: auto;
+	display: flex;
+	font-size: 5vmin;
+}
+
+@keyframes piterjs_intro_screen_show {
+	from {
+		transform: rotateY( 90deg );
+		opacity: 0;
+	}
+}
+
+[piterjs_intro_screen] > *:not([piterjs_screen_lines]) {
+	animation: piterjs_intro_screen_show .25s ease-out forwards;
 }
 
 [piterjs_app] {
@@ -1256,13 +1306,6 @@ monospace;
 		opacity: 0;
 		z-index: -1;
 	}
-}
-
-[piterjs_intro_main_logo] {
-	display: block;
-	width: 15vmin;
-	box-shadow: none;
-	margin: 1.5vmin;
 }
 
 /*# sourceMappingURL=web.css.map */

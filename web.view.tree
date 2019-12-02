@@ -416,7 +416,6 @@ $piterjs_image $mol_image2 links /
 $piterjs_speech_snippet $mol_link
 	arg *
 		speech <= id \
-	start $mol_time_moment
 	speech $piterjs_speech
 	sub /
 		<= Photo $piterjs_image link <= photo \
@@ -451,7 +450,6 @@ $piterjs_meetup_page $mol_page
 		<= Speeches $mol_list rows <= speeches /
 	Speech!index $piterjs_speech_snippet
 		speech <= speech!index $piterjs_speech
-		start <= speech_start!index $mol_time_moment
 
 
 $mol_row $mol_view
@@ -501,6 +499,34 @@ $piterjs_meetup_snippet $mol_link
 			sub / <= title \
 		<= Date $mol_view
 			sub / <= date \
+
+$piterjs_intro_page $mol_view
+	sub /
+		<= Head $mol_view sub <= head /
+			<= Title $mol_view sub / <= title \PiterJS
+		<= Text $mol_text text <= text \
+
+
+$piterjs_logo $piterjs_image link \piterjs/logo/logo.svg
+
+$piterjs_intro_main $piterjs_intro_page
+	meetup $piterjs_meetup
+	title \PiterJS {title}
+	head /
+		<= Logo $piterjs_logo
+		<= Title
+
+
+$piterjs_schedule $mol_view
+	meetup $piterjs_meetup
+	sub /
+		<= Speeches $mol_list rows <= speeches /
+	Speech!index $mol_list sub /
+		<= Speech_interval!index $mol_view sub / <= speech_interval!index \19:20 - 23:50
+		<= Speech_title!index $mol_view
+			attr * mol_theme \$mol_theme_accent
+			sub / <= speech_title!index \
+		<= Speech_speaker!index $mol_view sub / <= speech_speaker!index \
 
 $mol_nav $mol_plugin
 	cycle?val false
@@ -571,17 +597,9 @@ $piterjs_intro $mol_view
 		place <= Place $piterjs_intro_page
 			title <= place_title \Мы в {place}
 			text <= place_notes \
-		schedule <= Schedule $piterjs_intro_page
+		schedule <= Schedule $piterjs_schedule
+			meetup <= meetup
 			title \Сегодня
-			text \
-				\19:15 – Кирилл Сергеев
-				\**Логирование на JS**
-				\
-				\20:10 – Светлана Авдей
-				\**Документация к API - делай это понятно**
-				\
-				\20:55 – Максим Ерехинский
-				\**Взаимодействие с iBeaсon в React Native**
 		profit <= Proft $piterjs_intro_page
 			title \Бонусы
 			text \
@@ -618,13 +636,6 @@ $piterjs_intro $mol_view
 			keys_y <= page_ids /string
 			current_x?val <=> page?val
 			current_y?val <=> page?val
-
-$piterjs_intro_page $mol_view
-	sub /
-		<= Head $mol_view sub <= head /
-			<= Title $mol_view sub / <= title \PiterJS
-		<= Text $mol_text text <= text \
-
 
 $piterjs_app $mol_view
 	sub /
@@ -717,11 +728,3 @@ $piterjs_now $mol_page
 				<= Patreon $piterjs_link
 					uri \https://www.patreon.com/bePatron?u=16938072
 					title \Поддержать PiterJS рублём
-
-$piterjs_intro_main $piterjs_intro_page
-	meetup $piterjs_meetup
-	title \PiterJS {title}
-	head /
-		<= Logo $piterjs_image link \piterjs/logo/logo.svg
-		<= Title
-
