@@ -33,6 +33,28 @@ namespace $ {
 		video() {
 			return $mol_data_optional( $mol_data_string )( this.data().video ) || null
 		}
+		
+		@ $mol_mem
+		previous() {
+			
+			const speeches = this.meetup().speeches()
+
+			const index = speeches.indexOf( this )
+			if( index <= 0 ) return null
+			
+			return speeches[ index - 1 ]
+
+		}
+
+		@ $mol_mem
+		interval() : $mol_time_interval {
+			
+			return new $mol_time_interval({
+				start : this.previous()?.interval().end ?? this.meetup().start() ,
+				duration : this.duration() ,
+			})
+
+		}
 
 		@ $mol_mem
 		duration() {

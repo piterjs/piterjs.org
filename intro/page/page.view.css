@@ -1,0 +1,28 @@
+[piterjs_intro_page] {
+	flex: auto;
+	display: flex;
+	align-items: center;
+	align-content: center;
+	justify-content: center;
+	flex-direction: column;
+}
+
+[piterjs_intro_page_head] {
+	display: flex;
+	align-items: center;
+	text-align: center;
+}
+
+
+[piterjs_intro_page_title] {
+	font-size: 2em;
+	margin: 2vmin;
+	font-weight: 600;
+	line-height: 1;
+}
+
+[piterjs_intro_page_text] {
+	margin: 2vmin;
+	box-shadow: none;
+	max-width: none;
+}

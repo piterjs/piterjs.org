@@ -1,0 +1,6 @@
+$piterjs_intro_page $mol_view
+	sub /
+		<= Head $mol_view sub <= head /
+			<= Title $mol_view sub / <= title \PiterJS
+		<= Text $mol_text text <= text \
+
