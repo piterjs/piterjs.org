@@ -1,5 +1,4 @@
 # PiterJS
-[![Build Status](https://ci.piterjs.org/api/badges/piterjs/piterjs/status.svg)](https://ci.piterjs.org/piterjs/piterjs)
 
 # Production build
 
@@ -46,7 +45,17 @@ You can change source files (`./piterjs/**`) and reload page to view result.
 
 1. Открываем [meetup/meetup.data.tree](meetup/meetup.data.tree)
 2. Добавляем данные о нём по аналогии с остальными.
-4. В поле `speeches` указываем идентификаторы выступлений. В поле `start` (время начала митапа)  используется [ISO8601](https://en.wikipedia.org/wiki/ISO_8601).
+3. В поле `speeches` указываем идентификаторы выступлений. В поле `place` указываем идентификатор площадки.  В поле `start` (время начала митапа)  используется [ISO8601](https://en.wikipedia.org/wiki/ISO_8601). 
+
+## Добавление площадки
+
+1. Открываем [place/place.data.tree](place/place.data.tree)
+2. Добавляем данные о ней по аналогии с остальными.
+
+## Изменение презентации
+
+1. Открываем [intro/intro.view.tree](intro/intro.view.tree)
+2. Изменяем по аналогии с остальным. В `text` можно использовать markdown. Можно добавлять свои страницы или скрывать существующие, поставив `- ` (дефис+пробел) перед веткой описания слайда. У каждого слайда первым словом задаётся уникальный идентификатор, который будет фигурировать в ссылке.
 
 # BrowserStack
 
