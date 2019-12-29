@@ -262,6 +262,7 @@ js-logging *
 	speaker \recNuTExXo6paisad
 	duration \PT55m
 	slides \https://github.com/piterjs/slides/blob/master/meetup=42/speech=js-logging.pdf
+	video \https://www.youtube.com/watch?v=HpQfpLaIK2E
 api-documenting *
 	title \Документация к API — делай это понятно
 	description \
@@ -269,6 +270,7 @@ api-documenting *
 	speaker \recHfk5ryFmvkmfoG
 	duration \PT45m
 	slides \https://github.com/piterjs/slides/blob/master/meetup=42/speech=api-documenting.pdf
+	video \https://www.youtube.com/watch?v=v-VXIYO5Lbs
 ibeacon-with-react-native *
 	title \Взаимодействие с iBeacons в React Native
 	description \
@@ -276,6 +278,7 @@ ibeacon-with-react-native *
 	speaker \recSJkANJgoAHmRu9
 	duration \PT40m
 	slides \https://github.com/piterjs/slides/blob/master/meetup=42/speech=ibeacon-with-react-native.pdf
+	video \https://www.youtube.com/watch?v=5X5UOCtYB20
 programming-is-a-lava *
 	title \Программирование — это лава!
 	description \В нас сидит очень требовательный и обидчивый идеалист, который хочет сделать самые универсальные решения, самую расширяемую архитектуру и самый красивый код. В докладе попробуем разобраться, почему быть таким идеалистом плохо, и как с ним договариваться.
