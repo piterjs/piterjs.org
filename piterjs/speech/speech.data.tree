@@ -223,16 +223,19 @@ slides *
 	description \Расскажу сколько всего умеет, как работает, и как сделать своё за один беспокойный вечер.
 	speaker \rec1qqsT1cczrE6dH
 	duration \PT40m
+	video \https://www.youtube.com/watch?v=o13NncAQXWk
 webgl-planet *
 	title \Планета на WebGL
 	description \Доклад для уставших от “формочек и кнопочек”. Расскажу немного основ по компьютерной графике и о том, как написать простой 3d рендер на WebGL без использования фреймворков и библиотек.
 	speaker \vola
 	duration \PT40m
+	video \https://www.youtube.com/watch?v=4jS3RtzasS0
 css-types *
 	title \Типы данных в CSS
 	description \Расскажу про типы данных в CSS3 и язык их описания. Будет много формального синтаксиса и интересных деталей.
 	speaker \vals
 	duration \PT40m
+	video \https://www.youtube.com/watch?v=o3oFkckaJGo
 react-ssr-wat *
 	title \React + SSR там, где их уже не ждали
 	description \Клиентский портал крупного европейского телекома. Разметка рендерится на Java бэкенде, а фронтенд - набор jQuery плагинов. Разработчики хотят изменений, но бизнес не заинтересован в радикальных изменениях. Как начать использовать React, чтобы никого не спугнуть? Как добавить к нему SSR, если большая часть портала все еще не на React?
