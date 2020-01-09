@@ -3074,9 +3074,40 @@ var $;
 //speech.js.map
 ;
 "use strict";
+//unary.js.map
+;
+"use strict";
+//param.js.map
+;
+"use strict";
+//tail.js.map
+;
+"use strict";
+//result.js.map
+;
+"use strict";
+//foot.js.map
+;
+"use strict";
+var $;
+(function ($) {
+    function $mol_data_pipe(...funcs) {
+        return $.$mol_data_setup((input) => {
+            let value = input;
+            for (const func of funcs)
+                value = func.prototype ? new func(value) : func(value);
+            return value;
+        }, { funcs });
+    }
+    $.$mol_data_pipe = $mol_data_pipe;
+})($ || ($ = {}));
+//pipe.js.map
+;
+"use strict";
 var $;
 (function ($) {
     function $mol_data_wrapper(pre, Obj) {
+        console.warn('$mol_data_wrapper is deparecated. Use $mol_data_pipe instead.');
         return $.$mol_data_setup((val) => new Obj(pre(val)), { pre, Obj });
     }
     $.$mol_data_wrapper = $mol_data_wrapper;
@@ -3253,7 +3284,7 @@ var $;
 "use strict";
 var $;
 (function ($) {
-    $.$mol_style_attach("mol/theme/theme.css", "[mol_theme] , :root {\n\tbackground-color: var(--mol_theme_back);\n\tcolor: var(--mol_theme_text);\n\tfill: var(--mol_theme_text);\n}\n\n[mol_theme=\"$mol_theme_light\"] , :root {\n\t--mol_theme_back: hsl( 210 , 50% , 99% );\n\t--mol_theme_hover: rgba( 0 , 0 , 0 , .05 );\n\t--mol_theme_current: hsl( 210 , 100% , 80% );\n\t--mol_theme_text: rgba( 0 , 0 , 0 , .9 );\n\t--mol_theme_control: hsla( 210 , 60% , 35% , 1 );\n\t--mol_theme_shade: rgba( 0 , 0 , 0 , .5 );\n\t--mol_theme_line: rgba( 220 , 220 , 220 , 1 );\n\t--mol_theme_focus: hsla( 0 , 60% , 50% , 0.75 );\n\t--mol_theme_field: white;\n}\n\n[mol_theme=\"$mol_theme_dark\"] {\n\t--mol_theme_back: hsl( 210 , 50% , 10% );\n\t--mol_theme_hover: #333;\n\t--mol_theme_current: hsl( 210 , 100% , 20% );\n\t--mol_theme_text: rgba( 255 , 255 , 255 , .8 );\n\t--mol_theme_control: hsla( 210 , 60% , 70% , 1 );\n\t--mol_theme_shade: rgba( 255 , 255 , 255 , .5 );\n\t--mol_theme_line: rgba( 50 , 50 , 50 , 1 );\n\t--mol_theme_focus: rgba( 204 , 68 , 50 , .75 );\n\t--mol_theme_field: black;\n}\n\n[mol_theme=\"$mol_theme_base\"] {\n\t--mol_theme_back: hsla( 210 , 60% , 35% , 1 );\n\t--mol_theme_hover: rgba( 0 , 0 , 0 , .05 );\n\t--mol_theme_current: hsl( 210 , 100% , 20% );\n\t--mol_theme_text: white;\n\t--mol_theme_line: white;\n\t--mol_theme_control: white;\n}\n\n[mol_theme=\"$mol_theme_accent\"] {\n\t--mol_theme_back: rgb(204, 68, 50);\n\t--mol_theme_hover: rgb(165, 56, 42);\n\t--mol_theme_text: white;\n\t--mol_theme_line: rgba( 50 , 50 , 50 , 1 );\n\t--mol_theme_control: white;\n}\n");
+    $.$mol_style_attach("mol/theme/theme.css", "[mol_theme] , :root {\n\tbackground-color: var(--mol_theme_back);\n\tcolor: var(--mol_theme_text);\n\tfill: var(--mol_theme_text);\n}\n\n@media (prefers-color-scheme: light) {\n\t[mol_theme=\"$mol_theme_auto\"] {\n\t\t--mol_theme_back: hsl( 210 , 50% , 99% );\n\t\t--mol_theme_hover: rgba( 0 , 0 , 0 , .05 );\n\t\t--mol_theme_current: hsl( 210 , 100% , 80% );\n\t\t--mol_theme_text: rgba( 0 , 0 , 0 , .9 );\n\t\t--mol_theme_control: hsla( 210 , 60% , 35% , 1 );\n\t\t--mol_theme_shade: rgba( 0 , 0 , 0 , .5 );\n\t\t--mol_theme_line: rgba( 220 , 220 , 220 , 1 );\n\t\t--mol_theme_focus: hsla( 0 , 60% , 50% , 0.75 );\n\t\t--mol_theme_field: white;\n\t}\n}\n\n@media (prefers-color-scheme: dark) {\n\t[mol_theme=\"$mol_theme_auto\"] {\n\t\t--mol_theme_back: hsl( 210 , 50% , 10% );\n\t\t--mol_theme_hover: #333;\n\t\t--mol_theme_current: hsl( 210 , 100% , 20% );\n\t\t--mol_theme_text: rgba( 255 , 255 , 255 , .8 );\n\t\t--mol_theme_control: hsla( 210 , 60% , 70% , 1 );\n\t\t--mol_theme_shade: rgba( 255 , 255 , 255 , .5 );\n\t\t--mol_theme_line: rgba( 50 , 50 , 50 , 1 );\n\t\t--mol_theme_focus: rgba( 204 , 68 , 50 , .75 );\n\t\t--mol_theme_field: black;\n\t}\n}\n\n[mol_theme=\"$mol_theme_light\"] , :root {\n\t--mol_theme_back: hsl( 210 , 50% , 99% );\n\t--mol_theme_hover: rgba( 0 , 0 , 0 , .05 );\n\t--mol_theme_current: hsl( 210 , 100% , 80% );\n\t--mol_theme_text: rgba( 0 , 0 , 0 , .9 );\n\t--mol_theme_control: hsla( 210 , 60% , 35% , 1 );\n\t--mol_theme_shade: rgba( 0 , 0 , 0 , .5 );\n\t--mol_theme_line: rgba( 220 , 220 , 220 , 1 );\n\t--mol_theme_focus: hsla( 0 , 60% , 50% , 0.75 );\n\t--mol_theme_field: white;\n}\n\n[mol_theme=\"$mol_theme_dark\"] {\n\t--mol_theme_back: hsl( 210 , 50% , 10% );\n\t--mol_theme_hover: #333;\n\t--mol_theme_current: hsl( 210 , 100% , 20% );\n\t--mol_theme_text: rgba( 255 , 255 , 255 , .8 );\n\t--mol_theme_control: hsla( 210 , 60% , 70% , 1 );\n\t--mol_theme_shade: rgba( 255 , 255 , 255 , .5 );\n\t--mol_theme_line: rgba( 50 , 50 , 50 , 1 );\n\t--mol_theme_focus: rgba( 204 , 68 , 50 , .75 );\n\t--mol_theme_field: black;\n}\n\n[mol_theme=\"$mol_theme_base\"] {\n\t--mol_theme_back: hsla( 210 , 60% , 35% , 1 );\n\t--mol_theme_hover: rgba( 0 , 0 , 0 , .05 );\n\t--mol_theme_current: hsl( 210 , 100% , 20% );\n\t--mol_theme_text: white;\n\t--mol_theme_line: white;\n\t--mol_theme_control: white;\n}\n\n[mol_theme=\"$mol_theme_accent\"] {\n\t--mol_theme_back: rgb(204, 68, 50);\n\t--mol_theme_hover: rgb(165, 56, 42);\n\t--mol_theme_text: white;\n\t--mol_theme_line: rgba( 50 , 50 , 50 , 1 );\n\t--mol_theme_control: white;\n}\n");
 })($ || ($ = {}));
 //theme.css.js.map
 ;
@@ -4358,6 +4389,16 @@ var $;
                 $.$mol_dom_render_events(node, this.event());
                 return node;
             }
+            dom_node_actual() {
+                const node = this.Sub().dom_node_actual();
+                const attr = this.attr();
+                const style = this.style();
+                const fields = this.field();
+                $.$mol_dom_render_attributes(node, attr);
+                $.$mol_dom_render_styles(node, style);
+                $.$mol_dom_render_fields(node, fields);
+                return node;
+            }
             dom_tree() {
                 const Sub = this.Sub();
                 Sub.$ = this.$;
@@ -4372,6 +4413,9 @@ var $;
         __decorate([
             $.$mol_mem
         ], $mol_ghost.prototype, "dom_node", null);
+        __decorate([
+            $.$mol_mem
+        ], $mol_ghost.prototype, "dom_node_actual", null);
         $$.$mol_ghost = $mol_ghost;
     })($$ = $.$$ || ($.$$ = {}));
 })($ || ($ = {}));
@@ -10665,21 +10709,6 @@ var $;
 "use strict";
 var $;
 (function ($) {
-    console.warn('$mol_atom_wait is deprecated. Use $mol_fiber_sync instead.');
-    class $mol_atom_wait extends Promise {
-        constructor(message = 'Wait...') {
-            super(() => { });
-            this.message = message;
-        }
-    }
-    $.$mol_atom_wait = $mol_atom_wait;
-    $mol_atom_wait.prototype.constructor = Promise;
-})($ || ($ = {}));
-//wait.js.map
-;
-"use strict";
-var $;
-(function ($) {
     $.$mol_test({
         'Property method'() {
             class App extends $.$mol_object2 {
@@ -10760,13 +10789,10 @@ var $;
             $.$mol_defer.run();
             $.$mol_assert_unique(b.bar(), bar);
         },
-        'wait for data'() {
+        async 'wait for data'() {
             class Test extends $.$mol_object2 {
-                source(next, force) {
-                    new $.$mol_defer(() => {
-                        this.source('Jin', $.$mol_mem_force_cache);
-                    });
-                    return $.$mol_fail_hidden(new $.$mol_atom_wait('Wait for data!'));
+                source() {
+                    return $.$mol_fiber_sync(() => new Promise(done => done('Jin')))();
                 }
                 middle() {
                     return this.source();
@@ -11169,6 +11195,48 @@ var $;
     });
 })($ || ($ = {}));
 //interval.test.js.map
+;
+"use strict";
+//param.test.js.map
+;
+"use strict";
+//tail.test.js.map
+;
+"use strict";
+//result.test.js.map
+;
+"use strict";
+//foot.test.js.map
+;
+"use strict";
+var $;
+(function ($) {
+    $.$mol_test({
+        'single function'() {
+            const stringify = $.$mol_data_pipe((input) => input.toString());
+            $.$mol_assert_equal(stringify(5), '5');
+        },
+        'two functions'() {
+            const isLong = $.$mol_data_pipe((input) => input.toString(), (input) => input.length > 2);
+            $.$mol_assert_equal(isLong(5.0), false);
+            $.$mol_assert_equal(isLong(5.1), true);
+        },
+        'three functions'() {
+            const pattern = $.$mol_data_pipe((input) => input.toString(), (input) => new RegExp(input), (input) => input.toString());
+            $.$mol_assert_equal(pattern(5), '/5/');
+        },
+        'classes'() {
+            class Box {
+                constructor(value) {
+                    this.value = value;
+                }
+            }
+            const boxify = $.$mol_data_pipe((input) => input.toString(), Box);
+            $.$mol_assert_like(boxify(5), new Box('5'));
+        },
+    });
+})($ || ($ = {}));
+//pipe.test.js.map
 ;
 "use strict";
 var $;
