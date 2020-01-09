@@ -48,6 +48,26 @@
 	flex: 0 0 auto;
 }
 
+[piterjs_app_menu_body] {
+	display: flex;
+	flex-direction: column;
+	justify-content: space-between;
+}
+
+[piterjs_app_conf] {
+	margin: 0 .5rem;
+	display: flex;
+}
+
+[piterjs_app_conf_title] {
+	margin: .5rem;
+	font-weight: bolder;
+}
+
+[piterjs_app_conf_date] {
+	margin: .5rem;
+}
+
 [piterjs_app_meetups] {
 	padding: .5rem;
 }
