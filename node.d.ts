@@ -2432,6 +2432,9 @@ declare namespace $ {
         Menu(): $$.$mol_page;
         Meetups(): $$.$mol_list;
         menu_meetups(): readonly any[];
+        Conf(): $$.$mol_link;
+        Conf_title(): $mol_view;
+        Conf_date(): $mol_view;
         Meetup(id: any): $$.$piterjs_meetup_page;
         meetup(id: any): $piterjs_meetup;
         Speech(id: any): $$.$piterjs_speech_page;

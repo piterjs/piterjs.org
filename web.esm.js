@@ -4657,7 +4657,7 @@ var $;
 "use strict";
 var $;
 (function ($) {
-    $.$mol_style_attach("mol/book/book.view.css", "[mol_book] {\n\tdisplay: flex;\n\tflex-flow: row nowrap;\n\talign-items: stretch;\n\tjustify-content: flex-start;\n\toverflow: hidden;\n\tflex: 1 1 auto;\n\talign-self: stretch;\n\tmargin: 0;\n\tbox-shadow: 0 0 0 1px var(--mol_theme_line);\n\ttransform: translateZ( 0 );\n}\n\n[mol_book] > *:not([mol_book_page_visible]) {\n\tposition: absolute; \n\tleft: 0;\n\ttop: 0;\n}\n\n[mol_book] > [mol_book_page_focused]:not([mol_book_page_visible]) ~ * {\n\topacity: .25;\n\tpointer-events: none;\n\tz-index: -1;\n}\n\n[mol_book] > *:not([mol_book_page_visible]):not([mol_book_page_focused]) {\n\ttransform: translate3d( -100% , 0 , 0 );\n}\n\n[mol_book] > *:not([mol_book_page_visible]):not([mol_book_page_focused]) + *:before {\n\tcontent : '•••';\n\tposition: absolute;\n\ttop: 1rem;\n\tleft: 0;\n\tz-index: 1;\n\tpointer-events: none;\n\tcolor: var(--mol_skin_base_text);\n\ttransform: rotate(90deg);\n}\n\n[mol_book] > * {\n\tposition: relative;\n\t/* animation: mol_book_page_show linear .2s; */\n\ttransition-timing-function: linear;\n\tz-index: 0;\n\tmin-height: 100%;\n\tmax-height: 100%;\n}\n\n[mol_book_placeholder] {\n\tflex: 1000 1 400px;\n\tbox-shadow: 0 0 0 1px var(--mol_theme_line);\n\tbackground: var(--mol_theme_field);\n\tz-index: -1;\n}\n\n[mol_book_placeholder]:hover {\n\toutline: none;\n}\n\n@keyframes mol_book_page_show {\n\tfrom {\n\t\ttransform: translateX( 100% );\n\t\topacity: 0;\n\t\tz-index: -1;\n\t}\n}\n\n[mol_book_page]:not(:first-child) {\n\tanimation: mol_book_page_show .25s ease-out;\n}\n");
+    $.$mol_style_attach("mol/book/book.view.css", "[mol_book] {\n\tdisplay: flex;\n\tflex-flow: row nowrap;\n\talign-items: stretch;\n\tjustify-content: flex-start;\n\toverflow: hidden;\n\tflex: 1 1 auto;\n\talign-self: stretch;\n\tmargin: 0;\n\tbox-shadow: 0 0 0 1px var(--mol_theme_line);\n\ttransform: translateZ( 0 );\n}\n\n[mol_book] > *:not([mol_book_page_visible]) {\n\tposition: absolute; \n\tleft: 0;\n\ttop: 0;\n}\n\n[mol_book] > [mol_book_page_focused]:not([mol_book_page_visible]) ~ * {\n\topacity: .2;\n\tpointer-events: none;\n\tz-index: -1;\n}\n\n[mol_book] > *:not([mol_book_page_visible]):not([mol_book_page_focused]) {\n\ttransform: translate3d( -100% , 0 , 0 );\n}\n\n[mol_book] > *:not([mol_book_page_visible]):not([mol_book_page_focused]) + *:before {\n\tcontent : '•••';\n\tposition: absolute;\n\ttop: 1rem;\n\tleft: 0;\n\tz-index: 1;\n\tpointer-events: none;\n\tcolor: var(--mol_skin_base_text);\n\ttransform: rotate(90deg);\n}\n\n[mol_book] > * {\n\tposition: relative;\n\t/* animation: mol_book_page_show linear .2s; */\n\ttransition-timing-function: linear;\n\tz-index: 0;\n\tmin-height: 100%;\n\tmax-height: 100%;\n}\n\n[mol_book_placeholder] {\n\tflex: 1000 1 400px;\n\tbox-shadow: 0 0 0 1px var(--mol_theme_line);\n\tbackground: var(--mol_theme_field);\n\tz-index: -1;\n}\n\n[mol_book_placeholder]:hover {\n\toutline: none;\n}\n\n@keyframes mol_book_page_show {\n\tfrom {\n\t\ttransform: translateX( 100% );\n\t\topacity: 0;\n\t\tz-index: -1;\n\t}\n}\n\n[mol_book_page]:not(:first-child) {\n\tanimation: mol_book_page_show .25s ease-out;\n}\n");
 })($ || ($ = {}));
 //book.view.css.js.map
 ;
@@ -8964,7 +8964,7 @@ var $;
                 obj.title = () => "PiterJS";
                 obj.minimal_width = () => 200;
                 obj.event_top = (val) => this.event_front_up(val);
-                obj.body = () => [this.Meetups()];
+                obj.body = () => [this.Meetups(), this.Conf()];
                 return obj;
             })(new this.$.$mol_page());
         }
@@ -8976,6 +8976,25 @@ var $;
         }
         menu_meetups() {
             return [];
+        }
+        Conf() {
+            return ((obj) => {
+                obj.uri = () => "https://conf.piterjs.org/";
+                obj.sub = () => [this.Conf_title(), this.Conf_date()];
+                return obj;
+            })(new this.$.$mol_link());
+        }
+        Conf_title() {
+            return ((obj) => {
+                obj.sub = () => ["Conf"];
+                return obj;
+            })(new this.$.$mol_view());
+        }
+        Conf_date() {
+            return ((obj) => {
+                obj.sub = () => ["сентябрь'19"];
+                return obj;
+            })(new this.$.$mol_view());
         }
         Meetup(id) {
             return ((obj) => {
@@ -9056,6 +9075,15 @@ var $;
     __decorate([
         $.$mol_mem
     ], $piterjs_app.prototype, "Meetups", null);
+    __decorate([
+        $.$mol_mem
+    ], $piterjs_app.prototype, "Conf", null);
+    __decorate([
+        $.$mol_mem
+    ], $piterjs_app.prototype, "Conf_title", null);
+    __decorate([
+        $.$mol_mem
+    ], $piterjs_app.prototype, "Conf_date", null);
     __decorate([
         $.$mol_mem_key
     ], $piterjs_app.prototype, "Meetup", null);
@@ -9179,7 +9207,7 @@ var $node = $node || {} ; $node[ "/piterjs/app/app_lines.svg" ] = "data:image/sv
 "use strict";
 var $;
 (function ($) {
-    $.$mol_style_attach("piterjs/app/app.view.css", "[piterjs_app] {\n\t--mol_theme_current: hsla(53, 93%, 78%, 1);\n\t--mol_theme_control: hsl(233, 63%, 20%);\n\tdisplay: flex;;\n}\n\n[piterjs_app_screen]:before {\n\tcontent: '';\n\tdisplay: block;\n\theight: 3.5rem;\n\tbackground: black;\n\tleft: 0;\n\twidth: 100%;\n\ttop: 0;\n\tposition: absolute;\n}\n\n[piterjs_app] [mol_theme=\"$mol_theme_base\"] {\n\t--mol_theme_back: black;\n\t--mol_theme_text: white;\n\t--mol_theme_shade: rgba( 0 , 0 , 0 , .5 );\n\t--mol_theme_control: white;\n\tstroke: currentColor;\n}\n\n[piterjs_app] [mol_theme=\"$mol_theme_accent\"] {\n\t--mol_theme_back: #f7df1e;\n\t--mol_theme_text: black;\n\t--mol_theme_hover: hsl(53, 93%, 44%);\n\tstroke: currentColor;\n}\n\n[piterjs_app] > *:not([mol_book_page_visible]):not([mol_book_page_focused]) + *:before {\n\tleft: .25rem;\n}\n\n[piterjs_app] [mol_page] ,\n[piterjs_app] [mol_page_body] {\n\tbox-shadow: none;\n\tbackground: none;\n}\n\n[piterjs_app] [mol_page_head] {\n\tpadding: .5rem 1rem;\n}\n\n[piterjs_app_menu] {\n\tflex: 0 0 auto;\n}\n\n[piterjs_app_meetups] {\n\tpadding: .5rem;\n}\n\n[piterjs_app] [mol_button_major] {\n\tfont-weight: bolder;\n\tcolor: var(--mol_theme_text);\n\tbox-shadow: 0 0 0 2px #f7df1e;\n\tbackground: none;\n}\n\n[piterjs_app] [mol_button_major]:hover {\n\tbackground: #f7df1e;\n}\n\n[piterjs_app_book_placeholder] {\n\tbackground: none;\n}\n\n[piterjs_app_toggle_intro] {\n\tposition: absolute;\n\tbottom: 0;\n\tright: 0;\n\twidth: 2rem;\n\theight: 2rem;\n}\n");
+    $.$mol_style_attach("piterjs/app/app.view.css", "[piterjs_app] {\n\t--mol_theme_current: hsla(53, 93%, 78%, 1);\n\t--mol_theme_control: hsl(233, 63%, 20%);\n\tdisplay: flex;;\n}\n\n[piterjs_app_screen]:before {\n\tcontent: '';\n\tdisplay: block;\n\theight: 3.5rem;\n\tbackground: black;\n\tleft: 0;\n\twidth: 100%;\n\ttop: 0;\n\tposition: absolute;\n}\n\n[piterjs_app] [mol_theme=\"$mol_theme_base\"] {\n\t--mol_theme_back: black;\n\t--mol_theme_text: white;\n\t--mol_theme_shade: rgba( 0 , 0 , 0 , .5 );\n\t--mol_theme_control: white;\n\tstroke: currentColor;\n}\n\n[piterjs_app] [mol_theme=\"$mol_theme_accent\"] {\n\t--mol_theme_back: #f7df1e;\n\t--mol_theme_text: black;\n\t--mol_theme_hover: hsl(53, 93%, 44%);\n\tstroke: currentColor;\n}\n\n[piterjs_app] > *:not([mol_book_page_visible]):not([mol_book_page_focused]) + *:before {\n\tleft: .25rem;\n}\n\n[piterjs_app] [mol_page] ,\n[piterjs_app] [mol_page_body] {\n\tbox-shadow: none;\n\tbackground: none;\n}\n\n[piterjs_app] [mol_page_head] {\n\tpadding: .5rem 1rem;\n}\n\n[piterjs_app_menu] {\n\tflex: 0 0 auto;\n}\n\n[piterjs_app_menu_body] {\n\tdisplay: flex;\n\tflex-direction: column;\n\tjustify-content: space-between;\n}\n\n[piterjs_app_conf] {\n\tmargin: 0 .5rem;\n\tdisplay: flex;\n}\n\n[piterjs_app_conf_title] {\n\tmargin: .5rem;\n\tfont-weight: bolder;\n}\n\n[piterjs_app_conf_date] {\n\tmargin: .5rem;\n}\n\n[piterjs_app_meetups] {\n\tpadding: .5rem;\n}\n\n[piterjs_app] [mol_button_major] {\n\tfont-weight: bolder;\n\tcolor: var(--mol_theme_text);\n\tbox-shadow: 0 0 0 2px #f7df1e;\n\tbackground: none;\n}\n\n[piterjs_app] [mol_button_major]:hover {\n\tbackground: #f7df1e;\n}\n\n[piterjs_app_book_placeholder] {\n\tbackground: none;\n}\n\n[piterjs_app_toggle_intro] {\n\tposition: absolute;\n\tbottom: 0;\n\tright: 0;\n\twidth: 2rem;\n\theight: 2rem;\n}\n");
 })($ || ($ = {}));
 //app.view.css.js.map
 ;
