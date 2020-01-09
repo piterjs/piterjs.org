@@ -21,6 +21,13 @@ $piterjs_app $mol_view
 		event_top?val <=> event_front_up?val
 		body /
 			<= Meetups $mol_list rows <= menu_meetups /
+			<= Conf $mol_link
+				uri \https://conf.piterjs.org/
+				sub /
+					<= Conf_title $mol_view
+						sub / \Conf
+					<= Conf_date $mol_view
+						sub / \сентябрь'19
 	Meetup!id $piterjs_meetup_page
 		event_top?val <=> event_front_up?val
 		meetup <= meetup!id $piterjs_meetup
