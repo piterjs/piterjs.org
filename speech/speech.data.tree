@@ -308,3 +308,19 @@ own-project-development *
 	speaker \recX0NdhNVdZ2s18p
 	duration \PT40m
 	slides \https://github.com/piterjs/slides/blob/master/meetup=43/speech=own-project-development.pdf
+express-essentials-with-ts *
+	title \Express API — Essentials with TypeScript
+	description \Доклад уровня смузи (введения в технологию) об основах написания API на языке TypeScript, используя Express, Mongoose и MongoDB. Поговорим о фильтрации, сортировке, валидации, связывании моделей, о том как написать универсальный обработчик запросов и масштабировать его на различные хранимые сущности. Упакуем все в docker и запустим на виртуальном сервере.
+	speaker \yakup
+	duration \PT45m
+should-test-be-integrational *
+	title \Если нужен тест, пусть он будет интеграционным
+	description \Когда речь заходит о тестировании приложений, часто упоминают пирамиду тестирования, которая наглядно представляет оптимальное соотношение разных типов тестов в проекте. Предполагается, что фундамент пирамиды — юнит тесты. Я расскажу о проблемах, с которыми мы столкнулись следуя этому принципу, и о том, как решили их, сместив акцент на интеграционные тесты.
+	speaker \malv
+	duration \PT45m
+functional-errors-handling-in-ts *
+	title \Функциональная обработка ошибок в TypeScript
+	description \Рассмотрим применение монад (или подобных им идей) для обработки ошибок и упрощения разработки приложений на TypeScript. Для понимания доклада не требуется знание теории категорий, абстрактной алгебры и т.д. Достаточно понимать семантику TypeScript или подобных языков.
+	speaker \shara
+	duration \PT45m
+	

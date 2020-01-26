@@ -119,3 +119,14 @@
 	translation \
 	place \infobip
 	afterparty \
+44 *
+	start \2020-01-30T19:15:00+03
+	title \#44
+	description \
+	speeches /
+		\express-essentials-with-ts
+		\should-test-be-integrational
+		\functional-errors-handling-in-ts
+	translation \
+	place \elama
+	afterparty \
