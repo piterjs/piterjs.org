@@ -40,7 +40,7 @@ infobip *
 	address \Санкт-Петербург, 2-я Советская, д 7А
 	colors /
 		\#ff6002
-infobip *
+elama *
 	title \eLama
 	description \Единая платформа для эффективного управления рекламой
 	site \https://elama.ru/
