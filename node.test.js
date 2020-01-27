@@ -8817,6 +8817,11 @@ var $;
                     ...this.speech_id() ? [this.Speech(this.speech_id())] : [],
                 ];
             }
+            title() {
+                if (this.intro() != null)
+                    return this.Intro().title();
+                return this.Book().title();
+            }
             Placeholder() {
                 return this.meetup_id() ? super.Placeholder() : null;
             }
@@ -8861,6 +8866,9 @@ var $;
         __decorate([
             $.$mol_mem
         ], $piterjs_app.prototype, "pages", null);
+        __decorate([
+            $.$mol_mem
+        ], $piterjs_app.prototype, "title", null);
         __decorate([
             $.$mol_mem
         ], $piterjs_app.prototype, "meetups", null);

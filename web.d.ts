@@ -2433,6 +2433,7 @@ declare namespace $.$$ {
         speaker_id(next?: string): string;
         speaker(id: string): $piterjs_speaker;
         pages(): $piterjs_intro[] | ($mol_page | $piterjs_meetup_page | $piterjs_speech_page | $piterjs_now)[];
+        title(): string;
         Placeholder(): $piterjs_now;
         meetups(): $piterjs_meetup[];
         meetup_current(): $piterjs_meetup;
