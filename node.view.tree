@@ -613,6 +613,8 @@ $piterjs_intro $mol_view
 		afterparty <= Afterparty $piterjs_intro_page
 			title \Го в бар!
 			text <= afterparty \
+				\бар Гент
+				\Московский проспект 139/1
 	sub /
 		<= Screen $piterjs_screen
 			place <= place $piterjs_place

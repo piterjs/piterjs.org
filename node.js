@@ -8448,7 +8448,7 @@ var $;
             })(new this.$.$piterjs_intro_page());
         }
         afterparty() {
-            return "";
+            return "бар Гент\nМосковский проспект 139/1";
         }
         sub() {
             return [this.Screen()];
