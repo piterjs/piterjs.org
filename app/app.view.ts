@@ -31,6 +31,12 @@ namespace $.$$ {
 			]
 		}
 
+		@ $mol_mem
+		title() {
+			if( this.intro() != null ) return this.Intro().title()
+			return this.Book().title()
+		}
+
 		Placeholder() {
 			return this.meetup_id() ? super.Placeholder() : null
 		}
