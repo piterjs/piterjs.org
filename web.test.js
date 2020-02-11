@@ -298,8 +298,13 @@ var $;
             }
             let count = 0;
             for (let key in a) {
-                if (!$mol_compare_deep(a[key], b[key]))
-                    return result = false;
+                try {
+                    if (!$mol_compare_deep(a[key], b[key]))
+                        return result = false;
+                }
+                catch (error) {
+                    $.$mol_fail_hidden(new $.$mol_error_mix(`Failed ${JSON.stringify(key)} fields comparison of ${a} and ${b}`, error));
+                }
                 ++count;
             }
             for (let key in b) {
@@ -2095,6 +2100,15 @@ var $;
 //autorun.test.js.map
 ;
 "use strict";
+var $;
+(function ($_1) {
+    $_1.$mol_test_mocks.push($ => {
+        $.$mol_after_timeout = $_1.$mol_after_mock_timeout;
+    });
+})($ || ($ = {}));
+//timeout.test.js.map
+;
+"use strict";
 //extract.test.js.map
 ;
 "use strict";
@@ -2398,15 +2412,6 @@ var $;
     });
 })($ || ($ = {}));
 //memo.test.js.map
-;
-"use strict";
-var $;
-(function ($_1) {
-    $_1.$mol_test_mocks.push($ => {
-        $.$mol_after_timeout = $_1.$mol_after_mock_timeout;
-    });
-})($ || ($ = {}));
-//timeout.test.js.map
 ;
 "use strict";
 var $;

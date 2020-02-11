@@ -357,7 +357,7 @@ var $;
     })($$ = $.$$ || ($.$$ = {}));
     $.$mol_ambient_ref = Symbol('$mol_ambient_ref');
     function $mol_ambient(overrides) {
-        return Object.setPrototypeOf(overrides, this);
+        return Object.setPrototypeOf(overrides, this || $);
     }
     $.$mol_ambient = $mol_ambient;
 })($ || ($ = {}));
@@ -3264,7 +3264,9 @@ var $;
             this.focused([event.target]);
         }
         static blur(event) {
-            this.focused([]);
+            const element = $.$mol_mem_cached(() => this.focused())[0];
+            if (element === event.target)
+                this.focused([]);
         }
     }
     __decorate([
@@ -3521,9 +3523,12 @@ var $;
             }
             return min;
         }
-        view_rect(next = null) {
+        view_rect() {
             if ($.$mol_atom2.current)
                 this.view_rect_watcher();
+            return this.view_rect_cache();
+        }
+        view_rect_cache(next = null) {
             return next;
         }
         view_rect_watcher() {
@@ -3685,6 +3690,9 @@ var $;
     __decorate([
         $.$mol_mem
     ], $mol_view.prototype, "view_rect", null);
+    __decorate([
+        $.$mol_mem
+    ], $mol_view.prototype, "view_rect_cache", null);
     __decorate([
         $.$mol_mem
     ], $mol_view.prototype, "view_rect_watcher", null);
@@ -5719,8 +5727,7 @@ var $;
                 return next;
             }
             minimal_height() {
-                const visible = this.sub_visible();
-                return visible.reduce((sum, view) => sum + view.minimal_height(), 0);
+                return this.sub().reduce((sum, view) => sum + view.minimal_height(), 0);
             }
         }
         __decorate([
@@ -9447,8 +9454,13 @@ var $;
             }
             let count = 0;
             for (let key in a) {
-                if (!$mol_compare_deep(a[key], b[key]))
-                    return result = false;
+                try {
+                    if (!$mol_compare_deep(a[key], b[key]))
+                        return result = false;
+                }
+                catch (error) {
+                    $.$mol_fail_hidden(new $.$mol_error_mix(`Failed ${JSON.stringify(key)} fields comparison of ${a} and ${b}`, error));
+                }
                 ++count;
             }
             for (let key in b) {

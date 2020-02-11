@@ -362,7 +362,7 @@ var $;
     })($$ = $.$$ || ($.$$ = {}));
     $.$mol_ambient_ref = Symbol('$mol_ambient_ref');
     function $mol_ambient(overrides) {
-        return Object.setPrototypeOf(overrides, this);
+        return Object.setPrototypeOf(overrides, this || $);
     }
     $.$mol_ambient = $mol_ambient;
 })($ || ($ = {}));
@@ -3285,6 +3285,24 @@ var $;
 "use strict";
 var $;
 (function ($) {
+    class $mol_after_timeout extends $.$mol_object2 {
+        constructor(delay, task) {
+            super();
+            this.delay = delay;
+            this.task = task;
+            this.id = setTimeout(task, delay);
+        }
+        destructor() {
+            clearTimeout(this.id);
+        }
+    }
+    $.$mol_after_timeout = $mol_after_timeout;
+})($ || ($ = {}));
+//timeout.js.map
+;
+"use strict";
+var $;
+(function ($) {
     class $mol_view_selection extends $.$mol_object {
         static focused(next) {
             if (next === undefined)
@@ -3308,7 +3326,9 @@ var $;
             this.focused([event.target]);
         }
         static blur(event) {
-            this.focused([]);
+            const element = $.$mol_mem_cached(() => this.focused())[0];
+            if (element === event.target)
+                this.focused([]);
         }
     }
     __decorate([
@@ -3332,7 +3352,7 @@ var $;
             new $.$mol_after_tick($.$mol_fiber_root(() => $.$mol_view_selection.focus(event)));
         }, true);
         $.$mol_dom_context.document.addEventListener('blur', (event) => {
-            new $.$mol_after_tick($.$mol_fiber_root(() => $.$mol_view_selection.blur(event)));
+            new $.$mol_after_timeout(0, $.$mol_fiber_root(() => $.$mol_view_selection.blur(event)));
         }, true);
     }
 })($ || ($ = {}));
@@ -3596,9 +3616,12 @@ var $;
             }
             return min;
         }
-        view_rect(next = null) {
+        view_rect() {
             if ($.$mol_atom2.current)
                 this.view_rect_watcher();
+            return this.view_rect_cache();
+        }
+        view_rect_cache(next = null) {
             return next;
         }
         view_rect_watcher() {
@@ -3762,6 +3785,9 @@ var $;
     ], $mol_view.prototype, "view_rect", null);
     __decorate([
         $.$mol_mem
+    ], $mol_view.prototype, "view_rect_cache", null);
+    __decorate([
+        $.$mol_mem
     ], $mol_view.prototype, "view_rect_watcher", null);
     __decorate([
         $.$mol_mem
@@ -3807,7 +3833,7 @@ var $;
         function $mol_view_watch() {
             $.$mol_fiber_unlimit(() => {
                 for (const view of $.$mol_view.watchers) {
-                    view.view_rect(view.dom_node().getBoundingClientRect().toJSON());
+                    view.view_rect_cache(view.dom_node().getBoundingClientRect().toJSON());
                 }
                 new $.$mol_after_frame($mol_view_watch);
             });
@@ -5313,24 +5339,6 @@ var $;
 "use strict";
 var $;
 (function ($) {
-    class $mol_after_timeout extends $.$mol_object2 {
-        constructor(delay, task) {
-            super();
-            this.delay = delay;
-            this.task = task;
-            this.id = setTimeout(task, delay);
-        }
-        destructor() {
-            clearTimeout(this.id);
-        }
-    }
-    $.$mol_after_timeout = $mol_after_timeout;
-})($ || ($ = {}));
-//timeout.js.map
-;
-"use strict";
-var $;
-(function ($) {
     class $mol_state_time extends $.$mol_object {
         static now(precision = 0, next) {
             if (precision > 0) {
@@ -5837,8 +5845,7 @@ var $;
                 return next;
             }
             minimal_height() {
-                const visible = this.sub_visible();
-                return visible.reduce((sum, view) => sum + view.minimal_height(), 0);
+                return this.sub().reduce((sum, view) => sum + view.minimal_height(), 0);
             }
         }
         __decorate([
