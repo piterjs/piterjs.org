@@ -1512,8 +1512,6 @@ declare namespace $ {
 
 declare namespace $.$$ {
     class $piterjs_screen extends $.$piterjs_screen {
-        color_open(): string;
-        color_close(): string;
         sub(): ($mol_view | $piterjs_screen_lines)[];
     }
 }
