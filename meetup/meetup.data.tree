@@ -120,7 +120,7 @@
 	place \infobip
 	afterparty \
 44 *
-	start \2020-01-30T19:15:00+03
+	start \2020-01-30T19:35:00+03
 	title \#44
 	description \
 	speeches /
@@ -130,3 +130,5 @@
 	translation \
 	place \elama
 	afterparty \
+		\Бар "Гент"
+		\Московский пр. 139/1
