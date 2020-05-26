@@ -12,11 +12,11 @@ $piterjs_now $mol_page
 			<= Medium $mol_link_iconed
 				uri \https://medium.com/piterjs
 				title \
-			<= Vkontakte $mol_link_iconed
-				uri \https://vk.com/piterjs
-				title \
 			<= Telegram $mol_link_iconed
 				uri \https://t.me/piterjs
+				title \
+			<= Vkontakte $mol_link_iconed
+				uri \https://vk.com/piterjs
 				title \
 			<= Twitter $mol_link_iconed
 				uri \https://twitter.com/@gopiterjs
@@ -28,6 +28,10 @@ $piterjs_now $mol_page
 		<= Screen $piterjs_screen
 			place <= place $piterjs_place
 			content /
+				<= Lights $mol_check_icon
+					Icon <= Lights_icon $mol_icon_brightness_6
+					hint \Переключатель света
+					checked?val <=> lights?val false
 				<= Logo $mol_svg_root
 					view_box \0 0 270 270
 					sub /

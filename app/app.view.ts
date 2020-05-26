@@ -78,6 +78,20 @@ namespace $.$$ {
 
 		}
 
+		theme( next? : '$mol_theme_light' | '$mol_theme_dark' | '$mol_theme_auto' ) {
+			return this.$.$mol_state_local.value( 'lights' , next ) ?? '$mol_theme_auto'
+		}
+
+		lights( next? : boolean ) {
+
+			let theme = this.theme()
+			if( next === undefined ) return theme === '$mol_theme_light'
+
+			this.theme( next ? '$mol_theme_light' : '$mol_theme_dark' )
+
+			return next
+		}
+
 	}
 
 }

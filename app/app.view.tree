@@ -1,6 +1,6 @@
 $piterjs_app $mol_view
 	attr *
-		mol_theme \$mol_theme_auto
+		mol_theme <= theme?val \$mol_theme_auto
 	sub /
 		<= Screen $piterjs_screen
 			place <= place $piterjs_place
@@ -30,6 +30,7 @@ $piterjs_app $mol_view
 		meetup <= meetup!id $piterjs_meetup
 	Now $piterjs_now
 		place <= place $piterjs_place
+		lights?val <=> lights?val false
 	Intro $piterjs_intro
 		meetup <= meetup_current $piterjs_meetup
 		page?val <=> intro?val \

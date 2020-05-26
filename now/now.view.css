@@ -8,6 +8,13 @@
 	animation: none !important;
 }
 
+[piterjs_now_lights] {
+	position: absolute;
+	top: .75rem;
+	right: .75rem;
+	transform: rotate(90deg);
+}
+
 [piterjs_app_placeholder] {
 	flex: 1000 1 0;
 }
