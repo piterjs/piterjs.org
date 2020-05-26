@@ -1,24 +1,43 @@
 namespace $.$$ {
 
+	const { rem } = $mol_style_unit
+
 	$mol_style_define( $piterjs_speech_snippet , {
 
 		display: 'flex',
-		padding: '.5rem',
+		padding: rem(.25),
 		alignItems: 'flex-start',
 
+		'@' : {
+			mol_link_current: {
+				true: {
+					background: 'none',
+					Title: {
+						background: {
+							color: $mol_theme.current,
+						},
+					},
+				},
+			},
+		},
+
 		Photo: {
-			width: '6rem',
-			margin: '.25rem',
+			width: rem(6),
+			margin: rem(.5),
 		},
 
 		Info: {
-			flex: '16rem 1 1',
-			padding: '.25rem',
+			flex: {
+				grow: 1,
+				shrink: 1,
+				basis: rem(16),
+			},
+			padding: [ rem(.75) , 0 ],
 		},
 
 		Title: {
 			display: 'block',
-			padding: '.25rem',
+			padding: [ rem(.25), rem(.5) ],
 			fontWeight: '600',
 		},
 
@@ -27,13 +46,17 @@ namespace $.$$ {
 		},
 
 		Speaker_title: {
-			padding: '.25rem',
+			padding: [ rem(.25), rem(.5) ],
 			color: $mol_theme.text,
-			flex: '1 1 auto',
+			flex: {
+				grow: 1,
+				shrink: 1,
+				basis: 'auto',
+			},
 		},
 
 		Time: {
-			padding: '.25rem',
+			padding: [ rem(.25), rem(.5) ],
 			color: $mol_theme.text,
 			whiteSpace: 'nowrap',
 		},

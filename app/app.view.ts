@@ -5,13 +5,13 @@ namespace $.$$ {
 	export class $piterjs_app extends $.$piterjs_app {
 
 		@ $mol_mem
-		now( next? : string ) { return this.$.$mol_state_arg.value( 'now' , next ) }
+		now( next? : string | null ) { return this.$.$mol_state_arg.value( 'now' , next ) }
 
 		@ $mol_mem
-		intro( next? : string ) { return this.$.$mol_state_arg.value( 'intro' , next ) }
+		intro( next? : string | null ) { return this.$.$mol_state_arg.value( 'intro' , next ) }
 
 		@ $mol_mem
-		meetup_id( next? : string ) { return this.$.$mol_state_arg.value( 'meetup' , next ) }
+		meetup_id( next? : string | null ) { return this.$.$mol_state_arg.value( 'meetup' , next ) }
 		meetup( id : string ) { return $piterjs_meetup.item( id ) }
 		
 		speech_id( next? : string ) { return this.$.$mol_state_arg.value( 'speech' , next ) }
@@ -35,10 +35,6 @@ namespace $.$$ {
 		title() {
 			if( this.intro() != null ) return this.Intro().title()
 			return this.Book().title()
-		}
-
-		Placeholder() {
-			return this.meetup_id() ? super.Placeholder() : null
 		}
 
 		@ $mol_mem

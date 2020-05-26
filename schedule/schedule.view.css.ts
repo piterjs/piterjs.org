@@ -1,5 +1,7 @@
 namespace $.$$ {
 
+	const { vw , em , vmin } = $mol_style_unit
+
 	$mol_style_define( $piterjs_schedule , {
 
 		flex: 'auto',
@@ -12,13 +14,13 @@ namespace $.$$ {
 			margin: 'auto',
 			display: 'flex',
 			flexDirection: 'column',
-			padding: '.5em 5vw',
+			padding: [ em(.5) , vw(5) ],
 			alignContent: 'center',
 			alignItems: 'flex-start',
 		},
 
 		Speech: {
-			margin: '.5em',
+			margin: em(.5),
 		},
 
 		Speech_interval: {
@@ -26,13 +28,17 @@ namespace $.$$ {
 		},
 
 		Speech_title: {
-			padding: '0 .5em',
-			marginLeft: '10vmin',
+			padding: [ 0 , em(.5) ],
+			margin: {
+				left: vmin(10),
+			},
 		},
 
 		Speech_speaker: {
-			padding: '0 .5em',
-			marginLeft: '10vmin',
+			padding: [ 0 , em(.5) ],
+			margin : {
+				left: vmin(10),
+			},
 			color: $mol_theme.shade,
 		},
 

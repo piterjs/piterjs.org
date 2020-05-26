@@ -16,7 +16,7 @@ namespace $.$$ {
 		}
 
 		translation() {
-			return this.meetup().translation()
+			return this.meetup().translation()!
 		}
 		
 		@ $mol_mem

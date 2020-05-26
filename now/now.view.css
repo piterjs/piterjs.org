@@ -3,9 +3,13 @@
 	padding: 0;
 	align-items: stretch;
 	background: none;
-	flex: 1000 1000 400px;
+	flex: 1000 0 30rem;
 	position: relative;
 	animation: none !important;
+}
+
+[piterjs_app_placeholder] {
+	flex: 1000 1 0;
 }
 
 [piterjs_now_title] {
@@ -34,7 +38,7 @@
 }
 
 [piterjs_now_links] {
-	flex: 0 0 auto;
+	flex: 1 1 auto;
 	display: flex;
 	flex-wrap: wrap;
 }

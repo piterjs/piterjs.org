@@ -1,6 +1,5 @@
 namespace $ {
 
-	@ $mol_class
 	export class $piterjs_speaker extends $piterjs_model {
 
 		static uri() {
