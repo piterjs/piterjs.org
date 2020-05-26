@@ -79,7 +79,12 @@ namespace $.$$ {
 		}
 
 		theme( next? : '$mol_theme_light' | '$mol_theme_dark' | '$mol_theme_auto' ) {
-			return this.$.$mol_state_local.value( 'lights' , next ) ?? '$mol_theme_auto'
+			return this.$.$mol_state_local.value( 'lights' , next )
+				?? (
+					$mol_dom_context.matchMedia('(prefers-color-scheme: dark)').matches ? '$mol_theme_dark'
+					: $mol_dom_context.matchMedia('(prefers-color-scheme: light)').matches ? '$mol_theme_light'
+					: '$mol_theme_auto'
+				)
 		}
 
 		lights( next? : boolean ) {
