@@ -1,6 +1,5 @@
 namespace $ {
 	
-	@ $mol_class
 	export class $piterjs_model extends $mol_object2 {
 
 		static uri() { return '' } 
@@ -31,7 +30,7 @@ namespace $ {
 		@ $mol_mem
 		static data() {
 			
-			const tree = $mol_tree.fromString( this.$.$mol_http.resource( this.uri() ).text() )
+			const tree = $mol_tree.fromString( this.$.$mol_fetch.text( this.uri() ) )
 			const json = new $mol_tree({ type : '*' , sub : tree.sub }).toJSON()
 
 			return json

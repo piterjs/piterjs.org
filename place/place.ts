@@ -1,6 +1,5 @@
 namespace $ {
 
-	@ $mol_class
 	export class $piterjs_place extends $piterjs_model {
 
 		static uri() {

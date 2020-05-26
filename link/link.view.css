@@ -1,3 +1,15 @@
 [piterjs_link] {
 	padding: 0;
 }
+/* 
+[piterjs_link_button] {
+	font-weight: bolder;
+	color: var(--mol_theme_text);
+	box-shadow: 0 0 0 2px #f7df1e;
+	background: none;
+}
+
+[piterjs_link_button]:hover {
+	background: #f7df1e;
+}
+ */

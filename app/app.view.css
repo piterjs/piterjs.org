@@ -1,25 +1,15 @@
 [piterjs_app] {
-	--mol_theme_current: hsla(53, 93%, 78%, 1);
-	--mol_theme_control: hsl(233, 63%, 20%);
-	display: flex;;
-}
-
-[piterjs_app_screen]:before {
-	content: '';
-	display: block;
-	height: 3.5rem;
-	background: black;
-	left: 0;
-	width: 100%;
-	top: 0;
-	position: absolute;
+	--mol_theme_current: rgb(255, 229, 21);
+	--mol_theme_focus: rgb(255, 229, 21);
+	--mol_theme_current: rgb(255, 229, 21);
+	display: flex;
 }
 
 [piterjs_app] [mol_theme="$mol_theme_base"] {
-	--mol_theme_back: black;
-	--mol_theme_text: white;
+	--mol_theme_back: #f7df1e;
+	--mol_theme_text: black;
 	--mol_theme_shade: rgba( 0 , 0 , 0 , .5 );
-	--mol_theme_control: white;
+	--mol_theme_control: black;
 	stroke: currentColor;
 }
 
@@ -40,12 +30,8 @@
 	background: none;
 }
 
-[piterjs_app] [mol_page_head] {
-	padding: .5rem 1rem;
-}
-
 [piterjs_app_menu] {
-	flex: 0 0 auto;
+	flex: 0 0 12rem;
 }
 
 [piterjs_app_menu_body] {
@@ -55,32 +41,23 @@
 }
 
 [piterjs_app_conf] {
-	margin: 0 .5rem;
+	white-space: nowrap;
 	display: flex;
+	justify-content: space-between;
+	box-shadow: 0 -0.5rem 0.5rem -0.5rem hsla(0,0%,0%,.25);
 }
 
 [piterjs_app_conf_title] {
-	margin: .5rem;
+	margin: .5rem .75rem;
 	font-weight: bolder;
 }
 
 [piterjs_app_conf_date] {
-	margin: .5rem;
+	margin: .5rem .75rem;
 }
 
 [piterjs_app_meetups] {
-	padding: .5rem;
-}
-
-[piterjs_app] [mol_button_major] {
-	font-weight: bolder;
-	color: var(--mol_theme_text);
-	box-shadow: 0 0 0 2px #f7df1e;
-	background: none;
-}
-
-[piterjs_app] [mol_button_major]:hover {
-	background: #f7df1e;
+	padding: .75rem;
 }
 
 [piterjs_app_book_placeholder] {

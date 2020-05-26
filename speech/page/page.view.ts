@@ -15,11 +15,11 @@ namespace $.$$ {
 		}
 
 		slides() {
-			return this.speech().slides()
+			return this.speech().slides()!
 		}
 
 		video() {
-			return this.speech().video()
+			return this.speech().video()!
 		}
 
 		@ $mol_mem

@@ -1,24 +1,18 @@
 $piterjs_app $mol_view
+	attr *
+		mol_theme <= theme?val \$mol_theme_auto
 	sub /
 		<= Screen $piterjs_screen
 			place <= place $piterjs_place
 			Open null
+			Close null
 			content /
-				<= Book $mol_book
+				<= Book $mol_book2
 					pages <= pages /any
-					event_front_up?val => event_front_up?val
-					Placeholder <= Placeholder $piterjs_now
-						event_top?val <=> event_front_up?val
-						minimal_width 400
-						place <= place $piterjs_place
-						title \
-						body /
 		<= Toggle_intro $mol_check
 			checked?val <=> toggle_intro?val false
 	Menu $mol_page
-		title \PiterJS
-		minimal_width 200
-		event_top?val <=> event_front_up?val
+		title \Митапы
 		body /
 			<= Meetups $mol_list rows <= menu_meetups /
 			<= Conf $mol_link
@@ -29,18 +23,14 @@ $piterjs_app $mol_view
 					<= Conf_date $mol_view
 						sub / \сентябрь'19
 	Meetup!id $piterjs_meetup_page
-		event_top?val <=> event_front_up?val
 		meetup <= meetup!id $piterjs_meetup
 	Speech!id $piterjs_speech_page
-		event_top?val <=> event_front_up?val
 		speech <= speech!id $piterjs_speech
 	Menu_meetup!id $piterjs_meetup_snippet
 		meetup <= meetup!id $piterjs_meetup
 	Now $piterjs_now
-		event_top?val <=> event_front_up?val
-		minimal_width 600
 		place <= place $piterjs_place
+		lights?val <=> lights?val false
 	Intro $piterjs_intro
 		meetup <= meetup_current $piterjs_meetup
 		page?val <=> intro?val \
-		minimal_width 9000

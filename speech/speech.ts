@@ -1,6 +1,5 @@
 namespace $ {
 
-	@ $mol_class
 	export class $piterjs_speech extends $piterjs_model {
 
 		static uri() {
@@ -37,7 +36,7 @@ namespace $ {
 		@ $mol_mem
 		previous() {
 			
-			const speeches = this.meetup().speeches()
+			const speeches = this.meetup()!.speeches()
 
 			const index = speeches.indexOf( this )
 			if( index <= 0 ) return null
@@ -50,7 +49,7 @@ namespace $ {
 		interval() : $mol_time_interval {
 			
 			return new $mol_time_interval({
-				start : this.previous()?.interval().end ?? this.meetup().start() ,
+				start : this.previous()?.interval().end ?? this.meetup()!.start() ,
 				duration : this.duration() ,
 			})
 
