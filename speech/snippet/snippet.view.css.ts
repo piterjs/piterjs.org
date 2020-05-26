@@ -8,19 +8,6 @@ namespace $.$$ {
 		padding: rem(.25),
 		alignItems: 'flex-start',
 
-		'@' : {
-			mol_link_current: {
-				true: {
-					background: 'none',
-					Title: {
-						background: {
-							color: $mol_theme.current,
-						},
-					},
-				},
-			},
-		},
-
 		Photo: {
 			width: rem(6),
 			margin: rem(.5),
@@ -32,7 +19,7 @@ namespace $.$$ {
 				shrink: 1,
 				basis: rem(16),
 			},
-			padding: [ rem(.75) , 0 ],
+			padding: rem(.75),
 		},
 
 		Title: {

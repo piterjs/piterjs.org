@@ -37,6 +37,10 @@
 	animation: piterjs_now_logo_show .250s ease-out;
 }
 
+[piterjs_app_now_logo_angles] {
+	fill: var(--mol_theme_focus);
+}
+
 [piterjs_now_links] {
 	flex: 1 1 auto;
 	display: flex;

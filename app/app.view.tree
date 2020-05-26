@@ -1,4 +1,6 @@
 $piterjs_app $mol_view
+	attr *
+		mol_theme \$mol_theme_auto
 	sub /
 		<= Screen $piterjs_screen
 			place <= place $piterjs_place
