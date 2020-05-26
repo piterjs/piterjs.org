@@ -7,7 +7,7 @@ namespace $.$$ {
 		flex: {
 			grow: 1000,
 			shrink: 0,
-			basis: rem(40),
+			basis: rem(36),
 		},
 		
 		Description: {
