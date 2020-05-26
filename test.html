@@ -1,0 +1,43 @@
+<!doctype html>
+<html style=" width : 100% ; height : 100% ; position : fixed ">
+
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, height=device-height, initial-scale=1">
+
+<link rel="manifest" href="piterjs/app/manifest.json">
+
+<!-- description -->
+<meta name="description" content="PiterJS">
+<meta name="application-name" content="PiterJS">
+<meta name="apple-mobile-web-app-title" content="PiterJS">
+
+<!-- colors -->
+<meta name="theme-color" content="#000000">
+<meta name="msapplication-TileColor" content="#000000">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+
+<!-- logo -->
+<link href="piterjs/logo/logo_48.png" rel="icon" />
+<link rel="apple-touch-icon" sizes="128x128" href="piterjs/logo/logo_128.png">
+<link rel="apple-touch-icon-precomposed" sizes="128x128" href="piterjs/logo/logo_128.png">
+<meta name="msapplication-TileImage" content="piterjs/logo/logo_192.png">
+
+<!-- full screen -->
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+
+<link href="web.css" rel="stylesheet"/>
+
+<body style="margin: 0 ; height : 100%">
+
+<div mol_view_root="$piterjs_app"></div>
+
+<script src="web.js" charset="utf-8"></script>
+
+				<script src="/mol/build/client/client.js" charset="utf-8"></script>
+				<script>
+					setTimeout( ()=> {
+						document.head.appendChild( document.createElement( 'script' ) ).src = 'web.test.js'
+					},250)
+				</script>
+				
