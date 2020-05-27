@@ -34,3 +34,5 @@ $piterjs_app $mol_view
 	Intro $piterjs_intro
 		meetup <= meetup_current $piterjs_meetup
 		page?val <=> intro?val \
+	Video!uri $piterjs_video_page
+		source <= video_uri \

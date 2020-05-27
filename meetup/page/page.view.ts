@@ -16,14 +16,13 @@ namespace $.$$ {
 		}
 
 		translation() {
-			return this.meetup().translation()!
+			return this.meetup().translation() ?? ''
 		}
 		
 		@ $mol_mem
 		info() {
 			return [
 				... this.description() ? [ this.Description() ] : [] ,
-				... this.translation() ? [ this.Translation() ] : [] ,
 			]
 		}
 
@@ -31,6 +30,7 @@ namespace $.$$ {
 		body() {
 			return [
 				... this.info().length ? [ this.Info() ] : [] ,
+				... this.translation() ? [ this.Translation() ] : [] ,
 				this.Speeches() ,
 			]
 		}

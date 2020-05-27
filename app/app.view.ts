@@ -23,12 +23,14 @@ namespace $.$$ {
 		@ $mol_mem
 		pages() {
 			if( this.intro() != null ) return [ this.Intro() ]
-			return [
+			const pages = [
 				this.Menu() ,
-				... !this.meetup_id() ? [ this.Now() ] : [] ,
 				... this.meetup_id() ? [ this.Meetup( this.meetup_id() ) ] : [] ,
 				... this.speech_id() ? [ this.Speech( this.speech_id() ) ] : [] ,
+				... this.video_uri() ? [ this.Video( this.video() ) ] : [] ,
 			]
+			if( pages.length === 1 ) pages.push( this.Now() )
+			return pages
 		}
 
 		@ $mol_mem
@@ -95,6 +97,21 @@ namespace $.$$ {
 			this.theme( next ? '$mol_theme_light' : '$mol_theme_dark' )
 
 			return next
+		}
+
+		video() {
+			return this.$.$mol_state_arg.value( 'video' ) !== null
+		}
+
+		video_uri() {
+
+			if( !this.video() ) return ''
+			
+			const id = this.meetup_id()
+			if( !id ) return ''
+			
+			return this.meetup( id ).translation() ?? ''
+			
 		}
 
 	}
