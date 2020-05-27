@@ -3,6 +3,7 @@ $piterjs_meetup_snippet $mol_link
 		meetup <= id \
 		speech null
 		now null
+		video null
 	meetup $piterjs_meetup
 	sub /
 		<= Title $mol_view
