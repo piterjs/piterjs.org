@@ -1529,55 +1529,6 @@ declare namespace $.$$ {
 }
 
 declare namespace $ {
-    class $mol_button_typed extends $mol_button {
-    }
-}
-
-declare namespace $ {
-}
-
-declare namespace $ {
-    class $mol_button_minor extends $mol_button_typed {
-    }
-}
-
-declare namespace $ {
-}
-
-declare namespace $ {
-    class $mol_check extends $mol_button_minor {
-        attr(): {
-            mol_check_checked: any;
-            "aria-checked": any;
-            role: string;
-            disabled: boolean;
-            tabindex: number;
-            title: string;
-        };
-        checked(val?: any, force?: $mol_mem_force): any;
-        sub(): readonly any[];
-        Icon(): any;
-        label(): readonly any[];
-        Title(): $mol_view;
-        title(): string;
-    }
-}
-
-declare namespace $ {
-    function $mol_maybe<Value>(value: Value | null | undefined): Value[];
-}
-
-declare namespace $ {
-}
-
-declare namespace $.$$ {
-    class $mol_check extends $.$mol_check {
-        click(next?: Event): void;
-        sub(): any[];
-    }
-}
-
-declare namespace $ {
     class $mol_page extends $mol_view {
         sub(): readonly any[];
         Head(): $mol_view;
@@ -1615,6 +1566,29 @@ declare namespace $ {
         Gap_after(): $mol_view;
         gap_after(): number;
         view_window(): readonly any[];
+    }
+}
+
+declare namespace $ {
+    class $mol_dom_listener extends $mol_object {
+        _node: any;
+        _event: string;
+        _handler: (event: any) => any;
+        _config: boolean | {
+            passive: boolean;
+        };
+        constructor(_node: any, _event: string, _handler: (event: any) => any, _config?: boolean | {
+            passive: boolean;
+        });
+        destructor(): void;
+    }
+}
+
+declare namespace $ {
+    class $mol_print extends $mol_object {
+        static before(): $mol_dom_listener;
+        static after(): $mol_dom_listener;
+        static active(next?: boolean): boolean;
     }
 }
 
@@ -1733,6 +1707,55 @@ declare namespace $ {
 }
 
 declare namespace $ {
+}
+
+declare namespace $ {
+    class $mol_button_typed extends $mol_button {
+    }
+}
+
+declare namespace $ {
+}
+
+declare namespace $ {
+    class $mol_button_minor extends $mol_button_typed {
+    }
+}
+
+declare namespace $ {
+}
+
+declare namespace $ {
+    class $mol_check extends $mol_button_minor {
+        attr(): {
+            mol_check_checked: any;
+            "aria-checked": any;
+            role: string;
+            disabled: boolean;
+            tabindex: number;
+            title: string;
+        };
+        checked(val?: any, force?: $mol_mem_force): any;
+        sub(): readonly any[];
+        Icon(): any;
+        label(): readonly any[];
+        Title(): $mol_view;
+        title(): string;
+    }
+}
+
+declare namespace $ {
+    function $mol_maybe<Value>(value: Value | null | undefined): Value[];
+}
+
+declare namespace $ {
+}
+
+declare namespace $.$$ {
+    class $mol_check extends $.$mol_check {
+        click(next?: Event): void;
+        sub(): any[];
+    }
 }
 
 declare namespace $ {
@@ -2187,7 +2210,6 @@ declare namespace $.$$ {
 declare namespace $ {
     class $piterjs_meetup_page extends $mol_page {
         meetup(): $piterjs_meetup;
-        minimal_width(): number;
         tools(): readonly any[];
         Date(): $mol_view;
         date(): string;
@@ -2198,8 +2220,7 @@ declare namespace $ {
         info(): readonly any[];
         Description(): $$.$mol_text;
         description(): string;
-        Translation(): $$.$mol_link_iconed;
-        translation(): string;
+        Translation(): $$.$mol_link;
         Speeches(): $$.$mol_list;
         speeches(): readonly any[];
         Speech(index: any): $$.$piterjs_speech_snippet;
@@ -2216,7 +2237,7 @@ declare namespace $.$$ {
         description(): string;
         date(): string;
         translation(): string;
-        info(): ($mol_link_iconed | $mol_text)[];
+        info(): $mol_text[];
         body(): $mol_view[];
         speeches(): $piterjs_speech_snippet[];
         speech(index: number): $piterjs_speech;
@@ -2297,6 +2318,7 @@ declare namespace $ {
             meetup: string;
             speech: any;
             now: any;
+            video: any;
         };
         id(): string;
         meetup(): $piterjs_meetup;
@@ -2495,6 +2517,58 @@ declare namespace $.$$ {
 }
 
 declare namespace $ {
+    class $mol_frame extends $mol_view {
+        dom_name(): string;
+        attr(): {
+            src: string;
+            allow: string;
+            allowfullscreen: boolean;
+        };
+        uri(): string;
+        fullscreen(): boolean;
+        accelerometer(): boolean;
+        autoplay(): boolean;
+        encription(): boolean;
+        gyroscope(): boolean;
+        pip(): boolean;
+    }
+}
+
+declare namespace $ {
+}
+
+declare namespace $.$$ {
+    class $mol_frame extends $.$mol_frame {
+        dom_node: (next?: HTMLIFrameElement) => HTMLIFrameElement;
+        window(): unknown;
+        render(): void;
+        allow(): string[];
+    }
+}
+
+declare namespace $ {
+    class $piterjs_video_page extends $mol_page {
+        title(): string;
+        tools(): readonly any[];
+        Close(): $$.$mol_link;
+        Close_icon(): $mol_icon_cross;
+        body(): readonly any[];
+        Frame(): $$.$mol_frame;
+        uri(): string;
+        source(): string;
+    }
+}
+
+declare namespace $ {
+}
+
+declare namespace $.$$ {
+    class $piterjs_video_page extends $.$piterjs_video_page {
+        uri(): string;
+    }
+}
+
+declare namespace $ {
     class $piterjs_app extends $mol_view {
         attr(): {
             mol_theme: any;
@@ -2505,7 +2579,6 @@ declare namespace $ {
         place(): $piterjs_place;
         Book(): $$.$mol_book2;
         pages(): readonly any[];
-        Toggle_intro(): $$.$mol_check;
         toggle_intro(val?: any, force?: $mol_mem_force): any;
         Menu(): $$.$mol_page;
         Meetups(): $$.$mol_list;
@@ -2523,6 +2596,8 @@ declare namespace $ {
         Intro(): $$.$piterjs_intro;
         meetup_current(): $piterjs_meetup;
         intro(val?: any, force?: $mol_mem_force): any;
+        Video(uri: any): $$.$piterjs_video_page;
+        video_uri(): string;
     }
 }
 
@@ -2730,7 +2805,7 @@ declare namespace $.$$ {
         speech(id: string): $piterjs_speech;
         speaker_id(next?: string): string | null;
         speaker(id: string): $piterjs_speaker;
-        pages(): $piterjs_intro[] | ($mol_page | $piterjs_meetup_page | $piterjs_speech_page | $piterjs_now)[];
+        pages(): $piterjs_intro[] | ($mol_page | $piterjs_meetup_page | $piterjs_speech_page | $piterjs_video_page)[];
         title(): string;
         meetups(): $piterjs_meetup[];
         meetup_current(): $piterjs_meetup;
@@ -2741,6 +2816,8 @@ declare namespace $.$$ {
         toggle_intro(next?: boolean): boolean;
         theme(next?: '$mol_theme_light' | '$mol_theme_dark' | '$mol_theme_auto'): "$mol_theme_auto" | "$mol_theme_light" | "$mol_theme_dark";
         lights(next?: boolean): boolean;
+        video(): boolean;
+        video_uri(): string;
     }
 }
 

@@ -70,23 +70,6 @@ $mol_button $mol_view
 	sub /$mol_view_content
 		<= title
 
-$mol_button_typed $mol_button
-
-$mol_button_minor $mol_button_typed
-
-$mol_check $mol_button_minor
-	attr *
-		^
-		mol_check_checked <= checked?val false
-		aria-checked <= checked?val false
-		role \checkbox
-	sub /
-		<= Icon null
-		<= label /
-			<= Title $mol_view
-				sub /
-					<= title \
-
 $mol_page $mol_view
 	sub /
 		<= Head $mol_view
@@ -142,6 +125,23 @@ $mol_icon $mol_svg_root
 $mol_icon_cross $mol_icon path \M19 6.41L17.59 5L12 10.59L6.41 5L5 6.41L10.59 12L5 17.59L6.41 19L12 13.41L17.59 19L19 17.59L13.41 12L19 6.41Z
 
 $mol_float $mol_view
+
+$mol_button_typed $mol_button
+
+$mol_button_minor $mol_button_typed
+
+$mol_check $mol_button_minor
+	attr *
+		^
+		mol_check_checked <= checked?val false
+		aria-checked <= checked?val false
+		role \checkbox
+	sub /
+		<= Icon null
+		<= label /
+			<= Title $mol_view
+				sub /
+					<= title \
 
 $mol_icon_chevron $mol_icon path \M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z
 
@@ -324,7 +324,6 @@ $piterjs_speech_snippet $mol_link
 
 $piterjs_meetup_page $mol_page
 	meetup $piterjs_meetup
-	minimal_width 400
 	tools /
 		<= Date $mol_view
 			sub / <= date \
@@ -338,10 +337,9 @@ $piterjs_meetup_page $mol_page
 		<= Info $mol_view sub <= info / 
 			<= Description $mol_text
 				text <= description \
-			<= Translation $mol_link_iconed
-				uri <= translation \
-				target \_blank
-				title \Трансляция
+		<= Translation $mol_link
+			arg * video \
+			title \Трансляция
 		<= Speeches $mol_list rows <= speeches /
 	Speech!index $piterjs_speech_snippet
 		speech <= speech!index $piterjs_speech
@@ -386,6 +384,7 @@ $piterjs_meetup_snippet $mol_link
 		meetup <= id \
 		speech null
 		now null
+		video null
 	meetup $piterjs_meetup
 	sub /
 		<= Title $mol_view
@@ -530,6 +529,29 @@ $piterjs_intro $mol_view
 			current_x?val <=> page?val
 			current_y?val <=> page?val
 
+$mol_frame $mol_view
+	dom_name \iframe
+	attr *
+		src <= uri \
+		allow \
+		allowfullscreen <= fullscreen true
+	accelerometer true
+	autoplay true
+	encription true
+	gyroscope true
+	pip true
+
+$piterjs_video_page $mol_page
+	title \Видеотрансляция
+	tools /
+		<= Close $mol_link
+			arg * video null
+			sub /
+				<= Close_icon $mol_icon_cross
+	body /
+		<= Frame $mol_frame
+			uri <= uri <= source \
+
 $piterjs_app $mol_view
 	attr *
 		mol_theme <= theme?val \$mol_theme_auto
@@ -541,8 +563,9 @@ $piterjs_app $mol_view
 			content /
 				<= Book $mol_book2
 					pages <= pages /any
-		<= Toggle_intro $mol_check
-			checked?val <=> toggle_intro?val false
+		- <= Toggle_intro $mol_check
+			checked?val <=> 
+	toggle_intro?val false
 	Menu $mol_page
 		title \Митапы
 		body /
@@ -566,6 +589,8 @@ $piterjs_app $mol_view
 	Intro $piterjs_intro
 		meetup <= meetup_current $piterjs_meetup
 		page?val <=> intro?val \
+	Video!uri $piterjs_video_page
+		source <= video_uri \
 
 $mol_meter $mol_plugin
 	zoom 1
