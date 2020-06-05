@@ -1,11 +1,16 @@
 [piterjs_meetup_page] {
-	flex: 0 0 30rem;
+	flex: 0 0 28rem;
 }
 
 [piterjs_meetup_page_info] {
 	display: flex;
 	flex-direction: column;
 	padding: .75rem;
+}
+
+[piterjs_meetup_page_translation] {
+	margin: 0 .75rem;
+	font-weight: bolder;
 }
 
 [piterjs_meetup_page_description] {
