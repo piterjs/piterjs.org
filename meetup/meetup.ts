@@ -22,8 +22,8 @@ namespace $ {
 		}
 
 		@ $mol_mem
-		translation() {
-			return $mol_data_optional( $mol_data_string )( this.data().translation ) || null
+		video() {
+			return $mol_data_optional( $mol_data_string )( this.data().video ) || null
 		}
 
 		@ $mol_mem

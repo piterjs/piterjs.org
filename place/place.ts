@@ -32,6 +32,17 @@ namespace $ {
 		}
 
 		@ $mol_mem
+		coords() {
+			const coords = $mol_data_array( $mol_data_number )( this.data().coords )
+			return new $mol_vector_2d( coords[0] , coords[1] )
+		}
+
+		@ $mol_mem
+		route() {
+			return $mol_data_string( this.data().route )
+		}
+
+		@ $mol_mem
 		colors() {
 			return $mol_data_array( $mol_data_string )( this.data().colors )
 		}
