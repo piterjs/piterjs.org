@@ -1,16 +1,6 @@
 # PiterJS
 
-# Production build
-
-```
-git clone https://github.com/eigenmethod/mam.git ./mam && cd mam
-npm install
-npm start piterjs/app
-```
-
-Application will be bundled to `piterjs/app/-`
-
-# Developer environment
+# Start dev server
 
 ```
 git clone https://github.com/eigenmethod/mam.git ./mam && cd mam
@@ -21,6 +11,16 @@ npm start
 Application will be accessible at `http://localhost:9080/piterjs/app/-/index.html`
 
 You can change source files (`./piterjs/**`) and reload page to view result.
+
+# Build all bundles
+
+```
+git clone https://github.com/eigenmethod/mam.git ./mam && cd mam
+npm install
+npm start piterjs/app
+```
+
+Application will be bundled to `piterjs/app/-`
 
 # Внесение данных
 
