@@ -18,7 +18,7 @@ npm install
 npm start
 ```
 
-Application will be accessible at `http://localhost:8080/piterjs/app/-/index.html`
+Application will be accessible at `http://localhost:9080/piterjs/app/-/index.html`
 
 You can change source files (`./piterjs/**`) and reload page to view result.
 
