@@ -10,6 +10,8 @@ namespace $.$$ {
 		@ $mol_mem
 		intro( next? : string | null ) { return this.$.$mol_state_arg.value( 'intro' , next ) }
 
+		place_show() { return this.$.$mol_state_arg.value( 'place' ) !== null }
+
 		@ $mol_mem
 		meetup_id( next? : string | null ) { return this.$.$mol_state_arg.value( 'meetup' , next ) }
 		meetup( id : string ) { return $piterjs_meetup.item( id ) }
@@ -27,7 +29,8 @@ namespace $.$$ {
 				this.Menu() ,
 				... this.meetup_id() ? [ this.Meetup( this.meetup_id() ) ] : [] ,
 				... this.speech_id() ? [ this.Speech( this.speech_id() ) ] : [] ,
-				... this.video_uri() ? [ this.Video( this.video() ) ] : [] ,
+				... this.place_show() ? [ this.Place() ] : [] ,
+				... this.video_uri() ? [ this.Video() ] : [] ,
 			]
 			if( pages.length === 1 ) pages.push( this.Now() )
 			return pages
@@ -80,29 +83,11 @@ namespace $.$$ {
 
 		}
 
-		theme( next? : '$mol_theme_light' | '$mol_theme_dark' | '$mol_theme_auto' ) {
-			return this.$.$mol_state_local.value( 'lights' , next )
-				?? (
-					$mol_dom_context.matchMedia('(prefers-color-scheme: dark)').matches ? '$mol_theme_dark'
-					: $mol_dom_context.matchMedia('(prefers-color-scheme: light)').matches ? '$mol_theme_light'
-					: '$mol_theme_auto'
-				)
-		}
-
-		lights( next? : boolean ) {
-
-			let theme = this.theme()
-			if( next === undefined ) return theme === '$mol_theme_light'
-
-			this.theme( next ? '$mol_theme_light' : '$mol_theme_dark' )
-
-			return next
-		}
-
 		video() {
 			return this.$.$mol_state_arg.value( 'video' ) !== null
 		}
 
+		@ $mol_mem
 		video_uri() {
 
 			if( !this.video() ) return ''
@@ -110,7 +95,7 @@ namespace $.$$ {
 			const id = this.meetup_id()
 			if( !id ) return ''
 			
-			return this.meetup( id ).translation() ?? ''
+			return this.meetup( id ).video() ?? ''
 			
 		}
 

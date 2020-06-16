@@ -2,15 +2,22 @@
 	flex: 0 0 28rem;
 }
 
-[piterjs_meetup_page_info] {
-	display: flex;
-	flex-direction: column;
+[piterjs_meetup_page_body] {
 	padding: .75rem;
 }
 
-[piterjs_meetup_page_translation] {
-	margin: 0 .75rem;
+[piterjs_meetup_page_links] {
+	flex-wrap: wrap;
+}
+
+[piterjs_meetup_page_video] {
 	font-weight: bolder;
+	display: inline;
+}
+
+[piterjs_meetup_page_place] {
+	font-weight: bolder;
+	display: inline;
 }
 
 [piterjs_meetup_page_description] {
@@ -25,8 +32,4 @@
 [piterjs_meetup_page_date] {
 	padding: .5rem .75rem;
 	font-weight: normal;
-}
-
-[piterjs_meetup_page_speeches] {
-	padding: .75rem;
 }

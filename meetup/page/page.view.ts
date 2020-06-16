@@ -15,23 +15,24 @@ namespace $.$$ {
 			return this.meetup().start().toString( 'DD Month YYYY' )
 		}
 
-		translation() {
-			return this.meetup().translation() ?? ''
+		video() {
+			return this.meetup().video() ?? ''
 		}
 		
 		@ $mol_mem
-		info() {
+		bosy() {
 			return [
 				... this.description() ? [ this.Description() ] : [] ,
+				this.Links() ,
+				this.Speeches() ,
 			]
 		}
 
 		@ $mol_mem
-		body() {
+		links() {
 			return [
-				... this.info().length ? [ this.Info() ] : [] ,
-				... this.translation() ? [ this.Translation() ] : [] ,
-				this.Speeches() ,
+				this.Place() ,
+				... this.video() ? [ this.Video() ] : [] ,
 			]
 		}
 

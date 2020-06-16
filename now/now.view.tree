@@ -34,10 +34,7 @@ $piterjs_now $mol_page
 		<= Screen $piterjs_screen
 			place <= place $piterjs_place
 			content /
-				<= Lights $mol_check_icon
-					Icon <= Lights_icon $mol_icon_brightness_6
-					hint \Переключатель света
-					checked?val <=> lights?val false
+				<= Lights $mol_lights_toggle
 				<= Logo $mol_svg_root
 					view_box \0 0 270 270
 					sub /

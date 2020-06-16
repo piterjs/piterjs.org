@@ -81,7 +81,7 @@
 		\slides
 		\webgl-planet
 		\css-types
-	translation \https://www.youtube.com/watch?v=4giWGkd7WSQ
+	video \https://www.youtube.com/watch?v=4giWGkd7WSQ
 	place \dataart
 41 *
 	start \2019-10-10T16:15:00.000Z
@@ -91,7 +91,7 @@
 		\react-ssr-wat
 		\bdd-e2e
 		\event-loop-details
-	translation \https://www.youtube.com/watch?v=J0RLSBGorMY
+	video \https://www.youtube.com/watch?v=J0RLSBGorMY
 	place \dins
 42 *
 	start \2019-11-14T19:15:00+03
@@ -101,7 +101,7 @@
 		\js-logging
 		\api-documenting
 		\ibeacon-with-react-native
-	translation \https://www.youtube.com/watch?v=EoMd-8w-DfA
+	video \https://www.youtube.com/watch?v=EoMd-8w-DfA
 	place \jetbrains
 	afterparty \
 		\O'Hooligans
@@ -116,7 +116,7 @@
 		\new-view-on-architecture
 		\write-this-tests
 		\own-project-development
-	translation \
+	video \
 	place \infobip
 	afterparty \
 44 *
@@ -127,7 +127,7 @@
 		\express-essentials-with-ts
 		\should-test-be-integrational
 		\functional-errors-handling-in-ts
-	translation \
+	video \
 	place \elama
 	afterparty \
 		\Бар "Гент"
