@@ -96,7 +96,7 @@
 42 *
 	start \2019-11-14T19:15:00+03
 	title \#42
-	description \
+	description \Митап про логирование на JS, API на Node.js и про взаимодействие с iBeacons в React Native.
 	speeches /
 		\js-logging
 		\api-documenting
@@ -110,25 +110,69 @@
 43 *
 	start \2019-12-17T19:15:00+03
 	title \#43
-	description \
+	description \Митап про внутреннего идеалиста, про другой взгляд на архитектуру, про тестирование и про разработку собственного проекта.
 	speeches /
 		\programming-is-a-lava
 		\new-view-on-architecture
 		\write-this-tests
 		\own-project-development
-	video \
+	video \https://www.youtube.com/watch?v=04ZkeQHS5kk
 	place \infobip
 	afterparty \
 44 *
 	start \2020-01-30T19:35:00+03
 	title \#44
-	description \
+	description \Митап про typescript, интеграционные тесты и обработку ошибок.
 	speeches /
 		\express-essentials-with-ts
 		\should-test-be-integrational
 		\functional-errors-handling-in-ts
-	video \
+	video \https://www.youtube.com/watch?v=IEZmQCJFOog
 	place \elama
 	afterparty \
 		\Бар "Гент"
 		\Московский пр. 139/1
+45 *
+	start \2020-02-20T19:15:00+03
+	title \#45
+	description \Митап про чистые функции в TDD, CSS свойства и про выбор подхода стилизации в компонентном мире.
+	speeches /
+		\storybook-pure-functions
+		\css-value-processing
+		\styled-styles
+	video \https://www.youtube.com/watch?v=j83p7mCr7h0
+	place \griddynamics
+	afterparty \
+46 *
+	start \2020-04-23T19:10:00+03
+	title \#46
+	description \Митап про разработку сложных UI-компонентов, производительность и CSS-in-TS.
+	speeches /
+		\complex-components-dev
+		\high-performance-web-applications
+		\mol-style
+	video \https://www.youtube.com/watch?v=FMNLN5YIE_M
+	place \online
+	afterparty \
+47 *
+	start \2020-05-21T19:10:00+03
+	title \#47
+	description \Митап про cordova, нейронные сети в JavaScript и про AST.
+	speeches /
+		\react+cordova=🤎
+		\neural-networks-on-js
+		\tree-single-ast-to-rule
+	video \https://www.youtube.com/watch?v=pev6g_oysUs
+	place \online
+	afterparty \
+48 *
+	start \2020-06-11T19:10:00+03
+	title \#48
+	description \Митап про юридические риски для программиста, про игру на Firebase и про экспериментальный Node.js отладчик.
+	speeches /
+		\legal-risks-in-it
+		\game-with-firebase
+		\node-debugger
+	video \https://www.youtube.com/watch?v=ANbnQhxos-A
+	place \online
+	afterparty \

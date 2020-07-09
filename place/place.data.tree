@@ -74,3 +74,24 @@ elama *
 		\#03973d
 	notes \
 		\В конце: конкурсы и угощение
+griddynamics *
+	title \Grid Dynamics
+	description \Компания по разработке программного обеспечения в Санкт-Петербурге
+	site \https://www.griddynamics.com/
+	address \Санкт-Петербург, ул. Чапаева, 15
+	coords /
+		59.961179
+		30.331337
+	route \
+	colors /
+		\#0a9ee7
+		\#03973d
+	notes \
+		\В конце: угощение
+online *
+	title \Online
+	description \YouTube
+	site \https://www.youtube.com/piterjs/
+	colors /
+		\#0a9ee7
+		\#03973d
