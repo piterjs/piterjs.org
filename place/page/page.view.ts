@@ -11,7 +11,7 @@ namespace $.$$ {
 		}
 
 		coords() {
-			return this.place().coords()
+			return this.place().coords()!
 		}
 
 		route() {
