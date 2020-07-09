@@ -2,8 +2,7 @@ name: Deploy
 
 on:
   push:
-    branches:
-    - master
+  pull_request:
  
 jobs:
   build:
@@ -12,17 +11,15 @@ jobs:
     
     steps:
     
-    - name: Checkout sources
-      uses: actions/checkout@v1
-    
     - name: Build app
-      uses: hyoo-ru/mam_build@master
+      uses: hyoo-ru/mam_build@master2
       with:
-        module: 'piterjs/app'
         package: 'piterjs'
+        modules: 'app'
     
     - name: Deploy on GitHub Pages
       uses: alex-page/blazing-fast-gh-pages-deploy@v1.0.1
+      if: github.ref == 'refs/heads/master'
       with:
         repo-token: ${{ secrets.GH_PAT }}
-        site-directory: '.'
+        site-directory: 'piterjs/app/-'
