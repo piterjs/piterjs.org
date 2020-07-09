@@ -133,7 +133,7 @@
 		\Бар "Гент"
 		\Московский пр. 139/1
 45 *
-	start \2020-02-20T19:00:00+03
+	start \2020-02-20T19:15:00+03
 	title \#45
 	description \
 	speeches /
@@ -144,7 +144,7 @@
 	place \griddynamics
 	afterparty \
 46 *
-	start \2020-04-23T19:00:00+03
+	start \2020-04-23T19:10:00+03
 	title \#46
 	description \
 	speeches /
@@ -155,7 +155,7 @@
 	place \online
 	afterparty \
 47 *
-	start \2020-05-21T19:00:00+03
+	start \2020-05-21T19:10:00+03
 	title \#47
 	description \
 	speeches /
@@ -166,7 +166,7 @@
 	place \online
 	afterparty \
 48 *
-	start \2020-06-11T19:00:00+03
+	start \2020-06-11T19:10:00+03
 	title \#48
 	description \
 	speeches /
