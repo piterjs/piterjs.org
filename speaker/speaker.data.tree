@@ -1,3 +1,27 @@
+kozlyatinskiya *
+	title \Алексей Козятинский
+	description \Я пять лет работал в Google над JavaScript отладчиком в команде Chrome DevTools. Написал своими руками и фронтенд часть, и большую часть бэкенда в V8. Сейчас работаю в Netflix и отвечаю за успех переезда нашего основного приложения с очень старого JSC на новый модный V8. Вероятно вы видели мои доклады с Holy.js, где я рассказывал про Chrome DevTools и Chrome DevTools protocol. :
+	photo \https://habrastorage.org/webt/ly/gh/29/lygh2901j5ud26jv8oxrevhol2u.jpeg
+kirjs *
+	title \Kir JS
+	description \Родился в Москве, сейчас живу в Нью-Йорке и работаю в Firebase. Обучаю Angular не только в Google, но и во всем мире, организую самый большой Angular-митап в мире — AngularNYC (а также VueNYC и ReactNYC). В свободное от программирования время увлекаюсь танго, книгами и приятными беседами.
+	photo \https://habrastorage.org/webt/at/jq/yg/atjqygimfz4auma1zj4cin1wyoc.jpeg
+klimenkovyan *
+	title \Ян Клименков
+	description \Ранее работал в крупнейшем в России рекламном интернет-агентстве, сооснователь юр.фирмы, специализирующейся на IT и Digital.
+	photo \https://habrastorage.org/webt/rh/zs/tv/rhzstvmqghchru9kpyl_0jrha_a.jpeg
+zatravkini *
+	title \Иван Затравкин
+	description \Любитель кода со стажем. Пришёл в веб из мира ядерной физики, где будучи студентом пытался выжать максимум производительности с помощью интринсиков и GPGPU(CUDA).
+	photo \https://habrastorage.org/webt/jx/k6/fw/jxk6fwm0yvcqm9epdb-t9bjsrem.jpeg
+pyatakovr *
+	title \Роман Пятаков
+	description \Фронтенд-разработчик с опытом 4 года. Стать спикером — моя давняя мечта. Люблю петь в караоке, учусь играть на флейте. Всегда рад узнать что-то новое. Христианин.
+	photo \https://habrastorage.org/webt/4o/xc/qy/4oxcqy2xvx4jj-fdzj7nwcbrtqu.jpeg
+efimova *
+	title \Андрей Ефимов
+	description \Пишу фронт на реакте в Тинькофф.
+	photo \https://habrastorage.org/webt/z3/kb/4u/z3kb4uscaaxuqaatbnbs4ocudkm.jpeg
 shara *
 	title \Александр Шарихин
 	description \Разрабатываю на Scala(включая Scala.js) и TypeScript приложения автоматизации цифрового маркетинга. Люблю функциональное программирование и пропагандирую разумный подход к разработке программного обеспечения. Люблю ретро-компьютеры, являюсь автором Gopher-браузера для ZX-Spectrum(написан на ассемблере).
@@ -33,7 +57,7 @@ rec1gF5Ph0VV73XAd *
 	description \var_ya
 rec1qqsT1cczrE6dH *
 	title \Дмитрий Карловский
-	description \Больше 10 лет во фронтенде. Увлекаюсь БДСМ. Даже фреймворк свой запилил со связыванием данных и жёсткими ограничениями.
+	description \Рассекаю на велосипедах по бездорожью против ветра в гору на лыжах.
 	photo \https://habrastorage.org/webt/ae/1b/c_/ae1bc_91m_ctzx5cj44zjea3ylg.jpeg
 vola *
 	title \Анна Волкова
@@ -73,8 +97,8 @@ recAtTH2SPt6gPfd4 *
 	description \
 recBvy9W7RkucECri *
 	title \Дима Богер
-	description \Чуть больше года я увлекаюсь фронтендом и по выходным пишу пет-проект на Vue.js. На работе я пишу на Python и обожаю его интерактивность, возможность удобно выполнять любой код в любом окружении и играться в песочнице, мне хотелось такого же в моём проекте и я открыл для себя Storybook и концепцию визуального TDD. Проведу аналогии с бекенд-разработкой на Python, разберу основные концепции, библиотеки и инструменты, покажу и расскажу где находить годную информацию.
-	photo \https://dl.airtable.com/.attachmentThumbnails/6b8eed048829ec671165f9c93e1532fe/831f3605
+	description \Бывший тимлид фулстек команды, python-энтузиаст, организатор PiterPy Meetup.
+	photo \https://habrastorage.org/webt/fq/zc/l3/fqzcl3r8g8l0smgiextoujme4bq.jpeg
 recCC53xjGU5fg8u3 *
 	title \Михаил Ковалев
 	description \
@@ -90,7 +114,7 @@ recFF8cr19COwTNmL *
 	description \
 recFFfDnmdRM5Sybp *
 	title \Ульянов Владимир
-	description \Меня зовут Владимир, работаю fullstack разработчиком в ecommerce в highload-проектов. Но когда я начинал работать, я очень не любил фронтенд, и я считаю что Vue мог бы стать там волшебной пилюлей.
+	description \Занимаюсь разработкой интерфейсов, и серверов для этих интерфейсов. Люблю пробовать всё необычное и интересное :)
 	photo \https://dl.airtable.com/22siLVakTLKf9m002GMJ_large_img-profile%20-%20%D0%92%D0%BB%D0%B0%D0%B4%D0%B8%D0%BC%D0%B8%D1%80%20%D0%A3%D0%BB%D1%8C%D1%8F%D0%BD%D0%BE%D0%B2.jpg
 recFU3I8wHQ84UeHN *
 	title \Вячеслав Москаленко
@@ -140,7 +164,7 @@ recNY9uEJPTE8B09s *
 	description \
 recNuTExXo6paisad *
 	title \Кирилл Сергеев
-	description \Закончил университет по специальности «Защита информации». Программирует бэкенд больше 10 лет. Долгое время писал на PHP, пробовал языки Rust, Go, Python. Больше 5 лет пишет на Node.js. В основном принимал участие в проектах, где на бэкенд возложены крупные задачи по бизнес-логике.
+	description \В университете писал диплом по нейронным сетям. С давнего времени наблюдаю за этой сферой. Делал несколько Pet-проектов. Участвовал в исследованиях по T5 сетям. В JS с 2012 года на бекенде. В последнее время работаю в компании в сфере фармацевтики на JS.
 	photo \https://habrastorage.org/webt/zz/ub/gk/zzubgkgxaae5bituqn-2qdng-_i.jpeg
 recO0fk2FEJbcvhcG *
 	title \Роман Прудников

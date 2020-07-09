@@ -28,18 +28,21 @@ namespace $ {
 
 		@ $mol_mem
 		address() {
-			return $mol_data_string( this.data().address )
+			return $mol_data_optional( $mol_data_string )( this.data().address ) ?? ''
 		}
 
 		@ $mol_mem
 		coords() {
-			const coords = $mol_data_array( $mol_data_number )( this.data().coords )
+			
+			const coords = $mol_data_optional( $mol_data_array( $mol_data_number ) )( this.data().coords )
+			if( !coords ) return null as null
+
 			return new $mol_vector_2d( coords[0] , coords[1] )
 		}
 
 		@ $mol_mem
 		route() {
-			return $mol_data_string( this.data().route )
+			return $mol_data_optional( $mol_data_string )( this.data().route ) ?? ''
 		}
 
 		@ $mol_mem

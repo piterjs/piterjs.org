@@ -19,6 +19,10 @@ namespace $.$$ {
 			return this.meetup().video() ?? ''
 		}
 		
+		coords() {
+			return this.meetup().place().coords()
+		}
+		
 		@ $mol_mem
 		bosy() {
 			return [
@@ -31,7 +35,7 @@ namespace $.$$ {
 		@ $mol_mem
 		links() {
 			return [
-				this.Place() ,
+				... this.coords() ? [ this.Place() ] : [] ,
 				... this.video() ? [ this.Video() ] : [] ,
 			]
 		}
