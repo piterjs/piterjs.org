@@ -389,9 +389,11 @@ $piterjs_speech_page $mol_page
 			<= Slides $mol_link
 				uri <= slides \
 				title \Слайды
+				target \_blank
 			<= Video $mol_link
 				uri <= video \
 				title \Видео
+				target \_blank
 		<= Speaker $piterjs_speaker_snippet
 			speaker <= speaker $piterjs_speaker
 

@@ -7842,6 +7842,7 @@ var $;
             return ((obj) => {
                 obj.uri = () => this.slides();
                 obj.title = () => "Слайды";
+                obj.target = () => "_blank";
                 return obj;
             })(new this.$.$mol_link());
         }
@@ -7852,6 +7853,7 @@ var $;
             return ((obj) => {
                 obj.uri = () => this.video();
                 obj.title = () => "Видео";
+                obj.target = () => "_blank";
                 return obj;
             })(new this.$.$mol_link());
         }
