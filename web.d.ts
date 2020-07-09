@@ -214,6 +214,15 @@ declare namespace $ {
 }
 
 declare namespace $ {
+    class $mol_after_frame extends $mol_object2 {
+        task: () => void;
+        id: any;
+        constructor(task: () => void);
+        destructor(): void;
+    }
+}
+
+declare namespace $ {
     function $mol_compare_any(a: any, b: any): boolean;
 }
 
@@ -288,7 +297,7 @@ declare namespace $ {
         static deadline: number;
         static liveline: number;
         static current: $mol_fiber<any> | null;
-        static scheduled: $mol_after_tick | null;
+        static scheduled: $mol_after_frame | null;
         static queue: (() => PromiseLike<any>)[];
         static tick(): Promise<void>;
         static schedule(): Promise<any>;
@@ -598,15 +607,6 @@ declare namespace $ {
         plugins(): readonly $mol_view[];
     }
     type $mol_view_all = $mol_type_pick<$mol_ambient_context, typeof $mol_view>;
-}
-
-declare namespace $ {
-    class $mol_after_frame extends $mol_object2 {
-        task: () => void;
-        id: any;
-        constructor(task: () => void);
-        destructor(): void;
-    }
 }
 
 declare namespace $ {
@@ -1082,7 +1082,7 @@ declare namespace $ {
         notes(): string;
         site(): URL;
         address(): string;
-        coords(): $mol_vector_2d<number>;
+        coords(): $mol_vector_2d<number> | null;
         route(): string;
         colors(): readonly string[];
         meetups(): $piterjs_meetup[];
@@ -2367,6 +2367,7 @@ declare namespace $.$$ {
         description(): string;
         date(): string;
         video(): string;
+        coords(): $mol_vector_2d<number> | null;
         bosy(): $mol_view[];
         links(): $mol_link[];
         speeches(): $piterjs_speech_snippet[];
