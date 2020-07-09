@@ -8818,7 +8818,6 @@ var $;
             return ({
                 "src": this.uri(),
                 "allow": "",
-                "allowfullscreen": this.fullscreen(),
             });
         }
         uri() {
@@ -8880,12 +8879,13 @@ var $;
             }
             allow() {
                 return [
+                    ...this.fullscreen() ? ['fullscreen'] : [],
                     ...this.accelerometer() ? ['accelerometer'] : [],
                     ...this.autoplay() ? ['autoplay'] : [],
                     ...this.encription() ? ['encrypted-media'] : [],
                     ...this.gyroscope() ? ['gyroscope'] : [],
                     ...this.pip() ? ['picture-in-picture'] : [],
-                ];
+                ].join(';');
             }
         }
         __decorate([
@@ -8952,7 +8952,7 @@ var $;
 "use strict";
 var $;
 (function ($) {
-    $.$mol_style_attach("piterjs/video/page/page.view.css", "[piterjs_video_page] {\n\tflex: 1000 0 80rem;\n}\n");
+    $.$mol_style_attach("piterjs/video/page/page.view.css", "[piterjs_video_page] {\n\tflex: 1000 0 60rem;\n}\n");
 })($ || ($ = {}));
 //page.view.css.js.map
 ;
