@@ -1,0 +1,15 @@
+$piterjs_others $mol_page
+	title \Календарь событий из мира фронтенда
+	tools /
+		<= Close $mol_link
+			arg * others null
+			sub /
+				<= Close_icon $mol_icon_cross
+	body /
+		<= Events $mol_list
+			rows <= events /$mol_view
+	Event!uid $piterjs_others_event
+		title <= event_title!uid \
+		uri <= event_uri!uid \
+		start <= event_start!uid $mol_time_moment
+		location <= event_location!uid \
