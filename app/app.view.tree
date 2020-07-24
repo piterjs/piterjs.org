@@ -25,9 +25,7 @@ $piterjs_app $mol_view
 						<= Conf_date $mol_view
 							sub / \сентябрь'19
 				<= Others_link $mol_link
-					arg *
-						meetup null
-						others \
+					uri \#others
 					title \Другие события
 	Meetup!id $piterjs_meetup_page
 		meetup <= meetup!id $piterjs_meetup
