@@ -1,0 +1,9 @@
+$piterjs_others_event $mol_link
+	start $mol_time_moment
+	sub /
+		<= Location $mol_paragraph
+			sub / <= location \
+		<= Date $mol_paragraph
+			sub / <= date \
+		<= Title $mol_paragraph
+			sub / <= title \

@@ -40,11 +40,17 @@
 	justify-content: space-between;
 }
 
+[piterjs_app_links] {
+	padding: .75rem;
+	flex: none;
+}
+
 [piterjs_app_conf] {
 	white-space: nowrap;
 	display: flex;
 	justify-content: space-between;
 	box-shadow: 0 -0.5rem 0.5rem -0.5rem hsla(0,0%,0%,.25);
+	padding: 0;
 }
 
 [piterjs_app_conf_title] {
@@ -54,6 +60,10 @@
 
 [piterjs_app_conf_date] {
 	margin: .5rem .75rem;
+}
+
+[piterjs_app_others_link] {
+	padding: .5rem .75rem;
 }
 
 [piterjs_app_meetups] {

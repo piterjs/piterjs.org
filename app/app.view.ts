@@ -12,6 +12,8 @@ namespace $.$$ {
 
 		place_show() { return this.$.$mol_state_arg.value( 'place' ) !== null }
 
+		others() { return this.$.$mol_state_arg.value( 'others' ) !== null }
+
 		@ $mol_mem
 		meetup_id( next? : string | null ) { return this.$.$mol_state_arg.value( 'meetup' , next ) }
 		meetup( id : string ) { return $piterjs_meetup.item( id ) }
@@ -31,6 +33,7 @@ namespace $.$$ {
 				... this.speech_id() ? [ this.Speech( this.speech_id() ) ] : [] ,
 				... this.place_show() ? [ this.Place() ] : [] ,
 				... this.video_uri() ? [ this.Video() ] : [] ,
+				... this.others() ? [ this.Others() ] : [] ,
 			]
 			if( pages.length === 1 ) pages.push( this.Now() )
 			return pages

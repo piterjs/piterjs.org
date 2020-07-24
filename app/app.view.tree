@@ -16,13 +16,19 @@ $piterjs_app $mol_view
 		title \Митапы
 		body /
 			<= Meetups $mol_list rows <= menu_meetups /
-			<= Conf $mol_link
-				uri \https://conf.piterjs.org/
-				sub /
-					<= Conf_title $mol_view
-						sub / \Conf
-					<= Conf_date $mol_view
-						sub / \сентябрь'19
+			<= Links $mol_list rows /
+				<= Conf $mol_link
+					uri \https://conf.piterjs.org/
+					sub /
+						<= Conf_title $mol_view
+							sub / \Conf
+						<= Conf_date $mol_view
+							sub / \сентябрь'19
+				<= Others_link $mol_link
+					arg *
+						meetup null
+						others \
+					title \Другие события
 	Meetup!id $piterjs_meetup_page
 		meetup <= meetup!id $piterjs_meetup
 	Speech!id $piterjs_speech_page
@@ -38,3 +44,4 @@ $piterjs_app $mol_view
 		source <= video_uri \
 	Place $piterjs_place_page
 		place <= place $piterjs_place
+	Others $piterjs_others

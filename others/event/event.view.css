@@ -1,0 +1,24 @@
+[piterjs_others_event] {
+	display: flex;
+	flex-wrap: wrap;
+	padding: .5rem;
+}
+
+[piterjs_others_event_title] {
+	padding: 0 .25rem;
+	flex: 1000 1 50%;
+	font-weight: 600;
+	white-space: normal;
+}
+
+[piterjs_others_event_date] {
+	color: var(--mol_theme_text);
+	padding: 0 .25rem;
+	flex: 0 0 6rem;
+}
+
+[piterjs_others_event_location] {
+	color: var(--mol_theme_text);
+	padding: 0 .25rem;
+	flex: 1 0 10rem;
+}
