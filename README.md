@@ -1,30 +1,10 @@
 # PiterJS
 
-# Start dev server
-
-```
-git clone https://github.com/eigenmethod/mam.git ./mam && cd mam
-npm install
-npm start
-```
-
-Application will be accessible at `http://localhost:9080/piterjs/app/-/index.html`
-
-You can change source files (`./piterjs/**`) and reload page to view result.
-
-# Build all bundles
-
-```
-git clone https://github.com/eigenmethod/mam.git ./mam && cd mam
-npm install
-npm start piterjs/app
-```
-
-Application will be bundled to `piterjs/app/-`
-
 # Внесение данных
 
-Всё данные находятся в data.[tree](https://github.com/nin-jin/tree.d) конфигах. Для отступов используются табы, юниксовые переводы строк. После обновления данных нужно открыть [piterjs.org](https://piterjs.org/). Если будут какие-либо ошибки или данные не появятся, то в консоли разработчика (Ctrl+Shit+I) будет написано в чём проблема. 
+Всё данные находятся в data.[tree](https://github.com/nin-jin/tree.d) конфигах. Для отступов используются табы, юниксовые переводы строк. После обновления данных нужно открыть [piterjs.org](https://piterjs.org/). Если будут какие-либо ошибки или данные не появятся, то в консоли разработчика (Ctrl+Shit+I) будет написано в чём проблема.
+
+Проще всего вносить данные через свой форк прямо на гитхабе.
 
 ## Добавление докладчика
 
@@ -56,6 +36,18 @@ Application will be bundled to `piterjs/app/-`
 
 1. Открываем [intro/intro.view.tree](intro/intro.view.tree)
 2. Изменяем по аналогии с остальным. В `text` можно использовать markdown. Можно добавлять свои страницы или скрывать существующие, поставив `- ` (дефис+пробел) перед веткой описания слайда. У каждого слайда первым словом задаётся уникальный идентификатор, который будет фигурировать в ссылке.
+
+# Запуск девсервера
+
+```
+git clone https://github.com/eigenmethod/mam.git ./mam && cd mam
+npm install
+npm start
+```
+
+Application will be accessible at `http://localhost:9080/piterjs/app/-/index.html`
+
+You can change source files (`./piterjs/**`) and reload page to view result.
 
 # BrowserStack
 
