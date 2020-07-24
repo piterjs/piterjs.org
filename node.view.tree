@@ -55,6 +55,16 @@ $mol_book2 $mol_scroll
 	minimal_width 0
 	Placeholder $mol_view
 
+$mol_speck $mol_view
+	attr *
+		^
+		mol_theme \$mol_theme_accent
+	style *
+		^
+		minHeight \1em
+	sub /
+		<= value null
+
 $mol_button $mol_view
 	enabled true
 	minimal_height 40
@@ -69,9 +79,10 @@ $mol_button $mol_view
 		disabled <= disabled false
 		role \button
 		tabindex <= tab_index 0
-		title <= hint \
+		title <= hint_or_error <= hint \
 	sub /$mol_view_content
 		<= title
+	Speck $mol_speck
 
 $mol_page $mol_view
 	sub /
@@ -128,6 +139,9 @@ $mol_icon $mol_svg_root
 $mol_icon_cross $mol_icon path \M19 6.41L17.59 5L12 10.59L6.41 5L5 6.41L10.59 12L5 17.59L6.41 19L12 13.41L17.59 19L19 17.59L13.41 12L19 6.41Z
 
 $mol_float $mol_view
+	style *
+		^
+		minHeight \auto
 
 $mol_button_typed $mol_button
 
@@ -158,11 +172,18 @@ $mol_check_expand $mol_check
 	checked?val <=> expanded?val false
 	enabled <= expandable false
 
-$mol_dimmer $mol_view
+$mol_paragraph $mol_view
+	line_height 24
+	letter_width 8
+
+$mol_dimmer $mol_paragraph
 	haystack \
 	needle \
 	sub <= parts /$mol_view_content
-	Low!id $mol_view
+	Low!id $mol_paragraph
+		sub /
+			<= string!id \
+	High!id $mol_paragraph
 		sub /
 			<= string!id \
 
@@ -216,10 +237,6 @@ $mol_grid_cell $mol_view
 	minimal_height 40
 
 $mol_grid_number $mol_grid_cell
-
-$mol_paragraph $mol_view
-	line_height 24
-	letter_width 8
 
 $mol_image $mol_view
 	dom_name \img
@@ -404,6 +421,7 @@ $piterjs_meetup_snippet $mol_link
 		now null
 		video null
 		place null
+		others null
 	meetup $piterjs_meetup
 	sub /
 		<= Title $mol_view
@@ -615,6 +633,32 @@ $piterjs_place_page $mol_page
 						0
 					title \
 
+$piterjs_others_event $mol_link
+	start $mol_time_moment
+	sub /
+		<= Location $mol_paragraph
+			sub / <= location \
+		<= Date $mol_paragraph
+			sub / <= date \
+		<= Title $mol_paragraph
+			sub / <= title \
+
+$piterjs_others $mol_page
+	title \Календарь событий из мира фронтенда
+	tools /
+		<= Close $mol_link
+			arg * others null
+			sub /
+				<= Close_icon $mol_icon_cross
+	body /
+		<= Events $mol_list
+			rows <= events /$mol_view
+	Event!uid $piterjs_others_event
+		title <= event_title!uid \
+		uri <= event_uri!uid \
+		start <= event_start!uid $mol_time_moment
+		location <= event_location!uid \
+
 $piterjs_app $mol_view
 	plugins /
 		<= Theme $mol_theme_auto
@@ -633,13 +677,17 @@ $piterjs_app $mol_view
 		title \Митапы
 		body /
 			<= Meetups $mol_list rows <= menu_meetups /
-			<= Conf $mol_link
-				uri \https://conf.piterjs.org/
-				sub /
-					<= Conf_title $mol_view
-						sub / \Conf
-					<= Conf_date $mol_view
-						sub / \сентябрь'19
+			<= Links $mol_list rows /
+				<= Conf $mol_link
+					uri \https://conf.piterjs.org/
+					sub /
+						<= Conf_title $mol_view
+							sub / \Conf
+						<= Conf_date $mol_view
+							sub / \сентябрь'19
+				<= Others_link $mol_link
+					uri \#others
+					title \Другие события
 	Meetup!id $piterjs_meetup_page
 		meetup <= meetup!id $piterjs_meetup
 	Speech!id $piterjs_speech_page
@@ -655,6 +703,7 @@ $piterjs_app $mol_view
 		source <= video_uri \
 	Place $piterjs_place_page
 		place <= place $piterjs_place
+	Others $piterjs_others
 
 $mol_meter $mol_plugin
 	zoom 1
