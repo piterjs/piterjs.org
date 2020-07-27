@@ -1339,6 +1339,8 @@ declare namespace $ {
         bottom?: Value;
         left?: Value;
     };
+    type Span_align = 'none' | 'start' | 'end' | 'center';
+    type Snap_axis = 'x' | 'y' | 'block' | 'inline' | 'both';
     type Overflow = 'visible' | 'hidden' | 'clip' | 'scroll' | 'auto' | 'overlay' | Common;
     interface Overrides {
         alignContent?: 'baseline' | 'start' | 'end' | 'flex-start' | 'flex-end' | 'center' | 'normal' | 'space-between' | 'space-around' | 'space-evenly' | 'stretch' | ['first' | 'last', 'baseline'] | ['safe' | 'unsafe', 'start' | 'end' | 'flex-start' | 'flex-end'] | Common;
@@ -1371,8 +1373,15 @@ declare namespace $ {
         };
         whiteSpace?: 'normal' | 'nowrap' | 'break-spaces' | 'pre' | 'pre-wrap' | 'pre-line' | Common;
         webkitOverflowScrolling?: 'auto' | 'touch';
-        scrollbar: {
-            color: [Color, Color] | 'dark' | 'light' | 'auto' | Common;
+        scrollbar?: {
+            color?: [Color, Color] | 'dark' | 'light' | 'auto' | Common;
+        };
+        scroll?: {
+            snap?: {
+                type: 'none' | Snap_axis | [Snap_axis, 'mandatory' | 'proximity'] | Common;
+                stop: 'normal' | 'always' | Common;
+                align: Span_align | [Span_align, Span_align] | Common;
+            };
         };
         width?: Size;
         minWidth?: Size;
@@ -2810,9 +2819,16 @@ declare namespace $.$$ {
 }
 
 declare namespace $ {
-    class $piterjs_others_event extends $mol_link {
+    class $mol_icon_plus extends $mol_icon {
+        path(): string;
+    }
+}
+
+declare namespace $ {
+    class $piterjs_others_event extends $mol_link_iconed {
         start(): $mol_time_moment;
-        sub(): readonly any[];
+        target(): string;
+        content(): readonly any[];
         Location(): $$.$mol_paragraph;
         location(): string;
         Date(): $$.$mol_paragraph;
@@ -2835,6 +2851,8 @@ declare namespace $ {
     class $piterjs_others extends $mol_page {
         title(): string;
         tools(): readonly any[];
+        Add(): $$.$mol_link;
+        Add_icon(): $mol_icon_plus;
         Close(): $$.$mol_link;
         Close_icon(): $mol_icon_cross;
         body(): readonly any[];

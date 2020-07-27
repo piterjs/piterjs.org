@@ -633,9 +633,12 @@ $piterjs_place_page $mol_page
 						0
 					title \
 
-$piterjs_others_event $mol_link
+$mol_icon_plus $mol_icon path \M19,13H13V19H11V13H5V11H11V5H13V11H19V13Z
+
+$piterjs_others_event $mol_link_iconed
 	start $mol_time_moment
-	sub /
+	target \_blank
+	content /
 		<= Location $mol_paragraph
 			sub / <= location \
 		<= Date $mol_paragraph
@@ -644,8 +647,14 @@ $piterjs_others_event $mol_link
 			sub / <= title \
 
 $piterjs_others $mol_page
-	title \Календарь событий из мира фронтенда
+	title \Календарь фронтенд событий
 	tools /
+		<= Add $mol_link
+			uri \https://github.com/web-standards-ru/calendar
+			target \_blank
+			hint \Добавить ещё событие
+			sub /
+				<= Add_icon $mol_icon_plus
 		<= Close $mol_link
 			arg * others null
 			sub /
