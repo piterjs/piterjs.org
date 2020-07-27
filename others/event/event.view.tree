@@ -1,6 +1,7 @@
-$piterjs_others_event $mol_link
+$piterjs_others_event $mol_link_iconed
 	start $mol_time_moment
-	sub /
+	target \_blank
+	content /
 		<= Location $mol_paragraph
 			sub / <= location \
 		<= Date $mol_paragraph

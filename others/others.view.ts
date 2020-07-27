@@ -25,13 +25,12 @@ namespace $.$$ {
 		list_future() {
 
 			const present = new $mol_time_moment().merge({
-				day: 0,
 				hour: 0,
 				second: 0,
-			}).toOffset(0).toString()
+			}).shift({ day : -2 }).toOffset(0).toString()
 			
 			const next = this.list().filter( event => {
-				return event.start.toOffset(0).toString() > present
+				return event.start.toOffset(0).toString() >= present
 			})
 
 			return next
