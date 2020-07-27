@@ -1,6 +1,12 @@
 $piterjs_others $mol_page
-	title \Календарь событий из мира фронтенда
+	title \Календарь фронтенд событий
 	tools /
+		<= Add $mol_link
+			uri \https://github.com/web-standards-ru/calendar
+			target \_blank
+			hint \Добавить ещё событие
+			sub /
+				<= Add_icon $mol_icon_plus
 		<= Close $mol_link
 			arg * others null
 			sub /
