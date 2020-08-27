@@ -176,3 +176,10 @@
 	video \https://www.youtube.com/watch?v=ANbnQhxos-A
 	place \online
 	afterparty \
+50 *
+	start \2020-08-27T19:10:00+03
+	title \#50
+	description \Воркшоп про локальный HTTPS
+	video \
+	place \online
+	afterparty \

@@ -372,11 +372,15 @@ declare namespace $ {
         static queue: (() => PromiseLike<any>)[];
         static tick(): Promise<void>;
         static schedule(): Promise<any>;
-        value: Value;
-        error: Error | PromiseLike<Value> | null;
         cursor: $mol_fiber_status;
         masters: (number | $mol_fiber<any> | undefined)[];
         calculate: () => Value;
+        _value: Value;
+        get value(): Value;
+        set value(next: Value);
+        _error: Error | PromiseLike<Value> | null;
+        get error(): null | Error | PromiseLike<Value>;
+        set error(next: null | Error | PromiseLike<Value>);
         schedule(): void;
         wake(): Value | undefined;
         push(value: Value): Value;
@@ -417,10 +421,8 @@ declare namespace $ {
         subscribe(promise: Promise<unknown>): Promise<void>;
         get(): Value;
         pull(): void;
-        _value: Value;
         get value(): Value;
         set value(next: Value);
-        _error: Error | PromiseLike<Value> | null;
         get error(): null | Error | PromiseLike<Value>;
         set error(next: null | Error | PromiseLike<Value>);
         put(next: Value): Value;
@@ -562,7 +564,13 @@ declare namespace $ {
 }
 
 declare namespace $ {
-    function $mol_func_name(func: Function): string;
+    class $mol_memo extends $mol_wrapper {
+        static wrap<This extends object, Value>(task: (this: This, next?: Value) => Value): (this: This, next?: Value | undefined) => Value | undefined;
+    }
+}
+
+declare namespace $ {
+    function $mol_func_name(this: $mol_ambient_context, func: Function): string;
     function $mol_func_name_from<Target extends Function>(target: Target, source: Function): Target;
 }
 
@@ -722,7 +730,7 @@ declare namespace $ {
 }
 
 declare namespace $ {
-    function $mol_dom_parse(text: string, type?: SupportedType): Document;
+    function $mol_dom_parse(text: string, type?: DOMParserSupportedType): Document;
 }
 
 declare namespace $ {
@@ -959,6 +967,7 @@ declare namespace $ {
         get normal(): $mol_time_moment;
         merge(config: $mol_time_moment_config): $mol_time_moment;
         shift(config: $mol_time_duration_config): $mol_time_moment;
+        mask(config: $mol_time_duration_config): $mol_time_moment;
         toOffset(config: $mol_time_duration_config): $mol_time_moment;
         valueOf(): number;
         toJSON(): string;
@@ -1073,7 +1082,6 @@ declare namespace $ {
     class $mol_svg extends $mol_view {
         dom_name(): string;
         dom_name_space(): string;
-        text_width(text?: any, force?: $mol_mem_force): any;
         font_size(): number;
         font_family(): string;
     }
@@ -1085,20 +1093,11 @@ declare namespace $ {
     }
 }
 
-declare namespace $ {
-    function $mol_font_canvas(next?: CanvasRenderingContext2D): CanvasRenderingContext2D;
-}
-
-declare namespace $ {
-    function $mol_font_measure(size: number, face: string, text: string): number;
-}
-
 declare namespace $.$$ {
     class $mol_svg extends $.$mol_svg {
         computed_style(): CSSStyleDeclaration;
         font_size(): number;
         font_family(): any;
-        text_width(text: string): number;
     }
 }
 
@@ -1404,7 +1403,7 @@ declare namespace $ {
 }
 
 declare namespace $ {
-    type $mol_style_pseudo_class = ':active' | ':any' | ':any-link' | ':checked' | ':default' | ':defined' | ':dir(rtl)' | ':dir(ltr)' | ':disabled' | ':empty' | ':enabled' | ':first' | ':first-child' | ':first-of-type' | ':fullscreen' | ':focus' | ':hover' | ':indeterminate' | ':in-range' | ':invalid' | ':last-child' | ':last-of-type' | ':left' | ':link' | ':not()' | ':nth-child(even)' | ':nth-child(odd)' | ':nth-last-child(even)' | ':nth-last-child(odd)' | ':nth-of-type(even)' | ':nth-of-type(odd)' | ':nth-last-of-type(even)' | ':nth-last-of-type(odd)' | ':only-child' | ':only-of-type' | ':optional' | ':out-of-range' | ':read-only' | ':read-write' | ':required' | ':right' | ':root' | ':scope' | ':target' | ':valid' | ':visited';
+    type $mol_style_pseudo_class = ':active' | ':any' | ':any-link' | ':checked' | ':default' | ':defined' | ':dir(rtl)' | ':dir(ltr)' | ':disabled' | ':empty' | ':enabled' | ':first' | ':first-child' | ':first-of-type' | ':fullscreen' | ':focus' | ':focus-visible' | ':focus-within' | ':hover' | ':indeterminate' | ':in-range' | ':invalid' | ':last-child' | ':last-of-type' | ':left' | ':link' | ':not()' | ':nth-child(even)' | ':nth-child(odd)' | ':nth-last-child(even)' | ':nth-last-child(odd)' | ':nth-of-type(even)' | ':nth-of-type(odd)' | ':nth-last-of-type(even)' | ':nth-last-of-type(odd)' | ':only-child' | ':only-of-type' | ':optional' | ':out-of-range' | ':read-only' | ':read-write' | ':required' | ':right' | ':root' | ':scope' | ':target' | ':valid' | ':visited';
 }
 
 declare namespace $ {
@@ -1447,9 +1446,11 @@ declare namespace $ {
         field(): {
             scrollTop: any;
             scrollLeft: any;
+            tabIndex: number;
         };
         scroll_top(val?: any, force?: $mol_mem_force): any;
         scroll_left(val?: any, force?: $mol_mem_force): any;
+        tabindex(): number;
         event(): {
             scroll: (event?: any) => any;
         };
@@ -1468,12 +1469,6 @@ declare namespace $ {
         static value<Value>(key: string, next?: Value): Value;
         prefix(): string;
         value(key: string, next?: Value): Value;
-    }
-}
-
-declare namespace $ {
-    class $mol_memo extends $mol_wrapper {
-        static wrap<This extends object, Value>(task: (this: This, next?: Value) => Value): (this: This, next?: Value | undefined) => Value | undefined;
     }
 }
 
@@ -2529,34 +2524,6 @@ declare namespace $.$$ {
 }
 
 declare namespace $ {
-    class $piterjs_schedule extends $mol_view {
-        meetup(): $piterjs_meetup;
-        sub(): readonly any[];
-        Speeches(): $$.$mol_list;
-        speeches(): readonly any[];
-        Speech(index: any): $$.$mol_list;
-        Speech_interval(index: any): $mol_view;
-        speech_interval(index: any): string;
-        Speech_title(index: any): $mol_view;
-        speech_title(index: any): string;
-        Speech_speaker(index: any): $mol_view;
-        speech_speaker(index: any): string;
-    }
-}
-
-declare namespace $.$$ {
-}
-
-declare namespace $.$$ {
-    class $piterjs_schedule extends $.$piterjs_schedule {
-        speeches(): $mol_list[];
-        speech_interval(index: number): string;
-        speech_title(index: number): string;
-        speech_speaker(index: number): string;
-    }
-}
-
-declare namespace $ {
     class $mol_nav extends $mol_plugin {
         cycle(val?: any, force?: $mol_mem_force): any;
         mod_ctrl(): boolean;
@@ -2597,36 +2564,28 @@ declare namespace $ {
         pages(): {
             main: $$.$piterjs_intro_main;
             about: $piterjs_intro_page;
-            projects: $piterjs_intro_page;
             roles_org: $piterjs_intro_page;
-            roles_place: $piterjs_intro_page;
+            friends: $piterjs_intro_page;
             speakers: $piterjs_intro_page;
-            place: $piterjs_intro_page;
-            schedule: $$.$piterjs_schedule;
             profit: $piterjs_intro_page;
             info: $piterjs_intro_page;
             follow: $piterjs_intro_page;
-            afterparty: $piterjs_intro_page;
         };
         Main(): $$.$piterjs_intro_main;
         About(): $piterjs_intro_page;
-        Projects(): $piterjs_intro_page;
         Roles_org(): $piterjs_intro_page;
-        Roles_place(): $piterjs_intro_page;
+        Friends(): $piterjs_intro_page;
         Speakers(): $piterjs_intro_page;
-        Place(): $piterjs_intro_page;
-        place_title(): string;
-        place_notes(): string;
-        Schedule(): $$.$piterjs_schedule;
         Proft(): $piterjs_intro_page;
         Info(): $piterjs_intro_page;
         Follow(): $piterjs_intro_page;
-        Afterparty(): $piterjs_intro_page;
-        afterparty(): string;
         sub(): readonly any[];
         Screen(): $$.$piterjs_screen;
         place(): $piterjs_place;
         Page(): $mol_view;
+        attr(): {
+            tabindex: number;
+        };
         plugins(): readonly any[];
         Nav(): $$.$mol_nav;
         page_ids(): readonly string[];
@@ -2642,7 +2601,6 @@ declare namespace $.$$ {
         page_ids(): string[];
         Page(): any;
         place(): $piterjs_place;
-        place_title(): string;
         place_notes(): string;
         afterparty(): string;
     }
@@ -3013,6 +2971,7 @@ declare namespace $.$$ {
                 readonly normal: any;
                 merge: (config: $mol_time_moment_config) => $mol_time_moment;
                 shift: (config: $mol_time_duration_config) => $mol_time_moment;
+                mask: (config: $mol_time_duration_config) => $mol_time_moment;
                 toOffset: (config: $mol_time_duration_config) => $mol_time_moment;
                 valueOf: () => number;
                 toJSON: () => string;
@@ -3154,6 +3113,7 @@ declare namespace $.$$ {
                 readonly normal: any;
                 merge: (config: $mol_time_moment_config) => $mol_time_moment;
                 shift: (config: $mol_time_duration_config) => $mol_time_moment;
+                mask: (config: $mol_time_duration_config) => $mol_time_moment;
                 toOffset: (config: $mol_time_duration_config) => $mol_time_moment;
                 valueOf: () => number;
                 toJSON: () => string;
@@ -3302,6 +3262,7 @@ declare namespace $.$$ {
                 readonly normal: any;
                 merge: (config: $mol_time_moment_config) => $mol_time_moment;
                 shift: (config: $mol_time_duration_config) => $mol_time_moment;
+                mask: (config: $mol_time_duration_config) => $mol_time_moment;
                 toOffset: (config: $mol_time_duration_config) => $mol_time_moment;
                 valueOf: () => number;
                 toJSON: () => string;
@@ -3443,6 +3404,7 @@ declare namespace $.$$ {
                 readonly normal: any;
                 merge: (config: $mol_time_moment_config) => $mol_time_moment;
                 shift: (config: $mol_time_duration_config) => $mol_time_moment;
+                mask: (config: $mol_time_duration_config) => $mol_time_moment;
                 toOffset: (config: $mol_time_duration_config) => $mol_time_moment;
                 valueOf: () => number;
                 toJSON: () => string;
@@ -3591,6 +3553,7 @@ declare namespace $.$$ {
                 readonly normal: any;
                 merge: (config: $mol_time_moment_config) => $mol_time_moment;
                 shift: (config: $mol_time_duration_config) => $mol_time_moment;
+                mask: (config: $mol_time_duration_config) => $mol_time_moment;
                 toOffset: (config: $mol_time_duration_config) => $mol_time_moment;
                 valueOf: () => number;
                 toJSON: () => string;
@@ -3732,6 +3695,7 @@ declare namespace $.$$ {
                 readonly normal: any;
                 merge: (config: $mol_time_moment_config) => $mol_time_moment;
                 shift: (config: $mol_time_duration_config) => $mol_time_moment;
+                mask: (config: $mol_time_duration_config) => $mol_time_moment;
                 toOffset: (config: $mol_time_duration_config) => $mol_time_moment;
                 valueOf: () => number;
                 toJSON: () => string;
@@ -3880,26 +3844,6 @@ declare namespace $ {
     class $mol_ghost extends $mol_view {
         Sub(): $mol_view;
     }
-}
-
-declare namespace $ {
-    function $mol_log(path: any, ...values: any[]): void;
-}
-
-declare namespace $ {
-    function $mol_log_context(next?: (() => void) | null): (() => void) | null;
-}
-
-declare namespace $ {
-    function $mol_log_debug(next?: () => void): () => void;
-}
-
-declare namespace $ {
-    var $mol_log_filter: (next?: string | null) => string | null;
-}
-
-declare namespace $ {
-    function $mol_log_group<Task extends Function, This>(name: string, task: Task): Task;
 }
 
 declare namespace $ {
@@ -4107,6 +4051,7 @@ declare namespace $ {
         abstract relate(base?: $mol_file): string;
         abstract append(next: Uint8Array | string): void;
         find(include?: RegExp, exclude?: RegExp): $mol_file[];
+        size(): number;
     }
 }
 

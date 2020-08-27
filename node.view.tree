@@ -4,7 +4,6 @@ $mol_theme_auto $mol_plugin
 $mol_svg $mol_view
 	dom_name \svg
 	dom_name_space \http://www.w3.org/2000/svg
-	text_width?text 0
 	font_size 16
 	font_family \
 
@@ -46,6 +45,7 @@ $mol_scroll $mol_view
 		^
 		scrollTop <= scroll_top?val 0
 		scrollLeft <= scroll_left?val 0
+		tabIndex <= tabindex -1
 	event *
 		^
 		scroll?event <=> event_scroll?event null
@@ -446,17 +446,6 @@ $piterjs_intro_main $piterjs_intro_page
 		<= Title
 
 
-$piterjs_schedule $mol_view
-	meetup $piterjs_meetup
-	sub /
-		<= Speeches $mol_list rows <= speeches /
-	Speech!index $mol_list sub /
-		<= Speech_interval!index $mol_view sub / <= speech_interval!index \19:20 - 23:50
-		<= Speech_title!index $mol_view
-			attr * mol_theme \$mol_theme_accent
-			sub / <= speech_title!index \
-		<= Speech_speaker!index $mol_view sub / <= speech_speaker!index \
-
 $mol_nav $mol_plugin
 	cycle?val false
 	-
@@ -490,8 +479,8 @@ $piterjs_intro $mol_view
 				\Обсуждаем JS и всё, что в него компилируется
 				\Проводим митапы в Питере каждый месяц с мая 2015
 				\Без отпусков. Без перерывов. Без каникул.
-				\Нам и этого стало мало...
-		projects <= Projects $piterjs_intro_page
+				\И COVID нам ни по чём!
+		- projects <= Projects $piterjs_intro_page
 			title \Наши проекты
 			text \
 				\PiterJS **Meetups** - митапы в Петербурге
@@ -503,18 +492,27 @@ $piterjs_intro $mol_view
 			text \
 				\Программный комитет
 				\Фандрайзер 🔥
-				\Видео-мастер
+				\Видео-мастер 🔥
 				\Дизайнер 🔥
 				\Комьюнити-менеджер
 				\Менеджер
-		roles_place <= Roles_place $piterjs_intro_page
+		- roles_place <= Roles_place $piterjs_intro_page
 			title \Роли на площадке
 			text \
 				\Техник
 				\Видео-оператор
-				\Фотограф 🔥
+				\Фотограф
 				\Ведущий трансляции
 				\Ведущий мероприятия
+		friends <= Friends $piterjs_intro_page
+			title \JUG.RU
+			text \
+				\Продюссер
+				\Инженер
+				\Монтажёр
+				\Режиссёр трансляции
+				\Ведущий мероприятия
+				\Ведущий воркшопа
 		speakers <= Speakers $piterjs_intro_page
 			title \Докладчики
 			text \
@@ -523,10 +521,10 @@ $piterjs_intro $mol_view
 				\Поможем с темой
 				\Поможем с подготовкой
 				\Пиши на hi@piterjs.org
-		place <= Place $piterjs_intro_page
+		- place <= Place $piterjs_intro_page
 			title <= place_title \Мы в {place}
 			text <= place_notes \
-		schedule <= Schedule $piterjs_schedule
+		- schedule <= Schedule $piterjs_schedule
 			meetup <= meetup
 			title \Сегодня
 		profit <= Proft $piterjs_intro_page
@@ -535,7 +533,7 @@ $piterjs_intro $mol_view
 				\За лучшие вопросы - призы
 				\Мы ведём трансляцию
 				\И записываем видео
-				\Улыбайтесь фотографу
+				- \Улыбайтесь фотографу
 		info <= Info $piterjs_intro_page
 			title \Твой вклад
 			text \
@@ -551,7 +549,7 @@ $piterjs_intro $mol_view
 				\t.me/piterjs
 				\youtube.com/piterjs
 				\piterjs.org
-		afterparty <= Afterparty $piterjs_intro_page
+		- afterparty <= Afterparty $piterjs_intro_page
 			title \Го в бар!
 			text <= afterparty \
 	sub /
@@ -559,6 +557,8 @@ $piterjs_intro $mol_view
 			place <= place $piterjs_place
 			content /
 				<= Page $mol_view
+	attr *
+		tabindex -1
 	plugins /
 		<= Nav $mol_nav
 			keys_x <= page_ids /string
@@ -679,6 +679,7 @@ $piterjs_app $mol_view
 			content /
 				<= Book $mol_book2
 					pages <= pages /any
+					Placeholder null
 		- <= Toggle_intro $mol_check
 			checked?val <=> 
 	toggle_intro?val false
