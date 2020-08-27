@@ -10,8 +10,8 @@ $piterjs_intro $mol_view
 				\Обсуждаем JS и всё, что в него компилируется
 				\Проводим митапы в Питере каждый месяц с мая 2015
 				\Без отпусков. Без перерывов. Без каникул.
-				\Нам и этого стало мало...
-		projects <= Projects $piterjs_intro_page
+				\И COVID нам ни по чём!
+		- projects <= Projects $piterjs_intro_page
 			title \Наши проекты
 			text \
 				\PiterJS **Meetups** - митапы в Петербурге
@@ -23,18 +23,27 @@ $piterjs_intro $mol_view
 			text \
 				\Программный комитет
 				\Фандрайзер 🔥
-				\Видео-мастер
+				\Видео-мастер 🔥
 				\Дизайнер 🔥
 				\Комьюнити-менеджер
 				\Менеджер
-		roles_place <= Roles_place $piterjs_intro_page
+		- roles_place <= Roles_place $piterjs_intro_page
 			title \Роли на площадке
 			text \
 				\Техник
 				\Видео-оператор
-				\Фотограф 🔥
+				\Фотограф
 				\Ведущий трансляции
 				\Ведущий мероприятия
+		friends <= Friends $piterjs_intro_page
+			title \JUG.RU
+			text \
+				\Продюссер
+				\Инженер
+				\Монтажёр
+				\Режиссёр трансляции
+				\Ведущий мероприятия
+				\Ведущий воркшопа
 		speakers <= Speakers $piterjs_intro_page
 			title \Докладчики
 			text \
@@ -43,10 +52,10 @@ $piterjs_intro $mol_view
 				\Поможем с темой
 				\Поможем с подготовкой
 				\Пиши на hi@piterjs.org
-		place <= Place $piterjs_intro_page
+		- place <= Place $piterjs_intro_page
 			title <= place_title \Мы в {place}
 			text <= place_notes \
-		schedule <= Schedule $piterjs_schedule
+		- schedule <= Schedule $piterjs_schedule
 			meetup <= meetup
 			title \Сегодня
 		profit <= Proft $piterjs_intro_page
@@ -55,7 +64,7 @@ $piterjs_intro $mol_view
 				\За лучшие вопросы - призы
 				\Мы ведём трансляцию
 				\И записываем видео
-				\Улыбайтесь фотографу
+				- \Улыбайтесь фотографу
 		info <= Info $piterjs_intro_page
 			title \Твой вклад
 			text \
@@ -71,7 +80,7 @@ $piterjs_intro $mol_view
 				\t.me/piterjs
 				\youtube.com/piterjs
 				\piterjs.org
-		afterparty <= Afterparty $piterjs_intro_page
+		- afterparty <= Afterparty $piterjs_intro_page
 			title \Го в бар!
 			text <= afterparty \
 	sub /
@@ -79,6 +88,8 @@ $piterjs_intro $mol_view
 			place <= place $piterjs_place
 			content /
 				<= Page $mol_view
+	attr *
+		tabindex -1
 	plugins /
 		<= Nav $mol_nav
 			keys_x <= page_ids /string
