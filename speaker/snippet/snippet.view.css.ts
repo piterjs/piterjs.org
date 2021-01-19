@@ -75,7 +75,9 @@ namespace $.$$ {
 
 		Title: {
 			padding: rem(.25),
-			fontSize: rem(1.25),
+			font: {
+				size: rem(1.25),
+			},
 		},
 
 		Description: {
