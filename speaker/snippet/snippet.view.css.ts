@@ -22,7 +22,9 @@ namespace $.$$ {
 			overflow: 'visible',
 			zIndex: 0,
 			boxShadow: 'none',
-			borderRadius: '0',
+			border: {
+				radius: 0,
+			},
 
 			'::after': {
 				content: '',
@@ -51,7 +53,11 @@ namespace $.$$ {
 			},
 
 			Content: {
-				border: `.25rem solid ${ $mol_theme.back }`,
+				border: {
+					width: rem(.25),
+					style: 'solid',
+					color: $mol_theme.back,
+				},
 			},
 
 		},
