@@ -43,8 +43,8 @@ namespace $.$$ {
 				content: '',
 				position: 'absolute',
 				zIndex: -1,
-				left: '-.25rem',
-				bottom: '-.25rem',
+				left: rem(-.25),
+				bottom: rem(-.25),
 				width: rem(1),
 				height: rem(1),
 				background: {
@@ -75,7 +75,7 @@ namespace $.$$ {
 
 		Title: {
 			padding: rem(.25),
-			fontSize: '1.25em',
+			fontSize: rem(1.25),
 		},
 
 		Description: {
