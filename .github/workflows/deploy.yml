@@ -19,7 +19,7 @@ jobs:
         modules: 'app'
     
     - name: Deploy on GitHub Pages
-      uses: alex-page/blazing-fast-gh-pages-deploy@v1.0.1
+      uses: alex-page/blazing-fast-gh-pages-deploy@v1.1.0
       if: github.ref == 'refs/heads/master'
       with:
         repo-token: ${{ secrets.GH_PAT }}
