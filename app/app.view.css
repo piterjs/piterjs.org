@@ -53,6 +53,10 @@
 	padding: 0;
 }
 
+[piterjs_app_speech_body] {
+	padding: .75rem;
+}
+
 [piterjs_app_conf_title] {
 	margin: .5rem .75rem;
 	font-weight: bolder;
