@@ -1,5 +1,87 @@
-$mol_theme_auto $mol_plugin
-	attr * mol_theme <= theme \
+$mol_scroll $mol_view
+	minimal_height 0
+	_event_scroll_timer?val null
+	field *
+		^
+		scrollTop <= scroll_top?val 0
+		scrollLeft <= scroll_left?val 0
+		tabIndex <= tabindex -1
+	event *
+		^
+		scroll?event <=> event_scroll?event null
+
+$mol_page $mol_view
+	sub /
+		<= Head $mol_view
+			minimal_height 64
+			sub <= head /
+				<= Title $mol_view
+					dom_name \h1
+					sub /
+						<= title
+				<= Tools $mol_view
+					sub <= tools /$mol_view_content
+		<= Body $mol_scroll
+			scroll_top?val <=> body_scroll_top?val 0
+			sub <= body /$mol_view_content
+		<= Foot $mol_view
+			sub <= foot /$mol_view
+
+$mol_link $mol_view
+	dom_name \a
+	attr *
+		^
+		href <= uri \
+		title <= hint \
+		target <= target \_self
+		download <= file_name \
+		mol_link_current <= current false
+	sub /$mol_view_content
+		<= title
+	arg *
+	event *
+		^
+		click?event <=> click?event <=> event_click?event null
+
+$mol_image2 $mol_view
+	links /
+	aspect 1
+	sub /
+		<= Content $mol_view
+			style *
+				paddingTop <= height \100%
+				backgroundImage <= background \
+
+$piterjs_image $mol_image2 links /
+	<= link \
+	\piterjs/logo/logo.svg
+
+$mol_list $mol_view
+	render_visible_only true
+	render_over 0
+	sub <= rows /$mol_view
+	Empty $mol_view
+	Gap_before $mol_view style * paddingTop <= gap_before 0
+	Gap_after $mol_view style * paddingTop <= gap_after 0
+	view_window /
+		0
+		0
+
+$piterjs_speech_snippet $mol_link
+	arg *
+		speech <= id \
+		place null
+		video null
+	speech $piterjs_speech
+	sub /
+		<= Photo $piterjs_image link <= photo \
+		<= Info $mol_list sub /
+			<= Addon $mol_view sub /
+				<= Speaker_title $mol_view
+					sub / <= speaker_title \
+				<= Time $mol_view sub / <= time \
+			<= Title $mol_view
+				sub / <= title \
 
 $mol_svg $mol_view
 	dom_name \svg
@@ -21,39 +103,20 @@ $mol_svg_path $mol_svg
 		d <= geometry \
 
 
-$piterjs_screen_lines $mol_svg_root
-	style * fill <= color \#FFE515
-	view_box \0 0 310 246
+$mol_icon $mol_svg_root
+	view_box \0 0 24 24
+	minimal_width 16
+	minimal_height 16
 	sub /
-		<= First $mol_svg_path geometry \M56 9.00002L-1.5605e-05 67.5L-1.31571e-05 95.5L56 36.5L56 9.00002Z 
-		<= Second $mol_svg_path geometry \M148.5 1.40751e-05L-7.6932e-06 158L0 246L238 6.25073e-06L148.5 1.40751e-05Z
-		<= Third $mol_svg_path geometry \M167.5 152.5L167.5 108L268 3.62805e-06L309.5 0L167.5 152.5Z
+		<= Path $mol_svg_path
+			geometry <= path \
 
-$piterjs_screen $mol_view
-	place $piterjs_place
-	sub /
-		<= Open $piterjs_screen_lines
-			color <= color_open \#FFE515
-		<= Close $piterjs_screen_lines
-			color <= color_close \#FFE515
-	content /$mol_view
+$mol_icon_cross $mol_icon path \M19 6.41L17.59 5L12 10.59L6.41 5L5 6.41L10.59 12L5 17.59L6.41 19L12 13.41L17.59 19L19 17.59L13.41 12L19 6.41Z
 
-$mol_scroll $mol_view
-	minimal_height 0
-	_event_scroll_timer?val null
-	field *
+$mol_float $mol_view
+	style *
 		^
-		scrollTop <= scroll_top?val 0
-		scrollLeft <= scroll_left?val 0
-		tabIndex <= tabindex -1
-	event *
-		^
-		scroll?event <=> event_scroll?event null
-
-$mol_book2 $mol_scroll
-	sub <= pages /$mol_view
-	minimal_width 0
-	Placeholder $mol_view
+		minHeight \auto
 
 $mol_speck $mol_view
 	attr *
@@ -73,7 +136,7 @@ $mol_button $mol_view
 	event *
 		^
 		click?event <=> event_activate?event null
-		keypress?event <=> event_key_press?event null 
+		keydown?event <=> event_key_press?event null 
 	attr *
 		^
 		disabled <= disabled false
@@ -83,65 +146,6 @@ $mol_button $mol_view
 	sub /$mol_view_content
 		<= title
 	Speck $mol_speck
-
-$mol_page $mol_view
-	sub /
-		<= Head $mol_view
-			sub <= head /
-				<= Title $mol_button
-					sub /
-						<= title
-					event_click?val <=> event_top?val null
-				<= Tools $mol_view
-					sub <= tools /$mol_view_content
-		<= Body $mol_scroll
-			scroll_top?val <=> body_scroll_top?val 0
-			sub <= body /$mol_view_content
-		<= Foot $mol_view
-			sub <= foot /$mol_view
-
-$mol_list $mol_view
-	render_visible_only true
-	render_over 0.5
-	sub <= rows /$mol_view
-	Empty $mol_view
-	Gap_before $mol_view style * paddingTop <= gap_before 0
-	Gap_after $mol_view style * paddingTop <= gap_after 0
-	view_window /
-		0
-		0
-
-$mol_link $mol_view
-	dom_name \a
-	attr *
-		^
-		href <= uri \
-		title <= hint \
-		target <= target \_self
-		download <= file_name \
-		mol_link_current <= current false
-		mol_theme <= theme null
-	sub /$mol_view_content
-		<= title
-	arg *
-	event *
-		^
-		click?event <=> click?event <=> event_click?event null
-
-$mol_icon $mol_svg_root
-	view_box \0 0 24 24
-	minimal_width 16
-	minimal_height 16
-	sub /
-		<= Path $mol_svg_path
-			geometry <= path \
-
-$mol_icon_cross $mol_icon path \M19 6.41L17.59 5L12 10.59L6.41 5L5 6.41L10.59 12L5 17.59L6.41 19L12 13.41L17.59 19L19 17.59L13.41 12L19 6.41Z
-
-$mol_float $mol_view
-	style *
-		^
-		minHeight \auto
 
 $mol_button_typed $mol_button
 
@@ -153,7 +157,7 @@ $mol_check $mol_button_minor
 		mol_check_checked <= checked?val false
 		aria-checked <= checked?val false
 		role \checkbox
-	sub /
+	sub /$mol_view_content
 		<= Icon null
 		<= label /
 			<= Title $mol_view
@@ -175,6 +179,8 @@ $mol_check_expand $mol_check
 $mol_paragraph $mol_view
 	line_height 24
 	letter_width 8
+	width_limit Infinity
+	sub / <= title
 
 $mol_dimmer $mol_paragraph
 	haystack \
@@ -188,7 +194,7 @@ $mol_dimmer $mol_paragraph
 			<= string!id \
 
 $mol_grid $mol_scroll
-	row_height 40
+	row_height 32
 	row_ids /string[]
 	row_id!index null
 	col_ids /
@@ -265,6 +271,7 @@ $mol_text $mol_list
 		type <= block_type!id \
 	Span!id $mol_text_span
 	Link!id $mol_text_link
+		target <= link_target!id \_blank
 	Image!id $mol_text_image
 	Header!id $mol_text_header
 		level <= header_level!id 0
@@ -303,7 +310,7 @@ $mol_text_link $mol_link_iconed
 		^
 		mol_text_type <= type?val \
 	uri <= link?val \
-	content <= content?val /
+	content?val /
 
 $mol_text_image $mol_view
 	dom_name \object
@@ -314,35 +321,6 @@ $mol_text_image $mol_view
 		data <= link?val \
 	sub /
 		<= title?val \
-
-$mol_image2 $mol_view
-	links /
-	aspect 1
-	sub /
-		<= Content $mol_view
-			style *
-				paddingTop <= height \100%
-				backgroundImage <= background \
-
-$piterjs_image $mol_image2 links /
-	<= link \
-	\piterjs/logo/logo.svg
-
-$piterjs_speech_snippet $mol_link
-	arg *
-		speech <= id \
-		place null
-		video null
-	speech $piterjs_speech
-	sub /
-		<= Photo $piterjs_image link <= photo \
-		<= Info $mol_list sub /
-			<= Addon $mol_view sub /
-				<= Speaker_title $mol_view
-					sub / <= speaker_title \
-				<= Time $mol_view sub / <= time \
-			<= Title $mol_view
-				sub / <= title \
 
 $piterjs_meetup_page $mol_page
 	meetup $piterjs_meetup
@@ -445,6 +423,23 @@ $piterjs_intro_main $piterjs_intro_page
 		<= Logo $piterjs_logo
 		<= Title
 
+
+$piterjs_screen_lines $mol_svg_root
+	style * fill <= color \#FFE515
+	view_box \0 0 310 246
+	sub /
+		<= First $mol_svg_path geometry \M56 9.00002L-1.5605e-05 67.5L-1.31571e-05 95.5L56 36.5L56 9.00002Z 
+		<= Second $mol_svg_path geometry \M148.5 1.40751e-05L-7.6932e-06 158L0 246L238 6.25073e-06L148.5 1.40751e-05Z
+		<= Third $mol_svg_path geometry \M167.5 152.5L167.5 108L268 3.62805e-06L309.5 0L167.5 152.5Z
+
+$piterjs_screen $mol_view
+	place $piterjs_place
+	sub /
+		<= Open $piterjs_screen_lines
+			color <= color_open \#FFE515
+		<= Close $piterjs_screen_lines
+			color <= color_close \#FFE515
+	content /$mol_view
 
 $mol_nav $mol_plugin
 	cycle?val false
@@ -569,7 +564,7 @@ $piterjs_intro $mol_view
 $mol_frame $mol_view
 	dom_name \iframe
 	attr *
-		src <= uri \
+		src <= uri?val \
 		allow <= allow \
 	fullscreen true
 	accelerometer true
@@ -604,7 +599,7 @@ $mol_map_yandex_mark $mol_object
 	title <= address \
 	content \
 	object null
-	
+
 $mol_map_yandex $mol_view
 	zoom?val 2
 	center?val /
@@ -633,8 +628,6 @@ $piterjs_place_page $mol_page
 						0
 					title \
 
-$mol_icon_plus $mol_icon path \M19,13H13V19H11V13H5V11H11V5H13V11H19V13Z
-
 $piterjs_others_event $mol_link_iconed
 	start $mol_time_moment
 	target \_blank
@@ -645,6 +638,8 @@ $piterjs_others_event $mol_link_iconed
 			sub / <= date \
 		<= Title $mol_paragraph
 			sub / <= title \
+
+$mol_icon_plus $mol_icon path \M19,13H13V19H11V13H5V11H11V5H13V11H19V13Z
 
 $piterjs_others $mol_page
 	title \Календарь фронтенд событий
@@ -667,6 +662,14 @@ $piterjs_others $mol_page
 		uri <= event_uri!uid \
 		start <= event_start!uid $mol_time_moment
 		location <= event_location!uid \
+
+$mol_theme_auto $mol_plugin
+	attr * mol_theme <= theme \
+
+$mol_book2 $mol_scroll
+	sub <= pages /$mol_view
+	minimal_width 0
+	Placeholder $mol_view
 
 $piterjs_app $mol_view
 	plugins /
@@ -809,6 +812,42 @@ $mol_book_page $mol_ghost
 		^
 		mol_book_page_focused <= focused
 		mol_book_page_visible <= visible true
+
+$mol_view_tree_test_attributes_super $mol_view
+	some *
+		a 0
+		b 2
+
+$mol_view_tree_test_attributes $mol_view_tree_test_attributes_super
+	some *
+		^
+		a 1
+
+$mol_view_tree_test_binding $mol_view
+	value?val <=> task_title_new?val \123
+	enabled <= head_complete_enabled false
+
+$mol_view_tree_test_binding_right $mol_view
+	Test $mol_view_tree_test_binding_right_test
+		width?v => outer_width?v
+
+$mol_view_tree_test_binding_right_test $mol_view
+	width?val 0
+
+$mol_view_tree_test_simple $mol_view
+	some 1
+	bool true
+	str \test
+	arr /
+	arr_string /string
+
+$mol_view_tree_test_attributes_subcomponent $mol_view
+	- Comment
+	Page!index $mol_view_tree_test_attributes_subcomponent_page
+		Sub <= page!index null
+
+$mol_view_tree_test_attributes_subcomponent_page $mol_view
+	Sub null
 
 $mol_icon_github_circle $mol_icon path \M12,2C6.48,2 2,6.48 2,12C2,16.42 4.87,20.17 8.84,21.5C9.34,21.58 9.5,21.27 9.5,21C9.5,20.77 9.5,20.14 9.5,19.31C6.73,19.91 6.14,17.97 6.14,17.97C5.68,16.81 5.03,16.5 5.03,16.5C4.12,15.88 5.1,15.9 5.1,15.9C6.1,15.97 6.63,16.93 6.63,16.93C7.5,18.45 8.97,18 9.54,17.76C9.63,17.11 9.89,16.67 10.17,16.42C7.95,16.17 5.62,15.31 5.62,11.5C5.62,10.39 6,9.5 6.65,8.79C6.55,8.54 6.2,7.5 6.75,6.15C6.75,6.15 7.59,5.88 9.5,7.17C10.29,6.95 11.15,6.84 12,6.84C12.85,6.84 13.71,6.95 14.5,7.17C16.41,5.88 17.25,6.15 17.25,6.15C17.8,7.5 17.45,8.54 17.35,8.79C18,9.5 18.38,10.39 18.38,11.5C18.38,15.32 16.04,16.16 13.81,16.41C14.17,16.72 14.5,17.33 14.5,18.26C14.5,19.6 14.5,20.68 14.5,21C14.5,21.27 14.66,21.59 15.17,21.5C19.14,20.16 22,16.42 22,12C22,6.48 17.52,2 12,2Z
 
