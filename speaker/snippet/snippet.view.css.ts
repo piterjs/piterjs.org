@@ -28,8 +28,8 @@ namespace $.$$ {
 				content: '',
 				position: 'absolute',
 				zIndex: -1,
-				right: '-.25rem',
-				top: '-.25rem',
+				right: rem(-.25),
+				top: rem(-.25),
 				width: rem(1),
 				height: rem(1),
 				background: {
@@ -41,8 +41,8 @@ namespace $.$$ {
 				content: '',
 				position: 'absolute',
 				zIndex: -1,
-				left: '-.25rem',
-				bottom: '-.25rem',
+				left: rem(-.25),
+				bottom: rem(-.25),
 				width: rem(1),
 				height: rem(1),
 				background: {
