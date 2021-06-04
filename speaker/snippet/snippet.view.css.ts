@@ -51,7 +51,7 @@ namespace $.$$ {
 			},
 
 			Content: {
-				border: `.25rem solid ${ $mol_theme.back }`,
+				//border: `.25rem solid ${ $mol_theme.back }`,
 			},
 
 		},
