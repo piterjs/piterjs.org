@@ -3032,6 +3032,7 @@ declare namespace $ {
         pages(): readonly any[];
         Book(): $$.$mol_book2;
         Screen(): $$.$piterjs_screen;
+        tools(): readonly any[];
         menu_meetups(): readonly any[];
         Meetups(): $$.$mol_list;
         Conf_title(): $mol_view;
