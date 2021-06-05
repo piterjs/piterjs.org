@@ -15,6 +15,7 @@ $piterjs_app $mol_view
 	toggle_intro?val false
 	Menu $mol_page
 		title \Митапы
+		tools <= tools /
 		body /
 			<= Meetups $mol_list rows <= menu_meetups /
 			<= Links $mol_list rows /
