@@ -2521,182 +2521,6 @@ declare namespace $.$$ {
 }
 
 declare namespace $ {
-    class $piterjs_intro_page extends $mol_view {
-        sub(): readonly any[];
-        title(): string;
-        Title(): $mol_view;
-        head(): readonly any[];
-        Head(): $mol_view;
-        text(): string;
-        Text(): $$.$mol_text;
-    }
-}
-
-declare namespace $ {
-}
-
-declare namespace $ {
-    class $piterjs_logo extends $piterjs_image {
-        link(): string;
-    }
-}
-
-declare namespace $ {
-}
-
-declare namespace $ {
-    class $piterjs_intro_main extends $piterjs_intro_page {
-        meetup(): $piterjs_meetup;
-        title(): string;
-        head(): readonly any[];
-        Logo(): $piterjs_logo;
-    }
-}
-
-declare namespace $ {
-}
-
-declare namespace $.$$ {
-    class $piterjs_intro_main extends $.$piterjs_intro_main {
-        title(): string;
-    }
-}
-
-declare namespace $ {
-    class $piterjs_screen_lines extends $mol_svg_root {
-        style(): {
-            fill: string;
-        };
-        view_box(): string;
-        sub(): readonly any[];
-        color(): string;
-        First(): $mol_svg_path;
-        Second(): $mol_svg_path;
-        Third(): $mol_svg_path;
-    }
-}
-
-declare namespace $ {
-}
-
-declare namespace $ {
-    class $piterjs_screen extends $mol_view {
-        place(): $piterjs_place;
-        sub(): readonly any[];
-        content(): readonly $mol_view[];
-        color_open(): string;
-        Open(): $piterjs_screen_lines;
-        color_close(): string;
-        Close(): $piterjs_screen_lines;
-    }
-}
-
-declare namespace $ {
-}
-
-declare namespace $.$$ {
-    class $piterjs_screen extends $.$piterjs_screen {
-        sub(): ($mol_view | $piterjs_screen_lines)[];
-    }
-}
-
-declare namespace $ {
-    class $mol_plugin extends $mol_view {
-        dom_node(next?: Element): Element;
-        attr_static(): {
-            [key: string]: string | number | boolean;
-        };
-        event(): {
-            [key: string]: (event: Event) => void;
-        };
-        render(): void;
-    }
-}
-
-declare namespace $ {
-    class $mol_nav extends $mol_plugin {
-        cycle(val?: any): any;
-        mod_ctrl(): boolean;
-        mod_shift(): boolean;
-        mod_alt(): boolean;
-        keys_x(val?: any): any;
-        keys_y(val?: any): any;
-        current_x(val?: any): any;
-        current_y(val?: any): any;
-        event_up(event?: any): any;
-        event_down(event?: any): any;
-        event_left(event?: any): any;
-        event_right(event?: any): any;
-        event(): {
-            keydown: (event?: any) => any;
-        };
-        event_key(event?: any): any;
-    }
-}
-
-declare namespace $.$$ {
-    class $mol_nav extends $.$mol_nav {
-        event_key(event?: KeyboardEvent): undefined;
-        event_up(event?: KeyboardEvent): undefined;
-        event_down(event?: KeyboardEvent): undefined;
-        event_left(event?: KeyboardEvent): undefined;
-        event_right(event?: KeyboardEvent): undefined;
-        index_y(): any;
-        index_x(): any;
-    }
-}
-
-declare namespace $ {
-    class $piterjs_intro extends $mol_view {
-        title(): string;
-        meetup(): $piterjs_meetup;
-        page(val?: any): any;
-        pages(): {
-            main: $$.$piterjs_intro_main;
-            about: $piterjs_intro_page;
-            roles_org: $piterjs_intro_page;
-            friends: $piterjs_intro_page;
-            speakers: $piterjs_intro_page;
-            profit: $piterjs_intro_page;
-            info: $piterjs_intro_page;
-            follow: $piterjs_intro_page;
-        };
-        sub(): readonly any[];
-        attr(): {
-            tabindex: number;
-        };
-        plugins(): readonly any[];
-        Main(): $$.$piterjs_intro_main;
-        About(): $piterjs_intro_page;
-        Roles_org(): $piterjs_intro_page;
-        Friends(): $piterjs_intro_page;
-        Speakers(): $piterjs_intro_page;
-        Proft(): $piterjs_intro_page;
-        Info(): $piterjs_intro_page;
-        Follow(): $piterjs_intro_page;
-        place(): $piterjs_place;
-        Page(): $mol_view;
-        Screen(): $$.$piterjs_screen;
-        page_ids(): readonly string[];
-        Nav(): $$.$mol_nav;
-    }
-}
-
-declare namespace $ {
-}
-
-declare namespace $.$$ {
-    class $piterjs_intro extends $.$piterjs_intro {
-        dom_node(): Element;
-        page_ids(): string[];
-        Page(): any;
-        place(): $piterjs_place;
-        place_notes(): string;
-        afterparty(): string;
-    }
-}
-
-declare namespace $ {
     class $mol_frame extends $mol_view {
         dom_name(): string;
         attr(): {
@@ -2962,6 +2786,19 @@ declare namespace $.$$ {
 }
 
 declare namespace $ {
+    class $mol_plugin extends $mol_view {
+        dom_node(next?: Element): Element;
+        attr_static(): {
+            [key: string]: string | number | boolean;
+        };
+        event(): {
+            [key: string]: (event: Event) => void;
+        };
+        render(): void;
+    }
+}
+
+declare namespace $ {
     class $mol_theme_auto extends $mol_plugin {
         attr(): {
             mol_theme: string;
@@ -3014,16 +2851,52 @@ declare namespace $.$$ {
 }
 
 declare namespace $ {
+    class $piterjs_screen_lines extends $mol_svg_root {
+        style(): {
+            fill: string;
+        };
+        view_box(): string;
+        sub(): readonly any[];
+        color(): string;
+        First(): $mol_svg_path;
+        Second(): $mol_svg_path;
+        Third(): $mol_svg_path;
+    }
+}
+
+declare namespace $ {
+}
+
+declare namespace $ {
+    class $piterjs_screen extends $mol_view {
+        place(): $piterjs_place;
+        sub(): readonly any[];
+        content(): readonly $mol_view[];
+        color_open(): string;
+        Open(): $piterjs_screen_lines;
+        color_close(): string;
+        Close(): $piterjs_screen_lines;
+    }
+}
+
+declare namespace $ {
+}
+
+declare namespace $.$$ {
+    class $piterjs_screen extends $.$piterjs_screen {
+        sub(): ($mol_view | $piterjs_screen_lines)[];
+    }
+}
+
+declare namespace $ {
     class $piterjs_app extends $mol_view {
         plugins(): readonly any[];
         sub(): readonly any[];
-        toggle_intro(val?: any): any;
         Menu(): $$.$mol_page;
         Meetup(id: any): $$.$piterjs_meetup_page;
         Speech(id: any): $$.$piterjs_speech_page;
         Menu_meetup(id: any): $$.$piterjs_meetup_snippet;
         Now(): $piterjs_now;
-        Intro(): $$.$piterjs_intro;
         Video(): $$.$piterjs_video_page;
         Place(): $$.$piterjs_place_page;
         Others(): $$.$piterjs_others;
@@ -3042,8 +2915,6 @@ declare namespace $ {
         Links(): $$.$mol_list;
         meetup(id: any): $piterjs_meetup;
         speech(id: any): $piterjs_speech;
-        meetup_current(): $piterjs_meetup;
-        intro(val?: any): any;
         video_uri(): string;
     }
 }
@@ -3224,7 +3095,6 @@ declare namespace $ {
 declare namespace $.$$ {
     class $piterjs_app extends $.$piterjs_app {
         now(next?: string | null): string | null;
-        intro(next?: string | null): string | null;
         place_show(): boolean;
         others(): boolean;
         meetup_id(next?: string | null): string | null;
@@ -3233,7 +3103,7 @@ declare namespace $.$$ {
         speech(id: string): $piterjs_speech;
         speaker_id(next?: string): string | null;
         speaker(id: string): $piterjs_speaker;
-        pages(): $piterjs_intro[] | ($mol_page | $piterjs_meetup_page | $piterjs_speech_page | $piterjs_video_page | $piterjs_place_page | $piterjs_others)[];
+        pages(): ($mol_page | $piterjs_meetup_page | $piterjs_speech_page | $piterjs_video_page | $piterjs_place_page | $piterjs_others)[];
         title(): string;
         meetups(): $piterjs_meetup[];
         meetup_current(): $piterjs_meetup;
@@ -3241,7 +3111,6 @@ declare namespace $.$$ {
         menu_meetups(): $piterjs_meetup_snippet[];
         menu_meetup(id: string): $piterjs_meetup;
         menu_meetup_id(id: string): string;
-        toggle_intro(next?: boolean): boolean;
         video(): boolean;
         video_uri(): string;
     }

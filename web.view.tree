@@ -407,160 +407,6 @@ $piterjs_meetup_snippet $mol_link
 		<= Date $mol_view
 			sub / <= date \
 
-$piterjs_intro_page $mol_view
-	sub /
-		<= Head $mol_view sub <= head /
-			<= Title $mol_view sub / <= title \PiterJS
-		<= Text $mol_text text <= text \
-
-
-$piterjs_logo $piterjs_image link \piterjs/logo/logo.svg
-
-$piterjs_intro_main $piterjs_intro_page
-	meetup $piterjs_meetup
-	title \PiterJS {title}
-	head /
-		<= Logo $piterjs_logo
-		<= Title
-
-
-$piterjs_screen_lines $mol_svg_root
-	style * fill <= color \#FFE515
-	view_box \0 0 310 246
-	sub /
-		<= First $mol_svg_path geometry \M56 9.00002L-1.5605e-05 67.5L-1.31571e-05 95.5L56 36.5L56 9.00002Z 
-		<= Second $mol_svg_path geometry \M148.5 1.40751e-05L-7.6932e-06 158L0 246L238 6.25073e-06L148.5 1.40751e-05Z
-		<= Third $mol_svg_path geometry \M167.5 152.5L167.5 108L268 3.62805e-06L309.5 0L167.5 152.5Z
-
-$piterjs_screen $mol_view
-	place $piterjs_place
-	sub /
-		<= Open $piterjs_screen_lines
-			color <= color_open \#FFE515
-		<= Close $piterjs_screen_lines
-			color <= color_close \#FFE515
-	content /$mol_view
-
-$mol_nav $mol_plugin
-	cycle?val false
-	-
-	mod_ctrl false
-	mod_shift false
-	mod_alt false
-	-
-	keys_x?val /
-	keys_y?val /
-	-
-	current_x?val \
-	current_y?val \
-	-
-	event_up?event null
-	event_down?event null
-	event_left?event null
-	event_right?event null
-	event *
-		^
-		keydown?event <=> event_key?event null
-
-$piterjs_intro $mol_view
-	title \PiterJS Вступление
-	meetup $piterjs_meetup
-	page?val \
-	pages *
-		main <= Main $piterjs_intro_main meetup <= meetup
-		about <= About $piterjs_intro_page
-			title \Кто мы?
-			text \
-				\Обсуждаем JS и всё, что в него компилируется
-				\Проводим митапы в Питере каждый месяц с мая 2015
-				\Без отпусков. Без перерывов. Без каникул.
-				\И COVID нам ни по чём!
-		- projects <= Projects $piterjs_intro_page
-			title \Наши проекты
-			text \
-				\PiterJS **Meetups** - митапы в Петербурге
-				\PiterJS **Tour** - митапы в других городах
-				\PiterJS **Conf** - конференции
-				\PiterJS **Code+Learn** - воркшопы
-		roles_org <= Roles_org $piterjs_intro_page
-			title \Роли организаторов
-			text \
-				\Программный комитет
-				\Фандрайзер 🔥
-				\Видео-мастер 🔥
-				\Дизайнер 🔥
-				\Комьюнити-менеджер
-				\Менеджер
-		- roles_place <= Roles_place $piterjs_intro_page
-			title \Роли на площадке
-			text \
-				\Техник
-				\Видео-оператор
-				\Фотограф
-				\Ведущий трансляции
-				\Ведущий мероприятия
-		friends <= Friends $piterjs_intro_page
-			title \JUG.RU
-			text \
-				\Продюссер
-				\Инженер
-				\Монтажёр
-				\Режиссёр трансляции
-				\Ведущий мероприятия
-				\Ведущий воркшопа
-		speakers <= Speakers $piterjs_intro_page
-			title \Докладчики
-			text \
-				\Нужны всегда
-				\Даже если боишься
-				\Поможем с темой
-				\Поможем с подготовкой
-				\Пиши на hi@piterjs.org
-		- place <= Place $piterjs_intro_page
-			title <= place_title \Мы в {place}
-			text <= place_notes \
-		- schedule <= Schedule $piterjs_schedule
-			meetup <= meetup
-			title \Сегодня
-		profit <= Proft $piterjs_intro_page
-			title \Бонусы
-			text \
-				\За лучшие вопросы - призы
-				\Мы ведём трансляцию
-				\И записываем видео
-				- \Улыбайтесь фотографу
-		info <= Info $piterjs_intro_page
-			title \Твой вклад
-			text \
-				\patreon.com/piterjs
-				\github.com/piterjs
-				\hi@piterjs.org
-		follow <= Follow $piterjs_intro_page
-			title \Следите за новостями
-			text \
-				\medium.com/piterjs
-				\twitter.com/gopiterjs
-				\vk.com/piterjs
-				\t.me/piterjs
-				\youtube.com/piterjs
-				\piterjs.org
-		- afterparty <= Afterparty $piterjs_intro_page
-			title \Го в бар!
-			text <= afterparty \
-	sub /
-		<= Screen $piterjs_screen
-			place <= place $piterjs_place
-			content /
-				<= Page $mol_view
-	attr *
-		tabindex -1
-	plugins /
-		<= Nav $mol_nav
-			keys_x <= page_ids /string
-			keys_y <= page_ids /string
-			current_x?val <=> page?val
-			current_y?val <=> page?val
-
 $mol_frame $mol_view
 	dom_name \iframe
 	attr *
@@ -671,6 +517,23 @@ $mol_book2 $mol_scroll
 	minimal_width 0
 	Placeholder $mol_view
 
+$piterjs_screen_lines $mol_svg_root
+	style * fill <= color \#FFE515
+	view_box \0 0 310 246
+	sub /
+		<= First $mol_svg_path geometry \M56 9.00002L-1.5605e-05 67.5L-1.31571e-05 95.5L56 36.5L56 9.00002Z 
+		<= Second $mol_svg_path geometry \M148.5 1.40751e-05L-7.6932e-06 158L0 246L238 6.25073e-06L148.5 1.40751e-05Z
+		<= Third $mol_svg_path geometry \M167.5 152.5L167.5 108L268 3.62805e-06L309.5 0L167.5 152.5Z
+
+$piterjs_screen $mol_view
+	place $piterjs_place
+	sub /
+		<= Open $piterjs_screen_lines
+			color <= color_open \#FFE515
+		<= Close $piterjs_screen_lines
+			color <= color_close \#FFE515
+	content /$mol_view
+
 $piterjs_app $mol_view
 	plugins /
 		<= Theme $mol_theme_auto
@@ -685,7 +548,7 @@ $piterjs_app $mol_view
 					Placeholder null
 		- <= Toggle_intro $mol_check
 			checked?val <=> 
-	toggle_intro?val false
+	- toggle_intro?val false
 	Menu $mol_page
 		title \Митапы
 		tools <= tools /
@@ -710,7 +573,7 @@ $piterjs_app $mol_view
 		meetup <= meetup!id $piterjs_meetup
 	Now $piterjs_now
 		place <= place $piterjs_place
-	Intro $piterjs_intro
+	- Intro $piterjs_intro
 		meetup <= meetup_current $piterjs_meetup
 		page?val <=> intro?val \
 	Video $piterjs_video_page
