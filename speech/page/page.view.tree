@@ -1,6 +1,5 @@
 $piterjs_speech_page $mol_page
 	speech $piterjs_speech
-	minimal_width 600
 	tools /
 		<= Close $mol_link
 			arg * speech null
