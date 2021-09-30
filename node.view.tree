@@ -113,6 +113,63 @@ $mol_icon $mol_svg_root
 
 $mol_icon_cross $mol_icon path \M19 6.41L17.59 5L12 10.59L6.41 5L5 6.41L10.59 12L5 17.59L6.41 19L12 13.41L17.59 19L19 17.59L13.41 12L19 6.41Z
 
+$mol_paragraph $mol_view
+	line_height 24
+	letter_width 7
+	width_limit Infinity
+	sub / <= title
+
+$mol_dimmer $mol_paragraph
+	haystack \
+	needle \
+	sub <= parts /$mol_view_content
+	Low!id $mol_paragraph
+		sub /
+			<= string!id \
+	High!id $mol_paragraph
+		sub /
+			<= string!id \
+
+$mol_text_code_token $mol_dimmer
+	attr *
+		^
+		mol_text_code_token_type <= type \
+
+$mol_text_code_token_link $mol_text_code_token
+	dom_name \a
+	type \code-link
+	attr *
+		^
+		href <= haystack \
+		target \_blank
+
+$mol_text_code_row $mol_paragraph
+	text \
+	minimal_height 24
+	numb_showed true
+	Numb $mol_view
+		sub /
+			<= numb 0
+	Token!id $mol_text_code_token
+		type <= token_type!id \
+		haystack <= token_text!id \
+		needle <= highlight \
+	Token_link!id $mol_text_code_token_link
+		haystack <= token_text!id \
+		needle <= highlight \
+
+$mol_text_code $mol_list
+	attr *
+		^
+		mol_text_code_sidebar_showed <= sidebar_showed false
+	text \
+	text_lines /string
+	Row!id $mol_text_code_row
+		numb_showed <= sidebar_showed
+		numb <= row_numb!id 0
+		text <= row_text!id \
+		highlight <= highlight \
+
 $mol_float $mol_view
 	style *
 		^
@@ -176,24 +233,7 @@ $mol_check_expand $mol_check
 	checked?val <=> expanded?val false
 	enabled <= expandable false
 
-$mol_paragraph $mol_view
-	line_height 24
-	letter_width 7
-	width_limit Infinity
-	sub / <= title
-
-$mol_dimmer $mol_paragraph
-	haystack \
-	needle \
-	sub <= parts /$mol_view_content
-	Low!id $mol_paragraph
-		sub /
-			<= string!id \
-	High!id $mol_paragraph
-		sub /
-			<= string!id \
-
-$mol_grid $mol_scroll
+$mol_grid $mol_view
 	row_height 32
 	row_ids /string[]
 	row_id!index null
@@ -250,6 +290,7 @@ $mol_image $mol_view
 		^
 		src <= uri \
 		alt <= title
+		loading <= loading \lazy
 
 $mol_link_iconed $mol_link
 	sub /
@@ -270,12 +311,17 @@ $mol_text $mol_list
 		sub <= block_content!id /
 		type <= block_type!id \
 	Span!id $mol_text_span
+	String!id $mol_text_string
+		needle <= highlight \
 	Link!id $mol_text_link
 		target <= link_target!id \_blank
 	Image!id $mol_text_image
 	Header!id $mol_text_header
 		level <= header_level!id 0
 		content <= header_content!id /
+	Code!id $mol_text_code
+		text <= code_text!id \
+		highlight <= highlight \
 	Table!id $mol_grid
 		head_cells <= table_head_cells!id /
 		rows <= table_rows!id /
@@ -304,6 +350,10 @@ $mol_text_span $mol_paragraph
 		^
 		mol_text_type <= type?val \
 	sub <= content?val /
+
+$mol_text_string $mol_dimmer
+	dom_name \span
+	haystack?val \
 
 $mol_text_link $mol_link_iconed
 	attr *
@@ -371,7 +421,6 @@ $piterjs_speaker_snippet $mol_view
 
 $piterjs_speech_page $mol_page
 	speech $piterjs_speech
-	minimal_width 600
 	tools /
 		<= Close $mol_link
 			arg * speech null
@@ -407,7 +456,7 @@ $piterjs_meetup_snippet $mol_link
 		<= Date $mol_view
 			sub / <= date \
 
-$mol_frame $mol_view
+$mol_frame $mol_scroll
 	dom_name \iframe
 	attr *
 		src <= uri?val \
@@ -598,14 +647,18 @@ $mol_touch $mol_plugin
 	start_zoom?val 0
 	start_distance?val 0
 	zoom?val 1
+	action_type?val \
+	action_point?val $mol_vector_2d /
+		NaN
+		NaN
 	-
 	start_pan?val /
 		0
 		0
-	pan?val /
+	pan?val $mol_vector_2d /
 		0
 		0
-	pos?val /
+	pointer_center $mol_vector_2d /
 		NaN
 		NaN
 	-
@@ -627,6 +680,8 @@ $mol_touch $mol_plugin
 	swipe_to_left?val null
 	swipe_to_top?val null
 	-
+	draw?event null
+	-
 	style *
 		^
 		touch-action \none
@@ -634,14 +689,12 @@ $mol_touch $mol_plugin
 	-
 	event *
 		^
-		touchstart?event <=> event_start?event null
-		touchmove?event <=> event_move?event null
-		touchend?event <=> event_end?event null
-		mousedown?event <=> event_start?event null
-		mousemove?event <=> event_move?event null
-		mouseup?event <=> event_end?event null
-		mouseleave?event <=> event_leave?event null
+		pointerdown?event <=> event_start?event null
+		pointermove?event <=> event_move?event null
+		pointerup?event <=> event_end?event null
+		pointerleave?event <=> event_end?event null
 		wheel?event <=> event_wheel?event null
+		contextmenu?event <=> event_menu?event null
 
 $mol_ghost $mol_view
 	Sub $mol_view
