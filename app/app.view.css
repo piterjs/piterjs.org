@@ -1,8 +1,13 @@
 [piterjs_app] {
-	--mol_theme_current: rgb(255, 229, 21);
-	--mol_theme_focus: rgb(255, 229, 21);
-	--mol_theme_current: rgb(255, 229, 21);
 	display: flex;
+}
+
+[piterjs_app][mol_theme="$mol_theme_dark"] {
+	--mol_theme_focus: rgb(255, 187, 0);
+}
+
+[piterjs_app][mol_theme="$mol_theme_light"] {
+	--mol_theme_focus: black;
 }
 
 [piterjs_app] [mol_theme="$mol_theme_base"] {
