@@ -188,6 +188,7 @@ $mol_speck $mol_view
 $mol_button $mol_view
 	enabled true
 	minimal_height 40
+	minimal_width 40
 	click?event null
 	event_click?event null
 	event *
@@ -603,18 +604,19 @@ $piterjs_app $mol_view
 		title \Митапы
 		tools <= tools /
 		body /
-			<= Meetups $mol_list rows <= menu_meetups /
-			<= Links $mol_list rows /
-				<= Conf $mol_link
-					uri \https://conf.piterjs.org/
-					sub /
-						<= Conf_title $mol_view
-							sub / \Conf
-						<= Conf_date $mol_view
-							sub / \сентябрь'19
-				<= Others_link $mol_link
-					uri \#others
-					title \Другие события
+			<= Menu_content $mol_view sub /
+				<= Meetups $mol_list rows <= menu_meetups /
+				<= Links $mol_list rows /
+					<= Conf $mol_link
+						uri \https://conf.piterjs.org/
+						sub /
+							<= Conf_title $mol_view
+								sub / \Conf
+							<= Conf_date $mol_view
+								sub / \сентябрь'19
+					<= Others_link $mol_link
+						uri \#others
+						title \Другие события
 	Meetup!id $piterjs_meetup_page
 		meetup <= meetup!id $piterjs_meetup
 	Speech!id $piterjs_speech_page
