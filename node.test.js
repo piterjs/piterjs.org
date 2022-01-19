@@ -8012,7 +8012,9 @@ var $;
                 overflow: 'visible',
                 zIndex: 0,
                 boxShadow: 'none',
-                borderRadius: '0',
+                border: {
+                    radius: 0,
+                },
                 '::after': {
                     content: '',
                     position: 'absolute',
@@ -8037,7 +8039,13 @@ var $;
                         color: $mol_theme.current,
                     },
                 },
-                Content: {},
+                Content: {
+                    border: {
+                        width: rem(.25),
+                        style: 'solid',
+                        color: $mol_theme.back,
+                    },
+                },
             },
             Info: {
                 display: 'flex',
@@ -8051,7 +8059,9 @@ var $;
             },
             Title: {
                 padding: rem(.25),
-                fontSize: '1.25em',
+                font: {
+                    size: rem(1.25),
+                },
             },
             Description: {
                 margin: 0,
