@@ -12,6 +12,7 @@ namespace $.$$ {
 		
 		Description: {
 			boxShadow: 'none',
+			padding: rem(.75),
 		},
 		
 		Links: {

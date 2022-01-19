@@ -10,7 +10,7 @@ namespace $.$$ {
 
 		Photo: {
 			width: rem(6),
-			margin: rem(.5),
+			margin: $mol_gap.block,
 		},
 
 		Info: {
@@ -25,7 +25,6 @@ namespace $.$$ {
 		Title: {
 			display: 'block',
 			padding: [ rem(.25), rem(.5) ],
-			fontWeight: '600',
 		},
 
 		Addon: {
