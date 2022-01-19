@@ -25,10 +25,6 @@
 	stroke: currentColor;
 }
 
-[piterjs_app] > *:not([mol_book_page_visible]):not([mol_book_page_focused]) + *:before {
-	left: .25rem;
-}
-
 [piterjs_app] [mol_page] ,
 [piterjs_app] [mol_page_body] {
 	box-shadow: none;
@@ -74,10 +70,6 @@
 
 [piterjs_app_others_link] {
 	padding: .5rem .75rem;
-}
-
-[piterjs_app_book_placeholder] {
-	background: none;
 }
 
 [piterjs_app_toggle_intro] {
