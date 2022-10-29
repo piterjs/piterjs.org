@@ -1,38 +1,73 @@
 $mol_scroll $mol_view
-	minimal_height 0
-	_event_scroll_timer?val null
+	scroll_top?val 0
+	scroll_left?val 0
 	field *
 		^
-		scrollTop <= scroll_top?val 0
-		scrollLeft <= scroll_left?val 0
 		tabIndex <= tabindex -1
 	event *
 		^
 		scroll?event <=> event_scroll?event null
 
 $mol_page $mol_view
+	dom_name \article
+	field *
+		^
+		tabIndex <= tabindex -1
 	sub /
 		<= Head $mol_view
 			minimal_height 64
+			dom_name \header
 			sub <= head /
 				<= Title $mol_view
 					dom_name \h1
-					sub /
+					sub <= title_content /
+						<= Logo null
 						<= title
 				<= Tools $mol_view
 					sub <= tools /$mol_view_content
 		<= Body $mol_scroll
-			scroll_top?val <=> body_scroll_top?val 0
+			scroll_top?val => body_scroll_top?val
 			sub <= body /$mol_view_content
 		<= Foot $mol_view
+			dom_name \footer
 			sub <= foot /$mol_view
 
+$mol_svg $mol_view
+	dom_name \svg
+	dom_name_space \http://www.w3.org/2000/svg
+	font_size 16
+	font_family \
+	style_size *
+
+$mol_svg_root $mol_svg
+	dom_name \svg
+	attr *
+		^
+		viewBox <= view_box \0 0 100 100
+		preserveAspectRatio <= aspect \xMidYMid
+
+$mol_svg_path $mol_svg
+	dom_name \path
+	attr *
+		^
+		d <= geometry \
+
+
+$mol_icon $mol_svg_root
+	view_box \0 0 24 24
+	minimal_width 16
+	minimal_height 16
+	sub /
+		<= Path $mol_svg_path
+			geometry <= path \
+
 $mol_link $mol_view
+	uri \
 	dom_name \a
 	attr *
 		^
-		href <= uri \
-		title <= hint \
+		href <= uri_toggle \
+		title <= hint_safe <= hint \
 		target <= target \_self
 		download <= file_name \
 		mol_link_current <= current false
@@ -83,52 +118,24 @@ $piterjs_speech_snippet $mol_link
 			<= Title $mol_view
 				sub / <= title \
 
-$mol_svg $mol_view
-	dom_name \svg
-	dom_name_space \http://www.w3.org/2000/svg
-	font_size 16
-	font_family \
-
-$mol_svg_root $mol_svg
-	dom_name \svg
-	attr *
-		^
-		viewBox <= view_box \0 0 100 100
-		preserveAspectRatio <= aspect \xMidYMid
-
-$mol_svg_path $mol_svg
-	dom_name \path
-	attr *
-		^
-		d <= geometry \
-
-
-$mol_icon $mol_svg_root
-	view_box \0 0 24 24
-	minimal_width 16
-	minimal_height 16
-	sub /
-		<= Path $mol_svg_path
-			geometry <= path \
-
 $mol_icon_cross $mol_icon path \M19 6.41L17.59 5L12 10.59L6.41 5L5 6.41L10.59 12L5 17.59L6.41 19L12 13.41L17.59 19L19 17.59L13.41 12L19 6.41Z
 
 $mol_paragraph $mol_view
 	line_height 24
 	letter_width 7
-	width_limit Infinity
+	width_limit +Infinity
 	sub / <= title
 
 $mol_dimmer $mol_paragraph
 	haystack \
 	needle \
 	sub <= parts /$mol_view_content
-	Low!id $mol_paragraph
+	Low* $mol_paragraph
 		sub /
-			<= string!id \
-	High!id $mol_paragraph
+			<= string* \
+	High* $mol_paragraph
 		sub /
-			<= string!id \
+			<= string* \
 
 $mol_text_code_token $mol_dimmer
 	attr *
@@ -150,30 +157,16 @@ $mol_text_code_row $mol_paragraph
 	Numb $mol_view
 		sub /
 			<= numb 0
-	Token!id $mol_text_code_token
-		type <= token_type!id \
-		haystack <= token_text!id \
+	Token* $mol_text_code_token
+		type <= token_type* \
+		haystack <= token_text* \
 		needle <= highlight \
-	Token_link!id $mol_text_code_token_link
-		haystack <= token_text!id \
+	Token_link* $mol_text_code_token_link
+		haystack <= token_text* \
 		needle <= highlight \
+	find_pos* null
 
-$mol_text_code $mol_list
-	attr *
-		^
-		mol_text_code_sidebar_showed <= sidebar_showed false
-	text \
-	text_lines /string
-	Row!id $mol_text_code_row
-		numb_showed <= sidebar_showed
-		numb <= row_numb!id 0
-		text <= row_text!id \
-		highlight <= highlight \
-
-$mol_float $mol_view
-	style *
-		^
-		minHeight \auto
+$mol_stack $mol_view
 
 $mol_speck $mol_view
 	attr *
@@ -187,27 +180,61 @@ $mol_speck $mol_view
 
 $mol_button $mol_view
 	enabled true
-	minimal_height 40
-	minimal_width 40
 	click?event null
 	event_click?event null
 	event *
 		^
 		click?event <=> event_activate?event null
+		dblclick?event <=> clicks?event null
 		keydown?event <=> event_key_press?event null 
 	attr *
 		^
 		disabled <= disabled false
 		role \button
 		tabindex <= tab_index 0
-		title <= hint_or_error <= hint \
+		title <= hint_safe <= hint \
 	sub /$mol_view_content
 		<= title
 	Speck $mol_speck
+		value <= error \
 
 $mol_button_typed $mol_button
+	minimal_height 40
+	minimal_width 40
 
 $mol_button_minor $mol_button_typed
+
+$mol_icon_content_copy $mol_icon path \M19,21H8V7H19M19,5H8C6.9,5 6,5.9 6,7V21C6,22.1 6.9,23 8,23H19C20.1,23 21,22.1 21,21V7C21,5.9 20.1,5 19,5M16,1H4C2.9,1 2,1.9 2,3V17H4V3H16V1Z
+
+$mol_button_copy $mol_button_minor
+	text \
+	sub /
+		<= Icon $mol_icon_content_copy
+
+$mol_text_code $mol_stack
+	attr *
+		^
+		mol_text_code_sidebar_showed <= sidebar_showed false
+	text \
+	text_lines /string
+	find_pos* null
+	sub /
+		<= Rows $mol_list
+			render_visible_only <= render_visible_only false
+			rows <= rows /
+				<= Row*0 $mol_text_code_row
+					numb_showed <= sidebar_showed
+					numb <= row_numb* 0
+					text <= row_text* \
+					highlight <= highlight \
+		<= Copy $mol_button_copy
+			hint @ \Copy whole code
+			text <= text
+
+$mol_float $mol_view
+	style *
+		^
+		minHeight \auto
 
 $mol_check $mol_button_minor
 	attr *
@@ -225,7 +252,6 @@ $mol_check $mol_button_minor
 $mol_icon_chevron $mol_icon path \M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z
 
 $mol_check_expand $mol_check
-	minimal_height 40
 	Icon $mol_icon_chevron
 	level 0
 	style *
@@ -237,12 +263,13 @@ $mol_check_expand $mol_check
 $mol_grid $mol_view
 	row_height 32
 	row_ids /string[]
-	row_id!index null
+	row_id* null
 	col_ids /
 	records *
-	record!id null
+	record* null
 	hierarchy null
 	hierarchy_col \
+	minimal_width 0
 	-
 	sub /
 		<= Head
@@ -250,27 +277,28 @@ $mol_grid $mol_view
 			sub <= rows /$mol_view
 	Head $mol_grid_row
 		cells <= head_cells /$mol_view
-	Row!id $mol_grid_row
+	Row* $mol_grid_row
 		minimal_height <= row_height
-		cells <= cells!id /$mol_view
+		minimal_width <= minimal_width
+		cells <= cells* /$mol_view
 	-
-	Cell!id $mol_view
-	cell!id null
-	Cell_text!id $mol_grid_cell
-		sub <= cell_content_text!id <= cell_content!id /$mol_view_content
-	Cell_number!id $mol_grid_number
-		sub <= cell_content_number!id <= cell_content!id /$mol_view_content
-	Col_head!id $mol_float
+	Cell* $mol_view
+	cell* null
+	Cell_text* $mol_grid_cell
+		sub <= cell_content_text* <= cell_content* /$mol_view_content
+	Cell_number* $mol_grid_number
+		sub <= cell_content_number* <= cell_content* /$mol_view_content
+	Col_head* $mol_float
 		dom_name \th
-		sub <= col_head_content!id /$mol_view_content
-	Cell_branch!id $mol_check_expand
-		level <= cell_level!id 0
-		label <= cell_content!id /$mol_view_content
-		expanded?val <=> cell_expanded!id?val false
-	Cell_content!id /
-		<= Cell_dimmer!id $mol_dimmer
+		sub <= col_head_content* /$mol_view_content
+	Cell_branch* $mol_check_expand
+		level <= cell_level* 0
+		label <= cell_content* /$mol_view_content
+		expanded?val <=> cell_expanded*?val false
+	Cell_content* /
+		<= Cell_dimmer* $mol_dimmer
 			needle <= needle \
-			haystack <= cell_value!id \
+			haystack <= cell_value* \
 
 $mol_grid_table $mol_list
 	dom_name \table
@@ -291,7 +319,9 @@ $mol_image $mol_view
 		^
 		src <= uri \
 		alt <= title
-		loading <= loading \lazy
+		loading <= loading \eager
+	minimal_width 16
+	minimal_height 16
 
 $mol_link_iconed $mol_link
 	sub /
@@ -302,78 +332,141 @@ $mol_link_iconed $mol_link
 		<= title <= uri
 	host \
 
+$mol_ghost $mol_view
+	Sub $mol_view
+
+$mol_embed_native $mol_scroll
+	uri?val \
+	dom_name \object
+	window null
+	attr *
+		^
+		data <= uri
+		type <= mime \
+	sub /
+		<= Fallback $mol_link
+			uri <= uri
+			sub /
+				<= title \
+	message *
+		hashchange? <=> uri_change? null
+
+$mol_frame $mol_embed_native
+	dom_name \iframe
+	attr *
+		^
+		data null
+		type null
+		src <= uri?val \
+		srcdoc <= html null
+		allow <= allow \
+		allowfullscreen <= fullscreen true
+	accelerometer true
+	autoplay true
+	encription true
+	gyroscope true
+	pip true
+
+$mol_embed_youtube $mol_check
+	uri \
+	video_preview \
+	video_id \
+	checked? <=> active? false
+	sub /
+		<= Image $mol_image
+			title <= title \
+			uri <= video_preview \
+		<= Frame $mol_frame
+			title <= title \
+			uri <= video_embed \
+
+
+$mol_embed_any $mol_ghost
+	Image $mol_image
+		title <= title \
+		uri <= uri \
+	Object $mol_embed_native
+		title <= title \
+		uri <= uri \
+	Youtube $mol_embed_youtube
+		title <= title \
+		uri <= uri \
+
 $mol_text $mol_list
 	uri_base \
 	text \
-	tokens /
-	Quote!id $mol_text
-		text <= quote_text!id \
-	Row!id $mol_text_row
-		sub <= block_content!id /
-		type <= block_type!id \
-	Span!id $mol_text_span
-	String!id $mol_text_string
-		needle <= highlight \
-	Link!id $mol_text_link
-		target <= link_target!id \_blank
-	Image!id $mol_text_image
-	Header!id $mol_text_header
-		level <= header_level!id 0
-		content <= header_content!id /
-	Code!id $mol_text_code
-		text <= code_text!id \
+	param \
+	flow_tokens /
+	auto /
+		<= auto_scroll null
+	- \Blocks
+	Paragraph* $mol_paragraph
+		sub <= block_content* /
+	Quote* $mol_text
+		uri_resolve* <= uri_resolve* null
+		text <= quote_text* \
 		highlight <= highlight \
-	Table!id $mol_grid
-		head_cells <= table_head_cells!id /
-		rows <= table_rows!id /
-	Table_row!id $mol_grid_row
-		cells <= table_cells!id /
-	Table_cell!id $mol_grid_cell
-		sub <= table_cell_content!id /
-	Table_cell_head!id $mol_float
-		sub <= table_cell_content!id /
-
-$mol_text_row $mol_paragraph
-	attr *
-		^
-		mol_text_type <= type \
+		auto_scroll null
+	List* $mol_text
+		uri_resolve* <= uri_resolve* null
+		text <= list_text* \
+		highlight <= highlight \
+		auto_scroll null
+	Header* $mol_text_header
+		minimal_height 40
+		dom_name <= header_level* \h
+		content <= block_content* /
+		arg <= header_arg* *
+	Pre* $mol_text_code
+		text <= pre_text* \
+		highlight <= highlight \
+		sidebar_showed <= pre_sidebar_showed <= code_sidebar_showed true
+	- \Table
+	Table* $mol_grid
+		head_cells <= table_head_cells* /
+		rows <= table_rows* /
+	Table_row* $mol_grid_row
+		cells <= table_cells* /
+	Table_cell* $mol_text
+		auto_scroll null
+		highlight <= highlight \
+		uri_resolve* <= uri_resolve* null
+		text <= table_cell_text* \
+	- \Lines
+	String* $mol_dimmer
+		dom_name \span
+		needle <= highlight \
+		haystack <= line_text* \
+	Span* $mol_text_span
+		dom_name \span
+		type <= line_type* \
+		sub <= line_content* /
+	Code_line* $mol_text_code_row
+		numb_showed false
+		highlight <= highlight \
+		text <= line_text* \
+	Link* $mol_link_iconed
+		uri <= link_uri* \
+		content <= line_content* /
+	Link_http* $mol_link_iconed
+		uri <= link_uri* \
+		content / <= link_host* \
+	Embed* $mol_embed_any
+		uri <= link_uri* \
+		title <= line_text* \
 
 $mol_text_header $mol_paragraph
-	dom_name \h
-	attr *
-		^
-		mol_text_header_level <= level?val 0
-	sub <= content /
+	sub /
+		<= Link $mol_link
+			arg <= arg *
+			hint @ \Permalink to this section
+			sub <= content /
 
 $mol_text_span $mol_paragraph
 	dom_name \span
 	attr *
 		^
-		mol_text_type <= type?val \
-	sub <= content?val /
-
-$mol_text_string $mol_dimmer
-	dom_name \span
-	haystack?val \
-
-$mol_text_link $mol_link_iconed
-	attr *
-		^
-		mol_text_type <= type?val \
-	uri <= link?val \
-	content?val /
-
-$mol_text_image $mol_view
-	dom_name \object
-	attr *
-		^
-		allowfullscreen true
-		mol_text_type <= type?val \
-		data <= link?val \
-	sub /
-		<= Image $mol_image
-			uri <= link
-			title <= title?val \
+		mol_text_type <= type \
 
 $piterjs_meetup_page $mol_page
 	meetup $piterjs_meetup
@@ -458,31 +551,6 @@ $piterjs_meetup_snippet $mol_link
 			sub / <= title \
 		<= Date $mol_view
 			sub / <= date \
-
-$mol_embed_native $mol_scroll
-	dom_name \object
-	window null
-	attr *
-		^
-		data <= uri?val \
-		type <= mime \
-	sub /
-		<= title?val \
-
-$mol_frame $mol_embed_native
-	dom_name \iframe
-	attr *
-		data null
-		type null
-		src <= uri?val \
-		srcdoc <= html null
-		allow <= allow \
-	fullscreen true
-	accelerometer true
-	autoplay true
-	encription true
-	gyroscope true
-	pip true
 
 $piterjs_video_page $mol_page
 	title \Видеотрансляция
