@@ -40,7 +40,7 @@ namespace $.$$ {
 		},
 
 		Time: {
-			padding: $mol_gap.text,,
+			padding: $mol_gap.text,
 			color: $mol_theme.text,
 			whiteSpace: 'nowrap',
 		},
