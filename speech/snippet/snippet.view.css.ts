@@ -22,7 +22,7 @@ namespace $.$$ {
 
 		Title: {
 			display: 'block',
-			padding: $mol_gap.text,,
+			padding: $mol_gap.text,
 		},
 
 		Addon: {
@@ -30,7 +30,7 @@ namespace $.$$ {
 		},
 
 		Speaker_title: {
-			padding: $mol_gap.text,,
+			padding: $mol_gap.text,
 			color: $mol_theme.text,
 			flex: {
 				grow: 1,
