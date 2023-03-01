@@ -5,12 +5,11 @@ namespace $.$$ {
 	$mol_style_define( $piterjs_speech_snippet , {
 
 		display: 'flex',
-		padding: rem(.25),
+		padding: $mol_gap.block,
 		alignItems: 'flex-start',
 
 		Photo: {
 			width: rem(6),
-			margin: $mol_gap.block,
 		},
 
 		Info: {
@@ -19,12 +18,11 @@ namespace $.$$ {
 				shrink: 1,
 				basis: rem(16),
 			},
-			padding: rem(.75),
 		},
 
 		Title: {
 			display: 'block',
-			padding: [ rem(.25), rem(.5) ],
+			padding: $mol_gap.text,,
 		},
 
 		Addon: {
@@ -32,7 +30,7 @@ namespace $.$$ {
 		},
 
 		Speaker_title: {
-			padding: [ rem(.25), rem(.5) ],
+			padding: $mol_gap.text,,
 			color: $mol_theme.text,
 			flex: {
 				grow: 1,
@@ -42,7 +40,7 @@ namespace $.$$ {
 		},
 
 		Time: {
-			padding: [ rem(.25), rem(.5) ],
+			padding: $mol_gap.text,,
 			color: $mol_theme.text,
 			whiteSpace: 'nowrap',
 		},
