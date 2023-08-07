@@ -18,7 +18,7 @@ namespace $.$$ {
 
 		list() {
 			const uri = 'https://web-standards.ru/calendar.json'
-			return Event_list( this.$.$mol_fetch.json( uri ) )
+			return Event_list( this.$.$mol_fetch.json( uri ) as any )
 		}
 		
 		@ $mol_mem
