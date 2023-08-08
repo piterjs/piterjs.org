@@ -183,3 +183,13 @@
 	video \
 	place \online
 	afterparty \
+57 *
+	start \2023-08-16T19:10:00+03
+	title \#57
+	description \
+	speeches /
+		\piterjs-history
+		\rust-node
+		\nginx-njs
+	place \selectel
+	afterparty \
