@@ -3624,7 +3624,6 @@ declare namespace $ {
         Conf_title(): $mol_view;
         Conf_date(): $mol_view;
         Conf(): $$.$mol_link;
-        Others_link(): $$.$mol_link;
         Links(): $$.$mol_list;
         Menu_content(): $mol_view;
         meetup(id: any): $piterjs_meetup;

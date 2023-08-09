@@ -13222,17 +13222,10 @@ var $;
             ];
             return obj;
         }
-        Others_link() {
-            const obj = new this.$.$mol_link();
-            obj.uri = () => "#others";
-            obj.title = () => "Другие события";
-            return obj;
-        }
         Links() {
             const obj = new this.$.$mol_list();
             obj.rows = () => [
-                this.Conf(),
-                this.Others_link()
+                this.Conf()
             ];
             return obj;
         }
@@ -13325,9 +13318,6 @@ var $;
     __decorate([
         $mol_mem
     ], $piterjs_app.prototype, "Conf", null);
-    __decorate([
-        $mol_mem
-    ], $piterjs_app.prototype, "Others_link", null);
     __decorate([
         $mol_mem
     ], $piterjs_app.prototype, "Links", null);

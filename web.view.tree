@@ -915,7 +915,7 @@ $piterjs_app $mol_view
 								sub / \Conf
 							<= Conf_date $mol_view
 								sub / \сентябрь'19
-					<= Others_link $mol_link
+					- <= Others_link $mol_link
 						uri \#others
 						title \Другие события
 	Meetup!id $piterjs_meetup_page
