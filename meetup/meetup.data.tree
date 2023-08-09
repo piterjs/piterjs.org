@@ -190,6 +190,6 @@
 	speeches /
 		\piterjs-history
 		\rust-node
-		\nginx-njs
+		- \nginx-njs
 	place \selectel
 	afterparty \
