@@ -404,8 +404,8 @@ piterjs-history *
 	speaker \alexkorotaev
 	duration \PT60m
 	- \ 35+10+15
-js-v-tapkah-devops *
-	title \Становление и путь необычного разработчика на примере кейса на технологиях NGINX + NJS
+js-v-tapkah *
+	title \JS и тапки незрячего fulstack
 	description \
 	speaker \evgenynekrasov
 	duration \PT50m
