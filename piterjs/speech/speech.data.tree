@@ -402,17 +402,17 @@ piterjs-history *
 	title \PiterJS: как это было и как будет
 	description \
 	speaker \alexkorotaev
-	duration \PT70m
-	- \ 45+10+15
+	duration \PT60m
+	- \ 35+10+15
+js-v-tapkah-devops *
+	title \Становление и путь необычного разработчика на примере кейса на технологиях NGINX + NJS
+	description \
+	speaker \evgenynekrasov
+	duration \PT50m
+	- \ 30+10
 rust-node *
 	title \Интеграция Rust в Node.js
 	description \Зачем понадобился Rust в приложении на JS? Как интегрировать Rust на примере. Влияние Rust на JS.
 	speaker \evelas
 	duration \PT50m
 	- \ 30+10+10
-nginx-njs *
-	title \Становление и путь необычного разработчика на примере кейса на технологиях NGINX + NJS
-	description \
-	speaker \evgenynekrasov
-	duration \PT40m
-	- \ 30+10
