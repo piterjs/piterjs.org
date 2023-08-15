@@ -81,15 +81,9 @@ namespace $.$$ {
 		},
 
 		Description: {
-
 			margin: 0,
 			padding: 0,
 			boxShadow: 'none',
-			
-			Row: {
-				margin: rem(.25),
-			},
-
 		},
 
 	} )

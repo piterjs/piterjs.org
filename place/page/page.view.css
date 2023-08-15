@@ -2,11 +2,6 @@
 	flex: 1000 0 60rem;
 }
 
-[piterjs_place_page_info] {
-	padding: .75rem;
-	flex-wrap: wrap;
-}
-
 [piterjs_place_page_info] > * {
 	padding: .5rem .75rem;
 }

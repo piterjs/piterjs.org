@@ -7,8 +7,10 @@ namespace $.$$ {
 		@ $mol_mem
 		now( next? : string | null ) { return this.$.$mol_state_arg.value( 'now' , next ) }
 
-		// @ $mol_mem
-		// intro( next? : string | null ) { return this.$.$mol_state_arg.value( 'intro' , next ) }
+		@ $mol_mem
+		intro( next? : string | null ) {
+			return this.$.$mol_state_arg.value( 'intro' , next )!
+		}
 
 		place_show() { return this.$.$mol_state_arg.value( 'place' ) !== null }
 
@@ -26,7 +28,7 @@ namespace $.$$ {
 
 		@ $mol_mem
 		pages() {
-			// if( this.intro() != null ) return [ this.Intro() ]
+			if( this.intro() != null ) return [ this.Intro() ]
 			const pages = [
 				this.Menu() ,
 				... this.meetup_id() ? [ this.Meetup( this.meetup_id() ) ] : [] ,
@@ -41,7 +43,7 @@ namespace $.$$ {
 
 		@ $mol_mem
 		title() {
-			// if( this.intro() != null ) return this.Intro().title()
+			if( this.intro() != null ) return this.Intro().title()
 			return this.Book().title()
 		}
 
@@ -70,21 +72,21 @@ namespace $.$$ {
 		menu_meetup( id : string ) { return this.meetup( id ) }
 		menu_meetup_id( id : string ) { return id }
 
-		// toggle_intro( next? : boolean ) {
+		toggle_intro( next? : boolean ) {
 			
-		// 	if( next !== undefined ) {
+			if( next !== undefined ) {
 
-		// 		if( this.intro() ) {
-		// 			this.intro( null )
-		// 		} else {
-		// 			this.intro( 'main' )
-		// 		}
+				if( this.intro() ) {
+					this.intro( null )
+				} else {
+					this.intro( 'main' )
+				}
 
-		// 	}
+			}
 
-		// 	return Boolean( this.intro() )
+			return Boolean( this.intro() )
 
-		// }
+		}
 
 		video() {
 			return this.$.$mol_state_arg.value( 'video' ) !== null

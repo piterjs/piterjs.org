@@ -8,7 +8,8 @@ namespace $.$$ {
 		flexWrap: 'wrap',
 		display: 'flex',
 		justifyContent: 'space-between',
-		fontSize: '4vmin',
+		fontSize: '3vmin',
+		lineHeight: '3vmin',
 
 		Speeches: {
 			margin: 'auto',
@@ -25,17 +26,18 @@ namespace $.$$ {
 
 		Speech_interval: {
 			fontWeight: 'bolder',
+			padding: `.5em`,
 		},
 
 		Speech_title: {
-			padding: [ 0 , em(.5) ],
+			padding: `.5em`,
 			margin: {
 				left: vmin(10),
 			},
 		},
 
 		Speech_speaker: {
-			padding: [ 0 , em(.5) ],
+			padding: `.5em`,
 			margin : {
 				left: vmin(10),
 			},

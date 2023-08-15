@@ -88,6 +88,18 @@ griddynamics *
 		\#03973d
 	notes \
 		\В конце: угощение
+selectel *
+	title \Selectel
+	description \Selectel — это шесть дата-центров в Москве, Санкт-Петербурге и Ленинградской области. Мы работаем с 2008 года, на сегодняшний день у компании более 24 000 клиентов.
+	site \https://selectel.ru/
+	address \Санкт-Петербург, ул. Цветочная, 19
+	coords /
+		59.887228
+		30.329368
+	route \
+	colors /
+		\#0a9ee7
+		\#03973d
 online *
 	title \Online
 	description \YouTube

@@ -398,4 +398,25 @@ node-debugger *
 	speaker \kozlyatinskiya
 	duration \PT30m
 	slides \https://github.com/piterjs/slides/blob/master/meetup=48/speech=node-debugger.pdf
-
+piterjs-history *
+	title \PiterJS: как это было и как будет
+	description \
+		\Всё имеет начало. Когда-то горстка энтузиастов, захваченная идеей свободных знаний, начала делать события, посвящённые JS и смежным технологиям, встречаться с первыми трудностями, учиться договариваться, мириться с сообществом питонистов, расти и искать себе смену среди других людей с горящими глазами.
+		\Это лёгкая и наполненная забавными случаями история развития JS сообщества, рассказанная человеком, который был в нём с самого начала.
+	speaker \alexkorotaev
+	duration \PT60m
+	- \ 35+10+15
+js-tapki-fullstack *
+	title \JS и тапки незрячего fullstack
+	description \
+		\JS — развязный язык. С его помощью делают продукты: от интерфейсов сайтов до космических аппаратов, им можно перенести данные из базы в базу без простоя и настроить DevOps инфраструктуру.
+		\Евгений расскажет о применении JS на примерах из своих кейсов: построения Infrastructure as code, технологиях K6, Arduino и Pulumi.
+	speaker \evgenynekrasov
+	duration \PT50m
+	- \ 30+10
+rust-node *
+	title \Интеграция Rust в Node.js
+	description \Зачем понадобился Rust в приложении на JS? Как интегрировать Rust на примере. Влияние Rust на JS.
+	speaker \evelas
+	duration \PT50m
+	- \ 30+10+10
