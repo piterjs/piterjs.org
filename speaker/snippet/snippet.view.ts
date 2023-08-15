@@ -2,16 +2,25 @@ namespace $.$$ {
 
 	export class $piterjs_speaker_snippet extends $.$piterjs_speaker_snippet {
 
-		title() {
-			return this.speaker().title()
-		}
-
-		description() {
-			return this.speaker().description()
-		}
-
 		photo() {
-			return this.speaker().photo()
+			return this.speaker().photo_uri()
+		}
+
+		@ $mol_action
+		upload( next: File[] ) {
+
+			if( !next ) return []
+			
+			const file = next[0]
+			const pict = $mol_picture.fit( file, 320 )
+
+			const blob = pict.format( 'image/webp' )
+			if( !blob ) return []
+			
+			this.speaker().photo_blob( blob )
+			
+			return []
+
 		}
 
 	}

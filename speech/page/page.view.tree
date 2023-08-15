@@ -1,13 +1,23 @@
 $piterjs_speech_page $mol_page
 	speech $piterjs_speech
+		title? => title?
+		description? => description?
+		start? => start?
+	Title $mol_string_button
+		value? <=> title?
+		enabled <= editing false
 	tools /
+		<= Start $mol_pick_time
+			value_moment? <=> start?
 		<= Close $mol_link
 			arg * speech null
 			sub /
 				<= Close_icon $mol_icon_cross
 	body /
-		<= Description $mol_text
-			text <= description \
+		<= Description $mol_textarea
+			hint \О чём
+			value? <=> description?
+			enabled <= editing false
 		<= Links $mol_row sub <= links /
 			<= Slides $mol_link
 				uri <= slides \
@@ -19,3 +29,4 @@ $piterjs_speech_page $mol_page
 				target \_blank
 		<= Speaker $piterjs_speaker_snippet
 			speaker <= speaker $piterjs_speaker
+			editing <= editing false

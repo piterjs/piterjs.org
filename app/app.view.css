@@ -39,7 +39,6 @@
 	display: flex;
 	flex-direction: column;
 	justify-content: space-between;
-	flex: 1 0 auto;
 }
 
 [piterjs_app_links] {
@@ -50,7 +49,6 @@
 	white-space: nowrap;
 	display: flex;
 	justify-content: space-between;
-	box-shadow: 0 -0.5rem 0.5rem -0.5rem hsla(0,0%,0%,.25);
 	padding: 0;
 }
 

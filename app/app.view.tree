@@ -1,4 +1,8 @@
 $piterjs_app $mol_view
+	Domain $piterjs_domain
+		meetups_keys => meetups_keys
+		meetups_ids => meetups_ids
+		meetup* => meetup*
 	plugins /
 		<= Theme $mol_theme_auto
 	sub /
@@ -14,7 +18,16 @@ $piterjs_app $mol_view
 			checked?val <=> toggle_intro?val false
 	Menu $mol_page
 		title \Митапы
-		tools <= tools /
+		tools /
+			<= Meetup_add $mol_button_minor
+				click? <=> metup_add? null
+				sub / <= Meetup_add_icon $mol_icon_plus
+		foot <= foot /
+			<= Online $hyoo_sync_online
+				yard <= Yard $hyoo_sync_client
+			<= Editing $mol_check_icon
+				Icon <= Editing_icon $mol_icon_pencil
+				checked? <=> editing? false
 			<= Lights $mol_lights_toggle
 		body /
 			<= Menu_content $mol_view sub /
@@ -30,12 +43,14 @@ $piterjs_app $mol_view
 					- <= Others_link $mol_link
 						uri \#others
 						title \Другие события
-	Meetup!id $piterjs_meetup_page
-		meetup <= meetup!id $piterjs_meetup
+	Meetup* $piterjs_meetup_page
+		meetup <= meetup*
+		editing <= editing? false
 	Speech!id $piterjs_speech_page
 		speech <= speech!id $piterjs_speech
-	Menu_meetup!id $piterjs_meetup_snippet
-		meetup <= meetup!id $piterjs_meetup
+		editing <= editing? false
+	Menu_meetup* $piterjs_meetup_snippet
+		meetup <= meetup*
 	Now $piterjs_now
 		place <= place $piterjs_place
 	Intro $piterjs_intro
@@ -45,4 +60,5 @@ $piterjs_app $mol_view
 		source <= video_uri \
 	Place $piterjs_place_page
 		place <= place $piterjs_place
+		editing <= editing? false
 	Others $piterjs_others

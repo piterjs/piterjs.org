@@ -5,6 +5,19 @@ namespace $.$$ {
 	export class $piterjs_app extends $.$piterjs_app {
 
 		@ $mol_mem
+		Domain() {
+
+			const yard = super.Yard()
+			const land_id = 'n6cy9h_41olxb' as $mol_int62_string
+			
+			const rights = new Uint8Array( $mol_fetch.buffer( require( `/piterjs/app/${land_id}!${land_id}.bin` ) ) )
+			$mol_wire_sync( yard.world() ).apply( rights )
+
+			return this.Yard().world().Fund( $piterjs_domain ).Item( land_id )
+
+		}
+
+		@ $mol_mem
 		now( next? : string | null ) { return this.$.$mol_state_arg.value( 'now' , next ) }
 
 		@ $mol_mem
@@ -17,14 +30,29 @@ namespace $.$$ {
 		others() { return this.$.$mol_state_arg.value( 'others' ) !== null }
 
 		@ $mol_mem
-		meetup_id( next? : string | null ) { return this.$.$mol_state_arg.value( 'meetup' , next ) }
-		meetup( id : string ) { return $piterjs_meetup.item( id ) }
+		meetup_id( next? : string | null ) {
+			
+			const id = this.$.$mol_state_arg.value( 'meetup' , next )
+			if( !id ) return id
+
+			const ids2 = $mol_int62_string_ensure( id )
+			if( ids2 ) return ids2
+
+			return null
+
+		}
+
+		@ $mol_action
+		metup_add() {
+			const meetup = this.Domain().meetup_make()
+			this.meetup_id( meetup.id() )
+		}
 		
 		speech_id( next? : string ) { return this.$.$mol_state_arg.value( 'speech' , next ) }
-		speech( id : string ) { return $piterjs_speech.item( id ) }
+		speech( id : $mol_int62_string ) { return this.Domain().world()!.Fund( $piterjs_speech ).Item( id ) }
 		
 		speaker_id( next? : string ) { return this.$.$mol_state_arg.value( 'speaker' , next ) }
-		speaker( id : string ) { return $piterjs_speaker.item( id ) }
+		// speaker( id : string ) { return $piterjs_speaker.item( id ) }
 
 		@ $mol_mem
 		pages() {
@@ -48,16 +76,8 @@ namespace $.$$ {
 		}
 
 		@ $mol_mem
-		meetups() {
-			return this.$.$piterjs_meetup.all().slice()
-			.sort( ( a , b )=> b.start().valueOf() - a.start().valueOf() )
-		}
-
-		@ $mol_mem
 		meetup_current() {
-			const id = this.meetup_id()
-			const meetup = id ? this.meetup( id ) : this.meetups()[0]
-			return meetup
+			return this.meetup( this.meetup_id() || this.meetups_ids()[0] )
 		}
 
 		@ $mol_mem
@@ -67,7 +87,7 @@ namespace $.$$ {
 
 		@ $mol_mem
 		menu_meetups() {
-			return this.meetups().map( meetup => this.Menu_meetup( meetup.id() ) )
+			return this.meetups_ids().slice().reverse().map( id => this.Menu_meetup( id ) )
 		}
 		menu_meetup( id : string ) { return this.meetup( id ) }
 		menu_meetup_id( id : string ) { return id }
@@ -102,6 +122,11 @@ namespace $.$$ {
 			
 			return this.meetup( id ).video() ?? ''
 			
+		}
+
+		Editing() {
+			if( !this.Domain().editable() ) return null!
+			return super.Editing()
 		}
 
 	}
