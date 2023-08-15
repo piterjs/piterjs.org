@@ -2,10 +2,10 @@ namespace $ {
 
 	export class $piterjs_place extends $piterjs_model {
 
-		// @ $mol_mem
-		// notes() {
-		// 	return $mol_data_optional( $mol_data_string )( this.data().notes ) || ''
-		// }
+		@ $mol_mem
+		notes( next?: string ) {
+			return this.sub( 'notes', $hyoo_crowd_reg ).str( next )
+		}
 
 		// @ $mol_mem
 		// site() {
@@ -30,7 +30,7 @@ namespace $ {
 
 		@ $mol_mem
 		colors() {
-			return $mol_data_array( $mol_data_string )( this.data().colors )
+			return [ 'yellow', 'yellow' ] // $mol_data_array( $mol_data_string )( this.data().colors )
 		}
 
 	}
