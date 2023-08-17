@@ -83,8 +83,6 @@ $piterjs_intro $mol_view
 		afterparty <= Afterparty $piterjs_intro_page
 			title \Го в бар!
 			text <= afterparty \
-				\t.me/beerjs_spb
-				\Luminous: Загородный проспект, 13
 	sub /
 		<= Screen $piterjs_screen
 			place <= place $piterjs_place
