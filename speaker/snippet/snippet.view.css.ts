@@ -70,11 +70,10 @@ namespace $.$$ {
 				shrink: 1,
 				basis: rem(20),
 			},
-			padding: rem(.5),
 		},
 
 		Title: {
-			padding: rem(.25),
+			padding: rem(.75),
 			font: {
 				size: rem(1.25),
 			},
