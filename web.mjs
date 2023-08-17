@@ -11184,7 +11184,7 @@ var $;
             return obj;
         }
         afterparty() {
-            return "t.me/beerjs_spb\nLuminous: Загородный проспект, 13";
+            return "";
         }
         Afterparty() {
             const obj = new this.$.$piterjs_intro_page();
