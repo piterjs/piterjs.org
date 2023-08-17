@@ -3235,13 +3235,12 @@ declare namespace $ {
         Roles_org(): $piterjs_intro_page;
         Roles_place(): $piterjs_intro_page;
         Speakers(): $piterjs_intro_page;
+        Info(): $piterjs_intro_page;
         place_title(): string;
         place_notes(): string;
         Place(): $piterjs_intro_page;
         Schedule(): $$.$piterjs_schedule;
         Proft(): $piterjs_intro_page;
-        Info(): $piterjs_intro_page;
-        Follow(): $piterjs_intro_page;
         afterparty(): string;
         Afterparty(): $piterjs_intro_page;
         place(): $piterjs_place;

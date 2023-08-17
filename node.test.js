@@ -11718,11 +11718,10 @@ var $;
                 roles_org: this.Roles_org(),
                 roles_place: this.Roles_place(),
                 speakers: this.Speakers(),
+                info: this.Info(),
                 place: this.Place(),
                 schedule: this.Schedule(),
                 profit: this.Proft(),
-                info: this.Info(),
-                follow: this.Follow(),
                 afterparty: this.Afterparty()
             };
         }
@@ -11767,7 +11766,13 @@ var $;
         Speakers() {
             const obj = new this.$.$piterjs_intro_page();
             obj.title = () => "Докладчики";
-            obj.text = () => "Нужны всегда\nДаже если боишься\nПоможем с темой\nПодготовим\nПиши на hi@piterjs.org";
+            obj.text = () => "Нужны всегда\nДаже если боишься\nПоможем с темой\nПодготовим";
+            return obj;
+        }
+        Info() {
+            const obj = new this.$.$piterjs_intro_page();
+            obj.title = () => "Твой вклад";
+            obj.text = () => "github.com/piterjs\nt.me/nin_jin\npiterjs.org";
             return obj;
         }
         place_title() {
@@ -11794,20 +11799,8 @@ var $;
             obj.text = () => "За лучшие вопросы - призы\nМы ведём трансляцию\nИ записываем видео\nУлыбайтесь фотографу";
             return obj;
         }
-        Info() {
-            const obj = new this.$.$piterjs_intro_page();
-            obj.title = () => "Твой вклад";
-            obj.text = () => "github.com/piterjs\nhi@piterjs.org\npiterjs.org";
-            return obj;
-        }
-        Follow() {
-            const obj = new this.$.$piterjs_intro_page();
-            obj.title = () => "Следите за новостями";
-            obj.text = () => "vk.com/piterjs\nt.me/piterjs\nyoutube.com/piterjs\npiterjs.org";
-            return obj;
-        }
         afterparty() {
-            return "";
+            return "t.me/beerjs_spb\nLuminous: Загородный проспект, 13";
         }
         Afterparty() {
             const obj = new this.$.$piterjs_intro_page();
@@ -11866,6 +11859,9 @@ var $;
     ], $piterjs_intro.prototype, "Speakers", null);
     __decorate([
         $mol_mem
+    ], $piterjs_intro.prototype, "Info", null);
+    __decorate([
+        $mol_mem
     ], $piterjs_intro.prototype, "Place", null);
     __decorate([
         $mol_mem
@@ -11873,12 +11869,6 @@ var $;
     __decorate([
         $mol_mem
     ], $piterjs_intro.prototype, "Proft", null);
-    __decorate([
-        $mol_mem
-    ], $piterjs_intro.prototype, "Info", null);
-    __decorate([
-        $mol_mem
-    ], $piterjs_intro.prototype, "Follow", null);
     __decorate([
         $mol_mem
     ], $piterjs_intro.prototype, "Afterparty", null);
