@@ -54,7 +54,12 @@ $piterjs_intro $mol_view
 				\Даже если боишься
 				\Поможем с темой
 				\Подготовим
-				\Пиши на hi@piterjs.org
+		info <= Info $piterjs_intro_page
+			title \Твой вклад
+			text \
+				\github.com/piterjs
+				\t.me/nin_jin
+				\piterjs.org
 		place <= Place $piterjs_intro_page
 			title <= place_title \Мы в {place}
 			text <= place_notes \
@@ -68,13 +73,7 @@ $piterjs_intro $mol_view
 				\Мы ведём трансляцию
 				\И записываем видео
 				\Улыбайтесь фотографу
-		info <= Info $piterjs_intro_page
-			title \Твой вклад
-			text \
-				\github.com/piterjs
-				\hi@piterjs.org
-				\piterjs.org
-		follow <= Follow $piterjs_intro_page
+		- follow <= Follow $piterjs_intro_page
 			title \Следите за новостями
 			text \
 				\vk.com/piterjs
@@ -84,6 +83,8 @@ $piterjs_intro $mol_view
 		afterparty <= Afterparty $piterjs_intro_page
 			title \Го в бар!
 			text <= afterparty \
+				\t.me/beerjs_spb
+				\Luminous: Загородный проспект, 13
 	sub /
 		<= Screen $piterjs_screen
 			place <= place $piterjs_place
