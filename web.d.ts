@@ -3546,12 +3546,6 @@ declare namespace $ {
 }
 
 declare namespace $ {
-    class $mol_icon_medium extends $mol_icon {
-        path(): string;
-    }
-}
-
-declare namespace $ {
     class $mol_icon_telegram extends $mol_icon {
         path(): string;
     }
@@ -3559,12 +3553,6 @@ declare namespace $ {
 
 declare namespace $ {
     class $mol_icon_vk extends $mol_icon {
-        path(): string;
-    }
-}
-
-declare namespace $ {
-    class $mol_icon_twitter extends $mol_icon {
         path(): string;
     }
 }
@@ -3598,14 +3586,10 @@ declare namespace $ {
         body(): readonly any[];
         Github_icon(): $mol_icon_github_circle;
         Github(): $$.$mol_link;
-        Medium_icon(): $mol_icon_medium;
-        Medium(): $$.$mol_link;
         Telegram_icon(): $mol_icon_telegram;
         Telegram(): $$.$mol_link;
         Vkontakte_icon(): $mol_icon_vk;
         Vkontakte(): $$.$mol_link;
-        Twitter_icon(): $mol_icon_twitter;
-        Twitter(): $$.$mol_link;
         Youtube_icon(): $mol_icon_youtube;
         Youtube(): $$.$mol_link;
         Links(): $mol_view;
