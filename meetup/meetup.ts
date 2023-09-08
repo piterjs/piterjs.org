@@ -45,8 +45,8 @@ namespace $ {
 		}
 
 		@ $mol_mem
-		afterparty() {
-			return this.sub( 'afterparty', $hyoo_crowd_reg ).str()
+		afterparty( next?: string ) {
+			return this.sub( 'afterparty', $hyoo_crowd_reg ).str( next )
 		}
 
 	}

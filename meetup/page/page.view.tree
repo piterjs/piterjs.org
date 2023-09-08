@@ -2,6 +2,7 @@ $piterjs_meetup_page $mol_page
 	meetup $piterjs_meetup
 		title? => title?
 		description? => description?
+		afterparty? => afterparty?
 		start? => start?
 	Title $mol_string_button
 		value? <=> title?
@@ -47,6 +48,12 @@ $piterjs_meetup_page $mol_page
 			sub /
 				<= Speech_add_icon $mol_icon_plus
 				\Добавить доклад
+		<= Afterparty_field $mol_form_field
+			name \Афтерпати
+			Content <= Afterparty $mol_textarea
+				hint \Адрес, ориентиры, чат
+				value? <=> afterparty?
+				enabled <= editing false
 	Speech!index $piterjs_speech_snippet
 		speech <= speech!index $piterjs_speech
 

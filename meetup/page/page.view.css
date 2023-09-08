@@ -24,7 +24,12 @@
 
 [piterjs_meetup_page_description] {
 	box-shadow: none;
-	padding: 0;
+	flex-grow: 0;
+	font-family: sans-serif;
+}
+
+[piterjs_meetup_page_afterparty] {
+	box-shadow: none;
 	flex-grow: 0;
 	font-family: sans-serif;
 }

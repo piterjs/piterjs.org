@@ -15,11 +15,13 @@ namespace $.$$ {
 		}
 		
 		@ $mol_mem
-		bosy() {
+		body() {
 			return [
-				... this.description() ? [ this.Description() ] : [] ,
+				... ( this.editing() || this.description() ) ? [ this.Description() ] : [] ,
 				this.Links() ,
 				this.Speeches() ,
+				... this.editing() ? [ this.Speech_add() ] : [] ,
+				... this.editing() ? [ this.Afterparty_field() ] : [] ,
 			]
 		}
 
@@ -50,11 +52,6 @@ namespace $.$$ {
 		Public() {
 			if( !this.editing() ) return null!
 			return super.Public()
-		}
-
-		Speech_add() {
-			if( !this.editing() ) return null!
-			return super.Speech_add()
 		}
 
 	}
