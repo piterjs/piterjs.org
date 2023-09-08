@@ -28,7 +28,7 @@ namespace $.$$ {
 		place_show() { return this.$.$mol_state_arg.value( 'place' ) !== null }
 
 		others() { return this.$.$mol_state_arg.value( 'others' ) !== null }
-
+		
 		@ $mol_mem
 		meetup_id( next? : string | null ) {
 			
@@ -64,6 +64,7 @@ namespace $.$$ {
 				... this.place_show() ? [ this.Place() ] : [] ,
 				... this.video_uri() ? [ this.Video() ] : [] ,
 				... this.others() ? [ this.Others() ] : [] ,
+				... this.rights() ? [ this.Rights() ] : [] ,
 			]
 			if( pages.length === 1 ) pages.push( this.Now() )
 			return pages
@@ -129,9 +130,12 @@ namespace $.$$ {
 			
 		}
 
-		Meetup_add() {
-			if( !this.editing() ) return null!
-			return super.Meetup_add()
+		@ $mol_mem
+		tools() {
+			return [
+				... this.editing() ? [ this.Meetup_add() ] : [],
+				... this.editing() ? [ this.Rights_toggle() ] : [],
+			]
 		}
 
 		@ $mol_mem

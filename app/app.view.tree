@@ -18,10 +18,13 @@ $piterjs_app $mol_view
 			checked?val <=> toggle_intro?val false
 	Menu $mol_page
 		title \Митапы
-		tools /
+		tools <= tools /
 			<= Meetup_add $mol_button_minor
 				click? <=> metup_add? null
 				sub / <= Meetup_add_icon $mol_icon_plus
+			<= Rights_toggle $mol_check_icon
+				checked? <=> rights? false
+				Icon <= Rights_toggle_icon $mol_icon_shield_account
 		foot <= foot /
 			<= Online $hyoo_sync_online
 				yard <= Yard $hyoo_sync_client
@@ -65,3 +68,5 @@ $piterjs_app $mol_view
 		place <= place $piterjs_place
 		editing <= editing? false
 	Others $piterjs_others
+	Rights $hyoo_meta_rights
+		meta <= Domain
