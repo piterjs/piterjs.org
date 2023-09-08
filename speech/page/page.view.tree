@@ -8,6 +8,9 @@ $piterjs_speech_page $mol_page
 		enabled <= editing false
 		hint \Название
 	tools /
+		<= Public $mol_check_icon
+			checked? <=> speech_public? false
+			Icon <= Public_icon $mol_icon_eye
 		<= Start $mol_pick_time
 			value_moment? <=> start?
 			enabled <= editing false

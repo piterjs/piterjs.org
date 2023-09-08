@@ -23,6 +23,8 @@ namespace $ {
 			const ids = this.speeches_node().list()
 			const fund = this.world()!.Fund( $piterjs_speech )
 			return ids.map( id => fund.Item( $mol_int62_string_ensure( id )! ) )
+				.sort( ( a, b )=> a.start().valueOf() - b.start().valueOf() )
+
 		}
 
 		@ $mol_action
@@ -30,6 +32,11 @@ namespace $ {
 			const speech = this.world()!.Fund( $piterjs_speech ).make()!
 			this.speeches_node().add( speech.id() )
 			return speech
+		}
+
+		@ $mol_mem_key
+		speech_public( id: $mol_int62_string, next?: boolean ) {
+			return this.speeches_node().has( id, next )
 		}
 
 		@ $mol_mem

@@ -139,6 +139,10 @@ namespace $.$$ {
 			return super.Editing()
 		}
 
+		speech_public( id: $mol_int62_string, next?: boolean ) {
+			return this.meetup_current().speech_public( id, next )
+		}
+
 	}
 
 }

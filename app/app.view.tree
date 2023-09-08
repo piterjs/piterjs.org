@@ -45,11 +45,12 @@ $piterjs_app $mol_view
 						title \Другие события
 	Meetup* $piterjs_meetup_page
 		meetup <= meetup*
-		meetup_public? <=> meetup_public*?
 		editing <= editing? false
+		meetup_public? <=> meetup_public*?
 	Speech!id $piterjs_speech_page
 		speech <= speech!id $piterjs_speech
 		editing <= editing? false
+		speech_public? <=> speech_public*?
 	Menu_meetup* $piterjs_meetup_snippet
 		meetup <= meetup*
 	Now $piterjs_now
