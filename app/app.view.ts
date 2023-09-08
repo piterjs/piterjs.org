@@ -125,7 +125,7 @@ namespace $.$$ {
 		}
 
 		Editing() {
-			// if( !this.Domain().editable() ) return null!
+			if( !this.Domain().editable() ) return null!
 			return super.Editing()
 		}
 
