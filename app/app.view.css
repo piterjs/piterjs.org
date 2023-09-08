@@ -7,7 +7,7 @@
 }
 
 [piterjs_app][mol_theme="$mol_theme_light"] {
-	--mol_theme_focus: black;
+	--mol_theme_focus: #f7df1e;
 }
 
 [piterjs_app] [mol_theme="$mol_theme_base"] {
