@@ -1,10 +1,21 @@
 $piterjs_speaker_snippet $mol_view
 	speaker $piterjs_speaker
+		title? => title?
+		description? => description?
 	sub /
-		<= Photo $piterjs_image
-			link <= photo \
+		<= Photo_block $mol_stack sub /
+			<= Photo $piterjs_image
+				link <= photo \
+			<= Upload $mol_button_open
+				Icon null
+				files? <=> upload? /File
+				enabled <= editing false
 		<= Info $mol_list sub /
-			<= Title $mol_view
-				sub / <= title \
-			<= Description $mol_text
-				text <= description \
+			<= Title $mol_string
+				hint \Имя докладчика
+				value? <=> title?
+				enabled <= editing false
+			<= Description $mol_textarea
+				hint \Об авторе
+				value? <=> description?
+				enabled <= editing false

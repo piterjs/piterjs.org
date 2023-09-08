@@ -10,7 +10,7 @@ namespace $.$$ {
 		padding: rem(.75),
 
 		Photo: {
-			width: rem(20),
+			width: rem(16),
 			flex: {
 				grow: 0,
 				shrink: 1,
@@ -73,16 +73,23 @@ namespace $.$$ {
 		},
 
 		Title: {
-			padding: rem(.75),
-			font: {
-				size: rem(1.25),
-			},
+			textShadow: '0 0',
 		},
 
 		Description: {
 			margin: 0,
 			padding: 0,
 			boxShadow: 'none',
+		},
+
+		Upload: {
+			overflow: 'hidden',
+			align: {
+				self: 'stretch',
+			},
+			justify: {
+				self: 'stretch',
+			},
 		},
 
 	} )

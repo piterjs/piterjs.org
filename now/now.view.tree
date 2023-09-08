@@ -10,10 +10,6 @@ $piterjs_now $mol_page
 				uri \https://github.com/piterjs
 				sub /
 					<= Github_icon $mol_icon_github_circle
-			- <= Medium $mol_link
-				uri \https://medium.com/piterjs
-				sub /
-					<= Medium_icon $mol_icon_medium
 			<= Telegram $mol_link
 				uri \https://t.me/piterjs
 				sub /
@@ -22,10 +18,6 @@ $piterjs_now $mol_page
 				uri \https://vk.com/piterjs
 				sub /
 					<= Vkontakte_icon $mol_icon_vk
-			- <= Twitter $mol_link
-				uri \https://twitter.com/@gopiterjs
-				sub /
-					<= Twitter_icon $mol_icon_twitter
 			<= Youtube $mol_link
 				uri \https://www.youtube.com/channel/UCN9aK6ZG5PS1nnJZqscsmKw
 				sub /

@@ -9,7 +9,7 @@ namespace $.$$ {
 		alignItems: 'flex-start',
 
 		Photo: {
-			width: rem(6),
+			width: rem(7),
 		},
 
 		Info: {

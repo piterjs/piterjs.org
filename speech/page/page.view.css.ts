@@ -7,12 +7,21 @@ namespace $.$$ {
 		flex: {
 			grow: 1000,
 			shrink: 0,
-			basis: rem(36),
+			basis: rem(40),
+		},
+
+		Tools: {
+			flex: {
+				grow: 0,
+			},
 		},
 		
 		Description: {
 			boxShadow: 'none',
-			padding: rem(.75),
+			margin: rem(.75),
+			flex: {
+				grow: 0,
+			},
 		},
 		
 		Links: {

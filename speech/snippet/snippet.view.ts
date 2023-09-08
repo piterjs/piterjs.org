@@ -7,7 +7,7 @@ namespace $.$$ {
 		}
 
 		photo() {
-			return this.speech().speaker().photo()
+			return this.speech().speaker().photo_uri()
 		}
 
 		speaker_title() {

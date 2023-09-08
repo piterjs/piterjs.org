@@ -2,43 +2,43 @@ namespace $ {
 
 	export class $piterjs_meetup extends $piterjs_model {
 
-		static uri() {
-			return 'piterjs/meetup/meetup.data.tree'
-		}
-
 		@ $mol_mem
-		start() {
-			return new $mol_time_moment(  $mol_data_string( this.data().start ) )
+		start( next?: $mol_time_moment ) {
+			return new $mol_time_moment( this.sub( 'start', $hyoo_crowd_reg ).str( next?.toString() ) )
 		}
 		
 		@ $mol_mem
-		title() {
-			return $mol_data_string( this.data().title )
-		}
-
-		@ $mol_mem
-		description() {
-			return $mol_data_string( this.data().description )
-		}
-
-		@ $mol_mem
 		video() {
-			return $mol_data_optional( $mol_data_string )( this.data().video ) || null
+			return this.sub( 'video', $hyoo_crowd_reg ).str()
+		}
+
+		@ $mol_mem
+		speeches_node() {
+			return this.sub( 'speeches', $hyoo_crowd_list )
 		}
 
 		@ $mol_mem
 		speeches() {
-			return this.$.$piterjs_speech.list()( this.data().speeches )
+			const ids = this.speeches_node().list()
+			const fund = this.world()!.Fund( $piterjs_speech )
+			return ids.map( id => fund.Item( $mol_int62_string_ensure( id )! ) )
+		}
+
+		@ $mol_action
+		speech_make() {
+			const speech = this.world()!.Fund( $piterjs_speech ).make()!
+			this.speeches_node().add( speech.id() )
+			return speech
 		}
 
 		@ $mol_mem
 		place() {
-			return this.$.$piterjs_place.item( this.data().place )
+			return this.sub( 'place', $piterjs_place )
 		}
 
 		@ $mol_mem
 		afterparty() {
-			return $mol_data_optional( $mol_data_string )( this.data().afterparty ) || ''
+			return this.sub( 'afterparty', $hyoo_crowd_reg ).str()
 		}
 
 	}

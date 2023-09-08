@@ -1,6 +1,11 @@
 $piterjs_place_page $mol_page
 	place $piterjs_place
-	title \
+		title? => title?
+		address? => address?
+		route? => route?
+	Title $mol_string
+		value? <=> title?
+		enabled <= editinng false
 	tools /
 		<= Close $mol_link
 			arg * place null
@@ -8,8 +13,14 @@ $piterjs_place_page $mol_page
 				<= Close_icon $mol_icon_cross
 	body /
 		<= Info $mol_view sub <= info /
-			<= Address $mol_view sub / <= address \
-			<= Route $mol_view sub / <= route \
+			<= Address $mol_string
+				hint \Адрес
+				value? <=> address?
+				enabled <= editing false
+			<= Route $mol_textarea
+				hint \Как добраться
+				value? <=> route?
+				enabled <= editing false
 		<= Map $mol_map_yandex
 			zoom?val <=> zoom?val 14
 			objects /
