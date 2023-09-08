@@ -13,6 +13,12 @@ namespace $.$$ {
 			]
 		}
 
+		@ $mol_mem
+		map_locate() {
+			this.Map().query( this.address() )
+			this.Map().search()
+		}
+
 	}
 
 }

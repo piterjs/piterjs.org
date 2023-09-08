@@ -6,6 +6,7 @@ $piterjs_speech_page $mol_page
 	Title $mol_string_button
 		value? <=> title?
 		enabled <= editing false
+		hint \Название
 	tools /
 		<= Start $mol_pick_time
 			value_moment? <=> start?

@@ -9,6 +9,7 @@ $piterjs_meetup_page $mol_page
 	tools /
 		<= Start $mol_date
 			value_moment? <=> start?
+			align \bottom_left
 		<= Close $mol_link
 			arg *
 				meetup null
@@ -36,6 +37,11 @@ $piterjs_meetup_page $mol_page
 					speech null
 				title \Площадка
 		<= Speeches $mol_list rows <= speeches /
+		<= Speech_add $mol_button_minor
+			click? <=> speech_add? null
+			sub /
+				<= Speech_add_icon $mol_icon_plus
+				\Добавить доклад
 	Speech!index $piterjs_speech_snippet
 		speech <= speech!index $piterjs_speech
 

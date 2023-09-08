@@ -41,7 +41,18 @@ namespace $.$$ {
 		speech( index : number ) {
 			return this.meetup().speeches()[ index ]
 		}
+
+		speech_add() {
+			const speech = this.meetup().speech_make()
+			this.$.$mol_state_arg.value( 'speech', speech.id() )
+		}
 		
+		Speech_add() {
+			if( !this.editing() ) return null!
+			if( !this.meetup().editable() ) return null!
+			return super.Speech_add()
+		}
+
 	}
 
 }

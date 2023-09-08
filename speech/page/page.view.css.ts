@@ -22,6 +22,9 @@ namespace $.$$ {
 			flex: {
 				grow: 0,
 			},
+			font: {
+				family: 'sans-serif',
+			},
 		},
 		
 		Links: {

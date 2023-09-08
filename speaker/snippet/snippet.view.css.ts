@@ -11,55 +11,13 @@ namespace $.$$ {
 
 		Photo: {
 			width: rem(16),
+			height: rem(16),
 			flex: {
 				grow: 0,
 				shrink: 1,
 				basis: 'auto',
 			},
-			padding: 0,
 			margin: rem(.5),
-			position: 'relative',
-			overflow: 'visible',
-			zIndex: 0,
-			boxShadow: 'none',
-			border: {
-				radius: 0,
-			},
-
-			'::after': {
-				content: '',
-				position: 'absolute',
-				zIndex: -1,
-				right: rem(-.25),
-				top: rem(-.25),
-				width: rem(1),
-				height: rem(1),
-				background: {
-					color: $mol_theme.current,
-				},
-			},
-
-			'::before': {
-				content: '',
-				position: 'absolute',
-				zIndex: -1,
-				left: rem(-.25),
-				bottom: rem(-.25),
-				width: rem(1),
-				height: rem(1),
-				background: {
-					color: $mol_theme.current,
-				},
-			},
-
-			Content: {
-				border: {
-					width: rem(.25),
-					style: 'solid',
-					color: $mol_theme.back,
-				},
-			},
-
 		},
 
 		Info: {
@@ -80,6 +38,9 @@ namespace $.$$ {
 			margin: 0,
 			padding: 0,
 			boxShadow: 'none',
+			font: {
+				family: 'sans-serif',
+			},
 		},
 
 		Upload: {

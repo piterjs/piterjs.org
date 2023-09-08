@@ -1,3 +1,2 @@
-$piterjs_image $mol_image2 links /
-	<= link \
-	\piterjs/logo/logo.svg
+$piterjs_image $mol_image
+	uri <= link \

@@ -5,7 +5,7 @@ $piterjs_place_page $mol_page
 		route? => route?
 	Title $mol_string
 		value? <=> title?
-		enabled <= editinng false
+		enabled <= editing false
 	tools /
 		<= Close $mol_link
 			arg * place null
@@ -21,11 +21,6 @@ $piterjs_place_page $mol_page
 				hint \Как добраться
 				value? <=> route?
 				enabled <= editing false
-		<= Map $mol_map_yandex
-			zoom?val <=> zoom?val 14
-			objects /
-				<= Mark $mol_map_yandex_mark
-					pos <= coords $mol_vector_2d /
-						0
-						0
-					title \
+		<= Map $hyoo_map
+	auto /
+		<= map_locate null
