@@ -50,7 +50,7 @@ $piterjs_app $mol_view
 	Speech!id $piterjs_speech_page
 		speech <= speech!id $piterjs_speech
 		editing <= editing? false
-		speech_public? <=> speech_public*?
+		speech_public? <=> speech_public*? false
 	Menu_meetup* $piterjs_meetup_snippet
 		meetup <= meetup*
 	Now $piterjs_now
