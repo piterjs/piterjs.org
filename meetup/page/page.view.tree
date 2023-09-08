@@ -9,7 +9,7 @@ $piterjs_meetup_page $mol_page
 		hint \Номер
 	tools /
 		<= Public $mol_check_icon
-			checked? <=> meetup_public?
+			checked? <=> meetup_public? false
 			Icon <= Public_icon $mol_icon_eye
 		<= Start $mol_date
 			value_moment? <=> start?
