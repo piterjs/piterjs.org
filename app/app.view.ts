@@ -124,6 +124,11 @@ namespace $.$$ {
 			
 		}
 
+		Meetup_add() {
+			if( !this.Domain().editable() ) return null!
+			return super.Meetup_add()
+		}
+
 		Editing() {
 			if( !this.Domain().editable() ) return null!
 			return super.Editing()
