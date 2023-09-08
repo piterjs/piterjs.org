@@ -24,22 +24,19 @@ namespace $.$$ {
 			margin: em(.5),
 		},
 
-		Speech_interval: {
+		Speech_start: {
 			fontWeight: 'bolder',
 			padding: `.5em`,
 		},
 
 		Speech_title: {
 			padding: `.5em`,
-			margin: {
-				left: vmin(10),
-			},
 		},
 
 		Speech_speaker: {
 			padding: `.5em`,
 			margin : {
-				left: vmin(10),
+				left: vmin(9.5),
 			},
 			color: $mol_theme.shade,
 		},

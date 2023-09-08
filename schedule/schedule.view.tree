@@ -1,10 +1,14 @@
 $piterjs_schedule $mol_view
 	meetup $piterjs_meetup
 	sub /
-		<= Speeches $mol_list rows <= speeches /
-	Speech!index $mol_list sub /
-		<= Speech_interval!index $mol_view sub / <= speech_interval!index \19:20 - 23:50
-		<= Speech_title!index $mol_view
-			attr * mol_theme \$mol_theme_accent
-			sub / <= speech_title!index \
-		<= Speech_speaker!index $mol_view sub / <= speech_speaker!index \
+		<= Speeches $mol_list
+			rows <= speeches /
+				<= Speech*0 $mol_list sub /
+					<= Speech_main* $mol_view sub /
+						<= Speech_start* $mol_view
+							sub / <= speech_start* \19:20
+						<= Speech_title* $mol_view
+							attr * mol_theme \$mol_theme_accent
+							sub / <= speech_title* \
+					<= Speech_speaker* $mol_view
+						sub / <= speech_speaker* \
