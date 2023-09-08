@@ -134,9 +134,18 @@ namespace $.$$ {
 			return super.Meetup_add()
 		}
 
-		Editing() {
-			if( !this.Domain().editable() ) return null!
-			return super.Editing()
+		@ $mol_mem
+		foot() {
+			return [
+				this.Online(),
+				... this.Domain().editable() ? [ this.Editing() ] : [ this.User() ],
+				this.Lights(),
+			]
+		}
+
+		@ $mol_mem
+		user_id() {
+			return this.Yard().peer().id
 		}
 
 		speech_public( id: $mol_int62_string, next?: boolean ) {

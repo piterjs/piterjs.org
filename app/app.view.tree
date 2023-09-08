@@ -26,8 +26,9 @@ $piterjs_app $mol_view
 			<= Online $hyoo_sync_online
 				yard <= Yard $hyoo_sync_client
 			<= Editing $mol_check_icon
-				Icon <= Editing_icon $mol_icon_pencil
+				Icon <= Editing_icon $mol_icon_settings_outline
 				checked? <=> editing? false
+			<= User $mol_view sub / <= user_id \0_0
 			<= Lights $mol_lights_toggle
 		body /
 			<= Menu_content $mol_view sub /

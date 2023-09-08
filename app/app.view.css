@@ -75,3 +75,9 @@
 	width: 2rem;
 	height: 2rem;
 }
+
+[piterjs_app_user] {
+	font-size: .75rem;
+	padding: .5rem 0;
+	color: var(--mol_theme_shade);
+}
