@@ -3,7 +3,7 @@
 }
 
 [piterjs_app][mol_theme="$mol_theme_dark"] {
-	--mol_theme_focus: rgb(255, 187, 0);
+	--mol_theme_focus: #f7df1e;
 }
 
 [piterjs_app][mol_theme="$mol_theme_light"] {
