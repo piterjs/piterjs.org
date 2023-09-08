@@ -1,6 +1,5 @@
 $piterjs_app $mol_view
 	Domain $piterjs_domain
-		meetups_keys => meetups_keys
 		meetups_ids => meetups_ids
 		meetup* => meetup*
 	plugins /
