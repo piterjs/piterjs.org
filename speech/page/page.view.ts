@@ -22,6 +22,11 @@ namespace $.$$ {
 			]
 		}
 
+		Public() {
+			if( !this.editing() ) return null!
+			return super.Public()
+		}
+
 	}
 
 }
