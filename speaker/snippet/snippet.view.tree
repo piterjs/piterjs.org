@@ -1,4 +1,6 @@
 $piterjs_speaker_snippet $mol_view
+	event *
+		paste? <=> paste? null
 	speaker $piterjs_speaker
 		title? => title?
 		description? => description?

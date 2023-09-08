@@ -23,6 +23,16 @@ namespace $.$$ {
 
 		}
 
+		@ $mol_action
+		take_files( files: FileList ) {
+			return [ ... files ]
+		}
+
+		paste( event?: ClipboardEvent ) {
+			const files = event?.clipboardData?.files
+			if( files ) this.upload( this.take_files( files ) )
+		}
+
 	}
 
 }
