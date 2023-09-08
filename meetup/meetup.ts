@@ -5,7 +5,7 @@ namespace $ {
 		@ $mol_mem
 		start( next?: $mol_time_moment ) {
 			const str = this.sub( 'start', $hyoo_crowd_reg ).str( next?.toString() )
-			return str ? new $mol_time_moment( str ) : null
+			return str ? new $mol_time_moment( str ) : null!
 		}
 		
 		@ $mol_mem
