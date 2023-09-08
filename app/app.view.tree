@@ -2,6 +2,7 @@ $piterjs_app $mol_view
 	Domain $piterjs_domain
 		meetups_ids => meetups_ids
 		meetup* => meetup*
+		meetup_public*? => meetup_public*?
 	plugins /
 		<= Theme $mol_theme_auto
 	sub /
@@ -44,6 +45,7 @@ $piterjs_app $mol_view
 						title \Другие события
 	Meetup* $piterjs_meetup_page
 		meetup <= meetup*
+		meetup_public? <=> meetup_public*?
 		editing <= editing? false
 	Speech!id $piterjs_speech_page
 		speech <= speech!id $piterjs_speech

@@ -87,7 +87,12 @@ namespace $.$$ {
 
 		@ $mol_mem
 		menu_meetups() {
-			return this.meetups_ids().slice().reverse().map( id => this.Menu_meetup( id ) )
+			return this.meetups_ids().slice().reverse()
+				.sort( ( a, b )=>
+					+( this.meetup( b ).start()?.valueOf() ?? 0 )
+					-( this.meetup( a ).start()?.valueOf() ?? 0 )
+				)
+				.map( id => this.Menu_meetup( id ) )
 		}
 		menu_meetup( id : string ) { return this.meetup( id ) }
 		menu_meetup_id( id : string ) { return id }
@@ -125,7 +130,7 @@ namespace $.$$ {
 		}
 
 		Meetup_add() {
-			if( !this.Domain().editable() ) return null!
+			if( !this.editing() ) return null!
 			return super.Meetup_add()
 		}
 

@@ -17,13 +17,16 @@ namespace $ {
 			return this.world()!.Fund( $piterjs_meetup ).Item( id )
 		}
 
+		@ $mol_mem_key
+		meetup_public( id: $mol_int62_string, next?: boolean ) {
+			return this.meetups_node().has( id, next )
+		}
+
 		@ $mol_action
 		meetup_make() {
 			
 			const meetup = this.world()!.Fund( $piterjs_meetup ).make()!
 			meetup.steal_rights( this )
-
-			this.meetups_node().add( meetup.id() )
 
 			return meetup
 

@@ -47,9 +47,13 @@ namespace $.$$ {
 			this.$.$mol_state_arg.value( 'speech', speech.id() )
 		}
 		
+		Public() {
+			if( !this.editing() ) return null!
+			return super.Public()
+		}
+
 		Speech_add() {
 			if( !this.editing() ) return null!
-			if( !this.meetup().editable() ) return null!
 			return super.Speech_add()
 		}
 

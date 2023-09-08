@@ -7,6 +7,9 @@ $piterjs_meetup_page $mol_page
 		value? <=> title?
 		enabled <= editing false
 	tools /
+		<= Public $mol_check_icon
+			checked? <=> meetup_public?
+			Icon <= Public_icon $mol_icon_eye
 		<= Start $mol_date
 			value_moment? <=> start?
 			align \bottom_left
