@@ -13,6 +13,7 @@ $piterjs_meetup_page $mol_page
 			Icon <= Public_icon $mol_icon_eye
 		<= Start $mol_date
 			value_moment? <=> start?
+			enabled <= editing false
 			align \bottom_left
 		<= Close $mol_link
 			arg *

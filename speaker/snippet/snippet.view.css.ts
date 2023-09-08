@@ -17,7 +17,7 @@ namespace $.$$ {
 				shrink: 1,
 				basis: 'auto',
 			},
-			margin: rem(.5),
+			margin: rem(.75),
 		},
 
 		Info: {
