@@ -1,5 +1,4 @@
 $piterjs_link $mol_link
-	target \_blank
 	sub /
 		<= Button $mol_button_major
 			title <= title
