@@ -41,11 +41,15 @@ $piterjs_app $mol_view
 						uri \https://conf.piterjs.org/
 						sub /
 							<= Conf_title $mol_view
-								sub / \Conf
+								sub /
+									\Conf 
+									<= Conf_ext $mol_icon_share_outline
 							<= Conf_date $mol_view
 								sub / \сентябрь'19
 					<= Wiki_link $mol_link
-						arg * wiki \
+						arg *
+							wiki \
+							meetup null
 						title \База знаний
 					- <= Others_link $mol_link
 						uri \#others
