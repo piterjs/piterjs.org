@@ -44,6 +44,9 @@ $piterjs_app $mol_view
 								sub / \Conf
 							<= Conf_date $mol_view
 								sub / \сентябрь'19
+					<= Wiki_link $mol_link
+						arg * wiki \
+						title \База знаний
 					- <= Others_link $mol_link
 						uri \#others
 						title \Другие события
@@ -71,3 +74,6 @@ $piterjs_app $mol_view
 	Others $piterjs_others
 	Rights $hyoo_meta_rights
 		meta <= Domain
+	Wiki $hyoo_page
+		side_main_id \zi5t5h_8aygdf
+		yard <= Yard

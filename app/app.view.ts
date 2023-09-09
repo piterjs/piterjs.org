@@ -29,6 +29,8 @@ namespace $.$$ {
 
 		others() { return this.$.$mol_state_arg.value( 'others' ) !== null }
 		
+		wiki() { return this.$.$mol_state_arg.value( 'wiki' ) !== null }
+		
 		@ $mol_mem
 		meetup_id( next? : string | null ) {
 			
@@ -65,6 +67,7 @@ namespace $.$$ {
 				... this.video() ? [ this.Video() ] : [] ,
 				... this.others() ? [ this.Others() ] : [] ,
 				... this.rights() ? [ this.Rights() ] : [] ,
+				... this.wiki() ? this.Wiki().pages() : [],
 			]
 			if( pages.length === 1 ) pages.push( this.Now() )
 			return pages

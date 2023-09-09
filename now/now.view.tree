@@ -6,22 +6,21 @@ $piterjs_now $mol_page
 		tabindex null
 	tools /
 		<= Links $mol_view sub /
-			<= Github $mol_link
-				uri \https://github.com/piterjs
-				sub /
-					<= Github_icon $mol_icon_github_circle
-			<= Telegram $mol_link
-				uri \https://t.me/piterjs
-				sub /
-					<= Telegram_icon $mol_icon_telegram
-			<= Vkontakte $mol_link
+			<= Youtube $mol_link_iconed
+				uri \https://www.youtube.com/@piterjs
+				title \
+			<= Vkontakte $mol_link_iconed
 				uri \https://vk.com/piterjs
-				sub /
-					<= Vkontakte_icon $mol_icon_vk
-			<= Youtube $mol_link
-				uri \https://www.youtube.com/channel/UCN9aK6ZG5PS1nnJZqscsmKw
-				sub /
-					<= Youtube_icon $mol_icon_youtube
+				title \
+			<= Habr $mol_link_iconed
+				uri \https://habr.com/ru/users/PiterJS/
+				title \
+			<= Telegram $mol_link_iconed
+				uri \https://t.me/piterjs
+				title \
+			<= Github $mol_link_iconed
+				uri \https://github.com/piterjs
+				title \
 	body /
 		<= Screen $piterjs_screen
 			place <= place $piterjs_place
