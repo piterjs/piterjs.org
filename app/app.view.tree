@@ -63,7 +63,8 @@ $piterjs_app $mol_view
 		meetup <= meetup_current $piterjs_meetup
 		page?val <=> intro?val \
 	Video $piterjs_video_page
-		source <= video_uri \
+		source? <=> video_uri? \
+		editing <= editing? false
 	Place $piterjs_place_page
 		place <= place $piterjs_place
 		editing <= editing? false

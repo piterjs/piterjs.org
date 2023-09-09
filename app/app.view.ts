@@ -62,7 +62,7 @@ namespace $.$$ {
 				... this.meetup_id() ? [ this.Meetup( this.meetup_id() ) ] : [] ,
 				... this.speech_id() ? [ this.Speech( this.speech_id() ) ] : [] ,
 				... this.place_show() ? [ this.Place() ] : [] ,
-				... this.video_uri() ? [ this.Video() ] : [] ,
+				... this.video() ? [ this.Video() ] : [] ,
 				... this.others() ? [ this.Others() ] : [] ,
 				... this.rights() ? [ this.Rights() ] : [] ,
 			]
@@ -119,14 +119,12 @@ namespace $.$$ {
 		}
 
 		@ $mol_mem
-		video_uri() {
-
-			if( !this.video() ) return ''
+		video_uri( next?: string ) {
 			
 			const id = this.meetup_id()
 			if( !id ) return ''
 			
-			return this.meetup( id ).video() ?? ''
+			return this.meetup( id ).video( next ) ?? ''
 			
 		}
 

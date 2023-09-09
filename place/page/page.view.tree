@@ -6,6 +6,7 @@ $piterjs_place_page $mol_page
 	Title $mol_string
 		value? <=> title?
 		enabled <= editing false
+		hint \Название
 	tools /
 		<= Close $mol_link
 			arg * place null

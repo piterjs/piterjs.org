@@ -9,8 +9,8 @@ namespace $ {
 		}
 		
 		@ $mol_mem
-		video() {
-			return this.sub( 'video', $hyoo_crowd_reg ).str()
+		video( next?: string ) {
+			return this.sub( 'video', $hyoo_crowd_reg ).str( next )
 		}
 
 		@ $mol_mem
