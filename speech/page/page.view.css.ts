@@ -28,18 +28,21 @@ namespace $.$$ {
 		
 		Links: {
 			
-			margin: {
-				top : rem(-1),
-				right : 0,
-				bottom : 0,
-				left : 0,
+			// margin: {
+			// 	top : rem(-1),
+			// 	right : 0,
+			// 	bottom : 0,
+			// 	left : 0,
+			// },
+			flex: {
+				wrap: 'wrap',
 			},
-			fontWeight: '600',
-			flex: 'none',
 
 			'>': {
 				$mol_view: {
-					margin: 0,
+					flex: {
+						grow: 1,
+					},
 				}
 			}
 

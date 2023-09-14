@@ -6,19 +6,11 @@ namespace $.$$ {
 			return this.speech().speaker()
 		}
 
-		slides() {
-			return this.speech().slides()!
-		}
-
-		video() {
-			return this.speech().video()!
-		}
-
 		@ $mol_mem
 		links() {
 			return [
-				... this.slides() ? [ this.Slides() ] : [] ,
-				... this.video() ? [ this.Video() ] : [] ,
+				... ( this.editing() || this.slides() ) ? [ this.Slides() ] : [] ,
+				... ( this.editing() || this.video() ) ? [ this.Video() ] : [] ,
 			]
 		}
 

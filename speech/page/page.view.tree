@@ -3,6 +3,8 @@ $piterjs_speech_page $mol_page
 		title? => title?
 		description? => description?
 		start? => start?
+		slides? => slides?
+		video? => video?
 	Title $mol_string_button
 		value? <=> title?
 		enabled <= editing false
@@ -23,15 +25,15 @@ $piterjs_speech_page $mol_page
 			hint \О чём
 			value? <=> description?
 			enabled <= editing false
-		<= Links $mol_row sub <= links /
-			<= Slides $mol_link
-				uri <= slides \
+		<= Links $mol_view sub <= links /
+			<= Slides $mol_string_link
+				value? <=> slides?
+				enabled <= editing
 				title \Слайды
-				target \_blank
-			<= Video $mol_link
-				uri <= video \
+			<= Video $mol_string_link
+				value? <=> video?
+				enabled <= editing
 				title \Видео
-				target \_blank
 		<= Speaker $piterjs_speaker_snippet
 			speaker <= speaker $piterjs_speaker
 			editing <= editing false

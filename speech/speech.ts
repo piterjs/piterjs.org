@@ -9,13 +9,13 @@ namespace $ {
 		}
 
 		@ $mol_mem
-		slides() {
-			return this.sub( 'slides', $hyoo_crowd_reg ).str()
+		slides( next?: string ) {
+			return this.sub( 'slides', $hyoo_crowd_reg ).str( next )
 		}
 
 		@ $mol_mem
-		video() {
-			return this.sub( 'video', $hyoo_crowd_reg ).str()
+		video( next?: string ) {
+			return this.sub( 'video', $hyoo_crowd_reg ).str( next )
 		}
 		
 		@ $mol_mem
