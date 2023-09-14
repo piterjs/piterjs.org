@@ -45,7 +45,7 @@ namespace $.$$ {
 		}
 
 		@ $mol_action
-		metup_add() {
+		meetup_add() {
 			const meetup = this.Domain().meetup_make()
 			this.meetup_id( meetup.id() )
 		}

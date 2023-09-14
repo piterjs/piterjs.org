@@ -20,7 +20,7 @@ $piterjs_app $mol_view
 		title \Митапы
 		tools <= tools /
 			<= Meetup_add $mol_button_minor
-				click? <=> metup_add? null
+				click? <=> meetup_add? null
 				sub / <= Meetup_add_icon $mol_icon_plus
 			<= Rights_toggle $mol_check_icon
 				checked? <=> rights? false

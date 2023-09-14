@@ -7,11 +7,10 @@ namespace $.$$ {
 		display: 'flex',
 		alignItems: 'flex-start',
 		flexWrap: 'wrap',
-		padding: rem(.75),
 
 		Photo: {
-			width: rem(16),
-			height: rem(16),
+			// width: rem(21),
+			// height: rem(21),
 			flex: {
 				grow: 0,
 				shrink: 1,
@@ -19,10 +18,11 @@ namespace $.$$ {
 			},
 			margin: rem(.75),
 		},
-
+		
 		Info: {
 			display: 'flex',
 			flexDirection: 'column',
+			margin: [ rem(.75), 0 ],
 			flex: {
 				grow: 2,
 				shrink: 1,

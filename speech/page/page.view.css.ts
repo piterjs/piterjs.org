@@ -18,7 +18,6 @@ namespace $.$$ {
 		
 		Description: {
 			boxShadow: 'none',
-			margin: rem(.75),
 			flex: {
 				grow: 0,
 			},
@@ -35,7 +34,6 @@ namespace $.$$ {
 				bottom : 0,
 				left : 0,
 			},
-			padding: rem(.75),
 			fontWeight: '600',
 			flex: 'none',
 

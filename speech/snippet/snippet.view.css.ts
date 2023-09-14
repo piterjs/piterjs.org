@@ -9,8 +9,9 @@ namespace $.$$ {
 		alignItems: 'flex-start',
 
 		Photo: {
-			width: rem(7),
-			aspectRatio: 1,
+			width: rem(5),
+			// aspectRatio: 1,
+			height: `100%`,
 		},
 
 		Info: {
