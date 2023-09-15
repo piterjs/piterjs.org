@@ -11,7 +11,7 @@ $piterjs_intro $mol_view
 				\JS и всё, что рядом
 				\Каждый месяц с 2015
 				\Спячка с 2020
-				\Просыпаемся и пашем!
+				\С 2023 снова с вами!
 		- projects <= Projects $piterjs_intro_page
 			title \Наши проекты
 			text \
@@ -58,7 +58,7 @@ $piterjs_intro $mol_view
 			title \Твой вклад
 			text \
 				\github.com/piterjs
-				\t.me/nin_jin
+				\hi@piterjs.org
 				\piterjs.org
 		place <= Place $piterjs_intro_page
 			title <= place_title \Мы в {place}

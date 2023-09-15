@@ -1,4 +1,8 @@
 $piterjs_app $mol_view
+	Domain $piterjs_domain
+		meetups => meetups
+		meetup* => meetup*
+		meetup_public*? => meetup_public*?
 	plugins /
 		<= Theme $mol_theme_auto
 	sub /
@@ -15,6 +19,19 @@ $piterjs_app $mol_view
 	Menu $mol_page
 		title \Митапы
 		tools <= tools /
+			<= Meetup_add $mol_button_minor
+				click? <=> meetup_add? null
+				sub / <= Meetup_add_icon $mol_icon_plus
+			<= Rights_toggle $mol_check_icon
+				checked? <=> rights? false
+				Icon <= Rights_toggle_icon $mol_icon_shield_account
+		foot <= foot /
+			<= Online $hyoo_sync_online
+				yard <= Yard $hyoo_sync_client
+			<= Editing $mol_check_icon
+				Icon <= Editing_icon $mol_icon_settings_outline
+				checked? <=> editing? false
+			<= User $mol_view sub / <= user_id \0_0
 			<= Lights $mol_lights_toggle
 		body /
 			<= Menu_content $mol_view sub /
@@ -24,25 +41,43 @@ $piterjs_app $mol_view
 						uri \https://conf.piterjs.org/
 						sub /
 							<= Conf_title $mol_view
-								sub / \Conf
+								sub /
+									\Conf 
+									<= Conf_ext $mol_icon_share_outline
 							<= Conf_date $mol_view
 								sub / \сентябрь'19
+					<= Wiki_link $mol_link
+						arg *
+							wiki \
+							meetup null
+						title \База знаний
 					- <= Others_link $mol_link
 						uri \#others
 						title \Другие события
-	Meetup!id $piterjs_meetup_page
-		meetup <= meetup!id $piterjs_meetup
+	Meetup* $piterjs_meetup_page
+		meetup <= meetup*
+		editing <= editing? false
+		meetup_public? <=> meetup_public*?
 	Speech!id $piterjs_speech_page
 		speech <= speech!id $piterjs_speech
-	Menu_meetup!id $piterjs_meetup_snippet
-		meetup <= meetup!id $piterjs_meetup
+		editing <= editing? false
+		speech_public? <=> speech_public*? false
+	Menu_meetup* $piterjs_meetup_snippet
+		meetup <= meetup*
 	Now $piterjs_now
 		place <= place $piterjs_place
 	Intro $piterjs_intro
 		meetup <= meetup_current $piterjs_meetup
 		page?val <=> intro?val \
 	Video $piterjs_video_page
-		source <= video_uri \
+		source? <=> video_uri? \
+		editing <= editing? false
 	Place $piterjs_place_page
 		place <= place $piterjs_place
+		editing <= editing? false
 	Others $piterjs_others
+	Rights $hyoo_meta_rights
+		meta <= Domain
+	Wiki $hyoo_page
+		side_main_id \zi5t5h_8aygdf
+		yard <= Yard

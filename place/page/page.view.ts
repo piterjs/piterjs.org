@@ -2,20 +2,8 @@ namespace $.$$ {
 
 	export class $piterjs_place_page extends $.$piterjs_place_page {
 
-		title() {
-			return this.place().title()
-		}
-
-		address() {
-			return this.place().address()
-		}
-
 		coords() {
 			return this.place().coords()!
-		}
-
-		route() {
-			return this.place().route()
 		}
 
 		info() {
@@ -23,6 +11,12 @@ namespace $.$$ {
 				this.Address() ,
 				... this.route() ? [ this.Route() ] : []
 			]
+		}
+
+		@ $mol_mem
+		map_locate() {
+			this.Map().query( this.address() )
+			this.Map().search()
 		}
 
 	}

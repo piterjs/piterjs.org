@@ -1,10 +1,14 @@
 $piterjs_video_page $mol_page
-	title \Видеотрансляция
+	title \Трансляция
 	tools /
+		<= Link $mol_string
+			hint \Ссылка
+			value? <=> source? \
+			enabled <= editing false
 		<= Close $mol_link
 			arg * video null
 			sub /
 				<= Close_icon $mol_icon_cross
 	body /
 		<= Frame $mol_frame
-			uri <= uri <= source \
+			uri <= uri <= source

@@ -2,6 +2,10 @@
 	flex: 0 0 28rem;
 }
 
+[piterjs_meetup_page_head] {
+	flex-wrap: nowrap;
+}
+
 [piterjs_meetup_page_body] {
 	padding: .75rem;
 }
@@ -11,25 +15,25 @@
 }
 
 [piterjs_meetup_page_video] {
-	font-weight: bolder;
 	display: inline;
 }
 
 [piterjs_meetup_page_place] {
-	font-weight: bolder;
 	display: inline;
 }
 
 [piterjs_meetup_page_description] {
 	box-shadow: none;
-	padding: 0;
+	flex-grow: 0;
+	font-family: sans-serif;
+}
+
+[piterjs_meetup_page_afterparty] {
+	box-shadow: none;
+	flex-grow: 0;
+	font-family: sans-serif;
 }
 
 [piterjs_meetup_page_title] {
-	flex: 1000 1 auto;
-}
-
-[piterjs_meetup_page_date] {
-	padding: .5rem .75rem;
-	font-weight: normal;
+	flex: 1000 1000 auto;
 }

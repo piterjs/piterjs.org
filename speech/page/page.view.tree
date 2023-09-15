@@ -1,21 +1,39 @@
 $piterjs_speech_page $mol_page
 	speech $piterjs_speech
+		title? => title?
+		description? => description?
+		start? => start?
+		slides? => slides?
+		video? => video?
+	Title $mol_string_button
+		value? <=> title?
+		enabled <= editing false
+		hint \Название
 	tools /
+		<= Public $mol_check_icon
+			checked? <=> speech_public? false
+			Icon <= Public_icon $mol_icon_eye
+		<= Start $mol_pick_time
+			value_moment? <=> start?
+			enabled <= editing false
 		<= Close $mol_link
 			arg * speech null
 			sub /
 				<= Close_icon $mol_icon_cross
 	body /
-		<= Description $mol_text
-			text <= description \
-		<= Links $mol_row sub <= links /
-			<= Slides $mol_link
-				uri <= slides \
+		<= Description $mol_textarea
+			hint \О чём
+			value? <=> description?
+			enabled <= editing false
+		<= Links $mol_view sub <= links /
+			<= Slides $mol_string_link
+				value? <=> slides?
+				enabled <= editing
 				title \Слайды
-				target \_blank
-			<= Video $mol_link
-				uri <= video \
+			<= Video $mol_string_link
+				value? <=> video?
+				enabled <= editing
 				title \Видео
-				target \_blank
 		<= Speaker $piterjs_speaker_snippet
 			speaker <= speaker $piterjs_speaker
+			editing <= editing false

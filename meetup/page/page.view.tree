@@ -1,8 +1,21 @@
 $piterjs_meetup_page $mol_page
 	meetup $piterjs_meetup
+		title? => title?
+		description? => description?
+		afterparty? => afterparty?
+		start? => start?
+	Title $mol_string_button
+		value? <=> title?
+		enabled <= editing false
+		hint \Номер
 	tools /
-		<= Date $mol_view
-			sub / <= date \
+		<= Public $mol_check_icon
+			checked? <=> meetup_public? false
+			Icon <= Public_icon $mol_icon_eye
+		<= Start $mol_date
+			value_moment? <=> start?
+			enabled <= editing false
+			align \bottom_left
 		<= Close $mol_link
 			arg *
 				meetup null
@@ -12,8 +25,10 @@ $piterjs_meetup_page $mol_page
 			sub /
 				<= Close_icon $mol_icon_cross
 	body /
-		<= Description $mol_text
-			text <= description \
+		<= Description $mol_textarea
+			hint \Резюме
+			value? <=> description?
+			enabled <= editing false
 		<= Links $mol_view sub <= links / 
 			<= Video $mol_link
 				arg *
@@ -28,6 +43,17 @@ $piterjs_meetup_page $mol_page
 					speech null
 				title \Площадка
 		<= Speeches $mol_list rows <= speeches /
+		<= Speech_add $mol_button_minor
+			click? <=> speech_add? null
+			sub /
+				<= Speech_add_icon $mol_icon_plus
+				\Добавить доклад
+		<= Afterparty_field $mol_form_field
+			name \Афтерпати
+			Content <= Afterparty $mol_textarea
+				hint \Адрес, ориентиры, чат
+				value? <=> afterparty?
+				enabled <= editing false
 	Speech!index $piterjs_speech_snippet
 		speech <= speech!index $piterjs_speech
 

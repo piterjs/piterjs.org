@@ -49,7 +49,6 @@
 }
 
 [piterjs_now_links] {
-	flex: 1 1 auto;
 	display: flex;
 	flex-wrap: wrap;
 }

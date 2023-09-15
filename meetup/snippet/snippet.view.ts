@@ -12,7 +12,7 @@ namespace $.$$ {
 
 		@ $mol_mem
 		date() {
-			return this.meetup().start().toString( "Month'YY" )
+			return this.meetup().start()?.toString( "Month'YY" ) ?? ''
 		}
 
 	}

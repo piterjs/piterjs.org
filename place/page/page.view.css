@@ -2,6 +2,12 @@
 	flex: 1000 0 60rem;
 }
 
-[piterjs_place_page_info] > * {
-	padding: .5rem .75rem;
+[piterjs_place_page_tools] {
+	flex-grow: 0;
 }
+
+[piterjs_place_page_map] {
+	border-radius: var(--mol_gap_round);
+	overflow: hidden;
+}
+

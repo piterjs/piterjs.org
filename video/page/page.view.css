@@ -1,3 +1,7 @@
 [piterjs_video_page] {
 	flex: 1000 0 60rem;
 }
+
+[piterjs_video_page_body] {
+	padding: 0;
+}

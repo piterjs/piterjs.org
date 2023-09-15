@@ -7,10 +7,8 @@
 [piterjs_meetup_snippet_title] {
 	padding: .5rem .75rem;
 	flex: 1 1 auto;
-	font-weight: 600;
 }
 
 [piterjs_meetup_snippet_date] {
-	color: var(--mol_theme_text);
 	padding: .5rem .75rem;
 }

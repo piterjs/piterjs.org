@@ -2,54 +2,32 @@ namespace $ {
 
 	export class $piterjs_speech extends $piterjs_model {
 
-		static uri() {
-			return 'piterjs/speech/speech.data.tree'
-		}		
-
 		@ $mol_mem
-		meetup() {
-			return this.$.$piterjs_meetup.all().find(
-				meetup => meetup.speeches().indexOf( this ) !== -1
-			)
+		meetup( next?: $piterjs_meetup ) {
+			const id = $mol_int62_string_ensure( this.sub( 'meetup', $hyoo_crowd_reg ).str( next?.id() ) )
+			return id ? this.world()!.Fund( $piterjs_place ).Item( id ) : null
 		}
 
 		@ $mol_mem
-		title() {
-			return $mol_data_string( this.data().title )
+		slides( next?: string ) {
+			return this.sub( 'slides', $hyoo_crowd_reg ).str( next )
 		}
 
 		@ $mol_mem
-		description() {
-			return $mol_data_string( this.data().description )
-		}
-
-		@ $mol_mem
-		slides() {
-			return $mol_data_optional( $mol_data_string )( this.data().slides ) || null
-		}
-
-		@ $mol_mem
-		video() {
-			return $mol_data_optional( $mol_data_string )( this.data().video ) || null
+		video( next?: string ) {
+			return this.sub( 'video', $hyoo_crowd_reg ).str( next )
 		}
 		
 		@ $mol_mem
-		previous() {
-			
-			const speeches = this.meetup()!.speeches()
-
-			const index = speeches.indexOf( this )
-			if( index <= 0 ) return null
-			
-			return speeches[ index - 1 ]
-
+		start( next?: $mol_time_moment ) {
+			return new $mol_time_moment( this.sub( 'start', $hyoo_crowd_reg ).str( next?.toString() ) )
 		}
 
 		@ $mol_mem
 		interval() : $mol_time_interval {
 			
 			return new $mol_time_interval({
-				start : this.previous()?.interval().end ?? this.meetup()!.start() ,
+				start : this.start() ,
 				duration : this.duration() ,
 			})
 
@@ -57,12 +35,12 @@ namespace $ {
 
 		@ $mol_mem
 		duration() {
-			return new $mol_time_duration( $mol_data_string( this.data().duration ) )
+			return new $mol_time_duration( this.sub( 'duration', $hyoo_crowd_reg ).str() || 'PT30m' )
 		}
 		
 		@ $mol_mem
 		speaker() {
-			return this.$.$piterjs_speaker.item( this.data().speaker )
+			return this.sub( 'speaker', $piterjs_speaker )
 		}
 
 	}
