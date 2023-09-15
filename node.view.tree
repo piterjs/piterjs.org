@@ -32,6 +32,50 @@ $mol_page $mol_view
 			dom_name \footer
 			sub <= foot /$mol_view
 
+$mol_hotkey $mol_plugin
+	event *
+		^
+		keydown?event <=> keydown?event null
+	key *
+	mod_ctrl false
+	mod_alt false
+	mod_shift false
+
+$mol_string $mol_view
+	dom_name \input
+	enabled true
+	minimal_height 40
+	autocomplete false
+	selection? /number
+		0
+		0
+	auto /
+		<= selection_watcher null
+	field *
+		^
+		disabled <= disabled false
+		value <= value_changed? <=> value? \
+		placeholder <= hint_visible <= hint \
+		spellcheck <= spellcheck true
+		autocomplete <= autocomplete_native \
+		selectionEnd <= selection_end 0
+		selectionStart <= selection_start 0
+		inputMode <= keyboard \text
+		enterkeyhint <= enter \go
+	attr *
+		^
+		maxlength <= length_max +Infinity
+		type <= type? \text
+	event *
+		^
+		input?event <=> event_change?event null
+	plugins /
+		<= Submit $mol_hotkey
+			mod_ctrl <= submit_with_ctrl false
+			key * enter?event <=> submit?event null
+
+$mol_string_button $mol_string
+
 $mol_link $mol_view
 	uri \
 	dom_name \a
@@ -49,18 +93,26 @@ $mol_link $mol_view
 		^
 		click?event <=> click?event <=> event_click?event null
 
-$mol_image2 $mol_view
-	links /
-	aspect 1
-	sub /
-		<= Content $mol_view
-			style *
-				paddingTop <= height \100%
-				backgroundImage <= background \
+$mol_image $mol_view
+	dom_name \img
+	field *
+		^
+		src <= uri \
+		alt <= title
+		loading <= loading \eager
+		decoding <= decoding \async
+		crossOrigin <= cors null
+	attr *
+		^
+		width <= natural_width? 0
+		height <= natural_height? 0
+	event *
+		load? <=> load? null
+	minimal_width 16
+	minimal_height 16
 
-$piterjs_image $mol_image2 links /
-	<= link \
-	\piterjs/logo/logo.svg
+$piterjs_image $mol_image
+	uri <= link \
 
 $mol_list $mol_view
 	render_visible_only true
@@ -118,7 +170,214 @@ $mol_icon $mol_svg_root
 		<= Path $mol_svg_path
 			geometry <= path \
 
+$mol_icon_eye $mol_icon path \M12,9C10.34,9 9,10.34 9,12C9,13.66 10.34,15 12,15C13.66,15 15,13.66 15,12C15,10.34 13.66,9 12,9M12,17C9.24,17 7,14.76 7,12C7,9.24 9.24,7 12,7C14.76,7 17,9.24 17,12C17,14.76 14.76,17 12,17M12,4.5C7,4.5 2.73,7.61 1,12C2.73,16.39 7,19.5 12,19.5C17,19.5 21.27,16.39 23,12C21.27,7.61 17,4.5 12,4.5Z
+
+$mol_speck $mol_view
+	attr *
+		^
+		mol_theme <= theme \$mol_theme_accent
+	style *
+		^
+		minHeight \1em
+	sub /
+		<= value null
+
+$mol_button $mol_view
+	enabled true
+	click?event null
+	event_click?event null
+	event *
+		^
+		click?event <=> event_activate?event null
+		dblclick?event <=> clicks?event null
+		keydown?event <=> event_key_press?event null 
+	attr *
+		^
+		disabled <= disabled false
+		role \button
+		tabindex <= tab_index 0
+		title <= hint_safe <= hint \
+	sub /$mol_view_content
+		<= title
+	Speck $mol_speck
+		value <= error \
+
+$mol_button_typed $mol_button
+	minimal_height 40
+	minimal_width 40
+
+$mol_button_minor $mol_button_typed
+
+$mol_check $mol_button_minor
+	attr *
+		^
+		mol_check_checked <= checked? false
+		aria-checked <= aria_checked \false
+		role <= aria_role \checkbox
+	sub /$mol_view_content
+		<= Icon null
+		<= label /
+			<= Title $mol_view
+				sub /
+					<= title \
+
+$mol_check_icon $mol_check
+
+$mol_pop $mol_view
+	showed? false
+	align_vert \
+	align_hor \
+	prefer \vert
+	sub /
+		<= Anchor null
+	sub_visible /
+		<= Anchor
+		<= Bubble $mol_pop_bubble
+			align <= align \bottom_center
+			content <= bubble_content /$mol_view_content
+			height_max <= height_max 9999
+
+$mol_pop_bubble $mol_view
+	sub <= content /$mol_view_content
+	style *
+		^
+		maxHeight <= height_max 9999
+	attr *
+		^
+		mol_pop_align <= align \
+		tabindex 0
+
+$mol_pick $mol_pop
+	event *
+		^
+		keydown?event <=> keydown?event null
+	Anchor <= Trigger $mol_check
+		minimal_width 40
+		minimal_height 40
+		enabled <= trigger_enabled true
+		checked? <=> showed?
+		sub <= trigger_content /$mol_view_content
+			<= title
+		hint <= hint \
+
+$mol_icon_calendar $mol_icon path \M19,19H5V8H19M16,1V3H8V1H6V3H5C3.89,3 3,3.89 3,5V19C3,20.1 3.9,21 5,21H19C20.1,21 21,20.1 21,19V5C21,3.89 20.1,3 19,3H18V1M17,12H12V17H17V12Z
+
+$mol_icon_calendar_today $mol_icon path \M7,10H12V15H7M19,19H5V8H19M19,3H18V1H16V3H8V1H6V3H5C3.89,3 3,3.9 3,5V19C3,20.1 3.9,21 5,21H19C20.1,21 21,20.1 21,19V5C21,3.9 20.1,3 19,3Z
+
+$mol_format $mol_string
+	allow \0123456789
+	hint <= mask*0 \
+	keyboard \numeric
+
+$mol_icon_trash_can $mol_icon path \M9,3V4H4V6H5V19C5,20.1 5.9,21 7,21H17C18.1,21 19,20.1 19,19V6H20V4H15V3H9M9,8H11V17H9V8M13,8H15V17H13V8Z
+
+$mol_icon_trash_can_outline $mol_icon path \M9,3V4H4V6H5V19C5,20.1 5.9,21 7,21H17C18.1,21 19,20.1 19,19V6H20V4H15V3H9M7,6H17V19H7V6M9,8V17H11V8H9M13,8V17H15V8H13Z
+
+$mol_icon_chevron $mol_icon path \M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z
+
+$mol_icon_chevron_left $mol_icon path \M15.41,16.58L10.83,12L15.41,7.41L14,6L8,12L14,18L15.41,16.58Z
+
+$mol_icon_chevron_right $mol_icon path \M8.59,16.58L13.17,12L8.59,7.41L10,6L16,12L10,18L8.59,16.58Z
+
+$mol_hor $mol_view
+
+$mol_calendar $mol_list
+	sub /
+		<= Head $mol_view
+			sub <= head /
+				<= Title $mol_view
+					minimal_height 24
+					sub /
+						<= title \
+		<= Weekdays $mol_hor
+			sub <= weekdays /$mol_view
+	weeks /$mol_view
+	weeks_count 6
+	-
+	Weekday* $mol_calendar_day
+		holiday <= weekend* false
+		sub /
+			<= weekday* \
+	-
+	Week* $mol_hor
+		sub <= week_days* /$mol_view
+	-
+	Day* $mol_calendar_day
+		ghost <= day_ghost* false
+		holiday <= day_holiday* false
+		selected <= day_selected* false
+		theme <= day_theme* null
+		sub <= day_content* /
+			<= day_text* \
+	-
+	month_string \
+	month_moment $mol_time_moment
+
+$mol_calendar_day $mol_view
+	minimal_height 24
+	minimal_width 36
+	attr *
+		mol_calendar_holiday <= holiday false
+		mol_calendar_ghost <= ghost false
+		mol_calendar_selected <= selected false
+		mol_theme <= theme null
+
+$mol_date $mol_pick
+	Icon $mol_icon_calendar
+	-
+	bubble_content /
+		<= Input_row $mol_view sub <= input_content /
+			<= Today $mol_button_minor
+				hint @ \Today
+				enabled <= enabled true
+				click?event <=> today_click?event null
+				sub /
+					<= Today_icon $mol_icon_calendar_today
+			<= Input $mol_format
+				value? <=> value? \
+				mask* <= input_mask* \
+				enabled <= enabled true
+			<= Clear $mol_button_minor
+				hint @ \Clear
+				enabled <= enabled true
+				click?event <=> clear?event null
+				sub /
+					<= Clear_icon $mol_icon_trash_can_outline
+		<= Calendar $mol_date_calendar
+			enabled <= enabled true
+			month_moment <= month_moment <= value_moment
+			day_selected* <= day_selected* false
+			day_click*?event <=> day_click*?event null
+			Title => Calendar_title
+			head /
+				<= Calendar_tools $mol_view
+					sub /
+						<= Prev $mol_button_minor
+							hint <= prev_hint @ \Previous month
+							click?event <=> prev?event null
+							sub /
+								<= Prev_icon $mol_icon_chevron_left
+						<= Calendar_title
+						<= Next $mol_button_minor
+							hint <= next_hint @ \Next month
+							click?event <=> next?event null
+							sub /
+								<= Next_icon $mol_icon_chevron_right
+	-
+	value_number? +NaN
+	value_moment? $mol_time_moment
+
+$mol_date_calendar $mol_calendar
+	day_content* /
+		<= Day_button* $mol_button_minor
+			title <= day_text*
+			event_click?event <=> day_click*?event null
+			minimal_height 24
+			enabled <= enabled true
+
 $mol_icon_cross $mol_icon path \M19 6.41L17.59 5L12 10.59L6.41 5L5 6.41L10.59 12L5 17.59L6.41 19L12 13.41L17.59 19L19 17.59L13.41 12L19 6.41Z
+
+$mol_stack $mol_view
 
 $mol_paragraph $mol_view
 	line_height 24
@@ -126,8 +385,6 @@ $mol_paragraph $mol_view
 	width_limit +Infinity
 	row_width 0
 	sub / <= title
-
-$mol_stack $mol_view
 
 $mol_dimmer $mol_paragraph
 	haystack \
@@ -172,42 +429,6 @@ $mol_text_code_row $mol_paragraph
 		uri <= token_uri* \
 	find_pos* null
 
-$mol_speck $mol_view
-	attr *
-		^
-		mol_theme <= theme \$mol_theme_accent
-	style *
-		^
-		minHeight \1em
-	sub /
-		<= value null
-
-$mol_button $mol_view
-	enabled true
-	click?event null
-	event_click?event null
-	event *
-		^
-		click?event <=> event_activate?event null
-		dblclick?event <=> clicks?event null
-		keydown?event <=> event_key_press?event null 
-	attr *
-		^
-		disabled <= disabled false
-		role \button
-		tabindex <= tab_index 0
-		title <= hint_safe <= hint \
-	sub /$mol_view_content
-		<= title
-	Speck $mol_speck
-		value <= error \
-
-$mol_button_typed $mol_button
-	minimal_height 40
-	minimal_width 40
-
-$mol_button_minor $mol_button_typed
-
 $mol_icon_clipboard $mol_icon path \M19,3H14.82C14.4,1.84 13.3,1 12,1C10.7,1 9.6,1.84 9.18,3H5C3.9,3 3,3.9 3,5V19C3,20.1 3.9,21 5,21H19C20.1,21 21,20.1 21,19V5C21,3.9 20.1,3 19,3M12,3C12.55,3 13,3.45 13,4C13,4.55 12.55,5 12,5C11.45,5 11,4.55 11,4C11,3.45 11.45,3 12,3
 
 $mol_icon_clipboard_outline $mol_icon path \M19,3H14.82C14.4,1.84 13.3,1 12,1C10.7,1 9.6,1.84 9.18,3H5C3.9,3 3,3.9 3,5V19C3,20.1 3.9,21 5,21H19C20.1,21 21,20.1 21,19V5C21,3.9 20.1,3 19,3M12,3C12.55,3 13,3.45 13,4C13,4.55 12.55,5 12,5C11.45,5 11,4.55 11,4C11,3.45 11.45,3 12,3M7,7H17V5H19V19H5V5H7V7Z
@@ -249,25 +470,332 @@ $mol_text_code $mol_stack
 			hint @ \Copy whole code
 			text <= text_export \
 
+$mol_textarea $mol_stack
+	attr *
+		^
+		mol_textarea_clickable <= clickable? false
+		mol_textarea_sidebar_showed <= sidebar_showed false
+	event *
+		keydown?event <=> press?event null
+		pointermove?event <=> hover?event null
+	sub /
+		<= Edit $mol_textarea_edit
+			value? <=> value? \
+			hint <= hint \ 
+			enabled <= enabled true
+			spellcheck <= spellcheck true
+			length_max <= length_max +Infinity
+			selection? <=> selection? /number
+			bring => bring
+			submit? <=> submit? null
+			submit_with_ctrl <= submit_with_ctrl true
+		<= View $mol_text_code
+			text <= value
+			render_visible_only false
+			row_numb* <= row_numb* 0
+			sidebar_showed <= sidebar_showed
+			highlight <= highlight \
+	symbols_alt *
+		comma \<
+		period \>
+		dash \−
+		equals \≈
+		graveAccent \́
+		forwardSlash \÷
+		E \€
+		X \×
+		C \©
+		P \§
+		H \₽
+		key0 \°
+		key8 \•
+		key2 \@
+		key3 \#
+		key4 \$
+		key6 \^
+		key7 \&
+		bracketOpen \[
+		bracketClose \]
+		slashBack \|
+	symbols_alt_shift *
+		V \✅
+		X \❌
+		O \⭕
+		key1 \❗
+		key4 \💲
+		key7 \❓
+		comma \«
+		period \»
+		semicolon \“
+		quoteSingle \”
+		dash \—
+		equals \≠
+		graveAccent \̱
+		bracketOpen \{
+		bracketClose \}
+
+$mol_textarea_edit $mol_string
+	dom_name \textarea
+	enter \enter
+	field *
+		^
+		scrollTop 0
+
+$mol_icon_plus $mol_icon path \M19,13H13V19H11V13H5V11H11V5H13V11H19V13Z
+
+$mol_labeler $mol_list
+	rows /
+		<= Label $mol_view
+			minimal_height 32
+			sub <= label /$mol_view_content
+				<= title
+		<= Content $mol_view
+			minimal_height 24
+			sub <= content /
+
+$mol_form_field $mol_labeler
+	bids /string
+	label /
+		<= name \
+		<= Bid $mol_view
+			sub / <= bid \
+	content / <= control null
+
+$mol_row $mol_view
+
+$mol_form $mol_list
+	submit_allowed true
+	submit_blocked false
+	event *
+		^
+		keydown?event <=> keydown?event null
+	submit?event null
+	rows /
+		<= Body $mol_list
+			sub <= body <= form_fields /$mol_form_field
+		<= Foot $mol_row
+			sub <= foot <= buttons /$mol_view
+
+$piterjs_meetup_page $mol_page
+	meetup $piterjs_meetup
+		title? => title?
+		description? => description?
+		afterparty? => afterparty?
+		start? => start?
+	Title $mol_string_button
+		value? <=> title?
+		enabled <= editing false
+		hint \Номер
+	tools /
+		<= Public $mol_check_icon
+			checked? <=> meetup_public? false
+			Icon <= Public_icon $mol_icon_eye
+		<= Start $mol_date
+			value_moment? <=> start?
+			enabled <= editing false
+			align \bottom_left
+		<= Close $mol_link
+			arg *
+				meetup null
+				speech null
+				place null
+				video null
+			sub /
+				<= Close_icon $mol_icon_cross
+	body /
+		<= Description $mol_textarea
+			hint \Резюме
+			value? <=> description?
+			enabled <= editing false
+		<= Links $mol_view sub <= links / 
+			<= Video $mol_link
+				arg *
+					video \
+					place null
+					speech null
+				title \Трансляция
+			<= Place $mol_link
+				arg *
+					video null
+					place \
+					speech null
+				title \Площадка
+		<= Speeches $mol_list rows <= speeches /
+		<= Speech_add $mol_button_minor
+			click? <=> speech_add? null
+			sub /
+				<= Speech_add_icon $mol_icon_plus
+				\Добавить доклад
+		<= Afterparty_field $mol_form_field
+			name \Афтерпати
+			Content <= Afterparty $mol_textarea
+				hint \Адрес, ориентиры, чат
+				value? <=> afterparty?
+				enabled <= editing false
+	Speech!index $piterjs_speech_snippet
+		speech <= speech!index $piterjs_speech
+
+
+$mol_icon_clock $mol_icon path \M12,2C6.48,2 2,6.48 2,12C2,17.52 6.48,22 12,22C17.52,22 22,17.52 22,12C22,6.48 17.52,2 12,2M16.2,16.2L11,13V7H12.5V12.2L17,14.9L16.2,16.2Z
+
+$mol_icon_clock_outline $mol_icon path \M12,20C16.42,20 20,16.42 20,12C20,7.58 16.42,4 12,4C7.58,4 4,7.58 4,12C4,16.42 7.58,20 12,20M12,2C17.52,2 22,6.48 22,12C22,17.52 17.52,22 12,22C6.47,22 2,17.5 2,12C2,6.48 6.48,2 12,2M12.5,7V12.25L17,14.92L16.25,16.15L11,13V7H12.5Z
+
+$mol_check_list $mol_view
+	Option* $mol_check
+		checked? <=> option_checked*? false
+		label <= option_label* /
+			<= option_title* \
+		enabled <= option_enabled* <= enabled true
+		hint <= option_hint* \
+		minimal_height 24
+	options *
+	keys /string
+	sub <= items /$mol_check
+
+$mol_switch $mol_check_list
+	value? \
+
+$mol_pick_time $mol_pick
+	Icon $mol_icon_clock_outline
+	trigger_enabled <= enabled true
+	-
+	bubble_content /
+		<= Input $mol_format
+			value? <=> value? \
+			mask \__:__
+			allow \0123456789.
+			enabled <= enabled true
+		<= Pickers $mol_row
+			sub /
+				<= Hours $mol_switch
+					value? <=> hour_selected? \
+					options <= hour_options *
+				<= Delimiter $mol_paragraph
+					title \:
+				<= Minutes $mol_switch
+					value? <=> minute_selected? \
+					options <= minute_options *
+	-
+	value_moment? $mol_time_moment
+
+$mol_string_link $mol_view
+	attr *
+		^
+		mol_string_link_editing <= editing <= enabled true
+	sub /
+		<= View $mol_link
+			title <= title
+			hint <= hint_view \
+			uri <= value
+		<= Edit $mol_string
+			enabled <= enabled
+			value? <=> value? \
+			hint <= hint_edit <= hint <= title \
+
+$mol_icon_upload $mol_icon path \M9,16V10H5L12,3L19,10H15V16H9M5,20V18H19V20H5Z
+
+$mol_button_open $mol_button_minor
+	sub /
+		<= Icon $mol_icon_upload
+		<= Native $mol_button_open_native
+			files?next <=> files?next /
+			accept <= accept \
+			multiple <= multiple true
+
+$mol_button_open_native $mol_view
+	dom_name \input
+	files?next /
+	attr *
+		type \file
+		accept <= accept \
+		multiple <= multiple true
+	event *
+		change?next <=> picked?next null
+
+$piterjs_speaker_snippet $mol_view
+	event *
+		paste? <=> paste? null
+	speaker $piterjs_speaker
+		title? => title?
+		description? => description?
+	sub /
+		<= Photo_block $mol_stack sub /
+			<= Photo $piterjs_image
+				link <= photo \
+			<= Upload $mol_button_open
+				Icon null
+				files? <=> upload? /File
+				enabled <= editing false
+		<= Info $mol_list sub /
+			<= Title $mol_string
+				hint \Имя докладчика
+				value? <=> title?
+				enabled <= editing false
+			<= Description $mol_textarea
+				hint \Об авторе
+				value? <=> description?
+				enabled <= editing false
+
+$piterjs_speech_page $mol_page
+	speech $piterjs_speech
+		title? => title?
+		description? => description?
+		start? => start?
+		slides? => slides?
+		video? => video?
+	Title $mol_string_button
+		value? <=> title?
+		enabled <= editing false
+		hint \Название
+	tools /
+		<= Public $mol_check_icon
+			checked? <=> speech_public? false
+			Icon <= Public_icon $mol_icon_eye
+		<= Start $mol_pick_time
+			value_moment? <=> start?
+			enabled <= editing false
+		<= Close $mol_link
+			arg * speech null
+			sub /
+				<= Close_icon $mol_icon_cross
+	body /
+		<= Description $mol_textarea
+			hint \О чём
+			value? <=> description?
+			enabled <= editing false
+		<= Links $mol_view sub <= links /
+			<= Slides $mol_string_link
+				value? <=> slides?
+				enabled <= editing
+				title \Слайды
+			<= Video $mol_string_link
+				value? <=> video?
+				enabled <= editing
+				title \Видео
+		<= Speaker $piterjs_speaker_snippet
+			speaker <= speaker $piterjs_speaker
+			editing <= editing false
+
+$piterjs_meetup_snippet $mol_link
+	arg *
+		meetup <= id \
+		speech null
+		now null
+		video null
+		place null
+		others null
+		wiki null
+	meetup $piterjs_meetup
+	sub /
+		<= Title $mol_view
+			sub / <= title \
+		<= Date $mol_view
+			sub / <= date \
+
 $mol_float $mol_view
 	style *
 		^
 		minHeight \auto
-
-$mol_check $mol_button_minor
-	attr *
-		^
-		mol_check_checked <= checked? false
-		aria-checked <= aria_checked \false
-		role <= aria_role \checkbox
-	sub /$mol_view_content
-		<= Icon null
-		<= label /
-			<= Title $mol_view
-				sub /
-					<= title \
-
-$mol_icon_chevron $mol_icon path \M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z
 
 $mol_check_expand $mol_check
 	Icon $mol_icon_chevron
@@ -330,24 +858,6 @@ $mol_grid_cell $mol_view
 	minimal_height 40
 
 $mol_grid_number $mol_grid_cell
-
-$mol_image $mol_view
-	dom_name \img
-	field *
-		^
-		src <= uri \
-		alt <= title
-		loading <= loading \eager
-		decoding <= decoding \async
-		crossOrigin <= cors null
-	attr *
-		^
-		width <= natural_width? 0
-		height <= natural_height? 0
-	event *
-		load? <=> load? null
-	minimal_width 16
-	minimal_height 16
 
 $mol_link_iconed $mol_link
 	sub /
@@ -527,90 +1037,6 @@ $mol_text_list_item $mol_paragraph
 		^
 		mol_text_list_item_index <= index 0
 
-$piterjs_meetup_page $mol_page
-	meetup $piterjs_meetup
-	tools /
-		<= Date $mol_view
-			sub / <= date \
-		<= Close $mol_link
-			arg *
-				meetup null
-				speech null
-				place null
-				video null
-			sub /
-				<= Close_icon $mol_icon_cross
-	body /
-		<= Description $mol_text
-			text <= description \
-		<= Links $mol_view sub <= links / 
-			<= Video $mol_link
-				arg *
-					video \
-					place null
-					speech null
-				title \Трансляция
-			<= Place $mol_link
-				arg *
-					video null
-					place \
-					speech null
-				title \Площадка
-		<= Speeches $mol_list rows <= speeches /
-	Speech!index $piterjs_speech_snippet
-		speech <= speech!index $piterjs_speech
-
-
-$mol_row $mol_view
-
-$piterjs_speaker_snippet $mol_view
-	speaker $piterjs_speaker
-	sub /
-		<= Photo $piterjs_image
-			link <= photo \
-		<= Info $mol_list sub /
-			<= Title $mol_view
-				sub / <= title \
-			<= Description $mol_text
-				text <= description \
-
-$piterjs_speech_page $mol_page
-	speech $piterjs_speech
-	tools /
-		<= Close $mol_link
-			arg * speech null
-			sub /
-				<= Close_icon $mol_icon_cross
-	body /
-		<= Description $mol_text
-			text <= description \
-		<= Links $mol_row sub <= links /
-			<= Slides $mol_link
-				uri <= slides \
-				title \Слайды
-				target \_blank
-			<= Video $mol_link
-				uri <= video \
-				title \Видео
-				target \_blank
-		<= Speaker $piterjs_speaker_snippet
-			speaker <= speaker $piterjs_speaker
-
-$piterjs_meetup_snippet $mol_link
-	arg *
-		meetup <= id \
-		speech null
-		now null
-		video null
-		place null
-		others null
-	meetup $piterjs_meetup
-	sub /
-		<= Title $mol_view
-			sub / <= title \
-		<= Date $mol_view
-			sub / <= date \
-
 $piterjs_intro_page $mol_view
 	sub /
 		<= Head $mol_view sub <= head /
@@ -631,13 +1057,17 @@ $piterjs_intro_main $piterjs_intro_page
 $piterjs_schedule $mol_view
 	meetup $piterjs_meetup
 	sub /
-		<= Speeches $mol_list rows <= speeches /
-	Speech!index $mol_list sub /
-		<= Speech_interval!index $mol_view sub / <= speech_interval!index \19:20 - 23:50
-		<= Speech_title!index $mol_view
-			attr * mol_theme \$mol_theme_accent
-			sub / <= speech_title!index \
-		<= Speech_speaker!index $mol_view sub / <= speech_speaker!index \
+		<= Speeches $mol_list
+			rows <= speeches /
+				<= Speech*0 $mol_list sub /
+					<= Speech_main* $mol_view sub /
+						<= Speech_start* $mol_view
+							sub / <= speech_start* \19:20
+						<= Speech_title* $mol_view
+							attr * mol_theme \$mol_theme_accent
+							sub / <= speech_title* \
+					<= Speech_speaker* $mol_view
+						sub / <= speech_speaker* \
 
 $piterjs_screen_lines $mol_svg_root
 	style * fill <= color \#FFE515
@@ -690,7 +1120,7 @@ $piterjs_intro $mol_view
 				\JS и всё, что рядом
 				\Каждый месяц с 2015
 				\Спячка с 2020
-				\Просыпаемся и пашем!
+				\С 2023 снова с вами!
 		- projects <= Projects $piterjs_intro_page
 			title \Наши проекты
 			text \
@@ -737,7 +1167,7 @@ $piterjs_intro $mol_view
 			title \Твой вклад
 			text \
 				\github.com/piterjs
-				\t.me/nin_jin
+				\hi@piterjs.org
 				\piterjs.org
 		place <= Place $piterjs_intro_page
 			title <= place_title \Мы в {place}
@@ -777,42 +1207,410 @@ $piterjs_intro $mol_view
 			current_y?val <=> page?val
 
 $piterjs_video_page $mol_page
-	title \Видеотрансляция
+	title \Трансляция
 	tools /
+		<= Link $mol_string
+			hint \Ссылка
+			value? <=> source? \
+			enabled <= editing false
 		<= Close $mol_link
 			arg * video null
 			sub /
 				<= Close_icon $mol_icon_cross
 	body /
 		<= Frame $mol_frame
-			uri <= uri <= source \
+			uri <= uri <= source
 
-$mol_map_yandex_mark $mol_object
-	pos $mol_vector_2d /
-		0
-		0
-	box $mol_vector_2d /
-		<= box_lat $mol_vector_range /
-			0
-			0
-		<= box_lon $mol_vector_range /
-			0
-			0
-	hint \
-	title <= address \
-	content \
-	object null
+$mol_search $mol_pop
+	query? \
+	suggests /string
+	plugins /$mol_plugin
+		^
+		<= Hotkey $mol_hotkey
+			key * escape? <=> clear? null
+		<= Nav $mol_nav
+			keys_y <= nav_components /$mol_view
+			current_y?component <=> nav_focused?component null
+	showed? <=> suggests_showed? false
+	align_hor \right
+	Anchor $mol_view
+		sub <= anchor_content /
+			<= Query $mol_string
+				value? <=> query? \
+				hint <= hint @ \Search...
+				submit?event <=> submit?event null
+				enabled <= enabled true
+				keyboard <= keyboard \search
+				enter <= enter \search
+				bring => bring
+			<= Clear $mol_button_minor
+				hint @ \Clear
+				click?event <=> clear?event null
+				sub /
+					<= Clear_icon $mol_icon_cross
+	bubble_content /$mol_view_content
+		<= Menu $mol_list
+			rows <= menu_items /$mol_view
+	Suggest* $mol_button_minor
+		click?event <=> suggest_select*?event null
+		sub <= suggest_content* /$mol_view_content
+			<= Suggest_label* $mol_dimmer
+				haystack <= suggest_label* \
+				needle <= query? \
 
-$mol_map_yandex $mol_view
-	zoom? 2
-	center? /
+$mol_icon_terrain $mol_icon path \M14,6L10.25,11L13.1,14.8L11.5,16C9.81,13.75 7,10 7,10L1,18H23L14,6Z
+
+$mol_icon_lead_pencil $mol_icon path \M16.84,2.73C16.45,2.73 16.07,2.88 15.77,3.17L13.65,5.29L18.95,10.6L21.07,8.5C21.67,7.89 21.67,6.94 21.07,6.36L17.9,3.17C17.6,2.88 17.22,2.73 16.84,2.73M12.94,6L4.84,14.11L7.4,14.39L7.58,16.68L9.86,16.85L10.15,19.41L18.25,11.3M4.25,15.04L2.5,21.73L9.2,19.94L8.96,17.78L6.65,17.61L6.47,15.29
+
+$mol_icon_github_circle $mol_icon path \M12,2C6.48,2 2,6.48 2,12C2,16.42 4.87,20.17 8.84,21.5C9.34,21.58 9.5,21.27 9.5,21C9.5,20.77 9.5,20.14 9.5,19.31C6.73,19.91 6.14,17.97 6.14,17.97C5.68,16.81 5.03,16.5 5.03,16.5C4.12,15.88 5.1,15.9 5.1,15.9C6.1,15.97 6.63,16.93 6.63,16.93C7.5,18.45 8.97,18 9.54,17.76C9.63,17.11 9.89,16.67 10.17,16.42C7.95,16.17 5.62,15.31 5.62,11.5C5.62,10.39 6,9.5 6.65,8.79C6.55,8.54 6.2,7.5 6.75,6.15C6.75,6.15 7.59,5.88 9.5,7.17C10.29,6.95 11.15,6.84 12,6.84C12.85,6.84 13.71,6.95 14.5,7.17C16.41,5.88 17.25,6.15 17.25,6.15C17.8,7.5 17.45,8.54 17.35,8.79C18,9.5 18.38,10.39 18.38,11.5C18.38,15.32 16.04,16.16 13.81,16.41C14.17,16.72 14.5,17.33 14.5,18.26C14.5,19.6 14.5,20.68 14.5,21C14.5,21.27 14.66,21.59 15.17,21.5C19.14,20.16 22,16.42 22,12C22,6.48 17.52,2 12,2Z
+
+$mol_link_source $mol_link
+	hint @ \Source code
+	sub /
+		<= Icon $mol_icon_github_circle
+
+$mol_svg_group $mol_svg
+	dom_name \g
+
+$mol_svg_title $mol_svg
+	dom_name \title
+	sub /
+		<= title
+
+$mol_plot_graph $mol_svg_group
+	series_x /number
+	series_y /number
+	-
+	attr *
+		^
+		mol_plot_graph_type <= type \solid
+	-
+	style *
+		^
+		color <= color \
+	-
+	viewport $mol_vector_2d /
+		<= viewport_x $mol_vector_range /
+			Infinity
+			-Infinity
+		<= viewport_y $mol_vector_range /
+			Infinity
+			-Infinity
+	shift /number
 		0
 		0
-	objects /$mol_map_yandex_mark
+	scale /number
+		1
+		1
+	cursor_position $mol_vector_2d /
+		NaN
+		NaN
+	dimensions_pane $mol_vector_2d /
+		<= dimensions_pane_x $mol_vector_range /
+			Infinity
+			-Infinity
+		<= dimensions_pane_y $mol_vector_range /
+			Infinity
+			-Infinity
+	dimensions $mol_vector_2d /
+		<= dimensions_x $mol_vector_range /
+			Infinity
+			-Infinity
+		<= dimensions_y $mol_vector_range /
+			Infinity
+			-Infinity
+	size_real $mol_vector_2d /
+		0
+		0
+	gap $mol_vector_2d /
+		<= gap_x $mol_vector_range /
+			0
+			0
+		<= gap_y $mol_vector_range /
+			0
+			0
+	repos_x* 0
+	repos_y* 0
+	indexes /number
+	points /readonly(number)[]
+	front /$mol_svg
+	back /$mol_svg
+	Hint $mol_svg_title
+		title <= hint <= title \
+	hue +NaN
+	Sample null
+
+$mol_plot_graph_sample $mol_view
+	attr *
+		^
+		mol_plot_graph_type <= type \solid
+	style *
+		^
+		color <= color \black
+
+$mol_svg_image $mol_svg
+	dom_name \image
+	pos /
+		0
+		0
+	size /
+		0
+		0
+	attr *
+		^
+		x <= pos_x \
+		y <= pos_y \
+		width <= size_x \
+		height <= size_y \
+		href <= uri \
+		preserveAspectRatio <= aspect \none
+
+$mol_plot_map_tiles $mol_plot_graph
+	tile_size_real 256
+	level 0
+	level_pyramid 0
+	tiles_limit 8
+	uri_template \
+	sub <= tiles /
+	Tile* $mol_svg_image
+		style *
+			transform <= tile_transform* \
+		uri <= tile_uri* \
+		pos /
+			0
+			0
+		size /
+			<= tile_size_real
+			<= tile_size_real
+
+$mol_touch $mol_plugin
+	start_zoom? 0
+	start_distance? 0
+	zoom? 1
+	allow_draw true
+	allow_pan true
+	allow_zoom true
+	action_type? \
+	action_point? $mol_vector_2d /
+		NaN
+		NaN
+	-
+	start_pan? /
+		0
+		0
+	pan? $mol_vector_2d /
+		0
+		0
+	pointer_center $mol_vector_2d /
+		NaN
+		NaN
+	-
+	start_pos? null
+	swipe_precision 16
+	-
+	swipe_right? null
+	swipe_bottom? null
+	swipe_left? null
+	swipe_top? null
+	-
+	swipe_from_right? null
+	swipe_from_bottom? null
+	swipe_from_left? null
+	swipe_from_top? null
+	-
+	swipe_to_right? null
+	swipe_to_bottom? null
+	swipe_to_left? null
+	swipe_to_top? null
+	-
+	draw_start?event null
+	draw?event null
+	draw_end?event null
+	-
+	style *
+		^
+		touch-action \none
+		overscroll-behavior \none
+	-
+	event *
+		^
+		pointerdown?event <=> event_start?event null
+		pointermove?event <=> event_move?event null
+		pointerup?event <=> event_end?event null
+		pointerleave?event <=> event_leave?event null
+		wheel?event <=> event_wheel?event null
+
+$mol_plot_pane $mol_svg_root
+	aspect \none
+	-
+	hue_base? +NaN
+	hue_shift? 111
+	-
+	gap_hor 48
+	gap_vert 24
+	gap_left <= gap_hor
+	gap_right <= gap_hor
+	gap_top <= gap_vert
+	gap_bottom <= gap_vert
+	gap $mol_vector_2d /
+		<= gap_x $mol_vector_range /
+			<= gap_left
+			<= gap_right
+		<= gap_y $mol_vector_range /
+			<= gap_bottom
+			<= gap_top
+	-
+	shift_limit $mol_vector_2d /
+		<= shift_limit_x $mol_vector_range /
+			0
+			0
+		<= shift_limit_y $mol_vector_range /
+			0
+			0
+	shift_default $mol_vector_2d /
+		0
+		0
+	shift? $mol_vector_2d /
+		0
+		0
+	scale_limit $mol_vector_2d /
+		<= scale_limit_x $mol_vector_range /
+			0
+			Infinity
+		<= scale_limit_y $mol_vector_range /
+			0
+			-Infinity
+	scale_default $mol_vector_2d /
+		0
+		0
+	scale? $mol_vector_2d /
+		1
+		-1
+	scale_x? 1
+	scale_y? -1
+	size $mol_vector_2d /
+		0
+		0
+	size_real $mol_vector_2d /
+		1
+		1
+	dimensions $mol_vector_2d /
+		<= dimensions_x $mol_vector_range /
+			Infinity
+			-Infinity
+		<= dimensions_y $mol_vector_range /
+			Infinity
+			-Infinity
+	dimensions_viewport $mol_vector_2d /
+		<= dimensions_viewport_x $mol_vector_range /
+			Infinity
+			-Infinity
+		<= dimensions_viewport_y $mol_vector_range /
+			Infinity
+			-Infinity
+	-
+	sub <= graphs_sorted /$mol_svg
+	graphs_colored <= graphs_visible <= graphs_positioned <= graphs /$mol_plot_graph
+	-
+	plugins /
+		^
+		<= Touch $mol_touch
+			zoom? <=> zoom? 1
+			pan? <=> shift?
+			pointer_center => cursor_position
+			allow_draw <= allow_draw true
+			allow_pan <= allow_pan true
+			allow_zoom <= allow_zoom true
+			action_type => action_type
+			action_point => action_point
+			draw_start?event <=> draw_start?event null
+			draw?event <=> draw?event null
+			draw_end?event <=> draw_end?event null
+	- event *
+		^
+		dblclick?event <=> reset?event null
+
+$hyoo_map_pane $mol_plot_pane
+	gap_hor 0
+	gap_vert 0
+	scale?val $mol_vector_2d /
+		<= zoom
+		<= zoom
+
+$hyoo_map $mol_view
+	attr *
+		mol_theme <= theme \$mol_theme_light
+	tiles_options *
+		sketch \https://basemaps.cartocdn.com/rastertiles/voyager/{level}/{x}/{y}.png
+		photo \https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{level}/{y}/{x}
+	sub /
+		<= Main $mol_page
+			head /
+				<= Search $mol_search
+					query?val <=> query?val \
+					submit?event <=> search?event null
+				<= Photo $mol_check_icon
+					hint @ \Real Photos
+					checked?val <=> photo?val false
+					Icon <= Photo_icon $mol_icon_terrain
+				<= Draw $mol_link_iconed
+					hint @ \Draw on map
+					uri <= draw_uri \https://draw.hyoo.ru/#!map=true/zoom={zoom}/center={center}
+					sub /
+						<= Draw_icon $mol_icon_lead_pencil
+				<= Source $mol_link_source
+					uri \https://github.com/hyoo-ru/map.hyoo.ru/
+			Head => Main_head
+			sub /
+				<= Main_head
+				<= Pane $hyoo_map_pane
+					geo_to_tile_x!val => geo_to_tile_x!val
+					geo_to_tile_y!val => geo_to_tile_y!val
+					allow_draw false
+					zoom?val <=> zoom?val 1
+					shift?val <=> center?val $mol_vector_2d /
+						0
+						0
+					graphs /
+						<= Tiles $mol_plot_map_tiles
+							level_pyramid -3
+							tile_size_real <= tile_size 256
+							uri_template <= tiles_uri \
+						- <= Diag1 $mol_plot_group
+							repos_x!val <= geo_to_tile_x!val
+							repos_y!val <= geo_to_tile_y!val
+							graphs /
+								<= Track_line $mol_plot_line
+								<= Track_dot $mol_plot_dot
+							title \Saint-Petersburg - Moscow - Tokio
+							series_x /
+								30.32
+								37.62
+								139.69
+							series_y /
+								59.95
+								55.75
+								35.69
+				<= Attribution $mol_view sub /
+					<= ESRI $mol_link
+						title \ESRI
+						uri \https://www.esri.com/en-us/legal/terms/data-attributions
+					<= OSM $mol_link_iconed
+						title \OSM
+						uri \https://osm.org/copyright
+					<= CARTO $mol_link_iconed
+						title \CARTO
+						uri \https://carto.com/attributions
 
 $piterjs_place_page $mol_page
 	place $piterjs_place
-	title \
+		title? => title?
+		address? => address?
+		route? => route?
+	Title $mol_string
+		value? <=> title?
+		enabled <= editing false
+		hint \Название
 	tools /
 		<= Close $mol_link
 			arg * place null
@@ -820,16 +1618,17 @@ $piterjs_place_page $mol_page
 				<= Close_icon $mol_icon_cross
 	body /
 		<= Info $mol_view sub <= info /
-			<= Address $mol_view sub / <= address \
-			<= Route $mol_view sub / <= route \
-		<= Map $mol_map_yandex
-			zoom?val <=> zoom?val 14
-			objects /
-				<= Mark $mol_map_yandex_mark
-					pos <= coords $mol_vector_2d /
-						0
-						0
-					title \
+			<= Address $mol_string
+				hint \Адрес
+				value? <=> address?
+				enabled <= editing false
+			<= Route $mol_textarea
+				hint \Как добраться
+				value? <=> route?
+				enabled <= editing false
+		<= Map $hyoo_map
+	auto /
+		<= map_locate null
 
 $piterjs_others_event $mol_link_iconed
 	start $mol_time_moment
@@ -841,8 +1640,6 @@ $piterjs_others_event $mol_link_iconed
 			sub / <= date \
 		<= Title $mol_paragraph
 			sub / <= title \
-
-$mol_icon_plus $mol_icon path \M19,13H13V19H11V13H5V11H11V5H13V11H19V13Z
 
 $piterjs_others $mol_page
 	title \Календарь фронтенд событий
@@ -866,8 +1663,63 @@ $piterjs_others $mol_page
 		start <= event_start!uid $mol_time_moment
 		location <= event_location!uid \
 
-$mol_theme_auto $mol_plugin
-	attr * mol_theme <= theme \
+$mol_avatar $mol_icon
+	view_box \0 0 24 24
+	id \
+	path \M 12 12 l 0 0 M 0 0 l 0 0 M 24 24 l 0 0 M 0 24 l 0 0 M 24 0 l 0 0
+
+$hyoo_meta_link $mol_link
+	minimal_height 40
+	meta $hyoo_meta_model
+		id => id
+		title => title
+	param \
+	all_title @ \All
+	sub /
+		<= Avatar $mol_avatar
+			id <= id
+		<= Title $mol_dimmer
+			haystack <= title
+			needle <= highlight \
+
+$mol_button_major $mol_button_typed
+	attr *
+		^
+		mol_theme \$mol_theme_accent
+
+$mol_bar $mol_view
+
+$hyoo_meta_rights $mol_page
+	title @ \Rights
+	meta $hyoo_meta_model
+		editors => editors
+	body /
+		<= Content $mol_list
+			rows <= blocks /
+				<= Editor_list $mol_list
+					rows <= editor_list /
+						<= Editor_link*0_0 $hyoo_meta_link
+							meta <= peer* $hyoo_meta_person
+				<= Editor_add $mol_form_field
+					name @ \Add new
+					bid <= editor_add_bid @ \Irrevocable!
+					Content <= Editor_add_form $mol_list
+						rows <= editor_add_rows /
+							<= Editor_add_bar $mol_bar sub /
+								<= Editor_add_id $mol_string
+									hint @ \Id or Profile Link
+									value? <=> editor_add_id? \
+									enabled <= editable false
+								<= Editor_add_submit $mol_button_major
+									enabled <= editor_add_allowed false
+									click? <=> editor_add_submit? null
+									sub /
+										<= Editor_add_icon $mol_icon_plus
+							<= Editor_add_preview $hyoo_meta_link
+								meta <= editor_add_preview $hyoo_meta_model
+							<= Editor_fill_all $mol_button_minor
+								title @ \Allow anyone
+								click? <=> editor_fill_all? null
 
 $mol_book2 $mol_scroll
 	menu_title \
@@ -876,7 +1728,546 @@ $mol_book2 $mol_scroll
 	Placeholder $mol_view
 	Gap* $mol_view title \
 
-$mol_check_icon $mol_check
+$mol_theme_auto $mol_plugin
+	attr * mol_theme <= theme \
+
+$hyoo_page_side_news $mol_page
+	side $hyoo_page_side
+		news => news
+	title @ \Interesting
+	attr *
+		^
+		mol_theme \$mol_theme_special
+	body /
+		<= Section_list $mol_list
+			rows <= items /
+				<= Item*0 $hyoo_meta_link
+					meta <= item* $hyoo_page_side
+					title <= item_title* \
+					Avatar null
+
+$mol_icon_magnify $mol_icon path \M9.5,3C13.09,3 16,5.91 16,9.5C16,11.11 15.41,12.59 14.44,13.73L14.71,14H15.5L20.5,19L19,20.5L14,15.5V14.71L13.73,14.44C12.59,15.41 11.11,16 9.5,16C5.91,16 3,13.09 3,9.5C3,5.91 5.91,3 9.5,3M9.5,5C7,5 5,7 5,9.5C5,12 7,14 9.5,14C12,14 14,12 14,9.5C14,7 12,5 9.5,5Z
+
+$mol_icon_pencil $mol_icon path \M20.71,7.04C21.1,6.65 21.1,6 20.71,5.63L18.37,3.29C18,2.9 17.35,2.9 16.96,3.29L15.12,5.12L18.87,8.87M3,17.25V21H6.75L17.81,9.93L14.06,6.18L3,17.25Z
+
+$mol_icon_pencil_outline $mol_icon path \M14.06,9L15,9.94L5.92,19H5V18.08L14.06,9M17.66,3C17.41,3 17.15,3.1 16.96,3.29L15.13,5.12L18.88,8.87L20.71,7.04C21.1,6.65 21.1,6 20.71,5.63L18.37,3.29C18.17,3.09 17.92,3 17.66,3M14.06,6.19L3,17.25V21H6.75L17.81,9.94L14.06,6.19Z
+
+$mol_ghost $mol_view
+	Sub $mol_view
+
+$mol_drag $mol_ghost
+	event *
+		dragstart?event <=> drag_start?event <=> start?event null
+		drag?event <=> drag_move?event <=> move?event null
+		dragend?event <=> drag_end?event <=> end?event null
+	attr *
+		draggable true
+		mol_drag_status <= status? \ready
+	transfer *
+		text/plain \
+		text/html \
+		text/uri-list \
+	allow_copy true
+	allow_link true
+	allow_move true
+	image <= dom_node
+
+$mol_drop $mol_ghost
+	enabled? true
+	event *
+		dragenter?event <=> enter?event null
+		dragover?event <=> move?event null
+		dragleave?event <=> leave?event null
+		drop?event <=> drop?event null
+	attr * mol_drop_status <= status? \ready
+	adopt?transfer *
+	receive?transfer null
+	allow /
+		\copy
+		\move
+		\link
+
+$mol_icon_pin $mol_icon path \M16,12V4H17V2H7V4H8V12L6,14V16H11.2V22H12.8V16H18V14L16,12Z
+
+$mol_icon_pin_outline $mol_icon path \M16,12V4H17V2H7V4H8V12L6,14V16H11.2V22H12.8V16H18V14L16,12M8.8,14L10,12.8V4H14V12.8L15.2,14H8.8Z
+
+$hyoo_meta_menu_items $mol_list
+	id \
+	editing false
+	drop_allow /
+		\move
+		\link
+	list $hyoo_crowd_list
+		list => ids
+	item* $hyoo_meta_model
+		title => item_title*
+	item_list* $hyoo_crowd_list
+	item_moved*? null
+	rows <= items /
+		<= Item*0_0 $mol_list
+			rows <= item_content* /
+				<= Item_row* $mol_view
+					sub <= item_row* /
+						<= Item_expand* $mol_check_expand
+							expandable <= item_expandable* false
+							expanded? <=> item_expanded*? true
+						<= Item_drop_after* $mol_drop
+							enabled <= editable false
+							adopt? <=> transfer_adopt? null
+							receive? <=> receive_after*? null
+							allow <= drop_allow
+							Sub <= Item_drag* $mol_drag
+								end? <=> item_drag_end*? null
+								transfer *
+									text/plain <= item_text* \
+									text/html <= item_html* \
+									text/uri-list <= item_uri* \
+								Sub <= Item_link* $hyoo_meta_link
+									meta <= item*
+									param <= param \
+									highlight <= highlight \
+									Avatar null
+						<= Item_remove* $mol_button_minor
+							hint @ \Remove
+							click? <=> item_remove*? null
+							sub /
+								<= Item_remove_icon* $mol_icon_cross
+						<= Item_pin* $mol_button_minor
+							hint @ \Pin here
+							click? <=> item_pin*? null
+							sub /
+								<= Item_pin_icon* $mol_icon_pin_outline
+						<= Item_drop_inside* $mol_drop
+							enabled <= editable
+							adopt? <=> transfer_adopt? null
+							receive? <=> receive_inside*? null
+							allow <= drop_allow
+							Sub <= Item_add* $mol_button_minor
+								hint @ \Add page inside
+								click? <=> item_add*? null
+								sub /
+									<= Item_add_icon* $mol_icon_plus
+				<= Item_items* $hyoo_meta_menu_items
+					editing <= editing
+					list <= item_list*
+					item* <= item*
+					item_moved*? <=> item_moved*?
+					item_expanded*? <=> item_expanded*?
+					item_list* <= item_list*
+					item_uri* <= item_uri*
+					highlight <= highlight
+					item_add*? <=> item_add*?
+
+$hyoo_meta_menu $mol_page
+	editable true
+	item_moved*? null
+	yard $hyoo_sync_yard
+	item* $hyoo_meta_model
+		title => item_title*
+	list $hyoo_crowd_list
+		list => ids
+		world => world
+	item_list* $hyoo_crowd_list
+	drop_allow /
+		\move
+		\link
+	Logo $mol_avatar
+		id <= id \
+	tools_ext /
+	head /
+		<= Title
+		<= Tools
+		<= Search $mol_search
+			query? <=> search? \
+	tools /
+		<= Search_toggle $mol_check_icon
+			hint @ \Fulltext search
+			checked? <=> search_show? false
+			Icon <= Search_icon $mol_icon_magnify
+		<= Editing $mol_check_icon
+			hint @ \Edit list
+			checked? <=> editing? false
+			Icon <= Editing_icon $mol_icon_pencil_outline
+		<= Add $mol_button_minor
+			hint @ \Add new
+			click? <=> add? null
+			sub /
+				<= Add_icon $mol_icon_plus
+		^ tools_ext
+	body /
+		<= Found $hyoo_meta_menu_items
+			editing <= editing
+			drop_allow /
+			list <= list
+			ids <= found /$mol_int62_string
+			highlight <= search
+			item_uri* <= item_uri* \
+			item_moved*? <=> item_moved*?
+			- item_list* <= item_list*
+			item_add*? <=> item_add*? null
+		<= Content $hyoo_meta_menu_items
+			editing <= editing
+			drop_allow <= drop_allow
+			list <= list
+			item_uri* <= item_uri* \
+			item_expanded*? <=> item_expanded*? false
+			item_moved*? <=> item_moved*?
+			item_list* <= item_list*
+			item_add*? <=> item_add*? null
+		<= Drop_end $mol_drop
+			enabled <= editable
+			adopt? <=> transfer_adopt? null
+			receive? <=> receive_end? null
+			Sub <= Drop_zone $mol_view
+			allow <= drop_allow
+
+$hyoo_page_side_menu $hyoo_meta_menu
+	side_current $hyoo_page_side
+	Title $hyoo_meta_link
+		meta <= side $hyoo_page_side
+			title => title
+
+$mol_paginator $mol_bar
+	sub /
+		<= Backward $mol_button_minor
+			hint <= backward_hint @ \Backward
+			click?event <=> backward?event null
+			sub / <= Backward_icon $mol_icon_chevron_left
+		<= Value $mol_view sub / <= value? 0
+		<= Forward $mol_button_minor
+			hint <= forward_hint @ \Forward
+			click?event <=> forward?event null
+			sub / <= Forward_icon $mol_icon_chevron_right
+
+$mol_search_jumper $mol_search
+	Root $mol_view
+	Index $mol_paginator
+		value? <=> index? 0
+		forward?event => forward?event
+		backward?event => backward?event
+	plugins /
+		^
+		<= Backward $mol_hotkey
+			mod_shift true
+			key * enter?event <=> backward?event
+		<= Forward $mol_hotkey
+			key *
+				enter?event <=> forward?event
+				escape? <=> escape? null
+
+$mol_icon_information $mol_icon path \M13,9H11V7H13M13,17H11V11H13M12,2C6.48,2 2,6.48 2,12C2,17.52 6.48,22 12,22C17.52,22 22,17.52 22,12C22,6.48 17.52,2 12,2Z
+
+$mol_icon_information_outline $mol_icon path \M11,9H13V7H11M12,20C7.59,20 4,16.41 4,12C4,7.59 7.59,4 12,4C16.41,4 20,7.59 20,12C20,16.41 16.41,20 12,20M12,2C6.48,2 2,6.48 2,12C2,17.52 6.48,22 12,22C17.52,22 22,17.52 22,12C22,6.48 17.52,2 12,2M11,17H13V11H11V17Z
+
+$mol_icon_bookmark $mol_icon path \M17,3H7C5.9,3 5,3.9 5,5V21L12,18L19,21V5C19,3.89 18.1,3 17,3Z
+
+$mol_icon_bookmark_outline $mol_icon path \M17,18L12,15.82L7,18V5H17M17,3H7C5.9,3 5,3.9 5,5V21L12,18L19,21V5C19,3.89 18.1,3 17,3Z
+
+$hyoo_page_side_view $mol_page
+	profile $hyoo_page_side
+	peer* $hyoo_page_side
+	book $hyoo_page_side
+	highlight \
+	side $hyoo_page_side
+		id => id
+		editable => editable
+		title? => title?
+		details? => side_details?
+		released => released
+		release => side_release
+		changed_moment => changed_moment
+		authors => authors
+	plugins /
+		<= Search_start $mol_hotkey
+			key * F? <=> search_start? null
+			mod_ctrl true
+	auto /
+		<= slides_send null
+		<= history_mark null
+	Logo <= Menu_toggle $mol_check
+		checked? <=> menu_showed? false
+		hint @ \Menu Showing
+		sub /
+			<= Avatar $mol_avatar
+				id <= id
+	head /
+		<= Title
+		<= Tools
+		<= Search $mol_search_jumper
+			query?val <=> search_query?val \
+			Root <= Details
+			clear? <=> search_stop? null
+	tools /
+		<= Edit_toggle $mol_check_icon
+			hint @ \Edit page
+			checked? <=> editing? false
+			Icon <= Edit_icon $mol_icon_pencil_outline
+			label <= edit_toggle_label /
+				<= Unreleased $mol_speck
+		<= Search_toggle $mol_check_icon
+			hint @ \Find on page
+			checked? <=> search_show? false
+			Icon <= Search_icon $mol_icon_magnify
+		<= Info_toggle $mol_check_icon
+			hint @ \Info page
+			checked? <=> info? false
+			Icon <= Info_icon $mol_icon_information_outline
+		<= Bookmark_toggle $mol_check_icon
+			hint @ \Bookmark page
+			checked? <=> bookmark? false
+			Icon <= Bookmark_icon $mol_icon_bookmark_outline
+	slides_content \
+		\# {title}
+		\{details}
+	body /
+		<= Details $mol_text
+			text <= details \
+			highlight <= search_query
+			- Empty <= Details_empty $mol_text text \...
+		<= Signature $mol_view
+			sub /
+				<= Changed $mol_date
+					value_moment <= changed_moment
+				<= Author_list $mol_view
+					sub <= author_list /
+						<= Author_link*0_0 $hyoo_meta_link
+							meta <= peer*
+
+
+$mol_icon_publish $mol_icon path \M5,4V6H19V4H5M5,14H9V20H15V14H19L12,7L5,14Z
+
+$mol_icon_export $mol_icon path \M23,12L19,8V11H10V13H19V16M1,18V6C1,4.89 1.9,4 3,4H15C16.1,4 17,4.9 17,6V9H15V6H3V18H15V15H17V18C17,19.1 16.1,20 15,20H3C1.9,20 1,19.1 1,18Z
+
+$mol_icon_download $mol_icon path \M5,20H19V18H5M19,9H15V3H9V9H5L12,16L19,9Z
+
+$mol_button_download $mol_button_minor
+	blob null
+	uri \
+	file_name \blob.bin
+	sub /
+		<= Icon $mol_icon_download
+		<= title \
+
+$mol_icon_shield $mol_icon path \M12,1L3,5V11C3,16.55 6.84,21.74 12,23C17.16,21.74 21,16.55 21,11V5L12,1Z
+
+$mol_icon_shield_account $mol_icon path \M12,1L3,5V11C3,16.55 6.84,21.74 12,23C17.16,21.74 21,16.55 21,11V5L12,1M12,5C13.66,5 15,6.34 15,8C15,9.66 13.66,11 12,11C10.34,11 9,9.66 9,8C9,6.34 10.34,5 12,5M17.13,17C15.92,18.85 14.11,20.24 12,20.92C9.89,20.24 8.08,18.85 6.87,17C6.53,16.5 6.24,16 6,15.47C6,13.82 8.71,12.47 12,12.47C15.29,12.47 18,13.79 18,15.47C17.76,16 17.47,16.5 17.13,17Z
+
+$hyoo_page_side_edit $mol_page
+	side $hyoo_page_side
+		title? => title?
+		details? => details?
+		details_selection? => details_selection?
+		aura? => aura?
+		editable => editable
+		released => released
+	Title $mol_string_button
+		hint @ \Title
+		- bring => bring
+		value? <=> title?
+		enabled <= editable
+	export_sign @ \\\Current Original on $hyoo_page.\{link}\\
+	tools /
+		<= Syntax $mol_link_iconed
+			hint @ \MarkedText Syntax
+			uri \https://marked.hyoo.ru/
+			icon \https://marked.hyoo.ru/hyoo/marked/logo/logo.svg
+			title \
+		<= Publish $mol_button_minor
+			click? <=> publish? null
+			disabled <= released
+			hint @ \Publish
+			sub /
+				<= Publish_icon $mol_icon_publish
+		<= Export $mol_pick
+			hint @ \Download markdown
+			trigger_content /
+				<= Export_icon $mol_icon_export
+			bubble_content /
+				<= Download $mol_button_download
+					title @ \Download Book as MT File
+					file_name <= download_name \{filename}.mt
+					blob <= download_blob $mol_blob
+				<= Copy_html $mol_button_copy
+					title @ \Copy to Clipboard
+					text <= copy_text \
+					html <= copy_html \
+		<= Rights_toggle $mol_check_icon
+			hint @ \Access Rights
+			checked? <=> rights? false
+			Icon <= Rights_icon $mol_icon_shield_account
+		<= Close $mol_button_minor
+			click? <=> close? null
+			sub / <= Close_icon $mol_icon_cross
+	body /
+		<= Details_edit $mol_textarea
+			hint @ \Details
+			value? <=> details?
+			selection? <=> details_selection?
+			enabled <= editable
+		<= Aura_field $mol_form_field
+			name @ \Page Background
+			Content <= Aura $mol_string_button
+				hint @ \hyper link
+				value? <=> aura?
+				enabled <= editable
+
+$mol_expander $mol_list
+	rows /
+		<= Label $mol_view
+			sub /
+				<= Trigger $mol_check_expand
+					checked? <=> expanded? false
+					expandable <= expandable true
+					label <= label /
+						<= title
+				<= Tools null
+		<= Content $mol_list
+			rows <= content /
+
+$hyoo_page_side_info $mol_page
+	Text $mol_text
+		flow_tokens => text_tokens
+		block_text* => text_header_title*
+		header_arg* => section_arg*
+		header_level* => section_level*
+	side $hyoo_page_side
+		details => details
+		details_node => details_node
+		referrers_list => referrers_list
+		referrers_stat* => referrers_stat*
+	title @ \Page Info
+	tools /
+		<= Slides $mol_link_iconed
+			hint @ \View as Slides
+			uri <= slides_uri \https://slides.hyoo.ru/#!slides={source}
+			title \
+		<= Close $mol_button_minor
+			click? <=> close? null
+			sub /
+				<= Close_icon $mol_icon_cross
+	body /
+		<= Stat $mol_view sub /
+			<= Size $mol_labeler
+				title @ \Size
+				content /
+					<= size \0
+			<= Chars $mol_labeler
+				title @ \Chars
+				content /
+					<= chars \0
+			<= Words $mol_labeler
+				title @ \Words
+				content /
+					<= words \0
+			<= Weight $mol_labeler
+				title @ \Weight
+				content /
+					<= weight \0B
+		<= Section_list $mol_expander
+			title @ \Sections
+			expanded? <=> section_expanded? false
+			content <= section_list /
+				<= Section_link*0 $mol_link
+					arg <= section_arg*
+					title <= section_title* \
+		<= Ref_list $mol_expander
+			title @ \Referrers
+			expanded? <=> ref_expanded? false
+			content <= ref_list /
+				<= Ref_item*0_0 $mol_view
+					sub /
+						<= Ref_item_link* $mol_link_iconed
+							uri <= ref_uri* \
+						<= Ref_item_stat* $mol_view
+							sub / <= ref_stat* 0
+		<= Word_list $mol_expander
+			title @ \Key Words
+			content / <= Word_list_items $mol_row
+				sub <= word_list_items /
+					<= Word_item*0_0 $mol_view
+						sub /
+							<= Word_item_text* $mol_view
+								sub / <= word_item_text* \
+							<= Word_item_stat* $mol_speck
+								value <= word_item_stat* 0
+								theme \$mol_theme_special
+				- Empty <= Word_list_empty $mol_card
+					title @ \No words
+
+$mol_password $mol_view
+	type? \password
+	sub <= content /
+		<= Pass $mol_string
+			type <= type
+			hint <= hint \
+			value? <=> value? \
+			submit?event <=> submit?event null
+			enabled <= enabled true
+		<= Show $mol_check_icon
+			checked? <=> checked? true
+			Icon <= Show_icon $mol_icon_eye
+
+$hyoo_meta_safe $mol_page
+	title @ \Private keys
+	yard $hyoo_sync_yard
+	bid_pass_long @ \> 7 letters
+	key_size 133
+	attr *
+		^
+		mol_theme \$mol_theme_special
+	body /
+		<= Content $mol_list rows <= content /
+			<= Export_block $mol_list rows <= export_rows /
+				<= Expot_bid $mol_text text @ \Your private access keys are stored in the browser. In order not to lose them or transfer to another device, it is recommended to come up with a strong password for exporting them.
+				<= Export_pass $mol_list rows /
+					<= Password_field $mol_form_field
+						name @ \Password
+						bids / <= password_bid \
+						Content <= Password $mol_password
+							value? <=> password? \
+					<= Recall_field $mol_form_field
+						name @ \Hint for recall
+						Content <= Recall $mol_string
+							enabled <= recall_enabled true
+							value? <=> recall? \
+				<= Export_link $mol_link
+					uri <= export_link \
+					title @ \This link contains your encrypted prvate keys. Save it to a secure place on another physical device. Using this link you can restore your private keys by enterig same password.
+			<= Import_block $mol_list rows <= import_rows /
+				<= Iport_descr $mol_text text @ \
+					\To import a private key, you must enter the password from it.
+					\**If the current key is not saved, it will be lost forever.**
+				<= Import_pass $mol_list rows /
+					<= Recall_field
+					<= Password_field
+				<= Import_switch $mol_button_minor
+					click? <=> import_switch? null
+					sub /
+						<= Peer_new $mol_avatar id <= peer_new \
+						<= impot_switch_title @ \Switch
+
+$mol_icon_sync $mol_icon path \M12,18C8.69,18 6,15.31 6,12C6,11 6.25,10.03 6.7,9.2L5.24,7.74C4.46,8.97 4,10.43 4,12C4,16.42 7.58,20 12,20V23L16,19L12,15M12,4V1L8,5L12,9V6C15.31,6 18,8.69 18,12C18,13 17.75,13.97 17.3,14.8L18.76,16.26C19.54,15.03 20,13.57 20,12C20,7.58 16.42,4 12,4Z
+
+$mol_icon_sync_off $mol_icon path \M20,4H14V10L16.24,7.76C17.32,8.85 18,10.34 18,12C18,13 17.75,13.94 17.32,14.77L18.78,16.23C19.55,15 20,13.56 20,12C20,9.79 19.09,7.8 17.64,6.36L20,4M2.86,5.41L5.22,7.77C4.45,9 4,10.44 4,12C4,14.21 4.91,16.2 6.36,17.64L4,20H10V14L7.76,16.24C6.68,15.15 6,13.66 6,12C6,11 6.25,10.06 6.68,9.23L14.76,17.31C14.5,17.44 14.26,17.56 14,17.65V19.74C14.79,19.53 15.54,19.2 16.22,18.78L18.58,21.14L19.85,19.87L4.14,4.14L2.86,5.41M10,6.35V4.26C9.2,4.47 8.45,4.8 7.77,5.22L9.23,6.68C9.5,6.56 9.73,6.44 10,6.35Z
+
+$hyoo_sync_online $mol_link
+	minimal_width 40
+	minimal_height 40
+	yard $hyoo_sync_yard
+	uri <= master_link \
+	sub /
+		<= Well $mol_avatar
+			id <= master_link \
+		<= Fail $mol_icon_sync_off
+	attr *
+		^
+		title <= message <= hint \$hyoo_sync
+
+$mol_icon_key $mol_icon path \M7,14C5.9,14 5,13.1 5,12C5,10.9 5.9,10 7,10C8.1,10 9,10.9 9,12C9,13.1 8.1,14 7,14M12.65,10C11.83,7.67 9.61,6 7,6C3.69,6 1,8.69 1,12C1,15.31 3.69,18 7,18C9.61,18 11.83,16.33 12.65,14H17V18H21V14H23V10H12.65Z
+
+$mol_icon_key_variant $mol_icon path \M22,18V22H18V19H15V16H12L9.74,13.74C9.19,13.91 8.61,14 8,14C4.69,14 2,11.31 2,8C2,4.69 4.69,2 8,2C11.31,2 14,4.69 14,8C14,8.61 13.91,9.19 13.74,9.74L22,18M7,5C5.9,5 5,5.9 5,7C5,8.1 5.9,9 7,9C8.1,9 9,8.1 9,7C9,5.9 8.1,5 7,5Z
+
+$mol_icon_image $mol_icon path \M8.5,13.5L11,16.5L14.5,12L19,18H5M21,19V5C21,3.89 20.1,3 19,3H5C3.9,3 3,3.9 3,5V19C3,20.1 3.9,21 5,21H19C20.1,21 21,20.1 21,19Z
 
 $mol_icon_brightness_6 $mol_icon path \M12,18V6C15.31,6 18,8.69 18,12C18,15.31 15.31,18 12,18M20,15.31L23.31,12L20,8.69V4H15.31L12,0.69L8.69,4H4V8.69L0.69,12L4,15.31V20H8.69L12,23.31L15.31,20H20V15.31Z
 
@@ -885,7 +2276,120 @@ $mol_lights_toggle $mol_check_icon
 	hint @ \Toggle lights
 	checked? <=> lights? false
 
+$hyoo_page_menu $hyoo_meta_menu
+	title @ \In Bookmarks
+	attr *
+		^
+		mol_theme \$mol_theme_special
+	head /
+		<= Profile $hyoo_meta_link
+			meta <= side $hyoo_page_side
+			hint @ \Profile
+			Title null
+		<= Title
+		<= Tools
+	Logo null
+	foot /
+		<= Online $hyoo_sync_online
+			yard <= yard
+		<= Safe_showing $mol_check_icon
+			hint @ \Private Keys
+			Icon <= Safe_icon $mol_icon_key_variant
+			checked? <=> safe_showing? false
+		<= About $mol_link_iconed
+			hint @ \About $hyoo_page
+			title \
+			uri \http://page.hyoo.ru/
+		<= Aura_showing $mol_check_icon
+			hint @ \Backgrounds Showing
+			Icon <= Aura_icon $mol_icon_image
+			checked? <=> aura_showing? true
+		<= Lights $mol_lights_toggle
+
+$hyoo_page $mol_book2
+	side_main_id \iy8wtn_tky6pc
+	yard $hyoo_sync_client
+	side* $hyoo_page_side
+		title => side_title*
+		pages_node => pages_node*
+	side_current $hyoo_page_side
+	profile $hyoo_page_side
+		bookmarks_node => bookmarks_node
+	style *
+		^
+		backgroundImage <= aura_image \
+	plugins /
+		<= Theme $mol_theme_auto
+	auto /
+		<= ref_track null
+	pages /
+		<= News $hyoo_page_side_news
+			side <= profile
+		<= Side_menu $hyoo_page_side_menu
+			yard <= yard
+			side <= book_side $hyoo_page_side
+			side_current <= side_current
+			list <= book_pages_node null
+			item_list* <= pages_node*
+			item_uri* <= side_uri* \
+			item_add*? <=> side_add*? null
+			tools_ext <= tools_ext /
+		<= View*0_0 $hyoo_page_side_view
+			side <= side*
+			peer* <= side*
+			profile <= profile
+			menu_showed? <=> side_menu_showed? false
+			editing? <=> editing? false
+			info? <=> info? false
+			highlight <= search
+			Details => View_details*
+		<= Edit*0_0 $hyoo_page_side_edit
+			side <= side*
+			rights? <=> rights? false
+			close? <=> edit_close*? null
+		<= Info*0_0 $hyoo_page_side_info
+			side <= side*
+			close? <=> info_close*? null
+			Text <= View_details*
+		<= Rights*0_0 $hyoo_meta_rights
+			meta <= side*
+			peer* <= side*
+			tools /
+				<= Rights_close $mol_button_minor
+					click? <=> rights_close? null
+					sub /
+						<= Сlose_icon $mol_icon_cross
+		<= Safe $hyoo_meta_safe
+			yard <= yard
+			tools /
+				<= Safe_close $mol_button_minor
+					click? <=> safe_close? null
+					sub /
+						<= Safe_icon $mol_icon_cross
+	Placeholder <= Menu $hyoo_page_menu
+		yard <= yard
+		side <= profile
+		list <= bookmarks_node
+		item_uri* <= side_uri* \
+		add? <=> page_add? null
+		item_add*? <=> side_add*? null
+		aura_showing? <=> aura_showing? true
+		safe_showing? <=> safe? false
+		search => search
+
+$mol_icon_settings $mol_icon path \M12,15.5C10.07,15.5 8.5,13.93 8.5,12C8.5,10.07 10.07,8.5 12,8.5C13.93,8.5 15.5,10.07 15.5,12C15.5,13.93 13.93,15.5 12,15.5M19.43,12.97C19.47,12.65 19.5,12.33 19.5,12C19.5,11.67 19.47,11.34 19.43,11L21.54,9.37C21.73,9.22 21.78,8.95 21.66,8.73L19.66,5.27C19.54,5.05 19.27,4.96 19.05,5.05L16.56,6.05C16.04,5.66 15.5,5.32 14.87,5.07L14.5,2.42C14.46,2.18 14.25,2 14,2H10C9.75,2 9.54,2.18 9.5,2.42L9.13,5.07C8.5,5.32 7.96,5.66 7.44,6.05L4.95,5.05C4.73,4.96 4.46,5.05 4.34,5.27L2.34,8.73C2.21,8.95 2.27,9.22 2.46,9.37L4.57,11C4.53,11.34 4.5,11.67 4.5,12C4.5,12.33 4.53,12.65 4.57,12.97L2.46,14.63C2.27,14.78 2.21,15.05 2.34,15.27L4.34,18.73C4.46,18.95 4.73,19.03 4.95,18.95L7.44,17.94C7.96,18.34 8.5,18.68 9.13,18.93L9.5,21.58C9.54,21.82 9.75,22 10,22H14C14.25,22 14.46,21.82 14.5,21.58L14.87,18.93C15.5,18.67 16.04,18.34 16.56,17.94L19.05,18.95C19.27,19.03 19.54,18.95 19.66,18.73L21.66,15.27C21.78,15.05 21.73,14.78 21.54,14.63L19.43,12.97Z
+
+$mol_icon_settings_outline $mol_icon path \M12,8C14.21,8 16,9.79 16,12C16,14.21 14.21,16 12,16C9.79,16 8,14.21 8,12C8,9.79 9.79,8 12,8M12,10C10.9,10 10,10.9 10,12C10,13.1 10.9,14 12,14C13.1,14 14,13.1 14,12C14,10.9 13.1,10 12,10M10,22C9.75,22 9.54,21.82 9.5,21.58L9.13,18.93C8.5,18.68 7.96,18.34 7.44,17.94L4.95,18.95C4.73,19.03 4.46,18.95 4.34,18.73L2.34,15.27C2.21,15.05 2.27,14.78 2.46,14.63L4.57,12.97L4.5,12L4.57,11L2.46,9.37C2.27,9.22 2.21,8.95 2.34,8.73L4.34,5.27C4.46,5.05 4.73,4.96 4.95,5.05L7.44,6.05C7.96,5.66 8.5,5.32 9.13,5.07L9.5,2.42C9.54,2.18 9.75,2 10,2H14C14.25,2 14.46,2.18 14.5,2.42L14.87,5.07C15.5,5.32 16.04,5.66 16.56,6.05L19.05,5.05C19.27,4.96 19.54,5.05 19.66,5.27L21.66,8.73C21.79,8.95 21.73,9.22 21.54,9.37L19.43,11L19.5,12L19.43,13L21.54,14.63C21.73,14.78 21.79,15.05 21.66,15.27L19.66,18.73C19.54,18.95 19.27,19.04 19.05,18.95L16.56,17.95C16.04,18.34 15.5,18.68 14.87,18.93L14.5,21.58C14.46,21.82 14.25,22 14,22H10M11.25,4L10.88,6.61C9.68,6.86 8.62,7.5 7.85,8.39L5.44,7.35L4.69,8.65L6.8,10.2C6.4,11.37 6.4,12.64 6.8,13.8L4.68,15.36L5.43,16.66L7.86,15.62C8.63,16.5 9.68,17.14 10.87,17.38L11.24,20H12.76L13.13,17.39C14.32,17.14 15.37,16.5 16.14,15.62L18.57,16.66L19.32,15.36L17.2,13.81C17.6,12.64 17.6,11.37 17.2,10.2L19.31,8.65L18.56,7.35L16.15,8.39C15.38,7.5 14.32,6.86 13.12,6.62L12.75,4H11.25Z
+
+$mol_icon_share $mol_icon path \M21,12L14,5V9C7,10 4,15 3,20C5.5,16.5 9,14.9 14,14.9V19L21,12Z
+
+$mol_icon_share_outline $mol_icon path \M14,5V9C7,10 4,15 3,20C5.5,16.5 9,14.9 14,14.9V19L21,12L14,5M16,9.83L18.17,12L16,14.17V12.9H14C11.93,12.9 10.07,13.28 8.34,13.85C9.74,12.46 11.54,11.37 14.28,11L16,10.73V9.83Z
+
 $piterjs_app $mol_view
+	Domain $piterjs_domain
+		meetups => meetups
+		meetup* => meetup*
+		meetup_public*? => meetup_public*?
 	plugins /
 		<= Theme $mol_theme_auto
 	sub /
@@ -902,6 +2406,19 @@ $piterjs_app $mol_view
 	Menu $mol_page
 		title \Митапы
 		tools <= tools /
+			<= Meetup_add $mol_button_minor
+				click? <=> meetup_add? null
+				sub / <= Meetup_add_icon $mol_icon_plus
+			<= Rights_toggle $mol_check_icon
+				checked? <=> rights? false
+				Icon <= Rights_toggle_icon $mol_icon_shield_account
+		foot <= foot /
+			<= Online $hyoo_sync_online
+				yard <= Yard $hyoo_sync_client
+			<= Editing $mol_check_icon
+				Icon <= Editing_icon $mol_icon_settings_outline
+				checked? <=> editing? false
+			<= User $mol_view sub / <= user_id \0_0
 			<= Lights $mol_lights_toggle
 		body /
 			<= Menu_content $mol_view sub /
@@ -911,42 +2428,48 @@ $piterjs_app $mol_view
 						uri \https://conf.piterjs.org/
 						sub /
 							<= Conf_title $mol_view
-								sub / \Conf
+								sub /
+									\Conf 
+									<= Conf_ext $mol_icon_share_outline
 							<= Conf_date $mol_view
 								sub / \сентябрь'19
+					<= Wiki_link $mol_link
+						arg *
+							wiki \
+							meetup null
+						title \База знаний
 					- <= Others_link $mol_link
 						uri \#others
 						title \Другие события
-	Meetup!id $piterjs_meetup_page
-		meetup <= meetup!id $piterjs_meetup
+	Meetup* $piterjs_meetup_page
+		meetup <= meetup*
+		editing <= editing? false
+		meetup_public? <=> meetup_public*?
 	Speech!id $piterjs_speech_page
 		speech <= speech!id $piterjs_speech
-	Menu_meetup!id $piterjs_meetup_snippet
-		meetup <= meetup!id $piterjs_meetup
+		editing <= editing? false
+		speech_public? <=> speech_public*? false
+	Menu_meetup* $piterjs_meetup_snippet
+		meetup <= meetup*
 	Now $piterjs_now
 		place <= place $piterjs_place
 	Intro $piterjs_intro
 		meetup <= meetup_current $piterjs_meetup
 		page?val <=> intro?val \
 	Video $piterjs_video_page
-		source <= video_uri \
+		source? <=> video_uri? \
+		editing <= editing? false
 	Place $piterjs_place_page
 		place <= place $piterjs_place
+		editing <= editing? false
 	Others $piterjs_others
-
-$mol_icon_github_circle $mol_icon path \M12,2C6.48,2 2,6.48 2,12C2,16.42 4.87,20.17 8.84,21.5C9.34,21.58 9.5,21.27 9.5,21C9.5,20.77 9.5,20.14 9.5,19.31C6.73,19.91 6.14,17.97 6.14,17.97C5.68,16.81 5.03,16.5 5.03,16.5C4.12,15.88 5.1,15.9 5.1,15.9C6.1,15.97 6.63,16.93 6.63,16.93C7.5,18.45 8.97,18 9.54,17.76C9.63,17.11 9.89,16.67 10.17,16.42C7.95,16.17 5.62,15.31 5.62,11.5C5.62,10.39 6,9.5 6.65,8.79C6.55,8.54 6.2,7.5 6.75,6.15C6.75,6.15 7.59,5.88 9.5,7.17C10.29,6.95 11.15,6.84 12,6.84C12.85,6.84 13.71,6.95 14.5,7.17C16.41,5.88 17.25,6.15 17.25,6.15C17.8,7.5 17.45,8.54 17.35,8.79C18,9.5 18.38,10.39 18.38,11.5C18.38,15.32 16.04,16.16 13.81,16.41C14.17,16.72 14.5,17.33 14.5,18.26C14.5,19.6 14.5,20.68 14.5,21C14.5,21.27 14.66,21.59 15.17,21.5C19.14,20.16 22,16.42 22,12C22,6.48 17.52,2 12,2Z
-
-$mol_icon_telegram $mol_icon path \M9.78,18.65L10.06,14.42L17.74,7.5C18.08,7.19 17.67,7.04 17.22,7.31L7.74,13.3L3.64,12C2.76,11.75 2.75,11.14 3.84,10.7L19.81,4.54C20.54,4.21 21.24,4.72 20.96,5.84L18.24,18.65C18.05,19.56 17.5,19.78 16.74,19.36L12.6,16.3L10.61,18.23C10.38,18.46 10.19,18.65 9.78,18.65Z
-
-$mol_icon_vk $mol_icon path \M20.8,7.74C20.93,7.32 20.8,7 20.18,7H18.16C17.64,7 17.41,7.27 17.28,7.57C17.28,7.57 16.25,10.08 14.79,11.72C14.31,12.19 14.1,12.34 13.84,12.34C13.71,12.34 13.5,12.19 13.5,11.76V7.74C13.5,7.23 13.38,7 12.95,7H9.76C9.44,7 9.25,7.24 9.25,7.47C9.25,7.95 10,8.07 10.05,9.44V12.42C10.05,13.08 9.93,13.2 9.68,13.2C9,13.2 7.32,10.67 6.33,7.79C6.13,7.23 5.94,7 5.42,7H3.39C2.82,7 2.7,7.27 2.7,7.57C2.7,8.11 3.39,10.77 5.9,14.29C7.57,16.7 9.93,18 12.08,18C13.37,18 13.53,17.71 13.53,17.21V15.39C13.53,14.82 13.65,14.7 14.06,14.7C14.36,14.7 14.87,14.85 16.07,16C17.45,17.38 17.67,18 18.45,18H20.47C21.05,18 21.34,17.71 21.18,17.14C21,16.57 20.34,15.74 19.47,14.76C19,14.21 18.29,13.61 18.07,13.3C17.77,12.92 17.86,12.75 18.07,12.4C18.07,12.4 20.54,8.93 20.8,7.74Z
-
-$mol_button_major $mol_button_typed
-	attr *
-		^
-		mol_theme \$mol_theme_accent
+	Rights $hyoo_meta_rights
+		meta <= Domain
+	Wiki $hyoo_page
+		side_main_id \zi5t5h_8aygdf
+		yard <= Yard
 
 $piterjs_link $mol_link
-	target \_blank
 	sub /
 		<= Button $mol_button_major
 			title <= title
@@ -959,30 +2482,21 @@ $piterjs_now $mol_page
 		tabindex null
 	tools /
 		<= Links $mol_view sub /
-			<= Github $mol_link
-				uri \https://github.com/piterjs
-				sub /
-					<= Github_icon $mol_icon_github_circle
-			- <= Medium $mol_link
-				uri \https://medium.com/piterjs
-				sub /
-					<= Medium_icon $mol_icon_medium
-			<= Telegram $mol_link
-				uri \https://t.me/piterjs
-				sub /
-					<= Telegram_icon $mol_icon_telegram
-			<= Vkontakte $mol_link
+			<= Youtube $mol_link_iconed
+				uri \https://www.youtube.com/@piterjs
+				title \
+			<= Vkontakte $mol_link_iconed
 				uri \https://vk.com/piterjs
-				sub /
-					<= Vkontakte_icon $mol_icon_vk
-			- <= Twitter $mol_link
-				uri \https://twitter.com/@gopiterjs
-				sub /
-					<= Twitter_icon $mol_icon_twitter
-			<= Youtube $mol_link
-				uri \https://www.youtube.com/channel/UCN9aK6ZG5PS1nnJZqscsmKw
-				sub /
-					<= Youtube_icon $mol_icon_youtube
+				title \
+			<= Habr $mol_link_iconed
+				uri \https://habr.com/ru/users/PiterJS/
+				title \
+			<= Telegram $mol_link_iconed
+				uri \https://t.me/piterjs
+				title \
+			<= Github $mol_link_iconed
+				uri \https://github.com/piterjs
+				title \
 	body /
 		<= Screen $piterjs_screen
 			place <= place $piterjs_place
@@ -995,8 +2509,8 @@ $piterjs_now $mol_page
 						<= Logo_image $mol_svg_path
 							geometry \M218.3 164.7L212 162c-11-4.7-15.7-7.9-15.7-15.5 0-6.2 4.8-11 12.2-11 7.2 0 12 3.1 16.4 11l20-12.7c-8.5-14.6-20.1-20.3-36.4-20.3-23 0-37.5 14.6-37.5 33.6 0 20.7 12.2 30.5 30.8 38.4l6.4 2.7c11.8 5 18.7 8.2 18.7 16.9 0 7.3-6.8 12.5-17.4 12.5-12.7 0-19.7-6.5-25.2-15.5l-21 12c7.6 14.7 23 26 46.7 26 24.3 0 42.5-12.6 42.5-35.5 0-21.2-12.2-30.6-34-39.9zM123.7 201.3c0 12.7-5.3 16-13.7 16-8.8 0-12.4-6-16.4-13l-21 12.5c6 12.7 18 23.3 38.5 23.3 22.6 0 38.2-12 38.2-38.4v-86.9h-25.6v86.5zM111.4 65.4h-8l-.1-3.5h9c-3.4-4.7-2.2-13-.3-20h-9.2l1-3v-5.2H94l2 3-2 2.9h8l-.1 2.3h-9c-2 7-3.1 15.3.3 20h8.2l.1 3.1v.4H95.3c-.8 0-2 1.2-2.3 2.3H78.9v-3.5h13.7c-10.5-8.2 1.8-32.9 1.8-32.9h-16l1-7v-4.7h-9.9l2 2.4-2 2.3h7.4l-.1 7h-9.3s-12.3 24.7-1.8 33h10.6v3.4H53.6v-.3.1-5.6h7.3c-3.4-4.7-2.2-13-.3-20h-7.4v-2.3h.4v-6h-9.3l2 3-2 3h8v2.3h-8.4c-1.9 7-3 15.3.4 20h7.6l-.5 5.6v.2h-1.2V70h-.9L38.5 59v-8.8h-9.9l2 3-2 3h8.8v3l6.4 8.9s-.8 2.1-.4 3.5a50 50 0 0 0 6.6 7.9c1.4 1.5 3.6 6 3.6 6h24.8v6c-1.2.5-3.2 2-3.2 3.7 0 2.1 1.8 3.9 4.2 3.9 2.3 0 4.2-1.8 4.2-3.9 0-1.6-.5-3.2-2.8-3.6v-6.1H107l1.3-4.3c-5.2-2.3.3-7.8 3-10.2l1.6-5.5h-1.6v-.1zm-49 7.9h-2.3v-2.4h2.4v2.4zm4.7 0h-2.3v-2.4h2.3v2.4zm4.7 0h-2.3v-2.4h2.3v2.4zm4.7 0h-2.3v-2.4h2.3v2.4zm8.3 0h-2.4v-2.4h2.4v2.4zm4.7 0H87v-2.4h2.4v2.4zm4.6 0h-2.3v-2.4h2.3v2.4zm4.7 0h-2.3v-2.4h2.3v2.4z
 				<= Join $piterjs_link
-					uri \https://docs.google.com/forms/d/e/1FAIpQLSe7lb5LFc0LaaJu9POvlIAw8Te0g46xSmYZr7FwuCWg2saYmA/viewform
+					uri \#!wiki/=uxgccs_dqplnq
 					title \Подать заявку на доклад
 				<= Donate $piterjs_link
-					uri \https://www.tinkoff.ru/cf/7qAXpE2HV07
+					uri \#!wiki/=wu07hq_io8xyr
 					title \Поддержать PiterJS рублём
