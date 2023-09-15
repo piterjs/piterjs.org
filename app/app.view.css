@@ -3,15 +3,17 @@
 }
 
 [piterjs_app][mol_theme="$mol_theme_dark"] {
-	--mol_theme_focus: #f7df1e;
+	--mol_theme_focus: #FFE515;
+	--mol_theme_current: #FFE515;
 }
 
 [piterjs_app][mol_theme="$mol_theme_light"] {
-	--mol_theme_focus: #f7df1e;
+	--mol_theme_focus: #c2ab03;
+	--mol_theme_current: #c2ab03;
 }
 
 [piterjs_app] [mol_theme="$mol_theme_base"] {
-	--mol_theme_back: #f7df1e;
+	--mol_theme_back: #FFE515;
 	--mol_theme_text: black;
 	--mol_theme_shade: rgba( 0 , 0 , 0 , .5 );
 	--mol_theme_control: black;
@@ -23,6 +25,10 @@
 	--mol_theme_text: black;
 	--mol_theme_hover: hsl(53, 93%, 44%);
 	stroke: currentColor;
+}
+
+[piterjs_app] [mol_link] {
+	text-shadow: none;
 }
 
 [piterjs_app] [mol_page] ,
