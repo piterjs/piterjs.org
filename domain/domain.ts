@@ -17,6 +17,15 @@ namespace $ {
 			return this.world()!.Fund( $piterjs_meetup ).Item( id )
 		}
 
+		@ $mol_mem
+		meetups() {
+			return this.meetups_ids().map( id => this.meetup( id ) )
+				.sort( ( a, b )=>
+					+( b.start()?.valueOf() ?? 0 )
+					-( a.start()?.valueOf() ?? 0 )
+				)
+		}
+
 		@ $mol_mem_key
 		meetup_public( id: $mol_int62_string, next?: boolean ) {
 			return this.meetups_node().has( id, next )

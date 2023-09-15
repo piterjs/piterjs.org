@@ -81,7 +81,7 @@ namespace $.$$ {
 
 		@ $mol_mem
 		meetup_current() {
-			return this.meetup( this.meetup_id() || this.meetups_ids()[0] )
+			return this.meetup_id() ? this.meetup( this.meetup_id() ) : this.meetups()[0]
 		}
 
 		@ $mol_mem
@@ -91,12 +91,7 @@ namespace $.$$ {
 
 		@ $mol_mem
 		menu_meetups() {
-			return this.meetups_ids().slice().reverse()
-				.sort( ( a, b )=>
-					+( this.meetup( b ).start()?.valueOf() ?? 0 )
-					-( this.meetup( a ).start()?.valueOf() ?? 0 )
-				)
-				.map( id => this.Menu_meetup( id ) )
+			return this.meetups().map( meetup => this.Menu_meetup( meetup.id() ) )
 		}
 		menu_meetup( id : string ) { return this.meetup( id ) }
 		menu_meetup_id( id : string ) { return id }
