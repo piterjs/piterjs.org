@@ -5,9 +5,9 @@ namespace $.$$ {
 	$mol_style_define( $piterjs_speech_page , {
 
 		flex: {
-			grow: 1000,
+			grow: 0,
 			shrink: 0,
-			basis: rem(40),
+			basis: rem(60),
 		},
 
 		Tools: {
