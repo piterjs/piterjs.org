@@ -20,11 +20,15 @@ namespace $ {
 
 		@ $mol_mem
 		speeches() {
+			
 			const ids = this.speeches_node().list()
 			const fund = this.world()!.Fund( $piterjs_speech )
-			return ids.map( id => fund.Item( $mol_int62_string_ensure( id )! ) )
-				.sort( ( a, b )=> a.start().valueOf() - b.start().valueOf() )
-
+			const speeches = ids.map( id => fund.Item( $mol_int62_string_ensure( id )! ) )
+			
+			for( const speech of speeches ) speech.steal_rights( this )
+			speeches.sort( ( a, b )=> a.start().valueOf() - b.start().valueOf() )
+			
+			return speeches
 		}
 
 		@ $mol_action

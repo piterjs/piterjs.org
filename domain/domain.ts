@@ -14,7 +14,9 @@ namespace $ {
 
 		@ $mol_mem_key
 		meetup( id: $mol_int62_string ) {
-			return this.world()!.Fund( $piterjs_meetup ).Item( id )
+			const meetup = this.world()!.Fund( $piterjs_meetup ).Item( id )
+			meetup.steal_rights( this )
+			return meetup
 		}
 
 		@ $mol_mem
@@ -31,14 +33,8 @@ namespace $ {
 			return this.meetups_node().has( id, next )
 		}
 
-		@ $mol_action
 		meetup_make() {
-			
-			const meetup = this.world()!.Fund( $piterjs_meetup ).make()!
-			meetup.steal_rights( this )
-
-			return meetup
-
+			return this.world()!.Fund( $piterjs_meetup ).make()!
 		}
 
 	}
