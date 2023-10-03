@@ -306,6 +306,7 @@ $mol_calendar $mol_list
 		ghost <= day_ghost* false
 		holiday <= day_holiday* false
 		selected <= day_selected* false
+		today <= day_today* false
 		theme <= day_theme* null
 		sub <= day_content* /
 			<= day_text* \
@@ -320,6 +321,7 @@ $mol_calendar_day $mol_view
 		mol_calendar_holiday <= holiday false
 		mol_calendar_ghost <= ghost false
 		mol_calendar_selected <= selected false
+		mol_calendar_today <= today false
 		mol_theme <= theme null
 
 $mol_date $mol_pick
@@ -335,6 +337,7 @@ $mol_date $mol_pick
 					<= Today_icon $mol_icon_calendar_today
 			<= Input $mol_format
 				value? <=> value? \
+				value_changed? => value_changed?
 				mask* <= input_mask* \
 				enabled <= enabled true
 			<= Clear $mol_button_minor
@@ -641,6 +644,7 @@ $mol_icon_clock $mol_icon path \M12,2C6.48,2 2,6.48 2,12C2,17.52 6.48,22 12,22C1
 $mol_icon_clock_outline $mol_icon path \M12,20C16.42,20 20,16.42 20,12C20,7.58 16.42,4 12,4C7.58,4 4,7.58 4,12C4,16.42 7.58,20 12,20M12,2C17.52,2 22,6.48 22,12C22,17.52 17.52,22 12,22C6.47,22 2,17.5 2,12C2,6.48 6.48,2 12,2M12.5,7V12.25L17,14.92L16.25,16.15L11,13V7H12.5Z
 
 $mol_check_list $mol_view
+	dictionary *
 	Option* $mol_check
 		checked? <=> option_checked*? false
 		label <= option_label* /
@@ -1561,7 +1565,7 @@ $hyoo_map $mol_view
 				<= Source $mol_link_source
 					uri \https://github.com/hyoo-ru/map.hyoo.ru/
 			Head => Main_head
-			sub /
+			sub <= main_sub /
 				<= Main_head
 				<= Pane $hyoo_map_pane
 					geo_to_tile_x!val => geo_to_tile_x!val
@@ -1571,7 +1575,7 @@ $hyoo_map $mol_view
 					shift?val <=> center?val $mol_vector_2d /
 						0
 						0
-					graphs /
+					graphs <= graphs /
 						<= Tiles $mol_plot_map_tiles
 							level_pyramid -3
 							tile_size_real <= tile_size 256
@@ -2273,12 +2277,13 @@ $mol_select $mol_pick
 	hint @ \Pick..
 	bubble_content /
 		<= Filter
-		<= Bubble_pane $mol_scroll sub /
-			<= Menu $mol_list
-				rows <= menu_content /$mol_view
-	Filter $mol_string
-		value? <=> filter_pattern? \
-		hint @ \Filter..
+		<= Bubble_pane $mol_scroll
+			sub /
+				<= Menu $mol_list
+					rows <= menu_content /$mol_view
+	Filter $mol_search
+		query? <=> filter_pattern? \
+		hint <= filter_hint @ \Filter..
 		submit?event <=> submit?event null
 		enabled <= enabled true
 	Trigger_icon $mol_icon_dots_vertical

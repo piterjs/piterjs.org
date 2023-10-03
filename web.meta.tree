@@ -82,7 +82,8 @@
 	include \/mol/offline/install
 	deploy \/hyoo/map/logo/logo.svg
 \/hyoo/sync
-	build $hyoo_sync_revision \git rev-parse --short HEAD
+	- build $hyoo_sync_revision \git rev-parse --short HEAD
+	build $hyoo_sync_revision \echo echo
 \/hyoo/page
 	include \/mol/offline/install
 	deploy \/hyoo/page/logo/logo.svg
