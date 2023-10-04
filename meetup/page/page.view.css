@@ -51,11 +51,6 @@
 	padding: var(--mol_gap_text);
 }
 
-[piterjs_meetup_page_joined_bid] {
-	padding: var(--mol_gap_text);
-	color: var(--mol_theme_focus);
-}
-
 [piterjs_meetup_page_free_space] {
 	padding: var(--mol_gap_text);
 	color: var(--mol_theme_shade);
