@@ -66,6 +66,8 @@ $piterjs_app $mol_view
 		meetup_public? <=> meetup_public*?
 	Meetup_guests* $piterjs_meetup_guests
 		meetup <= meetup*
+	Meetup_stats* $piterjs_meetup_stats
+		meetup <= meetup*
 	Speech!id $piterjs_speech_page
 		speech <= speech!id $piterjs_speech
 		editing <= editing? false

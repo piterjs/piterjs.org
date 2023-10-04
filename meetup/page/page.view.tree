@@ -19,6 +19,11 @@ $piterjs_meetup_page $mol_page
 			hint \Список гостей
 			sub /
 				<= Guests_link_icon $mol_icon_account_group_outline
+		<= Stats_link $mol_link
+			arg * stats \
+			hint \Статистика
+			sub /
+				<= Stats_link_icon $mol_icon_chart_bar_stacked
 		<= Start $mol_date
 			value_moment? <=> start?
 			enabled <= editing false

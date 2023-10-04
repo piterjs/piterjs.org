@@ -70,6 +70,15 @@ namespace $ {
 		}
 
 		@ $mol_mem
+		joined_moments() {
+			const land = this.joined_node().yoke([])
+			land?.pub.promote()
+			return [ ... land?._unit_all.values() ?? [] ]
+				.filter( unit => unit.data && unit.kind() === $hyoo_crowd_unit_kind.join )
+				.map( unit => new $mol_time_moment( $hyoo_crowd_time_stamp( unit.time ) ) )
+		}
+
+		@ $mol_mem
 		joined_count() {
 			return this.joined_node().total()
 		}
