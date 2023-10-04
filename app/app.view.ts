@@ -32,6 +32,8 @@ namespace $.$$ {
 		wiki() { return this.$.$mol_state_arg.value( 'wiki' ) !== null }
 		
 		guests() { return this.$.$mol_state_arg.value( 'guests' ) !== null }
+
+		safe() { return this.$.$mol_state_arg.value( 'safe' ) !== null }
 		
 		@ $mol_mem
 		meetup_id( next? : string | null ) {
@@ -63,6 +65,7 @@ namespace $.$$ {
 			if( this.intro() != null ) return [ this.Intro() ]
 			const pages = [
 				this.Menu() ,
+				... this.safe() ? [ this.Safe() ] : [],
 				... this.meetup_id() ? [ this.Meetup( this.meetup_id() ) ] : [] ,
 				... this.guests() ? [ this.Meetup_guests( this.meetup_id() ) ] : [] ,
 				... this.speech_id() ? [ this.Speech( this.speech_id() ) ] : [] ,
@@ -134,6 +137,7 @@ namespace $.$$ {
 			return [
 				... this.editing() ? [ this.Meetup_add() ] : [],
 				... this.editing() ? [ this.Rights_toggle() ] : [],
+				this.Safe_link(),
 			]
 		}
 
