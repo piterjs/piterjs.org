@@ -11,9 +11,6 @@ namespace $.$$ {
 				basis: `20rem`,
 				grow: 0,
 			},
-			background: {
-				color: $mol_theme.card,
-			},
 		},
 
 	} )

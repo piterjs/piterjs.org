@@ -68,12 +68,18 @@ $piterjs_meetup_page $mol_page
 						hint \Адрес, ориентиры, чат
 						value? <=> afterparty?
 						enabled <= editing false
-				<= Capacity_field $mol_form_field
-					name \Максимальная вместимость
-					Content <= Capacity $mol_number
-						hint \100
-						value? <=> capacity? 0
-						enabled <= editing false
+				<= Capacity_block $mol_view sub /
+					<= Capacity_field $mol_form_field
+						name \Максимальная вместимость
+						Content <= Capacity $mol_number
+							hint \100
+							value? <=> capacity? 0
+							enabled <= editing false
+					<= Capacity_cut $mol_button_minor
+						title \закрыть регистрацию
+						click? <=> capacity_cut? null
+						sub /
+							<= Capacity_cut_icon $mol_icon_heart_box_outline
 			<= Join $mol_section
 				title \Регистрация
 				level 5

@@ -55,3 +55,11 @@
 	padding: var(--mol_gap_text);
 	color: var(--mol_theme_shade);
 }
+
+[piterjs_meetup_page_capacity_field] {
+	flex: 1
+}
+
+[piterjs_meetup_page_capacity_cut] {
+	align-self: flex-end;
+}

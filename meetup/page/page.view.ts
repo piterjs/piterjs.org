@@ -74,6 +74,10 @@ namespace $.$$ {
 			return this.meetup().place().capacity_max( next )
 		}
 
+		capacity_cut() {
+			this.meetup().place().capacity_max( this.joined_count() )
+		}
+
 		profile_editable() {
 			return !this.joined()
 		}
@@ -81,6 +85,7 @@ namespace $.$$ {
 		join_enabled() {
 			if( this.person().name_first().length < 2 ) return false
 			if( this.person().name_last().length < 2 ) return false
+			if( !this.joined() && this.meetup().place().capacity_max() <= this.joined_count() ) return false
 			return true
 		}
 
