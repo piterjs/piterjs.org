@@ -16,7 +16,7 @@ namespace $.$$ {
 
 		@ $mol_mem
 		join_allowed() {
-			return this.meetup().start().valueOf() > $mol_state_time.now( 60 * 60 )
+			return ( this.meetup().start()?.valueOf() ?? 0 ) > $mol_state_time.now( 60 * 60 )
 		}
 		
 		@ $mol_mem
