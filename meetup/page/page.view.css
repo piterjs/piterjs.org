@@ -2,6 +2,14 @@
 	flex: 0 0 28rem;
 }
 
+[piterjs_meetup_page_title] {
+	flex: 1000 1000 3rem;
+}
+
+[piterjs_meetup_page_tools] {
+	flex-grow: 1;
+}
+
 [piterjs_meetup_page_body] {
 	padding: .75rem;
 }
@@ -51,8 +59,4 @@
 [piterjs_meetup_page_free_space] {
 	padding: var(--mol_gap_text);
 	color: var(--mol_theme_shade);
-}
-
-[piterjs_meetup_page_title] {
-	flex: 1000 1000 3rem;
 }
