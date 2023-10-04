@@ -65,6 +65,11 @@ namespace $.$$ {
 			return super.Guests_link()
 		}
 
+		Stats_link() {
+			if( !this.editing() ) return null!
+			return super.Stats_link()
+		}
+
 		capacity( next?: number ) {
 			return this.meetup().place().capacity_max( next )
 		}
