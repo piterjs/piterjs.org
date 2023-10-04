@@ -37,6 +37,11 @@ namespace $ {
 			return this.world()!.Fund( $piterjs_meetup ).make()!
 		}
 
+		@ $mol_mem
+		person() {
+			return this.world()!.Fund( $piterjs_person ).Item( this.land!.peer_id() )
+		}
+
 	}
 
 }

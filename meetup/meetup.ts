@@ -53,6 +53,27 @@ namespace $ {
 			return this.sub( 'afterparty', $hyoo_crowd_reg ).str( next )
 		}
 
+		@ $mol_mem
+		joined_node() {
+			return this.sub( 'joined', $hyoo_crowd_counter )
+		}
+
+		@ $mol_mem
+		joined( next?: boolean ) {
+			return this.joined_node().counted( next ) ?? false
+		}
+
+		@ $mol_mem
+		joined_list() {
+			const Person = this.world()!.Fund( $piterjs_person )
+			return this.joined_node().list().map( id => Person.Item( id ) )
+		}
+
+		@ $mol_mem
+		joined_count() {
+			return this.joined_node().total()
+		}
+
 	}
 
 }

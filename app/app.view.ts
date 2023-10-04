@@ -31,6 +31,8 @@ namespace $.$$ {
 		
 		wiki() { return this.$.$mol_state_arg.value( 'wiki' ) !== null }
 		
+		guests() { return this.$.$mol_state_arg.value( 'guests' ) !== null }
+		
 		@ $mol_mem
 		meetup_id( next? : string | null ) {
 			
@@ -62,6 +64,7 @@ namespace $.$$ {
 			const pages = [
 				this.Menu() ,
 				... this.meetup_id() ? [ this.Meetup( this.meetup_id() ) ] : [] ,
+				... this.guests() ? [ this.Meetup_guests( this.meetup_id() ) ] : [] ,
 				... this.speech_id() ? [ this.Speech( this.speech_id() ) ] : [] ,
 				... this.place_show() ? [ this.Place() ] : [] ,
 				... this.video() ? [ this.Video() ] : [] ,

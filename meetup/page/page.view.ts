@@ -13,15 +13,21 @@ namespace $.$$ {
 		coords() {
 			return this.meetup().place().coords()
 		}
+
+		@ $mol_mem
+		join_allowed() {
+			return this.meetup().start().valueOf() > $mol_state_time.now( 60 * 60 )
+		}
 		
 		@ $mol_mem
-		body() {
+		content() {
 			return [
 				... ( this.editing() || this.description() ) ? [ this.Description() ] : [] ,
 				this.Links() ,
 				this.Speeches() ,
 				... this.editing() ? [ this.Speech_add() ] : [] ,
-				... this.editing() ? [ this.Afterparty_field() ] : [] ,
+				... this.editing() ? [ this.Hidden_fields() ] : [] ,
+				... this.join_allowed() ? [ this.Join() ] : [] ,
 			]
 		}
 
@@ -52,6 +58,47 @@ namespace $.$$ {
 		Public() {
 			if( !this.editing() ) return null!
 			return super.Public()
+		}
+
+		Guests_link() {
+			if( !this.editing() ) return null!
+			return super.Guests_link()
+		}
+
+		capacity( next?: number ) {
+			return this.meetup().place().capacity_max( next )
+		}
+
+		profile_editable() {
+			return !this.joined()
+		}
+
+		join_enabled() {
+			if( this.person().name_first().length < 2 ) return false
+			if( this.person().name_last().length < 2 ) return false
+			return true
+		}
+
+		@ $mol_mem
+		join_content() {
+			return [
+				this.Profile(),
+				this.Joined_form(),
+				... this.meetup().joined() ? [ this.Joined_bid() ] : [],
+			]
+		}
+
+		@ $mol_mem
+		joined_form() {
+			return [
+				this.Joined(),
+				... this.meetup().joined() ? [ this.Joined_confirm() ] : [],
+			]
+		}
+
+		free_space() {
+			const space = this.meetup().place().capacity_max() - this.joined_count()
+			return `Свободно мест: ${space}`
 		}
 
 	}

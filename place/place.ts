@@ -13,6 +13,11 @@ namespace $ {
 		// }
 
 		@ $mol_mem
+		capacity_max( next?: number ) {
+			return this.sub( 'capacity_max', $hyoo_crowd_reg ).numb( next )
+		}
+
+		@ $mol_mem
 		address( next?: string ) {
 			return this.sub( 'address', $hyoo_crowd_reg ).str( next )
 		}

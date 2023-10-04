@@ -1,0 +1,18 @@
+$piterjs_meetup_guests $mol_page
+	meetup $piterjs_meetup
+	title \Список гостей
+	tools /
+		<= Close $mol_link
+			arg * guests null
+			sub /
+				<= Close_icon $mol_icon_cross
+	body /
+		<= Content $mol_list rows /
+			<= Filter $mol_search
+				hint \Поиск...
+				query? <=> filter? \
+			<= Person_list $mol_list
+				rows <= person_list /
+					<= Person*0_0 $piterjs_person_snippet
+						person <= person* $piterjs_person
+						needle <= filter

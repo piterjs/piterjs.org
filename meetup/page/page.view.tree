@@ -4,6 +4,8 @@ $piterjs_meetup_page $mol_page
 		description? => description?
 		afterparty? => afterparty?
 		start? => start?
+		joined_count => joined_count
+		joined? => joined?
 	Title $mol_string_button
 		value? <=> title?
 		enabled <= editing false
@@ -12,6 +14,11 @@ $piterjs_meetup_page $mol_page
 		<= Public $mol_check_icon
 			checked? <=> meetup_public? false
 			Icon <= Public_icon $mol_icon_eye
+		<= Guests_link $mol_link
+			arg * guests \
+			hint \Список гостей
+			sub /
+				<= Guests_link_icon $mol_icon_account_group_outline
 		<= Start $mol_date
 			value_moment? <=> start?
 			enabled <= editing false
@@ -25,35 +32,58 @@ $piterjs_meetup_page $mol_page
 			sub /
 				<= Close_icon $mol_icon_cross
 	body /
-		<= Description $mol_textarea
-			hint \Резюме
-			value? <=> description?
-			enabled <= editing false
-		<= Links $mol_view sub <= links / 
-			<= Video $mol_link
-				arg *
-					video \
-					place null
-					speech null
-				title \Трансляция
-			<= Place $mol_link
-				arg *
-					video null
-					place \
-					speech null
-				title \Площадка
-		<= Speeches $mol_list rows <= speeches /
-		<= Speech_add $mol_button_minor
-			click? <=> speech_add? null
-			sub /
-				<= Speech_add_icon $mol_icon_plus
-				\Добавить доклад
-		<= Afterparty_field $mol_form_field
-			name \Афтерпати
-			Content <= Afterparty $mol_textarea
-				hint \Адрес, ориентиры, чат
-				value? <=> afterparty?
+		<= Content $mol_list rows <= content /
+			<= Description $mol_textarea
+				hint \Резюме
+				value? <=> description?
 				enabled <= editing false
+			<= Links $mol_view sub <= links / 
+				<= Video $mol_link
+					arg *
+						video \
+						place null
+						speech null
+					title \Трансляция
+				<= Place $mol_link
+					arg *
+						video null
+						place \
+						speech null
+					title \Площадка
+			<= Speeches $mol_list rows <= speeches /
+			<= Speech_add $mol_button_minor
+				click? <=> speech_add? null
+				sub /
+					<= Speech_add_icon $mol_icon_plus
+					\Добавить доклад
+			<= Hidden_fields $mol_list rows /
+				<= Afterparty_field $mol_form_field
+					name \Афтерпати
+					Content <= Afterparty $mol_textarea
+						hint \Адрес, ориентиры, чат
+						value? <=> afterparty?
+						enabled <= editing false
+				<= Capacity_field $mol_form_field
+					name \Максимальная вместимость
+					Content <= Capacity $mol_number
+						hint \100
+						value? <=> capacity? 0
+						enabled <= editing false
+			<= Join $mol_section
+				title \Регистрация
+				level 5
+				tools /
+					<= Free_space $mol_paragraph title <= free_space \нет мест
+				content <= join_content /
+					<= Profile $piterjs_person_edit
+						person <= person $piterjs_person
+						- enabled <= profile_editable true
+					<= Joined_form $mol_view sub <= joined_form /
+						<= Joined $mol_check_box
+							checked? <=> joined?
+							enabled <= join_enabled false
+							title \Я приду
+						<= Joined_confirm $mol_paragraph title \🔥 Ждём тебя!
+					<= Joined_bid $mol_paragraph title \Если не сможешь прийти - не забудь отменить регистрацию, чтобы освободить место другим.
 	Speech!index $piterjs_speech_snippet
 		speech <= speech!index $piterjs_speech
-

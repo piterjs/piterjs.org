@@ -1,0 +1,13 @@
+$piterjs_person_edit $mol_view
+	person $piterjs_person
+		name_first? => name_first?
+		name_last? => name_last?
+	sub /
+		<= Name_first $mol_string
+			hint \Имя
+			value? <=> name_first?
+			enabled <= enabled true
+		<= Name_last $mol_string
+			hint \Фамилия
+			value? <=> name_last?
+			enabled <= enabled true
