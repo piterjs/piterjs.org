@@ -65,8 +65,8 @@ namespace $.$$ {
 			if( this.intro() != null ) return [ this.Intro() ]
 			const pages = [
 				this.Menu() ,
-				... this.safe() ? [ this.Safe() ] : [],
 				... this.meetup_id() ? [ this.Meetup( this.meetup_id() ) ] : [] ,
+				... this.safe() ? [ this.Safe() ] : [],
 				... this.guests() ? [ this.Meetup_guests( this.meetup_id() ) ] : [] ,
 				... this.speech_id() ? [ this.Speech( this.speech_id() ) ] : [] ,
 				... this.place_show() ? [ this.Place() ] : [] ,
