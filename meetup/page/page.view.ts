@@ -89,8 +89,9 @@ namespace $.$$ {
 		}
 		
 		join_enabled() {
+			if( this.joined() ) return true
 			if( !/\S{2,}\s\S{2,}/.test( this.person_name() ) ) return false
-			if( !this.joined() && this.meetup().place().capacity_max() <= this.joined_count() ) return false
+			if( this.meetup().place().capacity_max() <= this.joined_count() ) return false
 			return true
 		}
 
