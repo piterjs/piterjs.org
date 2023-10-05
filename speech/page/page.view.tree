@@ -10,6 +10,11 @@ $piterjs_speech_page $mol_page
 		enabled <= editing false
 		hint \Название
 	tools /
+		<= Poster_copy $mol_button_copy
+			hint \Скопировать постер
+			blobs /$mol_blob
+				<= poster_blob? $mol_blob
+			Icon <= Poster_copy_icon $mol_icon_camera
 		<= Public $mol_check_icon
 			checked? <=> speech_public? false
 			Icon <= Public_icon $mol_icon_eye
@@ -21,6 +26,12 @@ $piterjs_speech_page $mol_page
 			sub /
 				<= Close_icon $mol_icon_cross
 	body /
+		<= Poster_zone $mol_view
+			minimal_width 0
+			minimal_height 0
+			sub /
+				<= Poster $piterjs_speech_poster
+					speech <= speech
 		<= Description $mol_textarea
 			hint \О чём
 			value? <=> description?
