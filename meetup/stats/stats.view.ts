@@ -3,7 +3,10 @@ namespace $.$$ {
 
 		@ $mol_mem
 		joins_stat() {
-			return $mol_array_groups( this.joined_moments(), moment => moment.toString( 'YYYY-MM-DD' )  )
+			return $mol_array_groups(
+				Object.values( this.joined_moments() ),
+				moment => moment.toString( 'YYYY-MM-DD' ),
+			)
 		}
 		
 		@ $mol_mem
