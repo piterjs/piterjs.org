@@ -8,8 +8,8 @@ namespace $.$$ {
 		flexWrap: 'wrap',
 		display: 'flex',
 		justifyContent: 'space-between',
-		fontSize: '3vmin',
-		lineHeight: '3vmin',
+		// fontSize: '3vmin',
+		// lineHeight: '3vmin',
 
 		Speeches: {
 			margin: 'auto',
@@ -26,17 +26,20 @@ namespace $.$$ {
 
 		Speech_start: {
 			fontWeight: 'bolder',
-			padding: `.5em`,
+			padding: [ `.5em`, `.75em` ],
 		},
 
 		Speech_title: {
-			padding: `.5em`,
+			padding: [ `.5em`, `.75em` ],
+			flex: {
+				shrink: 1,
+			},
 		},
 
 		Speech_speaker: {
-			padding: `.5em`,
+			padding: [ `.5em`, `.75em` ],
 			margin : {
-				left: vmin(9.5),
+				left: `4.75em`,
 			},
 			color: $mol_theme.shade,
 		},
