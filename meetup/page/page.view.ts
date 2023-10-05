@@ -28,6 +28,7 @@ namespace $.$$ {
 				... this.editing() ? [ this.Speech_add() ] : [] ,
 				... this.editing() ? [ this.Hidden_fields() ] : [] ,
 				... this.join_allowed() ? [ this.Join() ] : [] ,
+				... this.meetup().joined() ? [ this.Joined_bid() ] : [],
 			]
 		}
 
@@ -79,12 +80,16 @@ namespace $.$$ {
 		}
 
 		profile_editable() {
-			return !this.joined()
+			if( this.joined() ) return false
+			return true
 		}
-
+		
+		person_name() {
+			return this.person().name_real().trim().replace( /\s+/, ' ' )
+		}
+		
 		join_enabled() {
-			if( this.person().name_first().length < 2 ) return false
-			if( this.person().name_last().length < 2 ) return false
+			if( !/\S{2,}\s\S{2,}/.test( this.person_name() ) ) return false
 			if( !this.joined() && this.meetup().place().capacity_max() <= this.joined_count() ) return false
 			return true
 		}
@@ -94,7 +99,6 @@ namespace $.$$ {
 			return [
 				this.Profile(),
 				this.Joined_form(),
-				... this.meetup().joined() ? [ this.Joined_bid() ] : [],
 			]
 		}
 

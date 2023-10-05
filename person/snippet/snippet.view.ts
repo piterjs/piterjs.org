@@ -4,7 +4,7 @@ namespace $.$$ {
 		@ $mol_mem
 		haystack() {
 			const person = this.person()
-			return person.name_first() + ' ' + person.name_last()
+			return person.name_real() || person.name_first() + ' ' + person.name_last()
 		}
 		
 	}
