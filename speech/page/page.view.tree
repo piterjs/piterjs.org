@@ -10,11 +10,12 @@ $piterjs_speech_page $mol_page
 		enabled <= editing false
 		hint \Название
 	tools /
-		<= Poster_copy $mol_button_copy
+		<= Poster_copy $mol_button_share
 			hint \Скопировать постер
-			blobs /$mol_blob
+			capture <= Poster
+			- blobs /$mol_blob
 				<= poster_blob? $mol_blob
-			Icon <= Poster_copy_icon $mol_icon_camera
+			- Icon <= Poster_copy_icon $mol_icon_camera
 		<= Public $mol_check_icon
 			checked? <=> speech_public? false
 			Icon <= Public_icon $mol_icon_eye
