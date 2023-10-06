@@ -58,6 +58,7 @@ namespace $.$$ {
 		Name: {
 			margin: `auto`,
 			color: $mol_theme.shade,
+			textAlign: `center`,
 		},
 		
 	} )
