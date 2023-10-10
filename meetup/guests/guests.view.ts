@@ -4,7 +4,7 @@ namespace $.$$ {
 		@ $mol_mem
 		person_list() {
 			return this.meetup().joined_list()
-				.filter( $mol_match_text( this.filter(), person => [ person.name_first(), person.name_last(), person.id() ] ) )
+				.filter( $mol_match_text( this.filter(), person => [ person.name_real(), person.id() ] ) )
 				.map( person => this.Person( person ) )
 		}
 

@@ -42,6 +42,21 @@ namespace $ {
 			return this.world()!.Fund( $piterjs_person ).Item( this.land!.peer_id() )
 		}
 
+		@ $mol_mem
+		static secure_public() {
+			return '2SZr8D4nwg_SQrt1PSB3NTRqz_Qzx5eo04gC2lsJTRwCcLC-8vFfvBFHY8f05nrm_vRS5Rx_qTMRRw06wdrwWk'
+		}
+
+		@ $mol_mem
+		static secure_private() {
+			
+			const sec = this.$.$mol_state_arg.value( 'secure' )
+			if( !sec ) return null
+
+			return this.secure_public() + sec
+			
+		}
+
 	}
 
 }
