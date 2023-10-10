@@ -36,8 +36,9 @@ namespace $ {
 
 			}
 
-			const closed = reg.value() as Uint8Array | null
+			const closed = reg.value() as Uint8Array | string | null
 			if( !closed ) return ''
+			if( typeof closed === 'string' ) return closed
 
 			return $mol_charset_decode( secret.decrypt( closed, salt ) )
 
