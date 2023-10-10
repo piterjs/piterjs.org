@@ -22,16 +22,20 @@ namespace $ {
 		}
 
 		@ $mol_mem
-		name_real( next?: string ) {
+		name_real( next?: string, cache?: 'cache' ) {
+			if( cache ) return next!
 
-			const secret = $mol_wire_sync( this.secret() )
+			const secret = this.secret()
 			const reg = this.sub( 'name_real', $hyoo_crowd_reg )
 			const salt = $mol_charset_encode( this.id() )
 
 			if( next !== undefined ) {
 				
-				const closed = secret.encrypt( $mol_charset_encode( next ), salt )
-				reg.value( new Uint8Array( closed ) )
+				secret.encrypt( $mol_charset_encode( next ), salt )
+					.then( closed => {
+						reg.value( new Uint8Array( closed ) )
+						this.name_real( $mol_mem_cached( ()=> this.name_real() ), 'cache' )
+					} )
 				return next
 
 			}
@@ -40,7 +44,7 @@ namespace $ {
 			if( !closed ) return ''
 			if( typeof closed === 'string' ) return closed
 
-			return $mol_charset_decode( secret.decrypt( closed, salt ) )
+			return $mol_charset_decode( $mol_wire_sync( secret ).decrypt( closed, salt ) )
 
 		}
 		
