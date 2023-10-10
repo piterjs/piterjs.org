@@ -92,6 +92,7 @@ $piterjs_meetup_page $mol_page
 					<= Profile $piterjs_person_edit
 						person <= person $piterjs_person
 						enabled <= profile_editable true
+						bid <= profile_bid \
 					<= Joined_form $mol_view sub <= joined_form /
 						<= Joined $mol_check_box
 							checked? <=> joined?

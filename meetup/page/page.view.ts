@@ -87,10 +87,17 @@ namespace $.$$ {
 		person_name() {
 			return this.person().name_real().trim().replace( /\s+/, ' ' )
 		}
+
+		profile_bid() {
+			const name = this.person_name()
+			if( !name ) return 'Обязательно'
+			if( !/\S{2,}\s\S{2,}/.test( this.person_name() ) ) return 'От двух слов'
+			return ''
+		}
 		
 		join_enabled() {
 			if( this.joined() ) return true
-			if( !/\S{2,}\s\S{2,}/.test( this.person_name() ) ) return false
+			if( this.profile_bid() ) return false
 			if( this.meetup().place().capacity_max() <= this.joined_count() ) return false
 			return true
 		}
