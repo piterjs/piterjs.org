@@ -1,0 +1,25 @@
+$piterjs_meetup_stats $mol_page
+	meetup $piterjs_meetup
+		joined_moments => joined_moments
+	title \Статистика
+	tools /
+		<= Close $mol_link
+			arg * stats null
+			sub /
+				<= Close_icon $mol_icon_cross
+	body /
+		<= Chart $mol_chart
+			graphs /
+				<= Days $mol_plot_mark_hor
+					title \Дни
+					labels <= days /
+				<= Counts $mol_plot_ruler_vert
+					title \Число
+					series_y <= joins_per_days /
+				<= Joins $mol_plot_bar
+					title \Регистрации
+					series_y <= joins_per_days /
+				<= Details $mol_plot_mark_cross
+					labels <= days /
+					graphs /
+						<= Joins

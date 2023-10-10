@@ -3,6 +3,7 @@ $piterjs_app $mol_view
 		meetups => meetups
 		meetup* => meetup*
 		meetup_public*? => meetup_public*?
+		person => person
 	plugins /
 		<= Theme $mol_theme_auto
 	sub /
@@ -25,6 +26,10 @@ $piterjs_app $mol_view
 			<= Rights_toggle $mol_check_icon
 				checked? <=> rights? false
 				Icon <= Rights_toggle_icon $mol_icon_shield_account
+			<= Safe_link $mol_link
+				arg * safe \
+				sub /
+					<= Safe_icon $mol_icon_key_variant
 		foot <= foot /
 			<= Online $hyoo_sync_online
 				yard <= Yard $hyoo_sync_client
@@ -56,8 +61,13 @@ $piterjs_app $mol_view
 						title \Другие события
 	Meetup* $piterjs_meetup_page
 		meetup <= meetup*
+		person <= person
 		editing <= editing? false
 		meetup_public? <=> meetup_public*?
+	Meetup_guests* $piterjs_meetup_guests
+		meetup <= meetup*
+	Meetup_stats* $piterjs_meetup_stats
+		meetup <= meetup*
 	Speech!id $piterjs_speech_page
 		speech <= speech!id $piterjs_speech
 		editing <= editing? false
@@ -81,3 +91,9 @@ $piterjs_app $mol_view
 	Wiki $hyoo_page
 		side_main_id \zi5t5h_8aygdf
 		yard <= Yard
+	Safe $hyoo_meta_safe
+		tools /
+			<= Safe_close $mol_link
+				arg * safe null
+				sub /
+					<= Safe_close_icon $mol_icon_cross

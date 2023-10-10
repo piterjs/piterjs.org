@@ -1,5 +1,5 @@
 [piterjs_screen_lines] {
-	width: 25%;
+	width: 20vmin;
 	pointer-events: none;
 	position: absolute;
 	z-index: -1;

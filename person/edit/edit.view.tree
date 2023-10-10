@@ -1,0 +1,7 @@
+$piterjs_person_edit $mol_form_field
+	person $piterjs_person
+		name_real? => name_real?
+	name \Имя Фамилия
+	Content <= Name_real $mol_string
+		value? <=> name_real?
+		enabled <= enabled true

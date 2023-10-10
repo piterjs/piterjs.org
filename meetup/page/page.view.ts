@@ -13,15 +13,22 @@ namespace $.$$ {
 		coords() {
 			return this.meetup().place().coords()
 		}
+
+		@ $mol_mem
+		join_allowed() {
+			return ( this.meetup().start()?.valueOf() ?? 0 ) > $mol_state_time.now( 60 * 60 )
+		}
 		
 		@ $mol_mem
-		body() {
+		content() {
 			return [
 				... ( this.editing() || this.description() ) ? [ this.Description() ] : [] ,
 				this.Links() ,
+				... this.join_allowed() ? [ this.Join() ] : [] ,
+				... this.meetup().joined() ? [ this.Joined_bid() ] : [],
 				this.Speeches() ,
 				... this.editing() ? [ this.Speech_add() ] : [] ,
-				... this.editing() ? [ this.Afterparty_field() ] : [] ,
+				... this.editing() ? [ this.Hidden_fields() ] : [] ,
 			]
 		}
 
@@ -52,6 +59,68 @@ namespace $.$$ {
 		Public() {
 			if( !this.editing() ) return null!
 			return super.Public()
+		}
+
+		Guests_link() {
+			if( !this.editing() ) return null!
+			return super.Guests_link()
+		}
+
+		Stats_link() {
+			if( !this.editing() ) return null!
+			return super.Stats_link()
+		}
+
+		capacity( next?: number ) {
+			return this.meetup().place().capacity_max( next )
+		}
+
+		capacity_cut() {
+			this.meetup().place().capacity_max( this.joined_count() )
+		}
+
+		profile_editable() {
+			if( this.joined() ) return false
+			return true
+		}
+		
+		person_name() {
+			return this.person().name_real().trim().replace( /\s+/, ' ' )
+		}
+
+		profile_bid() {
+			const name = this.person_name()
+			if( !name ) return 'Обязательно'
+			if( !/\S{2,}\s\S{2,}/.test( this.person_name() ) ) return 'От двух слов'
+			return ''
+		}
+		
+		join_enabled() {
+			if( this.joined() ) return true
+			if( this.profile_bid() ) return false
+			if( this.meetup().place().capacity_max() <= this.joined_count() ) return false
+			return true
+		}
+
+		@ $mol_mem
+		join_content() {
+			return [
+				this.Profile(),
+				this.Joined_form(),
+			]
+		}
+
+		@ $mol_mem
+		joined_form() {
+			return [
+				this.Joined(),
+				... this.meetup().joined() ? [ this.Joined_confirm() ] : [],
+			]
+		}
+
+		free_space() {
+			const space = this.meetup().place().capacity_max() - this.joined_count()
+			return `Свободно мест: ${space}`
 		}
 
 	}

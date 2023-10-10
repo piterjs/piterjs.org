@@ -1,0 +1,14 @@
+$piterjs_speech_poster $piterjs_screen
+	speech $piterjs_speech
+		title => title
+		start => start
+		speaker => speaker
+	theme \$mol_theme_light
+	content /
+		<= Main $mol_view sub /
+			<= Title $mol_paragraph
+				title <= title
+			<= Photo $piterjs_image
+				link <= photo_uri \
+			<= Name $mol_paragraph
+				title <= speaker_name \

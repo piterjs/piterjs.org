@@ -47,6 +47,14 @@ namespace $.$$ {
 			}
 
 		},
+
+		Poster_zone: {
+			position: `absolute`,
+			width: 0,
+			height: 0,
+			overflow: `hidden`,
+			zIndex: 1,
+		},
 		
 	} )
 
