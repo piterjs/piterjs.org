@@ -424,7 +424,13 @@ declare namespace $ {
 }
 
 declare namespace $ {
-    function $mol_wire_async<Host extends object>(obj: Host): (Host extends (...args: infer Args) => infer Res ? Res extends Promise<any> ? Host : (...args: Args) => Promise<Res> : {}) & { [key in keyof Host]: Host[key] extends (...args: infer Args_1) => infer Res_1 ? Res_1 extends Promise<any> ? Host[key] : (...args: Args_1) => Promise<Res_1> : Host[key]; };
+    export function $mol_wire_async<Host extends object>(obj: Host): ObjectOrFunctionResultPromisify<Host>;
+    type FunctionResultPromisify<Some> = Some extends (...args: infer Args) => infer Res ? Res extends PromiseLike<unknown> ? Some : (...args: Args) => Promise<Res> : Some;
+    type MethodsResultPromisify<Host extends Object> = {
+        [K in keyof Host]: FunctionResultPromisify<Host[K]>;
+    };
+    type ObjectOrFunctionResultPromisify<Some> = (Some extends (...args: any) => unknown ? FunctionResultPromisify<Some> : {}) & (Some extends Object ? MethodsResultPromisify<Some> : Some);
+    export {};
 }
 
 declare namespace $ {
@@ -968,7 +974,13 @@ declare namespace $ {
 }
 
 declare namespace $ {
-    function $mol_wire_sync<Host extends object>(obj: Host): (Host extends (...args: infer Args) => infer Res ? Res extends Promise<infer Res2> ? (...args: Args) => Res2 : Host : {}) & { [key in keyof Host]: Host[key] extends (...args: infer Args_1) => Promise<infer Res_1> ? (...args: Args_1) => Res_1 : Host[key]; };
+    export function $mol_wire_sync<Host extends object>(obj: Host): ObjectOrFunctionResultAwaited<Host>;
+    type FunctionResultAwaited<Some> = Some extends (...args: infer Args) => infer Res ? (...args: Args) => Awaited<Res> : Some;
+    type MethodsResultAwaited<Host extends Object> = {
+        [K in keyof Host]: FunctionResultAwaited<Host[K]>;
+    };
+    type ObjectOrFunctionResultAwaited<Some> = (Some extends (...args: any) => unknown ? FunctionResultAwaited<Some> : {}) & (Some extends Object ? MethodsResultAwaited<Some> : Some);
+    export {};
 }
 
 declare namespace $ {
@@ -1498,10 +1510,52 @@ declare namespace $ {
 declare namespace $ {
     class $piterjs_place extends $piterjs_model {
         notes(next?: string): string;
+        capacity_max(next?: number): number;
         address(next?: string): string;
         route(next?: string): string;
         coords(next?: $mol_vector_2d<number>): $mol_vector_2d<number>;
         colors(): string[];
+    }
+}
+
+declare namespace $ {
+    class $hyoo_crowd_counter extends $hyoo_crowd_reg {
+        list(): readonly `${string}_${string}`[];
+        times(): {
+            [k: string]: number;
+        };
+        total(): number;
+        counted(next?: boolean): boolean | undefined;
+    }
+}
+
+declare namespace $ {
+    class $mol_crypto_secret extends Object {
+        readonly native: CryptoKey & {
+            type: 'secret';
+        };
+        static size: number;
+        static extra: number;
+        constructor(native: CryptoKey & {
+            type: 'secret';
+        });
+        static generate(): Promise<$mol_crypto_secret>;
+        static from(serial: BufferSource | string): Promise<$mol_crypto_secret>;
+        static derive(private_serial: string, public_serial: string): Promise<$mol_crypto_secret>;
+        serial(): Promise<ArrayBuffer>;
+        encrypt(open: BufferSource, salt: BufferSource): Promise<ArrayBuffer>;
+        decrypt(closed: BufferSource, salt: BufferSource): Promise<ArrayBuffer>;
+    }
+}
+
+declare namespace $ {
+    let $mol_mem_cached: typeof $mol_wire_probe;
+}
+
+declare namespace $ {
+    class $piterjs_person extends $piterjs_model {
+        secret(): $mol_crypto_secret;
+        name_real(next?: string, cache?: 'cache'): string;
     }
 }
 
@@ -1515,6 +1569,45 @@ declare namespace $ {
         speech_public(id: $mol_int62_string, next?: boolean): boolean;
         place(): $piterjs_place;
         afterparty(next?: string): string;
+        joined_node(): $hyoo_crowd_counter;
+        joined(next?: boolean): boolean;
+        joined_list(): $piterjs_person[];
+        joined_moments(): {
+            [k: string]: $mol_time_moment;
+        };
+        joined_count(): number;
+    }
+}
+
+declare namespace $ {
+    class $mol_state_arg extends $mol_object {
+        prefix: string;
+        static href(next?: string): string;
+        static href_normal(): string;
+        static href_absolute(): string;
+        static dict(next?: {
+            [key: string]: string | null;
+        }): Readonly<{
+            [key: string]: string;
+        }>;
+        static dict_cut(except: string[]): {
+            [key: string]: string;
+        };
+        static value(key: string, next?: string | null): string | null;
+        static link(next: Record<string, string | null>): string;
+        static prolog: string;
+        static separator: string;
+        static make_link(next: {
+            [key: string]: string | null;
+        }): string;
+        static go(next: {
+            [key: string]: string | null;
+        }): void;
+        static encode(str: string): string;
+        constructor(prefix?: string);
+        value(key: string, next?: string): string | null;
+        sub(postfix: string): $mol_state_arg;
+        link(next: Record<string, string | null>): string;
     }
 }
 
@@ -1586,6 +1679,9 @@ declare namespace $ {
         meetups(): $piterjs_meetup[];
         meetup_public(id: $mol_int62_string, next?: boolean): boolean;
         meetup_make(): $piterjs_meetup;
+        person(): $piterjs_person;
+        static secure_public(): string;
+        static secure_private(): string | null;
     }
 }
 
@@ -2005,6 +2101,9 @@ declare namespace $ {
     class $mol_link extends $mol_view {
         uri(): string;
         dom_name(): string;
+        uri_off(): string;
+        uri_native(): any;
+        external(): boolean;
         attr(): Record<string, any>;
         sub(): readonly $mol_view_content[];
         arg(): Record<string, any>;
@@ -2017,38 +2116,6 @@ declare namespace $ {
         current(): boolean;
         event_click(event?: any): any;
         click(event?: any): any;
-    }
-}
-
-declare namespace $ {
-    class $mol_state_arg extends $mol_object {
-        prefix: string;
-        static href(next?: string): string;
-        static href_normal(): string;
-        static href_absolute(): string;
-        static dict(next?: {
-            [key: string]: string | null;
-        }): Readonly<{
-            [key: string]: string;
-        }>;
-        static dict_cut(except: string[]): {
-            [key: string]: string;
-        };
-        static value(key: string, next?: string | null): string | null;
-        static link(next: Record<string, string | null>): string;
-        static prolog: string;
-        static separator: string;
-        static make_link(next: {
-            [key: string]: string | null;
-        }): string;
-        static go(next: {
-            [key: string]: string | null;
-        }): void;
-        static encode(str: string): string;
-        constructor(prefix?: string);
-        value(key: string, next?: string): string | null;
-        sub(postfix: string): $mol_state_arg;
-        link(next: Record<string, string | null>): string;
     }
 }
 
@@ -2123,10 +2190,6 @@ declare namespace $ {
 
 declare namespace $ {
     function $mol_support_css_overflow_anchor(this: $): boolean;
-}
-
-declare namespace $ {
-    let $mol_mem_cached: typeof $mol_wire_probe;
 }
 
 declare namespace $.$$ {
@@ -2354,6 +2417,36 @@ declare namespace $ {
 }
 
 declare namespace $ {
+    class $mol_icon_account extends $mol_icon {
+        path(): string;
+    }
+}
+
+declare namespace $ {
+    class $mol_icon_account_group extends $mol_icon {
+        path(): string;
+    }
+}
+
+declare namespace $ {
+    class $mol_icon_account_group_outline extends $mol_icon {
+        path(): string;
+    }
+}
+
+declare namespace $ {
+    class $mol_icon_chart_bar extends $mol_icon {
+        path(): string;
+    }
+}
+
+declare namespace $ {
+    class $mol_icon_chart_bar_stacked extends $mol_icon {
+        path(): string;
+    }
+}
+
+declare namespace $ {
     class $mol_pop extends $mol_view {
         showed(next?: any): boolean;
         align_vert(): string;
@@ -2503,7 +2596,7 @@ declare namespace $ {
     class $mol_fetch_response extends $mol_object2 {
         readonly native: Response;
         constructor(native: Response);
-        status(): "success" | "unknown" | "inform" | "redirect" | "wrong" | "failed";
+        status(): "success" | "redirect" | "unknown" | "inform" | "wrong" | "failed";
         code(): number;
         message(): string;
         headers(): Headers;
@@ -3125,6 +3218,30 @@ declare namespace $ {
 }
 
 declare namespace $ {
+    class $mol_section extends $mol_list {
+        level(): number;
+        rows(): readonly any[];
+        title_dom_name(): string;
+        Title(): $$.$mol_paragraph;
+        tools(): readonly any[];
+        Tools(): $mol_view;
+        head(): readonly any[];
+        Head(): $mol_view;
+        content(): readonly any[];
+        Content(): $$.$mol_list;
+    }
+}
+
+declare namespace $.$$ {
+    class $mol_section extends $.$mol_section {
+        title_dom_name(): string;
+    }
+}
+
+declare namespace $ {
+}
+
+declare namespace $ {
     class $mol_icon_plus extends $mol_icon {
         path(): string;
     }
@@ -3165,398 +3282,90 @@ declare namespace $ {
 }
 
 declare namespace $ {
-    class $mol_row extends $mol_view {
-    }
-}
-
-declare namespace $ {
-}
-
-declare namespace $ {
-    class $mol_form extends $mol_list {
-        submit_allowed(): boolean;
-        submit_blocked(): boolean;
-        event(): Record<string, any>;
-        submit(event?: any): any;
-        rows(): readonly any[];
-        keydown(event?: any): any;
-        form_fields(): readonly $mol_form_field[];
-        body(): readonly $mol_form_field[];
-        Body(): $$.$mol_list;
-        buttons(): readonly $mol_view[];
-        foot(): readonly $mol_view[];
-        Foot(): $mol_row;
-    }
-}
-
-declare namespace $.$$ {
-    class $mol_form extends $.$mol_form {
-        form_fields(): readonly $mol_form_field[];
-        submit_allowed(): boolean;
-        submit_blocked(): boolean;
-        keydown(next: KeyboardEvent): void;
-    }
-}
-
-declare namespace $ {
-}
-
-declare namespace $ {
-    class $piterjs_meetup_page extends $mol_page {
-        title(next?: any): string;
-        description(next?: any): string;
-        afterparty(next?: any): string;
-        start(next?: any): $mol_time_moment;
-        meetup(): $piterjs_meetup;
-        Title(): $mol_string_button;
-        tools(): readonly any[];
-        body(): readonly any[];
-        Speech(id: any): $$.$piterjs_speech_snippet;
-        editing(): boolean;
-        meetup_public(next?: any): boolean;
-        Public_icon(): $mol_icon_eye;
-        Public(): $mol_check_icon;
-        Start(): $$.$mol_date;
-        Close_icon(): $mol_icon_cross;
-        Close(): $$.$mol_link;
-        Description(): $$.$mol_textarea;
-        Video(): $$.$mol_link;
-        Place(): $$.$mol_link;
-        links(): readonly any[];
-        Links(): $mol_view;
-        speeches(): readonly any[];
-        Speeches(): $$.$mol_list;
-        speech_add(next?: any): any;
-        Speech_add_icon(): $mol_icon_plus;
-        Speech_add(): $mol_button_minor;
-        Afterparty(): $$.$mol_textarea;
-        Afterparty_field(): $$.$mol_form_field;
-        speech(id: any): $piterjs_speech;
-    }
-}
-
-declare namespace $.$$ {
-    class $piterjs_meetup_page extends $.$piterjs_meetup_page {
-        video(): string;
-        address(): string;
-        coords(): $mol_vector_2d<number>;
-        body(): ($mol_view | $mol_button_minor | $mol_textarea)[];
-        links(): $mol_link[];
-        speeches(): $piterjs_speech_snippet[];
-        speech(index: number): $piterjs_speech;
-        speech_add(): void;
-        Public(): $mol_check_icon;
-    }
-}
-
-declare namespace $ {
-}
-
-declare namespace $ {
-    class $mol_icon_clock extends $mol_icon {
+    class $mol_icon_minus extends $mol_icon {
         path(): string;
     }
 }
 
 declare namespace $ {
-    class $mol_icon_clock_outline extends $mol_icon {
-        path(): string;
-    }
-}
-
-declare namespace $ {
-    class $mol_check_list extends $mol_view {
-        dictionary(): Record<string, any>;
-        Option(id: any): $$.$mol_check;
-        options(): Record<string, any>;
-        keys(): readonly string[];
-        sub(): readonly $mol_check[];
-        option_checked(id: any, next?: any): boolean;
-        option_title(id: any): string;
-        option_label(id: any): readonly any[];
+    class $mol_number extends $mol_view {
+        precision_view(): number;
+        precision_change(): number;
+        value_min(): number;
+        value_max(): number;
+        value(next?: any): number;
         enabled(): boolean;
-        option_enabled(id: any): boolean;
-        option_hint(id: any): string;
-        items(): readonly $mol_check[];
-    }
-}
-
-declare namespace $.$$ {
-    class $mol_check_list extends $.$mol_check_list {
-        options(): {
-            [key: string]: string;
-        };
-        dictionary(next?: Record<string, boolean>): Record<string, boolean>;
-        option_checked(id: string, next?: boolean | null): boolean;
-        keys(): readonly string[];
-        items(): $mol_check[];
-        option_title(key: string): string;
-    }
-}
-
-declare namespace $ {
-}
-
-declare namespace $ {
-    class $mol_switch extends $mol_check_list {
-        value(next?: any): string;
-    }
-}
-
-declare namespace $ {
-    class $mol_state_session<Value> extends $mol_object {
-        static 'native()': Pick<Storage, 'getItem' | 'setItem' | 'removeItem'>;
-        static native(): Storage | {
-            getItem(key: string): any;
-            setItem(key: string, value: string): void;
-            removeItem(key: string): void;
-        };
-        static value<Value>(key: string, next?: Value): Value;
-        prefix(): string;
-        value(key: string, next?: Value): Value;
-    }
-}
-
-declare namespace $.$$ {
-    class $mol_switch extends $.$mol_switch {
-        value(next?: any): any;
-        option_checked(key: string, next?: boolean): boolean;
-    }
-}
-
-declare namespace $ {
-    class $mol_pick_time extends $mol_pick {
-        Icon(): $mol_icon_clock_outline;
-        trigger_enabled(): boolean;
-        bubble_content(): readonly any[];
-        value_moment(next?: any): $mol_time_moment;
-        enabled(): boolean;
-        value(next?: any): string;
-        Input(): $$.$mol_format;
-        hour_selected(next?: any): string;
-        hour_options(): Record<string, any>;
-        Hours(): $$.$mol_switch;
-        Delimiter(): $$.$mol_paragraph;
-        minute_selected(next?: any): string;
-        minute_options(): Record<string, any>;
-        Minutes(): $$.$mol_switch;
-        Pickers(): $mol_row;
-    }
-}
-
-declare namespace $.$$ {
-    class $mol_pick_time extends $.$mol_pick_time {
-        trigger_content(): (string | $mol_icon_clock_outline)[];
-        value_moment(next?: $mol_time_moment): $mol_time_moment;
-        value(next?: string): string;
-        hour_selected(hour_str?: string): string;
-        minute_selected(minute_str?: string): string;
-        hour_options(): {
-            '0': string;
-            '1': string;
-            '2': string;
-            '3': string;
-            '4': string;
-            '5': string;
-            '6': string;
-            '7': string;
-            '8': string;
-            '9': string;
-            '10': string;
-            '11': string;
-            '12': string;
-            '13': string;
-            '14': string;
-            '15': string;
-            '16': string;
-            '17': string;
-            '18': string;
-            '19': string;
-            '20': string;
-            '21': string;
-            '22': string;
-            '23': string;
-        };
-        minute_options(): {
-            '0': string;
-            '5': string;
-            '10': string;
-            '15': string;
-            '20': string;
-            '25': string;
-            '30': string;
-            '35': string;
-            '40': string;
-            '45': string;
-            '50': string;
-            '55': string;
-        };
-    }
-}
-
-declare namespace $ {
-}
-
-declare namespace $ {
-    class $mol_string_link extends $mol_view {
-        attr(): Record<string, any>;
         sub(): readonly any[];
-        enabled(): boolean;
-        editing(): boolean;
-        hint_view(): string;
-        View(): $$.$mol_link;
-        value(next?: any): string;
-        title(): string;
+        precision(): number;
+        type(): string;
+        value_string(next?: any): string;
         hint(): string;
-        hint_edit(): string;
-        Edit(): $$.$mol_string;
-    }
-}
-
-declare namespace $.$$ {
-    class $mol_string_link extends $.$mol_string_link {
-        sub(): $mol_link[] | $mol_string[];
+        string_enabled(): boolean;
+        submit(next?: any): any;
+        String(): $$.$mol_string;
+        event_dec(next?: any): any;
+        dec_enabled(): boolean;
+        dec_icon(): $mol_icon_minus;
+        Dec(): $mol_button_minor;
+        event_inc(next?: any): any;
+        inc_enabled(): boolean;
+        inc_icon(): $mol_icon_plus;
+        Inc(): $mol_button_minor;
     }
 }
 
 declare namespace $ {
-    class $mol_icon_upload extends $mol_icon {
+}
+
+declare namespace $.$$ {
+    class $mol_number extends $.$mol_number {
+        value_limited(next?: any): number;
+        event_dec(next?: Event): void;
+        event_inc(next?: Event): void;
+        value_string(next?: string): string;
+        dec_enabled(): boolean;
+        inc_enabled(): boolean;
+    }
+}
+
+declare namespace $ {
+    class $mol_icon_heart extends $mol_icon {
         path(): string;
     }
 }
 
 declare namespace $ {
-    class $mol_button_open extends $mol_button_minor {
-        sub(): readonly any[];
-        Icon(): $mol_icon_upload;
-        files(next?: any): readonly any[];
-        accept(): string;
-        multiple(): boolean;
-        Native(): $$.$mol_button_open_native;
-    }
-    class $mol_button_open_native extends $mol_view {
-        dom_name(): string;
-        files(next?: any): readonly any[];
-        attr(): Record<string, any>;
-        event(): Record<string, any>;
-        accept(): string;
-        multiple(): boolean;
-        picked(next?: any): any;
-    }
-}
-
-declare namespace $.$$ {
-    class $mol_button_open_native extends $.$mol_button_open_native {
-        dom_node(): HTMLInputElement;
-        picked(): void;
+    class $mol_icon_heart_box extends $mol_icon {
+        path(): string;
     }
 }
 
 declare namespace $ {
-}
-
-declare namespace $ {
-    class $piterjs_speaker_snippet extends $mol_view {
-        event(): Record<string, any>;
-        title(next?: any): string;
-        description(next?: any): string;
-        speaker(): $piterjs_speaker;
-        sub(): readonly any[];
-        paste(next?: any): any;
-        photo(): string;
-        Photo(): $piterjs_image;
-        upload(next?: any): readonly File[];
-        editing(): boolean;
-        Upload(): $mol_button_open;
-        Photo_block(): $mol_stack;
-        Title(): $$.$mol_string;
-        Description(): $$.$mol_textarea;
-        Info(): $$.$mol_list;
+    class $mol_icon_heart_box_outline extends $mol_icon {
+        path(): string;
     }
 }
 
 declare namespace $ {
-    class $mol_picture extends $mol_object2 {
-        readonly canvas: HTMLCanvasElement;
-        constructor(canvas: HTMLCanvasElement);
-        get context(): CanvasRenderingContext2D | null;
-        static fit(image: Exclude<CanvasImageSource, VideoFrame> | Blob | string, width?: number, height?: number): $mol_picture;
-        static make(image: Exclude<CanvasImageSource, VideoFrame>, width: number, height?: number): $mol_picture;
-        static sizes(image: Exclude<CanvasImageSource, VideoFrame>): number[];
-        static load(uri: string): Promise<HTMLImageElement>;
-        format(type: 'image/png' | 'image/jpeg' | 'image/webp', quality?: number): Blob | null;
+    class $piterjs_person_edit extends $mol_form_field {
+        name_real(next?: any): string;
+        person(): $piterjs_person;
+        name(): string;
+        Content(): $$.$mol_string;
+        enabled(): boolean;
+        Name_real(): $$.$mol_string;
     }
-}
-
-declare namespace $.$$ {
-    class $piterjs_speaker_snippet extends $.$piterjs_speaker_snippet {
-        photo(): string;
-        upload(next: File[]): never[];
-        take_files(files: FileList): File[];
-        paste(event?: ClipboardEvent): void;
-    }
-}
-
-declare namespace $.$$ {
 }
 
 declare namespace $ {
-    class $piterjs_speech_page extends $mol_page {
-        title(next?: any): string;
-        description(next?: any): string;
-        start(next?: any): $mol_time_moment;
-        slides(next?: any): string;
-        video(next?: any): string;
-        speech(): $piterjs_speech;
-        Title(): $mol_string_button;
-        tools(): readonly any[];
-        body(): readonly any[];
-        editing(): boolean;
-        speech_public(next?: any): boolean;
-        Public_icon(): $mol_icon_eye;
-        Public(): $mol_check_icon;
-        Start(): $$.$mol_pick_time;
-        Close_icon(): $mol_icon_cross;
-        Close(): $$.$mol_link;
-        Description(): $$.$mol_textarea;
-        Slides(): $$.$mol_string_link;
-        Video(): $$.$mol_string_link;
-        links(): readonly any[];
-        Links(): $mol_view;
-        speaker(): $piterjs_speaker;
-        Speaker(): $$.$piterjs_speaker_snippet;
+    class $mol_icon_tick extends $mol_icon {
+        path(): string;
     }
-}
-
-declare namespace $.$$ {
-    class $piterjs_speech_page extends $.$piterjs_speech_page {
-        speaker(): $piterjs_speaker;
-        links(): $mol_string_link[];
-        Public(): $mol_check_icon;
-    }
-}
-
-declare namespace $.$$ {
 }
 
 declare namespace $ {
-    class $piterjs_meetup_snippet extends $mol_link {
-        arg(): Record<string, any>;
-        meetup(): $piterjs_meetup;
-        sub(): readonly any[];
-        id(): string;
-        title(): string;
-        Title(): $mol_view;
-        date(): string;
-        Date(): $mol_view;
-    }
-}
-
-declare namespace $.$$ {
-    class $piterjs_meetup_snippet extends $.$piterjs_meetup_snippet {
-        id(): `${string}_${string}`;
-        title(): string;
-        date(): string;
+    class $mol_check_box extends $mol_check {
+        Icon(): $mol_icon_tick;
     }
 }
 
@@ -3640,6 +3449,20 @@ declare namespace $ {
         minimal_height(): number;
     }
     class $mol_grid_number extends $mol_grid_cell {
+    }
+}
+
+declare namespace $ {
+    class $mol_state_session<Value> extends $mol_object {
+        static 'native()': Pick<Storage, 'getItem' | 'setItem' | 'removeItem'>;
+        static native(): Storage | {
+            getItem(key: string): any;
+            setItem(key: string, value: string): void;
+            removeItem(key: string): void;
+        };
+        static value<Value>(key: string, next?: Value): Value;
+        prefix(): string;
+        value(key: string, next?: Value): Value;
     }
 }
 
@@ -3997,6 +3820,43 @@ declare namespace $ {
 }
 
 declare namespace $ {
+    class $mol_row extends $mol_view {
+    }
+}
+
+declare namespace $ {
+}
+
+declare namespace $ {
+    class $mol_form extends $mol_list {
+        submit_allowed(): boolean;
+        submit_blocked(): boolean;
+        event(): Record<string, any>;
+        submit(event?: any): any;
+        rows(): readonly any[];
+        keydown(event?: any): any;
+        form_fields(): readonly $mol_form_field[];
+        body(): readonly $mol_form_field[];
+        Body(): $$.$mol_list;
+        buttons(): readonly $mol_view[];
+        foot(): readonly $mol_view[];
+        Foot(): $mol_row;
+    }
+}
+
+declare namespace $.$$ {
+    class $mol_form extends $.$mol_form {
+        form_fields(): readonly $mol_form_field[];
+        submit_allowed(): boolean;
+        submit_blocked(): boolean;
+        keydown(next: KeyboardEvent): void;
+    }
+}
+
+declare namespace $ {
+}
+
+declare namespace $ {
     class $mol_text_list extends $mol_text {
         auto_scroll(): any;
         attr(): Record<string, any>;
@@ -4013,106 +3873,92 @@ declare namespace $ {
 }
 
 declare namespace $ {
-    class $piterjs_intro_page extends $mol_view {
-        sub(): readonly any[];
-        title(): string;
-        Title(): $mol_view;
-        head(): readonly any[];
-        Head(): $mol_view;
-        text(): string;
-        Text(): $$.$mol_text;
-    }
-}
-
-declare namespace $ {
-}
-
-declare namespace $ {
-    class $piterjs_logo extends $piterjs_image {
-        link(): string;
-    }
-}
-
-declare namespace $ {
-}
-
-declare namespace $ {
-    class $piterjs_intro_main extends $piterjs_intro_page {
+    class $piterjs_meetup_page extends $mol_page {
+        title(next?: any): string;
+        description(next?: any): string;
+        afterparty(next?: any): string;
+        start(next?: any): $mol_time_moment;
+        joined_count(): number;
+        joined(next?: any): boolean;
         meetup(): $piterjs_meetup;
-        title(): string;
-        head(): readonly any[];
-        Logo(): $piterjs_logo;
-    }
-}
-
-declare namespace $.$$ {
-    class $piterjs_intro_main extends $.$piterjs_intro_main {
-        title(): string;
-    }
-}
-
-declare namespace $ {
-}
-
-declare namespace $ {
-    class $piterjs_schedule extends $mol_view {
-        meetup(): $piterjs_meetup;
-        sub(): readonly any[];
-        speech_start(id: any): string;
-        Speech_start(id: any): $mol_view;
-        speech_title(id: any): string;
-        Speech_title(id: any): $mol_view;
-        Speech_main(id: any): $mol_view;
-        speech_speaker(id: any): string;
-        Speech_speaker(id: any): $mol_view;
-        Speech(id: any): $$.$mol_list;
+        Title(): $mol_string_button;
+        tools(): readonly any[];
+        body(): readonly any[];
+        Speech(id: any): $$.$piterjs_speech_snippet;
+        editing(): boolean;
+        meetup_public(next?: any): boolean;
+        Public_icon(): $mol_icon_eye;
+        Public(): $mol_check_icon;
+        Guests_link_icon(): $mol_icon_account_group_outline;
+        Guests_link(): $$.$mol_link;
+        Stats_link_icon(): $mol_icon_chart_bar_stacked;
+        Stats_link(): $$.$mol_link;
+        Start(): $$.$mol_date;
+        Close_icon(): $mol_icon_cross;
+        Close(): $$.$mol_link;
+        Description(): $$.$mol_textarea;
+        Video(): $$.$mol_link;
+        Place(): $$.$mol_link;
+        links(): readonly any[];
+        Links(): $mol_view;
         speeches(): readonly any[];
-        Speeches(): $$.$mol_list;
+        Speeches(): $$.$mol_section;
+        speech_add(next?: any): any;
+        Speech_add_icon(): $mol_icon_plus;
+        Speech_add(): $mol_button_minor;
+        Afterparty(): $$.$mol_textarea;
+        Afterparty_field(): $$.$mol_form_field;
+        capacity(next?: any): number;
+        Capacity(): $$.$mol_number;
+        Capacity_field(): $$.$mol_form_field;
+        capacity_cut(next?: any): any;
+        Capacity_cut_icon(): $mol_icon_heart_box_outline;
+        Capacity_cut(): $mol_button_minor;
+        Capacity_block(): $mol_view;
+        Hidden_fields(): $$.$mol_list;
+        free_space(): string;
+        Free_space(): $$.$mol_paragraph;
+        person(): $piterjs_person;
+        profile_editable(): boolean;
+        profile_bid(): string;
+        Profile(): $piterjs_person_edit;
+        join_enabled(): boolean;
+        Joined(): $mol_check_box;
+        Joined_confirm(): $$.$mol_paragraph;
+        joined_form(): readonly any[];
+        Joined_form(): $mol_view;
+        join_content(): readonly any[];
+        Join(): $$.$mol_section;
+        Joined_bid(): $$.$mol_text;
+        content(): readonly any[];
+        Content(): $$.$mol_list;
+        speech(id: any): $piterjs_speech;
     }
 }
 
 declare namespace $.$$ {
-    class $piterjs_schedule extends $.$piterjs_schedule {
-        speeches(): $mol_list[];
-        speech_start(index: number): string;
-        speech_title(index: number): string;
-        speech_speaker(index: number): string;
-    }
-}
-
-declare namespace $.$$ {
-}
-
-declare namespace $ {
-    class $piterjs_screen_lines extends $mol_svg_root {
-        style(): Record<string, any>;
-        view_box(): string;
-        sub(): readonly any[];
-        color(): string;
-        First(): $mol_svg_path;
-        Second(): $mol_svg_path;
-        Third(): $mol_svg_path;
-    }
-}
-
-declare namespace $ {
-}
-
-declare namespace $ {
-    class $piterjs_screen extends $mol_view {
-        place(): $piterjs_place;
-        sub(): readonly any[];
-        content(): readonly $mol_view[];
-        color_open(): string;
-        Open(): $piterjs_screen_lines;
-        color_close(): string;
-        Close(): $piterjs_screen_lines;
-    }
-}
-
-declare namespace $.$$ {
-    class $piterjs_screen extends $.$piterjs_screen {
-        sub(): ($mol_view | $piterjs_screen_lines)[];
+    class $piterjs_meetup_page extends $.$piterjs_meetup_page {
+        video(): string;
+        address(): string;
+        coords(): $mol_vector_2d<number>;
+        join_allowed(): boolean;
+        content(): ($mol_view | $mol_button_minor | $mol_textarea)[];
+        links(): $mol_link[];
+        speeches(): $piterjs_speech_snippet[];
+        speech(index: number): $piterjs_speech;
+        speech_add(): void;
+        Public(): $mol_check_icon;
+        Guests_link(): $mol_link;
+        Stats_link(): $mol_link;
+        capacity(next?: number): number;
+        capacity_cut(): void;
+        profile_editable(): boolean;
+        person_name(): string;
+        profile_bid(): "" | "Обязательно" | "От двух слов";
+        join_enabled(): boolean;
+        join_content(): $mol_view[];
+        joined_form(): ($mol_paragraph | $mol_check_box)[];
+        free_space(): string;
     }
 }
 
@@ -4148,88 +3994,6 @@ declare namespace $.$$ {
         index_y(): number | null;
         index_x(): number | null;
     }
-}
-
-declare namespace $ {
-    class $piterjs_intro extends $mol_view {
-        title(): string;
-        meetup(): $piterjs_meetup;
-        page(val?: any): string;
-        pages(): Record<string, any>;
-        sub(): readonly any[];
-        attr(): Record<string, any>;
-        plugins(): readonly any[];
-        Main(): $$.$piterjs_intro_main;
-        About(): $piterjs_intro_page;
-        Roles_org(): $piterjs_intro_page;
-        Roles_place(): $piterjs_intro_page;
-        Speakers(): $piterjs_intro_page;
-        Info(): $piterjs_intro_page;
-        place_title(): string;
-        place_notes(): string;
-        Place(): $piterjs_intro_page;
-        Schedule(): $$.$piterjs_schedule;
-        Proft(): $piterjs_intro_page;
-        afterparty(): string;
-        Afterparty(): $piterjs_intro_page;
-        place(): $piterjs_place;
-        Page(): $mol_view;
-        Screen(): $$.$piterjs_screen;
-        page_ids(): readonly string[];
-        Nav(): $$.$mol_nav;
-    }
-}
-
-declare namespace $ {
-    function $mol_fiber_defer<Value = void>(calculate: () => Value): $mol_wire_task<{}, [], Value>;
-    function $mol_fiber_root<Calculate extends (this: This, ...args: any[]) => Result, Result = void, This = void>(calculate: Calculate): Calculate;
-    function $mol_fiber_sync<Args extends any[], Value = void, This = void>(request: (this: This, ...args: Args) => PromiseLike<Value>): (...args: Args) => Value;
-    function $mol_fiber_warp(): Promise<void>;
-    class $mol_fiber_solid extends $mol_wrapper {
-        static func<This, Args extends any[], Result>(task: (this: This, ...args: Args) => Result): (this: This, ...args: Args) => Result;
-    }
-    class $mol_fiber {
-        static method: typeof $mol_wire_method;
-    }
-}
-
-declare namespace $.$$ {
-    class $piterjs_intro extends $.$piterjs_intro {
-        dom_node(): Element;
-        page_ids(): string[];
-        Page(): any;
-        place(): $piterjs_place;
-        place_title(): string;
-        place_notes(): string;
-        afterparty(): string;
-    }
-}
-
-declare namespace $ {
-}
-
-declare namespace $ {
-    class $piterjs_video_page extends $mol_page {
-        title(): string;
-        tools(): readonly any[];
-        body(): readonly any[];
-        source(next?: any): string;
-        editing(): boolean;
-        Link(): $$.$mol_string;
-        Close_icon(): $mol_icon_cross;
-        Close(): $$.$mol_link;
-        uri(): string;
-        Frame(): $$.$mol_frame;
-    }
-}
-
-declare namespace $.$$ {
-    class $piterjs_video_page extends $.$piterjs_video_page {
-        uri(): string;
-    }
-}
-
-declare namespace $ {
 }
 
 declare namespace $ {
@@ -4285,29 +4049,50 @@ declare namespace $ {
 }
 
 declare namespace $ {
-    class $mol_icon_terrain extends $mol_icon {
-        path(): string;
+    class $piterjs_person_snippet extends $mol_dimmer {
+        person(): $piterjs_person;
+    }
+}
+
+declare namespace $.$$ {
+    class $piterjs_person_snippet extends $.$piterjs_person_snippet {
+        haystack(): string;
+    }
+}
+
+declare namespace $.$$ {
+}
+
+declare namespace $ {
+    class $piterjs_meetup_guests extends $mol_page {
+        meetup(): $piterjs_meetup;
+        title(): string;
+        tools(): readonly any[];
+        body(): readonly any[];
+        Close_icon(): $mol_icon_cross;
+        Close(): $$.$mol_link;
+        filter(next?: any): string;
+        Filter(): $$.$mol_search;
+        person(id: any): $piterjs_person;
+        Person(id: any): $$.$piterjs_person_snippet;
+        person_list(): readonly any[];
+        Person_list(): $$.$mol_list;
+        Content(): $$.$mol_list;
     }
 }
 
 declare namespace $ {
-    class $mol_icon_lead_pencil extends $mol_icon {
-        path(): string;
+    function $mol_match_text<Variant>(query: string, values: (variant: Variant) => string[]): (variant: Variant) => boolean;
+}
+
+declare namespace $.$$ {
+    class $piterjs_meetup_guests extends $.$piterjs_meetup_guests {
+        person_list(): $piterjs_person_snippet[];
+        person(person: $piterjs_person): $piterjs_person;
     }
 }
 
-declare namespace $ {
-    class $mol_icon_github_circle extends $mol_icon {
-        path(): string;
-    }
-}
-
-declare namespace $ {
-    class $mol_link_source extends $mol_link {
-        hint(): string;
-        sub(): readonly any[];
-        Icon(): $mol_icon_github_circle;
-    }
+declare namespace $.$$ {
 }
 
 declare namespace $ {
@@ -4385,59 +4170,307 @@ declare namespace $ {
 }
 
 declare namespace $ {
-    class $mol_svg_image extends $mol_svg {
+    class $mol_svg_text extends $mol_svg {
         dom_name(): string;
         pos(): readonly any[];
-        size(): readonly any[];
         attr(): Record<string, any>;
+        sub(): readonly any[];
         pos_x(): string;
         pos_y(): string;
-        size_x(): string;
-        size_y(): string;
-        uri(): string;
-        aspect(): string;
+        align(): string;
+        text(): string;
     }
 }
 
 declare namespace $.$$ {
-    class $mol_svg_image extends $.$mol_svg_image {
+    class $mol_svg_text extends $.$mol_svg_text {
         pos_x(): any;
         pos_y(): any;
-        size_x(): any;
-        size_y(): any;
     }
 }
 
 declare namespace $ {
-    class $mol_plot_map_tiles extends $mol_plot_graph {
-        tile_size_real(): number;
-        level(): number;
-        level_pyramid(): number;
-        tiles_limit(): number;
-        uri_template(): string;
-        sub(): readonly any[];
-        Tile(id: any): $$.$mol_svg_image;
-        tiles(): readonly any[];
-        tile_transform(id: any): string;
-        tile_uri(id: any): string;
-    }
 }
 
 declare namespace $ {
+    class $mol_svg_rect extends $mol_svg {
+        dom_name(): string;
+        pos(): readonly any[];
+        attr(): Record<string, any>;
+        width(): string;
+        height(): string;
+        pos_x(): string;
+        pos_y(): string;
+    }
 }
 
 declare namespace $.$$ {
-    type Id = [number, number, number];
-    export class $mol_plot_map_tiles extends $.$mol_plot_map_tiles {
-        level(): number;
-        tiles(): $mol_svg_image[];
-        tile_uri(id: Id): string;
-        tile_transform(id: Id): string;
-        tile_at(pos: [number, number, number]): number[];
-        back(): readonly $.$mol_svg[];
-        front(): never[];
+    class $mol_svg_rect extends $.$mol_svg_rect {
+        pos_x(): any;
+        pos_y(): any;
     }
-    export {};
+}
+
+declare namespace $ {
+    class $mol_plot_ruler extends $mol_plot_graph {
+        step(): number;
+        scale_axis(): number;
+        scale_step(): number;
+        shift_axis(): number;
+        dimensions_axis(): $mol_vector_range<number>;
+        viewport_axis(): $mol_vector_range<number>;
+        axis_points(): readonly number[];
+        normalize(next?: any): number;
+        precision(): number;
+        sub(): readonly any[];
+        Label(id: any): $$.$mol_svg_text;
+        background_x(): string;
+        background_y(): string;
+        background_width(): string;
+        background_height(): string;
+        Background(): $$.$mol_svg_rect;
+        curve(): string;
+        Curve(): $mol_svg_path;
+        labels_formatted(): readonly any[];
+        title_pos_x(): string;
+        title_pos_y(): string;
+        title_align(): string;
+        Title(): $$.$mol_svg_text;
+        label_pos_x(id: any): string;
+        label_pos_y(id: any): string;
+        label_pos(id: any): readonly any[];
+        label_text(id: any): string;
+        label_align(): string;
+    }
+}
+
+declare namespace $ {
+    function $mol_math_round_expand(val: number, gap?: number): number;
+}
+
+declare namespace $.$$ {
+    class $mol_plot_ruler extends $.$mol_plot_ruler {
+        labels_formatted(): $mol_svg_text[];
+        step(): number;
+        snap_to_grid(coord: number): number;
+        axis_points(): number[];
+        precision(): number;
+        label_text(index: number): string;
+        font_size(): number;
+        back(): $mol_svg_path[];
+        front(): readonly $.$mol_svg[];
+    }
+}
+
+declare namespace $ {
+}
+
+declare namespace $ {
+    class $mol_plot_ruler_hor extends $mol_plot_ruler {
+        title_align(): string;
+        label_align(): string;
+        title_pos_x(): string;
+        title_pos_y(): string;
+        label_pos_y(id: any): string;
+        background_width(): string;
+    }
+}
+
+declare namespace $.$$ {
+    class $mol_plot_ruler_hor extends $.$mol_plot_ruler_hor {
+        dimensions_axis(): $mol_vector_range<number>;
+        viewport_axis(): $mol_vector_range<number>;
+        scale_axis(): number;
+        scale_step(): number;
+        shift_axis(): number;
+        curve(): string;
+        label_pos_x(index: number): string;
+        background_y(): string;
+        title_pos_y(): string;
+        background_height(): string;
+    }
+}
+
+declare namespace $ {
+}
+
+declare namespace $ {
+    class $mol_plot_mark_hor extends $mol_plot_ruler_hor {
+        labels(): readonly string[];
+    }
+}
+
+declare namespace $.$$ {
+    class $mol_plot_mark_hor extends $.$mol_plot_mark_hor {
+        series_x(): readonly number[];
+        labels(): readonly string[];
+        visible_indexes(): number[];
+        curve(): string;
+        label_text(index: number): string;
+        labels_formatted(): $mol_svg_text[];
+        label_pos_x(index: number): string;
+        label_pos_y(index: number): string;
+    }
+}
+
+declare namespace $ {
+}
+
+declare namespace $ {
+    class $mol_plot_ruler_vert extends $mol_plot_ruler {
+        title_align(): string;
+        label_align(): string;
+        title_pos_y(): string;
+        label_pos_x(id: any): string;
+        background_height(): string;
+        background_width(): string;
+    }
+}
+
+declare namespace $.$$ {
+    class $mol_plot_ruler_vert extends $.$mol_plot_ruler_vert {
+        dimensions_axis(): $mol_vector_range<number>;
+        viewport_axis(): $mol_vector_range<number>;
+        scale_axis(): number;
+        scale_step(): number;
+        shift_axis(): number;
+        curve(): string;
+        title_pos_x(): string;
+        label_pos_y(index: number): string;
+    }
+}
+
+declare namespace $ {
+}
+
+declare namespace $ {
+    class $mol_plot_bar extends $mol_plot_graph {
+        style(): Record<string, any>;
+        sub(): readonly any[];
+        Sample(): $mol_plot_graph_sample;
+        stroke_width(): string;
+        curve(): string;
+        Curve(): $mol_svg_path;
+    }
+}
+
+declare namespace $.$$ {
+    class $mol_plot_bar extends $.$mol_plot_bar {
+        indexes(): number[];
+        curve(): string;
+        stroke_width(): string;
+        color(): string;
+        dimensions(): $mol_vector_2d<$mol_vector_range<number>>;
+    }
+}
+
+declare namespace $ {
+}
+
+declare namespace $ {
+    class $mol_svg_text_box extends $mol_svg_group {
+        font_size(): number;
+        width(): number;
+        sub(): readonly any[];
+        box_width(): string;
+        box_height(): string;
+        box_pos_x(): string;
+        box_pos_y(): string;
+        Back(): $$.$mol_svg_rect;
+        pos_x(): string;
+        pos_y(): string;
+        align(): string;
+        text(): string;
+        Text(): $$.$mol_svg_text;
+    }
+}
+
+declare namespace $ {
+    function $mol_font_canvas(next?: CanvasRenderingContext2D): CanvasRenderingContext2D;
+}
+
+declare namespace $ {
+    function $mol_font_measure(font: string, text: string): number;
+}
+
+declare namespace $.$$ {
+    class $mol_svg_text_box extends $.$mol_svg_text_box {
+        box_width(): string;
+        width(): number;
+        box_pos_x(): string;
+        box_pos_y(): string;
+    }
+}
+
+declare namespace $ {
+}
+
+declare namespace $ {
+    class $mol_plot_mark_cross extends $mol_plot_graph {
+        labels(): readonly string[];
+        title_x_gap(): number;
+        threshold(): number;
+        graphs(): readonly $mol_plot_graph[];
+        dimensions(): $mol_vector_2d<$mol_vector_range<number>>;
+        sub(): readonly any[];
+        dimensions_x(): $mol_vector_range<number>;
+        dimensions_y(): $mol_vector_range<number>;
+        curve(): string;
+        Curve(): $mol_svg_path;
+        title_x_pos_x(): string;
+        title_x_pos_y(): string;
+        title_x(): string;
+        Label_x(): $$.$mol_svg_text_box;
+        title_y_pos_x(): string;
+        title_y_pos_y(): string;
+        title_y(): string;
+        Label_y(): $$.$mol_svg_text_box;
+    }
+}
+
+declare namespace $.$$ {
+    class $mol_plot_mark_cross extends $.$mol_plot_mark_cross {
+        nearest(): {
+            value: $mol_vector_2d<number>;
+            scaled: $mol_vector_2d<number>;
+            index: number;
+        } | null;
+        curve(): string;
+        title_x(): string;
+        title_x_pos_x(): string;
+        title_x_pos_y(): string;
+        title_y(): string;
+        title_y_pos_y(): string;
+    }
+}
+
+declare namespace $ {
+}
+
+declare namespace $ {
+    class $mol_chart_legend extends $mol_scroll {
+        graphs(): readonly $mol_plot_graph[];
+        graphs_front(): readonly $mol_plot_graph[];
+        sub(): readonly $mol_view[];
+        Graph_legend(id: any): $mol_view;
+        graph_legends(): readonly $mol_view[];
+        Graph_sample(id: any): any;
+        Graph_sample_box(id: any): $mol_view;
+        graph_title(id: any): string;
+        Graph_title(id: any): $mol_view;
+    }
+}
+
+declare namespace $.$$ {
+    class $mol_chart_legend extends $.$mol_chart_legend {
+        graphs_front(): readonly $mol_plot_graph[];
+        graph_legends(): readonly $mol_view[];
+        graph_title(index: number): string;
+        Graph_sample(index: number): any;
+    }
+}
+
+declare namespace $ {
 }
 
 declare namespace $ {
@@ -4583,6 +4616,757 @@ declare namespace $.$$ {
 }
 
 declare namespace $ {
+}
+
+declare namespace $ {
+    class $mol_chart extends $mol_view {
+        gap_hor(): number;
+        gap_vert(): number;
+        gap_left(): number;
+        gap_right(): number;
+        gap_bottom(): number;
+        gap_top(): number;
+        graphs(): readonly $mol_plot_graph[];
+        sub(): readonly any[];
+        Legend(): $$.$mol_chart_legend;
+        hue_base(): number;
+        hue_shift(): number;
+        zoom(next?: any): number;
+        graphs_colored(): $mol_plot_graph[];
+        Plot(): $$.$mol_plot_pane;
+    }
+}
+
+declare namespace $ {
+}
+
+declare namespace $ {
+    class $piterjs_meetup_stats extends $mol_page {
+        joined_moments(): {
+            [k: string]: $mol_time_moment;
+        };
+        meetup(): $piterjs_meetup;
+        title(): string;
+        tools(): readonly any[];
+        body(): readonly any[];
+        Close_icon(): $mol_icon_cross;
+        Close(): $$.$mol_link;
+        days(): readonly any[];
+        Days(): $$.$mol_plot_mark_hor;
+        joins_per_days(): readonly any[];
+        Counts(): $$.$mol_plot_ruler_vert;
+        Joins(): $$.$mol_plot_bar;
+        Details(): $$.$mol_plot_mark_cross;
+        Chart(): $mol_chart;
+    }
+}
+
+declare namespace $ {
+    type $mol_type_immutable_deep<Val> = {
+        readonly [field in keyof Val]: $mol_type_immutable_deep<Val[field]>;
+    };
+}
+
+declare namespace $ {
+    function $mol_array_groups<Item, Groups extends string>(all: readonly Item[], group: (item: Item) => Groups): $mol_type_immutable_deep<Record<Groups, Item[] | undefined>>;
+}
+
+declare namespace $.$$ {
+    class $piterjs_meetup_stats extends $.$piterjs_meetup_stats {
+        joins_stat(): $mol_type_immutable_deep<Record<string, $mol_time_moment[] | undefined>>;
+        days(): string[];
+        joins_per_days(): number[];
+    }
+}
+
+declare namespace $.$$ {
+}
+
+declare namespace $ {
+    class $mol_icon_camera extends $mol_icon {
+        path(): string;
+    }
+}
+
+declare namespace $ {
+    type $mol_type_partial_deep<Val> = Val extends object ? Val extends Function ? Val : {
+        [field in keyof Val]?: $mol_type_partial_deep<Val[field]> | undefined;
+    } : Val;
+}
+
+declare namespace $ {
+    let $mol_jsx_prefix: string;
+    let $mol_jsx_crumbs: string;
+    let $mol_jsx_booked: Set<string> | null;
+    let $mol_jsx_document: $mol_jsx.JSX.ElementClass['ownerDocument'];
+    const $mol_jsx_frag = "";
+    function $mol_jsx<Props extends $mol_jsx.JSX.IntrinsicAttributes, Children extends Array<Node | string>>(Elem: string | ((props: Props, ...children: Children) => Element), props: Props, ...childNodes: Children): Element | DocumentFragment;
+    namespace $mol_jsx.JSX {
+        interface Element extends HTMLElement {
+            class?: string;
+        }
+        interface ElementClass {
+            attributes: {};
+            ownerDocument: Pick<Document, 'getElementById' | 'createElementNS' | 'createDocumentFragment'>;
+            childNodes: Array<Node | string>;
+            valueOf(): Element;
+        }
+        type OrString<Dict> = {
+            [key in keyof Dict]: Dict[key] | string;
+        };
+        type IntrinsicElements = {
+            [key in keyof ElementTagNameMap]?: $.$mol_type_partial_deep<OrString<Element & IntrinsicAttributes & ElementTagNameMap[key]>>;
+        };
+        interface IntrinsicAttributes {
+            id?: string;
+            xmlns?: string;
+        }
+        interface ElementAttributesProperty {
+            attributes: {};
+        }
+        interface ElementChildrenAttribute {
+        }
+    }
+}
+
+declare namespace $ {
+    class $mol_icon_download extends $mol_icon {
+        path(): string;
+    }
+}
+
+declare namespace $ {
+    class $mol_button_download extends $mol_button_minor {
+        blob(): any;
+        uri(): string;
+        file_name(): string;
+        sub(): readonly any[];
+        Icon(): $mol_icon_download;
+        title(): string;
+    }
+}
+
+declare namespace $.$$ {
+    class $mol_button_download extends $.$mol_button_download {
+        uri(): string;
+        click(): void;
+    }
+}
+
+declare namespace $ {
+    class $mol_icon_clock extends $mol_icon {
+        path(): string;
+    }
+}
+
+declare namespace $ {
+    class $mol_icon_clock_outline extends $mol_icon {
+        path(): string;
+    }
+}
+
+declare namespace $ {
+    class $mol_check_list extends $mol_view {
+        dictionary(): Record<string, any>;
+        Option(id: any): $$.$mol_check;
+        options(): Record<string, any>;
+        keys(): readonly string[];
+        sub(): readonly $mol_check[];
+        option_checked(id: any, next?: any): boolean;
+        option_title(id: any): string;
+        option_label(id: any): readonly any[];
+        enabled(): boolean;
+        option_enabled(id: any): boolean;
+        option_hint(id: any): string;
+        items(): readonly $mol_check[];
+    }
+}
+
+declare namespace $.$$ {
+    class $mol_check_list extends $.$mol_check_list {
+        options(): {
+            [key: string]: string;
+        };
+        dictionary(next?: Record<string, boolean>): Record<string, boolean>;
+        option_checked(id: string, next?: boolean | null): boolean;
+        keys(): readonly string[];
+        items(): $mol_check[];
+        option_title(key: string): string;
+    }
+}
+
+declare namespace $ {
+}
+
+declare namespace $ {
+    class $mol_switch extends $mol_check_list {
+        value(next?: any): string;
+    }
+}
+
+declare namespace $.$$ {
+    class $mol_switch extends $.$mol_switch {
+        value(next?: any): any;
+        option_checked(key: string, next?: boolean): boolean;
+    }
+}
+
+declare namespace $ {
+    class $mol_pick_time extends $mol_pick {
+        Icon(): $mol_icon_clock_outline;
+        trigger_enabled(): boolean;
+        bubble_content(): readonly any[];
+        value_moment(next?: any): $mol_time_moment;
+        enabled(): boolean;
+        value(next?: any): string;
+        Input(): $$.$mol_format;
+        hour_selected(next?: any): string;
+        hour_options(): Record<string, any>;
+        Hours(): $$.$mol_switch;
+        Delimiter(): $$.$mol_paragraph;
+        minute_selected(next?: any): string;
+        minute_options(): Record<string, any>;
+        Minutes(): $$.$mol_switch;
+        Pickers(): $mol_row;
+    }
+}
+
+declare namespace $.$$ {
+    class $mol_pick_time extends $.$mol_pick_time {
+        trigger_content(): (string | $mol_icon_clock_outline)[];
+        value_moment(next?: $mol_time_moment): $mol_time_moment;
+        value(next?: string): string;
+        hour_selected(hour_str?: string): string;
+        minute_selected(minute_str?: string): string;
+        hour_options(): {
+            '0': string;
+            '1': string;
+            '2': string;
+            '3': string;
+            '4': string;
+            '5': string;
+            '6': string;
+            '7': string;
+            '8': string;
+            '9': string;
+            '10': string;
+            '11': string;
+            '12': string;
+            '13': string;
+            '14': string;
+            '15': string;
+            '16': string;
+            '17': string;
+            '18': string;
+            '19': string;
+            '20': string;
+            '21': string;
+            '22': string;
+            '23': string;
+        };
+        minute_options(): {
+            '0': string;
+            '5': string;
+            '10': string;
+            '15': string;
+            '20': string;
+            '25': string;
+            '30': string;
+            '35': string;
+            '40': string;
+            '45': string;
+            '50': string;
+            '55': string;
+        };
+    }
+}
+
+declare namespace $ {
+}
+
+declare namespace $ {
+    class $piterjs_screen_lines extends $mol_svg_root {
+        style(): Record<string, any>;
+        view_box(): string;
+        sub(): readonly any[];
+        color(): string;
+        First(): $mol_svg_path;
+        Second(): $mol_svg_path;
+        Third(): $mol_svg_path;
+    }
+}
+
+declare namespace $ {
+}
+
+declare namespace $ {
+    class $piterjs_screen extends $mol_view {
+        place(): $piterjs_place;
+        sub(): readonly any[];
+        content(): readonly $mol_view[];
+        color_open(): string;
+        Open(): $piterjs_screen_lines;
+        color_close(): string;
+        Close(): $piterjs_screen_lines;
+    }
+}
+
+declare namespace $.$$ {
+    class $piterjs_screen extends $.$piterjs_screen {
+        sub(): ($mol_view | $piterjs_screen_lines)[];
+    }
+}
+
+declare namespace $ {
+}
+
+declare namespace $ {
+    class $piterjs_speech_poster extends $piterjs_screen {
+        title(): string;
+        start(): $mol_time_moment;
+        speaker(): $piterjs_speaker;
+        speech(): $piterjs_speech;
+        theme(): string;
+        content(): readonly any[];
+        Title(): $$.$mol_paragraph;
+        photo_uri(): string;
+        Photo(): $piterjs_image;
+        speaker_name(): string;
+        Name(): $$.$mol_paragraph;
+        Main(): $mol_view;
+    }
+}
+
+declare namespace $ {
+    function $mol_blob_uri(blob: $mol_blob): Promise<string>;
+}
+
+declare namespace $.$$ {
+    class $piterjs_speech_poster extends $.$piterjs_speech_poster {
+        photo_uri(): string;
+        speaker_name(): string;
+    }
+}
+
+declare namespace $.$$ {
+}
+
+declare namespace $ {
+    class $mol_string_link extends $mol_view {
+        attr(): Record<string, any>;
+        sub(): readonly any[];
+        enabled(): boolean;
+        editing(): boolean;
+        hint_view(): string;
+        View(): $$.$mol_link;
+        value(next?: any): string;
+        title(): string;
+        hint(): string;
+        hint_edit(): string;
+        Edit(): $$.$mol_string;
+    }
+}
+
+declare namespace $.$$ {
+    class $mol_string_link extends $.$mol_string_link {
+        sub(): $mol_link[] | $mol_string[];
+    }
+}
+
+declare namespace $ {
+    class $mol_icon_upload extends $mol_icon {
+        path(): string;
+    }
+}
+
+declare namespace $ {
+    class $mol_button_open extends $mol_button_minor {
+        sub(): readonly any[];
+        Icon(): $mol_icon_upload;
+        files(next?: any): readonly any[];
+        accept(): string;
+        multiple(): boolean;
+        Native(): $$.$mol_button_open_native;
+    }
+    class $mol_button_open_native extends $mol_view {
+        dom_name(): string;
+        files(next?: any): readonly any[];
+        attr(): Record<string, any>;
+        event(): Record<string, any>;
+        accept(): string;
+        multiple(): boolean;
+        picked(next?: any): any;
+    }
+}
+
+declare namespace $.$$ {
+    class $mol_button_open_native extends $.$mol_button_open_native {
+        dom_node(): HTMLInputElement;
+        picked(): void;
+    }
+}
+
+declare namespace $ {
+}
+
+declare namespace $ {
+    class $piterjs_speaker_snippet extends $mol_view {
+        event(): Record<string, any>;
+        title(next?: any): string;
+        description(next?: any): string;
+        speaker(): $piterjs_speaker;
+        sub(): readonly any[];
+        paste(next?: any): any;
+        photo(): string;
+        Photo(): $piterjs_image;
+        upload(next?: any): readonly File[];
+        editing(): boolean;
+        Upload(): $mol_button_open;
+        Photo_block(): $mol_stack;
+        Title(): $$.$mol_string;
+        Description(): $$.$mol_textarea;
+        Info(): $$.$mol_list;
+    }
+}
+
+declare namespace $ {
+    class $mol_picture extends $mol_object2 {
+        readonly canvas: HTMLCanvasElement;
+        constructor(canvas: HTMLCanvasElement);
+        get context(): CanvasRenderingContext2D | null;
+        static fit(image: Exclude<CanvasImageSource, VideoFrame> | Blob | string, width?: number, height?: number): $mol_picture;
+        static make(image: Exclude<CanvasImageSource, VideoFrame>, width: number, height?: number): $mol_picture;
+        static sizes(image: Exclude<CanvasImageSource, VideoFrame>): number[];
+        static load(uri: string): Promise<HTMLImageElement>;
+        format(type: 'image/png' | 'image/jpeg' | 'image/webp', quality?: number): Blob | null;
+    }
+}
+
+declare namespace $.$$ {
+    class $piterjs_speaker_snippet extends $.$piterjs_speaker_snippet {
+        photo(): string;
+        upload(next: File[]): never[];
+        take_files(files: FileList): File[];
+        paste(event?: ClipboardEvent): void;
+    }
+}
+
+declare namespace $.$$ {
+}
+
+declare namespace $ {
+    class $piterjs_speech_page extends $mol_page {
+        title(next?: any): string;
+        description(next?: any): string;
+        start(next?: any): $mol_time_moment;
+        slides(next?: any): string;
+        video(next?: any): string;
+        speech(): $piterjs_speech;
+        Title(): $mol_string_button;
+        tools(): readonly any[];
+        body(): readonly any[];
+        editing(): boolean;
+        poster_blob(next?: any): Blob;
+        poster_name(): string;
+        Poster_copy_icon(): $mol_icon_camera;
+        Poster_copy(): $$.$mol_button_download;
+        speech_public(next?: any): boolean;
+        Public_icon(): $mol_icon_eye;
+        Public(): $mol_check_icon;
+        Start(): $$.$mol_pick_time;
+        Close_icon(): $mol_icon_cross;
+        Close(): $$.$mol_link;
+        Poster(): $$.$piterjs_speech_poster;
+        Poster_zone(): $mol_view;
+        Description(): $$.$mol_textarea;
+        Slides(): $$.$mol_string_link;
+        Video(): $$.$mol_string_link;
+        links(): readonly any[];
+        Links(): $mol_view;
+        speaker(): $piterjs_speaker;
+        Speaker(): $$.$piterjs_speaker_snippet;
+    }
+}
+
+declare namespace $ {
+    function $mol_dom_serialize(node: Node): string;
+}
+
+declare namespace $ {
+    function $mol_dom_capture_image(el: Element): Promise<HTMLImageElement>;
+    function $mol_dom_capture_canvas(el: Element): Promise<HTMLCanvasElement>;
+}
+
+declare namespace $.$$ {
+    class $piterjs_speech_page extends $.$piterjs_speech_page {
+        speaker(): $piterjs_speaker;
+        links(): $mol_string_link[];
+        Public(): $mol_check_icon;
+        poster_name(): string;
+        poster_blob(): Blob;
+    }
+}
+
+declare namespace $.$$ {
+}
+
+declare namespace $ {
+    class $piterjs_meetup_snippet extends $mol_link {
+        arg(): Record<string, any>;
+        meetup(): $piterjs_meetup;
+        sub(): readonly any[];
+        id(): string;
+        title(): string;
+        Title(): $mol_view;
+        date(): string;
+        Date(): $mol_view;
+    }
+}
+
+declare namespace $.$$ {
+    class $piterjs_meetup_snippet extends $.$piterjs_meetup_snippet {
+        id(): `${string}_${string}`;
+        title(): string;
+        date(): string;
+    }
+}
+
+declare namespace $ {
+}
+
+declare namespace $ {
+    class $piterjs_intro_page extends $mol_view {
+        sub(): readonly any[];
+        title(): string;
+        Title(): $mol_view;
+        head(): readonly any[];
+        Head(): $mol_view;
+        text(): string;
+        Text(): $$.$mol_text;
+    }
+}
+
+declare namespace $ {
+}
+
+declare namespace $ {
+    class $piterjs_logo extends $piterjs_image {
+        link(): string;
+    }
+}
+
+declare namespace $ {
+}
+
+declare namespace $ {
+    class $piterjs_intro_main extends $piterjs_intro_page {
+        meetup(): $piterjs_meetup;
+        title(): string;
+        head(): readonly any[];
+        Logo(): $piterjs_logo;
+    }
+}
+
+declare namespace $.$$ {
+    class $piterjs_intro_main extends $.$piterjs_intro_main {
+        title(): string;
+    }
+}
+
+declare namespace $ {
+}
+
+declare namespace $ {
+    class $piterjs_schedule extends $mol_view {
+        meetup(): $piterjs_meetup;
+        sub(): readonly any[];
+        speech_start(id: any): string;
+        Speech_start(id: any): $mol_view;
+        speech_title(id: any): string;
+        Speech_title(id: any): $mol_view;
+        Speech_main(id: any): $mol_view;
+        speech_speaker(id: any): string;
+        Speech_speaker(id: any): $mol_view;
+        Speech(id: any): $$.$mol_list;
+        speeches(): readonly any[];
+        Speeches(): $$.$mol_list;
+    }
+}
+
+declare namespace $.$$ {
+    class $piterjs_schedule extends $.$piterjs_schedule {
+        speeches(): $mol_list[];
+        speech_start(index: number): string;
+        speech_title(index: number): string;
+        speech_speaker(index: number): string;
+    }
+}
+
+declare namespace $.$$ {
+}
+
+declare namespace $ {
+    class $piterjs_intro extends $mol_view {
+        title(): string;
+        meetup(): $piterjs_meetup;
+        page(val?: any): string;
+        pages(): Record<string, any>;
+        sub(): readonly any[];
+        attr(): Record<string, any>;
+        plugins(): readonly any[];
+        Main(): $$.$piterjs_intro_main;
+        About(): $piterjs_intro_page;
+        Roles_org(): $piterjs_intro_page;
+        Roles_place(): $piterjs_intro_page;
+        Speakers(): $piterjs_intro_page;
+        Info(): $piterjs_intro_page;
+        place_title(): string;
+        place_notes(): string;
+        Place(): $piterjs_intro_page;
+        Schedule(): $$.$piterjs_schedule;
+        Proft(): $piterjs_intro_page;
+        afterparty(): string;
+        Afterparty(): $piterjs_intro_page;
+        place(): $piterjs_place;
+        Page(): $mol_view;
+        Screen(): $$.$piterjs_screen;
+        page_ids(): readonly string[];
+        Nav(): $$.$mol_nav;
+    }
+}
+
+declare namespace $ {
+    function $mol_fiber_defer<Value = void>(calculate: () => Value): $mol_wire_task<{}, [], Value>;
+    function $mol_fiber_root<Calculate extends (this: This, ...args: any[]) => Result, Result = void, This = void>(calculate: Calculate): Calculate;
+    function $mol_fiber_sync<Args extends any[], Value = void, This = void>(request: (this: This, ...args: Args) => PromiseLike<Value>): (...args: Args) => Value;
+    function $mol_fiber_warp(): Promise<void>;
+    class $mol_fiber_solid extends $mol_wrapper {
+        static func<This, Args extends any[], Result>(task: (this: This, ...args: Args) => Result): (this: This, ...args: Args) => Result;
+    }
+    class $mol_fiber {
+        static method: typeof $mol_wire_method;
+    }
+}
+
+declare namespace $.$$ {
+    class $piterjs_intro extends $.$piterjs_intro {
+        dom_node(): Element;
+        page_ids(): string[];
+        Page(): any;
+        place(): $piterjs_place;
+        place_title(): string;
+        place_notes(): string;
+        afterparty(): string;
+    }
+}
+
+declare namespace $ {
+}
+
+declare namespace $ {
+    class $piterjs_video_page extends $mol_page {
+        title(): string;
+        tools(): readonly any[];
+        body(): readonly any[];
+        source(next?: any): string;
+        editing(): boolean;
+        Link(): $$.$mol_string;
+        Close_icon(): $mol_icon_cross;
+        Close(): $$.$mol_link;
+        uri(): string;
+        Frame(): $$.$mol_frame;
+    }
+}
+
+declare namespace $.$$ {
+    class $piterjs_video_page extends $.$piterjs_video_page {
+        uri(): string;
+    }
+}
+
+declare namespace $ {
+}
+
+declare namespace $ {
+    class $mol_icon_terrain extends $mol_icon {
+        path(): string;
+    }
+}
+
+declare namespace $ {
+    class $mol_icon_lead_pencil extends $mol_icon {
+        path(): string;
+    }
+}
+
+declare namespace $ {
+    class $mol_icon_github_circle extends $mol_icon {
+        path(): string;
+    }
+}
+
+declare namespace $ {
+    class $mol_link_source extends $mol_link {
+        hint(): string;
+        sub(): readonly any[];
+        Icon(): $mol_icon_github_circle;
+    }
+}
+
+declare namespace $ {
+    class $mol_svg_image extends $mol_svg {
+        dom_name(): string;
+        pos(): readonly any[];
+        size(): readonly any[];
+        attr(): Record<string, any>;
+        pos_x(): string;
+        pos_y(): string;
+        size_x(): string;
+        size_y(): string;
+        uri(): string;
+        aspect(): string;
+    }
+}
+
+declare namespace $.$$ {
+    class $mol_svg_image extends $.$mol_svg_image {
+        pos_x(): any;
+        pos_y(): any;
+        size_x(): any;
+        size_y(): any;
+    }
+}
+
+declare namespace $ {
+    class $mol_plot_map_tiles extends $mol_plot_graph {
+        tile_size_real(): number;
+        level(): number;
+        level_pyramid(): number;
+        tiles_limit(): number;
+        uri_template(): string;
+        sub(): readonly any[];
+        Tile(id: any): $$.$mol_svg_image;
+        tiles(): readonly any[];
+        tile_transform(id: any): string;
+        tile_uri(id: any): string;
+    }
+}
+
+declare namespace $ {
+}
+
+declare namespace $.$$ {
+    type Id = [number, number, number];
+    export class $mol_plot_map_tiles extends $.$mol_plot_map_tiles {
+        level(): number;
+        tiles(): $mol_svg_image[];
+        tile_uri(id: Id): string;
+        tile_transform(id: Id): string;
+        tile_at(pos: [number, number, number]): number[];
+        back(): readonly $.$mol_svg[];
+        front(): never[];
+    }
+    export {};
 }
 
 declare namespace $ {
@@ -4820,30 +5604,30 @@ declare namespace $.$$ {
     class $piterjs_others extends $.$piterjs_others {
         list(): readonly Readonly<{
             description?: string | undefined;
-            allDay?: boolean | undefined;
             location?: string | undefined;
+            allDay?: boolean | undefined;
             end: $mol_time_moment;
             start: $mol_time_moment;
-            uid: string;
             summary: string;
+            uid: string;
         }>[];
         list_future(): Readonly<{
             description?: string | undefined;
-            allDay?: boolean | undefined;
             location?: string | undefined;
+            allDay?: boolean | undefined;
             end: $mol_time_moment;
             start: $mol_time_moment;
-            uid: string;
             summary: string;
+            uid: string;
         }>[];
         dict(): Map<string, Readonly<{
             description?: string | undefined;
-            allDay?: boolean | undefined;
             location?: string | undefined;
+            allDay?: boolean | undefined;
             end: $mol_time_moment;
             start: $mol_time_moment;
-            uid: string;
             summary: string;
+            uid: string;
         }>>;
         events(): $piterjs_others_event[];
         event_title(uid: string): string;
@@ -4999,53 +5783,12 @@ declare namespace $ {
 declare let $hyoo_sync_revision: string;
 
 declare namespace $ {
-    type $mol_type_partial_deep<Val> = Val extends object ? Val extends Function ? Val : {
-        [field in keyof Val]?: $mol_type_partial_deep<Val[field]> | undefined;
-    } : Val;
-}
-
-declare namespace $ {
-    let $mol_jsx_prefix: string;
-    let $mol_jsx_crumbs: string;
-    let $mol_jsx_booked: Set<string> | null;
-    let $mol_jsx_document: $mol_jsx.JSX.ElementClass['ownerDocument'];
-    const $mol_jsx_frag = "";
-    function $mol_jsx<Props extends $mol_jsx.JSX.IntrinsicAttributes, Children extends Array<Node | string>>(Elem: string | ((props: Props, ...children: Children) => Element), props: Props, ...childNodes: Children): Element | DocumentFragment;
-    namespace $mol_jsx.JSX {
-        interface Element extends HTMLElement {
-            class?: string;
-        }
-        interface ElementClass {
-            attributes: {};
-            ownerDocument: Pick<Document, 'getElementById' | 'createElementNS' | 'createDocumentFragment'>;
-            childNodes: Array<Node | string>;
-            valueOf(): Element;
-        }
-        type OrString<Dict> = {
-            [key in keyof Dict]: Dict[key] | string;
-        };
-        type IntrinsicElements = {
-            [key in keyof ElementTagNameMap]?: $.$mol_type_partial_deep<OrString<Element & IntrinsicAttributes & ElementTagNameMap[key]>>;
-        };
-        interface IntrinsicAttributes {
-            id?: string;
-            xmlns?: string;
-        }
-        interface ElementAttributesProperty {
-            attributes: {};
-        }
-        interface ElementChildrenAttribute {
-        }
-    }
-}
-
-declare namespace $ {
     function $hyoo_sync_peer(path: string, next?: string): Promise<$hyoo_crowd_peer>;
 }
 
 declare namespace $ {
     function $mol_wire_race<Tasks extends ((...args: any) => any)[]>(...tasks: Tasks): {
-        [index in keyof Tasks]: index extends number ? ReturnType<Tasks[index]> : Tasks[index];
+        [index in keyof Tasks]: ReturnType<Tasks[index]>;
     };
 }
 
@@ -5771,30 +6514,6 @@ declare namespace $ {
 }
 
 declare namespace $ {
-    class $mol_icon_download extends $mol_icon {
-        path(): string;
-    }
-}
-
-declare namespace $ {
-    class $mol_button_download extends $mol_button_minor {
-        blob(): any;
-        uri(): string;
-        file_name(): string;
-        sub(): readonly any[];
-        Icon(): $mol_icon_download;
-        title(): string;
-    }
-}
-
-declare namespace $.$$ {
-    class $mol_button_download extends $.$mol_button_download {
-        uri(): string;
-        click(): void;
-    }
-}
-
-declare namespace $ {
     class $mol_icon_shield extends $mol_icon {
         path(): string;
     }
@@ -6229,25 +6948,6 @@ declare namespace $ {
 }
 
 declare namespace $ {
-    class $mol_crypto_secret extends Object {
-        readonly native: CryptoKey & {
-            type: 'secret';
-        };
-        static size: number;
-        static extra: number;
-        constructor(native: CryptoKey & {
-            type: 'secret';
-        });
-        static generate(): Promise<$mol_crypto_secret>;
-        static from(serial: BufferSource | string): Promise<$mol_crypto_secret>;
-        static derive(private_serial: string, public_serial: string): Promise<$mol_crypto_secret>;
-        serial(): Promise<ArrayBuffer>;
-        encrypt(open: BufferSource, salt: BufferSource): Promise<ArrayBuffer>;
-        decrypt(closed: BufferSource, salt: BufferSource): Promise<ArrayBuffer>;
-    }
-}
-
-declare namespace $ {
     class $mol_after_work extends $mol_object2 {
         delay: number;
         task: () => void;
@@ -6327,10 +7027,6 @@ declare namespace $ {
         submit(event?: any): any;
         enabled(): boolean;
     }
-}
-
-declare namespace $ {
-    function $mol_match_text<Variant>(query: string, values: (variant: Variant) => string[]): (variant: Variant) => boolean;
 }
 
 declare namespace $.$$ {
@@ -6584,11 +7280,14 @@ declare namespace $ {
         meetups(): $piterjs_meetup[];
         meetup(id: any): $piterjs_meetup;
         meetup_public(id: any, next?: any): boolean;
+        person(): $piterjs_person;
         Domain(): $piterjs_domain;
         plugins(): readonly any[];
         sub(): readonly any[];
         Menu(): $mol_page;
         Meetup(id: any): $$.$piterjs_meetup_page;
+        Meetup_guests(id: any): $$.$piterjs_meetup_guests;
+        Meetup_stats(id: any): $$.$piterjs_meetup_stats;
         Speech(id: any): $$.$piterjs_speech_page;
         Menu_meetup(id: any): $$.$piterjs_meetup_snippet;
         Now(): $piterjs_now;
@@ -6598,6 +7297,7 @@ declare namespace $ {
         Others(): $$.$piterjs_others;
         Rights(): $$.$hyoo_meta_rights;
         Wiki(): $$.$hyoo_page;
+        Safe(): $$.$hyoo_meta_safe;
         Theme(): $$.$mol_theme_auto;
         place(): $piterjs_place;
         pages(): readonly any[];
@@ -6611,6 +7311,8 @@ declare namespace $ {
         rights(next?: any): boolean;
         Rights_toggle_icon(): $mol_icon_shield_account;
         Rights_toggle(): $mol_check_icon;
+        Safe_icon(): $mol_icon_key_variant;
+        Safe_link(): $$.$mol_link;
         tools(): readonly any[];
         Yard(): $hyoo_sync_client;
         Online(): $$.$hyoo_sync_online;
@@ -6635,6 +7337,8 @@ declare namespace $ {
         meetup_current(): $piterjs_meetup;
         intro(val?: any): string;
         video_uri(next?: any): string;
+        Safe_close_icon(): $mol_icon_cross;
+        Safe_close(): $$.$mol_link;
     }
 }
 
@@ -6681,12 +7385,15 @@ declare namespace $.$$ {
         place_show(): boolean;
         others(): boolean;
         wiki(): boolean;
+        guests(): boolean;
+        stats(): boolean;
+        safe(): boolean;
         meetup_id(next?: string | null): string | null;
         meetup_add(): void;
         speech_id(next?: string): string | null;
         speech(id: $mol_int62_string): $piterjs_speech;
         speaker_id(next?: string): string | null;
-        pages(): $piterjs_intro[] | ($mol_view | $mol_page | $piterjs_meetup_page | $piterjs_speech_page | $piterjs_video_page | $piterjs_place_page | $piterjs_others | $hyoo_meta_rights | $hyoo_page_side_menu | $hyoo_page_side_view | $hyoo_page_side_edit | $hyoo_page_side_info | $hyoo_meta_safe)[];
+        pages(): $piterjs_intro[] | ($mol_view | $mol_page | $piterjs_meetup_page | $piterjs_meetup_guests | $piterjs_meetup_stats | $piterjs_speech_page | $piterjs_video_page | $piterjs_place_page | $piterjs_others | $hyoo_meta_rights | $hyoo_page_side_menu | $hyoo_page_side_view | $hyoo_page_side_edit | $hyoo_page_side_info | $hyoo_meta_safe)[];
         title(): string;
         meetup_current(): $piterjs_meetup;
         place(): $piterjs_place;
@@ -6696,7 +7403,7 @@ declare namespace $.$$ {
         toggle_intro(next?: boolean): boolean;
         video(): boolean;
         video_uri(next?: string): string;
-        tools(): $mol_button_minor[];
+        tools(): ($mol_link | $mol_button_minor)[];
         foot(): ($mol_view | $mol_check_icon | $hyoo_sync_online)[];
         user_id(): `${string}_${string}`;
         speech_public(id: $mol_int62_string, next?: boolean): boolean;
