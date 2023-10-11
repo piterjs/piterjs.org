@@ -1003,6 +1003,16 @@ $piterjs_meetup_page $mol_page
 	Speech!index $piterjs_speech_snippet
 		speech <= speech!index $piterjs_speech
 
+$mol_icon_download $mol_icon path \M5,20H19V18H5M19,9H15V3H9V9H5L12,16L19,9Z
+
+$mol_button_download $mol_button_minor
+	blob null
+	uri \
+	file_name \blob.bin
+	sub /
+		<= Icon $mol_icon_download
+		<= title \
+
 $mol_nav $mol_plugin
 	cycle? false
 	-
@@ -1068,6 +1078,9 @@ $piterjs_meetup_guests $mol_page
 	meetup $piterjs_meetup
 	title \Список гостей
 	tools /
+		<= Dump $mol_button_download
+			file_name \guests.csv
+			blob <= dump_blob $mol_blob
 		<= Close $mol_link
 			arg * guests null
 			sub /
@@ -1490,10 +1503,9 @@ $piterjs_meetup_stats $mol_page
 					title \Дни
 					labels <= days /
 				<= Counts $mol_plot_ruler_vert
-					title \Число
 					series_y <= joins_per_days /
 				<= Joins $mol_plot_bar
-					title \Регистрации
+					title <= joins_title \Регистрации
 					series_y <= joins_per_days /
 				<= Details $mol_plot_mark_cross
 					labels <= days /
@@ -1501,16 +1513,6 @@ $piterjs_meetup_stats $mol_page
 						<= Joins
 
 $mol_icon_camera $mol_icon path \M4,4H7L9,2H15L17,4H20C21.1,4 22,4.9 22,6V18C22,19.1 21.1,20 20,20H4C2.9,20 2,19.1 2,18V6C2,4.9 2.9,4 4,4M12,7C9.24,7 7,9.24 7,12C7,14.76 9.24,17 12,17C14.76,17 17,14.76 17,12C17,9.24 14.76,7 12,7M12,9C13.66,9 15,10.34 15,12C15,13.66 13.66,15 12,15C10.34,15 9,13.66 9,12C9,10.34 10.34,9 12,9Z
-
-$mol_icon_download $mol_icon path \M5,20H19V18H5M19,9H15V3H9V9H5L12,16L19,9Z
-
-$mol_button_download $mol_button_minor
-	blob null
-	uri \
-	file_name \blob.bin
-	sub /
-		<= Icon $mol_icon_download
-		<= title \
 
 $mol_icon_clock $mol_icon path \M12,2C6.48,2 2,6.48 2,12C2,17.52 6.48,22 12,22C17.52,22 22,17.52 22,12C22,6.48 17.52,2 12,2M16.2,16.2L11,13V7H12.5V12.2L17,14.9L16.2,16.2Z
 
