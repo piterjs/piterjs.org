@@ -18,6 +18,7 @@ namespace $.$$ {
 			const table = this.meetup().joined_list().map( person => ({
 				id: person.id(),
 				real_name: person.name_real(),
+				visitor: this.visitor( person.id() ),
 			}) )
 			const text = $mol_csv_serial( table )
 			return new $mol_blob( [ text ], { type: 'text/csv' } )
