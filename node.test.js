@@ -15922,7 +15922,10 @@ var $;
                 return person;
             }
             dump_blob() {
-                const table = this.meetup().joined_list().map(person => ({ real_name: person.name_real() }));
+                const table = this.meetup().joined_list().map(person => ({
+                    id: person.id(),
+                    real_name: person.name_real(),
+                }));
                 const text = $mol_csv_serial(table);
                 return new $mol_blob([text], { type: 'text/csv' });
             }
@@ -18716,7 +18719,7 @@ var $;
                 return Object.values(this.joins_stat()).map(moments => moments.length);
             }
             joins_title() {
-                return super.joins_title() + ` (${Object.keys(this.joins_stat()).length})`;
+                return super.joins_title() + ` (${Object.keys(this.joined_moments()).length})`;
             }
         }
         __decorate([
