@@ -5,11 +5,12 @@ namespace $.$$ {
 		person_list() {
 			return this.meetup().joined_list()
 				.filter( $mol_match_text( this.filter(), person => [ person.name_real(), person.id() ] ) )
-				.map( person => this.Person( person ) )
+				.map( person => this.Person( person.id() ) )
 		}
 
-		person( person: $piterjs_person ) {
-			return person
+		@ $mol_mem_key
+		person( person: $mol_int62_string ) {
+			return this.meetup().world()!.Fund( $piterjs_person ).Item( person )
 		}
 
 		@ $mol_mem
@@ -17,6 +18,7 @@ namespace $.$$ {
 			const table = this.meetup().joined_list().map( person => ({
 				id: person.id(),
 				real_name: person.name_real(),
+				visitor: this.visitor( person.id() ),
 			}) )
 			const text = $mol_csv_serial( table )
 			return new $mol_blob( [ text ], { type: 'text/csv' } )

@@ -1,5 +1,6 @@
 $piterjs_meetup_guests $mol_page
 	meetup $piterjs_meetup
+		visitor*? => visitor*?
 	title \Список гостей
 	tools /
 		<= Dump $mol_button_download
@@ -16,6 +17,9 @@ $piterjs_meetup_guests $mol_page
 				query? <=> filter? \
 			<= Person_list $mol_list
 				rows <= person_list /
-					<= Person*0_0 $piterjs_person_snippet
-						person <= person* $piterjs_person
-						needle <= filter
+					<= Person*0_0 $mol_check_box
+						checked? <=> visitor*?
+						label /
+							<= Person_snippet* $piterjs_person_snippet
+								person <= person* $piterjs_person
+								needle <= filter

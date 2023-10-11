@@ -82,6 +82,25 @@ namespace $ {
 			return this.joined_node().total()
 		}
 
+		@ $mol_mem
+		visitors_node() {
+			return this.sub( 'visitors', $hyoo_crowd_list )
+		}
+
+		@ $mol_mem_key
+		visitor( peer: $mol_int62_string, next?: boolean ) {
+			return this.visitors_node().has( peer, next )
+		}
+
+		@ $mol_mem
+		visitors_list() {
+			const Person = this.world()!.Fund( $piterjs_person )
+			return this.visitors_node().list()
+				.map( $mol_int62_string_ensure )
+				.filter( $mol_guard_defined )
+				.map( id => Person.Item( id ) )
+		}
+
 	}
 
 }
