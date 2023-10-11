@@ -18,6 +18,11 @@ namespace $.$$ {
 		joins_per_days() {
 			return Object.values( this.joins_stat() ).map( moments => moments!.length )
 		}
+
+		@ $mol_mem
+		joins_title() {
+			return super.joins_title() + ` (${ Object.keys( this.joins_stat() ).length })`
+		}
 		
 	}
 }
