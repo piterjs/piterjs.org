@@ -1076,6 +1076,7 @@ $piterjs_person_snippet $mol_dimmer
 
 $piterjs_meetup_guests $mol_page
 	meetup $piterjs_meetup
+		visitor*? => visitor*?
 	title \Список гостей
 	tools /
 		<= Dump $mol_button_download
@@ -1092,9 +1093,12 @@ $piterjs_meetup_guests $mol_page
 				query? <=> filter? \
 			<= Person_list $mol_list
 				rows <= person_list /
-					<= Person*0_0 $piterjs_person_snippet
-						person <= person* $piterjs_person
-						needle <= filter
+					<= Person*0_0 $mol_check_box
+						checked? <=> visitor*?
+						label /
+							<= Person_snippet* $piterjs_person_snippet
+								person <= person* $piterjs_person
+								needle <= filter
 
 $mol_svg_group $mol_svg
 	dom_name \g
@@ -1490,6 +1494,8 @@ $mol_chart $mol_view
 $piterjs_meetup_stats $mol_page
 	meetup $piterjs_meetup
 		joined_moments => joined_moments
+		visitors_list => visitors_list
+		visitor* => visitor*
 	title \Статистика
 	tools /
 		<= Close $mol_link
@@ -1507,6 +1513,9 @@ $piterjs_meetup_stats $mol_page
 				<= Joins $mol_plot_bar
 					title <= joins_title \Регистрации
 					series_y <= joins_per_days /
+				<= Visits $mol_plot_bar
+					title <= visits_title \Визиты
+					series_y <= visits_per_days /
 				<= Details $mol_plot_mark_cross
 					labels <= days /
 					graphs /

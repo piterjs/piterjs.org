@@ -1716,6 +1716,9 @@ declare namespace $ {
             [k: string]: $mol_time_moment;
         };
         joined_count(): number;
+        visitors_node(): $hyoo_crowd_list;
+        visitor(peer: $mol_int62_string, next?: boolean): boolean;
+        visitors_list(): $piterjs_person[];
     }
 }
 
@@ -4260,6 +4263,7 @@ declare namespace $.$$ {
 
 declare namespace $ {
     class $piterjs_meetup_guests extends $mol_page {
+        visitor(id: any, next?: any): boolean;
         meetup(): $piterjs_meetup;
         title(): string;
         tools(): readonly any[];
@@ -4271,7 +4275,8 @@ declare namespace $ {
         filter(next?: any): string;
         Filter(): $$.$mol_search;
         person(id: any): $piterjs_person;
-        Person(id: any): $$.$piterjs_person_snippet;
+        Person_snippet(id: any): $$.$piterjs_person_snippet;
+        Person(id: any): $mol_check_box;
         person_list(): readonly any[];
         Person_list(): $$.$mol_list;
         Content(): $$.$mol_list;
@@ -4288,8 +4293,8 @@ declare namespace $ {
 
 declare namespace $.$$ {
     class $piterjs_meetup_guests extends $.$piterjs_meetup_guests {
-        person_list(): $piterjs_person_snippet[];
-        person(person: $piterjs_person): $piterjs_person;
+        person_list(): $mol_check_box[];
+        person(person: $mol_int62_string): $piterjs_person;
         dump_blob(): Blob;
     }
 }
@@ -4847,6 +4852,8 @@ declare namespace $ {
         joined_moments(): {
             [k: string]: $mol_time_moment;
         };
+        visitors_list(): $piterjs_person[];
+        visitor(id: any): boolean;
         meetup(): $piterjs_meetup;
         title(): string;
         tools(): readonly any[];
@@ -4859,6 +4866,9 @@ declare namespace $ {
         Counts(): $$.$mol_plot_ruler_vert;
         joins_title(): string;
         Joins(): $$.$mol_plot_bar;
+        visits_title(): string;
+        visits_per_days(): readonly any[];
+        Visits(): $$.$mol_plot_bar;
         Details(): $$.$mol_plot_mark_cross;
         Chart(): $mol_chart;
     }
@@ -4876,10 +4886,12 @@ declare namespace $ {
 
 declare namespace $.$$ {
     class $piterjs_meetup_stats extends $.$piterjs_meetup_stats {
-        joins_stat(): $mol_type_immutable_deep<Record<string, $mol_time_moment[] | undefined>>;
+        joins_stat(): $mol_type_immutable_deep<Record<string, [string, $mol_time_moment][] | undefined>>;
         days(): string[];
         joins_per_days(): number[];
         joins_title(): string;
+        visits_per_days(): number[];
+        visits_title(): string;
     }
 }
 

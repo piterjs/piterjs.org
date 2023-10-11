@@ -6120,6 +6120,19 @@ var $;
         joined_count() {
             return this.joined_node().total();
         }
+        visitors_node() {
+            return this.sub('visitors', $hyoo_crowd_list);
+        }
+        visitor(peer, next) {
+            return this.visitors_node().has(peer, next);
+        }
+        visitors_list() {
+            const Person = this.world().Fund($piterjs_person);
+            return this.visitors_node().list()
+                .map($mol_int62_string_ensure)
+                .filter($mol_guard_defined)
+                .map(id => Person.Item(id));
+        }
     }
     __decorate([
         $mol_mem
@@ -6160,6 +6173,15 @@ var $;
     __decorate([
         $mol_mem
     ], $piterjs_meetup.prototype, "joined_count", null);
+    __decorate([
+        $mol_mem
+    ], $piterjs_meetup.prototype, "visitors_node", null);
+    __decorate([
+        $mol_mem_key
+    ], $piterjs_meetup.prototype, "visitor", null);
+    __decorate([
+        $mol_mem
+    ], $piterjs_meetup.prototype, "visitors_list", null);
     $.$piterjs_meetup = $piterjs_meetup;
 })($ || ($ = {}));
 //piterjs/meetup/meetup.ts
@@ -15747,6 +15769,9 @@ var $;
 var $;
 (function ($) {
     class $piterjs_meetup_guests extends $mol_page {
+        visitor(id, next) {
+            return this.meetup().visitor(id, next);
+        }
         meetup() {
             const obj = new this.$.$piterjs_meetup();
             return obj;
@@ -15804,10 +15829,18 @@ var $;
             const obj = new this.$.$piterjs_person();
             return obj;
         }
-        Person(id) {
+        Person_snippet(id) {
             const obj = new this.$.$piterjs_person_snippet();
             obj.person = () => this.person(id);
             obj.needle = () => this.filter();
+            return obj;
+        }
+        Person(id) {
+            const obj = new this.$.$mol_check_box();
+            obj.checked = (next) => this.visitor(id, next);
+            obj.label = () => [
+                this.Person_snippet(id)
+            ];
             return obj;
         }
         person_list() {
@@ -15853,6 +15886,9 @@ var $;
     __decorate([
         $mol_mem_key
     ], $piterjs_meetup_guests.prototype, "person", null);
+    __decorate([
+        $mol_mem_key
+    ], $piterjs_meetup_guests.prototype, "Person_snippet", null);
     __decorate([
         $mol_mem_key
     ], $piterjs_meetup_guests.prototype, "Person", null);
@@ -15916,15 +15952,16 @@ var $;
             person_list() {
                 return this.meetup().joined_list()
                     .filter($mol_match_text(this.filter(), person => [person.name_real(), person.id()]))
-                    .map(person => this.Person(person));
+                    .map(person => this.Person(person.id()));
             }
             person(person) {
-                return person;
+                return this.meetup().world().Fund($piterjs_person).Item(person);
             }
             dump_blob() {
                 const table = this.meetup().joined_list().map(person => ({
                     id: person.id(),
                     real_name: person.name_real(),
+                    visitor: this.visitor(person.id()),
                 }));
                 const text = $mol_csv_serial(table);
                 return new $mol_blob([text], { type: 'text/csv' });
@@ -15933,6 +15970,9 @@ var $;
         __decorate([
             $mol_mem
         ], $piterjs_meetup_guests.prototype, "person_list", null);
+        __decorate([
+            $mol_mem_key
+        ], $piterjs_meetup_guests.prototype, "person", null);
         __decorate([
             $mol_mem
         ], $piterjs_meetup_guests.prototype, "dump_blob", null);
@@ -17012,7 +17052,7 @@ var $;
                 return (8 / Math.sqrt(this.indexes().length)).toPrecision(2) + '%';
             }
             color() {
-                return `hsl( ${this.hue()} , 70% , 85% )`;
+                return `hsl( ${this.hue()} , 80% , 85% )`;
             }
             dimensions() {
                 let next = new this.$.$mol_vector_2d($mol_vector_range_full.inversed, new this.$.$mol_vector_range(0, 0));
@@ -18581,6 +18621,12 @@ var $;
         joined_moments() {
             return this.meetup().joined_moments();
         }
+        visitors_list() {
+            return this.meetup().visitors_list();
+        }
+        visitor(id) {
+            return this.meetup().visitor(id);
+        }
         meetup() {
             const obj = new this.$.$piterjs_meetup();
             return obj;
@@ -18638,6 +18684,18 @@ var $;
             obj.series_y = () => this.joins_per_days();
             return obj;
         }
+        visits_title() {
+            return "Визиты";
+        }
+        visits_per_days() {
+            return [];
+        }
+        Visits() {
+            const obj = new this.$.$mol_plot_bar();
+            obj.title = () => this.visits_title();
+            obj.series_y = () => this.visits_per_days();
+            return obj;
+        }
         Details() {
             const obj = new this.$.$mol_plot_mark_cross();
             obj.labels = () => this.days();
@@ -18652,6 +18710,7 @@ var $;
                 this.Days(),
                 this.Counts(),
                 this.Joins(),
+                this.Visits(),
                 this.Details()
             ];
             return obj;
@@ -18675,6 +18734,9 @@ var $;
     __decorate([
         $mol_mem
     ], $piterjs_meetup_stats.prototype, "Joins", null);
+    __decorate([
+        $mol_mem
+    ], $piterjs_meetup_stats.prototype, "Visits", null);
     __decorate([
         $mol_mem
     ], $piterjs_meetup_stats.prototype, "Details", null);
@@ -18710,16 +18772,22 @@ var $;
     (function ($$) {
         class $piterjs_meetup_stats extends $.$piterjs_meetup_stats {
             joins_stat() {
-                return $mol_array_groups(Object.values(this.joined_moments()), moment => moment.toString('MM-DD'));
+                return $mol_array_groups(Object.entries(this.joined_moments()), ([id, moment]) => moment.toString('MM-DD'));
             }
             days() {
                 return Object.keys(this.joins_stat());
             }
             joins_per_days() {
-                return Object.values(this.joins_stat()).map(moments => moments.length);
+                return Object.values(this.joins_stat()).map(pairs => pairs.length);
             }
             joins_title() {
                 return super.joins_title() + ` (${Object.keys(this.joined_moments()).length})`;
+            }
+            visits_per_days() {
+                return Object.values(this.joins_stat()).map(pairs => pairs.filter(([id]) => this.visitor(id)).length);
+            }
+            visits_title() {
+                return super.visits_title() + ` (${this.visitors_list().length})`;
             }
         }
         __decorate([
@@ -18734,6 +18802,12 @@ var $;
         __decorate([
             $mol_mem
         ], $piterjs_meetup_stats.prototype, "joins_title", null);
+        __decorate([
+            $mol_mem
+        ], $piterjs_meetup_stats.prototype, "visits_per_days", null);
+        __decorate([
+            $mol_mem
+        ], $piterjs_meetup_stats.prototype, "visits_title", null);
         $$.$piterjs_meetup_stats = $piterjs_meetup_stats;
     })($$ = $.$$ || ($.$$ = {}));
 })($ || ($ = {}));
