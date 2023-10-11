@@ -11,6 +11,10 @@ namespace $.$$ {
 				self: `stretch`,
 			}
 		},
+
+		Person_snippet: {
+			padding: 0,
+		},
 		
 	} )
 	
