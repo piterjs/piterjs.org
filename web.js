@@ -5490,6 +5490,7 @@ var $;
             }
         }
         name_real(next, cache) {
+            $mol_wire_solid();
             if (cache)
                 return next;
             const secret = this.secret();
