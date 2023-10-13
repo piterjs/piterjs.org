@@ -16337,7 +16337,8 @@ var $;
                 ...super.attr(),
                 x: this.pos_x(),
                 y: this.pos_y(),
-                "text-anchor": this.align()
+                "text-anchor": this.align_hor(),
+                "alignment-baseline": this.align_vert()
             };
         }
         sub() {
@@ -16353,6 +16354,12 @@ var $;
         }
         align() {
             return "middle";
+        }
+        align_hor() {
+            return this.align();
+        }
+        align_vert() {
+            return "baseline";
         }
         text() {
             return "";
@@ -17228,7 +17235,7 @@ var $;
 "use strict";
 var $;
 (function ($) {
-    $mol_style_attach("mol/svg/text/box/box.view.css", "[mol_svg_text_box_back] {\n\tstroke: none;\n\tfill: var(--mol_theme_back);\n}\n");
+    $mol_style_attach("mol/svg/text/box/box.view.css", "[mol_svg_text_box_back] {\n\tstroke: none;\n\tfill: var(--mol_theme_back);\n\ttransition: none;\n}\n");
 })($ || ($ = {}));
 //mol/svg/text/box/-css/box.view.css.ts
 ;
@@ -17241,6 +17248,9 @@ var $;
         }
         title_x_gap() {
             return 4;
+        }
+        title_y_gap() {
+            return 22;
         }
         threshold() {
             return 16;
@@ -17408,6 +17418,13 @@ var $;
                     return '0';
                 return nearest.scaled.y.toFixed(3);
             }
+            title_y_pos_x() {
+                const nearest = this.nearest();
+                if (!nearest)
+                    return '0';
+                const pos = this.title_y_gap();
+                return pos.toFixed(3);
+            }
         }
         __decorate([
             $mol_mem
@@ -17420,7 +17437,7 @@ var $;
 "use strict";
 var $;
 (function ($) {
-    $mol_style_attach("mol/plot/mark/cross/cross.view.css", "[mol_plot_mark_cross_curve] {\n\tcolor: var(--mol_theme_focus);\n\tstroke-width: 1px;\n\tstroke: currentColor;\n\tpointer-events: none;\n}\n\n[mol_plot_mark_cross_label_x], [mol_plot_mark_cross_label_y] {\n\tcolor: var(--mol_theme_focus);\n\tfont-weight: bold;\n\tpointer-events: none;\n}\n\n[mol_plot_mark_cross_label_y] {\n\ttransform: translateY( 4px );\n}\n");
+    $mol_style_attach("mol/plot/mark/cross/cross.view.css", "[mol_plot_mark_cross_curve] {\n\tcolor: var(--mol_theme_focus);\n\tstroke-width: 1px;\n\tstroke: currentColor;\n\tpointer-events: none;\n}\n\n[mol_plot_mark_cross_label_x], [mol_plot_mark_cross_label_y] {\n\tcolor: var(--mol_theme_focus);\n\tpointer-events: none;\n}\n\n[mol_plot_mark_cross_label_y] {\n\ttransform: translateY( 4px );\n}\n");
 })($ || ($ = {}));
 //mol/plot/mark/cross/-css/cross.view.css.ts
 ;
@@ -18783,7 +18800,7 @@ var $;
     (function ($$) {
         class $piterjs_meetup_stats extends $.$piterjs_meetup_stats {
             joins_stat() {
-                return $mol_array_groups(Object.entries(this.joined_moments()), ([id, moment]) => moment.toString('MM-DD'));
+                return $mol_array_groups(Object.entries(this.joined_moments()), ([id, moment]) => moment.toString('DD WD'));
             }
             days() {
                 return Object.keys(this.joins_stat());
