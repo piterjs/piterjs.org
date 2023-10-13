@@ -23,6 +23,7 @@ namespace $ {
 
 		@ $mol_mem
 		name_real( next?: string, cache?: 'cache' ) {
+			$mol_wire_solid()
 			if( cache ) return next!
 
 			const secret = this.secret()
