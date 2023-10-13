@@ -1,13 +1,11 @@
 namespace $.$$ {
 
-	const { rem } = $mol_style_unit
-
 	$mol_style_define( $piterjs_speech_page , {
 
 		flex: {
 			grow: 0,
 			shrink: 0,
-			basis: rem(60),
+			basis: `40rem`,
 		},
 
 		Tools: {
