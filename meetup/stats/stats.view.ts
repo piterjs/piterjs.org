@@ -5,7 +5,7 @@ namespace $.$$ {
 		joins_stat() {
 			return $mol_array_groups(
 				Object.entries( this.joined_moments() ),
-				([ id, moment ])=> moment.toString( 'MM-DD' ),
+				([ id, moment ])=> moment.toString( 'DD WD' ),
 			)
 		}
 		
