@@ -31,6 +31,12 @@ namespace $.$$ {
 		Person_snippet: {
 			padding: 0,
 		},
+
+		Person_join_moment: {
+			font: {
+				size: `.8rem`,
+			},
+		},
 		
 	} )
 	
