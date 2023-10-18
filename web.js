@@ -15241,14 +15241,13 @@ var $;
             return obj;
         }
         person_join_moment(id) {
-            const obj = new this.$.$mol_time_moment();
-            return obj;
+            return "";
         }
         Person_join_moment(id) {
-            const obj = new this.$.$mol_date();
-            obj.value_moment = () => this.person_join_moment(id);
-            obj.enabled = () => false;
-            obj.align_hor = () => "left";
+            const obj = new this.$.$mol_view();
+            obj.sub = () => [
+                this.person_join_moment(id)
+            ];
             return obj;
         }
         Person(id) {
@@ -15308,9 +15307,6 @@ var $;
     __decorate([
         $mol_mem_key
     ], $piterjs_meetup_guests.prototype, "Person_visitor", null);
-    __decorate([
-        $mol_mem_key
-    ], $piterjs_meetup_guests.prototype, "person_join_moment", null);
     __decorate([
         $mol_mem_key
     ], $piterjs_meetup_guests.prototype, "Person_join_moment", null);
@@ -15392,7 +15388,7 @@ var $;
                 return new $mol_blob([text], { type: 'text/csv' });
             }
             person_join_moment(id) {
-                return this.meetup().joined_moments()[id];
+                return this.meetup().joined_moments()[id].toString(`DD WD hh:mm`);
             }
         }
         __decorate([
@@ -15444,9 +15440,8 @@ var $;
                 padding: 0,
             },
             Person_join_moment: {
-                font: {
-                    size: `.8rem`,
-                },
+                padding: $mol_gap.text,
+                color: $mol_theme.shade,
             },
         });
     })($$ = $.$$ || ($.$$ = {}));

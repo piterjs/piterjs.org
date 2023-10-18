@@ -4277,8 +4277,8 @@ declare namespace $ {
         person(id: any): $piterjs_person;
         Person_snippet(id: any): $$.$piterjs_person_snippet;
         Person_visitor(id: any): $mol_check_box;
-        person_join_moment(id: any): $mol_time_moment;
-        Person_join_moment(id: any): $$.$mol_date;
+        person_join_moment(id: any): string;
+        Person_join_moment(id: any): $mol_view;
         Person(id: any): $mol_view;
         person_list(): readonly any[];
         Person_list(): $$.$mol_list;
@@ -4299,7 +4299,7 @@ declare namespace $.$$ {
         person_list(): $mol_view[];
         person(person: $mol_int62_string): $piterjs_person;
         dump_blob(): Blob;
-        person_join_moment(id: $mol_int62_string): $mol_time_moment;
+        person_join_moment(id: $mol_int62_string): string;
     }
 }
 
