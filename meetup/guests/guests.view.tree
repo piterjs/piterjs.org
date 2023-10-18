@@ -17,9 +17,14 @@ $piterjs_meetup_guests $mol_page
 				query? <=> filter? \
 			<= Person_list $mol_list
 				rows <= person_list /
-					<= Person*0_0 $mol_check_box
-						checked? <=> visitor*?
-						label /
-							<= Person_snippet* $piterjs_person_snippet
-								person <= person* $piterjs_person
-								needle <= filter
+					<= Person*0_0 $mol_view sub /
+						<= Person_visitor* $mol_check_box
+							checked? <=> visitor*?
+							label /
+								<= Person_snippet* $piterjs_person_snippet
+									person <= person* $piterjs_person
+									needle <= filter
+						<= Person_join_moment* $mol_date
+							value_moment <= person_join_moment* $mol_time_moment
+							enabled false
+							align_hor \left

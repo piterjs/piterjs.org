@@ -23,6 +23,11 @@ namespace $.$$ {
 			const text = $mol_csv_serial( table )
 			return new $mol_blob( [ text ], { type: 'text/csv' } )
 		}
+
+		@ $mol_mem_key
+		person_join_moment( id: $mol_int62_string ) {
+			return this.meetup().joined_moments()[ id ]
+		}
 		
 	}
 }
