@@ -24,7 +24,5 @@ $piterjs_meetup_guests $mol_page
 								<= Person_snippet* $piterjs_person_snippet
 									person <= person* $piterjs_person
 									needle <= filter
-						<= Person_join_moment* $mol_date
-							value_moment <= person_join_moment* $mol_time_moment
-							enabled false
-							align_hor \left
+						<= Person_join_moment* $mol_view
+							sub / <= person_join_moment* \

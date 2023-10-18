@@ -33,9 +33,8 @@ namespace $.$$ {
 		},
 
 		Person_join_moment: {
-			font: {
-				size: `.8rem`,
-			},
+			padding: $mol_gap.text,
+			color: $mol_theme.shade,
 		},
 		
 	} )
