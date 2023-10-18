@@ -627,7 +627,7 @@ declare namespace $ {
             style?: 'normal' | 'italic' | Common;
             weight?: 'normal' | 'bold' | 'lighter' | 'bolder' | 100 | 200 | 300 | 400 | 500 | 600 | 700 | 800 | 900 | Common;
             size?: 'xx-small' | 'x-small' | 'small' | 'medium' | 'large' | 'x-large' | 'xx-large' | 'xxx-large' | 'smaller' | 'larger' | Length | Common;
-            family?: 'serif' | 'sans-serif' | 'monospace' | 'cursive' | 'fantasy' | 'system-ui' | 'ui-serif' | 'ui-sans-serif' | 'ui-monospace' | 'ui-rounded' | 'emoji' | 'math' | 'fangsong' | Common;
+            family?: string & {} | 'serif' | 'sans-serif' | 'monospace' | 'cursive' | 'fantasy' | 'system-ui' | 'ui-serif' | 'ui-sans-serif' | 'ui-monospace' | 'ui-rounded' | 'emoji' | 'math' | 'fangsong' | Common;
         };
         color?: $mol_style_properties_color | Common;
         display?: 'block' | 'inline' | 'run-in' | 'list-item' | 'none' | 'flow' | 'flow-root' | 'table' | 'flex' | 'grid' | 'contents' | 'table-row-group' | 'table-header-group' | 'table-footer-group' | 'table-column-group' | 'table-row' | 'table-cell' | 'table-column' | 'table-caption' | 'inline-block' | 'inline-table' | 'inline-flex' | 'inline-grid' | 'ruby' | 'ruby-base' | 'ruby-text' | 'ruby-base-container' | 'ruby-text-container' | Common;
@@ -4146,7 +4146,10 @@ declare namespace $ {
         Filter(): $$.$mol_search;
         person(id: any): $piterjs_person;
         Person_snippet(id: any): $$.$piterjs_person_snippet;
-        Person(id: any): $mol_check_box;
+        Person_visitor(id: any): $mol_check_box;
+        person_join_moment(id: any): $mol_time_moment;
+        Person_join_moment(id: any): $$.$mol_date;
+        Person(id: any): $mol_view;
         person_list(): readonly any[];
         Person_list(): $$.$mol_list;
         Content(): $$.$mol_list;
@@ -4163,9 +4166,10 @@ declare namespace $ {
 
 declare namespace $.$$ {
     class $piterjs_meetup_guests extends $.$piterjs_meetup_guests {
-        person_list(): $mol_check_box[];
+        person_list(): $mol_view[];
         person(person: $mol_int62_string): $piterjs_person;
         dump_blob(): Blob;
+        person_join_moment(id: $mol_int62_string): $mol_time_moment;
     }
 }
 
@@ -5414,8 +5418,10 @@ declare namespace $ {
     class $hyoo_map extends $mol_view {
         attr(): Record<string, any>;
         tiles_options(): Record<string, any>;
+        auto(): readonly any[];
         sub(): readonly any[];
         theme(): string;
+        center_offset(): any;
         query(val?: any): string;
         search(event?: any): any;
         Search(): $$.$mol_search;
@@ -5527,6 +5533,7 @@ declare namespace $.$$ {
         zoom_limit(): $mol_vector_range<number>;
         zoom(next?: number): number;
         search(): void;
+        geo_jump(coord: $mol_vector_2d<number>, zoom?: number): void;
         draw_uri(): string;
         tiles_uri(): any;
         theme(): "$mol_theme_light" | "$mol_theme_dark";

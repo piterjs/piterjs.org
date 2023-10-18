@@ -15232,11 +15232,30 @@ var $;
             obj.needle = () => this.filter();
             return obj;
         }
-        Person(id) {
+        Person_visitor(id) {
             const obj = new this.$.$mol_check_box();
             obj.checked = (next) => this.visitor(id, next);
             obj.label = () => [
                 this.Person_snippet(id)
+            ];
+            return obj;
+        }
+        person_join_moment(id) {
+            const obj = new this.$.$mol_time_moment();
+            return obj;
+        }
+        Person_join_moment(id) {
+            const obj = new this.$.$mol_date();
+            obj.value_moment = () => this.person_join_moment(id);
+            obj.enabled = () => false;
+            obj.align_hor = () => "left";
+            return obj;
+        }
+        Person(id) {
+            const obj = new this.$.$mol_view();
+            obj.sub = () => [
+                this.Person_visitor(id),
+                this.Person_join_moment(id)
             ];
             return obj;
         }
@@ -15286,6 +15305,15 @@ var $;
     __decorate([
         $mol_mem_key
     ], $piterjs_meetup_guests.prototype, "Person_snippet", null);
+    __decorate([
+        $mol_mem_key
+    ], $piterjs_meetup_guests.prototype, "Person_visitor", null);
+    __decorate([
+        $mol_mem_key
+    ], $piterjs_meetup_guests.prototype, "person_join_moment", null);
+    __decorate([
+        $mol_mem_key
+    ], $piterjs_meetup_guests.prototype, "Person_join_moment", null);
     __decorate([
         $mol_mem_key
     ], $piterjs_meetup_guests.prototype, "Person", null);
@@ -15363,6 +15391,9 @@ var $;
                 const text = $mol_csv_serial(table);
                 return new $mol_blob([text], { type: 'text/csv' });
             }
+            person_join_moment(id) {
+                return this.meetup().joined_moments()[id];
+            }
         }
         __decorate([
             $mol_mem
@@ -15373,6 +15404,9 @@ var $;
         __decorate([
             $mol_mem
         ], $piterjs_meetup_guests.prototype, "dump_blob", null);
+        __decorate([
+            $mol_mem_key
+        ], $piterjs_meetup_guests.prototype, "person_join_moment", null);
         $$.$piterjs_meetup_guests = $piterjs_meetup_guests;
     })($$ = $.$$ || ($.$$ = {}));
 })($ || ($ = {}));
@@ -15385,12 +15419,26 @@ var $;
     (function ($$) {
         $mol_style_define($piterjs_meetup_guests, {
             flex: {
-                basis: `20rem`,
+                basis: `30rem`,
             },
             Filter: {
                 align: {
                     self: `stretch`,
                 }
+            },
+            Person: {
+                justify: {
+                    content: `flex-end`,
+                },
+                flex: {
+                    wrap: `wrap`,
+                },
+            },
+            Person_visitor: {
+                flex: {
+                    grow: 1,
+                },
+                maxWidth: `100%`,
             },
             Person_snippet: {
                 padding: 0,
@@ -20985,6 +21033,11 @@ var $;
                 photo: "https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{level}/{y}/{x}"
             };
         }
+        auto() {
+            return [
+                this.center_offset()
+            ];
+        }
         sub() {
             return [
                 this.Main()
@@ -20992,6 +21045,9 @@ var $;
         }
         theme() {
             return "$mol_theme_light";
+        }
+        center_offset() {
+            return null;
         }
         query(val) {
             if (val !== undefined)
@@ -21433,6 +21489,10 @@ var $;
                 this.zoom(zoom);
                 this.center(center);
             }
+            geo_jump(coord, zoom = 1) {
+                this.zoom(zoom);
+                this.center(this.Pane().geo_to_tile(coord).multed0(-zoom).added1(this.center_offset()));
+            }
             draw_uri() {
                 return super.draw_uri()
                     .replace('{zoom}', this.$.$mol_state_arg.value('zoom') ?? '')
@@ -21460,6 +21520,9 @@ var $;
         __decorate([
             $mol_mem
         ], $hyoo_map.prototype, "zoom", null);
+        __decorate([
+            $mol_action
+        ], $hyoo_map.prototype, "geo_jump", null);
         __decorate([
             $mol_mem
         ], $hyoo_map.prototype, "draw_uri", null);
