@@ -19455,10 +19455,19 @@ var $;
         theme() {
             return "$mol_theme_light";
         }
+        attr() {
+            return {
+                ...super.attr(),
+                piterjs_speech_poster_aspect: this.aspect()
+            };
+        }
         content() {
             return [
                 this.Main()
             ];
+        }
+        aspect() {
+            return "1:1";
         }
         Title() {
             const obj = new this.$.$mol_paragraph();
@@ -19567,11 +19576,23 @@ var $;
                 weight: `bolder`,
             },
             lineHeight: `4rem`,
+            transition: `none`,
             width: `1000px`,
             height: `1000px`,
-            aspectRatio: 1,
+            '@': {
+                piterjs_speech_poster_aspect: {
+                    '1:1': {
+                        width: `1000px`,
+                        height: `1000px`,
+                    },
+                    '16:9': {
+                        width: `1920px`,
+                        height: `1080px`,
+                    },
+                },
+            },
             $piterjs_screen_lines: {
-                width: `10rem`,
+                width: `20rem`,
             },
             Main: {
                 flex: {
@@ -20143,25 +20164,52 @@ var $;
         editing() {
             return false;
         }
-        poster_blob(next) {
+        Poster_copy_icon() {
+            const obj = new this.$.$mol_icon_camera();
+            return obj;
+        }
+        poster_1_1_blob(next) {
             if (next !== undefined)
                 return next;
             const obj = new this.$.$mol_blob();
             return obj;
         }
-        poster_name() {
-            return "poster.png";
+        poster_1_1_name() {
+            return "poster_universal.png";
         }
-        Poster_copy_icon() {
-            const obj = new this.$.$mol_icon_camera();
+        Poster_1_1() {
+            const obj = new this.$.$mol_button_download();
+            obj.blob = () => this.poster_1_1_blob();
+            obj.file_name = () => this.poster_1_1_name();
+            obj.title = () => "1:1";
+            return obj;
+        }
+        poster_16_9_blob(next) {
+            if (next !== undefined)
+                return next;
+            const obj = new this.$.$mol_blob();
+            return obj;
+        }
+        poster_16_9_name() {
+            return "poster_fhd.png";
+        }
+        Poster_16_19() {
+            const obj = new this.$.$mol_button_download();
+            obj.blob = () => this.poster_16_9_blob();
+            obj.file_name = () => this.poster_16_9_name();
+            obj.title = () => "16:9";
             return obj;
         }
         Poster_copy() {
-            const obj = new this.$.$mol_button_download();
+            const obj = new this.$.$mol_pick();
             obj.hint = () => "Скачать постер";
-            obj.blob = () => this.poster_blob();
-            obj.file_name = () => this.poster_name();
-            obj.Icon = () => this.Poster_copy_icon();
+            obj.trigger_content = () => [
+                this.Poster_copy_icon()
+            ];
+            obj.bubble_content = () => [
+                this.Poster_1_1(),
+                this.Poster_16_19()
+            ];
             return obj;
         }
         speech_public(next) {
@@ -20199,9 +20247,15 @@ var $;
             ];
             return obj;
         }
+        poster_aspect(next) {
+            if (next !== undefined)
+                return next;
+            return "1:1";
+        }
         Poster() {
             const obj = new this.$.$piterjs_speech_poster();
             obj.speech = () => this.speech();
+            obj.aspect = () => this.poster_aspect();
             return obj;
         }
         Poster_zone() {
@@ -20264,10 +20318,19 @@ var $;
     ], $piterjs_speech_page.prototype, "Title", null);
     __decorate([
         $mol_mem
-    ], $piterjs_speech_page.prototype, "poster_blob", null);
+    ], $piterjs_speech_page.prototype, "Poster_copy_icon", null);
     __decorate([
         $mol_mem
-    ], $piterjs_speech_page.prototype, "Poster_copy_icon", null);
+    ], $piterjs_speech_page.prototype, "poster_1_1_blob", null);
+    __decorate([
+        $mol_mem
+    ], $piterjs_speech_page.prototype, "Poster_1_1", null);
+    __decorate([
+        $mol_mem
+    ], $piterjs_speech_page.prototype, "poster_16_9_blob", null);
+    __decorate([
+        $mol_mem
+    ], $piterjs_speech_page.prototype, "Poster_16_19", null);
     __decorate([
         $mol_mem
     ], $piterjs_speech_page.prototype, "Poster_copy", null);
@@ -20289,6 +20352,9 @@ var $;
     __decorate([
         $mol_mem
     ], $piterjs_speech_page.prototype, "Close", null);
+    __decorate([
+        $mol_mem
+    ], $piterjs_speech_page.prototype, "poster_aspect", null);
     __decorate([
         $mol_mem
     ], $piterjs_speech_page.prototype, "Poster", null);
@@ -20429,10 +20495,21 @@ var $;
                     return null;
                 return super.Public();
             }
-            poster_name() {
-                return `${this.speaker().title()} - ${this.title()}.png`;
+            poster_1_1_name() {
+                return `${this.speaker().title()} - ${this.title()} 1-1.png`;
             }
-            poster_blob() {
+            poster_16_9_name() {
+                return `${this.speaker().title()} - ${this.title()} 16-9.png`;
+            }
+            poster_1_1_blob() {
+                this.poster_aspect(`1:1`);
+                const canvas = $mol_wire_sync(this.$).$mol_dom_capture_canvas(this.Poster().dom_tree());
+                const picture = $mol_picture.fit(canvas);
+                const blob = picture.format(`image/png`);
+                return blob;
+            }
+            poster_16_9_blob() {
+                this.poster_aspect(`16:9`);
                 const canvas = $mol_wire_sync(this.$).$mol_dom_capture_canvas(this.Poster().dom_tree());
                 const picture = $mol_picture.fit(canvas);
                 const blob = picture.format(`image/png`);

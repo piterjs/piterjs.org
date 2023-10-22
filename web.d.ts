@@ -4956,7 +4956,9 @@ declare namespace $ {
         speaker(): $piterjs_speaker;
         speech(): $piterjs_speech;
         theme(): string;
+        attr(): Record<string, any>;
         content(): readonly any[];
+        aspect(): string;
         Title(): $$.$mol_paragraph;
         photo_uri(): string;
         Photo(): $piterjs_image;
@@ -5095,16 +5097,21 @@ declare namespace $ {
         tools(): readonly any[];
         body(): readonly any[];
         editing(): boolean;
-        poster_blob(next?: any): Blob;
-        poster_name(): string;
         Poster_copy_icon(): $mol_icon_camera;
-        Poster_copy(): $$.$mol_button_download;
+        poster_1_1_blob(next?: any): Blob;
+        poster_1_1_name(): string;
+        Poster_1_1(): $$.$mol_button_download;
+        poster_16_9_blob(next?: any): Blob;
+        poster_16_9_name(): string;
+        Poster_16_19(): $$.$mol_button_download;
+        Poster_copy(): $$.$mol_pick;
         speech_public(next?: any): boolean;
         Public_icon(): $mol_icon_eye;
         Public(): $mol_check_icon;
         Start(): $$.$mol_pick_time;
         Close_icon(): $mol_icon_cross;
         Close(): $$.$mol_link;
+        poster_aspect(next?: any): string;
         Poster(): $$.$piterjs_speech_poster;
         Poster_zone(): $mol_view;
         Description(): $$.$mol_textarea;
@@ -5131,8 +5138,10 @@ declare namespace $.$$ {
         speaker(): $piterjs_speaker;
         links(): $mol_string_link[];
         Public(): $mol_check_icon;
-        poster_name(): string;
-        poster_blob(): Blob;
+        poster_1_1_name(): string;
+        poster_16_9_name(): string;
+        poster_1_1_blob(): Blob;
+        poster_16_9_blob(): Blob;
     }
 }
 
