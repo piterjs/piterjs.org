@@ -23,12 +23,26 @@ namespace $.$$ {
 
 		lineHeight: `4rem`,
 
+		transition: `none`,
+
 		width: `1000px`,
 		height: `1000px`,
-		aspectRatio: 1,
+		
+		'@': {
+			piterjs_speech_poster_aspect: {
+				'1:1': {
+					width: `1000px`,
+					height: `1000px`,
+				},
+				'16:9': {
+					width: `1920px`,
+					height: `1080px`,
+				},
+			},
+		},
 
 		$piterjs_screen_lines: {
-			width: `10rem`,
+			width: `20rem`,
 		},
 
 		Main: {
