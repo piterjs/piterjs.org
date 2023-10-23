@@ -12049,94 +12049,6 @@ var $;
 "use strict";
 var $;
 (function ($) {
-    class $mol_section extends $mol_list {
-        level() {
-            return 1;
-        }
-        rows() {
-            return [
-                this.Head(),
-                this.Content()
-            ];
-        }
-        title_dom_name() {
-            return "h1";
-        }
-        Title() {
-            const obj = new this.$.$mol_paragraph();
-            obj.dom_name = () => this.title_dom_name();
-            obj.title = () => this.title();
-            return obj;
-        }
-        tools() {
-            return [];
-        }
-        Tools() {
-            const obj = new this.$.$mol_view();
-            obj.sub = () => this.tools();
-            return obj;
-        }
-        head() {
-            return [
-                this.Title(),
-                this.Tools()
-            ];
-        }
-        Head() {
-            const obj = new this.$.$mol_view();
-            obj.sub = () => this.head();
-            return obj;
-        }
-        content() {
-            return [];
-        }
-        Content() {
-            const obj = new this.$.$mol_list();
-            obj.rows = () => this.content();
-            return obj;
-        }
-    }
-    __decorate([
-        $mol_mem
-    ], $mol_section.prototype, "Title", null);
-    __decorate([
-        $mol_mem
-    ], $mol_section.prototype, "Tools", null);
-    __decorate([
-        $mol_mem
-    ], $mol_section.prototype, "Head", null);
-    __decorate([
-        $mol_mem
-    ], $mol_section.prototype, "Content", null);
-    $.$mol_section = $mol_section;
-})($ || ($ = {}));
-//mol/section/-view.tree/section.view.tree.ts
-;
-"use strict";
-var $;
-(function ($) {
-    var $$;
-    (function ($$) {
-        class $mol_section extends $.$mol_section {
-            title_dom_name() {
-                return 'h' + this.level();
-            }
-        }
-        $$.$mol_section = $mol_section;
-    })($$ = $.$$ || ($.$$ = {}));
-})($ || ($ = {}));
-//mol/section/section.view.ts
-;
-"use strict";
-var $;
-(function ($) {
-    $mol_style_attach("mol/section/section.view.css", "[mol_section_head] {\n\tjustify-content: space-between;\n\talign-items: flex-end;\n\tflex-wrap: wrap;\n}\n\n[mol_section_title] {\n\tpadding: var(--mol_gap_text);\n\ttext-shadow: 0 0;\n\tfont-weight: normal;\n}\n\nh1[mol_section_title] {\n\tfont-size: 1.5rem;\n}\n\nh2[mol_section_title] {\n\tfont-size: 1.5rem;\n\tfont-style: italic;\n}\n\nh3[mol_section_title] {\n\tfont-size: 1.25rem;\n}\n\nh4[mol_section_title] {\n\tfont-size: 1.25rem;\n\tfont-style: italic;\n}\n\nh5[mol_section_title] {\n\tfont-size: 1rem;\n}\n\nh6[mol_section_title] {\n\tfont-size: 1rem;\n\tfont-style: italic;\n}\n");
-})($ || ($ = {}));
-//mol/section/-css/section.view.css.ts
-;
-"use strict";
-var $;
-(function ($) {
     class $mol_icon_plus extends $mol_icon {
         path() {
             return "M19,13H13V19H11V13H5V11H11V5H13V11H19V13Z";
@@ -12585,6 +12497,94 @@ var $;
     $mol_style_attach("mol/check/box/box.view.css", "[mol_check_box_icon] {\n\tborder-radius: var(--mol_gap_round);\n\tbox-shadow: inset 0 0 0 1px var(--mol_theme_line);\n\tcolor: var(--mol_theme_shade);\n\theight: 1rem;\n\talign-self: center;\n}\n\n[mol_check]:not([mol_check_checked]) > [mol_check_box_icon] {\n\tfill: transparent;\n}\n\n[mol_check]:not([disabled]) > [mol_check_box_icon] {\n\tbackground: var(--mol_theme_field);\n\tcolor: var(--mol_theme_text);\n}\n");
 })($ || ($ = {}));
 //mol/check/box/-css/box.view.css.ts
+;
+"use strict";
+var $;
+(function ($) {
+    class $mol_section extends $mol_list {
+        level() {
+            return 1;
+        }
+        rows() {
+            return [
+                this.Head(),
+                this.Content()
+            ];
+        }
+        title_dom_name() {
+            return "h1";
+        }
+        Title() {
+            const obj = new this.$.$mol_paragraph();
+            obj.dom_name = () => this.title_dom_name();
+            obj.title = () => this.title();
+            return obj;
+        }
+        tools() {
+            return [];
+        }
+        Tools() {
+            const obj = new this.$.$mol_view();
+            obj.sub = () => this.tools();
+            return obj;
+        }
+        head() {
+            return [
+                this.Title(),
+                this.Tools()
+            ];
+        }
+        Head() {
+            const obj = new this.$.$mol_view();
+            obj.sub = () => this.head();
+            return obj;
+        }
+        content() {
+            return [];
+        }
+        Content() {
+            const obj = new this.$.$mol_list();
+            obj.rows = () => this.content();
+            return obj;
+        }
+    }
+    __decorate([
+        $mol_mem
+    ], $mol_section.prototype, "Title", null);
+    __decorate([
+        $mol_mem
+    ], $mol_section.prototype, "Tools", null);
+    __decorate([
+        $mol_mem
+    ], $mol_section.prototype, "Head", null);
+    __decorate([
+        $mol_mem
+    ], $mol_section.prototype, "Content", null);
+    $.$mol_section = $mol_section;
+})($ || ($ = {}));
+//mol/section/-view.tree/section.view.tree.ts
+;
+"use strict";
+var $;
+(function ($) {
+    var $$;
+    (function ($$) {
+        class $mol_section extends $.$mol_section {
+            title_dom_name() {
+                return 'h' + this.level();
+            }
+        }
+        $$.$mol_section = $mol_section;
+    })($$ = $.$$ || ($.$$ = {}));
+})($ || ($ = {}));
+//mol/section/section.view.ts
+;
+"use strict";
+var $;
+(function ($) {
+    $mol_style_attach("mol/section/section.view.css", "[mol_section_head] {\n\tjustify-content: space-between;\n\talign-items: flex-end;\n\tflex-wrap: wrap;\n}\n\n[mol_section_title] {\n\tpadding: var(--mol_gap_text);\n\ttext-shadow: 0 0;\n\tfont-weight: normal;\n}\n\nh1[mol_section_title] {\n\tfont-size: 1.5rem;\n}\n\nh2[mol_section_title] {\n\tfont-size: 1.5rem;\n\tfont-style: italic;\n}\n\nh3[mol_section_title] {\n\tfont-size: 1.25rem;\n}\n\nh4[mol_section_title] {\n\tfont-size: 1.25rem;\n\tfont-style: italic;\n}\n\nh5[mol_section_title] {\n\tfont-size: 1rem;\n}\n\nh6[mol_section_title] {\n\tfont-size: 1rem;\n\tfont-style: italic;\n}\n");
+})($ || ($ = {}));
+//mol/section/-css/section.view.css.ts
 ;
 "use strict";
 var $;
@@ -14594,10 +14594,8 @@ var $;
             return [];
         }
         Speeches() {
-            const obj = new this.$.$mol_section();
-            obj.title = () => "Программа";
-            obj.level = () => 5;
-            obj.content = () => this.speeches();
+            const obj = new this.$.$mol_list();
+            obj.rows = () => this.speeches();
             return obj;
         }
         speech_add(next) {
@@ -14926,7 +14924,7 @@ var $;
                     ...(this.editing() || this.description()) ? [this.Description()] : [],
                     this.Links(),
                     ...this.join_allowed() ? [this.Join()] : [],
-                    ...this.meetup().joined() ? [this.Joined_bid()] : [],
+                    ...this.join_allowed() && this.meetup().joined() ? [this.Joined_bid()] : [],
                     this.Speeches(),
                     ...this.editing() ? [this.Speech_add()] : [],
                     ...this.editing() ? [this.Hidden_fields()] : [],

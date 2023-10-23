@@ -557,18 +557,6 @@ $mol_textarea_edit $mol_string
 		^
 		scrollTop 0
 
-$mol_section $mol_list
-	level 1
-	rows /
-		<= Head $mol_view
-			sub <= head /
-				<= Title $mol_paragraph
-					dom_name <= title_dom_name \h1
-					title <= title
-				<= Tools $mol_view sub <= tools /
-		<= Content $mol_list
-			rows <= content /
-
 $mol_icon_plus $mol_icon path \M19,13H13V19H11V13H5V11H11V5H13V11H19V13Z
 
 $mol_labeler $mol_list
@@ -634,6 +622,18 @@ $mol_icon_tick $mol_icon path \M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z
 
 $mol_check_box $mol_check
 	Icon $mol_icon_tick
+
+$mol_section $mol_list
+	level 1
+	rows /
+		<= Head $mol_view
+			sub <= head /
+				<= Title $mol_paragraph
+					dom_name <= title_dom_name \h1
+					title <= title
+				<= Tools $mol_view sub <= tools /
+		<= Content $mol_list
+			rows <= content /
 
 $mol_float $mol_view
 	style *
@@ -952,10 +952,7 @@ $piterjs_meetup_page $mol_page
 						place \
 						speech null
 					title \Площадка
-			<= Speeches $mol_section
-				title \Программа
-				level 5
-				content <= speeches /
+			<= Speeches $mol_list rows <= speeches /
 			<= Speech_add $mol_button_minor
 				click? <=> speech_add? null
 				sub /

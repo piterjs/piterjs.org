@@ -3221,30 +3221,6 @@ declare namespace $ {
 }
 
 declare namespace $ {
-    class $mol_section extends $mol_list {
-        level(): number;
-        rows(): readonly any[];
-        title_dom_name(): string;
-        Title(): $$.$mol_paragraph;
-        tools(): readonly any[];
-        Tools(): $mol_view;
-        head(): readonly any[];
-        Head(): $mol_view;
-        content(): readonly any[];
-        Content(): $$.$mol_list;
-    }
-}
-
-declare namespace $.$$ {
-    class $mol_section extends $.$mol_section {
-        title_dom_name(): string;
-    }
-}
-
-declare namespace $ {
-}
-
-declare namespace $ {
     class $mol_icon_plus extends $mol_icon {
         path(): string;
     }
@@ -3369,6 +3345,30 @@ declare namespace $ {
 declare namespace $ {
     class $mol_check_box extends $mol_check {
         Icon(): $mol_icon_tick;
+    }
+}
+
+declare namespace $ {
+}
+
+declare namespace $ {
+    class $mol_section extends $mol_list {
+        level(): number;
+        rows(): readonly any[];
+        title_dom_name(): string;
+        Title(): $$.$mol_paragraph;
+        tools(): readonly any[];
+        Tools(): $mol_view;
+        head(): readonly any[];
+        Head(): $mol_view;
+        content(): readonly any[];
+        Content(): $$.$mol_list;
+    }
+}
+
+declare namespace $.$$ {
+    class $mol_section extends $.$mol_section {
+        title_dom_name(): string;
     }
 }
 
@@ -3905,7 +3905,7 @@ declare namespace $ {
         links(): readonly any[];
         Links(): $mol_view;
         speeches(): readonly any[];
-        Speeches(): $$.$mol_section;
+        Speeches(): $$.$mol_list;
         speech_add(next?: any): any;
         Speech_add_icon(): $mol_icon_plus;
         Speech_add(): $mol_button_minor;
