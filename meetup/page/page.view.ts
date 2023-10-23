@@ -25,7 +25,7 @@ namespace $.$$ {
 				... ( this.editing() || this.description() ) ? [ this.Description() ] : [] ,
 				this.Links() ,
 				... this.join_allowed() ? [ this.Join() ] : [] ,
-				... this.meetup().joined() ? [ this.Joined_bid() ] : [],
+				... this.join_allowed() && this.meetup().joined() ? [ this.Joined_bid() ] : [],
 				this.Speeches() ,
 				... this.editing() ? [ this.Speech_add() ] : [] ,
 				... this.editing() ? [ this.Hidden_fields() ] : [] ,

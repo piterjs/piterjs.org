@@ -55,10 +55,7 @@ $piterjs_meetup_page $mol_page
 						place \
 						speech null
 					title \Площадка
-			<= Speeches $mol_section
-				title \Программа
-				level 5
-				content <= speeches /
+			<= Speeches $mol_list rows <= speeches /
 			<= Speech_add $mol_button_minor
 				click? <=> speech_add? null
 				sub /
