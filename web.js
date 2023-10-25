@@ -30462,78 +30462,14 @@ var $node = $node || {} ; $node[ "/piterjs/app/n6cy9h_41olxb!n6cy9h_41olxb.bin" 
 "use strict";
 var $;
 (function ($) {
-    class $mol_card extends $mol_list {
-        attr() {
-            return {
-                ...super.attr(),
-                mol_card_status_type: this.status()
-            };
-        }
-        rows() {
-            return [
-                this.Content(),
-                this.Status()
-            ];
-        }
-        status() {
-            return "";
-        }
-        content() {
-            return [
-                this.title()
-            ];
-        }
-        Content() {
-            const obj = new this.$.$mol_view();
-            obj.sub = () => this.content();
-            return obj;
-        }
-        status_text() {
-            return this.status();
-        }
-        Status() {
-            const obj = new this.$.$mol_view();
-            obj.minimal_height = () => 30;
-            obj.sub = () => [
-                this.status_text()
-            ];
-            return obj;
+    class $mol_icon_email extends $mol_icon {
+        path() {
+            return "M20,8L12,13L4,8V6L12,11L20,6M20,4H4C2.89,4 2,4.89 2,6V18C2,19.1 2.9,20 4,20H20C21.1,20 22,19.1 22,18V6C22,4.89 21.1,4 20,4Z";
         }
     }
-    __decorate([
-        $mol_mem
-    ], $mol_card.prototype, "Content", null);
-    __decorate([
-        $mol_mem
-    ], $mol_card.prototype, "Status", null);
-    $.$mol_card = $mol_card;
+    $.$mol_icon_email = $mol_icon_email;
 })($ || ($ = {}));
-//mol/card/-view.tree/card.view.tree.ts
-;
-"use strict";
-var $;
-(function ($) {
-    var $$;
-    (function ($$) {
-        class $mol_card extends $.$mol_card {
-            rows() {
-                return [
-                    this.Content(),
-                    ...this.status_text() ? [this.Status()] : [],
-                ];
-            }
-        }
-        $$.$mol_card = $mol_card;
-    })($$ = $.$$ || ($.$$ = {}));
-})($ || ($ = {}));
-//mol/card/card.view.ts
-;
-"use strict";
-var $;
-(function ($) {
-    $mol_style_attach("mol/card/card.view.css", "[mol_card] {\n\tbackground: var(--mol_theme_card);\n\tcolor: var(--mol_theme_text);\n\tborder-radius: var(--mol_gap_round);\n\tdisplay: flex;\n\tflex: 0 1 auto;\n\tflex-direction: column;\n\tposition: relative;\n\t/* overflow: hidden; */\n}\n\n[mol_card_content] {\n\tflex: 1 1 auto;\n\tborder-radius: var(--mol_gap_round);\n\tmargin: 0;\n\tpadding: var(--mol_gap_block);\n}\n\n[mol_card_status] {\n\tbackground: var(--mol_theme_line);\n\ttext-transform: capitalize;\n\tpadding: var(--mol_gap_text);\n\tmargin: 0;\n}\n\n[mol_card_status] {\n\tbackground: var(--mol_theme_line);\n}\n");
-})($ || ($ = {}));
-//mol/card/-css/card.view.css.ts
+//mol/icon/email/-view.tree/email.view.tree.ts
 ;
 "use strict";
 var $;
@@ -30757,6 +30693,18 @@ var $;
                 this.Screen()
             ];
         }
+        Mail_icon() {
+            const obj = new this.$.$mol_icon_email();
+            return obj;
+        }
+        Mail() {
+            const obj = new this.$.$mol_link();
+            obj.uri = () => "mailto:team@piterjs.org";
+            obj.sub = () => [
+                this.Mail_icon()
+            ];
+            return obj;
+        }
         Youtube() {
             const obj = new this.$.$mol_link_iconed();
             obj.uri = () => "https://www.youtube.com/@piterjs";
@@ -30790,6 +30738,7 @@ var $;
         Links() {
             const obj = new this.$.$mol_view();
             obj.sub = () => [
+                this.Mail(),
                 this.Youtube(),
                 this.Vkontakte(),
                 this.Habr(),
@@ -30822,8 +30771,8 @@ var $;
             return obj;
         }
         Descr() {
-            const obj = new this.$.$mol_card();
-            obj.title = () => "Ежемесячный питерский митап о JavaScript, Node.js и всего, что окружает современного фронтендера.";
+            const obj = new this.$.$mol_paragraph();
+            obj.title = () => "Ежемесячные митапы в Питере о JavaScript, Node.js и всего, что с ниими связано";
             return obj;
         }
         Join() {
@@ -30865,6 +30814,12 @@ var $;
             return obj;
         }
     }
+    __decorate([
+        $mol_mem
+    ], $piterjs_now.prototype, "Mail_icon", null);
+    __decorate([
+        $mol_mem
+    ], $piterjs_now.prototype, "Mail", null);
     __decorate([
         $mol_mem
     ], $piterjs_now.prototype, "Youtube", null);

@@ -7563,24 +7563,9 @@ declare namespace $ {
 }
 
 declare namespace $ {
-    class $mol_card extends $mol_list {
-        attr(): Record<string, any>;
-        rows(): readonly $mol_view[];
-        status(): string;
-        content(): readonly $mol_view_content[];
-        Content(): $mol_view;
-        status_text(): string;
-        Status(): $mol_view;
+    class $mol_icon_email extends $mol_icon {
+        path(): string;
     }
-}
-
-declare namespace $.$$ {
-    class $mol_card extends $.$mol_card {
-        rows(): readonly $mol_view[];
-    }
-}
-
-declare namespace $ {
 }
 
 declare namespace $ {
@@ -7647,6 +7632,8 @@ declare namespace $ {
         attr(): Record<string, any>;
         tools(): readonly any[];
         body(): readonly any[];
+        Mail_icon(): $mol_icon_email;
+        Mail(): $$.$mol_link;
         Youtube(): $$.$mol_link_iconed;
         Vkontakte(): $$.$mol_link_iconed;
         Habr(): $$.$mol_link_iconed;
@@ -7657,7 +7644,7 @@ declare namespace $ {
         Logo_angles(): $mol_svg_path;
         Logo_image(): $mol_svg_path;
         Logo(): $mol_svg_root;
-        Descr(): $$.$mol_card;
+        Descr(): $$.$mol_paragraph;
         Join(): $piterjs_link;
         Donate(): $piterjs_link;
         Bids(): $mol_row;
