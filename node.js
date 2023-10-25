@@ -30954,6 +30954,82 @@ var $node = $node || {} ; $node[ "/piterjs/app/n6cy9h_41olxb!n6cy9h_41olxb.bin" 
 "use strict";
 var $;
 (function ($) {
+    class $mol_card extends $mol_list {
+        attr() {
+            return {
+                ...super.attr(),
+                mol_card_status_type: this.status()
+            };
+        }
+        rows() {
+            return [
+                this.Content(),
+                this.Status()
+            ];
+        }
+        status() {
+            return "";
+        }
+        content() {
+            return [
+                this.title()
+            ];
+        }
+        Content() {
+            const obj = new this.$.$mol_view();
+            obj.sub = () => this.content();
+            return obj;
+        }
+        status_text() {
+            return this.status();
+        }
+        Status() {
+            const obj = new this.$.$mol_view();
+            obj.minimal_height = () => 30;
+            obj.sub = () => [
+                this.status_text()
+            ];
+            return obj;
+        }
+    }
+    __decorate([
+        $mol_mem
+    ], $mol_card.prototype, "Content", null);
+    __decorate([
+        $mol_mem
+    ], $mol_card.prototype, "Status", null);
+    $.$mol_card = $mol_card;
+})($ || ($ = {}));
+//mol/card/-view.tree/card.view.tree.ts
+;
+"use strict";
+var $;
+(function ($) {
+    var $$;
+    (function ($$) {
+        class $mol_card extends $.$mol_card {
+            rows() {
+                return [
+                    this.Content(),
+                    ...this.status_text() ? [this.Status()] : [],
+                ];
+            }
+        }
+        $$.$mol_card = $mol_card;
+    })($$ = $.$$ || ($.$$ = {}));
+})($ || ($ = {}));
+//mol/card/card.view.ts
+;
+"use strict";
+var $;
+(function ($) {
+    $mol_style_attach("mol/card/card.view.css", "[mol_card] {\n\tbackground: var(--mol_theme_card);\n\tcolor: var(--mol_theme_text);\n\tborder-radius: var(--mol_gap_round);\n\tdisplay: flex;\n\tflex: 0 1 auto;\n\tflex-direction: column;\n\tposition: relative;\n\t/* overflow: hidden; */\n}\n\n[mol_card_content] {\n\tflex: 1 1 auto;\n\tborder-radius: var(--mol_gap_round);\n\tmargin: 0;\n\tpadding: var(--mol_gap_block);\n}\n\n[mol_card_status] {\n\tbackground: var(--mol_theme_line);\n\ttext-transform: capitalize;\n\tpadding: var(--mol_gap_text);\n\tmargin: 0;\n}\n\n[mol_card_status] {\n\tbackground: var(--mol_theme_line);\n}\n");
+})($ || ($ = {}));
+//mol/card/-css/card.view.css.ts
+;
+"use strict";
+var $;
+(function ($) {
     class $piterjs_link extends $mol_link {
         sub() {
             return [
@@ -30979,6 +31055,173 @@ var $;
     $mol_style_attach("piterjs/link/link.view.css", "[piterjs_link] {\n\tpadding: 0;\n}\n/* \n[piterjs_link_button] {\n\tfont-weight: bolder;\n\tcolor: var(--mol_theme_text);\n\tbox-shadow: 0 0 0 2px #f7df1e;\n\tbackground: none;\n}\n\n[piterjs_link_button]:hover {\n\tbackground: #f7df1e;\n}\n */\n");
 })($ || ($ = {}));
 //piterjs/link/-css/link.view.css.ts
+;
+"use strict";
+var $;
+(function ($) {
+    class $mol_icon_help extends $mol_icon {
+        path() {
+            return "M10,19H13V22H10V19M12,2C17.35,2.22 19.68,7.62 16.5,11.67C15.67,12.67 14.33,13.33 13.67,14.17C13,15 13,16 13,17H10C10,15.33 10,13.92 10.67,12.92C11.33,11.92 12.67,11.33 13.5,10.67C15.92,8.43 15.32,5.26 12,5C10.34,5 9,6.34 9,8H6C6,4.69 8.69,2 12,2Z";
+        }
+    }
+    $.$mol_icon_help = $mol_icon_help;
+})($ || ($ = {}));
+//mol/icon/help/-view.tree/help.view.tree.ts
+;
+"use strict";
+var $;
+(function ($) {
+    class $mol_icon_help_circle extends $mol_icon {
+        path() {
+            return "M15.07,11.25L14.17,12.17C13.45,12.89 13,13.5 13,15H11V14.5C11,13.39 11.45,12.39 12.17,11.67L13.41,10.41C13.78,10.05 14,9.55 14,9C14,7.89 13.1,7 12,7C10.9,7 10,7.9 10,9H8C8,6.79 9.79,5 12,5C14.21,5 16,6.79 16,9C16,9.88 15.64,10.67 15.07,11.25M13,19H11V17H13M12,2C6.48,2 2,6.48 2,12C2,17.52 6.48,22 12,22C17.52,22 22,17.52 22,12C22,6.47 17.5,2 12,2Z";
+        }
+    }
+    $.$mol_icon_help_circle = $mol_icon_help_circle;
+})($ || ($ = {}));
+//mol/icon/help/circle/-view.tree/circle.view.tree.ts
+;
+"use strict";
+var $;
+(function ($) {
+    class $mol_icon_help_circle_outline extends $mol_icon {
+        path() {
+            return "M11,18H13V16H11V18M12,2C6.48,2 2,6.48 2,12C2,17.52 6.48,22 12,22C17.52,22 22,17.52 22,12C22,6.48 17.52,2 12,2M12,20C7.59,20 4,16.41 4,12C4,7.59 7.59,4 12,4C16.41,4 20,7.59 20,12C20,16.41 16.41,20 12,20M12,6C9.79,6 8,7.79 8,10H10C10,8.9 10.9,8 12,8C13.1,8 14,8.9 14,10C14,12 11,11.75 11,15H13C13,12.75 16,12.5 16,10C16,7.79 14.21,6 12,6Z";
+        }
+    }
+    $.$mol_icon_help_circle_outline = $mol_icon_help_circle_outline;
+})($ || ($ = {}));
+//mol/icon/help/circle/outline/-view.tree/outline.view.tree.ts
+;
+"use strict";
+var $;
+(function ($) {
+    class $mol_hint extends $mol_check {
+        dictionary() {
+            return {};
+        }
+        Icon() {
+            const obj = new this.$.$mol_icon_help_circle_outline();
+            return obj;
+        }
+        hint_close() {
+            return this.$.$mol_locale.text('$mol_hint_hint_close');
+        }
+        hint_open() {
+            return this.$.$mol_locale.text('$mol_hint_hint_open');
+        }
+    }
+    __decorate([
+        $mol_mem
+    ], $mol_hint.prototype, "Icon", null);
+    $.$mol_hint = $mol_hint;
+})($ || ($ = {}));
+//mol/hint/-view.tree/hint.view.tree.ts
+;
+"use strict";
+var $;
+(function ($) {
+    function $mol_array_lottery(list) {
+        return list[Math.floor(Math.random() * list.length)];
+    }
+    $.$mol_array_lottery = $mol_array_lottery;
+})($ || ($ = {}));
+//mol/array/lottery/lottery.ts
+;
+"use strict";
+var $;
+(function ($) {
+    var $$;
+    (function ($$) {
+        $mol_style_define($mol_hint, {
+            color: $mol_theme.shade,
+            flex: {
+                shrink: 1,
+            },
+            Icon: {
+                color: $mol_theme.control,
+            },
+        });
+    })($$ = $.$$ || ($.$$ = {}));
+})($ || ($ = {}));
+//mol/hint/hint.view.css.ts
+;
+"use strict";
+var $;
+(function ($) {
+    var $$;
+    (function ($$) {
+        class $mol_hint extends $.$mol_hint {
+            keys_all() {
+                return Object.keys(this.dictionary());
+            }
+            keys_hidden(next) {
+                return new Set(this.$.$mol_state_local.value(`${this}`, next) ?? []);
+            }
+            keys_allowed() {
+                const hidden = this.keys_hidden();
+                return this.keys_all().filter(key => !hidden.has(key));
+            }
+            key_picked() {
+                return $mol_array_lottery(this.keys_allowed());
+            }
+            title() {
+                return this.dictionary()[this.key_picked()] ?? '';
+            }
+            sub() {
+                return this.checked()
+                    ? [this.title()]
+                    : [this.Icon()];
+            }
+            hint() {
+                return this.checked()
+                    ? this.hint_close()
+                    : this.hint_open();
+            }
+            checked(next) {
+                if (next === undefined)
+                    return this.keys_allowed().length > 0;
+                if (next) {
+                    if (this.keys_allowed().length === 0) {
+                        this.keys_hidden([]);
+                    }
+                }
+                else {
+                    this.keys_hidden([
+                        ...this.keys_hidden(),
+                        this.key_picked(),
+                    ]);
+                }
+                return next;
+            }
+        }
+        __decorate([
+            $mol_mem
+        ], $mol_hint.prototype, "keys_all", null);
+        __decorate([
+            $mol_mem
+        ], $mol_hint.prototype, "keys_hidden", null);
+        __decorate([
+            $mol_mem
+        ], $mol_hint.prototype, "keys_allowed", null);
+        __decorate([
+            $mol_mem
+        ], $mol_hint.prototype, "key_picked", null);
+        __decorate([
+            $mol_mem
+        ], $mol_hint.prototype, "title", null);
+        __decorate([
+            $mol_mem
+        ], $mol_hint.prototype, "sub", null);
+        __decorate([
+            $mol_mem
+        ], $mol_hint.prototype, "hint", null);
+        __decorate([
+            $mol_mem
+        ], $mol_hint.prototype, "checked", null);
+        $$.$mol_hint = $mol_hint;
+    })($$ = $.$$ || ($.$$ = {}));
+})($ || ($ = {}));
+//mol/hint/hint.view.ts
 ;
 "use strict";
 var $;
@@ -31070,16 +31313,36 @@ var $;
             ];
             return obj;
         }
+        Descr() {
+            const obj = new this.$.$mol_card();
+            obj.title = () => "Ежемесячный питерский митап о JavaScript, Node.js и всего, что окружает современного фронтендера.";
+            return obj;
+        }
         Join() {
             const obj = new this.$.$piterjs_link();
             obj.uri = () => "#!wiki/=uxgccs_dqplnq";
-            obj.title = () => "Подать заявку на доклад";
+            obj.title = () => "Стать спикером";
             return obj;
         }
         Donate() {
             const obj = new this.$.$piterjs_link();
             obj.uri = () => "#!wiki/=wu07hq_io8xyr";
-            obj.title = () => "Поддержать PiterJS рублём";
+            obj.title = () => "Поддержать нас";
+            return obj;
+        }
+        Bids() {
+            const obj = new this.$.$mol_row();
+            obj.sub = () => [
+                this.Join(),
+                this.Donate()
+            ];
+            return obj;
+        }
+        Hint() {
+            const obj = new this.$.$mol_hint();
+            obj.dictionary = () => ({
+                menu: "◀ Куча инфы в базе знаний"
+            });
             return obj;
         }
         Screen() {
@@ -31087,8 +31350,9 @@ var $;
             obj.place = () => this.place();
             obj.content = () => [
                 this.Logo(),
-                this.Join(),
-                this.Donate()
+                this.Descr(),
+                this.Bids(),
+                this.Hint()
             ];
             return obj;
         }
@@ -31125,10 +31389,19 @@ var $;
     ], $piterjs_now.prototype, "Logo", null);
     __decorate([
         $mol_mem
+    ], $piterjs_now.prototype, "Descr", null);
+    __decorate([
+        $mol_mem
     ], $piterjs_now.prototype, "Join", null);
     __decorate([
         $mol_mem
     ], $piterjs_now.prototype, "Donate", null);
+    __decorate([
+        $mol_mem
+    ], $piterjs_now.prototype, "Bids", null);
+    __decorate([
+        $mol_mem
+    ], $piterjs_now.prototype, "Hint", null);
     __decorate([
         $mol_mem
     ], $piterjs_now.prototype, "Screen", null);
@@ -31139,7 +31412,7 @@ var $;
 "use strict";
 var $;
 (function ($) {
-    $mol_style_attach("piterjs/now/now.view.css", "[piterjs_now] {\n\tfont-size: 1em;\n\tpadding: 0;\n\talign-items: stretch;\n\tbackground: none;\n\tflex: 1000 0 30rem;\n\tposition: relative;\n\tanimation: none !important;\n}\n\n[piterjs_now_lights] {\n\tposition: absolute;\n\ttop: .75rem;\n\tright: .75rem;\n}\n\n[piterjs_app_placeholder] {\n\tflex: 1000 1 0;\n}\n\n[piterjs_now_title] {\n\tflex: 1000 1 auto;\n\tpadding-right: 0;\n}\n\n[piterjs_now_body] {\n\tdisplay: flex;\n\tpadding: 0;\n}\n\n[piterjs_now_screen] {\n\tdisplay: flex;\n\tflex-direction: column;\n\tjustify-content: space-evenly;\n\talign-items: center;\n\tpadding: 1rem;\n\tbackground: none;\n}\n\n[piterjs_now_logo] {\n\tbox-shadow: none;\n\twidth: 30vmin;\n\tmargin: 1rem;\n\tanimation: piterjs_now_logo_show .250s ease-out;\n}\n\n[piterjs_app_now_logo_angles] {\n\tfill: var(--mol_theme_focus);\n}\n\n[piterjs_now_links] {\n\tdisplay: flex;\n\tflex-wrap: wrap;\n}\n\n[piterjs_app_now_join] {\n\tpadding: 0;\n\tmargin: 1rem;\n}\n\n@keyframes piterjs_now_logo_show {\n\tfrom {\n\t\ttransform: scale(2);\n\t\topacity: 0;\n\t\tz-index: -1;\n\t}\n}\n");
+    $mol_style_attach("piterjs/now/now.view.css", "[piterjs_now] {\n\tfont-size: 1em;\n\tpadding: 0;\n\talign-items: stretch;\n\tbackground: none;\n\tflex: 1000 0 30rem;\n\tposition: relative;\n\tanimation: none !important;\n}\n\n[piterjs_now_lights] {\n\tposition: absolute;\n\ttop: .75rem;\n\tright: .75rem;\n}\n\n[piterjs_app_placeholder] {\n\tflex: 1000 1 0;\n}\n\n[piterjs_now_title] {\n\tflex: 1000 1 auto;\n\tpadding-right: 0;\n}\n\n[piterjs_now_body] {\n\tdisplay: flex;\n\tpadding: 0;\n}\n\n[piterjs_now_screen] {\n\tdisplay: flex;\n\tflex-direction: column;\n\tjustify-content: space-evenly;\n\talign-items: center;\n\tpadding: 1rem;\n\tbackground: none;\n}\n\n[piterjs_now_logo] {\n\tbox-shadow: none;\n\twidth: 30vmin;\n\tmargin: 1rem;\n\tanimation: piterjs_now_logo_show .250s ease-out;\n}\n\n[piterjs_app_now_logo_angles] {\n\tfill: #FFE515;\n}\n\n[piterjs_now_descr] {\n\ttext-align: center;\n}\n\n[piterjs_now_links] {\n\tflex-wrap: wrap;\n}\n\n[piterjs_now_bids] {\n\tflex-wrap: wrap;\n\tjustify-content: center;\n}\n\n@keyframes piterjs_now_logo_show {\n\tfrom {\n\t\ttransform: scale(2);\n\t\topacity: 0;\n\t\tz-index: -1;\n\t}\n}\n");
 })($ || ($ = {}));
 //piterjs/now/-css/now.view.css.ts
 

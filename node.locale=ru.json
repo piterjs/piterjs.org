@@ -54,6 +54,8 @@
 	"$hyoo_page_side_view_Search_toggle_hint": "Поиск по странице",
 	"$mol_date_next_hint": "Следующий месяц",
 	"$mol_date_prev_hint": "Предыдущий месяц",
+	"$mol_hint_hint_close": "Скрыть",
+	"$mol_hint_hint_open": "Подсказка",
 	"$mol_lights_toggle_hint": "Переключить освещение",
 	"$mol_link_source_hint": "Исходные коды",
 	"$mol_paginator_backward_hint": "Назад",

@@ -56,6 +56,8 @@
 	"$mol_date_Today_hint": "Today",
 	"$mol_date_next_hint": "Next month",
 	"$mol_date_prev_hint": "Previous month",
+	"$mol_hint_hint_close": "Hide",
+	"$mol_hint_hint_open": "Hint",
 	"$mol_lights_toggle_hint": "Toggle lights",
 	"$mol_link_source_hint": "Source code",
 	"$mol_paginator_backward_hint": "Backward",

@@ -7455,6 +7455,27 @@ declare namespace $ {
 }
 
 declare namespace $ {
+    class $mol_card extends $mol_list {
+        attr(): Record<string, any>;
+        rows(): readonly $mol_view[];
+        status(): string;
+        content(): readonly $mol_view_content[];
+        Content(): $mol_view;
+        status_text(): string;
+        Status(): $mol_view;
+    }
+}
+
+declare namespace $.$$ {
+    class $mol_card extends $.$mol_card {
+        rows(): readonly $mol_view[];
+    }
+}
+
+declare namespace $ {
+}
+
+declare namespace $ {
     class $piterjs_link extends $mol_link {
         sub(): readonly any[];
         Button(): $mol_button_major;
@@ -7462,6 +7483,53 @@ declare namespace $ {
 }
 
 declare namespace $ {
+}
+
+declare namespace $ {
+    class $mol_icon_help extends $mol_icon {
+        path(): string;
+    }
+}
+
+declare namespace $ {
+    class $mol_icon_help_circle extends $mol_icon {
+        path(): string;
+    }
+}
+
+declare namespace $ {
+    class $mol_icon_help_circle_outline extends $mol_icon {
+        path(): string;
+    }
+}
+
+declare namespace $ {
+    class $mol_hint extends $mol_check {
+        dictionary(): Record<string, any>;
+        Icon(): $mol_icon_help_circle_outline;
+        hint_close(): string;
+        hint_open(): string;
+    }
+}
+
+declare namespace $ {
+    function $mol_array_lottery<Value>(list: readonly Value[]): Value;
+}
+
+declare namespace $.$$ {
+}
+
+declare namespace $.$$ {
+    class $mol_hint extends $.$mol_hint {
+        keys_all(): string[];
+        keys_hidden(next?: string[]): Set<string>;
+        keys_allowed(): string[];
+        key_picked(): string;
+        title(): any;
+        sub(): any[];
+        hint(): string;
+        checked(next?: boolean): boolean;
+    }
 }
 
 declare namespace $ {
@@ -7481,8 +7549,11 @@ declare namespace $ {
         Logo_angles(): $mol_svg_path;
         Logo_image(): $mol_svg_path;
         Logo(): $mol_svg_root;
+        Descr(): $$.$mol_card;
         Join(): $piterjs_link;
         Donate(): $piterjs_link;
+        Bids(): $mol_row;
+        Hint(): $$.$mol_hint;
         Screen(): $$.$piterjs_screen;
     }
 }
