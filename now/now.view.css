@@ -45,17 +45,20 @@
 }
 
 [piterjs_app_now_logo_angles] {
-	fill: var(--mol_theme_focus);
+	fill: #FFE515;
+}
+
+[piterjs_now_descr] {
+	text-align: center;
 }
 
 [piterjs_now_links] {
-	display: flex;
 	flex-wrap: wrap;
 }
 
-[piterjs_app_now_join] {
-	padding: 0;
-	margin: 1rem;
+[piterjs_now_bids] {
+	flex-wrap: wrap;
+	justify-content: center;
 }
 
 @keyframes piterjs_now_logo_show {
