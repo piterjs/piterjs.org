@@ -31256,7 +31256,7 @@ var $;
         }
         Descr() {
             const obj = new this.$.$mol_paragraph();
-            obj.title = () => "Ежемесячные митапы в Питере о JavaScript, Node.js и всего, что с ниими связано";
+            obj.title = () => "Ежемесячные митапы в Питере о JavaScript, Node.js и всего, что с ними связано";
             return obj;
         }
         Join() {
