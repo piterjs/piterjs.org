@@ -11,19 +11,6 @@ $piterjs_meetup_page $mol_page
 		enabled <= editing false
 		hint \Номер
 	tools /
-		<= Public $mol_check_icon
-			checked? <=> meetup_public? false
-			Icon <= Public_icon $mol_icon_eye
-		<= Guests_link $mol_link
-			arg * guests \
-			hint \Список гостей
-			sub /
-				<= Guests_link_icon $mol_icon_account_group_outline
-		<= Stats_link $mol_link
-			arg * stats \
-			hint \Статистика
-			sub /
-				<= Stats_link_icon $mol_icon_chart_bar_stacked
 		<= Start $mol_date
 			value_moment? <=> start?
 			enabled <= editing false
@@ -102,3 +89,18 @@ $piterjs_meetup_page $mol_page
 				\Да, мы упарываемся по твоей приватности 💟
 	Speech!index $piterjs_speech_snippet
 		speech <= speech!index $piterjs_speech
+	foot /
+		<= Public $mol_check_icon
+			checked? <=> meetup_public? false
+			Icon <= Public_icon $mol_icon_eye
+			hint \Опубликовано
+		<= Guests_link $mol_link
+			arg * guests \
+			hint \Список гостей
+			sub /
+				<= Guests_link_icon $mol_icon_account_group_outline
+		<= Stats_link $mol_link
+			arg * stats \
+			hint \Статистика
+			sub /
+				<= Stats_link_icon $mol_icon_chart_bar_stacked
