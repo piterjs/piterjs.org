@@ -10,22 +10,6 @@ $piterjs_speech_page $mol_page
 		enabled <= editing false
 		hint \Название
 	tools /
-		<= Poster_copy $mol_pick
-			hint \Скачать постер
-			trigger_content /
-				<= Poster_copy_icon $mol_icon_camera
-			bubble_content /
-				<= Poster_1_1 $mol_button_download
-					blob <= poster_1_1_blob? $mol_blob
-					file_name <= poster_1_1_name \poster_universal.png
-					title \1:1
-				<= Poster_16_19 $mol_button_download
-					blob <= poster_16_9_blob? $mol_blob
-					file_name <= poster_16_9_name \poster_fhd.png
-					title \16:9
-		<= Public $mol_check_icon
-			checked? <=> speech_public? false
-			Icon <= Public_icon $mol_icon_eye
 		<= Start $mol_pick_time
 			value_moment? <=> start?
 			enabled <= editing false
@@ -57,3 +41,20 @@ $piterjs_speech_page $mol_page
 		<= Speaker $piterjs_speaker_snippet
 			speaker <= speaker $piterjs_speaker
 			editing <= editing false
+	foot /
+		<= Public $mol_check_icon
+			checked? <=> speech_public? false
+			Icon <= Public_icon $mol_icon_eye
+		<= Poster_copy $mol_pick
+			hint \Скачать постер
+			trigger_content /
+				<= Poster_copy_icon $mol_icon_camera
+			bubble_content /
+				<= Poster_1_1 $mol_button_download
+					blob <= poster_1_1_blob? $mol_blob
+					file_name <= poster_1_1_name \poster_universal.png
+					title \1:1
+				<= Poster_16_19 $mol_button_download
+					blob <= poster_16_9_blob? $mol_blob
+					file_name <= poster_16_9_name \poster_fhd.png
+					title \16:9

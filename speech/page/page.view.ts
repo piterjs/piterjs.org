@@ -19,6 +19,11 @@ namespace $.$$ {
 			return super.Public()
 		}
 
+		override Poster_copy() {
+			if( !this.editing() ) return null!
+			return super.Poster_copy()
+		}
+
 		override poster_1_1_name() {
 			return `${ this.speaker().title() } - ${ this.title() } 1-1.png`
 		}
