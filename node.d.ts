@@ -4908,12 +4908,6 @@ declare namespace $.$$ {
 }
 
 declare namespace $ {
-    class $mol_icon_camera extends $mol_icon {
-        path(): string;
-    }
-}
-
-declare namespace $ {
     class $mol_icon_clock extends $mol_icon {
         path(): string;
     }
@@ -5217,6 +5211,12 @@ declare namespace $.$$ {
 }
 
 declare namespace $ {
+    class $mol_icon_camera extends $mol_icon {
+        path(): string;
+    }
+}
+
+declare namespace $ {
     class $piterjs_speech_page extends $mol_page {
         title(next?: any): string;
         description(next?: any): string;
@@ -5227,18 +5227,8 @@ declare namespace $ {
         Title(): $mol_string_button;
         tools(): readonly any[];
         body(): readonly any[];
+        foot(): readonly any[];
         editing(): boolean;
-        Poster_copy_icon(): $mol_icon_camera;
-        poster_1_1_blob(next?: any): Blob;
-        poster_1_1_name(): string;
-        Poster_1_1(): $$.$mol_button_download;
-        poster_16_9_blob(next?: any): Blob;
-        poster_16_9_name(): string;
-        Poster_16_19(): $$.$mol_button_download;
-        Poster_copy(): $$.$mol_pick;
-        speech_public(next?: any): boolean;
-        Public_icon(): $mol_icon_eye;
-        Public(): $mol_check_icon;
         Start(): $$.$mol_pick_time;
         Close_icon(): $mol_icon_cross;
         Close(): $$.$mol_link;
@@ -5252,6 +5242,17 @@ declare namespace $ {
         Links(): $mol_view;
         speaker(): $piterjs_speaker;
         Speaker(): $$.$piterjs_speaker_snippet;
+        speech_public(next?: any): boolean;
+        Public_icon(): $mol_icon_eye;
+        Public(): $mol_check_icon;
+        Poster_copy_icon(): $mol_icon_camera;
+        poster_1_1_blob(next?: any): Blob;
+        poster_1_1_name(): string;
+        Poster_1_1(): $$.$mol_button_download;
+        poster_16_9_blob(next?: any): Blob;
+        poster_16_9_name(): string;
+        Poster_16_19(): $$.$mol_button_download;
+        Poster_copy(): $$.$mol_pick;
     }
 }
 
@@ -5269,6 +5270,7 @@ declare namespace $.$$ {
         speaker(): $piterjs_speaker;
         links(): $mol_string_link[];
         Public(): $mol_check_icon;
+        Poster_copy(): $mol_pick;
         poster_1_1_name(): string;
         poster_16_9_name(): string;
         poster_1_1_blob(): Blob;

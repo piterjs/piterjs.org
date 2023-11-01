@@ -18910,18 +18910,6 @@ var $;
 "use strict";
 var $;
 (function ($) {
-    class $mol_icon_camera extends $mol_icon {
-        path() {
-            return "M4,4H7L9,2H15L17,4H20C21.1,4 22,4.9 22,6V18C22,19.1 21.1,20 20,20H4C2.9,20 2,19.1 2,18V6C2,4.9 2.9,4 4,4M12,7C9.24,7 7,9.24 7,12C7,14.76 9.24,17 12,17C14.76,17 17,14.76 17,12C17,9.24 14.76,7 12,7M12,9C13.66,9 15,10.34 15,12C15,13.66 13.66,15 12,15C10.34,15 9,13.66 9,12C9,10.34 10.34,9 12,9Z";
-        }
-    }
-    $.$mol_icon_camera = $mol_icon_camera;
-})($ || ($ = {}));
-//mol/icon/camera/-view.tree/camera.view.tree.ts
-;
-"use strict";
-var $;
-(function ($) {
     class $mol_icon_clock extends $mol_icon {
         path() {
             return "M12,2C6.48,2 2,6.48 2,12C2,17.52 6.48,22 12,22C17.52,22 22,17.52 22,12C22,6.48 17.52,2 12,2M16.2,16.2L11,13V7H12.5V12.2L17,14.9L16.2,16.2Z";
@@ -20123,6 +20111,18 @@ var $;
 "use strict";
 var $;
 (function ($) {
+    class $mol_icon_camera extends $mol_icon {
+        path() {
+            return "M4,4H7L9,2H15L17,4H20C21.1,4 22,4.9 22,6V18C22,19.1 21.1,20 20,20H4C2.9,20 2,19.1 2,18V6C2,4.9 2.9,4 4,4M12,7C9.24,7 7,9.24 7,12C7,14.76 9.24,17 12,17C14.76,17 17,14.76 17,12C17,9.24 14.76,7 12,7M12,9C13.66,9 15,10.34 15,12C15,13.66 13.66,15 12,15C10.34,15 9,13.66 9,12C9,10.34 10.34,9 12,9Z";
+        }
+    }
+    $.$mol_icon_camera = $mol_icon_camera;
+})($ || ($ = {}));
+//mol/icon/camera/-view.tree/camera.view.tree.ts
+;
+"use strict";
+var $;
+(function ($) {
     class $piterjs_speech_page extends $mol_page {
         title(next) {
             return this.speech().title(next);
@@ -20152,8 +20152,6 @@ var $;
         }
         tools() {
             return [
-                this.Poster_copy(),
-                this.Public(),
                 this.Start(),
                 this.Close()
             ];
@@ -20166,71 +20164,14 @@ var $;
                 this.Speaker()
             ];
         }
+        foot() {
+            return [
+                this.Public(),
+                this.Poster_copy()
+            ];
+        }
         editing() {
             return false;
-        }
-        Poster_copy_icon() {
-            const obj = new this.$.$mol_icon_camera();
-            return obj;
-        }
-        poster_1_1_blob(next) {
-            if (next !== undefined)
-                return next;
-            const obj = new this.$.$mol_blob();
-            return obj;
-        }
-        poster_1_1_name() {
-            return "poster_universal.png";
-        }
-        Poster_1_1() {
-            const obj = new this.$.$mol_button_download();
-            obj.blob = () => this.poster_1_1_blob();
-            obj.file_name = () => this.poster_1_1_name();
-            obj.title = () => "1:1";
-            return obj;
-        }
-        poster_16_9_blob(next) {
-            if (next !== undefined)
-                return next;
-            const obj = new this.$.$mol_blob();
-            return obj;
-        }
-        poster_16_9_name() {
-            return "poster_fhd.png";
-        }
-        Poster_16_19() {
-            const obj = new this.$.$mol_button_download();
-            obj.blob = () => this.poster_16_9_blob();
-            obj.file_name = () => this.poster_16_9_name();
-            obj.title = () => "16:9";
-            return obj;
-        }
-        Poster_copy() {
-            const obj = new this.$.$mol_pick();
-            obj.hint = () => "Скачать постер";
-            obj.trigger_content = () => [
-                this.Poster_copy_icon()
-            ];
-            obj.bubble_content = () => [
-                this.Poster_1_1(),
-                this.Poster_16_19()
-            ];
-            return obj;
-        }
-        speech_public(next) {
-            if (next !== undefined)
-                return next;
-            return false;
-        }
-        Public_icon() {
-            const obj = new this.$.$mol_icon_eye();
-            return obj;
-        }
-        Public() {
-            const obj = new this.$.$mol_check_icon();
-            obj.checked = (next) => this.speech_public(next);
-            obj.Icon = () => this.Public_icon();
-            return obj;
         }
         Start() {
             const obj = new this.$.$mol_pick_time();
@@ -20314,6 +20255,69 @@ var $;
             obj.editing = () => this.editing();
             return obj;
         }
+        speech_public(next) {
+            if (next !== undefined)
+                return next;
+            return false;
+        }
+        Public_icon() {
+            const obj = new this.$.$mol_icon_eye();
+            return obj;
+        }
+        Public() {
+            const obj = new this.$.$mol_check_icon();
+            obj.checked = (next) => this.speech_public(next);
+            obj.Icon = () => this.Public_icon();
+            return obj;
+        }
+        Poster_copy_icon() {
+            const obj = new this.$.$mol_icon_camera();
+            return obj;
+        }
+        poster_1_1_blob(next) {
+            if (next !== undefined)
+                return next;
+            const obj = new this.$.$mol_blob();
+            return obj;
+        }
+        poster_1_1_name() {
+            return "poster_universal.png";
+        }
+        Poster_1_1() {
+            const obj = new this.$.$mol_button_download();
+            obj.blob = () => this.poster_1_1_blob();
+            obj.file_name = () => this.poster_1_1_name();
+            obj.title = () => "1:1";
+            return obj;
+        }
+        poster_16_9_blob(next) {
+            if (next !== undefined)
+                return next;
+            const obj = new this.$.$mol_blob();
+            return obj;
+        }
+        poster_16_9_name() {
+            return "poster_fhd.png";
+        }
+        Poster_16_19() {
+            const obj = new this.$.$mol_button_download();
+            obj.blob = () => this.poster_16_9_blob();
+            obj.file_name = () => this.poster_16_9_name();
+            obj.title = () => "16:9";
+            return obj;
+        }
+        Poster_copy() {
+            const obj = new this.$.$mol_pick();
+            obj.hint = () => "Скачать постер";
+            obj.trigger_content = () => [
+                this.Poster_copy_icon()
+            ];
+            obj.bubble_content = () => [
+                this.Poster_1_1(),
+                this.Poster_16_19()
+            ];
+            return obj;
+        }
     }
     __decorate([
         $mol_mem
@@ -20321,33 +20325,6 @@ var $;
     __decorate([
         $mol_mem
     ], $piterjs_speech_page.prototype, "Title", null);
-    __decorate([
-        $mol_mem
-    ], $piterjs_speech_page.prototype, "Poster_copy_icon", null);
-    __decorate([
-        $mol_mem
-    ], $piterjs_speech_page.prototype, "poster_1_1_blob", null);
-    __decorate([
-        $mol_mem
-    ], $piterjs_speech_page.prototype, "Poster_1_1", null);
-    __decorate([
-        $mol_mem
-    ], $piterjs_speech_page.prototype, "poster_16_9_blob", null);
-    __decorate([
-        $mol_mem
-    ], $piterjs_speech_page.prototype, "Poster_16_19", null);
-    __decorate([
-        $mol_mem
-    ], $piterjs_speech_page.prototype, "Poster_copy", null);
-    __decorate([
-        $mol_mem
-    ], $piterjs_speech_page.prototype, "speech_public", null);
-    __decorate([
-        $mol_mem
-    ], $piterjs_speech_page.prototype, "Public_icon", null);
-    __decorate([
-        $mol_mem
-    ], $piterjs_speech_page.prototype, "Public", null);
     __decorate([
         $mol_mem
     ], $piterjs_speech_page.prototype, "Start", null);
@@ -20384,6 +20361,33 @@ var $;
     __decorate([
         $mol_mem
     ], $piterjs_speech_page.prototype, "Speaker", null);
+    __decorate([
+        $mol_mem
+    ], $piterjs_speech_page.prototype, "speech_public", null);
+    __decorate([
+        $mol_mem
+    ], $piterjs_speech_page.prototype, "Public_icon", null);
+    __decorate([
+        $mol_mem
+    ], $piterjs_speech_page.prototype, "Public", null);
+    __decorate([
+        $mol_mem
+    ], $piterjs_speech_page.prototype, "Poster_copy_icon", null);
+    __decorate([
+        $mol_mem
+    ], $piterjs_speech_page.prototype, "poster_1_1_blob", null);
+    __decorate([
+        $mol_mem
+    ], $piterjs_speech_page.prototype, "Poster_1_1", null);
+    __decorate([
+        $mol_mem
+    ], $piterjs_speech_page.prototype, "poster_16_9_blob", null);
+    __decorate([
+        $mol_mem
+    ], $piterjs_speech_page.prototype, "Poster_16_19", null);
+    __decorate([
+        $mol_mem
+    ], $piterjs_speech_page.prototype, "Poster_copy", null);
     $.$piterjs_speech_page = $piterjs_speech_page;
 })($ || ($ = {}));
 //piterjs/speech/page/-view.tree/page.view.tree.ts
@@ -20499,6 +20503,11 @@ var $;
                 if (!this.editing())
                     return null;
                 return super.Public();
+            }
+            Poster_copy() {
+                if (!this.editing())
+                    return null;
+                return super.Poster_copy();
             }
             poster_1_1_name() {
                 return `${this.speaker().title()} - ${this.title()} 1-1.png`;
