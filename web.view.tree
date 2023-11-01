@@ -2849,9 +2849,6 @@ $piterjs_app $mol_view
 			<= Meetup_add $mol_button_minor
 				click? <=> meetup_add? null
 				sub / <= Meetup_add_icon $mol_icon_plus
-			<= Rights_toggle $mol_check_icon
-				checked? <=> rights? false
-				Icon <= Rights_toggle_icon $mol_icon_shield_account
 			<= Safe_link $mol_link
 				arg * safe \
 				sub /
@@ -2862,6 +2859,9 @@ $piterjs_app $mol_view
 			<= Editing $mol_check_icon
 				Icon <= Editing_icon $mol_icon_settings_outline
 				checked? <=> editing? false
+			<= Rights_toggle $mol_check_icon
+				checked? <=> rights? false
+				Icon <= Rights_toggle_icon $mol_icon_shield_account
 			<= User $mol_view sub / <= user_id \0_0
 			<= Lights $mol_lights_toggle
 		body /

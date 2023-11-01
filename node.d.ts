@@ -7460,9 +7460,6 @@ declare namespace $ {
         meetup_add(next?: any): any;
         Meetup_add_icon(): $mol_icon_plus;
         Meetup_add(): $mol_button_minor;
-        rights(next?: any): boolean;
-        Rights_toggle_icon(): $mol_icon_shield_account;
-        Rights_toggle(): $mol_check_icon;
         Safe_icon(): $mol_icon_key_variant;
         Safe_link(): $$.$mol_link;
         tools(): readonly any[];
@@ -7471,6 +7468,9 @@ declare namespace $ {
         Editing_icon(): $mol_icon_settings_outline;
         editing(next?: any): boolean;
         Editing(): $mol_check_icon;
+        rights(next?: any): boolean;
+        Rights_toggle_icon(): $mol_icon_shield_account;
+        Rights_toggle(): $mol_check_icon;
         user_id(): string;
         User(): $mol_view;
         Lights(): $$.$mol_lights_toggle;

@@ -30106,21 +30106,6 @@ var $;
             ];
             return obj;
         }
-        rights(next) {
-            if (next !== undefined)
-                return next;
-            return false;
-        }
-        Rights_toggle_icon() {
-            const obj = new this.$.$mol_icon_shield_account();
-            return obj;
-        }
-        Rights_toggle() {
-            const obj = new this.$.$mol_check_icon();
-            obj.checked = (next) => this.rights(next);
-            obj.Icon = () => this.Rights_toggle_icon();
-            return obj;
-        }
         Safe_icon() {
             const obj = new this.$.$mol_icon_key_variant();
             return obj;
@@ -30138,7 +30123,6 @@ var $;
         tools() {
             return [
                 this.Meetup_add(),
-                this.Rights_toggle(),
                 this.Safe_link()
             ];
         }
@@ -30166,6 +30150,21 @@ var $;
             obj.checked = (next) => this.editing(next);
             return obj;
         }
+        rights(next) {
+            if (next !== undefined)
+                return next;
+            return false;
+        }
+        Rights_toggle_icon() {
+            const obj = new this.$.$mol_icon_shield_account();
+            return obj;
+        }
+        Rights_toggle() {
+            const obj = new this.$.$mol_check_icon();
+            obj.checked = (next) => this.rights(next);
+            obj.Icon = () => this.Rights_toggle_icon();
+            return obj;
+        }
         user_id() {
             return "0_0";
         }
@@ -30184,6 +30183,7 @@ var $;
             return [
                 this.Online(),
                 this.Editing(),
+                this.Rights_toggle(),
                 this.User(),
                 this.Lights()
             ];
@@ -30361,15 +30361,6 @@ var $;
     ], $piterjs_app.prototype, "Meetup_add", null);
     __decorate([
         $mol_mem
-    ], $piterjs_app.prototype, "rights", null);
-    __decorate([
-        $mol_mem
-    ], $piterjs_app.prototype, "Rights_toggle_icon", null);
-    __decorate([
-        $mol_mem
-    ], $piterjs_app.prototype, "Rights_toggle", null);
-    __decorate([
-        $mol_mem
     ], $piterjs_app.prototype, "Safe_icon", null);
     __decorate([
         $mol_mem
@@ -30389,6 +30380,15 @@ var $;
     __decorate([
         $mol_mem
     ], $piterjs_app.prototype, "Editing", null);
+    __decorate([
+        $mol_mem
+    ], $piterjs_app.prototype, "rights", null);
+    __decorate([
+        $mol_mem
+    ], $piterjs_app.prototype, "Rights_toggle_icon", null);
+    __decorate([
+        $mol_mem
+    ], $piterjs_app.prototype, "Rights_toggle", null);
     __decorate([
         $mol_mem
     ], $piterjs_app.prototype, "User", null);
@@ -30873,7 +30873,6 @@ var $;
             tools() {
                 return [
                     ...this.editing() ? [this.Meetup_add()] : [],
-                    ...this.editing() ? [this.Rights_toggle()] : [],
                     this.Safe_link(),
                 ];
             }
@@ -30881,6 +30880,7 @@ var $;
                 return [
                     this.Online(),
                     ...this.Domain().editable() ? [this.Editing()] : [this.User()],
+                    ...this.editing() ? [this.Rights_toggle()] : [],
                     this.Lights(),
                 ];
             }
