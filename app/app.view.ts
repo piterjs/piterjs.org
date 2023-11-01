@@ -138,16 +138,16 @@ namespace $.$$ {
 		tools() {
 			return [
 				... this.editing() ? [ this.Meetup_add() ] : [],
-				... this.editing() ? [ this.Rights_toggle() ] : [],
 				this.Safe_link(),
 			]
 		}
-
+		
 		@ $mol_mem
 		foot() {
 			return [
 				this.Online(),
 				... this.Domain().editable() ? [ this.Editing() ] : [ this.User() ],
+				... this.editing() ? [ this.Rights_toggle() ] : [],
 				this.Lights(),
 			]
 		}
