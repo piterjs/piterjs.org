@@ -1,4 +1,5 @@
 $piterjs_meetup_guests $mol_page
+	theme \$mol_theme_special
 	meetup $piterjs_meetup
 		visitor*? => visitor*?
 	title \Список гостей

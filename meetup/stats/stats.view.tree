@@ -1,4 +1,5 @@
 $piterjs_meetup_stats $mol_page
+	theme \$mol_theme_special
 	meetup $piterjs_meetup
 		joined_moments => joined_moments
 		visitors_list => visitors_list

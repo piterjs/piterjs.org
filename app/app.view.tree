@@ -89,6 +89,7 @@ $piterjs_app $mol_view
 		editing <= editing? false
 	Others $piterjs_others
 	Rights $hyoo_meta_rights
+		theme \$mol_theme_special
 		meta <= Domain
 		tools /
 			<= Rights_close $mol_check
@@ -96,6 +97,7 @@ $piterjs_app $mol_view
 				sub /
 					<= Rights_close_icon $mol_icon_cross
 	Rights_meetup $hyoo_meta_rights
+		theme \$mol_theme_special
 		meta <= meetup_current
 		tools /
 			<= Rights_meetup_close $mol_check
