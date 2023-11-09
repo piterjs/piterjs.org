@@ -217,6 +217,7 @@ declare namespace $ {
         abstract put(next: Result | Error | Promise<Result | Error>): Result | Error | Promise<Result | Error>;
         sync(): Awaited<Result>;
         async(): Promise<Result>;
+        step(): Promise<null>;
     }
 }
 
@@ -1804,9 +1805,6 @@ declare namespace $.$$ {
 declare namespace $ {
     class $mol_plugin extends $mol_view {
         dom_node_external(next?: Element): Element;
-        attr_static(): {
-            [key: string]: string | number | boolean;
-        };
         render(): void;
     }
 }
@@ -2049,6 +2047,7 @@ declare namespace $ {
         event(): Record<string, any>;
         plugins(): readonly any[];
         selection_watcher(): any;
+        error_report(): any;
         disabled(): boolean;
         value(next?: any): string;
         value_changed(next?: any): string;
@@ -2079,6 +2078,7 @@ declare namespace $ {
 declare namespace $.$$ {
     class $mol_string extends $.$mol_string {
         event_change(next?: Event): void;
+        error_report(): void;
         hint_visible(): string;
         disabled(): boolean;
         autocomplete_native(): "on" | "off";
@@ -2487,6 +2487,24 @@ declare namespace $ {
 declare namespace $ {
     class $mol_icon_calendar_today extends $mol_icon {
         path(): string;
+    }
+}
+
+declare namespace $ {
+    let $mol_mem_persist: typeof $mol_wire_solid;
+}
+
+declare namespace $ {
+    class $mol_storage extends $mol_object2 {
+        static native(): {
+            estimate: () => StorageEstimate;
+            getDirectory: () => FileSystemDirectoryHandle;
+            persist: () => boolean;
+            persisted: () => boolean;
+        };
+        static persisted(next?: boolean): boolean;
+        static estimate(): StorageEstimate;
+        static dir(): FileSystemDirectoryHandle;
     }
 }
 
@@ -3136,6 +3154,7 @@ declare namespace $ {
         event(): Record<string, any>;
         sub(): readonly any[];
         symbols_alt(): Record<string, any>;
+        symbols_alt_ctrl(): Record<string, any>;
         symbols_alt_shift(): Record<string, any>;
         clickable(next?: any): boolean;
         sidebar_showed(): boolean;
@@ -3793,6 +3812,30 @@ declare namespace $ {
 }
 
 declare namespace $ {
+    class $mol_icon_settings extends $mol_icon {
+        path(): string;
+    }
+}
+
+declare namespace $ {
+    class $mol_icon_settings_outline extends $mol_icon {
+        path(): string;
+    }
+}
+
+declare namespace $ {
+    class $mol_icon_shield extends $mol_icon {
+        path(): string;
+    }
+}
+
+declare namespace $ {
+    class $mol_icon_shield_account extends $mol_icon {
+        path(): string;
+    }
+}
+
+declare namespace $ {
     class $mol_icon_account extends $mol_icon {
         path(): string;
     }
@@ -3883,13 +3926,13 @@ declare namespace $ {
         start(next?: any): $mol_time_moment;
         joined_count(): number;
         joined(next?: any): boolean;
+        editable(): boolean;
         meetup(): $piterjs_meetup;
         Title(): $mol_string_button;
         tools(): readonly any[];
         body(): readonly any[];
         Speech(id: any): $$.$piterjs_speech_snippet;
         foot(): readonly any[];
-        editing(): boolean;
         Start(): $$.$mol_date;
         Close_icon(): $mol_icon_cross;
         Close(): $$.$mol_link;
@@ -3933,6 +3976,12 @@ declare namespace $ {
         meetup_public(next?: any): boolean;
         Public_icon(): $mol_icon_eye;
         Public(): $mol_check_icon;
+        Editing_icon(): $mol_icon_settings_outline;
+        editing(next?: any): boolean;
+        Editing(): $mol_check_icon;
+        rights(next?: any): boolean;
+        Rights_toggle_icon(): $mol_icon_shield_account;
+        Rights_toggle(): $mol_check_icon;
         Guests_link_icon(): $mol_icon_account_group_outline;
         Guests_link(): $$.$mol_link;
         Stats_link_icon(): $mol_icon_chart_bar_stacked;
@@ -3951,9 +4000,7 @@ declare namespace $.$$ {
         speeches(): $piterjs_speech_snippet[];
         speech(index: number): $piterjs_speech;
         speech_add(): void;
-        Public(): $mol_check_icon;
-        Guests_link(): $mol_link;
-        Stats_link(): $mol_link;
+        foot(): readonly any[];
         capacity(next?: number): number;
         capacity_cut(): void;
         profile_editable(): boolean;
@@ -5093,12 +5140,12 @@ declare namespace $ {
         start(next?: any): $mol_time_moment;
         slides(next?: any): string;
         video(next?: any): string;
+        editable(): boolean;
         speech(): $piterjs_speech;
         Title(): $mol_string_button;
         tools(): readonly any[];
         body(): readonly any[];
         foot(): readonly any[];
-        editing(): boolean;
         Start(): $$.$mol_pick_time;
         Close_icon(): $mol_icon_cross;
         Close(): $$.$mol_link;
@@ -5115,6 +5162,9 @@ declare namespace $ {
         speech_public(next?: any): boolean;
         Public_icon(): $mol_icon_eye;
         Public(): $mol_check_icon;
+        Editing_icon(): $mol_icon_settings_outline;
+        editing(next?: any): boolean;
+        Editing(): $mol_check_icon;
         Poster_copy_icon(): $mol_icon_camera;
         poster_1_1_blob(next?: any): Blob;
         poster_1_1_name(): string;
@@ -5139,8 +5189,7 @@ declare namespace $.$$ {
     class $piterjs_speech_page extends $.$piterjs_speech_page {
         speaker(): $piterjs_speaker;
         links(): $mol_string_link[];
-        Public(): $mol_check_icon;
-        Poster_copy(): $mol_pick;
+        foot(): readonly any[];
         poster_1_1_name(): string;
         poster_16_9_name(): string;
         poster_1_1_blob(): Blob;
@@ -6497,29 +6546,12 @@ declare namespace $ {
         details(): string;
         Details(): $$.$mol_text;
         Changed(): $$.$mol_date;
+        author_link(id: any): string;
         Author_link(id: any): $$.$hyoo_meta_link;
         author_list(): readonly any[];
         Author_list(): $mol_view;
         Following(): $$.$hyoo_meta_link;
         Signature(): $mol_view;
-    }
-}
-
-declare namespace $ {
-    let $mol_mem_persist: typeof $mol_wire_solid;
-}
-
-declare namespace $ {
-    class $mol_storage extends $mol_object2 {
-        static native(): {
-            estimate: () => StorageEstimate;
-            getDirectory: () => FileSystemDirectoryHandle;
-            persist: () => boolean;
-            persisted: () => boolean;
-        };
-        static persisted(next?: boolean): boolean;
-        static estimate(): StorageEstimate;
-        static dir(): FileSystemDirectoryHandle;
     }
 }
 
@@ -6539,6 +6571,7 @@ declare namespace $.$$ {
         slides_content(): string;
         slides_send(): void;
         history_mark(): void;
+        author_link(id: $mol_int62_string): string;
     }
 }
 
@@ -6553,18 +6586,6 @@ declare namespace $ {
 
 declare namespace $ {
     class $mol_icon_export extends $mol_icon {
-        path(): string;
-    }
-}
-
-declare namespace $ {
-    class $mol_icon_shield extends $mol_icon {
-        path(): string;
-    }
-}
-
-declare namespace $ {
-    class $mol_icon_shield_account extends $mol_icon {
         path(): string;
     }
 }
@@ -7296,18 +7317,6 @@ declare namespace $ {
 }
 
 declare namespace $ {
-    class $mol_icon_settings extends $mol_icon {
-        path(): string;
-    }
-}
-
-declare namespace $ {
-    class $mol_icon_settings_outline extends $mol_icon {
-        path(): string;
-    }
-}
-
-declare namespace $ {
     class $mol_icon_share extends $mol_icon {
         path(): string;
     }
@@ -7325,6 +7334,7 @@ declare namespace $ {
         meetup(id: any): $piterjs_meetup;
         meetup_public(id: any, next?: any): boolean;
         person(): $piterjs_person;
+        editable(): boolean;
         Domain(): $piterjs_domain;
         plugins(): readonly any[];
         sub(): readonly any[];
@@ -7340,6 +7350,7 @@ declare namespace $ {
         Place(): $$.$piterjs_place_page;
         Others(): $$.$piterjs_others;
         Rights(): $$.$hyoo_meta_rights;
+        Rights_meetup(): $$.$hyoo_meta_rights;
         Wiki(): $$.$hyoo_page;
         Safe(): $$.$hyoo_meta_safe;
         Theme(): $$.$mol_theme_auto;
@@ -7376,11 +7387,16 @@ declare namespace $ {
         Wiki_link(): $$.$mol_link;
         Links(): $$.$mol_list;
         Menu_content(): $mol_view;
+        rights_meetup(next?: any): boolean;
         speech(id: any): $piterjs_speech;
         speech_public(id: any, next?: any): boolean;
         meetup_current(): $piterjs_meetup;
         intro(val?: any): string;
         video_uri(next?: any): string;
+        Rights_close_icon(): $mol_icon_cross;
+        Rights_close(): $$.$mol_check;
+        Rights_meetup_close_icon(): $mol_icon_cross;
+        Rights_meetup_close(): $$.$mol_check;
         Safe_close_icon(): $mol_icon_cross;
         Safe_close(): $$.$mol_link;
     }
@@ -7449,6 +7465,9 @@ declare namespace $.$$ {
         video_uri(next?: string): string;
         tools(): ($mol_link | $mol_button_minor)[];
         foot(): ($mol_view | $mol_check_icon | $hyoo_sync_online)[];
+        editing(next?: boolean): boolean;
+        rights(next?: boolean): boolean;
+        rights_meetup(next?: boolean): boolean;
         user_id(): `${string}_${string}`;
         speech_public(id: $mol_int62_string, next?: boolean): boolean;
     }

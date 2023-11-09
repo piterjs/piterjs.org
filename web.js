@@ -802,11 +802,25 @@ var $;
                 }
                 if (!$mol_promise_like(this.cache))
                     return this.cache;
-                await this.cache;
+                await Promise.race([this.cache, this.step()]);
+                if (!$mol_promise_like(this.cache))
+                    return this.cache;
                 if (this.cursor === $mol_wire_cursor.final) {
                     await new Promise(() => { });
                 }
             }
+        }
+        step() {
+            return new Promise(done => {
+                const sub = new $mol_wire_pub_sub;
+                const prev = sub.track_on();
+                sub.track_next(this);
+                sub.track_off(prev);
+                sub.absorb = () => {
+                    done(null);
+                    sub.destructor();
+                };
+            });
         }
     }
     $.$mol_wire_fiber = $mol_wire_fiber;
@@ -1613,6 +1627,9 @@ var $;
     function $mol_dom_render_attributes(el, attrs) {
         for (let name in attrs) {
             let val = attrs[name];
+            if (val === undefined) {
+                continue;
+            }
             if (val === null || val === false) {
                 if (!el.hasAttribute(name))
                     continue;
@@ -1990,7 +2007,7 @@ var $;
 "use strict";
 var $;
 (function ($) {
-    $mol_style_attach("mol/theme/theme.css", ":root {\n\t--mol_theme_hue: 210deg;\n\t--mol_theme_luma: -1;\n\t--mol_theme_satur: 1;\n\t--mol_theme_image: none;\n}\n\n[mol_theme] {\n\tcolor: var(--mol_theme_text);\n\tfill: var(--mol_theme_text);\n}\n:where([mol_theme]) {\n\tbackground-color: var(--mol_theme_back);\n}\n\t\n:root, [mol_theme] {\n\t--mol_theme_back: hsl( var(--mol_theme_hue), calc( var(--mol_theme_satur) * 20% ), calc( 55% + 45% * var(--mol_theme_luma) ) );\n\t--mol_theme_text: hsl( var(--mol_theme_hue), 0%, calc( 40% - 40% * var(--mol_theme_luma) ) );\n\t--mol_theme_field: hsl( var(--mol_theme_hue), calc( var(--mol_theme_satur) * 50% ), calc( 54% + 46% * var(--mol_theme_luma) ), .25 );\n\t\n\t--mol_theme_card: hsl( var(--mol_theme_hue), calc( var(--mol_theme_satur) * 50% ), calc( 55% + 35% * var(--mol_theme_luma) ), .25 );\n\t--mol_theme_hover: hsl( var(--mol_theme_hue), 0%, 50%, .1 );\n\t--mol_theme_line: hsl( var(--mol_theme_hue), 0%, 50%, .2 );\n\t--mol_theme_shade: hsl( var(--mol_theme_hue), 0%, 50%, 1 );\n\t\n\t--mol_theme_control: hsl( var(--mol_theme_hue), 50%, calc( 50% - 10% * var(--mol_theme_luma) ) );\n\t--mol_theme_current: hsl( calc( var(--mol_theme_hue) - 90deg ), 50%, calc( 50% - 10% * var(--mol_theme_luma) ) );\n\t--mol_theme_special: hsl( calc( var(--mol_theme_hue) + 90deg ), 50%, calc( 50% - 10% * var(--mol_theme_luma) ) );\n\t--mol_theme_focus: hsl( calc( var(--mol_theme_hue) + 180deg ), 100%, calc( 55% - 10% * var(--mol_theme_luma) ) );\n\t\n}\n\n[mol_theme=\"$mol_theme_light\"] {\n\t--mol_theme_luma: 1;\n\t--mol_theme_image: none;\n}\n\n[mol_theme=\"$mol_theme_dark\"] {\n\t--mol_theme_luma: -1;\n\t--mol_theme_image: invert(1) hue-rotate( 180deg );\n}\n\n[mol_theme=\"$mol_theme_base\"] {\n\t--mol_theme_luma: -2;\n\t--mol_theme_back: hsl( var(--mol_theme_hue), 50%, 40% );\n\t--mol_theme_hover: hsl( var(--mol_theme_hue), 60%, 30% );\n\t--mol_theme_current: hsl( var(--mol_theme_hue), 100%, 20% );\n}\n\n[mol_theme=\"$mol_theme_current\"] {\n\tbackground-color: var(--mol_theme_back);\n\t--mol_theme_back: hsl( calc( var(--mol_theme_hue) - 90deg ), 50%, calc( 50% + 30% * var(--mol_theme_luma) ) );\n}\n\n[mol_theme=\"$mol_theme_special\"] {\n\t--mol_theme_card: hsl( calc( var(--mol_theme_hue) + 90deg ), 50%, calc( 55% + 35% * var(--mol_theme_luma) ), .25 );\n}\n\n[mol_theme=\"$mol_theme_accent\"] {\n\tbackground-color: var(--mol_theme_back);\n\t--mol_theme_luma: -2;\n\t--mol_theme_shade: hsl( var(--mol_theme_hue), 50%, 95%, .8 );\n\t--mol_theme_back: hsl( calc( var(--mol_theme_hue) + 180deg ), 90%, 50% );\n\t--mol_theme_hover: hsl( calc( var(--mol_theme_hue) + 180deg ), 80%, 35% );\n}\n\n[mol_theme=\"$mol_theme_accent\"] [mol_theme=\"$mol_theme_accent\"] {\n\t--mol_theme_back: black;\n}\n");
+    $mol_style_attach("mol/theme/theme.css", ":root {\n\t--mol_theme_hue: 210deg;\n\t--mol_theme_hue_spread: 90deg;\n}\n\n:where([mol_theme]) {\n\tcolor: var(--mol_theme_text);\n\tfill: var(--mol_theme_text);\n\tbackground-color: var(--mol_theme_back);\n}\n\t\n:root, [mol_theme=\"$mol_theme_dark\"], :where([mol_theme=\"$mol_theme_dark\"]) [mol_theme]  {\n\n\t--mol_theme_luma: -1;\n\t--mol_theme_image: invert(1) hue-rotate( 180deg );\n\n\t--mol_theme_back: hsl( var(--mol_theme_hue), 20%, 10% );\n\t--mol_theme_card: hsl( var(--mol_theme_hue), 50%, 20%, .25 );\n\t--mol_theme_field: hsl( var(--mol_theme_hue), 50%, 8%, .25 );\n\t--mol_theme_hover: hsl( var(--mol_theme_hue), 0%, 50%, .1 );\n\t\n\t--mol_theme_text: hsl( var(--mol_theme_hue), 0%, 80% );\n\t--mol_theme_shade: hsl( var(--mol_theme_hue), 0%, 60%, 1 );\n\t--mol_theme_line: hsl( var(--mol_theme_hue), 0%, 50%, .2 );\n\t--mol_theme_focus: hsl( calc( var(--mol_theme_hue) + 180deg ), 100%, 65% );\n\t\n\t--mol_theme_control: hsl( var(--mol_theme_hue), 60%, 65% );\n\t--mol_theme_current: hsl( calc( var(--mol_theme_hue) - var(--mol_theme_hue_spread) ), 60%, 65% );\n\t--mol_theme_special: hsl( calc( var(--mol_theme_hue) + var(--mol_theme_hue_spread) ), 60%, 65% );\n\n\t/* --mol_theme_back: oklch( 20% .03 var(--mol_theme_hue) );\n\t--mol_theme_card: oklch( 35% .05 var(--mol_theme_hue) / .25 );\n\t--mol_theme_field: oklch( 0% 0 var(--mol_theme_hue) / .25 );\n\t--mol_theme_hover: oklch( 70% 0 var(--mol_theme_hue) / .1 );\n\t\n\t--mol_theme_text: oklch( 80% 0 var(--mol_theme_hue) );\n\t--mol_theme_shade: oklch( 60% 0 var(--mol_theme_hue) );\n\t--mol_theme_line: oklch( 50% 0 var(--mol_theme_hue) / .2 );\n\t--mol_theme_focus: oklch( 80% .2 calc( var(--mol_theme_hue) + 120deg ) );\n\t\n\t--mol_theme_control: oklch( 70% .1 var(--mol_theme_hue) );\n\t--mol_theme_current: oklch( 80% .2 calc( var(--mol_theme_hue) - 60deg ) );\n\t--mol_theme_special: oklch( 80% .3 calc( var(--mol_theme_hue) + 60deg ) ); */\n\n}\n\n[mol_theme=\"$mol_theme_light\"], :where([mol_theme=\"$mol_theme_light\"]) [mol_theme] {\n\t\n\t--mol_theme_luma: 1;\n\t--mol_theme_image: none;\n\t\n\t--mol_theme_back: hsl( var(--mol_theme_hue), 20%, 99% );\n\t--mol_theme_card: hsl( var(--mol_theme_hue), 50%, 90%, .25 );\n\t--mol_theme_field: hsl( var(--mol_theme_hue), 50%, 100%, .5 );\n\t--mol_theme_hover: hsl( var(--mol_theme_hue), 0%, 50%, .1 );\n\t\n\t--mol_theme_text: hsl( var(--mol_theme_hue), 0%, 0% );\n\t--mol_theme_shade: hsl( var(--mol_theme_hue), 0%, 40%, 1 );\n\t--mol_theme_line: hsl( var(--mol_theme_hue), 0%, 50%, .2 );\n\t--mol_theme_focus: hsl( calc( var(--mol_theme_hue) + 180deg ), 100%, 40% );\n\t\n\t--mol_theme_control: hsl( var(--mol_theme_hue), 80%, 30% );\n\t--mol_theme_current: hsl( calc( var(--mol_theme_hue) - var(--mol_theme_hue_spread) ), 80%, 30% );\n\t--mol_theme_special: hsl( calc( var(--mol_theme_hue) + var(--mol_theme_hue_spread) ), 80%, 30% );\n\t\n\t/* --mol_theme_back: oklch( 93% .01 var(--mol_theme_hue) );\n\t--mol_theme_card: oklch( 100% .02 var(--mol_theme_hue) / .25 );\n\t--mol_theme_field: oklch( 100% 0 var(--mol_theme_hue) / .5 );\n\t--mol_theme_hover: oklch( 70% 0 var(--mol_theme_hue) / .1 );\n\t\n\t--mol_theme_text: oklch( 20% 0 var(--mol_theme_hue) );\n\t--mol_theme_shade: oklch( 60% 0 var(--mol_theme_hue) );\n\t--mol_theme_line: oklch( 70% 0 var(--mol_theme_hue) / .2 );\n\t--mol_theme_focus: oklch( 20% .8 calc( var(--mol_theme_hue) + 120deg ) );\n\t\n\t--mol_theme_control: oklch( 45% .25 var(--mol_theme_hue) );\n\t--mol_theme_current: oklch( 45% .5 calc( var(--mol_theme_hue) - 60deg ) );\n\t--mol_theme_special: oklch( 45% .5 calc( var(--mol_theme_hue) + 60deg ) ); */\n\n}\n\n:where( :root, [mol_theme=\"$mol_theme_dark\"] ) [mol_theme=\"$mol_theme_base\"] {\n\t--mol_theme_back: hsl( var(--mol_theme_hue), 50%, 30% );\n\t--mol_theme_card: hsl( var(--mol_theme_hue), 40%, 20%, .25 );\n\t/* --mol_theme_back: oklch( 25% .05 var(--mol_theme_hue) );\n\t--mol_theme_card: oklch( 35% .1 var(--mol_theme_hue) / .25 ); */\n}\n:where( [mol_theme=\"$mol_theme_light\"] ) [mol_theme=\"$mol_theme_base\"] {\n\t--mol_theme_back: hsl( var(--mol_theme_hue), 50%, 80% );\n\t--mol_theme_card: hsl( var(--mol_theme_hue), 80%, 95%, .25 );\n\t/* --mol_theme_back: oklch( 95% .02 var(--mol_theme_hue) );\n\t--mol_theme_card: oklch( 80% .05 var(--mol_theme_hue) / .25 ); */\n}\n\n:where( :root, [mol_theme=\"$mol_theme_dark\"] ) [mol_theme=\"$mol_theme_accent\"] {\n\t--mol_theme_back: hsl( calc( var(--mol_theme_hue) + 180deg ), 90%, 30% );\n\t--mol_theme_card: hsl( calc( var(--mol_theme_hue) + 180deg ), 80%, 20%, .25 );\n\t/* --mol_theme_back: oklch( 40% .2 calc( var(--mol_theme_hue) + 120deg ) );\n\t--mol_theme_card: oklch( 50% .3 calc( var(--mol_theme_hue) + 120deg ) / .25 ); */\n}\n:where( [mol_theme=\"$mol_theme_light\"] ) [mol_theme=\"$mol_theme_accent\"] {\n\t--mol_theme_back: hsl( calc( var(--mol_theme_hue) + 180deg ), 90%, 75% );\n\t--mol_theme_card: hsl( calc( var(--mol_theme_hue) + 180deg ), 80%, 90%, .25 );\n\t/* --mol_theme_back: oklch( 90% .03 calc( var(--mol_theme_hue) + 120deg ) );\n\t--mol_theme_card: oklch( 80% .05 calc( var(--mol_theme_hue) + 120deg ) / .25 ); */\n}\n\n:where( :root, [mol_theme=\"$mol_theme_dark\"] ) [mol_theme=\"$mol_theme_current\"] {\n\t--mol_theme_back: hsl( calc( var(--mol_theme_hue) - var(--mol_theme_hue_spread) ), 50%, 30% );\n\t--mol_theme_card: hsl( calc( var(--mol_theme_hue) - var(--mol_theme_hue_spread) ), 40%, 20%, .25 );\n\t/* --mol_theme_back: oklch( 25% .05 calc( var(--mol_theme_hue) - 60deg ) );\n\t--mol_theme_card: oklch( 35% .1 calc( var(--mol_theme_hue) - 60deg ) / .25 ); */\n}\n:where( [mol_theme=\"$mol_theme_light\"] ) [mol_theme=\"$mol_theme_current\"] {\n\t--mol_theme_back: hsl( calc( var(--mol_theme_hue) - var(--mol_theme_hue_spread) ), 50%, 80% );\n\t--mol_theme_card: hsl( calc( var(--mol_theme_hue) - var(--mol_theme_hue_spread) ), 80%, 95%, .25 );\n\t/* --mol_theme_back: oklch( 95% .02 calc( var(--mol_theme_hue) - 60deg ) );\n\t--mol_theme_card: oklch( 80% .05 calc( var(--mol_theme_hue) - 60deg ) / .25 ); */\n}\n\n:where( :root, [mol_theme=\"$mol_theme_dark\"] ) [mol_theme=\"$mol_theme_special\"] {\n\t--mol_theme_back: hsl( calc( var(--mol_theme_hue) + var(--mol_theme_hue_spread) ), 50%, 30% );\n\t--mol_theme_card: hsl( calc( var(--mol_theme_hue) + var(--mol_theme_hue_spread) ), 40%, 20%, .25 );\n\t/* --mol_theme_back: oklch( 25% .05 calc( var(--mol_theme_hue) + 60deg ) );\n\t--mol_theme_card: oklch( 35% .1 calc( var(--mol_theme_hue) + 60deg ) / .25 ); */\n}\n:where( [mol_theme=\"$mol_theme_light\"] ) [mol_theme=\"$mol_theme_special\"] {\n\t--mol_theme_back: hsl( calc( var(--mol_theme_hue) + var(--mol_theme_hue_spread) ), 50%, 80% );\n\t--mol_theme_card: hsl( calc( var(--mol_theme_hue) + var(--mol_theme_hue_spread) ), 80%, 95%, .25 );\n\t/* --mol_theme_back: oklch( 95% .02 calc( var(--mol_theme_hue) + 60deg ) );\n\t--mol_theme_card: oklch( 80% .05 calc( var(--mol_theme_hue) + 60deg ) / .25 ); */\n}\n");
 })($ || ($ = {}));
 //mol/theme/-css/theme.css.ts
 ;
@@ -2198,7 +2215,6 @@ var $;
             $mol_dom_render_styles(node, this.style_size());
             const attr = this.attr();
             const style = this.style();
-            const fields = this.field();
             $mol_dom_render_attributes(node, attr);
             $mol_dom_render_styles(node, style);
             return node;
@@ -2294,7 +2310,7 @@ var $;
         }
         attr() {
             return {
-                mol_theme: this.theme(),
+                mol_theme: this.theme() ?? undefined,
             };
         }
         style_size() {
@@ -6593,11 +6609,7 @@ var $;
 (function ($) {
     class $mol_plugin extends $mol_view {
         dom_node_external(next) {
-            const host = $mol_owning_get(this).host;
-            return next ?? host.dom_node();
-        }
-        attr_static() {
-            return {};
+            return next ?? $mol_owning_get(this).host.dom_node();
         }
         render() {
             this.dom_node_actual();
@@ -6808,7 +6820,8 @@ var $;
         }
         auto() {
             return [
-                this.selection_watcher()
+                this.selection_watcher(),
+                this.error_report()
             ];
         }
         field() {
@@ -6844,6 +6857,9 @@ var $;
             ];
         }
         selection_watcher() {
+            return null;
+        }
+        error_report() {
             return null;
         }
         disabled() {
@@ -6965,12 +6981,35 @@ var $;
                 const el = next.target;
                 const from = el.selectionStart;
                 const to = el.selectionEnd;
-                el.value = this.value_changed(el.value);
+                try {
+                    el.value = this.value_changed(el.value);
+                }
+                catch (error) {
+                    const el = this.dom_node();
+                    if (error instanceof Error) {
+                        el.setCustomValidity(error.message);
+                        el.reportValidity();
+                    }
+                    $mol_fail_hidden(error);
+                }
                 if (to === null)
                     return;
                 el.selectionEnd = to;
                 el.selectionStart = from;
                 this.selection_change(next);
+            }
+            error_report() {
+                try {
+                    if (this.focused())
+                        this.value();
+                }
+                catch (error) {
+                    const el = this.dom_node();
+                    if (error instanceof Error) {
+                        el.setCustomValidity(error.message);
+                        el.reportValidity();
+                    }
+                }
             }
             hint_visible() {
                 return (this.enabled() ? this.hint() : '') || ' ';
@@ -7011,6 +7050,12 @@ var $;
                 return this.selection()[1];
             }
         }
+        __decorate([
+            $mol_action
+        ], $mol_string.prototype, "event_change", null);
+        __decorate([
+            $mol_mem
+        ], $mol_string.prototype, "error_report", null);
         __decorate([
             $mol_mem
         ], $mol_string.prototype, "selection_watcher", null);
@@ -8604,6 +8649,45 @@ var $;
 "use strict";
 var $;
 (function ($) {
+    $.$mol_mem_persist = $mol_wire_solid;
+})($ || ($ = {}));
+//mol/mem/persist/persist.ts
+;
+"use strict";
+var $;
+(function ($) {
+    class $mol_storage extends $mol_object2 {
+        static native() {
+            return $mol_wire_sync(this.$.$mol_dom_context.navigator.storage);
+        }
+        static persisted(next) {
+            $mol_mem_persist();
+            const native = this.native();
+            const prev = $mol_mem_cached(() => this.persisted()) ?? native.persisted();
+            if (next && !prev)
+                native.persist();
+            return next ?? prev;
+        }
+        static estimate() {
+            return this.native().estimate();
+        }
+        static dir() {
+            return this.native().getDirectory();
+        }
+    }
+    __decorate([
+        $mol_mem
+    ], $mol_storage, "native", null);
+    __decorate([
+        $mol_mem
+    ], $mol_storage, "persisted", null);
+    $.$mol_storage = $mol_storage;
+})($ || ($ = {}));
+//mol/storage/storage.web.ts
+;
+"use strict";
+var $;
+(function ($) {
     class $mol_state_local extends $mol_object {
         static 'native()';
         static native() {
@@ -8637,10 +8721,13 @@ var $;
             this.changes();
             if (next === void 0)
                 return JSON.parse(this.native().getItem(key) || 'null');
-            if (next === null)
+            if (next === null) {
                 this.native().removeItem(key);
-            else
+            }
+            else {
                 this.native().setItem(key, JSON.stringify(next));
+                this.$.$mol_storage.persisted(true);
+            }
             return next;
         }
         prefix() { return ''; }
@@ -11104,6 +11191,7 @@ var $;
                 graveAccent: "́",
                 forwardSlash: "÷",
                 E: "€",
+                V: "✔",
                 X: "×",
                 C: "©",
                 P: "§",
@@ -11118,6 +11206,11 @@ var $;
                 bracketOpen: "[",
                 bracketClose: "]",
                 slashBack: "|"
+            };
+        }
+        symbols_alt_ctrl() {
+            return {
+                space: " "
             };
         }
         symbols_alt_shift() {
@@ -11307,7 +11400,9 @@ var $;
             symbol_insert(event) {
                 const symbol = event.shiftKey
                     ? this.symbols_alt_shift()[$mol_keyboard_code[event.keyCode]]
-                    : this.symbols_alt()[$mol_keyboard_code[event.keyCode]];
+                    : event.ctrlKey
+                        ? this.symbols_alt_ctrl()[$mol_keyboard_code[event.keyCode]]
+                        : this.symbols_alt()[$mol_keyboard_code[event.keyCode]];
                 if (!symbol)
                     return;
                 document.execCommand('insertText', false, symbol);
@@ -11316,7 +11411,7 @@ var $;
                 this.clickable(event.ctrlKey);
             }
             press(event) {
-                if (event.altKey && !event.ctrlKey) {
+                if (event.altKey) {
                     this.symbol_insert(event);
                 }
                 else {
@@ -13586,6 +13681,54 @@ var $;
 "use strict";
 var $;
 (function ($) {
+    class $mol_icon_settings extends $mol_icon {
+        path() {
+            return "M12,15.5C10.07,15.5 8.5,13.93 8.5,12C8.5,10.07 10.07,8.5 12,8.5C13.93,8.5 15.5,10.07 15.5,12C15.5,13.93 13.93,15.5 12,15.5M19.43,12.97C19.47,12.65 19.5,12.33 19.5,12C19.5,11.67 19.47,11.34 19.43,11L21.54,9.37C21.73,9.22 21.78,8.95 21.66,8.73L19.66,5.27C19.54,5.05 19.27,4.96 19.05,5.05L16.56,6.05C16.04,5.66 15.5,5.32 14.87,5.07L14.5,2.42C14.46,2.18 14.25,2 14,2H10C9.75,2 9.54,2.18 9.5,2.42L9.13,5.07C8.5,5.32 7.96,5.66 7.44,6.05L4.95,5.05C4.73,4.96 4.46,5.05 4.34,5.27L2.34,8.73C2.21,8.95 2.27,9.22 2.46,9.37L4.57,11C4.53,11.34 4.5,11.67 4.5,12C4.5,12.33 4.53,12.65 4.57,12.97L2.46,14.63C2.27,14.78 2.21,15.05 2.34,15.27L4.34,18.73C4.46,18.95 4.73,19.03 4.95,18.95L7.44,17.94C7.96,18.34 8.5,18.68 9.13,18.93L9.5,21.58C9.54,21.82 9.75,22 10,22H14C14.25,22 14.46,21.82 14.5,21.58L14.87,18.93C15.5,18.67 16.04,18.34 16.56,17.94L19.05,18.95C19.27,19.03 19.54,18.95 19.66,18.73L21.66,15.27C21.78,15.05 21.73,14.78 21.54,14.63L19.43,12.97Z";
+        }
+    }
+    $.$mol_icon_settings = $mol_icon_settings;
+})($ || ($ = {}));
+//mol/icon/settings/-view.tree/settings.view.tree.ts
+;
+"use strict";
+var $;
+(function ($) {
+    class $mol_icon_settings_outline extends $mol_icon {
+        path() {
+            return "M12,8C14.21,8 16,9.79 16,12C16,14.21 14.21,16 12,16C9.79,16 8,14.21 8,12C8,9.79 9.79,8 12,8M12,10C10.9,10 10,10.9 10,12C10,13.1 10.9,14 12,14C13.1,14 14,13.1 14,12C14,10.9 13.1,10 12,10M10,22C9.75,22 9.54,21.82 9.5,21.58L9.13,18.93C8.5,18.68 7.96,18.34 7.44,17.94L4.95,18.95C4.73,19.03 4.46,18.95 4.34,18.73L2.34,15.27C2.21,15.05 2.27,14.78 2.46,14.63L4.57,12.97L4.5,12L4.57,11L2.46,9.37C2.27,9.22 2.21,8.95 2.34,8.73L4.34,5.27C4.46,5.05 4.73,4.96 4.95,5.05L7.44,6.05C7.96,5.66 8.5,5.32 9.13,5.07L9.5,2.42C9.54,2.18 9.75,2 10,2H14C14.25,2 14.46,2.18 14.5,2.42L14.87,5.07C15.5,5.32 16.04,5.66 16.56,6.05L19.05,5.05C19.27,4.96 19.54,5.05 19.66,5.27L21.66,8.73C21.79,8.95 21.73,9.22 21.54,9.37L19.43,11L19.5,12L19.43,13L21.54,14.63C21.73,14.78 21.79,15.05 21.66,15.27L19.66,18.73C19.54,18.95 19.27,19.04 19.05,18.95L16.56,17.95C16.04,18.34 15.5,18.68 14.87,18.93L14.5,21.58C14.46,21.82 14.25,22 14,22H10M11.25,4L10.88,6.61C9.68,6.86 8.62,7.5 7.85,8.39L5.44,7.35L4.69,8.65L6.8,10.2C6.4,11.37 6.4,12.64 6.8,13.8L4.68,15.36L5.43,16.66L7.86,15.62C8.63,16.5 9.68,17.14 10.87,17.38L11.24,20H12.76L13.13,17.39C14.32,17.14 15.37,16.5 16.14,15.62L18.57,16.66L19.32,15.36L17.2,13.81C17.6,12.64 17.6,11.37 17.2,10.2L19.31,8.65L18.56,7.35L16.15,8.39C15.38,7.5 14.32,6.86 13.12,6.62L12.75,4H11.25Z";
+        }
+    }
+    $.$mol_icon_settings_outline = $mol_icon_settings_outline;
+})($ || ($ = {}));
+//mol/icon/settings/outline/-view.tree/outline.view.tree.ts
+;
+"use strict";
+var $;
+(function ($) {
+    class $mol_icon_shield extends $mol_icon {
+        path() {
+            return "M12,1L3,5V11C3,16.55 6.84,21.74 12,23C17.16,21.74 21,16.55 21,11V5L12,1Z";
+        }
+    }
+    $.$mol_icon_shield = $mol_icon_shield;
+})($ || ($ = {}));
+//mol/icon/shield/-view.tree/shield.view.tree.ts
+;
+"use strict";
+var $;
+(function ($) {
+    class $mol_icon_shield_account extends $mol_icon {
+        path() {
+            return "M12,1L3,5V11C3,16.55 6.84,21.74 12,23C17.16,21.74 21,16.55 21,11V5L12,1M12,5C13.66,5 15,6.34 15,8C15,9.66 13.66,11 12,11C10.34,11 9,9.66 9,8C9,6.34 10.34,5 12,5M17.13,17C15.92,18.85 14.11,20.24 12,20.92C9.89,20.24 8.08,18.85 6.87,17C6.53,16.5 6.24,16 6,15.47C6,13.82 8.71,12.47 12,12.47C15.29,12.47 18,13.79 18,15.47C17.76,16 17.47,16.5 17.13,17Z";
+        }
+    }
+    $.$mol_icon_shield_account = $mol_icon_shield_account;
+})($ || ($ = {}));
+//mol/icon/shield/account/-view.tree/account.view.tree.ts
+;
+"use strict";
+var $;
+(function ($) {
     class $mol_icon_account extends $mol_icon {
         path() {
             return "M12,4C14.21,4 16,5.79 16,8C16,10.21 14.21,12 12,12C9.79,12 8,10.21 8,8C8,5.79 9.79,4 12,4M12,14C16.42,14 20,15.79 20,18V20H4V18C4,15.79 7.58,14 12,14Z";
@@ -13840,6 +13983,9 @@ var $;
         joined(next) {
             return this.meetup().joined(next);
         }
+        editable() {
+            return this.meetup().editable();
+        }
         meetup() {
             const obj = new this.$.$piterjs_meetup();
             return obj;
@@ -13870,12 +14016,11 @@ var $;
         foot() {
             return [
                 this.Public(),
+                this.Editing(),
+                this.Rights_toggle(),
                 this.Guests_link(),
                 this.Stats_link()
             ];
-        }
-        editing() {
-            return false;
         }
         Start() {
             const obj = new this.$.$mol_date();
@@ -14138,6 +14283,36 @@ var $;
             obj.hint = () => "Опубликовано";
             return obj;
         }
+        Editing_icon() {
+            const obj = new this.$.$mol_icon_settings_outline();
+            return obj;
+        }
+        editing(next) {
+            if (next !== undefined)
+                return next;
+            return false;
+        }
+        Editing() {
+            const obj = new this.$.$mol_check_icon();
+            obj.Icon = () => this.Editing_icon();
+            obj.checked = (next) => this.editing(next);
+            return obj;
+        }
+        rights(next) {
+            if (next !== undefined)
+                return next;
+            return false;
+        }
+        Rights_toggle_icon() {
+            const obj = new this.$.$mol_icon_shield_account();
+            return obj;
+        }
+        Rights_toggle() {
+            const obj = new this.$.$mol_check_icon();
+            obj.checked = (next) => this.rights(next);
+            obj.Icon = () => this.Rights_toggle_icon();
+            return obj;
+        }
         Guests_link_icon() {
             const obj = new this.$.$mol_icon_account_group_outline();
             return obj;
@@ -14282,6 +14457,24 @@ var $;
     ], $piterjs_meetup_page.prototype, "Public", null);
     __decorate([
         $mol_mem
+    ], $piterjs_meetup_page.prototype, "Editing_icon", null);
+    __decorate([
+        $mol_mem
+    ], $piterjs_meetup_page.prototype, "editing", null);
+    __decorate([
+        $mol_mem
+    ], $piterjs_meetup_page.prototype, "Editing", null);
+    __decorate([
+        $mol_mem
+    ], $piterjs_meetup_page.prototype, "rights", null);
+    __decorate([
+        $mol_mem
+    ], $piterjs_meetup_page.prototype, "Rights_toggle_icon", null);
+    __decorate([
+        $mol_mem
+    ], $piterjs_meetup_page.prototype, "Rights_toggle", null);
+    __decorate([
+        $mol_mem
     ], $piterjs_meetup_page.prototype, "Guests_link_icon", null);
     __decorate([
         $mol_mem
@@ -14341,20 +14534,10 @@ var $;
                 const speech = this.meetup().speech_make();
                 this.$.$mol_state_arg.value('speech', speech.id());
             }
-            Public() {
-                if (!this.editing())
-                    return null;
-                return super.Public();
-            }
-            Guests_link() {
-                if (!this.editing())
-                    return null;
-                return super.Guests_link();
-            }
-            Stats_link() {
-                if (!this.editing())
-                    return null;
-                return super.Stats_link();
+            foot() {
+                if (!this.editable())
+                    return [];
+                return super.foot();
             }
             capacity(next) {
                 return this.meetup().place().capacity_max(next);
@@ -14416,6 +14599,9 @@ var $;
         __decorate([
             $mol_mem
         ], $piterjs_meetup_page.prototype, "speeches", null);
+        __decorate([
+            $mol_mem
+        ], $piterjs_meetup_page.prototype, "foot", null);
         __decorate([
             $mol_mem
         ], $piterjs_meetup_page.prototype, "join_content", null);
@@ -19527,6 +19713,9 @@ var $;
         video(next) {
             return this.speech().video(next);
         }
+        editable() {
+            return this.speech().editable();
+        }
         speech() {
             const obj = new this.$.$piterjs_speech();
             return obj;
@@ -19555,11 +19744,9 @@ var $;
         foot() {
             return [
                 this.Public(),
+                this.Editing(),
                 this.Poster_copy()
             ];
-        }
-        editing() {
-            return false;
         }
         Start() {
             const obj = new this.$.$mol_pick_time();
@@ -19656,6 +19843,21 @@ var $;
             const obj = new this.$.$mol_check_icon();
             obj.checked = (next) => this.speech_public(next);
             obj.Icon = () => this.Public_icon();
+            return obj;
+        }
+        Editing_icon() {
+            const obj = new this.$.$mol_icon_settings_outline();
+            return obj;
+        }
+        editing(next) {
+            if (next !== undefined)
+                return next;
+            return false;
+        }
+        Editing() {
+            const obj = new this.$.$mol_check_icon();
+            obj.Icon = () => this.Editing_icon();
+            obj.checked = (next) => this.editing(next);
             return obj;
         }
         Poster_copy_icon() {
@@ -19758,6 +19960,15 @@ var $;
     __decorate([
         $mol_mem
     ], $piterjs_speech_page.prototype, "Public", null);
+    __decorate([
+        $mol_mem
+    ], $piterjs_speech_page.prototype, "Editing_icon", null);
+    __decorate([
+        $mol_mem
+    ], $piterjs_speech_page.prototype, "editing", null);
+    __decorate([
+        $mol_mem
+    ], $piterjs_speech_page.prototype, "Editing", null);
     __decorate([
         $mol_mem
     ], $piterjs_speech_page.prototype, "Poster_copy_icon", null);
@@ -19887,15 +20098,10 @@ var $;
                     ...(this.editing() || this.video()) ? [this.Video()] : [],
                 ];
             }
-            Public() {
-                if (!this.editing())
-                    return null;
-                return super.Public();
-            }
-            Poster_copy() {
-                if (!this.editing())
-                    return null;
-                return super.Poster_copy();
+            foot() {
+                if (!this.editable())
+                    return [];
+                return super.foot();
             }
             poster_1_1_name() {
                 return `${this.speaker().title()} - ${this.title()} 1-1.png`;
@@ -22651,7 +22857,7 @@ var $;
 "use strict";
 var $;
 (function ($) {
-    $mol_style_attach("mol/book2/book2.view.css", "[mol_book2] {\n\tdisplay: flex;\n\tflex-flow: row nowrap;\n\talign-items: stretch;\n\tflex: 1 1 auto;\n\talign-self: stretch;\n\tmargin: 0;\n\t/* box-shadow: 0 0 0 1px var(--mol_theme_line); */\n\t/* transform: translateZ(0); */\n\ttransition: none;\n\toverflow: overlay;\n\tscroll-snap-type: x mandatory;\n\tpadding: 0 1px;\n\tscroll-padding: 0 1px;\n\tgap: 1px;\n}\n\n[mol_book2] > * {\n/* \tflex: none; */\n\tscroll-snap-stop: always;\n\tscroll-snap-align: end;\n\tposition: relative;\n\tmin-height: 100%;\n\tmax-height: 100%;\n\tmax-width: 100%;\n\tflex-shrink: 0;\n}\n\n[mol_book2] > *:not(:first-of-type):before,\n[mol_book2] > *:not(:last-of-type)::after {\n\tcontent: '';\n\tposition: absolute;\n\ttop: 1.5rem;\n\twidth: 3px;\n\theight: 1rem;\n\tbackground: linear-gradient(\n\t\tto bottom,\n\t\tvar(--mol_theme_focus) 0%,\n\t\tvar(--mol_theme_focus) 15%,\n\t\ttransparent 15%,\n\t\ttransparent 45%,\n\t\tvar(--mol_theme_focus) 45%,\n\t\tvar(--mol_theme_focus) 55%,\n\t\ttransparent 55%,\n\t\ttransparent 85%,\n\t\tvar(--mol_theme_focus) 85%,\n\t\tvar(--mol_theme_focus) 100%\n\t);\n\tborder-radius: var(--mol_gap_round);\n\topacity: .5;\n}\n[mol_book2] > *:not(:first-of-type):before {\n\tleft: -2px;\n}\n[mol_book2] > *:not(:last-of-type)::after {\n\tright: -2px;\n}\n\n:where([mol_book2]) > * {\n\tbackground-color: var(--mol_theme_card);\n\t/* box-shadow: 0 0 0 1px var(--mol_theme_back); */\n}\n\n[mol_book2] > [mol_book2] {\n\tdisplay: contents;\n}\n\n[mol_book2] > *:first-child {\n\tscroll-snap-align: start;\n}\n\n[mol_book2] > [mol_view] {\n\ttransform: none; /* prevent content clipping */\n}\n\n[mol_book2_placeholder] {\n\tflex: 1 1 0;\n\tbackground: none;\n}\n\n[mol_book2_gap] {\n\tbackground: none;\n\tflex-grow: 1;\n\tscroll-snap-align: none;\n\tmargin-right: -1px;\n\tbox-shadow: none;\n}\n\n[mol_book2_gap]::before,\n[mol_book2_gap]::after {\n\tdisplay: none;\n}\n");
+    $mol_style_attach("mol/book2/book2.view.css", "[mol_book2] {\n\tdisplay: flex;\n\tflex-flow: row nowrap;\n\talign-items: stretch;\n\tflex: 1 1 auto;\n\talign-self: stretch;\n\tmargin: 0;\n\t/* box-shadow: 0 0 0 1px var(--mol_theme_line); */\n\t/* transform: translateZ(0); */\n\ttransition: none;\n\toverflow: overlay;\n\tscroll-snap-type: x mandatory;\n\tpadding: 0 1px;\n\tscroll-padding: 0 1px;\n\tgap: 1px;\n}\n\n[mol_book2] > * {\n/* \tflex: none; */\n\tscroll-snap-stop: always;\n\tscroll-snap-align: end;\n\tposition: relative;\n\tmin-height: 100%;\n\tmax-height: 100%;\n\tmax-width: 100%;\n\tflex-shrink: 0;\n}\n\n[mol_book2] > *:not(:first-of-type):before,\n[mol_book2] > *:not(:last-of-type)::after {\n\tcontent: '';\n\tposition: absolute;\n\ttop: 1.5rem;\n\twidth: 3px;\n\theight: 1rem;\n\tbackground: linear-gradient(\n\t\tto bottom,\n\t\tvar(--mol_theme_focus) 0%,\n\t\tvar(--mol_theme_focus) 15%,\n\t\ttransparent 15%,\n\t\ttransparent 42%,\n\t\tvar(--mol_theme_focus) 42%,\n\t\tvar(--mol_theme_focus) 58%,\n\t\ttransparent 58%,\n\t\ttransparent 85%,\n\t\tvar(--mol_theme_focus) 85%,\n\t\tvar(--mol_theme_focus) 100%\n\t);\n\topacity: .5;\n}\n[mol_book2] > *:not(:first-of-type):before {\n\tleft: -2px;\n}\n[mol_book2] > *:not(:last-of-type)::after {\n\tright: -2px;\n}\n\n:where([mol_book2]) > * {\n\tbackground-color: var(--mol_theme_card);\n\t/* box-shadow: 0 0 0 1px var(--mol_theme_back); */\n}\n\n[mol_book2] > [mol_book2] {\n\tdisplay: contents;\n}\n\n[mol_book2] > *:first-child {\n\tscroll-snap-align: start;\n}\n\n[mol_book2] > [mol_view] {\n\ttransform: none; /* prevent content clipping */\n}\n\n[mol_book2_placeholder] {\n\tflex: 1 1 0;\n\tbackground: none;\n}\n\n[mol_book2_gap] {\n\tbackground: none;\n\tflex-grow: 1;\n\tscroll-snap-align: none;\n\tmargin-right: -1px;\n\tbox-shadow: none;\n}\n\n[mol_book2_gap]::before,\n[mol_book2_gap]::after {\n\tdisplay: none;\n}\n");
 })($ || ($ = {}));
 //mol/book2/-css/book2.view.css.ts
 ;
@@ -23399,6 +23605,7 @@ var $;
                 Unit.put(unit, [unit.land, unit.head, unit.self]);
             }
             await trans.commit();
+            this.$.$mol_storage.persisted(true);
         }
         reconnects(reset) {
             return ($mol_wire_probe(() => this.reconnects()) ?? 0) + 1;
@@ -24716,7 +24923,8 @@ var $;
                 return this.item(id).land.allowed_mod();
             }
             ids() {
-                return super.ids().slice().reverse();
+                const self = this.id();
+                return super.ids().filter(id => id !== self).reverse();
             }
             items() {
                 return this.ids().map(id => this.Item(id));
@@ -25363,6 +25571,8 @@ var $;
         class $hyoo_page_side_menu extends $.$hyoo_page_side_menu {
             item_expanded(id, next) {
                 const cur = this.side_current();
+                if (id === cur.id())
+                    return false;
                 const path = [...cur.books()];
                 if (cur.pages().length)
                     path.unshift(cur);
@@ -25927,9 +26137,13 @@ var $;
             obj.value_moment = () => this.changed_moment();
             return obj;
         }
+        author_link(id) {
+            return "https://page.hyoo.ru/#!={person}";
+        }
         Author_link(id) {
             const obj = new this.$.$hyoo_meta_link();
             obj.meta = () => this.peer(id);
+            obj.uri = () => this.author_link(id);
             return obj;
         }
         author_list() {
@@ -26057,45 +26271,6 @@ var $;
 "use strict";
 var $;
 (function ($) {
-    $.$mol_mem_persist = $mol_wire_solid;
-})($ || ($ = {}));
-//mol/mem/persist/persist.ts
-;
-"use strict";
-var $;
-(function ($) {
-    class $mol_storage extends $mol_object2 {
-        static native() {
-            return $mol_wire_sync(this.$.$mol_dom_context.navigator.storage);
-        }
-        static persisted(next) {
-            $mol_mem_persist();
-            const native = this.native();
-            const prev = $mol_mem_cached(() => this.persisted()) ?? native.persisted();
-            if (next && !prev)
-                native.persist();
-            return next ?? prev;
-        }
-        static estimate() {
-            return this.native().estimate();
-        }
-        static dir() {
-            return this.native().getDirectory();
-        }
-    }
-    __decorate([
-        $mol_mem
-    ], $mol_storage, "native", null);
-    __decorate([
-        $mol_mem
-    ], $mol_storage, "persisted", null);
-    $.$mol_storage = $mol_storage;
-})($ || ($ = {}));
-//mol/storage/storage.ts
-;
-"use strict";
-var $;
-(function ($) {
     var $$;
     (function ($$) {
         class $hyoo_page_side_view extends $.$hyoo_page_side_view {
@@ -26160,6 +26335,9 @@ var $;
             }
             history_mark() {
                 this.profile().history_add(this.side().id());
+            }
+            author_link(id) {
+                return super.author_link(id).replace('{person}', id);
             }
         }
         __decorate([
@@ -26251,30 +26429,6 @@ var $;
     $.$mol_icon_export = $mol_icon_export;
 })($ || ($ = {}));
 //mol/icon/export/-view.tree/export.view.tree.ts
-;
-"use strict";
-var $;
-(function ($) {
-    class $mol_icon_shield extends $mol_icon {
-        path() {
-            return "M12,1L3,5V11C3,16.55 6.84,21.74 12,23C17.16,21.74 21,16.55 21,11V5L12,1Z";
-        }
-    }
-    $.$mol_icon_shield = $mol_icon_shield;
-})($ || ($ = {}));
-//mol/icon/shield/-view.tree/shield.view.tree.ts
-;
-"use strict";
-var $;
-(function ($) {
-    class $mol_icon_shield_account extends $mol_icon {
-        path() {
-            return "M12,1L3,5V11C3,16.55 6.84,21.74 12,23C17.16,21.74 21,16.55 21,11V5L12,1M12,5C13.66,5 15,6.34 15,8C15,9.66 13.66,11 12,11C10.34,11 9,9.66 9,8C9,6.34 10.34,5 12,5M17.13,17C15.92,18.85 14.11,20.24 12,20.92C9.89,20.24 8.08,18.85 6.87,17C6.53,16.5 6.24,16 6,15.47C6,13.82 8.71,12.47 12,12.47C15.29,12.47 18,13.79 18,15.47C17.76,16 17.47,16.5 17.13,17Z";
-        }
-    }
-    $.$mol_icon_shield_account = $mol_icon_shield_account;
-})($ || ($ = {}));
-//mol/icon/shield/account/-view.tree/account.view.tree.ts
 ;
 "use strict";
 var $;
@@ -27911,6 +28065,7 @@ var $;
 var $;
 (function ($) {
     function $mol_base64_decode_web(base64Str) {
+        base64Str = base64Str.replace(/-/g, '+').replace(/_/g, '/');
         return new Uint8Array($mol_dom_context.atob(base64Str).split('').map(c => c.charCodeAt(0)));
     }
     $.$mol_base64_decode_web = $mol_base64_decode_web;
@@ -29407,30 +29562,6 @@ var $;
 "use strict";
 var $;
 (function ($) {
-    class $mol_icon_settings extends $mol_icon {
-        path() {
-            return "M12,15.5C10.07,15.5 8.5,13.93 8.5,12C8.5,10.07 10.07,8.5 12,8.5C13.93,8.5 15.5,10.07 15.5,12C15.5,13.93 13.93,15.5 12,15.5M19.43,12.97C19.47,12.65 19.5,12.33 19.5,12C19.5,11.67 19.47,11.34 19.43,11L21.54,9.37C21.73,9.22 21.78,8.95 21.66,8.73L19.66,5.27C19.54,5.05 19.27,4.96 19.05,5.05L16.56,6.05C16.04,5.66 15.5,5.32 14.87,5.07L14.5,2.42C14.46,2.18 14.25,2 14,2H10C9.75,2 9.54,2.18 9.5,2.42L9.13,5.07C8.5,5.32 7.96,5.66 7.44,6.05L4.95,5.05C4.73,4.96 4.46,5.05 4.34,5.27L2.34,8.73C2.21,8.95 2.27,9.22 2.46,9.37L4.57,11C4.53,11.34 4.5,11.67 4.5,12C4.5,12.33 4.53,12.65 4.57,12.97L2.46,14.63C2.27,14.78 2.21,15.05 2.34,15.27L4.34,18.73C4.46,18.95 4.73,19.03 4.95,18.95L7.44,17.94C7.96,18.34 8.5,18.68 9.13,18.93L9.5,21.58C9.54,21.82 9.75,22 10,22H14C14.25,22 14.46,21.82 14.5,21.58L14.87,18.93C15.5,18.67 16.04,18.34 16.56,17.94L19.05,18.95C19.27,19.03 19.54,18.95 19.66,18.73L21.66,15.27C21.78,15.05 21.73,14.78 21.54,14.63L19.43,12.97Z";
-        }
-    }
-    $.$mol_icon_settings = $mol_icon_settings;
-})($ || ($ = {}));
-//mol/icon/settings/-view.tree/settings.view.tree.ts
-;
-"use strict";
-var $;
-(function ($) {
-    class $mol_icon_settings_outline extends $mol_icon {
-        path() {
-            return "M12,8C14.21,8 16,9.79 16,12C16,14.21 14.21,16 12,16C9.79,16 8,14.21 8,12C8,9.79 9.79,8 12,8M12,10C10.9,10 10,10.9 10,12C10,13.1 10.9,14 12,14C13.1,14 14,13.1 14,12C14,10.9 13.1,10 12,10M10,22C9.75,22 9.54,21.82 9.5,21.58L9.13,18.93C8.5,18.68 7.96,18.34 7.44,17.94L4.95,18.95C4.73,19.03 4.46,18.95 4.34,18.73L2.34,15.27C2.21,15.05 2.27,14.78 2.46,14.63L4.57,12.97L4.5,12L4.57,11L2.46,9.37C2.27,9.22 2.21,8.95 2.34,8.73L4.34,5.27C4.46,5.05 4.73,4.96 4.95,5.05L7.44,6.05C7.96,5.66 8.5,5.32 9.13,5.07L9.5,2.42C9.54,2.18 9.75,2 10,2H14C14.25,2 14.46,2.18 14.5,2.42L14.87,5.07C15.5,5.32 16.04,5.66 16.56,6.05L19.05,5.05C19.27,4.96 19.54,5.05 19.66,5.27L21.66,8.73C21.79,8.95 21.73,9.22 21.54,9.37L19.43,11L19.5,12L19.43,13L21.54,14.63C21.73,14.78 21.79,15.05 21.66,15.27L19.66,18.73C19.54,18.95 19.27,19.04 19.05,18.95L16.56,17.95C16.04,18.34 15.5,18.68 14.87,18.93L14.5,21.58C14.46,21.82 14.25,22 14,22H10M11.25,4L10.88,6.61C9.68,6.86 8.62,7.5 7.85,8.39L5.44,7.35L4.69,8.65L6.8,10.2C6.4,11.37 6.4,12.64 6.8,13.8L4.68,15.36L5.43,16.66L7.86,15.62C8.63,16.5 9.68,17.14 10.87,17.38L11.24,20H12.76L13.13,17.39C14.32,17.14 15.37,16.5 16.14,15.62L18.57,16.66L19.32,15.36L17.2,13.81C17.6,12.64 17.6,11.37 17.2,10.2L19.31,8.65L18.56,7.35L16.15,8.39C15.38,7.5 14.32,6.86 13.12,6.62L12.75,4H11.25Z";
-        }
-    }
-    $.$mol_icon_settings_outline = $mol_icon_settings_outline;
-})($ || ($ = {}));
-//mol/icon/settings/outline/-view.tree/outline.view.tree.ts
-;
-"use strict";
-var $;
-(function ($) {
     class $mol_icon_share extends $mol_icon {
         path() {
             return "M21,12L14,5V9C7,10 4,15 3,20C5.5,16.5 9,14.9 14,14.9V19L21,12Z";
@@ -29468,6 +29599,9 @@ var $;
         person() {
             return this.Domain().person();
         }
+        editable() {
+            return this.Domain().editable();
+        }
         Domain() {
             const obj = new this.$.$piterjs_domain();
             return obj;
@@ -29497,8 +29631,9 @@ var $;
             const obj = new this.$.$piterjs_meetup_page();
             obj.meetup = () => this.meetup(id);
             obj.person = () => this.person();
-            obj.editing = () => this.editing();
+            obj.editing = (next) => this.editing(next);
             obj.meetup_public = (next) => this.meetup_public(id, next);
+            obj.rights = (next) => this.rights_meetup(next);
             return obj;
         }
         Meetup_guests(id) {
@@ -29514,7 +29649,7 @@ var $;
         Speech(id) {
             const obj = new this.$.$piterjs_speech_page();
             obj.speech = () => this.speech(id);
-            obj.editing = () => this.editing();
+            obj.editing = (next) => this.editing(next);
             obj.speech_public = (next) => this.speech_public(id, next);
             return obj;
         }
@@ -29553,6 +29688,17 @@ var $;
         Rights() {
             const obj = new this.$.$hyoo_meta_rights();
             obj.meta = () => this.Domain();
+            obj.tools = () => [
+                this.Rights_close()
+            ];
+            return obj;
+        }
+        Rights_meetup() {
+            const obj = new this.$.$hyoo_meta_rights();
+            obj.meta = () => this.meetup_current();
+            obj.tools = () => [
+                this.Rights_meetup_close()
+            ];
             return obj;
         }
         Wiki() {
@@ -29765,6 +29911,11 @@ var $;
             ];
             return obj;
         }
+        rights_meetup(next) {
+            if (next !== undefined)
+                return next;
+            return false;
+        }
         speech(id) {
             const obj = new this.$.$piterjs_speech();
             return obj;
@@ -29787,6 +29938,30 @@ var $;
             if (next !== undefined)
                 return next;
             return "";
+        }
+        Rights_close_icon() {
+            const obj = new this.$.$mol_icon_cross();
+            return obj;
+        }
+        Rights_close() {
+            const obj = new this.$.$mol_check();
+            obj.checked = (next) => this.rights(next);
+            obj.sub = () => [
+                this.Rights_close_icon()
+            ];
+            return obj;
+        }
+        Rights_meetup_close_icon() {
+            const obj = new this.$.$mol_icon_cross();
+            return obj;
+        }
+        Rights_meetup_close() {
+            const obj = new this.$.$mol_check();
+            obj.checked = (next) => this.rights_meetup(next);
+            obj.sub = () => [
+                this.Rights_meetup_close_icon()
+            ];
+            return obj;
         }
         Safe_close_icon() {
             const obj = new this.$.$mol_icon_cross();
@@ -29842,6 +30017,9 @@ var $;
     __decorate([
         $mol_mem
     ], $piterjs_app.prototype, "Rights", null);
+    __decorate([
+        $mol_mem
+    ], $piterjs_app.prototype, "Rights_meetup", null);
     __decorate([
         $mol_mem
     ], $piterjs_app.prototype, "Wiki", null);
@@ -29936,6 +30114,9 @@ var $;
         $mol_mem
     ], $piterjs_app.prototype, "Menu_content", null);
     __decorate([
+        $mol_mem
+    ], $piterjs_app.prototype, "rights_meetup", null);
+    __decorate([
         $mol_mem_key
     ], $piterjs_app.prototype, "speech", null);
     __decorate([
@@ -29950,6 +30131,18 @@ var $;
     __decorate([
         $mol_mem
     ], $piterjs_app.prototype, "video_uri", null);
+    __decorate([
+        $mol_mem
+    ], $piterjs_app.prototype, "Rights_close_icon", null);
+    __decorate([
+        $mol_mem
+    ], $piterjs_app.prototype, "Rights_close", null);
+    __decorate([
+        $mol_mem
+    ], $piterjs_app.prototype, "Rights_meetup_close_icon", null);
+    __decorate([
+        $mol_mem
+    ], $piterjs_app.prototype, "Rights_meetup_close", null);
     __decorate([
         $mol_mem
     ], $piterjs_app.prototype, "Safe_close_icon", null);
@@ -30335,15 +30528,16 @@ var $;
                     return [this.Intro()];
                 const pages = [
                     this.Menu(),
-                    ...this.meetup_id() ? [this.Meetup(this.meetup_id())] : [],
+                    ...this.rights() ? [this.Rights()] : [],
                     ...this.safe() ? [this.Safe()] : [],
+                    ...this.meetup_id() ? [this.Meetup(this.meetup_id())] : [],
+                    ...this.rights_meetup() ? [this.Rights_meetup()] : [],
                     ...this.guests() ? [this.Meetup_guests(this.meetup_id())] : [],
                     ...this.stats() ? [this.Meetup_stats(this.meetup_id())] : [],
                     ...this.speech_id() ? [this.Speech(this.speech_id())] : [],
                     ...this.place_show() ? [this.Place()] : [],
                     ...this.video() ? [this.Video()] : [],
                     ...this.others() ? [this.Others()] : [],
-                    ...this.rights() ? [this.Rights()] : [],
                     ...this.wiki() ? this.Wiki().pages() : [],
                 ];
                 if (pages.length === 1)
@@ -30396,9 +30590,18 @@ var $;
                 return [
                     this.Online(),
                     ...this.Domain().editable() ? [this.Editing()] : [this.User()],
-                    ...this.editing() ? [this.Rights_toggle()] : [],
+                    ...this.editable() ? [this.Rights_toggle()] : [],
                     this.Lights(),
                 ];
+            }
+            editing(next) {
+                return this.$.$mol_state_session.value(`${this}.editing()`, next);
+            }
+            rights(next) {
+                return this.$.$mol_state_session.value(`${this}.rights()`, next);
+            }
+            rights_meetup(next) {
+                return this.$.$mol_state_session.value(`${this}.rights_meetup()`, next);
             }
             user_id() {
                 return this.Yard().peer().id;
