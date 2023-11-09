@@ -66,15 +66,16 @@ namespace $.$$ {
 			if( this.intro() != null ) return [ this.Intro() ]
 			const pages = [
 				this.Menu() ,
-				... this.meetup_id() ? [ this.Meetup( this.meetup_id() ) ] : [] ,
+				... this.rights() ? [ this.Rights() ] : [] ,
 				... this.safe() ? [ this.Safe() ] : [],
+				... this.meetup_id() ? [ this.Meetup( this.meetup_id() ) ] : [] ,
+				... this.rights_meetup() ? [ this.Rights_meetup() ] : [] ,
 				... this.guests() ? [ this.Meetup_guests( this.meetup_id() ) ] : [] ,
 				... this.stats() ? [ this.Meetup_stats( this.meetup_id() ) ] : [] ,
 				... this.speech_id() ? [ this.Speech( this.speech_id() ) ] : [] ,
 				... this.place_show() ? [ this.Place() ] : [] ,
 				... this.video() ? [ this.Video() ] : [] ,
 				... this.others() ? [ this.Others() ] : [] ,
-				... this.rights() ? [ this.Rights() ] : [] ,
 				... this.wiki() ? this.Wiki().pages() : [],
 			]
 			if( pages.length === 1 ) pages.push( this.Now() )
@@ -147,9 +148,21 @@ namespace $.$$ {
 			return [
 				this.Online(),
 				... this.Domain().editable() ? [ this.Editing() ] : [ this.User() ],
-				... this.editing() ? [ this.Rights_toggle() ] : [],
+				... this.editable() ? [ this.Rights_toggle() ] : [],
 				this.Lights(),
 			]
+		}
+
+		editing( next?: boolean ) {
+			return this.$.$mol_state_session.value( `${this}.editing()`, next )
+		}
+
+		rights( next?: boolean ) {
+			return this.$.$mol_state_session.value( `${this}.rights()`, next )
+		}
+
+		rights_meetup( next?: boolean ) {
+			return this.$.$mol_state_session.value( `${this}.rights_meetup()`, next )
 		}
 
 		@ $mol_mem

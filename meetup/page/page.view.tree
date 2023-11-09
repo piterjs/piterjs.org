@@ -6,14 +6,15 @@ $piterjs_meetup_page $mol_page
 		start? => start?
 		joined_count => joined_count
 		joined? => joined?
+		editable => editable
 	Title $mol_string_button
 		value? <=> title?
-		enabled <= editing false
+		enabled <= editing
 		hint \Номер
 	tools /
 		<= Start $mol_date
 			value_moment? <=> start?
-			enabled <= editing false
+			enabled <= editing
 			align \bottom_left
 		<= Close $mol_link
 			arg *
@@ -28,7 +29,7 @@ $piterjs_meetup_page $mol_page
 			<= Description $mol_textarea
 				hint \Резюме
 				value? <=> description?
-				enabled <= editing false
+				enabled <= editing
 			<= Links $mol_view sub <= links / 
 				<= Video $mol_link
 					arg *
@@ -54,14 +55,14 @@ $piterjs_meetup_page $mol_page
 					Content <= Afterparty $mol_textarea
 						hint \Адрес, ориентиры, чат
 						value? <=> afterparty?
-						enabled <= editing false
+						enabled <= editing
 				<= Capacity_block $mol_view sub /
 					<= Capacity_field $mol_form_field
 						name \Максимальная вместимость
 						Content <= Capacity $mol_number
 							hint \100
 							value? <=> capacity? 0
-							enabled <= editing false
+							enabled <= editing
 					<= Capacity_cut $mol_button_minor
 						title \закрыть регистрацию
 						click? <=> capacity_cut? null
@@ -94,6 +95,12 @@ $piterjs_meetup_page $mol_page
 			checked? <=> meetup_public? false
 			Icon <= Public_icon $mol_icon_eye
 			hint \Опубликовано
+		<= Editing $mol_check_icon
+			Icon <= Editing_icon $mol_icon_settings_outline
+			checked? <=> editing? false
+		<= Rights_toggle $mol_check_icon
+			checked? <=> rights? false
+			Icon <= Rights_toggle_icon $mol_icon_shield_account
 		<= Guests_link $mol_link
 			arg * guests \
 			hint \Список гостей

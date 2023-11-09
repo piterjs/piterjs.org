@@ -4,6 +4,7 @@ $piterjs_app $mol_view
 		meetup* => meetup*
 		meetup_public*? => meetup_public*?
 		person => person
+		editable => editable
 	plugins /
 		<= Theme $mol_theme_auto
 	sub /
@@ -62,15 +63,16 @@ $piterjs_app $mol_view
 	Meetup* $piterjs_meetup_page
 		meetup <= meetup*
 		person <= person
-		editing <= editing? false
+		editing? <=> editing? false
 		meetup_public? <=> meetup_public*?
+		rights? <=> rights_meetup? false
 	Meetup_guests* $piterjs_meetup_guests
 		meetup <= meetup*
 	Meetup_stats* $piterjs_meetup_stats
 		meetup <= meetup*
 	Speech!id $piterjs_speech_page
 		speech <= speech!id $piterjs_speech
-		editing <= editing? false
+		editing? <=> editing? false
 		speech_public? <=> speech_public*? false
 	Menu_meetup* $piterjs_meetup_snippet
 		meetup <= meetup*
@@ -88,6 +90,18 @@ $piterjs_app $mol_view
 	Others $piterjs_others
 	Rights $hyoo_meta_rights
 		meta <= Domain
+		tools /
+			<= Rights_close $mol_check
+				checked? <=> rights?
+				sub /
+					<= Rights_close_icon $mol_icon_cross
+	Rights_meetup $hyoo_meta_rights
+		meta <= meetup_current
+		tools /
+			<= Rights_meetup_close $mol_check
+				checked? <=> rights_meetup?
+				sub /
+					<= Rights_meetup_close_icon $mol_icon_cross
 	Wiki $hyoo_page
 		side_main_id \zi5t5h_8aygdf
 		yard <= Yard

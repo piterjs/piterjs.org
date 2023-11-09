@@ -5,14 +5,15 @@ $piterjs_speech_page $mol_page
 		start? => start?
 		slides? => slides?
 		video? => video?
+		editable => editable
 	Title $mol_string_button
 		value? <=> title?
-		enabled <= editing false
+		enabled <= editing
 		hint \Название
 	tools /
 		<= Start $mol_pick_time
 			value_moment? <=> start?
-			enabled <= editing false
+			enabled <= editing
 		<= Close $mol_link
 			arg * speech null
 			sub /
@@ -28,7 +29,7 @@ $piterjs_speech_page $mol_page
 		<= Description $mol_textarea
 			hint \О чём
 			value? <=> description?
-			enabled <= editing false
+			enabled <= editing
 		<= Links $mol_view sub <= links /
 			<= Slides $mol_string_link
 				value? <=> slides?
@@ -40,11 +41,14 @@ $piterjs_speech_page $mol_page
 				title \Видео
 		<= Speaker $piterjs_speaker_snippet
 			speaker <= speaker $piterjs_speaker
-			editing <= editing false
+			editing <= editing
 	foot /
 		<= Public $mol_check_icon
 			checked? <=> speech_public? false
 			Icon <= Public_icon $mol_icon_eye
+		<= Editing $mol_check_icon
+			Icon <= Editing_icon $mol_icon_settings_outline
+			checked? <=> editing? false
 		<= Poster_copy $mol_pick
 			hint \Скачать постер
 			trigger_content /

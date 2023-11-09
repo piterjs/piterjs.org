@@ -55,22 +55,13 @@ namespace $.$$ {
 			const speech = this.meetup().speech_make()
 			this.$.$mol_state_arg.value( 'speech', speech.id() )
 		}
+
+		@ $mol_mem
+		foot() {
+			if( !this.editable() ) return []
+			return super.foot()
+		}
 		
-		Public() {
-			if( !this.editing() ) return null!
-			return super.Public()
-		}
-
-		Guests_link() {
-			if( !this.editing() ) return null!
-			return super.Guests_link()
-		}
-
-		Stats_link() {
-			if( !this.editing() ) return null!
-			return super.Stats_link()
-		}
-
 		capacity( next?: number ) {
 			return this.meetup().place().capacity_max( next )
 		}

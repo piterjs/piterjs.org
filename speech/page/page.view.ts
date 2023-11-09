@@ -14,14 +14,9 @@ namespace $.$$ {
 			]
 		}
 
-		override Public() {
-			if( !this.editing() ) return null!
-			return super.Public()
-		}
-
-		override Poster_copy() {
-			if( !this.editing() ) return null!
-			return super.Poster_copy()
+		override foot() {
+			if( !this.editable() ) return []
+			return super.foot()
 		}
 
 		override poster_1_1_name() {
