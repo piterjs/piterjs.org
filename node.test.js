@@ -15941,6 +15941,9 @@ var $;
 var $;
 (function ($) {
     class $piterjs_meetup_guests extends $mol_page {
+        theme() {
+            return "$mol_theme_special";
+        }
         visitor(id, next) {
             return this.meetup().visitor(id, next);
         }
@@ -18858,6 +18861,9 @@ var $;
 var $;
 (function ($) {
     class $piterjs_meetup_stats extends $mol_page {
+        theme() {
+            return "$mol_theme_special";
+        }
         joined_moments() {
             return this.meetup().joined_moments();
         }
@@ -30159,6 +30165,7 @@ var $;
         }
         Rights() {
             const obj = new this.$.$hyoo_meta_rights();
+            obj.theme = () => "$mol_theme_special";
             obj.meta = () => this.Domain();
             obj.tools = () => [
                 this.Rights_close()
@@ -30167,6 +30174,7 @@ var $;
         }
         Rights_meetup() {
             const obj = new this.$.$hyoo_meta_rights();
+            obj.theme = () => "$mol_theme_special";
             obj.meta = () => this.meetup_current();
             obj.tools = () => [
                 this.Rights_meetup_close()

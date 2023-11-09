@@ -4302,6 +4302,7 @@ declare namespace $.$$ {
 
 declare namespace $ {
     class $piterjs_meetup_guests extends $mol_page {
+        theme(): string;
         visitor(id: any, next?: any): boolean;
         meetup(): $piterjs_meetup;
         title(): string;
@@ -4896,6 +4897,7 @@ declare namespace $ {
 
 declare namespace $ {
     class $piterjs_meetup_stats extends $mol_page {
+        theme(): string;
         joined_moments(): {
             [k: string]: $mol_time_moment;
         };

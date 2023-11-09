@@ -1093,6 +1093,7 @@ $piterjs_person_snippet $mol_dimmer
 	person $piterjs_person
 
 $piterjs_meetup_guests $mol_page
+	theme \$mol_theme_special
 	meetup $piterjs_meetup
 		visitor*? => visitor*?
 	title \Список гостей
@@ -1515,6 +1516,7 @@ $mol_chart $mol_view
 			hue_shift <= hue_shift 111
 
 $piterjs_meetup_stats $mol_page
+	theme \$mol_theme_special
 	meetup $piterjs_meetup
 		joined_moments => joined_moments
 		visitors_list => visitors_list
@@ -2931,6 +2933,7 @@ $piterjs_app $mol_view
 		editing <= editing? false
 	Others $piterjs_others
 	Rights $hyoo_meta_rights
+		theme \$mol_theme_special
 		meta <= Domain
 		tools /
 			<= Rights_close $mol_check
@@ -2938,6 +2941,7 @@ $piterjs_app $mol_view
 				sub /
 					<= Rights_close_icon $mol_icon_cross
 	Rights_meetup $hyoo_meta_rights
+		theme \$mol_theme_special
 		meta <= meetup_current
 		tools /
 			<= Rights_meetup_close $mol_check
