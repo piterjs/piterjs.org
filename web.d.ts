@@ -1574,7 +1574,7 @@ declare namespace $ {
         joined(next?: boolean): boolean;
         joined_list(): $piterjs_person[];
         joined_moments(): {
-            [k: string]: $mol_time_moment;
+            [key: `${string}_${string}`]: $mol_time_moment;
         };
         joined_count(): number;
         visitors_node(): $hyoo_crowd_list;
@@ -4496,6 +4496,36 @@ declare namespace $ {
 }
 
 declare namespace $ {
+    class $mol_plot_dot extends $mol_plot_graph {
+        points_max(): number;
+        aspect(): number;
+        style(): Record<string, any>;
+        sub(): readonly any[];
+        Sample(): $mol_plot_graph_sample;
+        diameter(): number;
+        curve(): string;
+        Curve(): $mol_svg_path;
+    }
+}
+
+declare namespace $ {
+    function $mol_coord_pack(high: number, low: number): number;
+    function $mol_coord_high(pack: number): number;
+    function $mol_coord_low(pack: number): number;
+}
+
+declare namespace $.$$ {
+    class $mol_plot_dot extends $.$mol_plot_dot {
+        filled(): Set<number>;
+        indexes(): number[];
+        curve(): string;
+    }
+}
+
+declare namespace $ {
+}
+
+declare namespace $ {
     class $mol_svg_text_box extends $mol_svg_group {
         font_size(): number;
         width(): number;
@@ -4578,12 +4608,34 @@ declare namespace $ {
 }
 
 declare namespace $ {
+    class $mol_gallery extends $mol_view {
+        sub(): readonly $mol_view[];
+        Side(id: any): $$.$mol_gallery;
+        items(): readonly $mol_view[];
+        side_size(id: any): string;
+        side_items(id: any): readonly $mol_view[];
+    }
+}
+
+declare namespace $.$$ {
+    class $mol_gallery extends $.$mol_gallery {
+        sub(): readonly $mol_view[];
+        side_items(id: number): $mol_view[];
+        side_size(id: number): string;
+    }
+}
+
+declare namespace $ {
+}
+
+declare namespace $ {
     class $mol_chart_legend extends $mol_scroll {
         graphs(): readonly $mol_plot_graph[];
         graphs_front(): readonly $mol_plot_graph[];
-        sub(): readonly $mol_view[];
+        sub(): readonly any[];
         Graph_legend(id: any): $mol_view;
         graph_legends(): readonly $mol_view[];
+        Gallery(): $$.$mol_gallery;
         Graph_sample(id: any): any;
         Graph_sample_box(id: any): $mol_view;
         graph_title(id: any): string;
@@ -4774,11 +4826,14 @@ declare namespace $ {
     class $piterjs_meetup_stats extends $mol_page {
         theme(): string;
         joined_moments(): {
-            [k: string]: $mol_time_moment;
+            [key: `${string}_${string}`]: $mol_time_moment;
         };
         visitors_list(): $piterjs_person[];
         visitor(id: any): boolean;
         meetup(): $piterjs_meetup;
+        joined_list_prev(): $piterjs_person[];
+        visitors_list_prev(): $piterjs_person[];
+        meetup_prev(): $piterjs_meetup;
         title(): string;
         tools(): readonly any[];
         body(): readonly any[];
@@ -4793,6 +4848,12 @@ declare namespace $ {
         visits_title(): string;
         visits_per_days(): readonly any[];
         Visits(): $$.$mol_plot_bar;
+        joins_new_title(): string;
+        joins_new_per_days(): readonly any[];
+        Joins_new(): $$.$mol_plot_dot;
+        visits_new_title(): string;
+        visits_new_per_days(): readonly any[];
+        Visits_new(): $$.$mol_plot_dot;
         Details(): $$.$mol_plot_mark_cross;
         Chart(): $mol_chart;
     }
@@ -4816,6 +4877,10 @@ declare namespace $.$$ {
         joins_title(): string;
         visits_per_days(): number[];
         visits_title(): string;
+        joins_new_per_days(): number[];
+        joins_new_title(): string;
+        visits_new_per_days(): number[];
+        visits_new_title(): string;
     }
 }
 
@@ -7385,6 +7450,7 @@ declare namespace $ {
         Links(): $$.$mol_list;
         Menu_content(): $mol_view;
         rights_meetup(next?: any): boolean;
+        meetup_prev(id: any): $piterjs_meetup;
         speech(id: any): $piterjs_speech;
         speech_public(id: any, next?: any): boolean;
         meetup_current(): $piterjs_meetup;
@@ -7457,6 +7523,7 @@ declare namespace $.$$ {
         menu_meetups(): $piterjs_meetup_snippet[];
         menu_meetup(id: string): $piterjs_meetup;
         menu_meetup_id(id: string): string;
+        meetup_prev(id: $piterjs_meetup): $piterjs_meetup;
         toggle_intro(next?: boolean): boolean;
         video(): boolean;
         video_uri(next?: string): string;

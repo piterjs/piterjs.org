@@ -17293,7 +17293,7 @@ var $;
                 return (8 / Math.sqrt(this.indexes().length)).toPrecision(2) + '%';
             }
             color() {
-                return `hsl( ${this.hue()} , 80% , 85% )`;
+                return `hsl( ${this.hue()} , 80% , 80% )`;
             }
             dimensions() {
                 let next = new this.$.$mol_vector_2d($mol_vector_range_full.inversed, new this.$.$mol_vector_range(0, 0));
@@ -17324,6 +17324,166 @@ var $;
     $mol_style_attach("mol/plot/bar/bar.view.css", "[mol_plot_bar] {\n\tstroke-linecap: butt;\n\tstroke-width: 1rem;\n}\n\n[mol_plot_bar_sample] {\n\tbackground: currentColor;\n\tposition: absolute;\n\ttop:0;\n\tbottom: 0;\n\tleft: 0;\n\tright: 0;\n}\n");
 })($ || ($ = {}));
 //mol/plot/bar/-css/bar.view.css.ts
+;
+"use strict";
+var $;
+(function ($) {
+    class $mol_plot_dot extends $mol_plot_graph {
+        points_max() {
+            return +Infinity;
+        }
+        aspect() {
+            return 1;
+        }
+        style() {
+            return {
+                ...super.style(),
+                "stroke-width": this.diameter()
+            };
+        }
+        sub() {
+            return [
+                this.Hint(),
+                this.Curve()
+            ];
+        }
+        Sample() {
+            const obj = new this.$.$mol_plot_graph_sample();
+            obj.color = () => this.color();
+            return obj;
+        }
+        diameter() {
+            return 8;
+        }
+        curve() {
+            return "";
+        }
+        Curve() {
+            const obj = new this.$.$mol_svg_path();
+            obj.geometry = () => this.curve();
+            return obj;
+        }
+    }
+    __decorate([
+        $mol_mem
+    ], $mol_plot_dot.prototype, "Sample", null);
+    __decorate([
+        $mol_mem
+    ], $mol_plot_dot.prototype, "Curve", null);
+    $.$mol_plot_dot = $mol_plot_dot;
+})($ || ($ = {}));
+//mol/plot/dot/-view.tree/dot.view.tree.ts
+;
+"use strict";
+var $;
+(function ($) {
+    const mask = 0b11111_11111_11111;
+    function $mol_coord_pack(high, low) {
+        return (high << 17 >>> 2) | (low & mask);
+    }
+    $.$mol_coord_pack = $mol_coord_pack;
+    function $mol_coord_high(pack) {
+        return pack << 2 >> 17;
+    }
+    $.$mol_coord_high = $mol_coord_high;
+    function $mol_coord_low(pack) {
+        return (pack << 17) >> 17;
+    }
+    $.$mol_coord_low = $mol_coord_low;
+})($ || ($ = {}));
+//mol/coord/coord.ts
+;
+"use strict";
+var $;
+(function ($) {
+    var $$;
+    (function ($$) {
+        class $mol_plot_dot extends $.$mol_plot_dot {
+            filled() {
+                return new Set();
+            }
+            indexes() {
+                const radius = this.diameter() / 2;
+                const points_max = this.points_max();
+                const viewport = this.viewport();
+                const viewport_left = viewport.x.min - radius;
+                const viewport_right = viewport.x.max + radius;
+                const viewport_bottom = viewport.y.min - radius;
+                const viewport_top = viewport.y.max + radius;
+                const [shift_x, shift_y] = this.shift();
+                const [scale_x, scale_y] = this.scale();
+                let last_x = Number.NEGATIVE_INFINITY;
+                let last_y = Number.NEGATIVE_INFINITY;
+                let spacing = 0;
+                let filled = this.filled();
+                let indexes;
+                const series_x = this.series_x();
+                const series_y = this.series_y();
+                do {
+                    indexes = [];
+                    for (let i = 0; i < series_x.length; i++) {
+                        const point_x = this.repos_x(series_x[i]);
+                        const point_y = this.repos_y(series_y[i]);
+                        const scaled_x = Math.round(shift_x + point_x * scale_x);
+                        const scaled_y = Math.round(shift_y + point_y * scale_y);
+                        if (Math.abs(scaled_x - last_x) < radius
+                            && Math.abs(scaled_y - last_y) < radius)
+                            continue;
+                        last_x = scaled_x;
+                        last_y = scaled_y;
+                        if (scaled_x < viewport_left)
+                            continue;
+                        if (scaled_y < viewport_bottom)
+                            continue;
+                        if (scaled_x > viewport_right)
+                            continue;
+                        if (scaled_y > viewport_top)
+                            continue;
+                        if (spacing !== 0) {
+                            const key = $mol_coord_pack(Math.round(point_x * scale_x / spacing) * spacing, Math.round(point_y * scale_y / spacing) * spacing);
+                            if (filled.has(key))
+                                continue;
+                            filled.add(key);
+                        }
+                        indexes.push(i);
+                        if (indexes.length > points_max)
+                            break;
+                    }
+                    spacing += Math.ceil(radius);
+                    filled.clear();
+                } while (indexes.length > points_max);
+                return indexes;
+            }
+            curve() {
+                const points = this.points();
+                if (points.length === 0)
+                    return '';
+                const diameter = this.diameter();
+                const aspect = this.aspect();
+                const shift_y = Math.max(0, Math.floor((aspect - 1) * diameter / 2));
+                const shift_x = Math.max(0, Math.floor((1 / aspect - 1) * diameter / 2));
+                const size_y = Math.max(0, Math.ceil((aspect - 1) * diameter));
+                const size_x = Math.max(0, Math.ceil((1 / aspect - 1) * diameter));
+                return points.map(point => `M ${point[0] - shift_x} ${point[1] - shift_y} l ${size_x} ${size_y}`).join(' ');
+            }
+        }
+        __decorate([
+            $mol_mem
+        ], $mol_plot_dot.prototype, "filled", null);
+        __decorate([
+            $mol_mem
+        ], $mol_plot_dot.prototype, "indexes", null);
+        $$.$mol_plot_dot = $mol_plot_dot;
+    })($$ = $.$$ || ($.$$ = {}));
+})($ || ($ = {}));
+//mol/plot/dot/dot.view.ts
+;
+"use strict";
+var $;
+(function ($) {
+    $mol_style_attach("mol/plot/dot/dot.view.css", "[mol_plot_dot] {\n\tstroke-linecap: round;\n\tfill: none;\n}\n\n[mol_plot_dot_sample] {\n\twidth: .5rem;\n\theight: .5rem;\n\tborder-radius: 1rem;\n\tbackground: currentColor;\n\tposition: absolute;\n\ttop: .75em;\n\tleft: 50%;\n\ttransform: translate(-50%, -50%);\n}\n");
+})($ || ($ = {}));
+//mol/plot/dot/-css/dot.view.css.ts
 ;
 "use strict";
 var $;
@@ -17667,6 +17827,84 @@ var $;
 "use strict";
 var $;
 (function ($) {
+    class $mol_gallery extends $mol_view {
+        sub() {
+            return this.items();
+        }
+        Side(id) {
+            const obj = new this.$.$mol_gallery();
+            obj.style = () => ({
+                flexGrow: this.side_size(id)
+            });
+            obj.items = () => this.side_items(id);
+            return obj;
+        }
+        items() {
+            return [];
+        }
+        side_size(id) {
+            return "1";
+        }
+        side_items(id) {
+            return [];
+        }
+    }
+    __decorate([
+        $mol_mem_key
+    ], $mol_gallery.prototype, "Side", null);
+    $.$mol_gallery = $mol_gallery;
+})($ || ($ = {}));
+//mol/gallery/-view.tree/gallery.view.tree.ts
+;
+"use strict";
+var $;
+(function ($) {
+    var $$;
+    (function ($$) {
+        class $mol_gallery extends $.$mol_gallery {
+            sub() {
+                const items = this.items();
+                if (items.length <= 3)
+                    return items;
+                return [
+                    this.Side(0),
+                    this.Side(1),
+                ];
+            }
+            side_items(id) {
+                const items = this.items();
+                const middle = items.length % 2
+                    ? Math.ceil(items.length / 3)
+                    : items.length / 2;
+                return id
+                    ? items.slice(middle)
+                    : items.slice(0, middle);
+            }
+            side_size(id) {
+                return String(this.side_items(id).length);
+            }
+        }
+        __decorate([
+            $mol_mem
+        ], $mol_gallery.prototype, "sub", null);
+        __decorate([
+            $mol_mem_key
+        ], $mol_gallery.prototype, "side_items", null);
+        $$.$mol_gallery = $mol_gallery;
+    })($$ = $.$$ || ($.$$ = {}));
+})($ || ($ = {}));
+//mol/gallery/gallery.view.ts
+;
+"use strict";
+var $;
+(function ($) {
+    $mol_style_attach("mol/gallery/gallery.view.css", "[mol_gallery] {\n\tflex-wrap: wrap;\n\tflex: 1 1 auto;\n\talign-items: stretch;\n    align-content: stretch;\n}\n");
+})($ || ($ = {}));
+//mol/gallery/-css/gallery.view.css.ts
+;
+"use strict";
+var $;
+(function ($) {
     class $mol_chart_legend extends $mol_scroll {
         graphs() {
             return [];
@@ -17675,7 +17913,9 @@ var $;
             return [];
         }
         sub() {
-            return this.graph_legends();
+            return [
+                this.Gallery()
+            ];
         }
         Graph_legend(id) {
             const obj = new this.$.$mol_view();
@@ -17687,6 +17927,11 @@ var $;
         }
         graph_legends() {
             return [];
+        }
+        Gallery() {
+            const obj = new this.$.$mol_gallery();
+            obj.items = () => this.graph_legends();
+            return obj;
         }
         Graph_sample(id) {
             return null;
@@ -17712,6 +17957,9 @@ var $;
     __decorate([
         $mol_mem_key
     ], $mol_chart_legend.prototype, "Graph_legend", null);
+    __decorate([
+        $mol_mem
+    ], $mol_chart_legend.prototype, "Gallery", null);
     __decorate([
         $mol_mem_key
     ], $mol_chart_legend.prototype, "Graph_sample_box", null);
@@ -17752,7 +18000,7 @@ var $;
 "use strict";
 var $;
 (function ($) {
-    $mol_style_attach("mol/chart/legend/legend.view.css", "[mol_chart_legend] {\n\tdisplay: flex;\n\tflex-wrap: wrap;\n\tflex-direction: row;\n\tpadding: .5rem;\n\tmargin: .5rem;\n\tflex: 0 1 auto;\n}\n\n[mol_chart_legend_graph_legend] {\n\tdisplay: flex;\n\tjustify-content: flex-start;\n\tflex: 1 1 8rem;\n\tpadding: .5rem;\n}\n\n[mol_chart_legend_graph_title] {\n\tmargin: 0 .25rem;\n\tflex: 1 1 auto;\n}\n\n[mol_chart_legend_graph_sample_box] {\n\tposition: relative;\n\twidth: 1.5rem;\n\tflex: none;\n}\n");
+    $mol_style_attach("mol/chart/legend/legend.view.css", "[mol_chart_legend] {\n\tdisplay: flex;\n\tflex-wrap: wrap;\n\tflex-direction: row;\n\tflex: 0 1 auto;\n}\n\n[mol_chart_legend_graph_legend] {\n\tdisplay: flex;\n\tjustify-content: flex-start;\n\tflex: 1 1 8rem;\n\tpadding: .5rem;\n}\n\n[mol_chart_legend_graph_title] {\n\tmargin: 0 .25rem;\n\tflex: 1 1 auto;\n}\n\n[mol_chart_legend_graph_sample_box] {\n\tposition: relative;\n\twidth: 1.5rem;\n\tflex: none;\n}\n");
 })($ || ($ = {}));
 //mol/chart/legend/-css/legend.view.css.ts
 ;
@@ -18824,10 +19072,10 @@ var $;
             return obj;
         }
         hue_base() {
-            return 140;
+            return 210;
         }
         hue_shift() {
-            return 111;
+            return 163;
         }
         zoom(next) {
             return this.Plot().scale_x(next);
@@ -18885,6 +19133,16 @@ var $;
             const obj = new this.$.$piterjs_meetup();
             return obj;
         }
+        joined_list_prev() {
+            return this.meetup_prev().joined_list();
+        }
+        visitors_list_prev() {
+            return this.meetup_prev().visitors_list();
+        }
+        meetup_prev() {
+            const obj = new this.$.$piterjs_meetup();
+            return obj;
+        }
         title() {
             return "Статистика";
         }
@@ -18917,7 +19175,6 @@ var $;
         }
         Days() {
             const obj = new this.$.$mol_plot_mark_hor();
-            obj.title = () => "Дни";
             obj.labels = () => this.days();
             return obj;
         }
@@ -18930,7 +19187,7 @@ var $;
             return obj;
         }
         joins_title() {
-            return "Регистрации";
+            return "Заявки";
         }
         Joins() {
             const obj = new this.$.$mol_plot_bar();
@@ -18950,6 +19207,30 @@ var $;
             obj.series_y = () => this.visits_per_days();
             return obj;
         }
+        joins_new_title() {
+            return "Новые заявки";
+        }
+        joins_new_per_days() {
+            return [];
+        }
+        Joins_new() {
+            const obj = new this.$.$mol_plot_dot();
+            obj.title = () => this.joins_new_title();
+            obj.series_y = () => this.joins_new_per_days();
+            return obj;
+        }
+        visits_new_title() {
+            return "Новые визиты";
+        }
+        visits_new_per_days() {
+            return [];
+        }
+        Visits_new() {
+            const obj = new this.$.$mol_plot_dot();
+            obj.title = () => this.visits_new_title();
+            obj.series_y = () => this.visits_new_per_days();
+            return obj;
+        }
         Details() {
             const obj = new this.$.$mol_plot_mark_cross();
             obj.labels = () => this.days();
@@ -18965,6 +19246,8 @@ var $;
                 this.Counts(),
                 this.Joins(),
                 this.Visits(),
+                this.Joins_new(),
+                this.Visits_new(),
                 this.Details()
             ];
             return obj;
@@ -18973,6 +19256,9 @@ var $;
     __decorate([
         $mol_mem
     ], $piterjs_meetup_stats.prototype, "meetup", null);
+    __decorate([
+        $mol_mem
+    ], $piterjs_meetup_stats.prototype, "meetup_prev", null);
     __decorate([
         $mol_mem
     ], $piterjs_meetup_stats.prototype, "Close_icon", null);
@@ -18991,6 +19277,12 @@ var $;
     __decorate([
         $mol_mem
     ], $piterjs_meetup_stats.prototype, "Visits", null);
+    __decorate([
+        $mol_mem
+    ], $piterjs_meetup_stats.prototype, "Joins_new", null);
+    __decorate([
+        $mol_mem
+    ], $piterjs_meetup_stats.prototype, "Visits_new", null);
     __decorate([
         $mol_mem
     ], $piterjs_meetup_stats.prototype, "Details", null);
@@ -19043,6 +19335,24 @@ var $;
             visits_title() {
                 return super.visits_title() + ` (${this.visitors_list().length})`;
             }
+            joins_new_per_days() {
+                if (!this.meetup_prev())
+                    return [0];
+                const prev = new Set(this.joined_list_prev().map(person => person.id()));
+                return Object.values(this.joins_stat()).map(pairs => pairs.filter(([peer]) => !prev.has(peer)).length);
+            }
+            joins_new_title() {
+                return super.joins_new_title() + ` (${this.joins_new_per_days().reduce((a, b) => a + b)})`;
+            }
+            visits_new_per_days() {
+                if (!this.meetup_prev())
+                    return [0];
+                const prev = new Set(this.visitors_list_prev().map(person => person.id()));
+                return Object.values(this.joins_stat()).map(pairs => pairs.filter(([id]) => this.visitor(id) && !prev.has(id)).length);
+            }
+            visits_new_title() {
+                return super.visits_new_title() + ` (${this.visits_new_per_days().reduce((a, b) => a + b)})`;
+            }
         }
         __decorate([
             $mol_mem
@@ -19062,6 +19372,18 @@ var $;
         __decorate([
             $mol_mem
         ], $piterjs_meetup_stats.prototype, "visits_title", null);
+        __decorate([
+            $mol_mem
+        ], $piterjs_meetup_stats.prototype, "joins_new_per_days", null);
+        __decorate([
+            $mol_mem
+        ], $piterjs_meetup_stats.prototype, "joins_new_title", null);
+        __decorate([
+            $mol_mem
+        ], $piterjs_meetup_stats.prototype, "visits_new_per_days", null);
+        __decorate([
+            $mol_mem
+        ], $piterjs_meetup_stats.prototype, "visits_new_title", null);
         $$.$piterjs_meetup_stats = $piterjs_meetup_stats;
     })($$ = $.$$ || ($.$$ = {}));
 })($ || ($ = {}));
@@ -19074,12 +19396,11 @@ var $;
     (function ($$) {
         $mol_style_define($piterjs_meetup_stats, {
             flex: {
-                basis: `30rem`,
+                basis: `50rem`,
             },
             Chart: {
                 flex: {
                     basis: `20rem`,
-                    grow: 0,
                 },
             },
         });
@@ -30132,6 +30453,7 @@ var $;
         Meetup_stats(id) {
             const obj = new this.$.$piterjs_meetup_stats();
             obj.meetup = () => this.meetup(id);
+            obj.meetup_prev = () => this.meetup_prev(id);
             return obj;
         }
         Speech(id) {
@@ -30406,6 +30728,10 @@ var $;
                 return next;
             return false;
         }
+        meetup_prev(id) {
+            const obj = new this.$.$piterjs_meetup();
+            return obj;
+        }
         speech(id) {
             const obj = new this.$.$piterjs_speech();
             return obj;
@@ -30606,6 +30932,9 @@ var $;
     __decorate([
         $mol_mem
     ], $piterjs_app.prototype, "rights_meetup", null);
+    __decorate([
+        $mol_mem_key
+    ], $piterjs_app.prototype, "meetup_prev", null);
     __decorate([
         $mol_mem_key
     ], $piterjs_app.prototype, "speech", null);
@@ -31050,6 +31379,10 @@ var $;
             }
             menu_meetup(id) { return this.meetup(id); }
             menu_meetup_id(id) { return id; }
+            meetup_prev(id) {
+                const meetups = this.meetups();
+                return meetups[meetups.indexOf(this.meetup(id)) + 1];
+            }
             toggle_intro(next) {
                 if (next !== undefined) {
                     if (this.intro()) {

@@ -1288,6 +1288,20 @@ $mol_plot_bar $mol_plot_graph
 	Sample $mol_plot_graph_sample
 		color <= color
 
+$mol_plot_dot $mol_plot_graph
+	points_max +Infinity
+	aspect 1
+	style *
+		^
+		stroke-width <= diameter 8
+	sub /
+		<= Hint
+		<= Curve $mol_svg_path
+			geometry <= curve \
+	-
+	Sample $mol_plot_graph_sample
+		color <= color
+
 $mol_svg_text_box $mol_svg_group
 	font_size 16
 	width 0
@@ -1331,10 +1345,18 @@ $mol_plot_mark_cross $mol_plot_graph
 			pos_y <= title_y_pos_y \0
 			text <= title_y \
 
+$mol_gallery $mol_view
+	sub <= items /$mol_view
+	Side* $mol_gallery
+		style *
+			flexGrow <= side_size* \1
+		items <= side_items* /$mol_view
+
 $mol_chart_legend $mol_scroll
 	graphs /$mol_plot_graph
 	graphs_front /$mol_plot_graph
-	sub <= graph_legends /$mol_view
+	sub /
+		<= Gallery $mol_gallery items <= graph_legends /$mol_view
 	-
 	Graph_legend* $mol_view
 		sub /
@@ -1512,8 +1534,8 @@ $mol_chart $mol_view
 			gap_top <= gap_top
 			graphs <= graphs
 			graphs_colored => graphs_colored
-			hue_base <= hue_base 140
-			hue_shift <= hue_shift 111
+			hue_base <= hue_base 210
+			hue_shift <= hue_shift 163
 
 $piterjs_meetup_stats $mol_page
 	theme \$mol_theme_special
@@ -1521,6 +1543,9 @@ $piterjs_meetup_stats $mol_page
 		joined_moments => joined_moments
 		visitors_list => visitors_list
 		visitor* => visitor*
+	meetup_prev $piterjs_meetup
+		joined_list => joined_list_prev
+		visitors_list => visitors_list_prev
 	title \Статистика
 	tools /
 		<= Close $mol_link
@@ -1531,16 +1556,21 @@ $piterjs_meetup_stats $mol_page
 		<= Chart $mol_chart
 			graphs /
 				<= Days $mol_plot_mark_hor
-					title \Дни
 					labels <= days /
 				<= Counts $mol_plot_ruler_vert
 					series_y <= joins_per_days /
 				<= Joins $mol_plot_bar
-					title <= joins_title \Регистрации
+					title <= joins_title \Заявки
 					series_y <= joins_per_days /
 				<= Visits $mol_plot_bar
 					title <= visits_title \Визиты
 					series_y <= visits_per_days /
+				<= Joins_new $mol_plot_dot
+					title <= joins_new_title \Новые заявки
+					series_y <= joins_new_per_days /
+				<= Visits_new $mol_plot_dot
+					title <= visits_new_title \Новые визиты
+					series_y <= visits_new_per_days /
 				<= Details $mol_plot_mark_cross
 					labels <= days /
 					graphs /
@@ -2915,6 +2945,7 @@ $piterjs_app $mol_view
 		meetup <= meetup*
 	Meetup_stats* $piterjs_meetup_stats
 		meetup <= meetup*
+		meetup_prev <= meetup_prev* $piterjs_meetup
 	Speech!id $piterjs_speech_page
 		speech <= speech!id $piterjs_speech
 		editing? <=> editing? false
