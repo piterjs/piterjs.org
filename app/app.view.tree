@@ -70,6 +70,7 @@ $piterjs_app $mol_view
 		meetup <= meetup*
 	Meetup_stats* $piterjs_meetup_stats
 		meetup <= meetup*
+		meetup_prev <= meetup_prev* $piterjs_meetup
 	Speech!id $piterjs_speech_page
 		speech <= speech!id $piterjs_speech
 		editing? <=> editing? false

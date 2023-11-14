@@ -33,6 +33,31 @@ namespace $.$$ {
 		visits_title() {
 			return super.visits_title() + ` (${ this.visitors_list().length })`
 		}
+
+		@ $mol_mem
+		joins_new_per_days() {
+			if( !this.meetup_prev() ) return [0]
+			const prev = new Set( this.joined_list_prev().map( person => person.id() ) )
+			return Object.values( this.joins_stat() ).map( pairs => pairs!.filter( ([ peer ])=> !prev.has( peer as $mol_int62_string ) ).length )
+		}
+
+		@ $mol_mem
+		joins_new_title() {
+			return super.joins_new_title() + ` (${ this.joins_new_per_days().reduce( (a,b)=> a+b ) })`
+		}
+		
+		@ $mol_mem
+		visits_new_per_days() {
+			if( !this.meetup_prev() ) return [0]
+			const prev = new Set( this.visitors_list_prev().map( person => person.id() ) )
+			return Object.values( this.joins_stat() ).map( pairs => pairs!.filter( ([ id ])=> this.visitor( id ) && !prev.has( id as $mol_int62_string ) ).length )
+		}
+	
+		@ $mol_mem
+		visits_new_title() {
+			return super.visits_new_title() + ` (${ this.visits_new_per_days().reduce( (a,b)=> a+b ) })`
+		}
+		
 		
 	}
 }

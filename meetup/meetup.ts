@@ -74,7 +74,9 @@ namespace $ {
 			return Object.fromEntries(
 				Object.entries( this.joined_node().times() )
 				.map( ([ peer, stamp ]) => [ peer, new $mol_time_moment( stamp ) ] )
-			)
+			) as {
+				[ key: $mol_int62_string ]: $mol_time_moment
+			}
 		}
 
 		@ $mol_mem

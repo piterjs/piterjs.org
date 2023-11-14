@@ -105,6 +105,11 @@ namespace $.$$ {
 		menu_meetup( id : string ) { return this.meetup( id ) }
 		menu_meetup_id( id : string ) { return id }
 
+		meetup_prev( id: $piterjs_meetup ) {
+			const meetups = this.meetups()
+			return meetups[ meetups.indexOf( this.meetup( id ) ) + 1 ]
+		}
+
 		toggle_intro( next? : boolean ) {
 			
 			if( next !== undefined ) {

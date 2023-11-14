@@ -4,6 +4,9 @@ $piterjs_meetup_stats $mol_page
 		joined_moments => joined_moments
 		visitors_list => visitors_list
 		visitor* => visitor*
+	meetup_prev $piterjs_meetup
+		joined_list => joined_list_prev
+		visitors_list => visitors_list_prev
 	title \Статистика
 	tools /
 		<= Close $mol_link
@@ -14,16 +17,21 @@ $piterjs_meetup_stats $mol_page
 		<= Chart $mol_chart
 			graphs /
 				<= Days $mol_plot_mark_hor
-					title \Дни
 					labels <= days /
 				<= Counts $mol_plot_ruler_vert
 					series_y <= joins_per_days /
 				<= Joins $mol_plot_bar
-					title <= joins_title \Регистрации
+					title <= joins_title \Заявки
 					series_y <= joins_per_days /
 				<= Visits $mol_plot_bar
 					title <= visits_title \Визиты
 					series_y <= visits_per_days /
+				<= Joins_new $mol_plot_dot
+					title <= joins_new_title \Новые заявки
+					series_y <= joins_new_per_days /
+				<= Visits_new $mol_plot_dot
+					title <= visits_new_title \Новые визиты
+					series_y <= visits_new_per_days /
 				<= Details $mol_plot_mark_cross
 					labels <= days /
 					graphs /

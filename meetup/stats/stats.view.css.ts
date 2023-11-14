@@ -3,7 +3,7 @@ namespace $.$$ {
 	$mol_style_define( $piterjs_meetup_stats, {
 		
 		flex: {
-			basis: `30rem`,
+			basis: `50rem`,
 		},
 
 		Chart: {
