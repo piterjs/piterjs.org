@@ -2244,6 +2244,105 @@ declare namespace $.$$ {
 }
 
 declare namespace $ {
+    class $mol_svg extends $mol_view {
+        dom_name(): string;
+        dom_name_space(): string;
+        font_size(): number;
+        font_family(): string;
+        style_size(): Record<string, any>;
+    }
+}
+
+declare namespace $ {
+    class $mol_after_timeout extends $mol_object2 {
+        delay: number;
+        task: () => void;
+        id: any;
+        constructor(delay: number, task: () => void);
+        destructor(): void;
+    }
+}
+
+declare namespace $ {
+    class $mol_state_time extends $mol_object {
+        static task(precision: number, reset?: null): $mol_after_timeout | $mol_after_frame;
+        static now(precision: number): number;
+    }
+}
+
+declare namespace $.$$ {
+    class $mol_svg extends $.$mol_svg {
+        computed_style(): Record<string, any>;
+        font_size(): number;
+        font_family(): any;
+    }
+}
+
+declare namespace $ {
+    class $mol_svg_root extends $mol_svg {
+        dom_name(): string;
+        attr(): Record<string, any>;
+        view_box(): string;
+        aspect(): string;
+    }
+}
+
+declare namespace $ {
+}
+
+declare namespace $ {
+    class $mol_svg_path extends $mol_svg {
+        dom_name(): string;
+        attr(): Record<string, any>;
+        geometry(): string;
+    }
+}
+
+declare namespace $ {
+    class $mol_icon extends $mol_svg_root {
+        view_box(): string;
+        minimal_width(): number;
+        minimal_height(): number;
+        sub(): readonly any[];
+        path(): string;
+        Path(): $mol_svg_path;
+    }
+}
+
+declare namespace $ {
+}
+
+declare namespace $ {
+    class $mol_icon_calendar extends $mol_icon {
+        path(): string;
+    }
+}
+
+declare namespace $ {
+    class $mol_icon_calendar_plus extends $mol_icon {
+        path(): string;
+    }
+}
+
+declare namespace $ {
+    class $mol_link_calendar extends $mol_link {
+        interval(): $mol_time_interval;
+        details(): string;
+        location(): string;
+        sub(): readonly any[];
+        start(): $mol_time_moment;
+        end(): $mol_time_moment;
+        Icon(): $mol_icon_calendar_plus;
+    }
+}
+
+declare namespace $.$$ {
+    class $mol_link_calendar extends $.$mol_link_calendar {
+        uri(): string;
+    }
+}
+
+declare namespace $ {
     class $mol_pop extends $mol_view {
         showed(next?: any): boolean;
         align_vert(): string;
@@ -2407,81 +2506,6 @@ declare namespace $.$$ {
 }
 
 declare namespace $ {
-}
-
-declare namespace $ {
-    class $mol_svg extends $mol_view {
-        dom_name(): string;
-        dom_name_space(): string;
-        font_size(): number;
-        font_family(): string;
-        style_size(): Record<string, any>;
-    }
-}
-
-declare namespace $ {
-    class $mol_after_timeout extends $mol_object2 {
-        delay: number;
-        task: () => void;
-        id: any;
-        constructor(delay: number, task: () => void);
-        destructor(): void;
-    }
-}
-
-declare namespace $ {
-    class $mol_state_time extends $mol_object {
-        static task(precision: number, reset?: null): $mol_after_timeout | $mol_after_frame;
-        static now(precision: number): number;
-    }
-}
-
-declare namespace $.$$ {
-    class $mol_svg extends $.$mol_svg {
-        computed_style(): Record<string, any>;
-        font_size(): number;
-        font_family(): any;
-    }
-}
-
-declare namespace $ {
-    class $mol_svg_root extends $mol_svg {
-        dom_name(): string;
-        attr(): Record<string, any>;
-        view_box(): string;
-        aspect(): string;
-    }
-}
-
-declare namespace $ {
-}
-
-declare namespace $ {
-    class $mol_svg_path extends $mol_svg {
-        dom_name(): string;
-        attr(): Record<string, any>;
-        geometry(): string;
-    }
-}
-
-declare namespace $ {
-    class $mol_icon extends $mol_svg_root {
-        view_box(): string;
-        minimal_width(): number;
-        minimal_height(): number;
-        sub(): readonly any[];
-        path(): string;
-        Path(): $mol_svg_path;
-    }
-}
-
-declare namespace $ {
-}
-
-declare namespace $ {
-    class $mol_icon_calendar extends $mol_icon {
-        path(): string;
-    }
 }
 
 declare namespace $ {
@@ -3924,11 +3948,17 @@ declare namespace $ {
         joined(next?: any): boolean;
         editable(): boolean;
         meetup(): $piterjs_meetup;
+        address(): string;
         Title(): $mol_string_button;
         tools(): readonly any[];
         body(): readonly any[];
         Speech(id: any): $$.$piterjs_speech_snippet;
         foot(): readonly any[];
+        subscribe_title(): string;
+        subscribe_details(): string;
+        duration(): $mol_time_duration;
+        interval(): $mol_time_interval;
+        Subscribe(): $$.$mol_link_calendar;
         Start(): $$.$mol_date;
         Close_icon(): $mol_icon_cross;
         Close(): $$.$mol_link;
@@ -3987,6 +4017,8 @@ declare namespace $ {
 
 declare namespace $.$$ {
     class $piterjs_meetup_page extends $.$piterjs_meetup_page {
+        subscribe_title(): string;
+        subscribe_details(): string;
         video(): string;
         address(): string;
         coords(): $mol_vector_2d<number>;
@@ -5784,8 +5816,8 @@ declare namespace $ {
 declare namespace $.$$ {
     class $piterjs_others extends $.$piterjs_others {
         list(): readonly Readonly<{
-            description?: string | undefined;
             location?: string | undefined;
+            description?: string | undefined;
             allDay?: boolean | undefined;
             end: $mol_time_moment;
             start: $mol_time_moment;
@@ -5793,8 +5825,8 @@ declare namespace $.$$ {
             uid: string;
         }>[];
         list_future(): Readonly<{
-            description?: string | undefined;
             location?: string | undefined;
+            description?: string | undefined;
             allDay?: boolean | undefined;
             end: $mol_time_moment;
             start: $mol_time_moment;
@@ -5802,8 +5834,8 @@ declare namespace $.$$ {
             uid: string;
         }>[];
         dict(): Map<string, Readonly<{
-            description?: string | undefined;
             location?: string | undefined;
+            description?: string | undefined;
             allDay?: boolean | undefined;
             end: $mol_time_moment;
             start: $mol_time_moment;

@@ -7815,6 +7815,305 @@ var $;
 "use strict";
 var $;
 (function ($) {
+    class $mol_svg extends $mol_view {
+        dom_name() {
+            return "svg";
+        }
+        dom_name_space() {
+            return "http://www.w3.org/2000/svg";
+        }
+        font_size() {
+            return 16;
+        }
+        font_family() {
+            return "";
+        }
+        style_size() {
+            return {};
+        }
+    }
+    $.$mol_svg = $mol_svg;
+})($ || ($ = {}));
+//mol/svg/-view.tree/svg.view.tree.ts
+;
+"use strict";
+var $;
+(function ($) {
+    class $mol_after_timeout extends $mol_object2 {
+        delay;
+        task;
+        id;
+        constructor(delay, task) {
+            super();
+            this.delay = delay;
+            this.task = task;
+            this.id = setTimeout(task, delay);
+        }
+        destructor() {
+            clearTimeout(this.id);
+        }
+    }
+    $.$mol_after_timeout = $mol_after_timeout;
+})($ || ($ = {}));
+//mol/after/timeout/timeout.ts
+;
+"use strict";
+var $;
+(function ($) {
+    class $mol_state_time extends $mol_object {
+        static task(precision, reset) {
+            if (precision) {
+                return new $mol_after_timeout(precision, () => this.task(precision, null));
+            }
+            else {
+                return new $mol_after_frame(() => this.task(precision, null));
+            }
+        }
+        static now(precision) {
+            this.task(precision);
+            return Date.now();
+        }
+    }
+    __decorate([
+        $mol_mem_key
+    ], $mol_state_time, "task", null);
+    __decorate([
+        $mol_mem_key
+    ], $mol_state_time, "now", null);
+    $.$mol_state_time = $mol_state_time;
+})($ || ($ = {}));
+//mol/state/time/time.ts
+;
+"use strict";
+var $;
+(function ($) {
+    var $$;
+    (function ($$) {
+        class $mol_svg extends $.$mol_svg {
+            computed_style() {
+                const win = this.$.$mol_dom_context;
+                const style = win.getComputedStyle(this.dom_node());
+                if (!style['font-size'])
+                    $mol_state_time.now(0);
+                return style;
+            }
+            font_size() {
+                return parseInt(this.computed_style()['font-size']) || 16;
+            }
+            font_family() {
+                return this.computed_style()['font-family'];
+            }
+        }
+        __decorate([
+            $mol_mem
+        ], $mol_svg.prototype, "computed_style", null);
+        __decorate([
+            $mol_mem
+        ], $mol_svg.prototype, "font_size", null);
+        __decorate([
+            $mol_mem
+        ], $mol_svg.prototype, "font_family", null);
+        $$.$mol_svg = $mol_svg;
+    })($$ = $.$$ || ($.$$ = {}));
+})($ || ($ = {}));
+//mol/svg/svg.view.ts
+;
+"use strict";
+var $;
+(function ($) {
+    class $mol_svg_root extends $mol_svg {
+        dom_name() {
+            return "svg";
+        }
+        attr() {
+            return {
+                ...super.attr(),
+                viewBox: this.view_box(),
+                preserveAspectRatio: this.aspect()
+            };
+        }
+        view_box() {
+            return "0 0 100 100";
+        }
+        aspect() {
+            return "xMidYMid";
+        }
+    }
+    $.$mol_svg_root = $mol_svg_root;
+})($ || ($ = {}));
+//mol/svg/root/-view.tree/root.view.tree.ts
+;
+"use strict";
+var $;
+(function ($) {
+    $mol_style_attach("mol/svg/root/root.view.css", "[mol_svg_root] {\n\toverflow: hidden;\n}\n");
+})($ || ($ = {}));
+//mol/svg/root/-css/root.view.css.ts
+;
+"use strict";
+var $;
+(function ($) {
+    class $mol_svg_path extends $mol_svg {
+        dom_name() {
+            return "path";
+        }
+        attr() {
+            return {
+                ...super.attr(),
+                d: this.geometry()
+            };
+        }
+        geometry() {
+            return "";
+        }
+    }
+    $.$mol_svg_path = $mol_svg_path;
+})($ || ($ = {}));
+//mol/svg/path/-view.tree/path.view.tree.ts
+;
+"use strict";
+var $;
+(function ($) {
+    class $mol_icon extends $mol_svg_root {
+        view_box() {
+            return "0 0 24 24";
+        }
+        minimal_width() {
+            return 16;
+        }
+        minimal_height() {
+            return 16;
+        }
+        sub() {
+            return [
+                this.Path()
+            ];
+        }
+        path() {
+            return "";
+        }
+        Path() {
+            const obj = new this.$.$mol_svg_path();
+            obj.geometry = () => this.path();
+            return obj;
+        }
+    }
+    __decorate([
+        $mol_mem
+    ], $mol_icon.prototype, "Path", null);
+    $.$mol_icon = $mol_icon;
+})($ || ($ = {}));
+//mol/icon/-view.tree/icon.view.tree.ts
+;
+"use strict";
+var $;
+(function ($) {
+    $mol_style_attach("mol/icon/icon.view.css", "[mol_icon] {\n\tfill: currentColor;\n\tstroke: none;\n\twidth: 1em;\n\theight: 1.5em;\n\tflex: 0 0 auto;\n\tvertical-align: top;\n\tdisplay: inline-block;\n\tfilter: drop-shadow(0px 1px 1px var(--mol_theme_back));\n\ttransform-origin: center;\n}\n\n[mol_icon_path] {\n\ttransform-origin: center;\n}\n");
+})($ || ($ = {}));
+//mol/icon/-css/icon.view.css.ts
+;
+"use strict";
+var $;
+(function ($) {
+    class $mol_icon_calendar extends $mol_icon {
+        path() {
+            return "M19,19H5V8H19M16,1V3H8V1H6V3H5C3.89,3 3,3.89 3,5V19C3,20.1 3.9,21 5,21H19C20.1,21 21,20.1 21,19V5C21,3.89 20.1,3 19,3H18V1M17,12H12V17H17V12Z";
+        }
+    }
+    $.$mol_icon_calendar = $mol_icon_calendar;
+})($ || ($ = {}));
+//mol/icon/calendar/-view.tree/calendar.view.tree.ts
+;
+"use strict";
+var $;
+(function ($) {
+    class $mol_icon_calendar_plus extends $mol_icon {
+        path() {
+            return "M19,19V7H5V19H19M16,1H18V3H19C20.1,3 21,3.9 21,5V19C21,20.1 20.1,21 19,21H5C3.89,21 3,20.1 3,19V5C3,3.89 3.89,3 5,3H6V1H8V3H16V1M11,9H13V12H16V14H13V17H11V14H8V12H11V9Z";
+        }
+    }
+    $.$mol_icon_calendar_plus = $mol_icon_calendar_plus;
+})($ || ($ = {}));
+//mol/icon/calendar/plus/-view.tree/plus.view.tree.ts
+;
+"use strict";
+var $;
+(function ($) {
+    class $mol_link_calendar extends $mol_link {
+        interval() {
+            const obj = new this.$.$mol_time_interval({
+                start: this.start(),
+                end: this.end()
+            });
+            return obj;
+        }
+        details() {
+            return "";
+        }
+        location() {
+            return "";
+        }
+        sub() {
+            return [
+                this.Icon()
+            ];
+        }
+        start() {
+            const obj = new this.$.$mol_time_moment();
+            return obj;
+        }
+        end() {
+            const obj = new this.$.$mol_time_moment();
+            return obj;
+        }
+        Icon() {
+            const obj = new this.$.$mol_icon_calendar_plus();
+            return obj;
+        }
+    }
+    __decorate([
+        $mol_mem
+    ], $mol_link_calendar.prototype, "interval", null);
+    __decorate([
+        $mol_mem
+    ], $mol_link_calendar.prototype, "start", null);
+    __decorate([
+        $mol_mem
+    ], $mol_link_calendar.prototype, "end", null);
+    __decorate([
+        $mol_mem
+    ], $mol_link_calendar.prototype, "Icon", null);
+    $.$mol_link_calendar = $mol_link_calendar;
+})($ || ($ = {}));
+//mol/link/calendar/-view.tree/calendar.view.tree.ts
+;
+"use strict";
+var $;
+(function ($) {
+    var $$;
+    (function ($$) {
+        class $mol_link_calendar extends $.$mol_link_calendar {
+            uri() {
+                const params = new URLSearchParams({
+                    dates: `${this.interval().start.merge({ second: 0 }).toString('YYYYMMDDThhmmssZ')}/${this.interval().end.merge({ second: 0 }).toString('YYYYMMDDThhmmssZ')}`,
+                    text: this.title(),
+                    details: this.details(),
+                    location: this.location(),
+                });
+                return `https://calendar.google.com/calendar/u/0/r/eventedit?${params.toString()}`;
+            }
+        }
+        __decorate([
+            $mol_mem
+        ], $mol_link_calendar.prototype, "uri", null);
+        $$.$mol_link_calendar = $mol_link_calendar;
+    })($$ = $.$$ || ($.$$ = {}));
+})($ || ($ = {}));
+//mol/link/calendar/calendar.view.ts
+;
+"use strict";
+var $;
+(function ($) {
     class $mol_pop extends $mol_view {
         showed(next) {
             if (next !== undefined)
@@ -8421,218 +8720,6 @@ var $;
     $mol_style_attach("mol/pick/pick.view.css", "[mol_pick_trigger] {\n\talign-items: center;\n\tflex-grow: 1;\n}\n");
 })($ || ($ = {}));
 //mol/pick/-css/pick.view.css.ts
-;
-"use strict";
-var $;
-(function ($) {
-    class $mol_svg extends $mol_view {
-        dom_name() {
-            return "svg";
-        }
-        dom_name_space() {
-            return "http://www.w3.org/2000/svg";
-        }
-        font_size() {
-            return 16;
-        }
-        font_family() {
-            return "";
-        }
-        style_size() {
-            return {};
-        }
-    }
-    $.$mol_svg = $mol_svg;
-})($ || ($ = {}));
-//mol/svg/-view.tree/svg.view.tree.ts
-;
-"use strict";
-var $;
-(function ($) {
-    class $mol_after_timeout extends $mol_object2 {
-        delay;
-        task;
-        id;
-        constructor(delay, task) {
-            super();
-            this.delay = delay;
-            this.task = task;
-            this.id = setTimeout(task, delay);
-        }
-        destructor() {
-            clearTimeout(this.id);
-        }
-    }
-    $.$mol_after_timeout = $mol_after_timeout;
-})($ || ($ = {}));
-//mol/after/timeout/timeout.ts
-;
-"use strict";
-var $;
-(function ($) {
-    class $mol_state_time extends $mol_object {
-        static task(precision, reset) {
-            if (precision) {
-                return new $mol_after_timeout(precision, () => this.task(precision, null));
-            }
-            else {
-                return new $mol_after_frame(() => this.task(precision, null));
-            }
-        }
-        static now(precision) {
-            this.task(precision);
-            return Date.now();
-        }
-    }
-    __decorate([
-        $mol_mem_key
-    ], $mol_state_time, "task", null);
-    __decorate([
-        $mol_mem_key
-    ], $mol_state_time, "now", null);
-    $.$mol_state_time = $mol_state_time;
-})($ || ($ = {}));
-//mol/state/time/time.ts
-;
-"use strict";
-var $;
-(function ($) {
-    var $$;
-    (function ($$) {
-        class $mol_svg extends $.$mol_svg {
-            computed_style() {
-                const win = this.$.$mol_dom_context;
-                const style = win.getComputedStyle(this.dom_node());
-                if (!style['font-size'])
-                    $mol_state_time.now(0);
-                return style;
-            }
-            font_size() {
-                return parseInt(this.computed_style()['font-size']) || 16;
-            }
-            font_family() {
-                return this.computed_style()['font-family'];
-            }
-        }
-        __decorate([
-            $mol_mem
-        ], $mol_svg.prototype, "computed_style", null);
-        __decorate([
-            $mol_mem
-        ], $mol_svg.prototype, "font_size", null);
-        __decorate([
-            $mol_mem
-        ], $mol_svg.prototype, "font_family", null);
-        $$.$mol_svg = $mol_svg;
-    })($$ = $.$$ || ($.$$ = {}));
-})($ || ($ = {}));
-//mol/svg/svg.view.ts
-;
-"use strict";
-var $;
-(function ($) {
-    class $mol_svg_root extends $mol_svg {
-        dom_name() {
-            return "svg";
-        }
-        attr() {
-            return {
-                ...super.attr(),
-                viewBox: this.view_box(),
-                preserveAspectRatio: this.aspect()
-            };
-        }
-        view_box() {
-            return "0 0 100 100";
-        }
-        aspect() {
-            return "xMidYMid";
-        }
-    }
-    $.$mol_svg_root = $mol_svg_root;
-})($ || ($ = {}));
-//mol/svg/root/-view.tree/root.view.tree.ts
-;
-"use strict";
-var $;
-(function ($) {
-    $mol_style_attach("mol/svg/root/root.view.css", "[mol_svg_root] {\n\toverflow: hidden;\n}\n");
-})($ || ($ = {}));
-//mol/svg/root/-css/root.view.css.ts
-;
-"use strict";
-var $;
-(function ($) {
-    class $mol_svg_path extends $mol_svg {
-        dom_name() {
-            return "path";
-        }
-        attr() {
-            return {
-                ...super.attr(),
-                d: this.geometry()
-            };
-        }
-        geometry() {
-            return "";
-        }
-    }
-    $.$mol_svg_path = $mol_svg_path;
-})($ || ($ = {}));
-//mol/svg/path/-view.tree/path.view.tree.ts
-;
-"use strict";
-var $;
-(function ($) {
-    class $mol_icon extends $mol_svg_root {
-        view_box() {
-            return "0 0 24 24";
-        }
-        minimal_width() {
-            return 16;
-        }
-        minimal_height() {
-            return 16;
-        }
-        sub() {
-            return [
-                this.Path()
-            ];
-        }
-        path() {
-            return "";
-        }
-        Path() {
-            const obj = new this.$.$mol_svg_path();
-            obj.geometry = () => this.path();
-            return obj;
-        }
-    }
-    __decorate([
-        $mol_mem
-    ], $mol_icon.prototype, "Path", null);
-    $.$mol_icon = $mol_icon;
-})($ || ($ = {}));
-//mol/icon/-view.tree/icon.view.tree.ts
-;
-"use strict";
-var $;
-(function ($) {
-    $mol_style_attach("mol/icon/icon.view.css", "[mol_icon] {\n\tfill: currentColor;\n\tstroke: none;\n\twidth: 1em;\n\theight: 1.5em;\n\tflex: 0 0 auto;\n\tvertical-align: top;\n\tdisplay: inline-block;\n\tfilter: drop-shadow(0px 1px 1px var(--mol_theme_back));\n\ttransform-origin: center;\n}\n\n[mol_icon_path] {\n\ttransform-origin: center;\n}\n");
-})($ || ($ = {}));
-//mol/icon/-css/icon.view.css.ts
-;
-"use strict";
-var $;
-(function ($) {
-    class $mol_icon_calendar extends $mol_icon {
-        path() {
-            return "M19,19H5V8H19M16,1V3H8V1H6V3H5C3.89,3 3,3.89 3,5V19C3,20.1 3.9,21 5,21H19C20.1,21 21,20.1 21,19V5C21,3.89 20.1,3 19,3H18V1M17,12H12V17H17V12Z";
-        }
-    }
-    $.$mol_icon_calendar = $mol_icon_calendar;
-})($ || ($ = {}));
-//mol/icon/calendar/-view.tree/calendar.view.tree.ts
 ;
 "use strict";
 var $;
@@ -10098,7 +10185,7 @@ var $;
                 const moment = this.value_moment();
                 if (val === undefined)
                     return moment?.toString('YYYY-MM-DD hh:mm') ?? '';
-                const moment2 = $mol_try(() => val && new $mol_time_moment(val)) || null;
+                const moment2 = $mol_try(() => val && new $mol_time_moment(val).merge({ offset: new $mol_time_moment().offset })) || null;
                 if (moment2 instanceof Error)
                     return val;
                 this.value_moment(moment2);
@@ -13997,6 +14084,9 @@ var $;
             const obj = new this.$.$piterjs_meetup();
             return obj;
         }
+        address() {
+            return "";
+        }
         Title() {
             const obj = new this.$.$mol_string_button();
             obj.value = (next) => this.title(next);
@@ -14006,6 +14096,7 @@ var $;
         }
         tools() {
             return [
+                this.Subscribe(),
                 this.Start(),
                 this.Close()
             ];
@@ -14028,6 +14119,31 @@ var $;
                 this.Guests_link(),
                 this.Stats_link()
             ];
+        }
+        subscribe_title() {
+            return "";
+        }
+        subscribe_details() {
+            return "";
+        }
+        duration() {
+            const obj = new this.$.$mol_time_duration("PT3h");
+            return obj;
+        }
+        interval() {
+            const obj = new this.$.$mol_time_interval({
+                start: this.start(),
+                duration: this.duration()
+            });
+            return obj;
+        }
+        Subscribe() {
+            const obj = new this.$.$mol_link_calendar();
+            obj.title = () => this.subscribe_title();
+            obj.details = () => this.subscribe_details();
+            obj.location = () => this.address();
+            obj.interval = () => this.interval();
+            return obj;
         }
         Start() {
             const obj = new this.$.$mol_date();
@@ -14362,6 +14478,15 @@ var $;
     ], $piterjs_meetup_page.prototype, "Speech", null);
     __decorate([
         $mol_mem
+    ], $piterjs_meetup_page.prototype, "duration", null);
+    __decorate([
+        $mol_mem
+    ], $piterjs_meetup_page.prototype, "interval", null);
+    __decorate([
+        $mol_mem
+    ], $piterjs_meetup_page.prototype, "Subscribe", null);
+    __decorate([
+        $mol_mem
     ], $piterjs_meetup_page.prototype, "Start", null);
     __decorate([
         $mol_mem
@@ -14502,6 +14627,13 @@ var $;
     var $$;
     (function ($$) {
         class $piterjs_meetup_page extends $.$piterjs_meetup_page {
+            subscribe_title() {
+                return `PiterJS ${this.title()}`;
+            }
+            subscribe_details() {
+                const url = $mol_html_encode(this.$.$mol_state_arg.href());
+                return `<a href="${url}">${url}</a>`;
+            }
             video() {
                 return this.meetup().video() ?? '';
             }
@@ -14594,6 +14726,9 @@ var $;
                 return `Свободно мест: ${space}`;
             }
         }
+        __decorate([
+            $mol_mem
+        ], $piterjs_meetup_page.prototype, "subscribe_details", null);
         __decorate([
             $mol_mem
         ], $piterjs_meetup_page.prototype, "join_allowed", null);
