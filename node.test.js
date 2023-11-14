@@ -19401,6 +19401,7 @@ var $;
             Chart: {
                 flex: {
                     basis: `20rem`,
+                    grow: 0,
                 },
             },
         });
