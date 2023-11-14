@@ -56,6 +56,10 @@
 	flex-wrap: wrap;
 }
 
+[piterjs_now_hint] {
+	text-align: center;
+}
+
 [piterjs_now_bids] {
 	flex-wrap: wrap;
 	justify-content: center;
