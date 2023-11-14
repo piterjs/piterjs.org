@@ -5502,6 +5502,32 @@ declare namespace $ {
 }
 
 declare namespace $ {
+    function $mol_lights(this: $, next?: boolean): boolean;
+}
+
+declare namespace $ {
+    class $mol_icon_brightness_6 extends $mol_icon {
+        path(): string;
+    }
+}
+
+declare namespace $ {
+    class $mol_lights_toggle extends $mol_check_icon {
+        Icon(): $mol_icon_brightness_6;
+        hint(): string;
+        checked(next?: any): boolean;
+        Lights_icon(): $mol_icon_brightness_6;
+        lights(next?: any): boolean;
+    }
+}
+
+declare namespace $.$$ {
+    class $mol_lights_toggle extends $.$mol_lights_toggle {
+        lights(next?: boolean): boolean;
+    }
+}
+
+declare namespace $ {
     class $mol_icon_terrain extends $mol_icon {
         path(): string;
     }
@@ -5605,12 +5631,12 @@ declare namespace $ {
         tiles_options(): Record<string, any>;
         auto(): readonly any[];
         sub(): readonly any[];
-        theme(): string;
+        photo(next?: any): boolean;
         center_offset(): any;
         query(val?: any): string;
         search(event?: any): any;
         Search(): $$.$mol_search;
-        photo(val?: any): boolean;
+        Lights(): $$.$mol_lights_toggle;
         Photo_icon(): $mol_icon_terrain;
         Photo(): $mol_check_icon;
         draw_uri(): string;
@@ -5721,7 +5747,6 @@ declare namespace $.$$ {
         geo_jump(coord: $mol_vector_2d<number>, zoom?: number): void;
         draw_uri(): string;
         tiles_uri(): any;
-        theme(): "$mol_theme_light" | "$mol_theme_dark";
     }
 }
 
@@ -6235,10 +6260,6 @@ declare namespace $ {
         attr(): Record<string, any>;
         theme(): string;
     }
-}
-
-declare namespace $ {
-    function $mol_lights(this: $, next?: boolean): boolean;
 }
 
 declare namespace $.$$ {
@@ -7279,28 +7300,6 @@ declare namespace $ {
 declare namespace $ {
     class $mol_icon_image extends $mol_icon {
         path(): string;
-    }
-}
-
-declare namespace $ {
-    class $mol_icon_brightness_6 extends $mol_icon {
-        path(): string;
-    }
-}
-
-declare namespace $ {
-    class $mol_lights_toggle extends $mol_check_icon {
-        Icon(): $mol_icon_brightness_6;
-        hint(): string;
-        checked(next?: any): boolean;
-        Lights_icon(): $mol_icon_brightness_6;
-        lights(next?: any): boolean;
-    }
-}
-
-declare namespace $.$$ {
-    class $mol_lights_toggle extends $.$mol_lights_toggle {
-        lights(next?: boolean): boolean;
     }
 }
 
