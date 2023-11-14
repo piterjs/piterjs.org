@@ -36,3 +36,6 @@ $piterjs_meetup_stats $mol_page
 					labels <= days /
 					graphs /
 						<= Joins
+						<= Visits
+						<= Joins_new
+						<= Visits_new
