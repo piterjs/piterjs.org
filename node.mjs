@@ -16165,8 +16165,10 @@ var $;
     (function ($$) {
         class $piterjs_meetup_guests extends $.$piterjs_meetup_guests {
             person_list() {
+                const moments = this.meetup().joined_moments();
                 return this.meetup().joined_list()
                     .filter($mol_match_text(this.filter(), person => [person.name_real(), person.id()]))
+                    .sort((a, b) => moments[a.id()].valueOf() - moments[b.id()].valueOf())
                     .map(person => this.Person(person.id()));
             }
             person(person) {
