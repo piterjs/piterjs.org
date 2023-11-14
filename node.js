@@ -19243,7 +19243,10 @@ var $;
             const obj = new this.$.$mol_plot_mark_cross();
             obj.labels = () => this.days();
             obj.graphs = () => [
-                this.Joins()
+                this.Joins(),
+                this.Visits(),
+                this.Joins_new(),
+                this.Visits_new()
             ];
             return obj;
         }
@@ -19409,7 +19412,6 @@ var $;
             Chart: {
                 flex: {
                     basis: `20rem`,
-                    grow: 0,
                 },
             },
         });
