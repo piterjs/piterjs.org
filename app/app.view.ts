@@ -70,11 +70,11 @@ namespace $.$$ {
 				... this.safe() ? [ this.Safe() ] : [],
 				... this.meetup_id() ? [ this.Meetup( this.meetup_id() ) ] : [] ,
 				... this.rights_meetup() ? [ this.Rights_meetup() ] : [] ,
-				... this.guests() ? [ this.Meetup_guests( this.meetup_id() ) ] : [] ,
-				... this.stats() ? [ this.Meetup_stats( this.meetup_id() ) ] : [] ,
 				... this.speech_id() ? [ this.Speech( this.speech_id() ) ] : [] ,
 				... this.place_show() ? [ this.Place() ] : [] ,
 				... this.video() ? [ this.Video() ] : [] ,
+				... this.guests() ? [ this.Meetup_guests( this.meetup_id() ) ] : [] ,
+				... this.stats() ? [ this.Meetup_stats( this.meetup_id() ) ] : [] ,
 				... this.others() ? [ this.Others() ] : [] ,
 				... this.wiki() ? this.Wiki().pages() : [],
 			]
