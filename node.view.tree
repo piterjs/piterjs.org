@@ -3080,4 +3080,4 @@ $piterjs_now $mol_page
 						title \Поддержать нас
 				<= Hint $mol_hint
 					dictionary *
-						menu \◀ Куча инфы в базе знаний
+						menu \<= Куча инфы в базе знаний
