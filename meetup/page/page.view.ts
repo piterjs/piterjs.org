@@ -2,6 +2,16 @@ namespace $.$$ {
 
 	export class $piterjs_meetup_page extends $.$piterjs_meetup_page {
 
+		subscribe_title() {
+			return `PiterJS ${this.title()}`
+		}
+
+		@ $mol_mem
+		subscribe_details() {
+			const url = $mol_html_encode( this.$.$mol_state_arg.href() )
+			return `<a href="${url}">${url}</a>`
+		}
+
 		video() {
 			return this.meetup().video() ?? ''
 		}

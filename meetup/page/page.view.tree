@@ -7,11 +7,19 @@ $piterjs_meetup_page $mol_page
 		joined_count => joined_count
 		joined? => joined?
 		editable => editable
+	address \
 	Title $mol_string_button
 		value? <=> title?
 		enabled <= editing
 		hint \Номер
 	tools /
+		<= Subscribe $mol_link_calendar
+			title <= subscribe_title \
+			details <= subscribe_details \
+			location <= address
+			interval <= interval $mol_time_interval / *
+				start <= start
+				duration <= duration $mol_time_duration / \PT3h
 		<= Start $mol_date
 			value_moment? <=> start?
 			enabled <= editing
