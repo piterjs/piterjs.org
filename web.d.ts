@@ -1690,14 +1690,22 @@ declare namespace $ {
 }
 
 declare namespace $ {
-    class $mol_scroll extends $mol_view {
-        scroll_top(next?: any): number;
-        scroll_left(next?: any): number;
-        field(): Record<string, any>;
-        event(): Record<string, any>;
-        tabindex(): number;
-        event_scroll(event?: any): any;
+    class $mol_list extends $mol_view {
+        render_visible_only(): boolean;
+        render_over(): number;
+        sub(): readonly $mol_view[];
+        Empty(): $mol_view;
+        Gap_before(): $mol_view;
+        Gap_after(): $mol_view;
+        view_window(): readonly any[];
+        rows(): readonly $mol_view[];
+        gap_before(): number;
+        gap_after(): number;
     }
+}
+
+declare namespace $ {
+    function $mol_support_css_overflow_anchor(this: $): boolean;
 }
 
 declare namespace $ {
@@ -1720,6 +1728,33 @@ declare namespace $ {
         static before(): $mol_dom_listener;
         static after(): $mol_dom_listener;
         static active(next?: boolean): boolean;
+    }
+}
+
+declare namespace $.$$ {
+    class $mol_list extends $.$mol_list {
+        sub(): readonly $mol_view[];
+        render_visible_only(): boolean;
+        view_window(next?: [number, number]): [number, number];
+        gap_before(): number;
+        gap_after(): number;
+        sub_visible(): $mol_view[];
+        minimal_height(): number;
+        force_render(path: Set<$mol_view>): void;
+    }
+}
+
+declare namespace $ {
+}
+
+declare namespace $ {
+    class $mol_scroll extends $mol_view {
+        scroll_top(next?: any): number;
+        scroll_left(next?: any): number;
+        field(): Record<string, any>;
+        event(): Record<string, any>;
+        tabindex(): number;
+        event_scroll(event?: any): any;
     }
 }
 
@@ -1791,7 +1826,9 @@ declare namespace $ {
         Tools(): $mol_view;
         head(): readonly any[];
         Head(): $mol_view;
-        body(): readonly $mol_view_content[];
+        body(): readonly $mol_view[];
+        Body_content(): $$.$mol_list;
+        body_content(): readonly any[];
         body_scroll_top(next?: any): number;
         Body(): $$.$mol_scroll;
         foot(): readonly $mol_view[];
@@ -2177,41 +2214,6 @@ declare namespace $ {
 }
 
 declare namespace $ {
-    class $mol_list extends $mol_view {
-        render_visible_only(): boolean;
-        render_over(): number;
-        sub(): readonly $mol_view[];
-        Empty(): $mol_view;
-        Gap_before(): $mol_view;
-        Gap_after(): $mol_view;
-        view_window(): readonly any[];
-        rows(): readonly $mol_view[];
-        gap_before(): number;
-        gap_after(): number;
-    }
-}
-
-declare namespace $ {
-    function $mol_support_css_overflow_anchor(this: $): boolean;
-}
-
-declare namespace $.$$ {
-    class $mol_list extends $.$mol_list {
-        sub(): readonly $mol_view[];
-        render_visible_only(): boolean;
-        view_window(next?: [number, number]): [number, number];
-        gap_before(): number;
-        gap_after(): number;
-        sub_visible(): $mol_view[];
-        minimal_height(): number;
-        force_render(path: Set<$mol_view>): void;
-    }
-}
-
-declare namespace $ {
-}
-
-declare namespace $ {
     class $piterjs_speech_snippet extends $mol_link {
         arg(): Record<string, any>;
         speech(): $piterjs_speech;
@@ -2519,9 +2521,34 @@ declare namespace $ {
 }
 
 declare namespace $ {
+    type $mol_log3_event<Fields> = {
+        [key in string]: unknown;
+    } & {
+        time?: string;
+        place: unknown;
+        message: string;
+    } & Fields;
+    type $mol_log3_logger<Fields, Res = void> = (this: $, event: $mol_log3_event<Fields>) => Res;
+    let $mol_log3_come: $mol_log3_logger<{}>;
+    let $mol_log3_done: $mol_log3_logger<{}>;
+    let $mol_log3_fail: $mol_log3_logger<{}>;
+    let $mol_log3_warn: $mol_log3_logger<{
+        hint: string;
+    }>;
+    let $mol_log3_rise: $mol_log3_logger<{}>;
+    let $mol_log3_area: $mol_log3_logger<{}, () => void>;
+    function $mol_log3_area_lazy(this: $, event: $mol_log3_event<{}>): () => void;
+    let $mol_log3_stack: (() => void)[];
+}
+
+declare namespace $ {
+    function $mol_log3_web_make(level: $mol_type_keys_extract<Console, Function>, color: string): (this: $, event: $mol_log3_event<{}>) => () => void;
+}
+
+declare namespace $ {
     class $mol_storage extends $mol_object2 {
         static native(): StorageManager;
-        static persisted(next?: boolean): boolean;
+        static persisted(next?: boolean, cache?: 'cache'): boolean;
         static estimate(): StorageEstimate;
         static dir(): FileSystemDirectoryHandle;
     }
@@ -6006,31 +6033,6 @@ declare namespace $ {
 }
 
 declare namespace $ {
-    type $mol_log3_event<Fields> = {
-        [key in string]: unknown;
-    } & {
-        time?: string;
-        place: unknown;
-        message: string;
-    } & Fields;
-    type $mol_log3_logger<Fields, Res = void> = (this: $, event: $mol_log3_event<Fields>) => Res;
-    let $mol_log3_come: $mol_log3_logger<{}>;
-    let $mol_log3_done: $mol_log3_logger<{}>;
-    let $mol_log3_fail: $mol_log3_logger<{}>;
-    let $mol_log3_warn: $mol_log3_logger<{
-        hint: string;
-    }>;
-    let $mol_log3_rise: $mol_log3_logger<{}>;
-    let $mol_log3_area: $mol_log3_logger<{}, () => void>;
-    function $mol_log3_area_lazy(this: $, event: $mol_log3_event<{}>): () => void;
-    let $mol_log3_stack: (() => void)[];
-}
-
-declare namespace $ {
-    function $mol_log3_web_make(level: $mol_type_keys_extract<Console, Function>, color: string): (this: $, event: $mol_log3_event<{}>) => () => void;
-}
-
-declare namespace $ {
     let $hyoo_sync_masters: string[];
 }
 
@@ -7163,7 +7165,7 @@ declare namespace $.$$ {
         key_new(): string | null;
         import_switch(): void;
         key_export(): string;
-        export_rows(): ($mol_link | $mol_list | $mol_text)[];
+        export_rows(): ($mol_list | $mol_link | $mol_text)[];
         import_rows(): ($mol_list | $mol_button_minor | $mol_text)[];
         export_link(): string;
     }

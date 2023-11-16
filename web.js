@@ -879,11 +879,15 @@ var $;
 (function ($) {
     $.$mol_key_store = new WeakMap();
     function $mol_key(value) {
+        if (typeof value === 'bigint')
+            return value.toString() + 'n';
         if (!value)
             return JSON.stringify(value);
         if (typeof value !== 'object' && typeof value !== 'function')
             return JSON.stringify(value);
         return JSON.stringify(value, (field, value) => {
+            if (typeof value === 'bigint')
+                return value.toString() + 'n';
             if (!value)
                 return value;
             if (typeof value !== 'object' && typeof value !== 'function')
@@ -6097,50 +6101,74 @@ var $;
 "use strict";
 var $;
 (function ($) {
-    class $mol_scroll extends $mol_view {
-        scroll_top(next) {
-            if (next !== undefined)
-                return next;
+    class $mol_list extends $mol_view {
+        render_visible_only() {
+            return true;
+        }
+        render_over() {
             return 0;
         }
-        scroll_left(next) {
-            if (next !== undefined)
-                return next;
+        sub() {
+            return this.rows();
+        }
+        Empty() {
+            const obj = new this.$.$mol_view();
+            return obj;
+        }
+        Gap_before() {
+            const obj = new this.$.$mol_view();
+            obj.style = () => ({
+                paddingTop: this.gap_before()
+            });
+            return obj;
+        }
+        Gap_after() {
+            const obj = new this.$.$mol_view();
+            obj.style = () => ({
+                paddingTop: this.gap_after()
+            });
+            return obj;
+        }
+        view_window() {
+            return [
+                0,
+                0
+            ];
+        }
+        rows() {
+            return [];
+        }
+        gap_before() {
             return 0;
         }
-        field() {
-            return {
-                ...super.field(),
-                tabIndex: this.tabindex()
-            };
-        }
-        event() {
-            return {
-                ...super.event(),
-                scroll: (event) => this.event_scroll(event)
-            };
-        }
-        tabindex() {
-            return -1;
-        }
-        event_scroll(event) {
-            if (event !== undefined)
-                return event;
-            return null;
+        gap_after() {
+            return 0;
         }
     }
     __decorate([
         $mol_mem
-    ], $mol_scroll.prototype, "scroll_top", null);
+    ], $mol_list.prototype, "Empty", null);
     __decorate([
         $mol_mem
-    ], $mol_scroll.prototype, "scroll_left", null);
+    ], $mol_list.prototype, "Gap_before", null);
     __decorate([
         $mol_mem
-    ], $mol_scroll.prototype, "event_scroll", null);
-    $.$mol_scroll = $mol_scroll;
+    ], $mol_list.prototype, "Gap_after", null);
+    $.$mol_list = $mol_list;
 })($ || ($ = {}));
-//mol/scroll/-view.tree/scroll.view.tree.ts
+//mol/list/-view.tree/list.view.tree.ts
+;
+"use strict";
+var $;
+(function ($) {
+    let cache = null;
+    function $mol_support_css_overflow_anchor() {
+        return cache ?? (cache = (!/Gecko\//.test(navigator.userAgent)
+            && this.$mol_dom_context.CSS?.supports('overflow-anchor:auto')) ?? false);
+    }
+    $.$mol_support_css_overflow_anchor = $mol_support_css_overflow_anchor;
+})($ || ($ = {}));
+//mol/support/css/css.ts
 ;
 "use strict";
 var $;
@@ -6199,6 +6227,193 @@ var $;
     $.$mol_print = $mol_print;
 })($ || ($ = {}));
 //mol/print/print.ts
+;
+"use strict";
+var $;
+(function ($) {
+    var $$;
+    (function ($$) {
+        class $mol_list extends $.$mol_list {
+            sub() {
+                const rows = this.rows();
+                return (rows.length === 0) ? [this.Empty()] : rows;
+            }
+            render_visible_only() {
+                return this.$.$mol_support_css_overflow_anchor();
+            }
+            view_window(next) {
+                const kids = this.sub();
+                if (kids.length < 3)
+                    return [0, kids.length];
+                if (this.$.$mol_print.active())
+                    return [0, kids.length];
+                const rect = this.view_rect();
+                if (next)
+                    return next;
+                let [min, max] = $mol_mem_cached(() => this.view_window()) ?? [0, 0];
+                let max2 = max = Math.min(max, kids.length);
+                let min2 = min = Math.max(0, Math.min(min, max - 1));
+                const anchoring = this.render_visible_only();
+                const window_height = this.$.$mol_window.size().height + 40;
+                const over = Math.ceil(window_height * this.render_over());
+                const limit_top = -over;
+                const limit_bottom = window_height + over;
+                const gap_before = $mol_mem_cached(() => this.gap_before()) ?? 0;
+                const gap_after = $mol_mem_cached(() => this.gap_after()) ?? 0;
+                let top = Math.ceil(rect?.top ?? 0) + gap_before;
+                let bottom = Math.ceil(rect?.bottom ?? 0) - gap_after;
+                if (top <= limit_top && bottom >= limit_bottom) {
+                    return [min2, max2];
+                }
+                if (anchoring && ((bottom < limit_top) || (top > limit_bottom))) {
+                    min = 0;
+                    top = Math.ceil(rect?.top ?? 0);
+                    while (min < (kids.length - 1)) {
+                        const height = kids[min].minimal_height();
+                        if (top + height >= limit_top)
+                            break;
+                        top += height;
+                        ++min;
+                    }
+                    min2 = min;
+                    max2 = max = min;
+                    bottom = top;
+                }
+                let top2 = top;
+                let bottom2 = bottom;
+                if (anchoring && (top <= limit_top) && (bottom2 < limit_bottom)) {
+                    min2 = Math.max(0, max - 1);
+                    top2 = bottom;
+                }
+                if ((bottom >= limit_bottom) && (top2 >= limit_top)) {
+                    max2 = Math.min(min + 1, kids.length);
+                    bottom2 = top;
+                }
+                while (bottom2 < limit_bottom && max2 < kids.length) {
+                    bottom2 += kids[max2].minimal_height();
+                    ++max2;
+                }
+                while (anchoring && ((top2 >= limit_top) && (min2 > 0))) {
+                    --min2;
+                    top2 -= kids[min2].minimal_height();
+                }
+                return [min2, max2];
+            }
+            gap_before() {
+                const skipped = this.sub().slice(0, this.view_window()[0]);
+                return Math.max(0, skipped.reduce((sum, view) => sum + view.minimal_height(), 0));
+            }
+            gap_after() {
+                const skipped = this.sub().slice(this.view_window()[1]);
+                return Math.max(0, skipped.reduce((sum, view) => sum + view.minimal_height(), 0));
+            }
+            sub_visible() {
+                return [
+                    ...this.gap_before() ? [this.Gap_before()] : [],
+                    ...this.sub().slice(...this.view_window()),
+                    ...this.gap_after() ? [this.Gap_after()] : [],
+                ];
+            }
+            minimal_height() {
+                return this.sub().reduce((sum, view) => {
+                    try {
+                        return sum + view.minimal_height();
+                    }
+                    catch (error) {
+                        $mol_fail_log(error);
+                        return sum;
+                    }
+                }, 0);
+            }
+            force_render(path) {
+                const kids = this.rows();
+                const index = kids.findIndex(item => path.has(item));
+                if (index >= 0) {
+                    const win = this.view_window();
+                    if (index < win[0] || index >= win[1]) {
+                        this.view_window([this.render_visible_only() ? index : 0, index + 1]);
+                    }
+                    kids[index].force_render(path);
+                }
+            }
+        }
+        __decorate([
+            $mol_mem
+        ], $mol_list.prototype, "sub", null);
+        __decorate([
+            $mol_mem
+        ], $mol_list.prototype, "view_window", null);
+        __decorate([
+            $mol_mem
+        ], $mol_list.prototype, "gap_before", null);
+        __decorate([
+            $mol_mem
+        ], $mol_list.prototype, "gap_after", null);
+        __decorate([
+            $mol_mem
+        ], $mol_list.prototype, "sub_visible", null);
+        __decorate([
+            $mol_mem
+        ], $mol_list.prototype, "minimal_height", null);
+        $$.$mol_list = $mol_list;
+    })($$ = $.$$ || ($.$$ = {}));
+})($ || ($ = {}));
+//mol/list/list.view.ts
+;
+"use strict";
+var $;
+(function ($) {
+    $mol_style_attach("mol/list/list.view.css", "[mol_list] {\n\twill-change: contents;\n\tdisplay: flex;\n\tflex-direction: column;\n\tflex-shrink: 0;\n\tmax-width: 100%;\n\t/* display: flex;\n\talign-items: stretch;\n\talign-content: stretch; */\n\ttransition: none;\n\tmin-height: 1.5rem;\n}\n\n[mol_list_gap_before] ,\n[mol_list_gap_after] {\n\tdisplay: block !important;\n\tflex: none;\n\ttransition: none;\n\toverflow-anchor: none;\n}\n");
+})($ || ($ = {}));
+//mol/list/-css/list.view.css.ts
+;
+"use strict";
+var $;
+(function ($) {
+    class $mol_scroll extends $mol_view {
+        scroll_top(next) {
+            if (next !== undefined)
+                return next;
+            return 0;
+        }
+        scroll_left(next) {
+            if (next !== undefined)
+                return next;
+            return 0;
+        }
+        field() {
+            return {
+                ...super.field(),
+                tabIndex: this.tabindex()
+            };
+        }
+        event() {
+            return {
+                ...super.event(),
+                scroll: (event) => this.event_scroll(event)
+            };
+        }
+        tabindex() {
+            return -1;
+        }
+        event_scroll(event) {
+            if (event !== undefined)
+                return event;
+            return null;
+        }
+    }
+    __decorate([
+        $mol_mem
+    ], $mol_scroll.prototype, "scroll_top", null);
+    __decorate([
+        $mol_mem
+    ], $mol_scroll.prototype, "scroll_left", null);
+    __decorate([
+        $mol_mem
+    ], $mol_scroll.prototype, "event_scroll", null);
+    $.$mol_scroll = $mol_scroll;
+})($ || ($ = {}));
+//mol/scroll/-view.tree/scroll.view.tree.ts
 ;
 "use strict";
 //mol/style/pseudo/class.ts
@@ -6361,7 +6576,7 @@ var $;
     (function ($$) {
         const { per, rem, px } = $mol_style_unit;
         $mol_style_define($mol_scroll, {
-            display: 'flex',
+            display: 'grid',
             overflow: 'auto',
             flex: {
                 direction: 'column',
@@ -6382,6 +6597,7 @@ var $;
             '>': {
                 $mol_view: {
                     transform: 'translateZ(0)',
+                    gridArea: '1/1',
                 },
             },
             '::before': {
@@ -6468,12 +6684,22 @@ var $;
         body() {
             return [];
         }
+        Body_content() {
+            const obj = new this.$.$mol_list();
+            obj.rows = () => this.body();
+            return obj;
+        }
+        body_content() {
+            return [
+                this.Body_content()
+            ];
+        }
         body_scroll_top(next) {
             return this.Body().scroll_top(next);
         }
         Body() {
             const obj = new this.$.$mol_scroll();
-            obj.sub = () => this.body();
+            obj.sub = () => this.body_content();
             return obj;
         }
         foot() {
@@ -6495,6 +6721,9 @@ var $;
     __decorate([
         $mol_mem
     ], $mol_page.prototype, "Head", null);
+    __decorate([
+        $mol_mem
+    ], $mol_page.prototype, "Body_content", null);
     __decorate([
         $mol_mem
     ], $mol_page.prototype, "Body", null);
@@ -6579,7 +6808,12 @@ var $;
                     shrink: 1,
                     basis: per(100),
                 },
+            },
+            Body_content: {
                 padding: $mol_gap.block,
+                justify: {
+                    self: 'stretch',
+                },
             },
             Foot: {
                 display: 'flex',
@@ -7419,217 +7653,6 @@ var $;
     $.$piterjs_image = $piterjs_image;
 })($ || ($ = {}));
 //piterjs/image/-view.tree/image.view.tree.ts
-;
-"use strict";
-var $;
-(function ($) {
-    class $mol_list extends $mol_view {
-        render_visible_only() {
-            return true;
-        }
-        render_over() {
-            return 0;
-        }
-        sub() {
-            return this.rows();
-        }
-        Empty() {
-            const obj = new this.$.$mol_view();
-            return obj;
-        }
-        Gap_before() {
-            const obj = new this.$.$mol_view();
-            obj.style = () => ({
-                paddingTop: this.gap_before()
-            });
-            return obj;
-        }
-        Gap_after() {
-            const obj = new this.$.$mol_view();
-            obj.style = () => ({
-                paddingTop: this.gap_after()
-            });
-            return obj;
-        }
-        view_window() {
-            return [
-                0,
-                0
-            ];
-        }
-        rows() {
-            return [];
-        }
-        gap_before() {
-            return 0;
-        }
-        gap_after() {
-            return 0;
-        }
-    }
-    __decorate([
-        $mol_mem
-    ], $mol_list.prototype, "Empty", null);
-    __decorate([
-        $mol_mem
-    ], $mol_list.prototype, "Gap_before", null);
-    __decorate([
-        $mol_mem
-    ], $mol_list.prototype, "Gap_after", null);
-    $.$mol_list = $mol_list;
-})($ || ($ = {}));
-//mol/list/-view.tree/list.view.tree.ts
-;
-"use strict";
-var $;
-(function ($) {
-    let cache = null;
-    function $mol_support_css_overflow_anchor() {
-        return cache ?? (cache = (!/Gecko\//.test(navigator.userAgent)
-            && this.$mol_dom_context.CSS?.supports('overflow-anchor:auto')) ?? false);
-    }
-    $.$mol_support_css_overflow_anchor = $mol_support_css_overflow_anchor;
-})($ || ($ = {}));
-//mol/support/css/css.ts
-;
-"use strict";
-var $;
-(function ($) {
-    var $$;
-    (function ($$) {
-        class $mol_list extends $.$mol_list {
-            sub() {
-                const rows = this.rows();
-                return (rows.length === 0) ? [this.Empty()] : rows;
-            }
-            render_visible_only() {
-                return this.$.$mol_support_css_overflow_anchor();
-            }
-            view_window(next) {
-                const kids = this.sub();
-                if (kids.length < 3)
-                    return [0, kids.length];
-                if (this.$.$mol_print.active())
-                    return [0, kids.length];
-                const rect = this.view_rect();
-                if (next)
-                    return next;
-                let [min, max] = $mol_mem_cached(() => this.view_window()) ?? [0, 0];
-                let max2 = max = Math.min(max, kids.length);
-                let min2 = min = Math.max(0, Math.min(min, max - 1));
-                const anchoring = this.render_visible_only();
-                const window_height = this.$.$mol_window.size().height + 40;
-                const over = Math.ceil(window_height * this.render_over());
-                const limit_top = -over;
-                const limit_bottom = window_height + over;
-                const gap_before = $mol_mem_cached(() => this.gap_before()) ?? 0;
-                const gap_after = $mol_mem_cached(() => this.gap_after()) ?? 0;
-                let top = Math.ceil(rect?.top ?? 0) + gap_before;
-                let bottom = Math.ceil(rect?.bottom ?? 0) - gap_after;
-                if (top <= limit_top && bottom >= limit_bottom) {
-                    return [min2, max2];
-                }
-                if (anchoring && ((bottom < limit_top) || (top > limit_bottom))) {
-                    min = 0;
-                    top = Math.ceil(rect?.top ?? 0);
-                    while (min < (kids.length - 1)) {
-                        const height = kids[min].minimal_height();
-                        if (top + height >= limit_top)
-                            break;
-                        top += height;
-                        ++min;
-                    }
-                    min2 = min;
-                    max2 = max = min;
-                    bottom = top;
-                }
-                let top2 = top;
-                let bottom2 = bottom;
-                if (anchoring && (top <= limit_top) && (bottom2 < limit_bottom)) {
-                    min2 = Math.max(0, max - 1);
-                    top2 = bottom;
-                }
-                if ((bottom >= limit_bottom) && (top2 >= limit_top)) {
-                    max2 = Math.min(min + 1, kids.length);
-                    bottom2 = top;
-                }
-                while (bottom2 < limit_bottom && max2 < kids.length) {
-                    bottom2 += kids[max2].minimal_height();
-                    ++max2;
-                }
-                while (anchoring && ((top2 >= limit_top) && (min2 > 0))) {
-                    --min2;
-                    top2 -= kids[min2].minimal_height();
-                }
-                return [min2, max2];
-            }
-            gap_before() {
-                const skipped = this.sub().slice(0, this.view_window()[0]);
-                return Math.max(0, skipped.reduce((sum, view) => sum + view.minimal_height(), 0));
-            }
-            gap_after() {
-                const skipped = this.sub().slice(this.view_window()[1]);
-                return Math.max(0, skipped.reduce((sum, view) => sum + view.minimal_height(), 0));
-            }
-            sub_visible() {
-                return [
-                    ...this.gap_before() ? [this.Gap_before()] : [],
-                    ...this.sub().slice(...this.view_window()),
-                    ...this.gap_after() ? [this.Gap_after()] : [],
-                ];
-            }
-            minimal_height() {
-                return this.sub().reduce((sum, view) => {
-                    try {
-                        return sum + view.minimal_height();
-                    }
-                    catch (error) {
-                        $mol_fail_log(error);
-                        return sum;
-                    }
-                }, 0);
-            }
-            force_render(path) {
-                const kids = this.rows();
-                const index = kids.findIndex(item => path.has(item));
-                if (index >= 0) {
-                    const win = this.view_window();
-                    if (index < win[0] || index >= win[1]) {
-                        this.view_window([this.render_visible_only() ? index : 0, index + 1]);
-                    }
-                    kids[index].force_render(path);
-                }
-            }
-        }
-        __decorate([
-            $mol_mem
-        ], $mol_list.prototype, "sub", null);
-        __decorate([
-            $mol_mem
-        ], $mol_list.prototype, "view_window", null);
-        __decorate([
-            $mol_mem
-        ], $mol_list.prototype, "gap_before", null);
-        __decorate([
-            $mol_mem
-        ], $mol_list.prototype, "gap_after", null);
-        __decorate([
-            $mol_mem
-        ], $mol_list.prototype, "sub_visible", null);
-        __decorate([
-            $mol_mem
-        ], $mol_list.prototype, "minimal_height", null);
-        $$.$mol_list = $mol_list;
-    })($$ = $.$$ || ($.$$ = {}));
-})($ || ($ = {}));
-//mol/list/list.view.ts
-;
-"use strict";
-var $;
-(function ($) {
-    $mol_style_attach("mol/list/list.view.css", "[mol_list] {\n\twill-change: contents;\n\tdisplay: flex;\n\tflex-direction: column;\n\tflex-shrink: 0;\n\tmax-width: 100%;\n\t/* display: flex;\n\talign-items: stretch;\n\talign-content: stretch; */\n\ttransition: none;\n\tmin-height: 1.5rem;\n}\n\n[mol_list_gap_before] ,\n[mol_list_gap_after] {\n\tdisplay: block !important;\n\tflex: none;\n\ttransition: none;\n\toverflow-anchor: none;\n}\n");
-})($ || ($ = {}));
-//mol/list/-css/list.view.css.ts
 ;
 "use strict";
 var $;
@@ -8605,7 +8628,7 @@ var $;
 "use strict";
 var $;
 (function ($) {
-    $mol_style_attach("mol/check/check.css", "[mol_check] {\n\tflex: 0 0 auto;\n\tjustify-content: flex-start;\n\talign-content: center;\n\talign-items: flex-start;\n\tborder: none;\n\tfont-weight: inherit;\n\tbox-shadow: none;\n\ttext-align: left;\n\tdisplay: inline-flex;\n\tflex-wrap: nowrap;\n}\n\n[mol_check_title] {\n\tflex-shrink: 1;\n}\n");
+    $mol_style_attach("mol/check/check.css", "[mol_check] {\n\tflex: 0 0 auto;\n\tjustify-content: flex-start;\n\talign-content: center;\n\t/* align-items: flex-start; */\n\tborder: none;\n\tfont-weight: inherit;\n\tbox-shadow: none;\n\ttext-align: left;\n\tdisplay: inline-flex;\n\tflex-wrap: nowrap;\n}\n\n[mol_check_title] {\n\tflex-shrink: 1;\n}\n");
 })($ || ($ = {}));
 //mol/check/-css/check.css.ts
 ;
@@ -8743,15 +8766,76 @@ var $;
 "use strict";
 var $;
 (function ($) {
+    function $mol_log3_area_lazy(event) {
+        const self = this;
+        const stack = self.$mol_log3_stack;
+        const deep = stack.length;
+        let logged = false;
+        stack.push(() => {
+            logged = true;
+            self.$mol_log3_area.call(self, event);
+        });
+        return () => {
+            if (logged)
+                self.console.groupEnd();
+            if (stack.length > deep)
+                stack.length = deep;
+        };
+    }
+    $.$mol_log3_area_lazy = $mol_log3_area_lazy;
+    $.$mol_log3_stack = [];
+})($ || ($ = {}));
+//mol/log3/log3.ts
+;
+"use strict";
+var $;
+(function ($) {
+    function $mol_log3_web_make(level, color) {
+        return function $mol_log3_logger(event) {
+            const pending = this.$mol_log3_stack.pop();
+            if (pending)
+                pending();
+            let tpl = '%c';
+            const chunks = Object.values(event);
+            for (let i = 0; i < chunks.length; ++i) {
+                tpl += (typeof chunks[i] === 'string') ? ' ⦙ %s' : ' ⦙ %o';
+            }
+            const style = `color:${color};font-weight:bolder`;
+            this.console[level](tpl, style, ...chunks);
+            const self = this;
+            return () => self.console.groupEnd();
+        };
+    }
+    $.$mol_log3_web_make = $mol_log3_web_make;
+    $.$mol_log3_come = $mol_log3_web_make('info', 'royalblue');
+    $.$mol_log3_done = $mol_log3_web_make('info', 'forestgreen');
+    $.$mol_log3_fail = $mol_log3_web_make('error', 'orangered');
+    $.$mol_log3_warn = $mol_log3_web_make('warn', 'goldenrod');
+    $.$mol_log3_rise = $mol_log3_web_make('log', 'magenta');
+    $.$mol_log3_area = $mol_log3_web_make('group', 'cyan');
+})($ || ($ = {}));
+//mol/log3/log3.web.ts
+;
+"use strict";
+var $;
+(function ($) {
     class $mol_storage extends $mol_object2 {
         static native() {
             return this.$.$mol_dom_context.navigator.storage;
         }
-        static persisted(next) {
+        static persisted(next, cache) {
             $mol_mem_persist();
+            if (cache)
+                return Boolean(next);
             const native = this.native();
             if (next)
-                native.persist();
+                native.persist().then(actual => {
+                    this.persisted(actual, 'cache');
+                    if (actual)
+                        this.$.$mol_log3_rise({ place: this, message: `Persist` });
+                    else
+                        this.$.$mol_log3_fail({ place: this, message: `Non persist` });
+                });
             return next ?? $mol_wire_sync(native).persisted();
         }
         static estimate() {
@@ -23506,59 +23590,6 @@ var $;
 "use strict";
 var $;
 (function ($) {
-    function $mol_log3_area_lazy(event) {
-        const self = this;
-        const stack = self.$mol_log3_stack;
-        const deep = stack.length;
-        let logged = false;
-        stack.push(() => {
-            logged = true;
-            self.$mol_log3_area.call(self, event);
-        });
-        return () => {
-            if (logged)
-                self.console.groupEnd();
-            if (stack.length > deep)
-                stack.length = deep;
-        };
-    }
-    $.$mol_log3_area_lazy = $mol_log3_area_lazy;
-    $.$mol_log3_stack = [];
-})($ || ($ = {}));
-//mol/log3/log3.ts
-;
-"use strict";
-var $;
-(function ($) {
-    function $mol_log3_web_make(level, color) {
-        return function $mol_log3_logger(event) {
-            const pending = this.$mol_log3_stack.pop();
-            if (pending)
-                pending();
-            let tpl = '%c';
-            const chunks = Object.values(event);
-            for (let i = 0; i < chunks.length; ++i) {
-                tpl += (typeof chunks[i] === 'string') ? ' ⦙ %s' : ' ⦙ %o';
-            }
-            const style = `color:${color};font-weight:bolder`;
-            this.console[level](tpl, style, ...chunks);
-            const self = this;
-            return () => self.console.groupEnd();
-        };
-    }
-    $.$mol_log3_web_make = $mol_log3_web_make;
-    $.$mol_log3_come = $mol_log3_web_make('info', 'royalblue');
-    $.$mol_log3_done = $mol_log3_web_make('info', 'forestgreen');
-    $.$mol_log3_fail = $mol_log3_web_make('error', 'orangered');
-    $.$mol_log3_warn = $mol_log3_web_make('warn', 'goldenrod');
-    $.$mol_log3_rise = $mol_log3_web_make('log', 'magenta');
-    $.$mol_log3_area = $mol_log3_web_make('group', 'cyan');
-})($ || ($ = {}));
-//mol/log3/log3.web.ts
-;
-"use strict";
-var $;
-(function ($) {
     $.$hyoo_sync_masters = [
         `sync.hyoo.ru`,
         `sync-pmzz.onrender.com`,
@@ -26914,8 +26945,7 @@ var $;
         Menu_toggle: {
             margin: [rem(-.5), rem(-.75)],
         },
-        Body: {
-            padding: $mol_gap.block,
+        Body_content: {
             justifyContent: 'space-between',
         },
         Search: {
@@ -27598,9 +27628,6 @@ var $;
             flex: {
                 grow: 0,
             },
-        },
-        Body: {
-            padding: $mol_gap.block,
         },
     });
 })($ || ($ = {}));
