@@ -10,10 +10,6 @@
 	flex-grow: 1;
 }
 
-[piterjs_meetup_page_body] {
-	padding: .75rem;
-}
-
 [piterjs_meetup_page_links] {
 	flex-wrap: wrap;
 }
