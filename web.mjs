@@ -331,7 +331,12 @@ var $;
             if (!val)
                 return null;
             if ($.$mol_dev_format_head in val) {
-                return val[$.$mol_dev_format_head]();
+                try {
+                    return val[$.$mol_dev_format_head]();
+                }
+                catch (error) {
+                    return $.$mol_dev_format_accent($mol_dev_format_native(val), '💨', $mol_dev_format_native(error), '');
+                }
             }
             if (typeof val === 'function') {
                 return $mol_dev_format_native(val);
@@ -385,7 +390,6 @@ var $;
     $.$mol_dev_format_element = $mol_dev_format_element;
     function $mol_dev_format_span(style, ...content) {
         return $mol_dev_format_element('span', {
-            'vertical-align': '8%',
             ...style,
         }, ...content);
     }
@@ -994,6 +998,8 @@ var $;
         return true;
     }
     function compare_buffer(left, right) {
+        if (left instanceof DataView)
+            return compare_buffer(new Uint8Array(left.buffer, left.byteOffset, left.byteLength), new Uint8Array(right.buffer, left.byteOffset, left.byteLength));
         const len = left.byteLength;
         if (len !== right.byteLength)
             return false;
@@ -1603,6 +1609,7 @@ var $;
         const getter = (() => value);
         getter['()'] = value;
         getter[Symbol.toStringTag] = value;
+        getter[$mol_dev_format_head] = () => $mol_dev_format_span({}, '()=> ', $mol_dev_format_auto(value));
         return getter;
     }
     $.$mol_const = $mol_const;
@@ -2676,6 +2683,73 @@ var $;
 "use strict";
 var $;
 (function ($) {
+    function $mol_base64_encode(src) {
+        throw new Error('Not implemented');
+    }
+    $.$mol_base64_encode = $mol_base64_encode;
+})($ || ($ = {}));
+//mol/base64/encode/encode.ts
+;
+"use strict";
+var $;
+(function ($) {
+    function binary_string(bytes) {
+        let binary = '';
+        if (typeof bytes !== 'string') {
+            for (const byte of bytes)
+                binary += String.fromCharCode(byte);
+        }
+        else {
+            binary = unescape(encodeURIComponent(bytes));
+        }
+        return binary;
+    }
+    function $mol_base64_encode_web(str) {
+        return $mol_dom_context.btoa(binary_string(str));
+    }
+    $.$mol_base64_encode_web = $mol_base64_encode_web;
+    $.$mol_base64_encode = $mol_base64_encode_web;
+})($ || ($ = {}));
+//mol/base64/encode/encode.web.ts
+;
+"use strict";
+var $;
+(function ($) {
+    function $mol_base64_decode(base64) {
+        throw new Error('Not implemented');
+    }
+    $.$mol_base64_decode = $mol_base64_decode;
+})($ || ($ = {}));
+//mol/base64/decode/decode.ts
+;
+"use strict";
+var $;
+(function ($) {
+    function $mol_base64_decode_web(base64Str) {
+        return new Uint8Array($mol_dom_context.atob(base64Str).split('').map(c => c.charCodeAt(0)));
+    }
+    $.$mol_base64_decode_web = $mol_base64_decode_web;
+    $.$mol_base64_decode = $mol_base64_decode_web;
+})($ || ($ = {}));
+//mol/base64/decode/decode.web.ts
+;
+"use strict";
+var $;
+(function ($) {
+    function $mol_base64_url_encode(buffer) {
+        return $mol_base64_encode(buffer).replace(/\+/g, '-').replace(/\//g, '_').replace(/=/g, '');
+    }
+    $.$mol_base64_url_encode = $mol_base64_url_encode;
+    function $mol_base64_url_decode(str) {
+        return $mol_base64_decode(str.replace(/-/g, '+').replace(/_/g, '/'));
+    }
+    $.$mol_base64_url_decode = $mol_base64_url_decode;
+})($ || ($ = {}));
+//mol/base64/url/url.ts
+;
+"use strict";
+var $;
+(function ($) {
     const algorithm = {
         name: 'ECDSA',
         hash: 'SHA-256',
@@ -2691,12 +2765,17 @@ var $;
     $.$mol_crypto_auditor_pair = $mol_crypto_auditor_pair;
     class $mol_crypto_auditor_public extends Object {
         native;
-        static size = 86;
+        static size_str = 86;
+        static size_bin = 64;
         constructor(native) {
             super();
             this.native = native;
         }
         static async from(serial) {
+            if (typeof serial !== 'string') {
+                serial = $mol_base64_url_encode(serial.subarray(0, 32))
+                    + $mol_base64_url_encode(serial.subarray(32, 64));
+            }
             return new this(await $mol_crypto_native.subtle.importKey('jwk', {
                 crv: "P-256",
                 ext: true,
@@ -2710,6 +2789,13 @@ var $;
             const { x, y } = await $mol_crypto_native.subtle.exportKey('jwk', this.native);
             return x + y;
         }
+        async toArray() {
+            const { x, y, d } = await $mol_crypto_native.subtle.exportKey('jwk', this.native);
+            return new Uint8Array([
+                ...$mol_base64_url_decode(x),
+                ...$mol_base64_url_decode(y),
+            ]);
+        }
         async verify(data, sign) {
             return await $mol_crypto_native.subtle.verify(algorithm, this.native, sign, data);
         }
@@ -2717,12 +2803,18 @@ var $;
     $.$mol_crypto_auditor_public = $mol_crypto_auditor_public;
     class $mol_crypto_auditor_private extends Object {
         native;
-        static size = 129;
+        static size_str = 129;
+        static size_bin = 96;
         constructor(native) {
             super();
             this.native = native;
         }
         static async from(serial) {
+            if (typeof serial !== 'string') {
+                serial = $mol_base64_url_encode(serial.subarray(0, 32))
+                    + $mol_base64_url_encode(serial.subarray(32, 64))
+                    + $mol_base64_url_encode(serial.subarray(64));
+            }
             return new this(await $mol_crypto_native.subtle.importKey('jwk', {
                 crv: "P-256",
                 ext: true,
@@ -2736,6 +2828,14 @@ var $;
         async serial() {
             const { x, y, d } = await $mol_crypto_native.subtle.exportKey('jwk', this.native);
             return x + y + d;
+        }
+        async toArray() {
+            const { x, y, d } = await $mol_crypto_native.subtle.exportKey('jwk', this.native);
+            return new Uint8Array([
+                ...$mol_base64_url_decode(x),
+                ...$mol_base64_url_decode(y),
+                ...$mol_base64_url_decode(d),
+            ]);
         }
         async sign(data) {
             return await $mol_crypto_native.subtle.sign(algorithm, this.native, data);
@@ -3787,17 +3887,17 @@ var $;
 (function ($) {
     class $hyoo_crowd_fund extends $mol_object {
         world;
-        Node;
-        constructor(world, Node) {
+        node_class;
+        constructor(world, node_class) {
             super();
             this.world = world;
-            this.Node = Node;
+            this.node_class = node_class;
         }
         Item(id) {
             const [land, head] = id.split('!');
             if (!head)
                 return this.Item(`${land}!0_0`);
-            return this.world.land_sync(land).node(head, this.Node);
+            return this.world.land_sync(land).node(head, this.node_class);
         }
         make(law = [''], mod = [], add = []) {
             const land = $mol_wire_sync(this.world).grab(law, mod, add);
@@ -5198,8 +5298,8 @@ var $;
             'sss': (moment) => {
                 if (moment.second == null)
                     return '';
-                const millisecond = Math.floor((moment.second - Math.floor(moment.second)) * 1000);
-                return String(1000 + millisecond).slice(1);
+                const millisecond = (moment.second - Math.trunc(moment.second)).toFixed(3);
+                return millisecond.slice(2);
             },
             'Z': (moment) => {
                 const offset = moment.offset;
@@ -6061,7 +6161,7 @@ var $;
             return this.world().Fund($piterjs_person).Item(this.land.peer_id());
         }
         static secure_public() {
-            return '2SZr8D4nwg_SQrt1PSB3NTRqz_Qzx5eo04gC2lsJTRwCcLC-8vFfvBFHY8f05nrm_vRS5Rx_qTMRRw06wdrwWk';
+            return 'r6g695s7TPi0biQ1c5p3zS8R8a9ol7Cahk9r3tSO3xINtqMlGNjgf0SB0WB-VKz4H3xkTru-99MR6dBlPYqWnc';
         }
         static secure_private() {
             const sec = this.$.$mol_state_arg.value('secure');
@@ -28618,28 +28718,6 @@ var $;
 "use strict";
 var $;
 (function ($) {
-    function $mol_base64_decode(base64) {
-        throw new Error('Not implemented');
-    }
-    $.$mol_base64_decode = $mol_base64_decode;
-})($ || ($ = {}));
-//mol/base64/decode/decode.ts
-;
-"use strict";
-var $;
-(function ($) {
-    function $mol_base64_decode_web(base64Str) {
-        base64Str = base64Str.replace(/-/g, '+').replace(/_/g, '/');
-        return new Uint8Array($mol_dom_context.atob(base64Str).split('').map(c => c.charCodeAt(0)));
-    }
-    $.$mol_base64_decode_web = $mol_base64_decode_web;
-    $.$mol_base64_decode = $mol_base64_decode_web;
-})($ || ($ = {}));
-//mol/base64/decode/decode.web.ts
-;
-"use strict";
-var $;
-(function ($) {
     class $mol_after_work extends $mol_object2 {
         delay;
         task;
@@ -28676,38 +28754,6 @@ var $;
     $.$mol_wait_rest = $mol_wait_rest;
 })($ || ($ = {}));
 //mol/wait/rest/rest.ts
-;
-"use strict";
-var $;
-(function ($) {
-    function $mol_base64_encode(src) {
-        throw new Error('Not implemented');
-    }
-    $.$mol_base64_encode = $mol_base64_encode;
-})($ || ($ = {}));
-//mol/base64/encode/encode.ts
-;
-"use strict";
-var $;
-(function ($) {
-    function binary_string(bytes) {
-        let binary = '';
-        if (typeof bytes !== 'string') {
-            for (const byte of bytes)
-                binary += String.fromCharCode(byte);
-        }
-        else {
-            binary = unescape(encodeURIComponent(bytes));
-        }
-        return binary;
-    }
-    function $mol_base64_encode_web(str) {
-        return $mol_dom_context.btoa(binary_string(str));
-    }
-    $.$mol_base64_encode_web = $mol_base64_encode_web;
-    $.$mol_base64_encode = $mol_base64_encode_web;
-})($ || ($ = {}));
-//mol/base64/encode/encode.web.ts
 ;
 "use strict";
 var $;
