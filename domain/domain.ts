@@ -44,7 +44,7 @@ namespace $ {
 
 		@ $mol_mem
 		static secure_public() {
-			return '2SZr8D4nwg_SQrt1PSB3NTRqz_Qzx5eo04gC2lsJTRwCcLC-8vFfvBFHY8f05nrm_vRS5Rx_qTMRRw06wdrwWk'
+			return 'r6g695s7TPi0biQ1c5p3zS8R8a9ol7Cahk9r3tSO3xINtqMlGNjgf0SB0WB-VKz4H3xkTru-99MR6dBlPYqWnc'
 		}
 
 		@ $mol_mem
