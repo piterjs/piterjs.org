@@ -62,7 +62,8 @@ namespace $ {
 
 			if( priv ) {
 
-				const pub = land.unit( peer, peer )?.data as string | undefined
+				const auth = this.land.peer()
+				const pub = peer === auth.id ? auth.key_public_serial : land.unit( peer, peer )?.data as string | undefined
 				return pub ? $mol_wire_sync( $mol_crypto_secret ).derive( priv, pub ) : null
 
 			} else {
