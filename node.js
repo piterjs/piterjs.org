@@ -6036,43 +6036,6 @@ var $;
 "use strict";
 var $;
 (function ($) {
-    class $hyoo_crowd_counter extends $hyoo_crowd_reg {
-        list() {
-            return this.yoke([])?.residents() ?? [];
-        }
-        times() {
-            const land = this.yoke([]);
-            land?.pub.promote();
-            return Object.fromEntries([...land?._unit_all.values() ?? []]
-                .filter(unit => unit.data && unit.kind() === $hyoo_crowd_unit_kind.join)
-                .map(unit => [unit.auth, $hyoo_crowd_time_stamp(unit.time)]));
-        }
-        total() {
-            return this.list().length;
-        }
-        counted(next) {
-            const yoke = this.yoke([]);
-            switch (next) {
-                case true:
-                    yoke?.join();
-                    return Boolean(yoke);
-                case false:
-                    yoke?.leave();
-                    return false;
-                case undefined: return yoke?.residents().includes(this.land.peer_id());
-            }
-        }
-    }
-    __decorate([
-        $mol_mem
-    ], $hyoo_crowd_counter.prototype, "times", null);
-    $.$hyoo_crowd_counter = $hyoo_crowd_counter;
-})($ || ($ = {}));
-//hyoo/crowd/counter/counter.ts
-;
-"use strict";
-var $;
-(function ($) {
     const algorithm = {
         name: 'AES-GCM',
         length: 128,
@@ -6141,58 +6104,49 @@ var $;
 "use strict";
 var $;
 (function ($) {
-    $.$mol_mem_cached = $mol_wire_probe;
-})($ || ($ = {}));
-//mol/mem/cached/cached.ts
-;
-"use strict";
-var $;
-(function ($) {
-    class $piterjs_person extends $piterjs_model {
-        secret() {
-            const priv = $piterjs_domain.secure_private();
-            if (priv) {
-                const pub = this.land.unit(this.id(), this.id()).data;
-                return $mol_wire_sync($mol_crypto_secret).derive(priv, pub);
-            }
-            else {
-                const priv = this.land.peer().key_private_serial;
-                const pub = $piterjs_domain.secure_public();
-                return $mol_wire_sync($mol_crypto_secret).derive(priv, pub);
-            }
+    class $hyoo_crowd_dict extends $hyoo_crowd_node {
+        keys(next) {
+            const prev = this.units();
+            if (!next)
+                return prev.map(unit => String(unit.data));
+            $mol_reconcile({
+                prev,
+                from: 0,
+                to: prev.length,
+                next,
+                equal: (next, prev) => prev.data === next,
+                drop: (prev, lead) => this.land.wipe(prev),
+                insert: (next, lead) => this.land.put(this.head, $mol_int62_hash_string(next + '\n' + this.head), lead?.self ?? '0_0', next),
+            });
+            return next;
         }
-        name_real(next, cache) {
-            $mol_wire_solid();
-            if (cache)
-                return next;
-            const secret = this.secret();
-            const reg = this.sub('name_real', $hyoo_crowd_reg);
-            const salt = $mol_charset_encode(this.id());
-            if (next !== undefined) {
-                secret.encrypt($mol_charset_encode(next), salt)
-                    .then(closed => {
-                    reg.value(new Uint8Array(closed));
-                    this.name_real($mol_mem_cached(() => this.name_real()), 'cache');
-                });
-                return next;
+        sub(key, Node) {
+            this.add(key);
+            return new Node(this.land, $mol_int62_hash_string(key + '\n' + this.head));
+        }
+        has(key) {
+            for (const unit of this.units()) {
+                if (unit.data === key)
+                    return true;
             }
-            const closed = reg.value();
-            if (!closed)
-                return '';
-            if (typeof closed === 'string')
-                return closed;
-            return $mol_charset_decode($mol_wire_sync(secret).decrypt(closed, salt));
+            return false;
+        }
+        add(key) {
+            if (this.has(key))
+                return;
+            this.keys([...this.keys(), key]);
+        }
+        drop(key) {
+            for (const unit of this.units()) {
+                if (unit.data !== key)
+                    continue;
+                this.land.wipe(unit);
+            }
         }
     }
-    __decorate([
-        $mol_mem
-    ], $piterjs_person.prototype, "secret", null);
-    __decorate([
-        $mol_mem
-    ], $piterjs_person.prototype, "name_real", null);
-    $.$piterjs_person = $piterjs_person;
+    $.$hyoo_crowd_dict = $hyoo_crowd_dict;
 })($ || ($ = {}));
-//piterjs/person/person.ts
+//hyoo/crowd/dict/dict.ts
 ;
 "use strict";
 var $;
@@ -6231,22 +6185,58 @@ var $;
         afterparty(next) {
             return this.sub('afterparty', $hyoo_crowd_reg).str(next);
         }
-        joined_node() {
-            return this.sub('joined', $hyoo_crowd_counter);
+        peer_secret(peer) {
+            const priv = $piterjs_domain.secure_private();
+            const land = this.joined_node()?.land;
+            if (!land)
+                return null;
+            if (priv) {
+                const pub = land.unit(peer, peer)?.data;
+                return pub ? $mol_wire_sync($mol_crypto_secret).derive(priv, pub) : null;
+            }
+            else {
+                const priv = land.peer().key_private_serial;
+                const pub = $piterjs_domain.secure_public();
+                return $mol_wire_sync($mol_crypto_secret).derive(priv, pub);
+            }
         }
-        joined(next) {
-            return this.joined_node().counted(next) ?? false;
+        joined_node() {
+            return this.yoke('joined', $hyoo_crowd_dict, [''], [], ['0_0']);
+        }
+        joined_name(id, next) {
+            const secret = $mol_wire_sync(this.peer_secret(id));
+            const salt = $mol_charset_encode(this.id());
+            if (next) {
+                const closed = secret.encrypt($mol_charset_encode(next), salt);
+                this.joined_node()?.sub(id, $hyoo_crowd_reg).value(new Uint8Array(closed));
+                return next;
+            }
+            if (next === '')
+                this.joined_node()?.as($hyoo_crowd_list).has(id, false);
+            if (!this.joined_node()?.has(id))
+                return '';
+            const closed = this.joined_node()?.sub(id, $hyoo_crowd_reg).value();
+            if (!close)
+                return '';
+            if (typeof closed === 'string')
+                return closed;
+            try {
+                return $mol_charset_decode(secret.decrypt(closed, salt));
+            }
+            catch (error) {
+                $mol_fail_log(error);
+                return '';
+            }
         }
         joined_list() {
-            const Person = this.world().Fund($piterjs_person);
-            return this.joined_node().list().map(id => Person.Item(id));
+            return this.joined_node()?.keys() ?? [];
         }
         joined_moments() {
-            return Object.fromEntries(Object.entries(this.joined_node().times())
-                .map(([peer, stamp]) => [peer, new $mol_time_moment(stamp)]));
+            return Object.fromEntries((this.joined_node()?.units() ?? [])
+                .map(unit => [unit.auth, new $mol_time_moment($hyoo_crowd_time_stamp(unit.time))]));
         }
         joined_count() {
-            return this.joined_node().total();
+            return this.joined_node()?.keys().length ?? 0;
         }
         visitors_node() {
             return this.sub('visitors', $hyoo_crowd_list);
@@ -6255,11 +6245,9 @@ var $;
             return this.visitors_node().has(peer, next);
         }
         visitors_list() {
-            const Person = this.world().Fund($piterjs_person);
             return this.visitors_node().list()
                 .map($mol_int62_string_ensure)
-                .filter($mol_guard_defined)
-                .map(id => Person.Item(id));
+                .filter($mol_guard_defined);
         }
     }
     __decorate([
@@ -6287,11 +6275,14 @@ var $;
         $mol_mem
     ], $piterjs_meetup.prototype, "afterparty", null);
     __decorate([
+        $mol_mem_key
+    ], $piterjs_meetup.prototype, "peer_secret", null);
+    __decorate([
         $mol_mem
     ], $piterjs_meetup.prototype, "joined_node", null);
     __decorate([
-        $mol_mem
-    ], $piterjs_meetup.prototype, "joined", null);
+        $mol_mem_key
+    ], $piterjs_meetup.prototype, "joined_name", null);
     __decorate([
         $mol_mem
     ], $piterjs_meetup.prototype, "joined_list", null);
@@ -6671,9 +6662,6 @@ var $;
         meetup_make() {
             return this.world().Fund($piterjs_meetup).make();
         }
-        person() {
-            return this.world().Fund($piterjs_person).Item(this.land.peer_id());
-        }
         static secure_public() {
             return 'r6g695s7TPi0biQ1c5p3zS8R8a9ol7Cahk9r3tSO3xINtqMlGNjgf0SB0WB-VKz4H3xkTru-99MR6dBlPYqWnc';
         }
@@ -6699,9 +6687,6 @@ var $;
     __decorate([
         $mol_mem_key
     ], $piterjs_domain.prototype, "meetup_public", null);
-    __decorate([
-        $mol_mem
-    ], $piterjs_domain.prototype, "person", null);
     __decorate([
         $mol_mem
     ], $piterjs_domain, "secure_public", null);
@@ -6841,6 +6826,13 @@ var $;
     $.$mol_print = $mol_print;
 })($ || ($ = {}));
 //mol/print/print.ts
+;
+"use strict";
+var $;
+(function ($) {
+    $.$mol_mem_cached = $mol_wire_probe;
+})($ || ($ = {}));
+//mol/mem/cached/cached.ts
 ;
 "use strict";
 var $;
@@ -12668,43 +12660,6 @@ var $;
 "use strict";
 var $;
 (function ($) {
-    class $piterjs_person_edit extends $mol_form_field {
-        name_real(next) {
-            return this.person().name_real(next);
-        }
-        person() {
-            const obj = new this.$.$piterjs_person();
-            return obj;
-        }
-        name() {
-            return "Имя Фамилия";
-        }
-        Content() {
-            return this.Name_real();
-        }
-        enabled() {
-            return true;
-        }
-        Name_real() {
-            const obj = new this.$.$mol_string();
-            obj.value = (next) => this.name_real(next);
-            obj.enabled = () => this.enabled();
-            return obj;
-        }
-    }
-    __decorate([
-        $mol_mem
-    ], $piterjs_person_edit.prototype, "person", null);
-    __decorate([
-        $mol_mem
-    ], $piterjs_person_edit.prototype, "Name_real", null);
-    $.$piterjs_person_edit = $piterjs_person_edit;
-})($ || ($ = {}));
-//piterjs/person/edit/-view.tree/edit.view.tree.ts
-;
-"use strict";
-var $;
-(function ($) {
     class $mol_icon_tick extends $mol_icon {
         path() {
             return "M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z";
@@ -14822,9 +14777,6 @@ var $;
         joined_count() {
             return this.meetup().joined_count();
         }
-        joined(next) {
-            return this.meetup().joined(next);
-        }
         editable() {
             return this.meetup().editable();
         }
@@ -15054,22 +15006,34 @@ var $;
             obj.title = () => this.free_space();
             return obj;
         }
-        person() {
-            const obj = new this.$.$piterjs_person();
-            return obj;
+        profile_bid() {
+            return "";
+        }
+        name_real(next) {
+            if (next !== undefined)
+                return next;
+            return "";
         }
         profile_editable() {
             return true;
         }
-        profile_bid() {
-            return "";
+        Name_real() {
+            const obj = new this.$.$mol_string();
+            obj.value = (next) => this.name_real(next);
+            obj.enabled = () => this.profile_editable();
+            return obj;
         }
         Profile() {
-            const obj = new this.$.$piterjs_person_edit();
-            obj.person = () => this.person();
-            obj.enabled = () => this.profile_editable();
+            const obj = new this.$.$mol_form_field();
+            obj.name = () => "Имя Фамилия";
             obj.bid = () => this.profile_bid();
+            obj.Content = () => this.Name_real();
             return obj;
+        }
+        joined(next) {
+            if (next !== undefined)
+                return next;
+            return false;
         }
         join_enabled() {
             return false;
@@ -15301,10 +15265,16 @@ var $;
     ], $piterjs_meetup_page.prototype, "Free_space", null);
     __decorate([
         $mol_mem
-    ], $piterjs_meetup_page.prototype, "person", null);
+    ], $piterjs_meetup_page.prototype, "name_real", null);
+    __decorate([
+        $mol_mem
+    ], $piterjs_meetup_page.prototype, "Name_real", null);
     __decorate([
         $mol_mem
     ], $piterjs_meetup_page.prototype, "Profile", null);
+    __decorate([
+        $mol_mem
+    ], $piterjs_meetup_page.prototype, "joined", null);
     __decorate([
         $mol_mem
     ], $piterjs_meetup_page.prototype, "Joined", null);
@@ -15405,7 +15375,7 @@ var $;
                     ...(this.editing() || this.description()) ? [this.Description()] : [],
                     this.Links(),
                     ...this.join_allowed() ? [this.Join()] : [],
-                    ...this.join_allowed() && this.meetup().joined() ? [this.Joined_bid()] : [],
+                    ...this.join_allowed() && this.joined() ? [this.Joined_bid()] : [],
                     this.Speeches(),
                     ...this.editing() ? [this.Speech_add()] : [],
                     ...this.editing() ? [this.Hidden_fields()] : [],
@@ -15444,7 +15414,7 @@ var $;
                 return true;
             }
             person_name() {
-                return this.person().name_real().trim().replace(/\s+/, ' ');
+                return this.name_real().trim().replace(/\s+/, ' ');
             }
             profile_bid() {
                 const name = this.person_name();
@@ -15472,12 +15442,23 @@ var $;
             joined_form() {
                 return [
                     this.Joined(),
-                    ...this.meetup().joined() ? [this.Joined_confirm()] : [],
+                    ...this.joined() ? [this.Joined_confirm()] : [],
                 ];
             }
             free_space() {
                 const space = this.meetup().place().capacity_max() - this.joined_count();
                 return `Свободно мест: ${space}`;
+            }
+            name_real(next) {
+                return this.$.$mol_state_local.value('name_real', next) ?? '';
+            }
+            joined(next) {
+                const peer = this.meetup().land.peer_id();
+                if (next === true)
+                    this.meetup().joined_name(peer, this.name_real());
+                if (next === false)
+                    this.meetup().joined_name(peer, '');
+                return Boolean(this.meetup().joined_name(peer));
             }
         }
         __decorate([
@@ -16198,52 +16179,6 @@ var $;
 "use strict";
 var $;
 (function ($) {
-    class $piterjs_person_snippet extends $mol_dimmer {
-        person() {
-            const obj = new this.$.$piterjs_person();
-            return obj;
-        }
-    }
-    __decorate([
-        $mol_mem
-    ], $piterjs_person_snippet.prototype, "person", null);
-    $.$piterjs_person_snippet = $piterjs_person_snippet;
-})($ || ($ = {}));
-//piterjs/person/snippet/-view.tree/snippet.view.tree.ts
-;
-"use strict";
-var $;
-(function ($) {
-    var $$;
-    (function ($$) {
-        class $piterjs_person_snippet extends $.$piterjs_person_snippet {
-            haystack() {
-                return this.person().name_real();
-            }
-        }
-        __decorate([
-            $mol_mem
-        ], $piterjs_person_snippet.prototype, "haystack", null);
-        $$.$piterjs_person_snippet = $piterjs_person_snippet;
-    })($$ = $.$$ || ($.$$ = {}));
-})($ || ($ = {}));
-//piterjs/person/snippet/snippet.view.ts
-;
-"use strict";
-var $;
-(function ($) {
-    var $$;
-    (function ($$) {
-        $mol_style_define($piterjs_person_snippet, {
-            padding: $mol_gap.text,
-        });
-    })($$ = $.$$ || ($.$$ = {}));
-})($ || ($ = {}));
-//piterjs/person/snippet/snippet.view.css.ts
-;
-"use strict";
-var $;
-(function ($) {
     class $piterjs_meetup_guests extends $mol_page {
         theme() {
             return "$mol_theme_special";
@@ -16305,12 +16240,11 @@ var $;
             return obj;
         }
         person(id) {
-            const obj = new this.$.$piterjs_person();
-            return obj;
+            return "";
         }
         Person_snippet(id) {
-            const obj = new this.$.$piterjs_person_snippet();
-            obj.person = () => this.person(id);
+            const obj = new this.$.$mol_dimmer();
+            obj.haystack = () => this.person(id);
             obj.needle = () => this.filter();
             return obj;
         }
@@ -16380,9 +16314,6 @@ var $;
     __decorate([
         $mol_mem
     ], $piterjs_meetup_guests.prototype, "Filter", null);
-    __decorate([
-        $mol_mem_key
-    ], $piterjs_meetup_guests.prototype, "person", null);
     __decorate([
         $mol_mem_key
     ], $piterjs_meetup_guests.prototype, "Person_snippet", null);
@@ -16455,18 +16386,18 @@ var $;
             person_list() {
                 const moments = this.meetup().joined_moments();
                 return this.meetup().joined_list()
-                    .filter($mol_match_text(this.filter(), person => [person.name_real(), person.id()]))
-                    .sort((a, b) => moments[a.id()].valueOf() - moments[b.id()].valueOf())
-                    .map(person => this.Person(person.id()));
+                    .filter($mol_match_text(this.filter(), person => [this.person(person), person]))
+                    .sort((a, b) => moments[a].valueOf() - moments[b].valueOf())
+                    .map(person => this.Person(person));
             }
             person(person) {
-                return this.meetup().world().Fund($piterjs_person).Item(person);
+                return this.meetup().joined_name(person) || person;
             }
             dump_blob() {
                 const table = this.meetup().joined_list().map(person => ({
-                    id: person.id(),
-                    real_name: person.name_real(),
-                    visitor: this.visitor(person.id()),
+                    id: person,
+                    real_name: this.person(person),
+                    visitor: this.visitor(person),
                 }));
                 const text = $mol_csv_serial(table);
                 return new $mol_blob([text], { type: 'text/csv' });
@@ -19639,7 +19570,7 @@ var $;
             joins_new_per_days() {
                 if (!this.meetup_prev())
                     return [0];
-                const prev = new Set(this.joined_list_prev().map(person => person.id()));
+                const prev = new Set(this.joined_list_prev());
                 return Object.values(this.joins_stat()).map(pairs => pairs.filter(([peer]) => !prev.has(peer)).length);
             }
             joins_new_title() {
@@ -19648,7 +19579,7 @@ var $;
             visits_new_per_days() {
                 if (!this.meetup_prev())
                     return [0];
-                const prev = new Set(this.visitors_list_prev().map(person => person.id()));
+                const prev = new Set(this.visitors_list_prev());
                 return Object.values(this.joins_stat()).map(pairs => pairs.filter(([id]) => this.visitor(id) && !prev.has(id)).length);
             }
             visits_new_title() {
@@ -24896,53 +24827,6 @@ var $;
     $.$hyoo_sync_client = $hyoo_sync_client;
 })($ || ($ = {}));
 //hyoo/sync/client/client.ts
-;
-"use strict";
-var $;
-(function ($) {
-    class $hyoo_crowd_dict extends $hyoo_crowd_node {
-        keys(next) {
-            const prev = this.units();
-            if (!next)
-                return prev.map(unit => String(unit.data));
-            $mol_reconcile({
-                prev,
-                from: 0,
-                to: prev.length,
-                next,
-                equal: (next, prev) => prev.data === next,
-                drop: (prev, lead) => this.land.wipe(prev),
-                insert: (next, lead) => this.land.put(this.head, $mol_int62_hash_string(next + '\n' + this.head), lead?.self ?? '0_0', next),
-            });
-            return next;
-        }
-        sub(key, Node) {
-            this.add(key);
-            return new Node(this.land, $mol_int62_hash_string(key + '\n' + this.head));
-        }
-        has(key) {
-            for (const unit of this.units()) {
-                if (unit.data === key)
-                    return true;
-            }
-            return false;
-        }
-        add(key) {
-            if (this.has(key))
-                return;
-            this.keys([...this.keys(), key]);
-        }
-        drop(key) {
-            for (const unit of this.units()) {
-                if (unit.data !== key)
-                    continue;
-                this.land.wipe(unit);
-            }
-        }
-    }
-    $.$hyoo_crowd_dict = $hyoo_crowd_dict;
-})($ || ($ = {}));
-//hyoo/crowd/dict/dict.ts
 ;
 "use strict";
 var $;
@@ -30654,9 +30538,6 @@ var $;
         meetup_public(id, next) {
             return this.Domain().meetup_public(id, next);
         }
-        person() {
-            return this.Domain().person();
-        }
         editable() {
             return this.Domain().editable();
         }
@@ -30688,7 +30569,6 @@ var $;
         Meetup(id) {
             const obj = new this.$.$piterjs_meetup_page();
             obj.meetup = () => this.meetup(id);
-            obj.person = () => this.person();
             obj.editing = (next) => this.editing(next);
             obj.meetup_public = (next) => this.meetup_public(id, next);
             obj.rights = (next) => this.rights_meetup(next);

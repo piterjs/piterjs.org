@@ -1688,17 +1688,6 @@ declare namespace $ {
 }
 
 declare namespace $ {
-    class $hyoo_crowd_counter extends $hyoo_crowd_reg {
-        list(): readonly `${string}_${string}`[];
-        times(): {
-            [k: string]: number;
-        };
-        total(): number;
-        counted(next?: boolean): boolean | undefined;
-    }
-}
-
-declare namespace $ {
     class $mol_crypto_secret extends Object {
         readonly native: CryptoKey & {
             type: 'secret';
@@ -1718,13 +1707,12 @@ declare namespace $ {
 }
 
 declare namespace $ {
-    let $mol_mem_cached: typeof $mol_wire_probe;
-}
-
-declare namespace $ {
-    class $piterjs_person extends $piterjs_model {
-        secret(): $mol_crypto_secret;
-        name_real(next?: string, cache?: 'cache'): string;
+    class $hyoo_crowd_dict extends $hyoo_crowd_node {
+        keys(next?: string[]): string[];
+        sub<Node extends typeof $hyoo_crowd_node>(key: string, Node: Node): InstanceType<Node>;
+        has(key: string): boolean;
+        add(key: string): void;
+        drop(key: string): void;
     }
 }
 
@@ -1738,16 +1726,17 @@ declare namespace $ {
         speech_public(id: $mol_int62_string, next?: boolean): boolean;
         place(): $piterjs_place;
         afterparty(next?: string): string;
-        joined_node(): $hyoo_crowd_counter;
-        joined(next?: boolean): boolean;
-        joined_list(): $piterjs_person[];
+        peer_secret(peer: $mol_int62_string): $mol_crypto_secret | null;
+        joined_node(): $hyoo_crowd_dict | null;
+        joined_name(id: $mol_int62_string, next?: string): string;
+        joined_list(): `${string}_${string}`[];
         joined_moments(): {
             [key: `${string}_${string}`]: $mol_time_moment;
         };
         joined_count(): number;
         visitors_node(): $hyoo_crowd_list;
         visitor(peer: $mol_int62_string, next?: boolean): boolean;
-        visitors_list(): $piterjs_person[];
+        visitors_list(): `${string}_${string}`[];
     }
 }
 
@@ -1844,7 +1833,6 @@ declare namespace $ {
         meetups(): $piterjs_meetup[];
         meetup_public(id: $mol_int62_string, next?: boolean): boolean;
         meetup_make(): $piterjs_meetup;
-        person(): $piterjs_person;
         static secure_public(): string;
         static secure_private(): string | null;
     }
@@ -1890,6 +1878,10 @@ declare namespace $ {
         static after(): $mol_dom_listener;
         static active(next?: boolean): boolean;
     }
+}
+
+declare namespace $ {
+    let $mol_mem_cached: typeof $mol_wire_probe;
 }
 
 declare namespace $.$$ {
@@ -3481,17 +3473,6 @@ declare namespace $ {
 }
 
 declare namespace $ {
-    class $piterjs_person_edit extends $mol_form_field {
-        name_real(next?: any): string;
-        person(): $piterjs_person;
-        name(): string;
-        Content(): $$.$mol_string;
-        enabled(): boolean;
-        Name_real(): $$.$mol_string;
-    }
-}
-
-declare namespace $ {
     class $mol_icon_tick extends $mol_icon {
         path(): string;
     }
@@ -4105,7 +4086,6 @@ declare namespace $ {
         afterparty(next?: any): string;
         start(next?: any): $mol_time_moment;
         joined_count(): number;
-        joined(next?: any): boolean;
         editable(): boolean;
         meetup(): $piterjs_meetup;
         address(): string;
@@ -4144,10 +4124,12 @@ declare namespace $ {
         Hidden_fields(): $$.$mol_list;
         free_space(): string;
         Free_space(): $$.$mol_paragraph;
-        person(): $piterjs_person;
-        profile_editable(): boolean;
         profile_bid(): string;
-        Profile(): $piterjs_person_edit;
+        name_real(next?: any): string;
+        profile_editable(): boolean;
+        Name_real(): $$.$mol_string;
+        Profile(): $$.$mol_form_field;
+        joined(next?: any): boolean;
         join_enabled(): boolean;
         Joined(): $mol_check_box;
         Joined_confirm(): $$.$mol_paragraph;
@@ -4200,6 +4182,8 @@ declare namespace $.$$ {
         join_content(): $mol_view[];
         joined_form(): ($mol_paragraph | $mol_check_box)[];
         free_space(): string;
+        name_real(next?: string): string;
+        joined(next?: boolean): boolean;
     }
 }
 
@@ -4355,21 +4339,6 @@ declare namespace $ {
 }
 
 declare namespace $ {
-    class $piterjs_person_snippet extends $mol_dimmer {
-        person(): $piterjs_person;
-    }
-}
-
-declare namespace $.$$ {
-    class $piterjs_person_snippet extends $.$piterjs_person_snippet {
-        haystack(): string;
-    }
-}
-
-declare namespace $.$$ {
-}
-
-declare namespace $ {
     class $piterjs_meetup_guests extends $mol_page {
         theme(): string;
         visitor(id: any, next?: any): boolean;
@@ -4383,8 +4352,8 @@ declare namespace $ {
         Close(): $$.$mol_link;
         filter(next?: any): string;
         Filter(): $$.$mol_search;
-        person(id: any): $piterjs_person;
-        Person_snippet(id: any): $$.$piterjs_person_snippet;
+        person(id: any): string;
+        Person_snippet(id: any): $$.$mol_dimmer;
         Person_visitor(id: any): $mol_check_box;
         person_join_moment(id: any): string;
         Person_join_moment(id: any): $mol_view;
@@ -4406,7 +4375,7 @@ declare namespace $ {
 declare namespace $.$$ {
     class $piterjs_meetup_guests extends $.$piterjs_meetup_guests {
         person_list(): $mol_view[];
-        person(person: $mol_int62_string): $piterjs_person;
+        person(person: $mol_int62_string): string;
         dump_blob(): Blob;
         person_join_moment(id: $mol_int62_string): string;
     }
@@ -5022,11 +4991,11 @@ declare namespace $ {
         joined_moments(): {
             [key: `${string}_${string}`]: $mol_time_moment;
         };
-        visitors_list(): $piterjs_person[];
+        visitors_list(): `${string}_${string}`[];
         visitor(id: any): boolean;
         meetup(): $piterjs_meetup;
-        joined_list_prev(): $piterjs_person[];
-        visitors_list_prev(): $piterjs_person[];
+        joined_list_prev(): `${string}_${string}`[];
+        visitors_list_prev(): `${string}_${string}`[];
         meetup_prev(): $piterjs_meetup;
         title(): string;
         tools(): readonly any[];
@@ -6343,16 +6312,6 @@ declare namespace $ {
     }
 }
 
-declare namespace $ {
-    class $hyoo_crowd_dict extends $hyoo_crowd_node {
-        keys(next?: string[]): string[];
-        sub<Node extends typeof $hyoo_crowd_node>(key: string, Node: Node): InstanceType<Node>;
-        has(key: string): boolean;
-        add(key: string): void;
-        drop(key: string): void;
-    }
-}
-
 declare namespace $.$$ {
     class $hyoo_page_side extends $hyoo_meta_model {
         referrers_node(): $hyoo_crowd_dict | null;
@@ -7551,7 +7510,6 @@ declare namespace $ {
         meetups(): $piterjs_meetup[];
         meetup(id: any): $piterjs_meetup;
         meetup_public(id: any, next?: any): boolean;
-        person(): $piterjs_person;
         editable(): boolean;
         Domain(): $piterjs_domain;
         plugins(): readonly any[];
