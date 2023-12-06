@@ -38,11 +38,6 @@ namespace $ {
 		}
 
 		@ $mol_mem
-		person() {
-			return this.world()!.Fund( $piterjs_person ).Item( this.land!.peer_id() )
-		}
-
-		@ $mol_mem
 		static secure_public() {
 			return 'r6g695s7TPi0biQ1c5p3zS8R8a9ol7Cahk9r3tSO3xINtqMlGNjgf0SB0WB-VKz4H3xkTru-99MR6dBlPYqWnc'
 		}
