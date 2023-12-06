@@ -12,6 +12,14 @@ namespace $.$$ {
 			return `<a href="${url}">${url}</a>`
 		}
 
+		interval() {
+			return this.start() ? super.interval() : null!
+		}
+
+		override Subscribe() {
+			return this.start() ? super.Subscribe() : null!
+		}
+
 		video() {
 			return this.meetup().video() ?? ''
 		}
