@@ -53,27 +53,72 @@ namespace $ {
 			return this.sub( 'afterparty', $hyoo_crowd_reg ).str( next )
 		}
 
-		@ $mol_mem
-		joined_node() {
-			return this.sub( 'joined', $hyoo_crowd_counter )
+		@ $mol_mem_key
+		peer_secret( peer: $mol_int62_string ) {
+			
+			const priv = $piterjs_domain.secure_private()
+			const land = this.joined_node()?.land
+			if( !land ) return null
+
+			if( priv ) {
+
+				const pub = land.unit( peer, peer )?.data as string | undefined
+				return pub ? $mol_wire_sync( $mol_crypto_secret ).derive( priv, pub ) : null
+
+			} else {
+
+				const priv = land.peer().key_private_serial
+				const pub = $piterjs_domain.secure_public()
+				return $mol_wire_sync( $mol_crypto_secret ).derive( priv, pub )
+
+			}
+
 		}
 
 		@ $mol_mem
-		joined( next?: boolean ) {
-			return this.joined_node().counted( next ) ?? false
+		joined_node() {
+			return this.yoke( 'joined', $hyoo_crowd_dict, [ '' ], [], [ '0_0' ] )
+		}
+
+		@ $mol_mem_key
+		joined_name( id: $mol_int62_string, next?: string ) {
+			
+			const secret = $mol_wire_sync( this.peer_secret( id )! )
+			const salt = $mol_charset_encode( this.id() )
+
+			if( next ) {
+				const closed = secret.encrypt( $mol_charset_encode( next ), salt )
+				this.joined_node()?.sub( id, $hyoo_crowd_reg ).value( new Uint8Array( closed ) )
+				return next
+			}
+			
+			if( next === '' ) this.joined_node()?.as( $hyoo_crowd_list ).has( id, false )
+			if( !this.joined_node()?.has( id ) ) return ''
+			
+			const closed = this.joined_node()?.sub( id, $hyoo_crowd_reg ).value()
+			if( !close ) return ''
+
+			if( typeof closed === 'string' ) return closed
+
+			try {
+				return $mol_charset_decode( secret.decrypt( closed as Uint8Array, salt ) )
+			} catch( error ) {
+				$mol_fail_log( error )
+				return ''
+			}
+
 		}
 
 		@ $mol_mem
 		joined_list() {
-			const Person = this.world()!.Fund( $piterjs_person )
-			return this.joined_node().list().map( id => Person.Item( id ) )
+			return this.joined_node()?.keys() as $mol_int62_string[] ?? []
 		}
 
 		@ $mol_mem
 		joined_moments() {
 			return Object.fromEntries(
-				Object.entries( this.joined_node().times() )
-				.map( ([ peer, stamp ]) => [ peer, new $mol_time_moment( stamp ) ] )
+				( this.joined_node()?.units() ?? [] )
+				.map( unit => [ unit.auth, new $mol_time_moment( $hyoo_crowd_time_stamp( unit.time ) ) ] )
 			) as {
 				[ key: $mol_int62_string ]: $mol_time_moment
 			}
@@ -81,7 +126,7 @@ namespace $ {
 
 		@ $mol_mem
 		joined_count() {
-			return this.joined_node().total()
+			return this.joined_node()?.keys().length ?? 0
 		}
 
 		@ $mol_mem
@@ -96,11 +141,9 @@ namespace $ {
 
 		@ $mol_mem
 		visitors_list() {
-			const Person = this.world()!.Fund( $piterjs_person )
 			return this.visitors_node().list()
 				.map( $mol_int62_string_ensure )
 				.filter( $mol_guard_defined )
-				.map( id => Person.Item( id ) )
 		}
 
 	}

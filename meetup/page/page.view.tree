@@ -5,7 +5,6 @@ $piterjs_meetup_page $mol_page
 		afterparty? => afterparty?
 		start? => start?
 		joined_count => joined_count
-		joined? => joined?
 		editable => editable
 	address \
 	Title $mol_string_button
@@ -82,13 +81,15 @@ $piterjs_meetup_page $mol_page
 				tools /
 					<= Free_space $mol_paragraph title <= free_space \нет мест
 				content <= join_content /
-					<= Profile $piterjs_person_edit
-						person <= person $piterjs_person
-						enabled <= profile_editable true
+					<= Profile $mol_form_field
+						name \Имя Фамилия
 						bid <= profile_bid \
+						Content <= Name_real $mol_string
+							value? <=> name_real? \
+							enabled <= profile_editable true
 					<= Joined_form $mol_view sub <= joined_form /
 						<= Joined $mol_check_box
-							checked? <=> joined?
+							checked? <=> joined? false
 							enabled <= join_enabled false
 							title \Я приду
 						<= Joined_confirm $mol_paragraph title \🔥 Ждём тебя!

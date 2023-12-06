@@ -22,8 +22,8 @@ $piterjs_meetup_guests $mol_page
 						<= Person_visitor* $mol_check_box
 							checked? <=> visitor*?
 							label /
-								<= Person_snippet* $piterjs_person_snippet
-									person <= person* $piterjs_person
+								<= Person_snippet* $mol_dimmer
+									haystack <= person* \
 									needle <= filter
 						<= Person_join_moment* $mol_view
 							sub / <= person_join_moment* \

@@ -37,7 +37,7 @@ namespace $.$$ {
 		@ $mol_mem
 		joins_new_per_days() {
 			if( !this.meetup_prev() ) return [0]
-			const prev = new Set( this.joined_list_prev().map( person => person.id() ) )
+			const prev = new Set( this.joined_list_prev() )
 			return Object.values( this.joins_stat() ).map( pairs => pairs!.filter( ([ peer ])=> !prev.has( peer as $mol_int62_string ) ).length )
 		}
 
@@ -49,7 +49,7 @@ namespace $.$$ {
 		@ $mol_mem
 		visits_new_per_days() {
 			if( !this.meetup_prev() ) return [0]
-			const prev = new Set( this.visitors_list_prev().map( person => person.id() ) )
+			const prev = new Set( this.visitors_list_prev() )
 			return Object.values( this.joins_stat() ).map( pairs => pairs!.filter( ([ id ])=> this.visitor( id ) && !prev.has( id as $mol_int62_string ) ).length )
 		}
 	

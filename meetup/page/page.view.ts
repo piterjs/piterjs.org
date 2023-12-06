@@ -43,7 +43,7 @@ namespace $.$$ {
 				... ( this.editing() || this.description() ) ? [ this.Description() ] : [] ,
 				this.Links() ,
 				... this.join_allowed() ? [ this.Join() ] : [] ,
-				... this.join_allowed() && this.meetup().joined() ? [ this.Joined_bid() ] : [],
+				... this.join_allowed() && this.joined() ? [ this.Joined_bid() ] : [],
 				this.Speeches() ,
 				... this.editing() ? [ this.Speech_add() ] : [] ,
 				... this.editing() ? [ this.Hidden_fields() ] : [] ,
@@ -94,7 +94,7 @@ namespace $.$$ {
 		}
 		
 		person_name() {
-			return this.person().name_real().trim().replace( /\s+/, ' ' )
+			return this.name_real().trim().replace( /\s+/, ' ' )
 		}
 
 		profile_bid() {
@@ -123,13 +123,24 @@ namespace $.$$ {
 		joined_form() {
 			return [
 				this.Joined(),
-				... this.meetup().joined() ? [ this.Joined_confirm() ] : [],
+				... this.joined() ? [ this.Joined_confirm() ] : [],
 			]
 		}
 
 		free_space() {
 			const space = this.meetup().place().capacity_max() - this.joined_count()
 			return `Свободно мест: ${space}`
+		}
+
+		name_real( next?: string ) {
+			return this.$.$mol_state_local.value( 'name_real', next ) ?? ''
+		}
+
+		joined( next?: boolean ) {
+			const peer = this.meetup().land.peer_id()
+			if( next === true ) this.meetup().joined_name( peer, this.name_real() )
+			if( next === false ) this.meetup().joined_name( peer, '' )
+			return Boolean( this.meetup().joined_name( peer ) )
 		}
 
 	}
