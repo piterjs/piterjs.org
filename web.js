@@ -84,7 +84,7 @@ var $;
         try {
             if (!having)
                 return false;
-            if (typeof having !== 'object')
+            if (typeof having !== 'object' && typeof having !== 'function')
                 return false;
             if (having instanceof $mol_delegate)
                 return false;
@@ -158,6 +158,38 @@ var $;
 "use strict";
 var $;
 (function ($) {
+    const named = new WeakSet();
+    function $mol_func_name(func) {
+        let name = func.name;
+        if (name?.length > 1)
+            return name;
+        if (named.has(func))
+            return name;
+        for (let key in this) {
+            try {
+                if (this[key] !== func)
+                    continue;
+                name = key;
+                Object.defineProperty(func, 'name', { value: name });
+                break;
+            }
+            catch { }
+        }
+        named.add(func);
+        return name;
+    }
+    $.$mol_func_name = $mol_func_name;
+    function $mol_func_name_from(target, source) {
+        Object.defineProperty(target, 'name', { value: source.name });
+        return target;
+    }
+    $.$mol_func_name_from = $mol_func_name_from;
+})($ || ($ = {}));
+//mol/func/name/name.ts
+;
+"use strict";
+var $;
+(function ($) {
     class $mol_object2 {
         static $ = $;
         [Symbol.toStringTag];
@@ -188,8 +220,12 @@ var $;
             return this.name;
         }
         destructor() { }
+        static destructor() { }
         toString() {
             return this[Symbol.toStringTag] || this.constructor.name + '()';
+        }
+        static toJSON() {
+            return this[Symbol.toStringTag] || this.$.$mol_func_name(this);
         }
         toJSON() {
             return this.toString();
@@ -830,38 +866,6 @@ var $;
     $.$mol_wire_fiber = $mol_wire_fiber;
 })($ || ($ = {}));
 //mol/wire/fiber/fiber.ts
-;
-"use strict";
-var $;
-(function ($) {
-    const named = new WeakSet();
-    function $mol_func_name(func) {
-        let name = func.name;
-        if (name?.length > 1)
-            return name;
-        if (named.has(func))
-            return name;
-        for (let key in this) {
-            try {
-                if (this[key] !== func)
-                    continue;
-                name = key;
-                Object.defineProperty(func, 'name', { value: name });
-                break;
-            }
-            catch { }
-        }
-        named.add(func);
-        return name;
-    }
-    $.$mol_func_name = $mol_func_name;
-    function $mol_func_name_from(target, source) {
-        Object.defineProperty(target, 'name', { value: source.name });
-        return target;
-    }
-    $.$mol_func_name_from = $mol_func_name_from;
-})($ || ($ = {}));
-//mol/func/name/name.ts
 ;
 "use strict";
 var $;
@@ -8921,7 +8925,12 @@ var $;
 (function ($) {
     class $mol_storage extends $mol_object2 {
         static native() {
-            return this.$.$mol_dom_context.navigator.storage;
+            return this.$.$mol_dom_context.navigator.storage ?? {
+                persisted: async () => false,
+                persist: async () => false,
+                estimate: async () => ({}),
+                getDirectory: async () => null,
+            };
         }
         static persisted(next, cache) {
             $mol_mem_persist();
@@ -8932,15 +8941,15 @@ var $;
                 native.persist().then(actual => {
                     setTimeout(() => this.persisted(actual, 'cache'), 5000);
                     if (actual)
-                        this.$.$mol_log3_rise({ place: this, message: `Persist` });
+                        this.$.$mol_log3_rise({ place: `$mol_storage`, message: `Persist: Yes` });
                     else
-                        this.$.$mol_log3_fail({ place: this, message: `Non persist` });
+                        this.$.$mol_log3_fail({ place: `$mol_storage`, message: `Persist: No` });
                 });
             }
             return next ?? $mol_wire_sync(native).persisted();
         }
         static estimate() {
-            return $mol_wire_sync(this.native()).estimate();
+            return $mol_wire_sync(this.native() ?? {}).estimate();
         }
         static dir() {
             return $mol_wire_sync(this.native()).getDirectory();
@@ -8954,7 +8963,7 @@ var $;
     ], $mol_storage, "persisted", null);
     $.$mol_storage = $mol_storage;
 })($ || ($ = {}));
-//mol/storage/storage.web.ts
+//mol/storage/storage.ts
 ;
 "use strict";
 var $;
@@ -10864,7 +10873,7 @@ var $;
                     throw new Error('Empty token');
                 var prefix = found[1];
                 if (prefix)
-                    handle('', prefix, [], start);
+                    handle('', prefix, [prefix], start);
                 var suffix = found[2];
                 if (!suffix)
                     continue;
@@ -14818,6 +14827,12 @@ var $;
             subscribe_details() {
                 const url = $mol_html_encode(this.$.$mol_state_arg.href());
                 return `<a href="${url}">${url}</a>`;
+            }
+            interval() {
+                return this.start() ? super.interval() : null;
+            }
+            Subscribe() {
+                return this.start() ? super.Subscribe() : null;
             }
             video() {
                 return this.meetup().video() ?? '';
