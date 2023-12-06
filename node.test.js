@@ -6183,7 +6183,8 @@ var $;
             if (!land)
                 return null;
             if (priv) {
-                const pub = land.unit(peer, peer)?.data;
+                const auth = this.land.peer();
+                const pub = peer === auth.id ? auth.key_public_serial : land.unit(peer, peer)?.data;
                 return pub ? $mol_wire_sync($mol_crypto_secret).derive(priv, pub) : null;
             }
             else {
