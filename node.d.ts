@@ -1734,7 +1734,7 @@ declare namespace $ {
             [key: `${string}_${string}`]: $mol_time_moment;
         };
         joined_count(): number;
-        visitors_node(): $hyoo_crowd_list;
+        visitors_node(): $hyoo_crowd_list | null;
         visitor(peer: $mol_int62_string, next?: boolean): boolean;
         visitors_list(): `${string}_${string}`[];
     }
