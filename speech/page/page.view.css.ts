@@ -5,7 +5,7 @@ namespace $.$$ {
 		flex: {
 			grow: 0,
 			shrink: 0,
-			basis: `40rem`,
+			basis: `35rem`,
 		},
 
 		Tools: {
