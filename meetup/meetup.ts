@@ -132,17 +132,19 @@ namespace $ {
 
 		@ $mol_mem
 		visitors_node() {
-			return this.sub( 'visitors', $hyoo_crowd_list )
+			const node = this.yoke( 'visitors2', $hyoo_crowd_list )
+			node?.land.steal_rights( this.land )
+			return node
 		}
 
 		@ $mol_mem_key
 		visitor( peer: $mol_int62_string, next?: boolean ) {
-			return this.visitors_node().has( peer, next )
+			return this.visitors_node()?.has( peer, next ) ?? false
 		}
 
 		@ $mol_mem
 		visitors_list() {
-			return this.visitors_node().list()
+			return ( this.visitors_node()?.list() ?? [] )
 				.map( $mol_int62_string_ensure )
 				.filter( $mol_guard_defined )
 		}
