@@ -1,8 +1,8 @@
 [piterjs_intro] {
 	flex: auto;
 	display: flex;
-	font-size: 4vmin;
-	line-height: 6vmin;
+	font-size: 3vmin;
+	line-height: 4.5vmin;
 }
 
 @keyframes piterjs_intro_screen_show {
