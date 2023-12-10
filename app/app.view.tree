@@ -40,17 +40,7 @@ $piterjs_app $mol_view
 			<= Lights $mol_lights_toggle
 		body /
 			<= Menu_content $mol_view sub /
-				<= Meetups $mol_list rows <= menu_meetups /
 				<= Links $mol_list rows /
-					<= Conf $mol_link
-						uri \https://conf.piterjs.org/
-						sub /
-							<= Conf_title $mol_view
-								sub /
-									\Conf 
-									<= Conf_ext $mol_icon_share_outline
-							<= Conf_date $mol_view
-								sub / \сентябрь'19
 					<= Wiki_link $mol_link
 						arg *
 							wiki \
@@ -59,6 +49,16 @@ $piterjs_app $mol_view
 					- <= Others_link $mol_link
 						uri \#others
 						title \Другие события
+				<= Meetups $mol_list rows <= menu_meetups /
+				<= Conf $mol_link
+					uri \https://conf.piterjs.org/
+					sub /
+						<= Conf_title $mol_view
+							sub /
+								\Conf 
+								<= Conf_ext $mol_icon_share_outline
+						<= Conf_date $mol_view
+							sub / \сентябрь'19
 	Meetup* $piterjs_meetup_page
 		meetup <= meetup*
 		editing? <=> editing? false
