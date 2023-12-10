@@ -5642,7 +5642,13 @@ declare namespace $ {
 }
 
 declare namespace $ {
-    class $mol_icon_github_circle extends $mol_icon {
+    class $mol_icon_script extends $mol_icon {
+        path(): string;
+    }
+}
+
+declare namespace $ {
+    class $mol_icon_script_text extends $mol_icon {
         path(): string;
     }
 }
@@ -5651,7 +5657,7 @@ declare namespace $ {
     class $mol_link_source extends $mol_link {
         hint(): string;
         sub(): readonly any[];
-        Icon(): $mol_icon_github_circle;
+        Icon(): $mol_icon_script_text;
     }
 }
 
@@ -7554,14 +7560,14 @@ declare namespace $ {
         User(): $mol_view;
         Lights(): $$.$mol_lights_toggle;
         foot(): readonly any[];
+        Wiki_link(): $$.$mol_link;
+        Links(): $$.$mol_list;
         menu_meetups(): readonly any[];
         Meetups(): $$.$mol_list;
         Conf_ext(): $mol_icon_share_outline;
         Conf_title(): $mol_view;
         Conf_date(): $mol_view;
         Conf(): $$.$mol_link;
-        Wiki_link(): $$.$mol_link;
-        Links(): $$.$mol_list;
         Menu_content(): $mol_view;
         rights_meetup(next?: any): boolean;
         meetup_prev(id: any): $piterjs_meetup;
