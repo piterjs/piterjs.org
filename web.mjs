@@ -14615,7 +14615,7 @@ var $;
         }
         Review_field() {
             const obj = new this.$.$mol_form_field();
-            obj.name = () => "Общие печатления";
+            obj.name = () => "Общие впечатления";
             obj.Content = () => this.Review();
             return obj;
         }
