@@ -280,6 +280,8 @@
     "$mol_embed_youtube",
     "$mol_icon_youtube",
     "$mol_frame",
+    "$mol_icon_gift_outline",
+    "$mol_icon_gift",
     "$mol_icon_eye",
     "$mol_check_icon",
     "$mol_icon_settings_outline",

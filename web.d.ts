@@ -1707,6 +1707,8 @@ declare namespace $ {
         meetup(next?: $piterjs_meetup): $piterjs_meetup | null;
         slides(next?: string): string;
         video(next?: string): string;
+        donate(next?: string): string;
+        contact(next?: string): string;
         start(next?: $mol_time_moment): $mol_time_moment;
         interval(): $mol_time_interval;
         duration(): $mol_time_duration;
@@ -3862,6 +3864,18 @@ declare namespace $ {
 }
 
 declare namespace $ {
+    class $mol_icon_gift extends $mol_icon {
+        path(): string;
+    }
+}
+
+declare namespace $ {
+    class $mol_icon_gift_outline extends $mol_icon {
+        path(): string;
+    }
+}
+
+declare namespace $ {
     class $mol_icon_eye extends $mol_icon {
         path(): string;
     }
@@ -4045,7 +4059,11 @@ declare namespace $ {
         join_content(): readonly any[];
         Join(): $$.$mol_section;
         Joined_bid(): $$.$mol_text;
+        Donate_icon(): $mol_icon_gift_outline;
+        Donate(): $$.$mol_link;
         Review(): $$.$mol_textarea;
+        Review_hint(): $mol_view;
+        Review_block(): $$.$mol_list;
         Review_field(): $$.$mol_form_field;
         Reviews(): $$.$mol_text;
         content(): readonly any[];
@@ -5275,6 +5293,8 @@ declare namespace $ {
         start(next?: any): $mol_time_moment;
         slides(next?: any): string;
         video(next?: any): string;
+        donate(next?: any): string;
+        contact(next?: any): string;
         editable(): boolean;
         review(next?: any): string;
         reviews(): string;
@@ -5290,13 +5310,15 @@ declare namespace $ {
         Poster(): $$.$piterjs_speech_poster;
         Poster_zone(): $mol_view;
         Description(): $$.$mol_textarea;
+        Slides(): $$.$mol_string_link;
+        Video(): $$.$mol_string_link;
+        Donate(): $$.$mol_string_link;
+        Contact(): $$.$mol_string_link;
+        links(): readonly any[];
+        Links(): $mol_view;
         Review(): $$.$mol_textarea;
         Review_field(): $$.$mol_form_field;
         Reviews(): $$.$mol_text;
-        Slides(): $$.$mol_string_link;
-        Video(): $$.$mol_string_link;
-        links(): readonly any[];
-        Links(): $mol_view;
         speaker(): $piterjs_speaker;
         Speaker(): $$.$piterjs_speaker_snippet;
         speech_public(next?: any): boolean;

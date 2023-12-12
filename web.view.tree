@@ -861,6 +861,10 @@ $mol_text_span $mol_paragraph
 		^
 		mol_text_type <= type \
 
+$mol_icon_gift $mol_icon path \M9.06,1.93C7.17,1.92 5.33,3.74 6.17,6H3C1.9,6 1,6.9 1,8V10C1,10.55 1.45,11 2,11H11V8H13V11H22C22.55,11 23,10.55 23,10V8C23,6.9 22.1,6 21,6H17.83C19,2.73 14.6,0.42 12.57,3.24L12,4L11.43,3.22C10.8,2.33 9.93,1.94 9.06,1.93M9,4C9.89,4 10.34,5.08 9.71,5.71C9.08,6.34 8,5.89 8,5C8,4.45 8.45,4 9,4M15,4C15.89,4 16.34,5.08 15.71,5.71C15.08,6.34 14,5.89 14,5C14,4.45 14.45,4 15,4M2,12V20C2,21.1 2.9,22 4,22H20C21.1,22 22,21.1 22,20V12H13V20H11V12H2Z
+
+$mol_icon_gift_outline $mol_icon path \M22,12V20C22,21.1 21.1,22 20,22H4C2.9,22 2,21.1 2,20V12C1.45,12 1,11.55 1,11V8C1,6.9 1.9,6 3,6H6.17C6.06,5.69 6,5.35 6,5C6,3.34 7.34,2 9,2C10,2 10.88,2.5 11.43,3.24V3.23L12,4L12.57,3.23V3.24C13.12,2.5 14,2 15,2C16.66,2 18,3.34 18,5C18,5.35 17.94,5.69 17.83,6H21C22.1,6 23,6.9 23,8V11C23,11.55 22.55,12 22,12M4,20H11V12H4V20M20,20V12H13V20H20M9,4C8.45,4 8,4.45 8,5C8,5.55 8.45,6 9,6C9.55,6 10,5.55 10,5C10,4.45 9.55,4 9,4M15,4C14.45,4 14,4.45 14,5C14,5.55 14.45,6 15,6C15.55,6 16,5.55 16,5C16,4.45 15.55,4 15,4M3,8V10H11V8H3M13,8V10H21V8H13Z
+
 $mol_icon_eye $mol_icon path \M12,9C10.34,9 9,10.34 9,12C9,13.66 10.34,15 12,15C13.66,15 15,13.66 15,12C15,10.34 13.66,9 12,9M12,17C9.24,17 7,14.76 7,12C7,9.24 9.24,7 12,7C14.76,7 17,9.24 17,12C17,14.76 14.76,17 12,17M12,4.5C7,4.5 2.73,7.61 1,12C2.73,16.39 7,19.5 12,19.5C17,19.5 21.27,16.39 23,12C21.27,7.61 17,4.5 12,4.5Z
 
 $mol_check_icon $mol_check
@@ -1017,9 +1021,23 @@ $piterjs_meetup_page $mol_page
 				\Да, мы упарываемся по твоей приватности 💟
 			<= Review_field $mol_form_field
 				name \Общие впечатления
-				Content <= Review $mol_textarea
-					hint \Что уже хорошо, а что улучшить?
-					value? <=> review?
+				Bid <= Donate $mol_link
+					target \_blank
+					hint \Задонатить
+					uri \#!wiki/=wu07hq_io8xyr
+					sub / <= Donate_icon $mol_icon_gift_outline
+				- Bid <= Review_score $mol_switch
+					options *
+						lie \🤬
+						hard \🤯
+						equal \😴
+						think \🤔
+						love \😍
+				Content <= Review_block $mol_list rows /
+					<= Review $mol_textarea
+						hint \Что хорошо, а что улучшить?
+						value? <=> review?
+					<= Review_hint $mol_view sub / \+ По каждому спикеру далее
 			<= Reviews $mol_text text <= reviews
 	Speech!index $piterjs_speech_snippet
 		speech <= speech!index $piterjs_speech
@@ -1745,6 +1763,8 @@ $piterjs_speech_page $mol_page
 		start? => start?
 		slides? => slides?
 		video? => video?
+		donate? => donate?
+		contact? => contact?
 		editable => editable
 		review? => review?
 		reviews => reviews
@@ -1772,12 +1792,6 @@ $piterjs_speech_page $mol_page
 			hint \О чём
 			value? <=> description?
 			enabled <= editing
-		<= Review_field $mol_form_field
-			name \Впечатления от доклада
-			Content <= Review $mol_textarea
-				hint \Что уже хорошо, а что улучшить?
-				value? <=> review?
-		<= Reviews $mol_text text <= reviews
 		<= Links $mol_view sub <= links /
 			<= Slides $mol_string_link
 				value? <=> slides?
@@ -1787,6 +1801,20 @@ $piterjs_speech_page $mol_page
 				value? <=> video?
 				enabled <= editing
 				title \Видео
+			<= Donate $mol_string_link
+				value? <=> donate?
+				enabled <= editing
+				title \Задонатить
+			<= Contact $mol_string_link
+				value? <=> contact?
+				enabled <= editing
+				title \Связаться
+		<= Review_field $mol_form_field
+			name \Впечатления
+			Content <= Review $mol_textarea
+				hint \Что хорошо, а что улучшить?
+				value? <=> review?
+		<= Reviews $mol_text text <= reviews
 		<= Speaker $piterjs_speaker_snippet
 			speaker <= speaker $piterjs_speaker
 			editing <= editing

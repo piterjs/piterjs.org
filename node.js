@@ -6666,6 +6666,12 @@ var $;
         video(next) {
             return this.sub('video', $hyoo_crowd_reg).str(next);
         }
+        donate(next) {
+            return this.sub('donate', $hyoo_crowd_reg).str(next);
+        }
+        contact(next) {
+            return this.sub('contact', $hyoo_crowd_reg).str(next);
+        }
         start(next) {
             return new $mol_time_moment(this.sub('start', $hyoo_crowd_reg).str(next?.toString()));
         }
@@ -6702,6 +6708,12 @@ var $;
     __decorate([
         $mol_mem
     ], $piterjs_speech.prototype, "video", null);
+    __decorate([
+        $mol_mem
+    ], $piterjs_speech.prototype, "donate", null);
+    __decorate([
+        $mol_mem
+    ], $piterjs_speech.prototype, "contact", null);
     __decorate([
         $mol_mem
     ], $piterjs_speech.prototype, "start", null);
@@ -14517,6 +14529,30 @@ var $;
 "use strict";
 var $;
 (function ($) {
+    class $mol_icon_gift extends $mol_icon {
+        path() {
+            return "M9.06,1.93C7.17,1.92 5.33,3.74 6.17,6H3C1.9,6 1,6.9 1,8V10C1,10.55 1.45,11 2,11H11V8H13V11H22C22.55,11 23,10.55 23,10V8C23,6.9 22.1,6 21,6H17.83C19,2.73 14.6,0.42 12.57,3.24L12,4L11.43,3.22C10.8,2.33 9.93,1.94 9.06,1.93M9,4C9.89,4 10.34,5.08 9.71,5.71C9.08,6.34 8,5.89 8,5C8,4.45 8.45,4 9,4M15,4C15.89,4 16.34,5.08 15.71,5.71C15.08,6.34 14,5.89 14,5C14,4.45 14.45,4 15,4M2,12V20C2,21.1 2.9,22 4,22H20C21.1,22 22,21.1 22,20V12H13V20H11V12H2Z";
+        }
+    }
+    $.$mol_icon_gift = $mol_icon_gift;
+})($ || ($ = {}));
+//mol/icon/gift/-view.tree/gift.view.tree.ts
+;
+"use strict";
+var $;
+(function ($) {
+    class $mol_icon_gift_outline extends $mol_icon {
+        path() {
+            return "M22,12V20C22,21.1 21.1,22 20,22H4C2.9,22 2,21.1 2,20V12C1.45,12 1,11.55 1,11V8C1,6.9 1.9,6 3,6H6.17C6.06,5.69 6,5.35 6,5C6,3.34 7.34,2 9,2C10,2 10.88,2.5 11.43,3.24V3.23L12,4L12.57,3.23V3.24C13.12,2.5 14,2 15,2C16.66,2 18,3.34 18,5C18,5.35 17.94,5.69 17.83,6H21C22.1,6 23,6.9 23,8V11C23,11.55 22.55,12 22,12M4,20H11V12H4V20M20,20V12H13V20H20M9,4C8.45,4 8,4.45 8,5C8,5.55 8.45,6 9,6C9.55,6 10,5.55 10,5C10,4.45 9.55,4 9,4M15,4C14.45,4 14,4.45 14,5C14,5.55 14.45,6 15,6C15.55,6 16,5.55 16,5C16,4.45 15.55,4 15,4M3,8V10H11V8H3M13,8V10H21V8H13Z";
+        }
+    }
+    $.$mol_icon_gift_outline = $mol_icon_gift_outline;
+})($ || ($ = {}));
+//mol/icon/gift/outline/-view.tree/outline.view.tree.ts
+;
+"use strict";
+var $;
+(function ($) {
     class $mol_icon_eye extends $mol_icon {
         path() {
             return "M12,9C10.34,9 9,10.34 9,12C9,13.66 10.34,15 12,15C13.66,15 15,13.66 15,12C15,10.34 13.66,9 12,9M12,17C9.24,17 7,14.76 7,12C7,9.24 9.24,7 12,7C14.76,7 17,9.24 17,12C17,14.76 14.76,17 12,17M12,4.5C7,4.5 2.73,7.61 1,12C2.73,16.39 7,19.5 12,19.5C17,19.5 21.27,16.39 23,12C21.27,7.61 17,4.5 12,4.5Z";
@@ -15161,16 +15197,46 @@ var $;
             obj.text = () => "Если не сможешь прийти - не забудь отменить регистрацию, чтобы освободить место другим.\nСделать это можно лишь с того же девайса. Но \\\\тут\\#!safe\\\\ можешь перенести свою авторизацию на любой другой.\nДа, мы упарываемся по твоей приватности 💟";
             return obj;
         }
+        Donate_icon() {
+            const obj = new this.$.$mol_icon_gift_outline();
+            return obj;
+        }
+        Donate() {
+            const obj = new this.$.$mol_link();
+            obj.target = () => "_blank";
+            obj.hint = () => "Задонатить";
+            obj.uri = () => "#!wiki/=wu07hq_io8xyr";
+            obj.sub = () => [
+                this.Donate_icon()
+            ];
+            return obj;
+        }
         Review() {
             const obj = new this.$.$mol_textarea();
-            obj.hint = () => "Что уже хорошо, а что улучшить?";
+            obj.hint = () => "Что хорошо, а что улучшить?";
             obj.value = (next) => this.review(next);
+            return obj;
+        }
+        Review_hint() {
+            const obj = new this.$.$mol_view();
+            obj.sub = () => [
+                "+ По каждому спикеру далее"
+            ];
+            return obj;
+        }
+        Review_block() {
+            const obj = new this.$.$mol_list();
+            obj.rows = () => [
+                this.Review(),
+                this.Review_hint()
+            ];
             return obj;
         }
         Review_field() {
             const obj = new this.$.$mol_form_field();
             obj.name = () => "Общие впечатления";
-            obj.Content = () => this.Review();
+            obj.Bid = () => this.Donate();
+            obj.Content = () => this.Review_block();
             return obj;
         }
         Reviews() {
@@ -15390,7 +15456,19 @@ var $;
     ], $piterjs_meetup_page.prototype, "Joined_bid", null);
     __decorate([
         $mol_mem
+    ], $piterjs_meetup_page.prototype, "Donate_icon", null);
+    __decorate([
+        $mol_mem
+    ], $piterjs_meetup_page.prototype, "Donate", null);
+    __decorate([
+        $mol_mem
     ], $piterjs_meetup_page.prototype, "Review", null);
+    __decorate([
+        $mol_mem
+    ], $piterjs_meetup_page.prototype, "Review_hint", null);
+    __decorate([
+        $mol_mem
+    ], $piterjs_meetup_page.prototype, "Review_block", null);
     __decorate([
         $mol_mem
     ], $piterjs_meetup_page.prototype, "Review_field", null);
@@ -15477,9 +15555,9 @@ var $;
             content() {
                 return [
                     ...(this.editing() || this.description()) ? [this.Description()] : [],
+                    this.Links(),
                     ...this.review_allowed() ? [this.Review_field()] : [],
                     ...(this.editing() && this.reviews()) ? [this.Reviews()] : [],
-                    this.Links(),
                     ...this.join_allowed() ? [this.Join()] : [],
                     ...this.join_allowed() && this.joined() ? [this.Joined_bid()] : [],
                     this.Speeches(),
@@ -15596,7 +15674,7 @@ var $;
 "use strict";
 var $;
 (function ($) {
-    $mol_style_attach("piterjs/meetup/page/page.view.css", "[mol_page][piterjs_meetup_page] {\n\tflex: 0 0 30rem;\n}\n\n[piterjs_meetup_page_title] {\n\tflex: 1000 1000 3rem;\n}\n\n[piterjs_meetup_page_tools] {\n\tflex-grow: 1;\n}\n\n[piterjs_meetup_page_links] {\n\tflex-wrap: wrap;\n}\n\n[piterjs_meetup_page_video] {\n\tdisplay: inline;\n}\n\n[piterjs_meetup_page_place] {\n\tdisplay: inline;\n}\n\n[piterjs_meetup_page_description] {\n\tbox-shadow: none;\n\tflex-grow: 0;\n\tfont-family: sans-serif;\n}\n\n[piterjs_meetup_page_reviews] {\n\tpadding: var(--mol_gap_block);\n\tbackground: var(--mol_theme_card);\n}\n\n[piterjs_meetup_page_hidden_fields] {\n\tpadding: var(--mol_gap_block);\n}\n\n[piterjs_meetup_page_afterparty] {\n\tbox-shadow: none;\n\tflex-grow: 0;\n\tfont-family: sans-serif;\n}\n\n[piterjs_meetup_page_join] {\n\tpadding: var(--mol_gap_block);\n\tbackground-color: var(--mol_theme_card);\n}\n\n[piterjs_meetup_page_joined_confirm] {\n\tpadding: var(--mol_gap_text);\n\tcolor: var(--mol_theme_focus);\n}\n\n[piterjs_meetup_page_free_space] {\n\tpadding: var(--mol_gap_text);\n\tcolor: var(--mol_theme_shade);\n}\n\n[piterjs_meetup_page_capacity_field] {\n\tflex: 1\n}\n\n[piterjs_meetup_page_capacity_cut] {\n\talign-self: flex-end;\n}\n");
+    $mol_style_attach("piterjs/meetup/page/page.view.css", "[mol_page][piterjs_meetup_page] {\n\tflex: 0 0 30rem;\n}\n\n[piterjs_meetup_page_title] {\n\tflex: 1000 1000 3rem;\n}\n\n[piterjs_meetup_page_tools] {\n\tflex-grow: 1;\n}\n\n[piterjs_meetup_page_links] {\n\tflex-wrap: wrap;\n}\n\n[piterjs_meetup_page_video] {\n\tdisplay: inline;\n}\n\n[piterjs_meetup_page_place] {\n\tdisplay: inline;\n}\n\n[piterjs_meetup_page_description] {\n\tbox-shadow: none;\n\tflex-grow: 0;\n\tfont-family: sans-serif;\n}\n\n[piterjs_meetup_page_donate] {\n\tmargin: -.5rem -.75rem;\n}\n\n[piterjs_meetup_page_review_hint] {\n\tcolor: var(--mol_theme_shade);\n\tpadding: var(--mol_gap_text);\n}\n\n[piterjs_meetup_page_review_field_label] {\n\tjustify-content: space-between;\n}\n\n[piterjs_meetup_page_reviews] {\n\tpadding: var(--mol_gap_block);\n\tbackground: var(--mol_theme_card);\n}\n\n[piterjs_meetup_page_hidden_fields] {\n\tpadding: var(--mol_gap_block);\n}\n\n[piterjs_meetup_page_afterparty] {\n\tbox-shadow: none;\n\tflex-grow: 0;\n\tfont-family: sans-serif;\n}\n\n[piterjs_meetup_page_join] {\n\tpadding: var(--mol_gap_block);\n\tbackground-color: var(--mol_theme_card);\n}\n\n[piterjs_meetup_page_joined_confirm] {\n\tpadding: var(--mol_gap_text);\n\tcolor: var(--mol_theme_focus);\n}\n\n[piterjs_meetup_page_free_space] {\n\tpadding: var(--mol_gap_text);\n\tcolor: var(--mol_theme_shade);\n}\n\n[piterjs_meetup_page_capacity_field] {\n\tflex: 1\n}\n\n[piterjs_meetup_page_capacity_cut] {\n\talign-self: flex-end;\n}\n");
 })($ || ($ = {}));
 //piterjs/meetup/page/-css/page.view.css.ts
 ;
@@ -20975,6 +21053,12 @@ var $;
         video(next) {
             return this.speech().video(next);
         }
+        donate(next) {
+            return this.speech().donate(next);
+        }
+        contact(next) {
+            return this.speech().contact(next);
+        }
         editable() {
             return this.speech().editable();
         }
@@ -21005,9 +21089,9 @@ var $;
             return [
                 this.Poster_zone(),
                 this.Description(),
+                this.Links(),
                 this.Review_field(),
                 this.Reviews(),
-                this.Links(),
                 this.Speaker()
             ];
         }
@@ -21065,23 +21149,6 @@ var $;
             obj.enabled = () => this.editing();
             return obj;
         }
-        Review() {
-            const obj = new this.$.$mol_textarea();
-            obj.hint = () => "Что уже хорошо, а что улучшить?";
-            obj.value = (next) => this.review(next);
-            return obj;
-        }
-        Review_field() {
-            const obj = new this.$.$mol_form_field();
-            obj.name = () => "Впечатления от доклада";
-            obj.Content = () => this.Review();
-            return obj;
-        }
-        Reviews() {
-            const obj = new this.$.$mol_text();
-            obj.text = () => this.reviews();
-            return obj;
-        }
         Slides() {
             const obj = new this.$.$mol_string_link();
             obj.value = (next) => this.slides(next);
@@ -21096,15 +21163,48 @@ var $;
             obj.title = () => "Видео";
             return obj;
         }
+        Donate() {
+            const obj = new this.$.$mol_string_link();
+            obj.value = (next) => this.donate(next);
+            obj.enabled = () => this.editing();
+            obj.title = () => "Задонатить";
+            return obj;
+        }
+        Contact() {
+            const obj = new this.$.$mol_string_link();
+            obj.value = (next) => this.contact(next);
+            obj.enabled = () => this.editing();
+            obj.title = () => "Связаться";
+            return obj;
+        }
         links() {
             return [
                 this.Slides(),
-                this.Video()
+                this.Video(),
+                this.Donate(),
+                this.Contact()
             ];
         }
         Links() {
             const obj = new this.$.$mol_view();
             obj.sub = () => this.links();
+            return obj;
+        }
+        Review() {
+            const obj = new this.$.$mol_textarea();
+            obj.hint = () => "Что хорошо, а что улучшить?";
+            obj.value = (next) => this.review(next);
+            return obj;
+        }
+        Review_field() {
+            const obj = new this.$.$mol_form_field();
+            obj.name = () => "Впечатления";
+            obj.Content = () => this.Review();
+            return obj;
+        }
+        Reviews() {
+            const obj = new this.$.$mol_text();
+            obj.text = () => this.reviews();
             return obj;
         }
         speaker() {
@@ -21225,6 +21325,21 @@ var $;
     ], $piterjs_speech_page.prototype, "Description", null);
     __decorate([
         $mol_mem
+    ], $piterjs_speech_page.prototype, "Slides", null);
+    __decorate([
+        $mol_mem
+    ], $piterjs_speech_page.prototype, "Video", null);
+    __decorate([
+        $mol_mem
+    ], $piterjs_speech_page.prototype, "Donate", null);
+    __decorate([
+        $mol_mem
+    ], $piterjs_speech_page.prototype, "Contact", null);
+    __decorate([
+        $mol_mem
+    ], $piterjs_speech_page.prototype, "Links", null);
+    __decorate([
+        $mol_mem
     ], $piterjs_speech_page.prototype, "Review", null);
     __decorate([
         $mol_mem
@@ -21232,15 +21347,6 @@ var $;
     __decorate([
         $mol_mem
     ], $piterjs_speech_page.prototype, "Reviews", null);
-    __decorate([
-        $mol_mem
-    ], $piterjs_speech_page.prototype, "Slides", null);
-    __decorate([
-        $mol_mem
-    ], $piterjs_speech_page.prototype, "Video", null);
-    __decorate([
-        $mol_mem
-    ], $piterjs_speech_page.prototype, "Links", null);
     __decorate([
         $mol_mem
     ], $piterjs_speech_page.prototype, "speaker", null);
@@ -21392,6 +21498,8 @@ var $;
                 return [
                     ...(this.editing() || this.slides()) ? [this.Slides()] : [],
                     ...(this.editing() || this.video()) ? [this.Video()] : [],
+                    ...(this.editing() || this.donate()) ? [this.Donate()] : [],
+                    ...(this.editing() || this.contact()) ? [this.Contact()] : [],
                 ];
             }
             Review_field() {
@@ -21443,7 +21551,7 @@ var $;
             flex: {
                 grow: 0,
                 shrink: 0,
-                basis: `35rem`,
+                basis: `50rem`,
             },
             Tools: {
                 flex: {
@@ -21472,6 +21580,7 @@ var $;
                 '>': {
                     $mol_view: {
                         flex: {
+                            basis: `10rem`,
                             grow: 1,
                         },
                     }
