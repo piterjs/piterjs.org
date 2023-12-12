@@ -1695,6 +1695,8 @@ declare namespace $ {
 
 declare namespace $ {
     class $piterjs_speaker extends $piterjs_model {
+        donate(next?: string): string;
+        contact(next?: string): string;
         photo_blob(next?: Blob): Blob;
         photo_uri(): string;
         speeches_node(): $hyoo_crowd_list;
@@ -1707,8 +1709,6 @@ declare namespace $ {
         meetup(next?: $piterjs_meetup): $piterjs_meetup | null;
         slides(next?: string): string;
         video(next?: string): string;
-        donate(next?: string): string;
-        contact(next?: string): string;
         start(next?: $mol_time_moment): $mol_time_moment;
         interval(): $mol_time_interval;
         duration(): $mol_time_duration;
@@ -5293,12 +5293,13 @@ declare namespace $ {
         start(next?: any): $mol_time_moment;
         slides(next?: any): string;
         video(next?: any): string;
-        donate(next?: any): string;
-        contact(next?: any): string;
         editable(): boolean;
         review(next?: any): string;
         reviews(): string;
         speech(): $piterjs_speech;
+        donate(next?: any): string;
+        contact(next?: any): string;
+        speaker(): $piterjs_speaker;
         Title(): $mol_string_button;
         tools(): readonly any[];
         body(): readonly any[];
@@ -5319,7 +5320,6 @@ declare namespace $ {
         Review(): $$.$mol_textarea;
         Review_field(): $$.$mol_form_field;
         Reviews(): $$.$mol_text;
-        speaker(): $piterjs_speaker;
         Speaker(): $$.$piterjs_speaker_snippet;
         speech_public(next?: any): boolean;
         Public_icon(): $mol_icon_eye;

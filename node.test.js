@@ -6613,6 +6613,12 @@ var $;
 var $;
 (function ($) {
     class $piterjs_speaker extends $piterjs_model {
+        donate(next) {
+            return this.sub('donate', $hyoo_crowd_reg).str(next);
+        }
+        contact(next) {
+            return this.sub('contact', $hyoo_crowd_reg).str(next);
+        }
         photo_blob(next) {
             return this.sub('photo', $hyoo_crowd_blob).blob(next);
         }
@@ -6628,6 +6634,12 @@ var $;
             return ids.map(id => fund.Item($mol_int62_string_ensure(id)));
         }
     }
+    __decorate([
+        $mol_mem
+    ], $piterjs_speaker.prototype, "donate", null);
+    __decorate([
+        $mol_mem
+    ], $piterjs_speaker.prototype, "contact", null);
     __decorate([
         $mol_mem
     ], $piterjs_speaker.prototype, "photo_blob", null);
@@ -6657,12 +6669,6 @@ var $;
         }
         video(next) {
             return this.sub('video', $hyoo_crowd_reg).str(next);
-        }
-        donate(next) {
-            return this.sub('donate', $hyoo_crowd_reg).str(next);
-        }
-        contact(next) {
-            return this.sub('contact', $hyoo_crowd_reg).str(next);
         }
         start(next) {
             return new $mol_time_moment(this.sub('start', $hyoo_crowd_reg).str(next?.toString()));
@@ -6700,12 +6706,6 @@ var $;
     __decorate([
         $mol_mem
     ], $piterjs_speech.prototype, "video", null);
-    __decorate([
-        $mol_mem
-    ], $piterjs_speech.prototype, "donate", null);
-    __decorate([
-        $mol_mem
-    ], $piterjs_speech.prototype, "contact", null);
     __decorate([
         $mol_mem
     ], $piterjs_speech.prototype, "start", null);
@@ -21045,12 +21045,6 @@ var $;
         video(next) {
             return this.speech().video(next);
         }
-        donate(next) {
-            return this.speech().donate(next);
-        }
-        contact(next) {
-            return this.speech().contact(next);
-        }
         editable() {
             return this.speech().editable();
         }
@@ -21062,6 +21056,16 @@ var $;
         }
         speech() {
             const obj = new this.$.$piterjs_speech();
+            return obj;
+        }
+        donate(next) {
+            return this.speaker().donate(next);
+        }
+        contact(next) {
+            return this.speaker().contact(next);
+        }
+        speaker() {
+            const obj = new this.$.$piterjs_speaker();
             return obj;
         }
         Title() {
@@ -21199,10 +21203,6 @@ var $;
             obj.text = () => this.reviews();
             return obj;
         }
-        speaker() {
-            const obj = new this.$.$piterjs_speaker();
-            return obj;
-        }
         Speaker() {
             const obj = new this.$.$piterjs_speaker_snippet();
             obj.speaker = () => this.speaker();
@@ -21293,6 +21293,9 @@ var $;
     ], $piterjs_speech_page.prototype, "speech", null);
     __decorate([
         $mol_mem
+    ], $piterjs_speech_page.prototype, "speaker", null);
+    __decorate([
+        $mol_mem
     ], $piterjs_speech_page.prototype, "Title", null);
     __decorate([
         $mol_mem
@@ -21339,9 +21342,6 @@ var $;
     __decorate([
         $mol_mem
     ], $piterjs_speech_page.prototype, "Reviews", null);
-    __decorate([
-        $mol_mem
-    ], $piterjs_speech_page.prototype, "speaker", null);
     __decorate([
         $mol_mem
     ], $piterjs_speech_page.prototype, "Speaker", null);
