@@ -28,6 +28,11 @@
 	font-family: sans-serif;
 }
 
+[piterjs_meetup_page_reviews] {
+	padding: var(--mol_gap_block);
+	background: var(--mol_theme_card);
+}
+
 [piterjs_meetup_page_hidden_fields] {
 	padding: var(--mol_gap_block);
 }

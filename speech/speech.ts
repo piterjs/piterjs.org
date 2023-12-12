@@ -5,7 +5,7 @@ namespace $ {
 		@ $mol_mem
 		meetup( next?: $piterjs_meetup ) {
 			const id = $mol_int62_string_ensure( this.sub( 'meetup', $hyoo_crowd_reg ).str( next?.id() ) )
-			return id ? this.world()!.Fund( $piterjs_place ).Item( id ) : null
+			return id ? this.world()!.Fund( $piterjs_meetup ).Item( id ) : null
 		}
 
 		@ $mol_mem
@@ -41,6 +41,23 @@ namespace $ {
 		@ $mol_mem
 		speaker() {
 			return this.sub( 'speaker', $piterjs_speaker )
+		}
+
+		@ $mol_mem
+		reviews_node() {
+			return this.meetup()?.reviews_node()?.sub( 'speech', $hyoo_crowd_struct ).sub( this.id(), $hyoo_crowd_dict )
+		}
+
+		@ $mol_mem
+		review( next?: string ) {
+			return this.reviews_node()?.sub( this.land.peer_id(), $hyoo_crowd_reg ).str( next ) ?? ''
+		}
+
+		@ $mol_mem
+		reviews() {
+			const regs = this.reviews_node()?.nodes( $hyoo_crowd_reg ) ?? []
+			const reviews = regs.map( reg => reg.str() ?? '' )
+			return reviews.filter( Boolean ).join( '\n---\n' )
 		}
 
 	}

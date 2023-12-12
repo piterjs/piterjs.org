@@ -6,6 +6,8 @@ $piterjs_speech_page $mol_page
 		slides? => slides?
 		video? => video?
 		editable => editable
+		review? => review?
+		reviews => reviews
 	Title $mol_string_button
 		value? <=> title?
 		enabled <= editing
@@ -30,6 +32,12 @@ $piterjs_speech_page $mol_page
 			hint \О чём
 			value? <=> description?
 			enabled <= editing
+		<= Review_field $mol_form_field
+			name \Впечатления от доклада
+			Content <= Review $mol_textarea
+				hint \Что уже хорошо, а что улучшить?
+				value? <=> review?
+		<= Reviews $mol_text text <= reviews
 		<= Links $mol_view sub <= links /
 			<= Slides $mol_string_link
 				value? <=> slides?

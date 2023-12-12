@@ -33,14 +33,11 @@ namespace $.$$ {
 		}
 
 		@ $mol_mem
-		join_allowed() {
-			return ( this.meetup().start()?.valueOf() ?? 0 ) > $mol_state_time.now( 60 * 60 )
-		}
-		
-		@ $mol_mem
 		content() {
 			return [
 				... ( this.editing() || this.description() ) ? [ this.Description() ] : [] ,
+				... this.review_allowed() ? [ this.Review_field() ] : [],
+				... ( this.editing() && this.reviews() ) ? [ this.Reviews() ] : [] ,
 				this.Links() ,
 				... this.join_allowed() ? [ this.Join() ] : [] ,
 				... this.join_allowed() && this.joined() ? [ this.Joined_bid() ] : [],

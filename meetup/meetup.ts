@@ -25,7 +25,10 @@ namespace $ {
 			const fund = this.world()!.Fund( $piterjs_speech )
 			const speeches = ids.map( id => fund.Item( $mol_int62_string_ensure( id )! ) )
 			
-			for( const speech of speeches ) speech.steal_rights( this )
+			for( const speech of speeches ) {
+				speech.steal_rights( this )
+				speech.meetup( this )
+			}
 			speeches.sort( ( a, b )=> a.start().valueOf() - b.start().valueOf() )
 			
 			return speeches
@@ -131,6 +134,11 @@ namespace $ {
 		}
 
 		@ $mol_mem
+		join_allowed() {
+			return ( this.start()?.valueOf() ?? 0 ) > $mol_state_time.now( 60 * 1000 )
+		}
+
+		@ $mol_mem
 		visitors_node() {
 			const node = this.yoke( 'visitors2', $hyoo_crowd_list )
 			node?.land.steal_rights( this.land )
@@ -149,6 +157,31 @@ namespace $ {
 				.filter( $mol_guard_defined )
 		}
 
+		@ $mol_mem
+		reviews_node() {
+			const node = this.yoke( 'reviews', $hyoo_crowd_dict, [''], [], ['0_0'] )
+			node?.land.steal_rights( this.land )
+			return node
+		}
+		
+		@ $mol_mem
+		review( next?: string ) {
+			return this.reviews_node()?.sub( 'meetup', $hyoo_crowd_dict ).sub( this.land.peer_id(), $hyoo_crowd_reg ).str( next ) ?? ''
+		}
+
+		@ $mol_mem
+		reviews() {
+			const regs = this.reviews_node()?.sub( 'meetup', $hyoo_crowd_dict ).nodes( $hyoo_crowd_reg ) ?? []
+			const reviews = regs.map( reg => reg.str() ?? '' )
+			return reviews.filter( Boolean ).join( '\n---\n' )
+		}
+
+		@ $mol_mem
+		review_allowed()  {
+			const peer = this.land.peer_id()
+			return this.visitor( peer ) && ( ( this.start()?.valueOf() ?? 0 ) < $mol_state_time.now( 60 * 1000 ) )
+		}
+		
 	}
 
 }

@@ -23,6 +23,13 @@ namespace $.$$ {
 				family: 'sans-serif',
 			},
 		},
+
+		Reviews: {
+			padding: $mol_gap.block,
+			background: {
+				color: $mol_theme.card,
+			},
+		},
 		
 		Links: {
 			

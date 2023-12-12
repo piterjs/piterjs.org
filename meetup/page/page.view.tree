@@ -5,7 +5,11 @@ $piterjs_meetup_page $mol_page
 		afterparty? => afterparty?
 		start? => start?
 		joined_count => joined_count
+		join_allowed => join_allowed
+		review_allowed => review_allowed
 		editable => editable
+		review? => review?
+		reviews => reviews
 	address \
 	Title $mol_string_button
 		value? <=> title?
@@ -97,6 +101,12 @@ $piterjs_meetup_page $mol_page
 				\Если не сможешь прийти - не забудь отменить регистрацию, чтобы освободить место другим.
 				\Сделать это можно лишь с того же девайса. Но \\тут\#!safe\\ можешь перенести свою авторизацию на любой другой.
 				\Да, мы упарываемся по твоей приватности 💟
+			<= Review_field $mol_form_field
+				name \Общие печатления
+				Content <= Review $mol_textarea
+					hint \Что уже хорошо, а что улучшить?
+					value? <=> review?
+			<= Reviews $mol_text text <= reviews
 	Speech!index $piterjs_speech_snippet
 		speech <= speech!index $piterjs_speech
 	foot /

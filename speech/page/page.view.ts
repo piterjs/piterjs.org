@@ -14,6 +14,14 @@ namespace $.$$ {
 			]
 		}
 
+		override Review_field() {
+			return this.speech().meetup()?.review_allowed() ? super.Review_field() : null!
+		}
+
+		override Reviews() {
+			return this.editing() ? super.Reviews() : null!
+		}
+
 		override foot() {
 			if( !this.editable() ) return []
 			return super.foot()
