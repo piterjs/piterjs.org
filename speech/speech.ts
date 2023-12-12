@@ -19,16 +19,6 @@ namespace $ {
 		}
 		
 		@ $mol_mem
-		donate( next?: string ) {
-			return this.sub( 'donate', $hyoo_crowd_reg ).str( next )
-		}
-		
-		@ $mol_mem
-		contact( next?: string ) {
-			return this.sub( 'contact', $hyoo_crowd_reg ).str( next )
-		}
-		
-		@ $mol_mem
 		start( next?: $mol_time_moment ) {
 			return new $mol_time_moment( this.sub( 'start', $hyoo_crowd_reg ).str( next?.toString() ) )
 		}

@@ -3,6 +3,16 @@ namespace $ {
 	export class $piterjs_speaker extends $piterjs_model {
 
 		@ $mol_mem
+		donate( next?: string ) {
+			return this.sub( 'donate', $hyoo_crowd_reg ).str( next )
+		}
+		
+		@ $mol_mem
+		contact( next?: string ) {
+			return this.sub( 'contact', $hyoo_crowd_reg ).str( next )
+		}
+		
+		@ $mol_mem
 		photo_blob( next?: Blob ) {
 			return this.sub( 'photo', $hyoo_crowd_blob ).blob( next )
 		}

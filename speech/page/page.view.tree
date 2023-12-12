@@ -5,11 +5,12 @@ $piterjs_speech_page $mol_page
 		start? => start?
 		slides? => slides?
 		video? => video?
-		donate? => donate?
-		contact? => contact?
 		editable => editable
 		review? => review?
 		reviews => reviews
+	speaker $piterjs_speaker
+		donate? => donate?
+		contact? => contact?
 	Title $mol_string_button
 		value? <=> title?
 		enabled <= editing
@@ -58,7 +59,7 @@ $piterjs_speech_page $mol_page
 				value? <=> review?
 		<= Reviews $mol_text text <= reviews
 		<= Speaker $piterjs_speaker_snippet
-			speaker <= speaker $piterjs_speaker
+			speaker <= speaker
 			editing <= editing
 	foot /
 		<= Public $mol_check_icon
