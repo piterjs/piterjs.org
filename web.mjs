@@ -5773,8 +5773,10 @@ var $;
             return reviews.filter(Boolean).join('\n---\n');
         }
         review_allowed() {
-            const peer = this.land.peer_id();
-            return this.visitor(peer) && ((this.start()?.valueOf() ?? 0) < $mol_state_time.now(60 * 1000));
+            const start = this.start()?.valueOf() ?? 0;
+            const end = this.start()?.shift('P7D').valueOf() ?? 0;
+            const now = $mol_state_time.now(60 * 1000);
+            return start < now && now < end;
         }
     }
     __decorate([
