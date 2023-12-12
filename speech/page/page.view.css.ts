@@ -5,7 +5,7 @@ namespace $.$$ {
 		flex: {
 			grow: 0,
 			shrink: 0,
-			basis: `35rem`,
+			basis: `50rem`,
 		},
 
 		Tools: {
@@ -46,6 +46,7 @@ namespace $.$$ {
 			'>': {
 				$mol_view: {
 					flex: {
+						basis: `10rem`,
 						grow: 1,
 					},
 				}

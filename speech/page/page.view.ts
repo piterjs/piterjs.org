@@ -11,6 +11,8 @@ namespace $.$$ {
 			return [
 				... ( this.editing() || this.slides() ) ? [ this.Slides() ] : [] ,
 				... ( this.editing() || this.video() ) ? [ this.Video() ] : [] ,
+				... ( this.editing() || this.donate() ) ? [ this.Donate() ] : [] ,
+				... ( this.editing() || this.contact() ) ? [ this.Contact() ] : [] ,
 			]
 		}
 

@@ -36,9 +36,9 @@ namespace $.$$ {
 		content() {
 			return [
 				... ( this.editing() || this.description() ) ? [ this.Description() ] : [] ,
+				this.Links() ,
 				... this.review_allowed() ? [ this.Review_field() ] : [],
 				... ( this.editing() && this.reviews() ) ? [ this.Reviews() ] : [] ,
-				this.Links() ,
 				... this.join_allowed() ? [ this.Join() ] : [] ,
 				... this.join_allowed() && this.joined() ? [ this.Joined_bid() ] : [],
 				this.Speeches() ,

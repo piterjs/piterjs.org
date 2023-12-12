@@ -103,9 +103,23 @@ $piterjs_meetup_page $mol_page
 				\Да, мы упарываемся по твоей приватности 💟
 			<= Review_field $mol_form_field
 				name \Общие впечатления
-				Content <= Review $mol_textarea
-					hint \Что уже хорошо, а что улучшить?
-					value? <=> review?
+				Bid <= Donate $mol_link
+					target \_blank
+					hint \Задонатить
+					uri \#!wiki/=wu07hq_io8xyr
+					sub / <= Donate_icon $mol_icon_gift_outline
+				- Bid <= Review_score $mol_switch
+					options *
+						lie \🤬
+						hard \🤯
+						equal \😴
+						think \🤔
+						love \😍
+				Content <= Review_block $mol_list rows /
+					<= Review $mol_textarea
+						hint \Что хорошо, а что улучшить?
+						value? <=> review?
+					<= Review_hint $mol_view sub / \+ По каждому спикеру далее
 			<= Reviews $mol_text text <= reviews
 	Speech!index $piterjs_speech_snippet
 		speech <= speech!index $piterjs_speech

@@ -28,6 +28,19 @@
 	font-family: sans-serif;
 }
 
+[piterjs_meetup_page_donate] {
+	margin: -.5rem -.75rem;
+}
+
+[piterjs_meetup_page_review_hint] {
+	color: var(--mol_theme_shade);
+	padding: var(--mol_gap_text);
+}
+
+[piterjs_meetup_page_review_field_label] {
+	justify-content: space-between;
+}
+
 [piterjs_meetup_page_reviews] {
 	padding: var(--mol_gap_block);
 	background: var(--mol_theme_card);

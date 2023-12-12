@@ -5,6 +5,8 @@ $piterjs_speech_page $mol_page
 		start? => start?
 		slides? => slides?
 		video? => video?
+		donate? => donate?
+		contact? => contact?
 		editable => editable
 		review? => review?
 		reviews => reviews
@@ -32,12 +34,6 @@ $piterjs_speech_page $mol_page
 			hint \О чём
 			value? <=> description?
 			enabled <= editing
-		<= Review_field $mol_form_field
-			name \Впечатления от доклада
-			Content <= Review $mol_textarea
-				hint \Что уже хорошо, а что улучшить?
-				value? <=> review?
-		<= Reviews $mol_text text <= reviews
 		<= Links $mol_view sub <= links /
 			<= Slides $mol_string_link
 				value? <=> slides?
@@ -47,6 +43,20 @@ $piterjs_speech_page $mol_page
 				value? <=> video?
 				enabled <= editing
 				title \Видео
+			<= Donate $mol_string_link
+				value? <=> donate?
+				enabled <= editing
+				title \Задонатить
+			<= Contact $mol_string_link
+				value? <=> contact?
+				enabled <= editing
+				title \Связаться
+		<= Review_field $mol_form_field
+			name \Впечатления
+			Content <= Review $mol_textarea
+				hint \Что хорошо, а что улучшить?
+				value? <=> review?
+		<= Reviews $mol_text text <= reviews
 		<= Speaker $piterjs_speaker_snippet
 			speaker <= speaker $piterjs_speaker
 			editing <= editing
