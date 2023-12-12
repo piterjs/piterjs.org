@@ -1,14 +1,3 @@
-$mol_list $mol_view
-	render_visible_only true
-	render_over 0
-	sub <= rows /$mol_view
-	Empty $mol_view
-	Gap_before $mol_view style * paddingTop <= gap_before 0
-	Gap_after $mol_view style * paddingTop <= gap_after 0
-	view_window /
-		0
-		0
-
 $mol_scroll $mol_view
 	scroll_top? 0
 	scroll_left? 0
@@ -39,8 +28,8 @@ $mol_page $mol_view
 		<= Body $mol_scroll
 			scroll_top? => body_scroll_top?
 			sub <= body_content /
-				<= Body_content $mol_list
-					rows <= body /$mol_view
+				<= Body_content $mol_view
+					sub <= body /$mol_view
 		<= Foot $mol_view
 			dom_name \footer
 			sub <= foot /$mol_view
@@ -130,6 +119,17 @@ $mol_image $mol_view
 
 $piterjs_image $mol_image
 	uri <= link \
+
+$mol_list $mol_view
+	render_visible_only true
+	render_over 0
+	sub <= rows /$mol_view
+	Empty $mol_view
+	Gap_before $mol_view style * paddingTop <= gap_before 0
+	Gap_after $mol_view style * paddingTop <= gap_after 0
+	view_window /
+		0
+		0
 
 $piterjs_speech_snippet $mol_link
 	arg *
@@ -919,7 +919,11 @@ $piterjs_meetup_page $mol_page
 		afterparty? => afterparty?
 		start? => start?
 		joined_count => joined_count
+		join_allowed => join_allowed
+		review_allowed => review_allowed
 		editable => editable
+		review? => review?
+		reviews => reviews
 	address \
 	Title $mol_string_button
 		value? <=> title?
@@ -1011,6 +1015,12 @@ $piterjs_meetup_page $mol_page
 				\Если не сможешь прийти - не забудь отменить регистрацию, чтобы освободить место другим.
 				\Сделать это можно лишь с того же девайса. Но \\тут\#!safe\\ можешь перенести свою авторизацию на любой другой.
 				\Да, мы упарываемся по твоей приватности 💟
+			<= Review_field $mol_form_field
+				name \Общие печатления
+				Content <= Review $mol_textarea
+					hint \Что уже хорошо, а что улучшить?
+					value? <=> review?
+			<= Reviews $mol_text text <= reviews
 	Speech!index $piterjs_speech_snippet
 		speech <= speech!index $piterjs_speech
 	foot /
@@ -1736,6 +1746,8 @@ $piterjs_speech_page $mol_page
 		slides? => slides?
 		video? => video?
 		editable => editable
+		review? => review?
+		reviews => reviews
 	Title $mol_string_button
 		value? <=> title?
 		enabled <= editing
@@ -1760,6 +1772,12 @@ $piterjs_speech_page $mol_page
 			hint \О чём
 			value? <=> description?
 			enabled <= editing
+		<= Review_field $mol_form_field
+			name \Впечатления от доклада
+			Content <= Review $mol_textarea
+				hint \Что уже хорошо, а что улучшить?
+				value? <=> review?
+		<= Reviews $mol_text text <= reviews
 		<= Links $mol_view sub <= links /
 			<= Slides $mol_string_link
 				value? <=> slides?

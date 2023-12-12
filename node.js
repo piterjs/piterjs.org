@@ -6153,6 +6153,33 @@ var $;
 "use strict";
 var $;
 (function ($) {
+    class $mol_state_time extends $mol_object {
+        static task(precision, reset) {
+            if (precision) {
+                return new $mol_after_timeout(precision, () => this.task(precision, null));
+            }
+            else {
+                return new $mol_after_frame(() => this.task(precision, null));
+            }
+        }
+        static now(precision) {
+            this.task(precision);
+            return Date.now();
+        }
+    }
+    __decorate([
+        $mol_mem_key
+    ], $mol_state_time, "task", null);
+    __decorate([
+        $mol_mem_key
+    ], $mol_state_time, "now", null);
+    $.$mol_state_time = $mol_state_time;
+})($ || ($ = {}));
+//mol/state/time/time.ts
+;
+"use strict";
+var $;
+(function ($) {
     class $piterjs_meetup extends $piterjs_model {
         start(next) {
             const str = this.sub('start', $hyoo_crowd_reg).str(next?.toString());
@@ -6168,8 +6195,10 @@ var $;
             const ids = this.speeches_node().list();
             const fund = this.world().Fund($piterjs_speech);
             const speeches = ids.map(id => fund.Item($mol_int62_string_ensure(id)));
-            for (const speech of speeches)
+            for (const speech of speeches) {
                 speech.steal_rights(this);
+                speech.meetup(this);
+            }
             speeches.sort((a, b) => a.start().valueOf() - b.start().valueOf());
             return speeches;
         }
@@ -6241,6 +6270,9 @@ var $;
         joined_count() {
             return this.joined_node()?.keys().length ?? 0;
         }
+        join_allowed() {
+            return (this.start()?.valueOf() ?? 0) > $mol_state_time.now(60 * 1000);
+        }
         visitors_node() {
             const node = this.yoke('visitors2', $hyoo_crowd_list);
             node?.land.steal_rights(this.land);
@@ -6253,6 +6285,23 @@ var $;
             return (this.visitors_node()?.list() ?? [])
                 .map($mol_int62_string_ensure)
                 .filter($mol_guard_defined);
+        }
+        reviews_node() {
+            const node = this.yoke('reviews', $hyoo_crowd_dict, [''], [], ['0_0']);
+            node?.land.steal_rights(this.land);
+            return node;
+        }
+        review(next) {
+            return this.reviews_node()?.sub('meetup', $hyoo_crowd_dict).sub(this.land.peer_id(), $hyoo_crowd_reg).str(next) ?? '';
+        }
+        reviews() {
+            const regs = this.reviews_node()?.sub('meetup', $hyoo_crowd_dict).nodes($hyoo_crowd_reg) ?? [];
+            const reviews = regs.map(reg => reg.str() ?? '');
+            return reviews.filter(Boolean).join('\n---\n');
+        }
+        review_allowed() {
+            const peer = this.land.peer_id();
+            return this.visitor(peer) && ((this.start()?.valueOf() ?? 0) < $mol_state_time.now(60 * 1000));
         }
     }
     __decorate([
@@ -6299,6 +6348,9 @@ var $;
     ], $piterjs_meetup.prototype, "joined_count", null);
     __decorate([
         $mol_mem
+    ], $piterjs_meetup.prototype, "join_allowed", null);
+    __decorate([
+        $mol_mem
     ], $piterjs_meetup.prototype, "visitors_node", null);
     __decorate([
         $mol_mem_key
@@ -6306,6 +6358,18 @@ var $;
     __decorate([
         $mol_mem
     ], $piterjs_meetup.prototype, "visitors_list", null);
+    __decorate([
+        $mol_mem
+    ], $piterjs_meetup.prototype, "reviews_node", null);
+    __decorate([
+        $mol_mem
+    ], $piterjs_meetup.prototype, "review", null);
+    __decorate([
+        $mol_mem
+    ], $piterjs_meetup.prototype, "reviews", null);
+    __decorate([
+        $mol_mem
+    ], $piterjs_meetup.prototype, "review_allowed", null);
     $.$piterjs_meetup = $piterjs_meetup;
 })($ || ($ = {}));
 //piterjs/meetup/meetup.ts
@@ -6592,7 +6656,7 @@ var $;
     class $piterjs_speech extends $piterjs_model {
         meetup(next) {
             const id = $mol_int62_string_ensure(this.sub('meetup', $hyoo_crowd_reg).str(next?.id()));
-            return id ? this.world().Fund($piterjs_place).Item(id) : null;
+            return id ? this.world().Fund($piterjs_meetup).Item(id) : null;
         }
         slides(next) {
             return this.sub('slides', $hyoo_crowd_reg).str(next);
@@ -6614,6 +6678,17 @@ var $;
         }
         speaker() {
             return this.sub('speaker', $piterjs_speaker);
+        }
+        reviews_node() {
+            return this.meetup()?.reviews_node()?.sub('speech', $hyoo_crowd_struct).sub(this.id(), $hyoo_crowd_dict);
+        }
+        review(next) {
+            return this.reviews_node()?.sub(this.land.peer_id(), $hyoo_crowd_reg).str(next) ?? '';
+        }
+        reviews() {
+            const regs = this.reviews_node()?.nodes($hyoo_crowd_reg) ?? [];
+            const reviews = regs.map(reg => reg.str() ?? '');
+            return reviews.filter(Boolean).join('\n---\n');
         }
     }
     __decorate([
@@ -6637,6 +6712,15 @@ var $;
     __decorate([
         $mol_mem
     ], $piterjs_speech.prototype, "speaker", null);
+    __decorate([
+        $mol_mem
+    ], $piterjs_speech.prototype, "reviews_node", null);
+    __decorate([
+        $mol_mem
+    ], $piterjs_speech.prototype, "review", null);
+    __decorate([
+        $mol_mem
+    ], $piterjs_speech.prototype, "reviews", null);
     $.$piterjs_speech = $piterjs_speech;
 })($ || ($ = {}));
 //piterjs/speech/speech.ts
@@ -6705,74 +6789,50 @@ var $;
 "use strict";
 var $;
 (function ($) {
-    class $mol_list extends $mol_view {
-        render_visible_only() {
-            return true;
-        }
-        render_over() {
+    class $mol_scroll extends $mol_view {
+        scroll_top(next) {
+            if (next !== undefined)
+                return next;
             return 0;
         }
-        sub() {
-            return this.rows();
-        }
-        Empty() {
-            const obj = new this.$.$mol_view();
-            return obj;
-        }
-        Gap_before() {
-            const obj = new this.$.$mol_view();
-            obj.style = () => ({
-                paddingTop: this.gap_before()
-            });
-            return obj;
-        }
-        Gap_after() {
-            const obj = new this.$.$mol_view();
-            obj.style = () => ({
-                paddingTop: this.gap_after()
-            });
-            return obj;
-        }
-        view_window() {
-            return [
-                0,
-                0
-            ];
-        }
-        rows() {
-            return [];
-        }
-        gap_before() {
+        scroll_left(next) {
+            if (next !== undefined)
+                return next;
             return 0;
         }
-        gap_after() {
-            return 0;
+        field() {
+            return {
+                ...super.field(),
+                tabIndex: this.tabindex()
+            };
+        }
+        event() {
+            return {
+                ...super.event(),
+                scroll: (event) => this.event_scroll(event)
+            };
+        }
+        tabindex() {
+            return -1;
+        }
+        event_scroll(event) {
+            if (event !== undefined)
+                return event;
+            return null;
         }
     }
     __decorate([
         $mol_mem
-    ], $mol_list.prototype, "Empty", null);
+    ], $mol_scroll.prototype, "scroll_top", null);
     __decorate([
         $mol_mem
-    ], $mol_list.prototype, "Gap_before", null);
+    ], $mol_scroll.prototype, "scroll_left", null);
     __decorate([
         $mol_mem
-    ], $mol_list.prototype, "Gap_after", null);
-    $.$mol_list = $mol_list;
+    ], $mol_scroll.prototype, "event_scroll", null);
+    $.$mol_scroll = $mol_scroll;
 })($ || ($ = {}));
-//mol/list/-view.tree/list.view.tree.ts
-;
-"use strict";
-var $;
-(function ($) {
-    let cache = null;
-    function $mol_support_css_overflow_anchor() {
-        return cache ?? (cache = (!/Gecko\//.test(navigator.userAgent)
-            && this.$mol_dom_context.CSS?.supports('overflow-anchor:auto')) ?? false);
-    }
-    $.$mol_support_css_overflow_anchor = $mol_support_css_overflow_anchor;
-})($ || ($ = {}));
-//mol/support/css/css.ts
+//mol/scroll/-view.tree/scroll.view.tree.ts
 ;
 "use strict";
 var $;
@@ -6831,200 +6891,6 @@ var $;
     $.$mol_print = $mol_print;
 })($ || ($ = {}));
 //mol/print/print.ts
-;
-"use strict";
-var $;
-(function ($) {
-    $.$mol_mem_cached = $mol_wire_probe;
-})($ || ($ = {}));
-//mol/mem/cached/cached.ts
-;
-"use strict";
-var $;
-(function ($) {
-    var $$;
-    (function ($$) {
-        class $mol_list extends $.$mol_list {
-            sub() {
-                const rows = this.rows();
-                return (rows.length === 0) ? [this.Empty()] : rows;
-            }
-            render_visible_only() {
-                return this.$.$mol_support_css_overflow_anchor();
-            }
-            view_window(next) {
-                const kids = this.sub();
-                if (kids.length < 3)
-                    return [0, kids.length];
-                if (this.$.$mol_print.active())
-                    return [0, kids.length];
-                const rect = this.view_rect();
-                if (next)
-                    return next;
-                let [min, max] = $mol_mem_cached(() => this.view_window()) ?? [0, 0];
-                let max2 = max = Math.min(max, kids.length);
-                let min2 = min = Math.max(0, Math.min(min, max - 1));
-                const anchoring = this.render_visible_only();
-                const window_height = this.$.$mol_window.size().height + 40;
-                const over = Math.ceil(window_height * this.render_over());
-                const limit_top = -over;
-                const limit_bottom = window_height + over;
-                const gap_before = $mol_mem_cached(() => this.gap_before()) ?? 0;
-                const gap_after = $mol_mem_cached(() => this.gap_after()) ?? 0;
-                let top = Math.ceil(rect?.top ?? 0) + gap_before;
-                let bottom = Math.ceil(rect?.bottom ?? 0) - gap_after;
-                if (top <= limit_top && bottom >= limit_bottom) {
-                    return [min2, max2];
-                }
-                if (anchoring && ((bottom < limit_top) || (top > limit_bottom))) {
-                    min = 0;
-                    top = Math.ceil(rect?.top ?? 0);
-                    while (min < (kids.length - 1)) {
-                        const height = kids[min].minimal_height();
-                        if (top + height >= limit_top)
-                            break;
-                        top += height;
-                        ++min;
-                    }
-                    min2 = min;
-                    max2 = max = min;
-                    bottom = top;
-                }
-                let top2 = top;
-                let bottom2 = bottom;
-                if (anchoring && (top <= limit_top) && (bottom2 < limit_bottom)) {
-                    min2 = Math.max(0, max - 1);
-                    top2 = bottom;
-                }
-                if ((bottom >= limit_bottom) && (top2 >= limit_top)) {
-                    max2 = Math.min(min + 1, kids.length);
-                    bottom2 = top;
-                }
-                while (bottom2 < limit_bottom && max2 < kids.length) {
-                    bottom2 += kids[max2].minimal_height();
-                    ++max2;
-                }
-                while (anchoring && ((top2 >= limit_top) && (min2 > 0))) {
-                    --min2;
-                    top2 -= kids[min2].minimal_height();
-                }
-                return [min2, max2];
-            }
-            gap_before() {
-                const skipped = this.sub().slice(0, this.view_window()[0]);
-                return Math.max(0, skipped.reduce((sum, view) => sum + view.minimal_height(), 0));
-            }
-            gap_after() {
-                const skipped = this.sub().slice(this.view_window()[1]);
-                return Math.max(0, skipped.reduce((sum, view) => sum + view.minimal_height(), 0));
-            }
-            sub_visible() {
-                return [
-                    ...this.gap_before() ? [this.Gap_before()] : [],
-                    ...this.sub().slice(...this.view_window()),
-                    ...this.gap_after() ? [this.Gap_after()] : [],
-                ];
-            }
-            minimal_height() {
-                return this.sub().reduce((sum, view) => {
-                    try {
-                        return sum + view.minimal_height();
-                    }
-                    catch (error) {
-                        $mol_fail_log(error);
-                        return sum;
-                    }
-                }, 0);
-            }
-            force_render(path) {
-                const kids = this.rows();
-                const index = kids.findIndex(item => path.has(item));
-                if (index >= 0) {
-                    const win = this.view_window();
-                    if (index < win[0] || index >= win[1]) {
-                        this.view_window([this.render_visible_only() ? index : 0, index + 1]);
-                    }
-                    kids[index].force_render(path);
-                }
-            }
-        }
-        __decorate([
-            $mol_mem
-        ], $mol_list.prototype, "sub", null);
-        __decorate([
-            $mol_mem
-        ], $mol_list.prototype, "view_window", null);
-        __decorate([
-            $mol_mem
-        ], $mol_list.prototype, "gap_before", null);
-        __decorate([
-            $mol_mem
-        ], $mol_list.prototype, "gap_after", null);
-        __decorate([
-            $mol_mem
-        ], $mol_list.prototype, "sub_visible", null);
-        __decorate([
-            $mol_mem
-        ], $mol_list.prototype, "minimal_height", null);
-        $$.$mol_list = $mol_list;
-    })($$ = $.$$ || ($.$$ = {}));
-})($ || ($ = {}));
-//mol/list/list.view.ts
-;
-"use strict";
-var $;
-(function ($) {
-    $mol_style_attach("mol/list/list.view.css", "[mol_list] {\n\twill-change: contents;\n\tdisplay: flex;\n\tflex-direction: column;\n\tflex-shrink: 0;\n\tmax-width: 100%;\n\t/* display: flex;\n\talign-items: stretch;\n\talign-content: stretch; */\n\ttransition: none;\n\tmin-height: 1.5rem;\n}\n\n[mol_list_gap_before] ,\n[mol_list_gap_after] {\n\tdisplay: block !important;\n\tflex: none;\n\ttransition: none;\n\toverflow-anchor: none;\n}\n");
-})($ || ($ = {}));
-//mol/list/-css/list.view.css.ts
-;
-"use strict";
-var $;
-(function ($) {
-    class $mol_scroll extends $mol_view {
-        scroll_top(next) {
-            if (next !== undefined)
-                return next;
-            return 0;
-        }
-        scroll_left(next) {
-            if (next !== undefined)
-                return next;
-            return 0;
-        }
-        field() {
-            return {
-                ...super.field(),
-                tabIndex: this.tabindex()
-            };
-        }
-        event() {
-            return {
-                ...super.event(),
-                scroll: (event) => this.event_scroll(event)
-            };
-        }
-        tabindex() {
-            return -1;
-        }
-        event_scroll(event) {
-            if (event !== undefined)
-                return event;
-            return null;
-        }
-    }
-    __decorate([
-        $mol_mem
-    ], $mol_scroll.prototype, "scroll_top", null);
-    __decorate([
-        $mol_mem
-    ], $mol_scroll.prototype, "scroll_left", null);
-    __decorate([
-        $mol_mem
-    ], $mol_scroll.prototype, "event_scroll", null);
-    $.$mol_scroll = $mol_scroll;
-})($ || ($ = {}));
-//mol/scroll/-view.tree/scroll.view.tree.ts
 ;
 "use strict";
 //mol/style/pseudo/class.ts
@@ -7296,8 +7162,8 @@ var $;
             return [];
         }
         Body_content() {
-            const obj = new this.$.$mol_list();
-            obj.rows = () => this.body();
+            const obj = new this.$.$mol_view();
+            obj.sub = () => this.body();
             return obj;
         }
         body_content() {
@@ -7422,6 +7288,9 @@ var $;
             },
             Body_content: {
                 padding: $mol_gap.block,
+                flex: {
+                    direction: 'column',
+                },
                 justify: {
                     self: 'stretch',
                 },
@@ -8268,6 +8137,224 @@ var $;
 "use strict";
 var $;
 (function ($) {
+    class $mol_list extends $mol_view {
+        render_visible_only() {
+            return true;
+        }
+        render_over() {
+            return 0;
+        }
+        sub() {
+            return this.rows();
+        }
+        Empty() {
+            const obj = new this.$.$mol_view();
+            return obj;
+        }
+        Gap_before() {
+            const obj = new this.$.$mol_view();
+            obj.style = () => ({
+                paddingTop: this.gap_before()
+            });
+            return obj;
+        }
+        Gap_after() {
+            const obj = new this.$.$mol_view();
+            obj.style = () => ({
+                paddingTop: this.gap_after()
+            });
+            return obj;
+        }
+        view_window() {
+            return [
+                0,
+                0
+            ];
+        }
+        rows() {
+            return [];
+        }
+        gap_before() {
+            return 0;
+        }
+        gap_after() {
+            return 0;
+        }
+    }
+    __decorate([
+        $mol_mem
+    ], $mol_list.prototype, "Empty", null);
+    __decorate([
+        $mol_mem
+    ], $mol_list.prototype, "Gap_before", null);
+    __decorate([
+        $mol_mem
+    ], $mol_list.prototype, "Gap_after", null);
+    $.$mol_list = $mol_list;
+})($ || ($ = {}));
+//mol/list/-view.tree/list.view.tree.ts
+;
+"use strict";
+var $;
+(function ($) {
+    let cache = null;
+    function $mol_support_css_overflow_anchor() {
+        return cache ?? (cache = (!/Gecko\//.test(navigator.userAgent)
+            && this.$mol_dom_context.CSS?.supports('overflow-anchor:auto')) ?? false);
+    }
+    $.$mol_support_css_overflow_anchor = $mol_support_css_overflow_anchor;
+})($ || ($ = {}));
+//mol/support/css/css.ts
+;
+"use strict";
+var $;
+(function ($) {
+    $.$mol_mem_cached = $mol_wire_probe;
+})($ || ($ = {}));
+//mol/mem/cached/cached.ts
+;
+"use strict";
+var $;
+(function ($) {
+    var $$;
+    (function ($$) {
+        class $mol_list extends $.$mol_list {
+            sub() {
+                const rows = this.rows();
+                return (rows.length === 0) ? [this.Empty()] : rows;
+            }
+            render_visible_only() {
+                return this.$.$mol_support_css_overflow_anchor();
+            }
+            view_window(next) {
+                const kids = this.sub();
+                if (kids.length < 3)
+                    return [0, kids.length];
+                if (this.$.$mol_print.active())
+                    return [0, kids.length];
+                const rect = this.view_rect();
+                if (next)
+                    return next;
+                let [min, max] = $mol_mem_cached(() => this.view_window()) ?? [0, 0];
+                let max2 = max = Math.min(max, kids.length);
+                let min2 = min = Math.max(0, Math.min(min, max - 1));
+                const anchoring = this.render_visible_only();
+                const window_height = this.$.$mol_window.size().height + 40;
+                const over = Math.ceil(window_height * this.render_over());
+                const limit_top = -over;
+                const limit_bottom = window_height + over;
+                const gap_before = $mol_mem_cached(() => this.gap_before()) ?? 0;
+                const gap_after = $mol_mem_cached(() => this.gap_after()) ?? 0;
+                let top = Math.ceil(rect?.top ?? 0) + gap_before;
+                let bottom = Math.ceil(rect?.bottom ?? 0) - gap_after;
+                if (top <= limit_top && bottom >= limit_bottom) {
+                    return [min2, max2];
+                }
+                if (anchoring && ((bottom < limit_top) || (top > limit_bottom))) {
+                    min = 0;
+                    top = Math.ceil(rect?.top ?? 0);
+                    while (min < (kids.length - 1)) {
+                        const height = kids[min].minimal_height();
+                        if (top + height >= limit_top)
+                            break;
+                        top += height;
+                        ++min;
+                    }
+                    min2 = min;
+                    max2 = max = min;
+                    bottom = top;
+                }
+                let top2 = top;
+                let bottom2 = bottom;
+                if (anchoring && (top <= limit_top) && (bottom2 < limit_bottom)) {
+                    min2 = Math.max(0, max - 1);
+                    top2 = bottom;
+                }
+                if ((bottom >= limit_bottom) && (top2 >= limit_top)) {
+                    max2 = Math.min(min + 1, kids.length);
+                    bottom2 = top;
+                }
+                while (bottom2 < limit_bottom && max2 < kids.length) {
+                    bottom2 += kids[max2].minimal_height();
+                    ++max2;
+                }
+                while (anchoring && ((top2 >= limit_top) && (min2 > 0))) {
+                    --min2;
+                    top2 -= kids[min2].minimal_height();
+                }
+                return [min2, max2];
+            }
+            gap_before() {
+                const skipped = this.sub().slice(0, this.view_window()[0]);
+                return Math.max(0, skipped.reduce((sum, view) => sum + view.minimal_height(), 0));
+            }
+            gap_after() {
+                const skipped = this.sub().slice(this.view_window()[1]);
+                return Math.max(0, skipped.reduce((sum, view) => sum + view.minimal_height(), 0));
+            }
+            sub_visible() {
+                return [
+                    ...this.gap_before() ? [this.Gap_before()] : [],
+                    ...this.sub().slice(...this.view_window()),
+                    ...this.gap_after() ? [this.Gap_after()] : [],
+                ];
+            }
+            minimal_height() {
+                return this.sub().reduce((sum, view) => {
+                    try {
+                        return sum + view.minimal_height();
+                    }
+                    catch (error) {
+                        $mol_fail_log(error);
+                        return sum;
+                    }
+                }, 0);
+            }
+            force_render(path) {
+                const kids = this.rows();
+                const index = kids.findIndex(item => path.has(item));
+                if (index >= 0) {
+                    const win = this.view_window();
+                    if (index < win[0] || index >= win[1]) {
+                        this.view_window([this.render_visible_only() ? index : 0, index + 1]);
+                    }
+                    kids[index].force_render(path);
+                }
+            }
+        }
+        __decorate([
+            $mol_mem
+        ], $mol_list.prototype, "sub", null);
+        __decorate([
+            $mol_mem
+        ], $mol_list.prototype, "view_window", null);
+        __decorate([
+            $mol_mem
+        ], $mol_list.prototype, "gap_before", null);
+        __decorate([
+            $mol_mem
+        ], $mol_list.prototype, "gap_after", null);
+        __decorate([
+            $mol_mem
+        ], $mol_list.prototype, "sub_visible", null);
+        __decorate([
+            $mol_mem
+        ], $mol_list.prototype, "minimal_height", null);
+        $$.$mol_list = $mol_list;
+    })($$ = $.$$ || ($.$$ = {}));
+})($ || ($ = {}));
+//mol/list/list.view.ts
+;
+"use strict";
+var $;
+(function ($) {
+    $mol_style_attach("mol/list/list.view.css", "[mol_list] {\n\twill-change: contents;\n\tdisplay: flex;\n\tflex-direction: column;\n\tflex-shrink: 0;\n\tmax-width: 100%;\n\t/* display: flex;\n\talign-items: stretch;\n\talign-content: stretch; */\n\ttransition: none;\n\tmin-height: 1.5rem;\n}\n\n[mol_list_gap_before] ,\n[mol_list_gap_after] {\n\tdisplay: block !important;\n\tflex: none;\n\ttransition: none;\n\toverflow-anchor: none;\n}\n");
+})($ || ($ = {}));
+//mol/list/-css/list.view.css.ts
+;
+"use strict";
+var $;
+(function ($) {
     class $piterjs_speech_snippet extends $mol_link {
         arg() {
             return {
@@ -8469,33 +8556,6 @@ var $;
     $.$mol_svg = $mol_svg;
 })($ || ($ = {}));
 //mol/svg/-view.tree/svg.view.tree.ts
-;
-"use strict";
-var $;
-(function ($) {
-    class $mol_state_time extends $mol_object {
-        static task(precision, reset) {
-            if (precision) {
-                return new $mol_after_timeout(precision, () => this.task(precision, null));
-            }
-            else {
-                return new $mol_after_frame(() => this.task(precision, null));
-            }
-        }
-        static now(precision) {
-            this.task(precision);
-            return Date.now();
-        }
-    }
-    __decorate([
-        $mol_mem_key
-    ], $mol_state_time, "task", null);
-    __decorate([
-        $mol_mem_key
-    ], $mol_state_time, "now", null);
-    $.$mol_state_time = $mol_state_time;
-})($ || ($ = {}));
-//mol/state/time/time.ts
 ;
 "use strict";
 var $;
@@ -14782,8 +14842,20 @@ var $;
         joined_count() {
             return this.meetup().joined_count();
         }
+        join_allowed() {
+            return this.meetup().join_allowed();
+        }
+        review_allowed() {
+            return this.meetup().review_allowed();
+        }
         editable() {
             return this.meetup().editable();
+        }
+        review(next) {
+            return this.meetup().review(next);
+        }
+        reviews() {
+            return this.meetup().reviews();
         }
         meetup() {
             const obj = new this.$.$piterjs_meetup();
@@ -15087,6 +15159,23 @@ var $;
             obj.text = () => "Если не сможешь прийти - не забудь отменить регистрацию, чтобы освободить место другим.\nСделать это можно лишь с того же девайса. Но \\\\тут\\#!safe\\\\ можешь перенести свою авторизацию на любой другой.\nДа, мы упарываемся по твоей приватности 💟";
             return obj;
         }
+        Review() {
+            const obj = new this.$.$mol_textarea();
+            obj.hint = () => "Что уже хорошо, а что улучшить?";
+            obj.value = (next) => this.review(next);
+            return obj;
+        }
+        Review_field() {
+            const obj = new this.$.$mol_form_field();
+            obj.name = () => "Общие печатления";
+            obj.Content = () => this.Review();
+            return obj;
+        }
+        Reviews() {
+            const obj = new this.$.$mol_text();
+            obj.text = () => this.reviews();
+            return obj;
+        }
         content() {
             return [
                 this.Description(),
@@ -15095,7 +15184,9 @@ var $;
                 this.Speech_add(),
                 this.Hidden_fields(),
                 this.Join(),
-                this.Joined_bid()
+                this.Joined_bid(),
+                this.Review_field(),
+                this.Reviews()
             ];
         }
         Content() {
@@ -15297,6 +15388,15 @@ var $;
     ], $piterjs_meetup_page.prototype, "Joined_bid", null);
     __decorate([
         $mol_mem
+    ], $piterjs_meetup_page.prototype, "Review", null);
+    __decorate([
+        $mol_mem
+    ], $piterjs_meetup_page.prototype, "Review_field", null);
+    __decorate([
+        $mol_mem
+    ], $piterjs_meetup_page.prototype, "Reviews", null);
+    __decorate([
+        $mol_mem
     ], $piterjs_meetup_page.prototype, "Content", null);
     __decorate([
         $mol_mem_key
@@ -15372,12 +15472,11 @@ var $;
             coords() {
                 return this.meetup().place().coords();
             }
-            join_allowed() {
-                return (this.meetup().start()?.valueOf() ?? 0) > $mol_state_time.now(60 * 60);
-            }
             content() {
                 return [
                     ...(this.editing() || this.description()) ? [this.Description()] : [],
+                    ...this.review_allowed() ? [this.Review_field()] : [],
+                    ...(this.editing() && this.reviews()) ? [this.Reviews()] : [],
                     this.Links(),
                     ...this.join_allowed() ? [this.Join()] : [],
                     ...this.join_allowed() && this.joined() ? [this.Joined_bid()] : [],
@@ -15471,9 +15570,6 @@ var $;
         ], $piterjs_meetup_page.prototype, "subscribe_details", null);
         __decorate([
             $mol_mem
-        ], $piterjs_meetup_page.prototype, "join_allowed", null);
-        __decorate([
-            $mol_mem
         ], $piterjs_meetup_page.prototype, "content", null);
         __decorate([
             $mol_mem
@@ -15498,7 +15594,7 @@ var $;
 "use strict";
 var $;
 (function ($) {
-    $mol_style_attach("piterjs/meetup/page/page.view.css", "[mol_page][piterjs_meetup_page] {\n\tflex: 0 0 30rem;\n}\n\n[piterjs_meetup_page_title] {\n\tflex: 1000 1000 3rem;\n}\n\n[piterjs_meetup_page_tools] {\n\tflex-grow: 1;\n}\n\n[piterjs_meetup_page_links] {\n\tflex-wrap: wrap;\n}\n\n[piterjs_meetup_page_video] {\n\tdisplay: inline;\n}\n\n[piterjs_meetup_page_place] {\n\tdisplay: inline;\n}\n\n[piterjs_meetup_page_description] {\n\tbox-shadow: none;\n\tflex-grow: 0;\n\tfont-family: sans-serif;\n}\n\n[piterjs_meetup_page_hidden_fields] {\n\tpadding: var(--mol_gap_block);\n}\n\n[piterjs_meetup_page_afterparty] {\n\tbox-shadow: none;\n\tflex-grow: 0;\n\tfont-family: sans-serif;\n}\n\n[piterjs_meetup_page_join] {\n\tpadding: var(--mol_gap_block);\n\tbackground-color: var(--mol_theme_card);\n}\n\n[piterjs_meetup_page_joined_confirm] {\n\tpadding: var(--mol_gap_text);\n\tcolor: var(--mol_theme_focus);\n}\n\n[piterjs_meetup_page_free_space] {\n\tpadding: var(--mol_gap_text);\n\tcolor: var(--mol_theme_shade);\n}\n\n[piterjs_meetup_page_capacity_field] {\n\tflex: 1\n}\n\n[piterjs_meetup_page_capacity_cut] {\n\talign-self: flex-end;\n}\n");
+    $mol_style_attach("piterjs/meetup/page/page.view.css", "[mol_page][piterjs_meetup_page] {\n\tflex: 0 0 30rem;\n}\n\n[piterjs_meetup_page_title] {\n\tflex: 1000 1000 3rem;\n}\n\n[piterjs_meetup_page_tools] {\n\tflex-grow: 1;\n}\n\n[piterjs_meetup_page_links] {\n\tflex-wrap: wrap;\n}\n\n[piterjs_meetup_page_video] {\n\tdisplay: inline;\n}\n\n[piterjs_meetup_page_place] {\n\tdisplay: inline;\n}\n\n[piterjs_meetup_page_description] {\n\tbox-shadow: none;\n\tflex-grow: 0;\n\tfont-family: sans-serif;\n}\n\n[piterjs_meetup_page_reviews] {\n\tpadding: var(--mol_gap_block);\n\tbackground: var(--mol_theme_card);\n}\n\n[piterjs_meetup_page_hidden_fields] {\n\tpadding: var(--mol_gap_block);\n}\n\n[piterjs_meetup_page_afterparty] {\n\tbox-shadow: none;\n\tflex-grow: 0;\n\tfont-family: sans-serif;\n}\n\n[piterjs_meetup_page_join] {\n\tpadding: var(--mol_gap_block);\n\tbackground-color: var(--mol_theme_card);\n}\n\n[piterjs_meetup_page_joined_confirm] {\n\tpadding: var(--mol_gap_text);\n\tcolor: var(--mol_theme_focus);\n}\n\n[piterjs_meetup_page_free_space] {\n\tpadding: var(--mol_gap_text);\n\tcolor: var(--mol_theme_shade);\n}\n\n[piterjs_meetup_page_capacity_field] {\n\tflex: 1\n}\n\n[piterjs_meetup_page_capacity_cut] {\n\talign-self: flex-end;\n}\n");
 })($ || ($ = {}));
 //piterjs/meetup/page/-css/page.view.css.ts
 ;
@@ -20880,6 +20976,12 @@ var $;
         editable() {
             return this.speech().editable();
         }
+        review(next) {
+            return this.speech().review(next);
+        }
+        reviews() {
+            return this.speech().reviews();
+        }
         speech() {
             const obj = new this.$.$piterjs_speech();
             return obj;
@@ -20901,6 +21003,8 @@ var $;
             return [
                 this.Poster_zone(),
                 this.Description(),
+                this.Review_field(),
+                this.Reviews(),
                 this.Links(),
                 this.Speaker()
             ];
@@ -20957,6 +21061,23 @@ var $;
             obj.hint = () => "О чём";
             obj.value = (next) => this.description(next);
             obj.enabled = () => this.editing();
+            return obj;
+        }
+        Review() {
+            const obj = new this.$.$mol_textarea();
+            obj.hint = () => "Что уже хорошо, а что улучшить?";
+            obj.value = (next) => this.review(next);
+            return obj;
+        }
+        Review_field() {
+            const obj = new this.$.$mol_form_field();
+            obj.name = () => "Впечатления от доклада";
+            obj.Content = () => this.Review();
+            return obj;
+        }
+        Reviews() {
+            const obj = new this.$.$mol_text();
+            obj.text = () => this.reviews();
             return obj;
         }
         Slides() {
@@ -21100,6 +21221,15 @@ var $;
     __decorate([
         $mol_mem
     ], $piterjs_speech_page.prototype, "Description", null);
+    __decorate([
+        $mol_mem
+    ], $piterjs_speech_page.prototype, "Review", null);
+    __decorate([
+        $mol_mem
+    ], $piterjs_speech_page.prototype, "Review_field", null);
+    __decorate([
+        $mol_mem
+    ], $piterjs_speech_page.prototype, "Reviews", null);
     __decorate([
         $mol_mem
     ], $piterjs_speech_page.prototype, "Slides", null);
@@ -21262,6 +21392,12 @@ var $;
                     ...(this.editing() || this.video()) ? [this.Video()] : [],
                 ];
             }
+            Review_field() {
+                return this.speech().meetup()?.review_allowed() ? super.Review_field() : null;
+            }
+            Reviews() {
+                return this.editing() ? super.Reviews() : null;
+            }
             foot() {
                 if (!this.editable())
                     return [];
@@ -21319,6 +21455,12 @@ var $;
                 },
                 font: {
                     family: 'sans-serif',
+                },
+            },
+            Reviews: {
+                padding: $mol_gap.block,
+                background: {
+                    color: $mol_theme.card,
                 },
             },
             Links: {

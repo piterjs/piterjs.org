@@ -1577,6 +1577,23 @@ declare namespace $ {
 }
 
 declare namespace $ {
+    class $mol_after_timeout extends $mol_object2 {
+        delay: number;
+        task: () => void;
+        id: any;
+        constructor(delay: number, task: () => void);
+        destructor(): void;
+    }
+}
+
+declare namespace $ {
+    class $mol_state_time extends $mol_object {
+        static task(precision: number, reset?: null): $mol_after_timeout | $mol_after_frame;
+        static now(precision: number): number;
+    }
+}
+
+declare namespace $ {
     class $piterjs_meetup extends $piterjs_model {
         start(next?: $mol_time_moment): $mol_time_moment;
         video(next?: string): string;
@@ -1594,9 +1611,14 @@ declare namespace $ {
             [key: `${string}_${string}`]: $mol_time_moment;
         };
         joined_count(): number;
+        join_allowed(): boolean;
         visitors_node(): $hyoo_crowd_list | null;
         visitor(peer: $mol_int62_string, next?: boolean): boolean;
         visitors_list(): `${string}_${string}`[];
+        reviews_node(): $hyoo_crowd_dict | null;
+        review(next?: string): string;
+        reviews(): string;
+        review_allowed(): boolean;
     }
 }
 
@@ -1682,13 +1704,16 @@ declare namespace $ {
 
 declare namespace $ {
     class $piterjs_speech extends $piterjs_model {
-        meetup(next?: $piterjs_meetup): $piterjs_place | null;
+        meetup(next?: $piterjs_meetup): $piterjs_meetup | null;
         slides(next?: string): string;
         video(next?: string): string;
         start(next?: $mol_time_moment): $mol_time_moment;
         interval(): $mol_time_interval;
         duration(): $mol_time_duration;
         speaker(): $piterjs_speaker;
+        reviews_node(): $hyoo_crowd_dict | undefined;
+        review(next?: string): string;
+        reviews(): string;
     }
 }
 
@@ -1706,22 +1731,14 @@ declare namespace $ {
 }
 
 declare namespace $ {
-    class $mol_list extends $mol_view {
-        render_visible_only(): boolean;
-        render_over(): number;
-        sub(): readonly $mol_view[];
-        Empty(): $mol_view;
-        Gap_before(): $mol_view;
-        Gap_after(): $mol_view;
-        view_window(): readonly any[];
-        rows(): readonly $mol_view[];
-        gap_before(): number;
-        gap_after(): number;
+    class $mol_scroll extends $mol_view {
+        scroll_top(next?: any): number;
+        scroll_left(next?: any): number;
+        field(): Record<string, any>;
+        event(): Record<string, any>;
+        tabindex(): number;
+        event_scroll(event?: any): any;
     }
-}
-
-declare namespace $ {
-    function $mol_support_css_overflow_anchor(this: $): boolean;
 }
 
 declare namespace $ {
@@ -1744,37 +1761,6 @@ declare namespace $ {
         static before(): $mol_dom_listener;
         static after(): $mol_dom_listener;
         static active(next?: boolean): boolean;
-    }
-}
-
-declare namespace $ {
-    let $mol_mem_cached: typeof $mol_wire_probe;
-}
-
-declare namespace $.$$ {
-    class $mol_list extends $.$mol_list {
-        sub(): readonly $mol_view[];
-        render_visible_only(): boolean;
-        view_window(next?: [number, number]): [number, number];
-        gap_before(): number;
-        gap_after(): number;
-        sub_visible(): $mol_view[];
-        minimal_height(): number;
-        force_render(path: Set<$mol_view>): void;
-    }
-}
-
-declare namespace $ {
-}
-
-declare namespace $ {
-    class $mol_scroll extends $mol_view {
-        scroll_top(next?: any): number;
-        scroll_left(next?: any): number;
-        field(): Record<string, any>;
-        event(): Record<string, any>;
-        tabindex(): number;
-        event_scroll(event?: any): any;
     }
 }
 
@@ -1847,7 +1833,7 @@ declare namespace $ {
         head(): readonly any[];
         Head(): $mol_view;
         body(): readonly $mol_view[];
-        Body_content(): $$.$mol_list;
+        Body_content(): $mol_view;
         body_content(): readonly any[];
         body_scroll_top(next?: any): number;
         Body(): $$.$mol_scroll;
@@ -2234,6 +2220,45 @@ declare namespace $ {
 }
 
 declare namespace $ {
+    class $mol_list extends $mol_view {
+        render_visible_only(): boolean;
+        render_over(): number;
+        sub(): readonly $mol_view[];
+        Empty(): $mol_view;
+        Gap_before(): $mol_view;
+        Gap_after(): $mol_view;
+        view_window(): readonly any[];
+        rows(): readonly $mol_view[];
+        gap_before(): number;
+        gap_after(): number;
+    }
+}
+
+declare namespace $ {
+    function $mol_support_css_overflow_anchor(this: $): boolean;
+}
+
+declare namespace $ {
+    let $mol_mem_cached: typeof $mol_wire_probe;
+}
+
+declare namespace $.$$ {
+    class $mol_list extends $.$mol_list {
+        sub(): readonly $mol_view[];
+        render_visible_only(): boolean;
+        view_window(next?: [number, number]): [number, number];
+        gap_before(): number;
+        gap_after(): number;
+        sub_visible(): $mol_view[];
+        minimal_height(): number;
+        force_render(path: Set<$mol_view>): void;
+    }
+}
+
+declare namespace $ {
+}
+
+declare namespace $ {
     class $piterjs_speech_snippet extends $mol_link {
         arg(): Record<string, any>;
         speech(): $piterjs_speech;
@@ -2272,23 +2297,6 @@ declare namespace $ {
         font_size(): number;
         font_family(): string;
         style_size(): Record<string, any>;
-    }
-}
-
-declare namespace $ {
-    class $mol_after_timeout extends $mol_object2 {
-        delay: number;
-        task: () => void;
-        id: any;
-        constructor(delay: number, task: () => void);
-        destructor(): void;
-    }
-}
-
-declare namespace $ {
-    class $mol_state_time extends $mol_object {
-        static task(precision: number, reset?: null): $mol_after_timeout | $mol_after_frame;
-        static now(precision: number): number;
     }
 }
 
@@ -3981,7 +3989,11 @@ declare namespace $ {
         afterparty(next?: any): string;
         start(next?: any): $mol_time_moment;
         joined_count(): number;
+        join_allowed(): boolean;
+        review_allowed(): boolean;
         editable(): boolean;
+        review(next?: any): string;
+        reviews(): string;
         meetup(): $piterjs_meetup;
         address(): string;
         Title(): $mol_string_button;
@@ -4033,6 +4045,9 @@ declare namespace $ {
         join_content(): readonly any[];
         Join(): $$.$mol_section;
         Joined_bid(): $$.$mol_text;
+        Review(): $$.$mol_textarea;
+        Review_field(): $$.$mol_form_field;
+        Reviews(): $$.$mol_text;
         content(): readonly any[];
         Content(): $$.$mol_list;
         speech(id: any): $piterjs_speech;
@@ -4061,7 +4076,6 @@ declare namespace $.$$ {
         video(): string;
         address(): string;
         coords(): $mol_vector_2d<number>;
-        join_allowed(): boolean;
         content(): ($mol_view | $mol_button_minor | $mol_textarea)[];
         links(): $mol_link[];
         speeches(): $piterjs_speech_snippet[];
@@ -5262,6 +5276,8 @@ declare namespace $ {
         slides(next?: any): string;
         video(next?: any): string;
         editable(): boolean;
+        review(next?: any): string;
+        reviews(): string;
         speech(): $piterjs_speech;
         Title(): $mol_string_button;
         tools(): readonly any[];
@@ -5274,6 +5290,9 @@ declare namespace $ {
         Poster(): $$.$piterjs_speech_poster;
         Poster_zone(): $mol_view;
         Description(): $$.$mol_textarea;
+        Review(): $$.$mol_textarea;
+        Review_field(): $$.$mol_form_field;
+        Reviews(): $$.$mol_text;
         Slides(): $$.$mol_string_link;
         Video(): $$.$mol_string_link;
         links(): readonly any[];
@@ -5310,6 +5329,8 @@ declare namespace $.$$ {
     class $piterjs_speech_page extends $.$piterjs_speech_page {
         speaker(): $piterjs_speaker;
         links(): $mol_string_link[];
+        Review_field(): $mol_form_field;
+        Reviews(): $mol_text;
         foot(): readonly any[];
         poster_1_1_name(): string;
         poster_16_9_name(): string;
@@ -7144,7 +7165,7 @@ declare namespace $.$$ {
         key_new(): string | null;
         import_switch(): void;
         key_export(): string;
-        export_rows(): ($mol_list | $mol_link | $mol_text)[];
+        export_rows(): ($mol_link | $mol_list | $mol_text)[];
         import_rows(): ($mol_list | $mol_button_minor | $mol_text)[];
         export_link(): string;
     }
