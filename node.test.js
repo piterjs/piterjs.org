@@ -6228,6 +6228,7 @@ var $;
             return this.yoke('joined', $hyoo_crowd_dict, [''], [], ['0_0']);
         }
         joined_name(id, next) {
+            $mol_wire_solid();
             const secret = $mol_wire_sync(this.peer_secret(id));
             const salt = $mol_charset_encode(this.id());
             if (next) {
