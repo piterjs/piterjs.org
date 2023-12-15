@@ -86,7 +86,7 @@ namespace $ {
 
 		@ $mol_mem_key
 		joined_name( id: $mol_int62_string, next?: string ) {
-			
+			$mol_wire_solid()
 			const secret = $mol_wire_sync( this.peer_secret( id )! )
 			const salt = $mol_charset_encode( this.id() )
 
