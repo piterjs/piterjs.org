@@ -92,6 +92,7 @@ $mol_link $mol_view
 		target <= target \_self
 		download <= file_name \
 		mol_link_current <= current false
+		rel <= relation \
 	sub /$mol_view_content
 		<= title
 	arg *
@@ -271,6 +272,7 @@ $mol_pick $mol_pop
 		minimal_height 40
 		enabled <= trigger_enabled true
 		checked? <=> showed?
+		clicks? <=> clicks? null
 		sub <= trigger_content /$mol_view_content
 			<= title
 		hint <= hint \
@@ -2002,6 +2004,9 @@ $piterjs_video_page $mol_page
 		<= Frame $mol_frame
 			uri <= uri <= source
 
+$mol_theme_auto $mol_plugin
+	attr * mol_theme <= theme \
+
 $mol_icon_brightness_6 $mol_icon path \M12,18V6C15.31,6 18,8.69 18,12C18,15.31 15.31,18 12,18M20,15.31L23.31,12L20,8.69V4H15.31L12,0.69L8.69,4H4V8.69L0.69,12L4,15.31V20H8.69L12,23.31L15.31,20H20V15.31Z
 
 $mol_lights_toggle $mol_check_icon
@@ -2072,6 +2077,8 @@ $hyoo_map $mol_view
 		photo \https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{level}/{y}/{x}
 	auto /
 		<= center_offset null
+	plugins /
+		<= Theme $mol_theme_auto
 	sub /
 		<= Main $mol_page
 			head /
@@ -2257,9 +2264,6 @@ $mol_book2 $mol_scroll
 	minimal_width 0
 	Placeholder $mol_view
 	Gap* $mol_view title \
-
-$mol_theme_auto $mol_plugin
-	attr * mol_theme <= theme \
 
 $hyoo_page_side_news $mol_page
 	side $hyoo_page_side
@@ -2730,7 +2734,7 @@ $hyoo_meta_safe $mol_page
 	title @ \Private keys
 	yard $hyoo_sync_yard
 	bid_pass_long @ \> 7 letters
-	key_size 133
+	key_size 144
 	attr *
 		^
 		mol_theme \$mol_theme_special
@@ -2841,6 +2845,7 @@ $hyoo_page_menu $hyoo_meta_menu
 			meta <= side $hyoo_page_side
 			hint @ \Profile
 			Title null
+			relation \nofollow
 		<= Title
 		<= Tools
 	Logo null
