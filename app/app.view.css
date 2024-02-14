@@ -27,16 +27,6 @@
 	stroke: currentColor;
 }
 
-[piterjs_app] [mol_link] {
-	text-shadow: none;
-}
-
-[piterjs_app] [mol_page] ,
-[piterjs_app] [mol_page_body] {
-	box-shadow: none;
-	background: none;
-}
-
 [piterjs_app_menu] {
 	flex: 0 0 15rem;
 }
