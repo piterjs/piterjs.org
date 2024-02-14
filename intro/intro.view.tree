@@ -2,7 +2,7 @@ $piterjs_intro $mol_view
 	title \PiterJS Вступление
 	meetup $piterjs_meetup
 	page?val \
-	pages *
+	pages *$piterjs_intro_page
 		main <= Main $piterjs_intro_main meetup <= meetup
 		about <= About $piterjs_intro_page
 			title \Кто мы?

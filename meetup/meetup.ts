@@ -88,7 +88,7 @@ namespace $ {
 		joined_name( id: $mol_int62_string, next?: string ) {
 			$mol_wire_solid()
 			const secret = $mol_wire_sync( this.peer_secret( id )! )
-			const salt = $mol_charset_encode( this.id() )
+			const salt = $mol_crypto_hash( $mol_charset_encode( this.id() ) ).slice( 0, 16 )
 
 			if( next ) {
 				const closed = secret.encrypt( $mol_charset_encode( next ), salt )
