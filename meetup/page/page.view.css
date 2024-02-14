@@ -59,7 +59,8 @@
 [piterjs_meetup_page_join] {
 	padding: var(--mol_gap_block);
 	background-color: var(--mol_theme_card);
-	box-shadow: 0 0rem 0.5rem var(--mol_theme_back);
+	border-radius: var(--mol_gap_round);
+	box-shadow: 0 0 0.5rem 0rem hsla(0,0%,0%,.125);
 }
 
 [piterjs_meetup_page_joined_confirm] {
