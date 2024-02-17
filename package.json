@@ -168,6 +168,7 @@
     "$piterjs_place",
     "$mol_vector",
     "$mol_crypto_secret",
+    "$piterjs_secret",
     "$mol_crypto_hash",
     "$mol_state_time",
     "$mol_state",
