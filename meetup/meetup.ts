@@ -79,6 +79,29 @@ namespace $ {
 
 		}
 
+		@ $mol_mem_key
+		peer_secret_old( peer: $mol_int62_string ) {
+			
+			const priv = $piterjs_domain.secure_private()
+			const land = this.joined_node()?.land
+			if( !land ) return null
+
+			if( priv ) {
+
+				const auth = this.land.peer()
+				const pub = peer === auth.id ? auth.key_public_serial : land.unit( peer, peer )?.data as string | undefined
+				return pub ? $mol_wire_sync( $piterjs_secret ).derive( priv, pub ) : null
+
+			} else {
+
+				const priv = land.peer().key_private_serial
+				const pub = $piterjs_domain.secure_public()
+				return $mol_wire_sync( $mol_crypto_secret ).derive( priv, pub )
+
+			}
+
+		}
+
 		@ $mol_mem
 		joined_node() {
 			return this.yoke( 'joined', $hyoo_crowd_dict, [ '' ], [], [ '0_0' ] )
@@ -107,8 +130,13 @@ namespace $ {
 			try {
 				return $mol_charset_decode( secret.decrypt( closed as Uint8Array, salt ) )
 			} catch( error ) {
-				$mol_fail_log( error )
-				return ''
+				try {
+					const secret = $mol_wire_sync( this.peer_secret_old( id )! )
+					return $mol_charset_decode( secret.decrypt( closed as Uint8Array, $mol_charset_encode( this.id() ) ) )
+				} catch( error ) {
+					$mol_fail_log( error )
+					return ''
+				}
 			}
 
 		}
