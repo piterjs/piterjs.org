@@ -101,7 +101,6 @@
 	deploy \/piterjs/logo/logo_192.png
 	deploy \/piterjs/logo/logo_512.png
 	deploy \/piterjs/app/app_lines.svg
-	deploy \/piterjs/logo-sponsors/KVANT_logo_01.png
-	deploy \/piterjs/logo-sponsors/KVANT_logo_01.svg
+	deploy \/piterjs/logo-sponsors/kvant-logo.png
 	deploy \/piterjs/logo-sponsors/Nexign_Logo.png
 	deploy \/piterjs/logo-sponsors/sprinthost.ru-2.png
