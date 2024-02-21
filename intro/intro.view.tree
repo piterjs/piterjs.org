@@ -72,6 +72,12 @@ $piterjs_intro $mol_view
 				\Нужны всегда
 				\Даже если боишься
 				\Поможем с темой
+		sponsors <= Sponsors $piterjs_intro_page
+			title \Спонсоры
+			text \
+				\""logo-sponsors\KVANT_logo_01.svg""
+				\""logo-sponsors\Nexign_Logo.png""
+				\""logo-sponsors\sprinthost.ru-2.png""
 		place <= Place $piterjs_intro_page
 			title <= place_title \Мы в {place}
 			text <= place_notes \
