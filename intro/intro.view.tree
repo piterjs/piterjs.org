@@ -75,7 +75,7 @@ $piterjs_intro $mol_view
 		sponsors <= Sponsors $piterjs_intro_page
 			title \Спонсоры
 			text \
-				\""/piterjs/logo-sponsors/KVANT_logo_01.svg""
+				\""/piterjs/logo-sponsors/kvant-logo.png""
 				\""/piterjs/logo-sponsors/Nexign_Logo.png""
 				\""/piterjs/logo-sponsors/sprinthost.ru-2.png""
 		place <= Place $piterjs_intro_page
