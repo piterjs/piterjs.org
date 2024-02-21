@@ -75,6 +75,9 @@
 	pack intern git \https://github.com/hyoo-ru/intern.hyoo.ru.git
 \/piterjs/place
 	deploy \/piterjs/place/place.data.tree
+\/hyoo/sync
+	- build $hyoo_sync_revision \git rev-parse --short HEAD
+	build $hyoo_sync_revision \echo echo
 \/piterjs/meetup
 	deploy \/piterjs/meetup/meetup.data.tree
 \/piterjs/speaker
@@ -84,9 +87,6 @@
 \/hyoo/map
 	include \/mol/offline/install
 	deploy \/hyoo/map/logo/logo.svg
-\/hyoo/sync
-	- build $hyoo_sync_revision \git rev-parse --short HEAD
-	build $hyoo_sync_revision \echo echo
 \/hyoo/page
 	include \/mol/offline/install
 	deploy \/hyoo/page/logo/logo.svg
