@@ -47,19 +47,20 @@ $piterjs_intro $mol_view
 				\Режиссёр трансляции
 				\Ведущий мероприятия
 				\Ведущий воркшопа
+				\Подготовим
+		contribution <= Contribution $piterjs_intro_page
+			title \Твой вклад
+			text \
+				\Привлекай компанию
+				\Поддерживай рублём
+				\Вступай в наши ряды
+				\Выступай сам
 		speakers <= Speakers $piterjs_intro_page
 			title \Докладчики
 			text \
 				\Нужны всегда
 				\Даже если боишься
 				\Поможем с темой
-				\Подготовим
-		info <= Info $piterjs_intro_page
-			title \Твой вклад
-			text \
-				\github.com/piterjs
-				\hi@piterjs.org
-				\piterjs.org
 		place <= Place $piterjs_intro_page
 			title <= place_title \Мы в {place}
 			text <= place_notes \
