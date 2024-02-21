@@ -21428,16 +21428,16 @@ var $;
 			(obj.text) = () => ("Конферансье\nТехник\nВидео-оператор\nФотограф\nВедущий трансляции\nХелпер\nКоординатор");
 			return obj;
 		}
+		Contribution(){
+			const obj = new this.$.$piterjs_intro_page();
+			(obj.title) = () => ("Твой вклад");
+			(obj.text) = () => ("Привлекай компанию\nПоддерживай рублём\nВступай в наши ряды\nВыступай сам");
+			return obj;
+		}
 		Speakers(){
 			const obj = new this.$.$piterjs_intro_page();
 			(obj.title) = () => ("Докладчики");
-			(obj.text) = () => ("Нужны всегда\nДаже если боишься\nПоможем с темой\nПодготовим");
-			return obj;
-		}
-		Info(){
-			const obj = new this.$.$piterjs_intro_page();
-			(obj.title) = () => ("Твой вклад");
-			(obj.text) = () => ("github.com/piterjs\nhi@piterjs.org\npiterjs.org");
+			(obj.text) = () => ("Нужны всегда\nДаже если боишься\nПоможем с темой");
 			return obj;
 		}
 		place_title(){
@@ -21515,8 +21515,8 @@ var $;
 				"about": (this.About()), 
 				"roles_org": (this.Roles_org()), 
 				"roles_place": (this.Roles_place()), 
+				"contribution": (this.Contribution()), 
 				"speakers": (this.Speakers()), 
-				"info": (this.Info()), 
 				"place": (this.Place()), 
 				"schedule": (this.Schedule()), 
 				"profit": (this.Proft()), 
@@ -21537,8 +21537,8 @@ var $;
 	($mol_mem(($.$piterjs_intro.prototype), "About"));
 	($mol_mem(($.$piterjs_intro.prototype), "Roles_org"));
 	($mol_mem(($.$piterjs_intro.prototype), "Roles_place"));
+	($mol_mem(($.$piterjs_intro.prototype), "Contribution"));
 	($mol_mem(($.$piterjs_intro.prototype), "Speakers"));
-	($mol_mem(($.$piterjs_intro.prototype), "Info"));
 	($mol_mem(($.$piterjs_intro.prototype), "Place"));
 	($mol_mem(($.$piterjs_intro.prototype), "Schedule"));
 	($mol_mem(($.$piterjs_intro.prototype), "Proft"));
