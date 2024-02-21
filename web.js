@@ -21449,7 +21449,7 @@ var $;
 		Sponsors(){
 			const obj = new this.$.$piterjs_intro_page();
 			(obj.title) = () => ("Спонсоры");
-			(obj.text) = () => ("\"\"/piterjs/logo-sponsors/kvant-logo.png\"\"\n\"\"/piterjs/logo-sponsors/Nexign_Logo.png\"\"\n\"\"/piterjs/logo-sponsors/sprinthost.ru-2.png\"\"");
+			(obj.text) = () => ("! \"\"/piterjs/logo-sponsors/kvant-logo.png\"\"\n  ! \"\"/piterjs/logo-sponsors/Nexign_Logo.png\"\"\n    ! \"\"/piterjs/logo-sponsors/sprinthost.ru-2.png\"\"");
 			return obj;
 		}
 		place_title(){
