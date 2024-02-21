@@ -21794,7 +21794,7 @@ var $;
 		Team(){
 			const obj = new this.$.$piterjs_intro_page();
 			(obj.title) = () => ("Команда");
-			(obj.text) = () => ("! \"\"https://i.imgur.com/n2Fxkqv.png\"\"\n  ! \"\"https://i.imgur.com/Mup6yZ5.jpeg\"\"\n    ! \"\"https://i.imgur.com/y8axmQx.jpeg\"\"\n      ! \"\"https://i.imgur.com/L9H07ur.jpeg\"\"\n! \"\"https://i.imgur.com/WYQiVs6.jpeg\"\"\n  ! \"\"https://i.imgur.com/V2Rkj38.jpeg\"\"\n    ! \"\"https://i.imgur.com/nQD3DUQ.jpeg\"\"");
+			(obj.text) = () => ("! \"\"https://i.imgur.com/n2Fxkqv.png\"\"\n  ! \"\"https://i.imgur.com/Mup6yZ5.jpeg\"\"\n    ! \"\"https://i.imgur.com/y8axmQx.jpeg\"\"\n      ! \"\"https://i.imgur.com/L9H07ur.jpeg\"\"\n! \"\"https://i.imgur.com/WYQiVs6.jpeg\"\"\n  ! \"\"https://i.imgur.com/V2Rkj38.jpeg\"\"\n    ! \"\"https://i.imgur.com/nQD3DUQ.jpeg\"\"\n      ! \"\"https://i.imgur.com/dRolfnB.jpeg\"\"");
 			return obj;
 		}
 		Roles_org(){

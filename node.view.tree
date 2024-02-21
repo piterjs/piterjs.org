@@ -2015,6 +2015,7 @@ $piterjs_intro $mol_view
 				\! ""https://i.imgur.com/WYQiVs6.jpeg""
 				\  ! ""https://i.imgur.com/V2Rkj38.jpeg""
 				\    ! ""https://i.imgur.com/nQD3DUQ.jpeg""
+				\      ! ""https://i.imgur.com/dRolfnB.jpeg""
 		roles_org <= Roles_org $piterjs_intro_page
 			title \Роли организаторов
 			text \
