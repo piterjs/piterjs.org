@@ -21830,6 +21830,12 @@ var $;
 			(obj.text) = () => ("Нужны всегда\nДаже если боишься\nПоможем с темой");
 			return obj;
 		}
+		Sponsors(){
+			const obj = new this.$.$piterjs_intro_page();
+			(obj.title) = () => ("Спонсоры");
+			(obj.text) = () => ("\"\"/piterjs/logo-sponsors\\KVANT_logo_01.svg\"\"\n\"\"/piterjs/logo-sponsors\\Nexign_Logo.png\"\"\n\"\"/piterjs/logo-sponsors\\sprinthost.ru-2.png\"\"");
+			return obj;
+		}
 		place_title(){
 			return "Мы в {place}";
 		}
@@ -21908,6 +21914,7 @@ var $;
 				"roles_place": (this.Roles_place()), 
 				"contribution": (this.Contribution()), 
 				"speakers": (this.Speakers()), 
+				"sponsors": (this.Sponsors()), 
 				"place": (this.Place()), 
 				"schedule": (this.Schedule()), 
 				"profit": (this.Proft()), 
@@ -21931,6 +21938,7 @@ var $;
 	($mol_mem(($.$piterjs_intro.prototype), "Roles_place"));
 	($mol_mem(($.$piterjs_intro.prototype), "Contribution"));
 	($mol_mem(($.$piterjs_intro.prototype), "Speakers"));
+	($mol_mem(($.$piterjs_intro.prototype), "Sponsors"));
 	($mol_mem(($.$piterjs_intro.prototype), "Place"));
 	($mol_mem(($.$piterjs_intro.prototype), "Schedule"));
 	($mol_mem(($.$piterjs_intro.prototype), "Proft"));
