@@ -21791,6 +21791,12 @@ var $;
 			(obj.text) = () => ("Митапы в Питере\nJS и всё, что рядом\nКаждый месяц с 2015\nСпячка с 2020\nС 2023 снова с вами!");
 			return obj;
 		}
+		Team(){
+			const obj = new this.$.$piterjs_intro_page();
+			(obj.title) = () => ("Команда");
+			(obj.text) = () => ("! \"\"https://i.imgur.com/n2Fxkqv.png\"\"\n  ! \"\"https://i.imgur.com/Mup6yZ5.jpeg\"\"\n    ! \"\"https://i.imgur.com/y8axmQx.jpeg\"\"\n      ! \"\"https://i.imgur.com/L9H07ur.jpeg\"\"\n! \"\"https://i.imgur.com/WYQiVs6.jpeg\"\"\n  ! \"\"https://i.imgur.com/V2Rkj38.jpeg\"\"\n    ! \"\"https://i.imgur.com/nQD3DUQ.jpeg\"\"");
+			return obj;
+		}
 		Roles_org(){
 			const obj = new this.$.$piterjs_intro_page();
 			(obj.title) = () => ("Роли организаторов");
@@ -21888,6 +21894,7 @@ var $;
 			return {
 				"main": (this.Main()), 
 				"about": (this.About()), 
+				"team": (this.Team()), 
 				"roles_org": (this.Roles_org()), 
 				"roles_place": (this.Roles_place()), 
 				"contribution": (this.Contribution()), 
@@ -21910,6 +21917,7 @@ var $;
 	};
 	($mol_mem(($.$piterjs_intro.prototype), "Main"));
 	($mol_mem(($.$piterjs_intro.prototype), "About"));
+	($mol_mem(($.$piterjs_intro.prototype), "Team"));
 	($mol_mem(($.$piterjs_intro.prototype), "Roles_org"));
 	($mol_mem(($.$piterjs_intro.prototype), "Roles_place"));
 	($mol_mem(($.$piterjs_intro.prototype), "Contribution"));
