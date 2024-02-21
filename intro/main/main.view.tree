@@ -1,7 +1,6 @@
 $piterjs_intro_main $piterjs_intro_page
 	meetup $piterjs_meetup
-	title \PiterJS {title}
+	title \{title}
 	head /
 		<= Logo $piterjs_logo
 		<= Title
-

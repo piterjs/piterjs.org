@@ -1,6 +1,11 @@
 [piterjs_logo] {
 	display: block;
-	width: 15vmin;
+	width: 30vmin;
 	box-shadow: none;
 	margin: 1.5vmin;
+}
+
+[piterjs_logo_angles] {
+	/* fill: var(--mol_theme_focus); */
+	fill: #F7DF1E;
 }
