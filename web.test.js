@@ -2266,39 +2266,29 @@ var $;
 (function ($) {
     $mol_test({
         'auto name'() {
-            class TestError extends $mol_error_mix {
+            class Invalid extends $mol_error_mix {
             }
-            const mix = new TestError('foo');
-            $mol_assert_equal(mix.name, 'TestError');
-        },
-        'empty mix'() {
-            const mix = new $mol_error_mix('foo');
-            $mol_assert_equal(mix.message, 'foo');
-            $mol_assert_equal(mix.cause, []);
+            const mix = new Invalid('foo');
+            $mol_assert_equal(mix.name, 'Invalid_Error');
         },
         'simpe mix'() {
-            const mix = new $mol_error_mix('foo', new Error('bar', { cause: 'xxx' }), new Error('lol', { cause: 'yyy' }));
-            $mol_assert_equal(mix.message, 'foo\n  bar\n  lol');
-            $mol_assert_equal(mix.cause, ['xxx', 'yyy']);
+            const mix = new $mol_error_mix('foo', {}, new Error('bar'), new Error('lol'));
+            $mol_assert_equal(mix.message, 'foo');
+            $mol_assert_equal(mix.errors.map(e => e.message), ['bar', 'lol']);
         },
-        'mix of mixes'() {
-            const mix = new $mol_error_mix('mix', new $mol_error_mix('foo1', new Error('bar1', { cause: 'xxx1' }), new Error('lol1', { cause: 'yyy1' })), new $mol_error_mix('foo2', new Error('bar2', { cause: 'xxx2' }), new Error('lol2', { cause: 'yyy2' })));
-            $mol_assert_equal(mix.message, 'mix\n  foo1\n    bar1\n    lol1\n  foo2\n    bar2\n    lol2');
-            $mol_assert_equal(mix.cause, ['xxx1', 'yyy1', 'xxx2', 'yyy2']);
-        },
-        'pick by class'() {
-            const mix = new $mol_error_mix('foo', new RangeError('bar', {
-                cause: [
-                    new SyntaxError('xxx1'),
-                    new SyntaxError('xxx2'),
-                    new TypeError('lol0'),
-                ],
-            }), new TypeError('lol1', {
-                cause: new TypeError('xxx3'),
-            }), new TypeError('lol2'));
-            $mol_assert_equal(mix.pick(RangeError).message, 'bar');
-            $mol_assert_equal(mix.pick(SyntaxError).message, 'xxx1');
-            $mol_assert_equal(mix.pick(TypeError).message, 'lol1');
+        'provide additional info'() {
+            class Invalid extends $mol_error_mix {
+            }
+            const mix = new $mol_error_mix('Wrong password', {}, new Invalid('Too short', { value: 'p@ssw0rd', hint: '> 8 letters' }), new Invalid('Too simple', { value: 'p@ssw0rd', hint: 'need capital letter' }));
+            const hints = [];
+            if (mix instanceof $mol_error_mix) {
+                for (const er of mix.errors) {
+                    if (er instanceof Invalid) {
+                        hints.push(er.cause?.hint ?? '');
+                    }
+                }
+            }
+            $mol_assert_equal(hints, ['> 8 letters', 'need capital letter']);
         },
     });
 })($ || ($ = {}));
@@ -4608,6 +4598,7 @@ var $;
         return $mol_crypto_native.getRandomValues(new Uint8Array(16));
     }
     $.$mol_crypto_salt = $mol_crypto_salt;
+    $.$mol_crypto_salt_once = new Uint8Array([1, 2, 3, 4, 5, 6, 7, 8, 9, 0, 1, 2, 3, 4, 5, 6]);
 })($ || ($ = {}));
 
 ;
@@ -4821,7 +4812,7 @@ var $;
             return new $mol_crypto_key_public(this.buffer, this.byteOffset, this.byteOffset + 64);
         }
         async sign(data) {
-            return await $mol_crypto_native.subtle.sign(algorithm, await this.native(), data);
+            return new Uint8Array(await $mol_crypto_native.subtle.sign(algorithm, await this.native(), data));
         }
     }
     __decorate([
@@ -4884,21 +4875,21 @@ var $;
 (function ($) {
     $mol_test({
         async 'sizes'() {
-            const cipher = await $mol_crypto_secret.generate();
-            const key = await cipher.serial();
+            const secret = await $mol_crypto_secret.generate();
+            const key = await secret.serial();
             $mol_assert_equal(key.byteLength, $mol_crypto_secret.size);
             const data = new Uint8Array([1, 2, 3]);
             const salt = $mol_crypto_salt();
-            const closed = await cipher.encrypt(data, salt);
+            const closed = await secret.encrypt(data, salt);
             $mol_assert_equal(closed.byteLength, 16);
         },
         async 'decrypt self encrypted with auto generated key'() {
-            const cipher = await $mol_crypto_secret.generate();
+            const secret = await $mol_crypto_secret.generate();
             const data = new Uint8Array([1, 2, 3]);
             const salt = $mol_crypto_salt();
-            const closed = await cipher.encrypt(data, salt);
-            const opened = await cipher.decrypt(closed, salt);
-            $mol_assert_like(data, new Uint8Array(opened));
+            const closed = await secret.encrypt(data, salt);
+            const opened = await secret.decrypt(closed, salt);
+            $mol_assert_equal(data, opened);
         },
         async 'decrypt encrypted with exported auto generated key'() {
             const data = new Uint8Array([1, 2, 3]);
@@ -4907,14 +4898,23 @@ var $;
             const closed = await Alice.encrypt(data, salt);
             const Bob = await $mol_crypto_secret.from(await Alice.serial());
             const opened = await Bob.decrypt(closed, salt);
-            $mol_assert_like(data, new Uint8Array(opened));
+            $mol_assert_equal(data, opened);
         },
         async 'derivation from public & private keys'() {
             const A = await $mol_crypto_key_private.generate();
             const B = await $mol_crypto_key_private.generate();
             const AK = await $mol_crypto_secret.derive(A.toString(), B.public().toString());
             const BK = await $mol_crypto_secret.derive(B.toString(), A.public().toString());
-            $mol_assert_like(new Uint8Array(await AK.serial()), new Uint8Array(await BK.serial()));
+            $mol_assert_equal(await AK.serial(), await BK.serial());
+        },
+        async 'derivation from passwod'() {
+            const data = new Uint8Array([1, 2, 3]);
+            const salt1 = $mol_crypto_salt();
+            const secret = await $mol_crypto_secret.pass('hello', salt1);
+            const salt2 = $mol_crypto_salt();
+            const closed = await secret.encrypt(data, salt2);
+            const opened = await secret.decrypt(closed, salt2);
+            $mol_assert_equal(data, opened);
         },
     });
 })($ || ($ = {}));
