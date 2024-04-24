@@ -22,7 +22,7 @@ $piterjs_speech_page $mol_page
 		<= Close $mol_link
 			arg * speech null
 			sub /
-				<= Close_icon $mol_icon_cross
+				<= Close_icon $mol_icon_close
 	body /
 		<= Poster_zone $mol_view
 			minimal_width 0

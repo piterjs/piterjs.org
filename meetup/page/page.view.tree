@@ -34,7 +34,7 @@ $piterjs_meetup_page $mol_page
 				place null
 				video null
 			sub /
-				<= Close_icon $mol_icon_cross
+				<= Close_icon $mol_icon_close
 	body /
 		<= Content $mol_list rows <= content /
 			<= Description $mol_textarea

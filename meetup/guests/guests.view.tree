@@ -10,7 +10,7 @@ $piterjs_meetup_guests $mol_page
 		<= Close $mol_link
 			arg * guests null
 			sub /
-				<= Close_icon $mol_icon_cross
+				<= Close_icon $mol_icon_close
 	body /
 		<= Content $mol_list rows /
 			<= Filter $mol_search

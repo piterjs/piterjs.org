@@ -10,7 +10,7 @@ $piterjs_others $mol_page
 		<= Close $mol_link
 			arg * others null
 			sub /
-				<= Close_icon $mol_icon_cross
+				<= Close_icon $mol_icon_close
 	body /
 		<= Events $mol_list
 			rows <= events /$mol_view

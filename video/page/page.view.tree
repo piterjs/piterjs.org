@@ -8,7 +8,7 @@ $piterjs_video_page $mol_page
 		<= Close $mol_link
 			arg * video null
 			sub /
-				<= Close_icon $mol_icon_cross
+				<= Close_icon $mol_icon_close
 	body /
 		<= Frame $mol_frame
 			uri <= uri <= source

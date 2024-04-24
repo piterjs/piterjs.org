@@ -11,7 +11,7 @@ $piterjs_place_page $mol_page
 		<= Close $mol_link
 			arg * place null
 			sub /
-				<= Close_icon $mol_icon_cross
+				<= Close_icon $mol_icon_close
 	body /
 		<= Info $mol_view sub <= info /
 			<= Address $mol_string

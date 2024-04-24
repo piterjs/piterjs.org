@@ -94,7 +94,7 @@ $piterjs_app $mol_view
 			<= Rights_close $mol_check
 				checked? <=> rights?
 				sub /
-					<= Rights_close_icon $mol_icon_cross
+					<= Rights_close_icon $mol_icon_close
 	Rights_meetup $hyoo_meta_rights
 		theme \$mol_theme_special
 		meta <= meetup_current
@@ -102,7 +102,7 @@ $piterjs_app $mol_view
 			<= Rights_meetup_close $mol_check
 				checked? <=> rights_meetup?
 				sub /
-					<= Rights_meetup_close_icon $mol_icon_cross
+					<= Rights_meetup_close_icon $mol_icon_close
 	Wiki $hyoo_page
 		side_main_id \zi5t5h_8aygdf
 		yard <= Yard
@@ -111,4 +111,4 @@ $piterjs_app $mol_view
 			<= Safe_close $mol_link
 				arg * safe null
 				sub /
-					<= Safe_close_icon $mol_icon_cross
+					<= Safe_close_icon $mol_icon_close

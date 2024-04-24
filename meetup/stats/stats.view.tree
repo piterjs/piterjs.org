@@ -12,7 +12,7 @@ $piterjs_meetup_stats $mol_page
 		<= Close $mol_link
 			arg * stats null
 			sub /
-				<= Close_icon $mol_icon_cross
+				<= Close_icon $mol_icon_close
 	body /
 		<= Chart $mol_chart
 			graphs /
