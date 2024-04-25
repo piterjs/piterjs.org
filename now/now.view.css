@@ -25,6 +25,7 @@
 [piterjs_now_body_content] {
 	display: flex;
 	padding: 0;
+	align-self: stretch;
 }
 
 [piterjs_now_screen] {
