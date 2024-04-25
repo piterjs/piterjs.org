@@ -449,7 +449,6 @@
     "$mol_drag",
     "$mol_ghost",
     "$mol_drop",
-    "$mol_icon_cross",
     "$mol_icon_pin_outline",
     "$mol_icon_pin",
     "$hyoo_page_side_view",
