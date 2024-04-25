@@ -23302,7 +23302,7 @@ var $;
 "use strict";
 var $;
 (function ($) {
-    $mol_style_attach("piterjs/place/page/page.view.css", "[piterjs_place_page] {\n\tflex: 1000 0 60rem;\n}\n\n[piterjs_place_page_tools] {\n\tflex-grow: 0;\n}\n\n[piterjs_place_page_map] {\n\tborder-radius: var(--mol_gap_round);\n\toverflow: hidden;\n}\n\n");
+    $mol_style_attach("piterjs/place/page/page.view.css", "[piterjs_place_page] {\n\tflex: 1000 0 60rem;\n}\n\n[piterjs_place_page_tools] {\n\tflex-grow: 0;\n}\n\n[piterjs_place_body_content] {\n\talign-self: stretch;\n}\n\n[piterjs_place_page_map] {\n\tborder-radius: var(--mol_gap_round);\n\toverflow: hidden;\n}\n\n");
 })($ || ($ = {}));
 
 ;
