@@ -28340,12 +28340,18 @@ var $;
                 ];
             }
             foot() {
-                return [
-                    this.Online(),
-                    ...this.Domain().editable() ? [this.Editing()] : [this.User()],
-                    ...this.editable() ? [this.Rights_toggle()] : [],
-                    this.Lights(),
-                ];
+                try {
+                    return [
+                        this.Online(),
+                        ...this.Domain().editable() ? [this.Editing()] : [this.User()],
+                        ...this.editable() ? [this.Rights_toggle()] : [],
+                        this.Lights(),
+                    ];
+                }
+                catch (error) {
+                    $mol_fail_log(error);
+                    return [this.Online(), this.Lights()];
+                }
             }
             editing(next) {
                 return this.$.$mol_state_session.value(`${this}.editing()`, next);
