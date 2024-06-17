@@ -936,7 +936,7 @@ var $;
 var $;
 (function ($_1) {
     $mol_test_mocks.push($ => {
-        $.$mol_after_frame = $mol_after_mock_commmon;
+        $.$mol_after_timeout = $mol_after_mock_timeout;
     });
 })($ || ($ = {}));
 
@@ -1024,15 +1024,6 @@ var $;
 
 ;
 "use strict";
-
-;
-"use strict";
-var $;
-(function ($_1) {
-    $mol_test_mocks.push($ => {
-        $.$mol_after_timeout = $mol_after_mock_timeout;
-    });
-})($ || ($ = {}));
 
 ;
 "use strict";
@@ -1777,6 +1768,15 @@ var $;
             $mol_assert_equal($mol_key(/./), '"/./"');
             $mol_assert_equal($mol_key(/\./gimsu), '"/\\\\./gimsu"');
         },
+    });
+})($ || ($ = {}));
+
+;
+"use strict";
+var $;
+(function ($_1) {
+    $mol_test_mocks.push($ => {
+        $.$mol_after_frame = $mol_after_mock_commmon;
     });
 })($ || ($ = {}));
 
@@ -5055,47 +5055,6 @@ var $;
             $mol_assert_equal($mol_state_session.value(key), '$mol_state_session_test');
             $mol_state_session.value(key, null);
             $mol_assert_equal($mol_state_session.value(key), null);
-        },
-    });
-})($ || ($ = {}));
-
-;
-"use strict";
-var $;
-(function ($) {
-    function $mol_csv_parse(text, delimiter = ',') {
-        var lines = text.split(/\r?\n/g);
-        var header = lines.shift().split(delimiter);
-        var res = [];
-        for (const line of lines) {
-            if (!line)
-                continue;
-            var row = {};
-            for (const [index, val] of line.split(delimiter).entries()) {
-                row[header[index]] = val.replace(/^"|"$/g, '').replace(/""/g, '"');
-            }
-            res.push(row);
-        }
-        return res;
-    }
-    $.$mol_csv_parse = $mol_csv_parse;
-})($ || ($ = {}));
-
-;
-"use strict";
-var $;
-(function ($) {
-    $mol_test({
-        'serial & parse'() {
-            const data = [
-                { foo: '123', bar: '456' },
-                { foo: 'x"xx', bar: 'y"y"y' },
-            ];
-            $mol_assert_like($mol_csv_parse($mol_csv_serial(data)), data);
-        },
-        'parse & serial'() {
-            const csv = 'foo,bar\n"123","456"\n"x""xx","y""y""y"';
-            $mol_assert_like($mol_csv_serial($mol_csv_parse(csv)), csv);
         },
     });
 })($ || ($ = {}));

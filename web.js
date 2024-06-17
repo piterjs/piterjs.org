@@ -595,41 +595,21 @@ var $;
 "use strict";
 var $;
 (function ($) {
-    class $mol_after_frame extends $mol_object2 {
+    class $mol_after_timeout extends $mol_object2 {
+        delay;
         task;
-        static _promise = null;
-        static get promise() {
-            if (this._promise)
-                return this._promise;
-            return this._promise = new Promise(done => {
-                const complete = () => {
-                    this._promise = null;
-                    done();
-                };
-                if (typeof requestAnimationFrame === 'function') {
-                    requestAnimationFrame(complete);
-                }
-                else {
-                    setTimeout(complete, 16);
-                }
-            });
-        }
-        cancelled = false;
-        promise;
-        constructor(task) {
+        id;
+        constructor(delay, task) {
             super();
+            this.delay = delay;
             this.task = task;
-            this.promise = $mol_after_frame.promise.then(() => {
-                if (this.cancelled)
-                    return;
-                task();
-            });
+            this.id = setTimeout(task, delay);
         }
         destructor() {
-            this.cancelled = true;
+            clearTimeout(this.id);
         }
     }
-    $.$mol_after_frame = $mol_after_frame;
+    $.$mol_after_timeout = $mol_after_timeout;
 })($ || ($ = {}));
 
 ;
@@ -657,7 +637,7 @@ var $;
         static plan() {
             if (this.plan_task)
                 return;
-            this.plan_task = new $mol_after_frame(() => {
+            this.plan_task = new $mol_after_timeout(0, () => {
                 try {
                     this.sync();
                 }
@@ -929,6 +909,47 @@ var $;
         });
     }
     $.$mol_key = $mol_key;
+})($ || ($ = {}));
+
+;
+"use strict";
+var $;
+(function ($) {
+    class $mol_after_frame extends $mol_object2 {
+        task;
+        static _promise = null;
+        static get promise() {
+            if (this._promise)
+                return this._promise;
+            return this._promise = new Promise(done => {
+                const complete = () => {
+                    this._promise = null;
+                    done();
+                };
+                if (typeof requestAnimationFrame === 'function') {
+                    requestAnimationFrame(complete);
+                }
+                else {
+                    setTimeout(complete, 16);
+                }
+            });
+        }
+        cancelled = false;
+        promise;
+        constructor(task) {
+            super();
+            this.task = task;
+            this.promise = $mol_after_frame.promise.then(() => {
+                if (this.cancelled)
+                    return;
+                task();
+            });
+        }
+        destructor() {
+            this.cancelled = true;
+        }
+    }
+    $.$mol_after_frame = $mol_after_frame;
 })($ || ($ = {}));
 
 ;
@@ -5746,27 +5767,6 @@ var $;
 		}
 	};
 
-
-;
-"use strict";
-var $;
-(function ($) {
-    class $mol_after_timeout extends $mol_object2 {
-        delay;
-        task;
-        id;
-        constructor(delay, task) {
-            super();
-            this.delay = delay;
-            this.task = task;
-            this.id = setTimeout(task, delay);
-        }
-        destructor() {
-            clearTimeout(this.id);
-        }
-    }
-    $.$mol_after_timeout = $mol_after_timeout;
-})($ || ($ = {}));
 
 ;
 "use strict";
@@ -11049,6 +11049,8 @@ var $;
             }
         }
         joined_list() {
+            if (!this.editable())
+                $mol_fail(new Error('Access Denied'));
             return this.joined_node()?.keys() ?? [];
         }
         joined_moments() {
@@ -16662,7 +16664,7 @@ var $;
 		}
 		Dump(){
 			const obj = new this.$.$mol_button_download();
-			(obj.file_name) = () => ("guests.csv");
+			(obj.file_name) = () => ("guests.txt");
 			(obj.blob) = () => ((this?.dump_blob()));
 			return obj;
 		}
@@ -16761,31 +16763,6 @@ var $;
 
 ;
 "use strict";
-var $;
-(function ($) {
-    function $mol_csv_serial(data, delimiter = ',') {
-        const fields = new Set();
-        for (const item of data) {
-            for (const field of Object.keys(item)) {
-                fields.add(field);
-            }
-        }
-        const rows = [[...fields]];
-        for (const item of data) {
-            const row = [];
-            rows.push(row);
-            for (const field of fields) {
-                const val = String(item[field] ?? '');
-                row.push('"' + val.replace(/"/g, '""') + '"');
-            }
-        }
-        return rows.map(row => row.join(delimiter)).join('\n');
-    }
-    $.$mol_csv_serial = $mol_csv_serial;
-})($ || ($ = {}));
-
-;
-"use strict";
 
 ;
 "use strict";
@@ -16805,13 +16782,11 @@ var $;
                 return this.meetup().joined_name(person) || person;
             }
             dump_blob() {
-                const table = this.meetup().joined_list().map(person => ({
-                    id: person,
-                    real_name: this.person(person),
-                    visitor: this.visitor(person),
-                }));
-                const text = $mol_csv_serial(table);
-                return new $mol_blob([text], { type: 'text/csv' });
+                const text = this.meetup().joined_list()
+                    .map(person => this.person(person))
+                    .sort()
+                    .join('\n');
+                return new $mol_blob([text], { type: 'text/plain' });
             }
             person_join_moment(id) {
                 return this.meetup().joined_moments()[id].toString(`DD WD hh:mm`);
@@ -17092,18 +17067,14 @@ var $;
                 const series_y = this.series_y();
                 for (let i = 0; i < series_x.length; i++) {
                     if (series_x[i] > next.x.max)
-                        next.x.max = series_x[i];
+                        next.x.max = this.repos_x(series_x[i]);
                     if (series_x[i] < next.x.min)
-                        next.x.min = series_x[i];
+                        next.x.min = this.repos_x(series_x[i]);
                     if (series_y[i] > next.y.max)
-                        next.y.max = series_y[i];
+                        next.y.max = this.repos_y(series_y[i]);
                     if (series_y[i] < next.y.min)
-                        next.y.min = series_y[i];
+                        next.y.min = this.repos_y(series_y[i]);
                 }
-                next.x.max = this.repos_x(next.x.max);
-                next.x.min = this.repos_x(next.x.min);
-                next.y.max = this.repos_y(next.y.max);
-                next.y.min = this.repos_y(next.y.min);
                 return next;
             }
             color() {

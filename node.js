@@ -631,20 +631,6 @@ var $;
 "use strict";
 var $;
 (function ($) {
-    class $mol_after_frame extends $mol_after_timeout {
-        task;
-        constructor(task) {
-            super(16, task);
-            this.task = task;
-        }
-    }
-    $.$mol_after_frame = $mol_after_frame;
-})($ || ($ = {}));
-
-;
-"use strict";
-var $;
-(function ($) {
     function $mol_promise_like(val) {
         return val && typeof val === 'object' && 'then' in val && typeof val.then === 'function';
     }
@@ -666,7 +652,7 @@ var $;
         static plan() {
             if (this.plan_task)
                 return;
-            this.plan_task = new $mol_after_frame(() => {
+            this.plan_task = new $mol_after_timeout(0, () => {
                 try {
                     this.sync();
                 }
@@ -938,6 +924,20 @@ var $;
         });
     }
     $.$mol_key = $mol_key;
+})($ || ($ = {}));
+
+;
+"use strict";
+var $;
+(function ($) {
+    class $mol_after_frame extends $mol_after_timeout {
+        task;
+        constructor(task) {
+            super(16, task);
+            this.task = task;
+        }
+    }
+    $.$mol_after_frame = $mol_after_frame;
 })($ || ($ = {}));
 
 ;
@@ -3583,6 +3583,8 @@ var $;
             return this.absolute($node.path.resolve(this.base, path).replace(/\\/g, '/'));
         }
         watcher() {
+            if (/\/\./.test(this.path()))
+                return { destructor() { } };
             const watcher = $node.chokidar.watch(this.path(), {
                 persistent: true,
                 ignored: /(^\.|___$)/,
@@ -11374,6 +11376,8 @@ var $;
             }
         }
         joined_list() {
+            if (!this.editable())
+                $mol_fail(new Error('Access Denied'));
             return this.joined_node()?.keys() ?? [];
         }
         joined_moments() {
@@ -17099,7 +17103,7 @@ var $;
 		}
 		Dump(){
 			const obj = new this.$.$mol_button_download();
-			(obj.file_name) = () => ("guests.csv");
+			(obj.file_name) = () => ("guests.txt");
 			(obj.blob) = () => ((this?.dump_blob()));
 			return obj;
 		}
@@ -17198,31 +17202,6 @@ var $;
 
 ;
 "use strict";
-var $;
-(function ($) {
-    function $mol_csv_serial(data, delimiter = ',') {
-        const fields = new Set();
-        for (const item of data) {
-            for (const field of Object.keys(item)) {
-                fields.add(field);
-            }
-        }
-        const rows = [[...fields]];
-        for (const item of data) {
-            const row = [];
-            rows.push(row);
-            for (const field of fields) {
-                const val = String(item[field] ?? '');
-                row.push('"' + val.replace(/"/g, '""') + '"');
-            }
-        }
-        return rows.map(row => row.join(delimiter)).join('\n');
-    }
-    $.$mol_csv_serial = $mol_csv_serial;
-})($ || ($ = {}));
-
-;
-"use strict";
 
 ;
 "use strict";
@@ -17242,13 +17221,11 @@ var $;
                 return this.meetup().joined_name(person) || person;
             }
             dump_blob() {
-                const table = this.meetup().joined_list().map(person => ({
-                    id: person,
-                    real_name: this.person(person),
-                    visitor: this.visitor(person),
-                }));
-                const text = $mol_csv_serial(table);
-                return new $mol_blob([text], { type: 'text/csv' });
+                const text = this.meetup().joined_list()
+                    .map(person => this.person(person))
+                    .sort()
+                    .join('\n');
+                return new $mol_blob([text], { type: 'text/plain' });
             }
             person_join_moment(id) {
                 return this.meetup().joined_moments()[id].toString(`DD WD hh:mm`);
@@ -17529,18 +17506,14 @@ var $;
                 const series_y = this.series_y();
                 for (let i = 0; i < series_x.length; i++) {
                     if (series_x[i] > next.x.max)
-                        next.x.max = series_x[i];
+                        next.x.max = this.repos_x(series_x[i]);
                     if (series_x[i] < next.x.min)
-                        next.x.min = series_x[i];
+                        next.x.min = this.repos_x(series_x[i]);
                     if (series_y[i] > next.y.max)
-                        next.y.max = series_y[i];
+                        next.y.max = this.repos_y(series_y[i]);
                     if (series_y[i] < next.y.min)
-                        next.y.min = series_y[i];
+                        next.y.min = this.repos_y(series_y[i]);
                 }
-                next.x.max = this.repos_x(next.x.max);
-                next.x.min = this.repos_x(next.x.min);
-                next.y.max = this.repos_y(next.y.max);
-                next.y.min = this.repos_y(next.y.min);
                 return next;
             }
             color() {
