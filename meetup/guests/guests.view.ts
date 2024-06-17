@@ -17,13 +17,11 @@ namespace $.$$ {
 
 		@ $mol_mem
 		dump_blob() {
-			const table = this.meetup().joined_list().map( person => ({
-				id: person,
-				real_name: this.person( person ),
-				visitor: this.visitor( person ),
-			}) )
-			const text = $mol_csv_serial( table )
-			return new $mol_blob( [ text ], { type: 'text/csv' } )
+			const text = this.meetup().joined_list()
+				.map( person => this.person( person ) )
+				.sort()
+				.join( '\n' )
+			return new $mol_blob( [ text ], { type: 'text/plain' } )
 		}
 
 		@ $mol_mem_key

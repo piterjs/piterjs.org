@@ -5,7 +5,7 @@ $piterjs_meetup_guests $mol_page
 	title \Список гостей
 	tools /
 		<= Dump $mol_button_download
-			file_name \guests.csv
+			file_name \guests.txt
 			blob <= dump_blob $mol_blob
 		<= Close $mol_link
 			arg * guests null

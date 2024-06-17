@@ -109,7 +109,9 @@ namespace $ {
 
 		@ $mol_mem_key
 		joined_name( id: $mol_int62_string, next?: string ) {
+			
 			$mol_wire_solid()
+			
 			const secret = $mol_wire_sync( this.peer_secret( id )! )
 			const salt = $mol_crypto_hash( $mol_charset_encode( this.id() ) ).slice( 0, 16 )
 
@@ -143,6 +145,7 @@ namespace $ {
 
 		@ $mol_mem
 		joined_list() {
+			if( !this.editable() ) $mol_fail( new Error( 'Access Denied' ) )
 			return this.joined_node()?.keys() as $mol_int62_string[] ?? []
 		}
 
