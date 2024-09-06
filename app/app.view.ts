@@ -1,17 +1,26 @@
 namespace $.$$ {
 
 	export class $piterjs_app extends $.$piterjs_app {
+		
+		@ $mol_mem
+		domain_id() {
+			return 'n6cy9h_41olxb' as $mol_int62_string
+		}
+		
+		@ $mol_mem
+		domain_rights() {
+			const land_id = this.domain_id()
+			return new Uint8Array( $mol_fetch.buffer( require( `/piterjs/app/${land_id}!${land_id}.bin` ) ) )
+		}
 
 		@ $mol_mem
 		Domain() {
 
 			const yard = super.Yard()
-			const land_id = 'n6cy9h_41olxb' as $mol_int62_string
 			
-			const rights = new Uint8Array( $mol_fetch.buffer( require( `/piterjs/app/${land_id}!${land_id}.bin` ) ) )
-			$mol_wire_sync( yard.world() ).apply( rights )
+			$mol_wire_sync( yard.world() ).apply( this.domain_rights() )
 
-			return this.Yard().world().Fund( $piterjs_domain ).Item( land_id )
+			return yard.world().Fund( $piterjs_domain ).Item( this.domain_id() )
 
 		}
 
