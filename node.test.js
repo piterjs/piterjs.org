@@ -2998,9 +2998,7 @@ var $;
             const win = this.$.$mol_dom_context;
             if (win.parent !== win.self && !win.document.hasFocus())
                 return;
-            new this.$.$mol_after_timeout(500, () => {
-                this.focused(true);
-            });
+            this.focused(true);
         }
         destructor() {
             const node = $mol_wire_probe(() => this.dom_node());
@@ -3606,7 +3604,7 @@ var $;
                 return { destructor() { } };
             const watcher = $node.chokidar.watch(this.path(), {
                 persistent: true,
-                ignored: /(^\.|___$)/,
+                ignored: path => /([\/\\]\.|___$)/.test(path),
                 depth: 0,
                 ignoreInitial: true,
                 awaitWriteFinish: {
@@ -6574,14 +6572,14 @@ var $;
                         continue;
                     if (n === placeholder)
                         continue;
-                    n.bring();
-                    new this.$.$mol_after_frame(() => {
+                    new this.$.$mol_after_tick(() => {
                         const b = this.dom_node();
                         const p = n.dom_node();
                         b.scroll({
                             left: p.offsetLeft + p.offsetWidth - b.offsetWidth,
                             behavior: 'smooth',
                         });
+                        new this.$.$mol_after_timeout(1000, () => n.bring());
                     });
                     break;
                 }
@@ -10665,7 +10663,7 @@ var $;
                 return this._native;
             const second = Math.floor(this.second ?? 0);
             const native = new Date(this.year ?? 0, this.month ?? 0, (this.day ?? 0) + 1, this.hour ?? 0, this.minute ?? 0, second, Math.floor(((this.second ?? 0) - second) * 1000));
-            const offset = native.getTimezoneOffset();
+            const offset = -native.getTimezoneOffset();
             shift: if (this.offset) {
                 const target = this.offset.count('PT1m');
                 if (target === offset)
@@ -33946,7 +33944,7 @@ var $;
 (function ($) {
     $mol_test({
         async 'unique index'() {
-            const db = await $$.$mol_db('$mol_db_test', mig => mig.store_make('users'), mig => mig.stores.users.index_make('names', ['name'], !!'unique'));
+            const db = await $$.$mol_db('$mol_db_test', mig => mig.store_make('users'), mig => mig.stores.users.index_make('names', ['name'], true));
             const trans = db.change('users');
             try {
                 const { users } = trans.stores;
@@ -33991,7 +33989,7 @@ var $;
             }
         },
         async 'multiple indexes'() {
-            const db = await $$.$mol_db('$mol_db_test', mig => mig.store_make('users'), mig => mig.stores.users.index_make('names', ['name'], !!'unique'), mig => mig.stores.users.index_make('ages', ['age']));
+            const db = await $$.$mol_db('$mol_db_test', mig => mig.store_make('users'), mig => mig.stores.users.index_make('names', ['name'], true), mig => mig.stores.users.index_make('ages', ['age']));
             const trans = db.change('users');
             try {
                 const { users } = trans.stores;
@@ -34166,6 +34164,7 @@ var $;
         },
         'normalization'() {
             $mol_assert_equal(new $mol_time_moment({ year: 2015, month: 6, day: 34 }).normal.toString(), '2015-08-04');
+            $mol_assert_equal(new $mol_time_moment('2024-09-30 19:00+03:00').normal.month, 8);
         },
         'renormalization'() {
             $mol_assert_equal(new $mol_time_moment('2024-08').normal.toString(), '2024-08');
@@ -34259,62 +34258,62 @@ var $;
         }
         int16(offset, next) {
             if (next === undefined)
-                return this.getInt16(offset, !!'LE');
+                return this.getInt16(offset, true);
             if (next >= -(2 ** 15) && next < 2 ** 15)
-                return this.setInt16(offset, next, !!'LE'), next;
+                return this.setInt16(offset, next, true), next;
             $mol_fail(new Error(`Wrong int16 value ${next}`));
         }
         uint16(offset, next) {
             if (next === undefined)
-                return this.getUint16(offset, !!'LE');
+                return this.getUint16(offset, true);
             if (next >= 0 && next < 2 ** 16)
-                return this.setUint16(offset, next, !!'LE'), next;
+                return this.setUint16(offset, next, true), next;
             $mol_fail(new Error(`Wrong uint16 value ${next}`));
         }
         int32(offset, next) {
             if (next === undefined)
-                return this.getInt32(offset, !!'LE');
+                return this.getInt32(offset, true);
             if (next >= -(2 ** 31) && next < 2 ** 31)
-                return this.setInt32(offset, next, !!'LE'), next;
+                return this.setInt32(offset, next, true), next;
             $mol_fail(new Error(`Wrong int32 value ${next}`));
         }
         uint32(offset, next) {
             if (next === undefined)
-                return this.getUint32(offset, !!'LE');
+                return this.getUint32(offset, true);
             if (next >= 0 && next < 2 ** 32)
-                return this.setUint32(offset, next, !!'LE'), next;
+                return this.setUint32(offset, next, true), next;
             $mol_fail(new Error(`Wrong uint32 value ${next}`));
         }
         uint48(offset, next) {
             if (next === undefined)
-                return this.getUint48(offset, !!'LE');
+                return this.getUint48(offset, true);
             if (next >= 0 && next < 2 ** 48)
-                return this.setUint48(offset, next, !!'LE'), next;
+                return this.setUint48(offset, next, true), next;
             $mol_fail(new Error(`Wrong uint48 value ${next}`));
         }
         int64(offset, next) {
             if (next === undefined)
-                return this.getBigInt64(offset, !!'LE');
+                return this.getBigInt64(offset, true);
             if (next >= -(2 ** 63) && next < 2 ** 63)
-                return this.setBigInt64(offset, next, !!'LE'), next;
+                return this.setBigInt64(offset, next, true), next;
             $mol_fail(new Error(`Wrong int64 value ${next}`));
         }
         uint64(offset, next) {
             if (next === undefined)
-                return this.getBigUint64(offset, !!'LE');
+                return this.getBigUint64(offset, true);
             if (next >= 0 && next < 2 ** 64)
-                return this.setBigUint64(offset, next, !!'LE'), next;
+                return this.setBigUint64(offset, next, true), next;
             $mol_fail(new Error(`Wrong uint64 value ${next}`));
         }
         float32(offset, next) {
             if (next !== undefined)
-                this.setFloat32(offset, next, !!'LE');
-            return this.getFloat32(offset, !!'LE');
+                this.setFloat32(offset, next, true);
+            return this.getFloat32(offset, true);
         }
         float64(offset, next) {
             if (next !== undefined)
-                this.setFloat64(offset, next, !!'LE');
-            return this.getFloat64(offset, !!'LE');
+                this.setFloat64(offset, next, true);
+            return this.getFloat64(offset, true);
         }
         asArray() {
             return new Uint8Array(this.buffer, this.byteOffset, this.byteLength);
