@@ -37,7 +37,7 @@ $piterjs_intro $mol_view
 				\???
 				\???
 				\???
-		geo_quest <= Geo_quest $piterjs_intro_page
+		geo_answer <= Geo_answer $piterjs_intro_page
 			title \О такие мы!
 			text \
 				\Санкт-Петербург: 76%
