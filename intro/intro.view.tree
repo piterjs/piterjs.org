@@ -104,11 +104,12 @@ $piterjs_intro $mol_view
 		contribution <= Contribution $piterjs_intro_page
 			title \Твой вклад
 			text \
-				\Привлекай партнёров
 				\Поддерживай рублём
+				\Привлекай партнёров
 				\Зазывай докладчиков
 				\Выступай сам
 				\Вступай в наши ряды
+				\Просто приходи
 		profit <= Proft $piterjs_intro_page
 			title \Бонусы
 			text \
