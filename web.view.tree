@@ -2033,68 +2033,65 @@ $piterjs_intro $mol_view
 			title \Наши проекты
 			text \
 				\PiterJS **Meetups** - митапы в Петербурге
-				\PiterJS **Tour** - митапы в других городах
+				\PiterJS **Picnic** - прогулки и шашлыки
+				\--
 				\PiterJS **Conf** - конференции
 				\PiterJS **Code+Learn** - воркшопы
+				\PiterJS **Tour** - митапы в других городах
 		team <= Team $piterjs_intro_page
 			title \Команда
 			text \
 				\! ""https://i.imgur.com/wXGooly.jpeg""
-				\  ! ""https://i.imgur.com/dRolfnB.jpeg""
 				\    ! ""https://i.imgur.com/Mup6yZ5.jpeg""
 				\      ! ""https://i.imgur.com/V2Rkj38.jpeg""
 				\! ""https://i.imgur.com/WYQiVs6.jpeg""
-				\  ! ""https://i.imgur.com/nQD3DUQ.jpeg""
 				\    ! ""https://i.imgur.com/n2Fxkqv.png""
 				\      ! ""https://i.imgur.com/L9H07ur.jpeg""
+				\! ""https://i.imgur.com/dRolfnB.jpeg""
 		roles_org <= Roles_org $piterjs_intro_page
 			title \Роли организаторов
 			text \
-				\Программный комитет
-				\Фандрайзер
-				\Видео-мастер
-				\Дизайнер
-				\Комьюнити-менеджер
-				\Координатор
+				\Подготовка **докладчиков**
+				\Коммуникация с **аудиторией**
+				\Коммуникация с **партнёрами**
+				\Фото и видео **монтаж**
+				\**Дизайн** и эстетика бренда
+				\**Сайт** и автоматизация 
+				\**Координация** всех этих людей
 		roles_place <= Roles_place $piterjs_intro_page
 			title \Роли на площадке
 			text \
-				\Конферансье
-				\Техник
-				\Видео-оператор
-				\Фотограф
-				\Ведущий трансляции
-				\Хелпер
-				\Координатор
-		- friends <= Friends $piterjs_intro_page
-			title \JUG.RU
-			text \
-				\Продюссер
-				\Инженер
-				\Монтажёр
-				\Режиссёр трансляции
-				\Ведущий мероприятия
-				\Ведущий воркшопа
-				\Подготовим
+				\**Встреча** гостей
+				\**Ведение** мероприятия
+				\**Видео** съёмка
+				\**Фото** съёмка
+				\Работа с **оборудованием**
+				\Коммуникация с **аудиторией** online
+				\**Координация** всех этих людей
 		contribution <= Contribution $piterjs_intro_page
 			title \Твой вклад
 			text \
-				\Привлекай компанию
+				\Привлекай партнёров
 				\Поддерживай рублём
-				\Вступай в наши ряды
+				\Зазывай докладчиков
 				\Выступай сам
+				\Вступай в наши ряды
 		speakers <= Speakers $piterjs_intro_page
-			title \Докладчики
+			title \Будь докладчиком
 			text \
 				\Нужны всегда
 				\Даже если боишься
 				\Поможем с темой
+		speakers <= Partnering $piterjs_intro_page
+			title \Стань партнёром
+			text \
+				\Подарки: упоминание в соцсетях и на трансляции
+				\Кейтеринг: + лого в трансляции и на видео
+				\Площадка: + вступителное слово на мероприятии
 		sponsors <= Sponsors $piterjs_intro_page
 			title \Спонсоры
 			text \
-				\! ""/piterjs/logo-sponsors/kvant-logo.png""
-				\  ! ""/piterjs/logo-sponsors/Nexign_Logo.png""
-				\    ! ""/piterjs/logo-sponsors/sprinthost.ru-2.png""
+				\    ! ""https://habrastorage.org/webt/nc/w7/xt/ncw7xtfdj49fv0o2ae0cz_wr2lq.png""
 		place <= Place $piterjs_intro_page
 			title <= place_title \Мы в {place}
 			text <= place_notes \

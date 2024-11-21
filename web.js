@@ -21791,37 +21791,43 @@ var $;
 		Team(){
 			const obj = new this.$.$piterjs_intro_page();
 			(obj.title) = () => ("Команда");
-			(obj.text) = () => ("! \"\"https://i.imgur.com/wXGooly.jpeg\"\"\n  ! \"\"https://i.imgur.com/dRolfnB.jpeg\"\"\n    ! \"\"https://i.imgur.com/Mup6yZ5.jpeg\"\"\n      ! \"\"https://i.imgur.com/V2Rkj38.jpeg\"\"\n! \"\"https://i.imgur.com/WYQiVs6.jpeg\"\"\n  ! \"\"https://i.imgur.com/nQD3DUQ.jpeg\"\"\n    ! \"\"https://i.imgur.com/n2Fxkqv.png\"\"\n      ! \"\"https://i.imgur.com/L9H07ur.jpeg\"\"");
+			(obj.text) = () => ("! \"\"https://i.imgur.com/wXGooly.jpeg\"\"\n    ! \"\"https://i.imgur.com/Mup6yZ5.jpeg\"\"\n      ! \"\"https://i.imgur.com/V2Rkj38.jpeg\"\"\n! \"\"https://i.imgur.com/WYQiVs6.jpeg\"\"\n    ! \"\"https://i.imgur.com/n2Fxkqv.png\"\"\n      ! \"\"https://i.imgur.com/L9H07ur.jpeg\"\"\n! \"\"https://i.imgur.com/dRolfnB.jpeg\"\"");
 			return obj;
 		}
 		Roles_org(){
 			const obj = new this.$.$piterjs_intro_page();
 			(obj.title) = () => ("Роли организаторов");
-			(obj.text) = () => ("Программный комитет\nФандрайзер\nВидео-мастер\nДизайнер\nКомьюнити-менеджер\nКоординатор");
+			(obj.text) = () => ("Подготовка **докладчиков**\nКоммуникация с **аудиторией**\nКоммуникация с **партнёрами**\nФото и видео **монтаж**\n**Дизайн** и эстетика бренда\n**Сайт** и автоматизация \n**Координация** всех этих людей");
 			return obj;
 		}
 		Roles_place(){
 			const obj = new this.$.$piterjs_intro_page();
 			(obj.title) = () => ("Роли на площадке");
-			(obj.text) = () => ("Конферансье\nТехник\nВидео-оператор\nФотограф\nВедущий трансляции\nХелпер\nКоординатор");
+			(obj.text) = () => ("**Встреча** гостей\n**Ведение** мероприятия\n**Видео** съёмка\n**Фото** съёмка\nРабота с **оборудованием**\nКоммуникация с **аудиторией** online\n**Координация** всех этих людей");
 			return obj;
 		}
 		Contribution(){
 			const obj = new this.$.$piterjs_intro_page();
 			(obj.title) = () => ("Твой вклад");
-			(obj.text) = () => ("Привлекай компанию\nПоддерживай рублём\nВступай в наши ряды\nВыступай сам");
+			(obj.text) = () => ("Привлекай партнёров\nПоддерживай рублём\nЗазывай докладчиков\nВыступай сам\nВступай в наши ряды");
 			return obj;
 		}
 		Speakers(){
 			const obj = new this.$.$piterjs_intro_page();
-			(obj.title) = () => ("Докладчики");
+			(obj.title) = () => ("Будь докладчиком");
 			(obj.text) = () => ("Нужны всегда\nДаже если боишься\nПоможем с темой");
+			return obj;
+		}
+		Partnering(){
+			const obj = new this.$.$piterjs_intro_page();
+			(obj.title) = () => ("Стань партнёром");
+			(obj.text) = () => ("Подарки: упоминание в соцсетях и на трансляции\nКейтеринг: + лого в трансляции и на видео\nПлощадка: + вступителное слово на мероприятии");
 			return obj;
 		}
 		Sponsors(){
 			const obj = new this.$.$piterjs_intro_page();
 			(obj.title) = () => ("Спонсоры");
-			(obj.text) = () => ("! \"\"/piterjs/logo-sponsors/kvant-logo.png\"\"\n  ! \"\"/piterjs/logo-sponsors/Nexign_Logo.png\"\"\n    ! \"\"/piterjs/logo-sponsors/sprinthost.ru-2.png\"\"");
+			(obj.text) = () => ("    ! \"\"https://habrastorage.org/webt/nc/w7/xt/ncw7xtfdj49fv0o2ae0cz_wr2lq.png\"\"");
 			return obj;
 		}
 		place_title(){
@@ -21902,6 +21908,7 @@ var $;
 				"roles_place": (this.Roles_place()), 
 				"contribution": (this.Contribution()), 
 				"speakers": (this.Speakers()), 
+				"speakers": (this.Partnering()), 
 				"sponsors": (this.Sponsors()), 
 				"place": (this.Place()), 
 				"schedule": (this.Schedule()), 
@@ -21926,6 +21933,7 @@ var $;
 	($mol_mem(($.$piterjs_intro.prototype), "Roles_place"));
 	($mol_mem(($.$piterjs_intro.prototype), "Contribution"));
 	($mol_mem(($.$piterjs_intro.prototype), "Speakers"));
+	($mol_mem(($.$piterjs_intro.prototype), "Partnering"));
 	($mol_mem(($.$piterjs_intro.prototype), "Sponsors"));
 	($mol_mem(($.$piterjs_intro.prototype), "Place"));
 	($mol_mem(($.$piterjs_intro.prototype), "Schedule"));
