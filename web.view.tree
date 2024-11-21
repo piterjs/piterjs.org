@@ -2097,6 +2097,7 @@ $piterjs_intro $mol_view
 				\        ! ""https://habrastorage.org/webt/qb/wr/v4/qbwrv4ogxnynfpjfd17eivvcipu.jpeg""
 				\! ""https://i.imgur.com/dRolfnB.jpeg""
 				\  ! ""https://i.imgur.com/L9H07ur.jpeg""
+				\    ! **Здесь можешь быть ты!**
 		speakers <= Speakers $piterjs_intro_page
 			title \Будь докладчиком
 			text \
