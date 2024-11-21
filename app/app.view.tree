@@ -15,8 +15,6 @@ $piterjs_app $mol_view
 				<= Book $mol_book2
 					pages <= pages /any
 					Placeholder null
-		<= Toggle_intro $mol_check
-			checked?val <=> toggle_intro?val false
 	Menu $mol_page
 		title \Митапы
 		tools <= tools /
@@ -30,6 +28,10 @@ $piterjs_app $mol_view
 		foot <= foot /
 			<= Online $hyoo_sync_online
 				yard <= Yard $hyoo_sync_client
+			<= Toggle_intro $mol_check_icon
+				checked? <=> toggle_intro? false
+				sub /
+					<= Toggle_intro_icon $mol_icon_presentation_play
 			<= Editing $mol_check_icon
 				Icon <= Editing_icon $mol_icon_settings_outline
 				checked? <=> editing? false
