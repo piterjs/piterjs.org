@@ -22292,10 +22292,28 @@ var $;
 			(obj.text) = () => ("Митапы в Питере\nJS и всё, что рядом\nКаждый месяц с 2015\nСпячка с 2020\nС 2023 снова с вами!");
 			return obj;
 		}
-		Team(){
+		Projects(){
 			const obj = new this.$.$piterjs_intro_page();
-			(obj.title) = () => ("Команда");
-			(obj.text) = () => ("! \"\"https://i.imgur.com/WYQiVs6.jpeg\"\"\n  ! \"\"https://i.imgur.com/wXGooly.jpeg\"\"\n    ! \"\"https://i.imgur.com/n2Fxkqv.png\"\"\n      ! \"\"https://i.imgur.com/V2Rkj38.jpeg\"\"\n        ! \"\"https://habrastorage.org/webt/qb/wr/v4/qbwrv4ogxnynfpjfd17eivvcipu.jpeg\"\"\n! \"\"https://i.imgur.com/dRolfnB.jpeg\"\"\n  ! \"\"https://i.imgur.com/L9H07ur.jpeg\"\"");
+			(obj.title) = () => ("Наши проекты");
+			(obj.text) = () => ("PiterJS **Meetups** - митапы в Петербурге\nPiterJS **Picnic** - прогулки и шашлыки\n--\nPiterJS **Conf** - конференции\nPiterJS **Code+Learn** - воркшопы\nPiterJS **Tour** - митапы в других городах");
+			return obj;
+		}
+		Community(){
+			const obj = new this.$.$piterjs_intro_page();
+			(obj.title) = () => ("Сообщество");
+			(obj.text) = () => ("YouTube: 2100\nVKontakte: 1900\nTelegram: 1300\nOffline: 70..100");
+			return obj;
+		}
+		Geo_quest(){
+			const obj = new this.$.$piterjs_intro_page();
+			(obj.title) = () => ("Откуда мы?");
+			(obj.text) = () => ("Санкт-Петербург: 76%\nМосква: 5%\n???\n???\n???\n???");
+			return obj;
+		}
+		Geo_answer(){
+			const obj = new this.$.$piterjs_intro_page();
+			(obj.title) = () => ("О такие мы!");
+			(obj.text) = () => ("Санкт-Петербург: 76%\nМосква: 5%\nРыбинск: 0.75%\nСамара: 0.64%\nЧелябинск: 0.61%\nГде-то на Земле: 17%");
 			return obj;
 		}
 		Roles_org(){
@@ -22310,22 +22328,16 @@ var $;
 			(obj.text) = () => ("**Встреча** гостей\n**Ведение** мероприятия\n**Видео** съёмка\n**Фото** съёмка\nРабота с **оборудованием**\nКоммуникация с **аудиторией** online\n**Координация** всех этих людей");
 			return obj;
 		}
+		Team(){
+			const obj = new this.$.$piterjs_intro_page();
+			(obj.title) = () => ("Команда");
+			(obj.text) = () => ("! \"\"https://i.imgur.com/WYQiVs6.jpeg\"\"\n  ! \"\"https://i.imgur.com/wXGooly.jpeg\"\"\n    ! \"\"https://i.imgur.com/n2Fxkqv.png\"\"\n      ! \"\"https://i.imgur.com/V2Rkj38.jpeg\"\"\n        ! \"\"https://habrastorage.org/webt/qb/wr/v4/qbwrv4ogxnynfpjfd17eivvcipu.jpeg\"\"\n! \"\"https://i.imgur.com/dRolfnB.jpeg\"\"\n  ! \"\"https://i.imgur.com/L9H07ur.jpeg\"\"");
+			return obj;
+		}
 		Speakers(){
 			const obj = new this.$.$piterjs_intro_page();
 			(obj.title) = () => ("Будь докладчиком");
 			(obj.text) = () => ("Нужны всегда\nДаже если боишься\nПоможем с темой");
-			return obj;
-		}
-		Partnering(){
-			const obj = new this.$.$piterjs_intro_page();
-			(obj.title) = () => ("Стань партнёром");
-			(obj.text) = () => ("**Подарки**: упоминание в соцсетях и на трансляции\n**Кейтеринг**: + лого в трансляции и на видео\n**Площадка**: + вступителное слово на мероприятии");
-			return obj;
-		}
-		Contribution(){
-			const obj = new this.$.$piterjs_intro_page();
-			(obj.title) = () => ("Твой вклад");
-			(obj.text) = () => ("Привлекай партнёров\nПоддерживай рублём\nЗазывай докладчиков\nВыступай сам\nВступай в наши ряды");
 			return obj;
 		}
 		Schedule(){
@@ -22334,16 +22346,28 @@ var $;
 			(obj.title) = () => ("Сегодня");
 			return obj;
 		}
-		Proft(){
+		Partnering(){
 			const obj = new this.$.$piterjs_intro_page();
-			(obj.title) = () => ("Бонусы");
-			(obj.text) = () => ("За лучшие вопросы - призы\nМы ведём трансляцию\nИ записываем видео\nУлыбайтесь фотографу");
+			(obj.title) = () => ("Стань партнёром");
+			(obj.text) = () => ("**Подарки**: упоминание в соцсетях и на трансляции\n**Кейтеринг**: + лого в трансляции и на видео\n**Площадка**: + вступителное слово на мероприятии");
 			return obj;
 		}
 		Sponsors(){
 			const obj = new this.$.$piterjs_intro_page();
 			(obj.title) = () => ("Спонсоры");
 			(obj.text) = () => ("! \"\"https://habrastorage.org/webt/lj/hn/vy/ljhnvybz0o31ylka0kqpff8mnme.png\"\"\n  ! \"\"https://habrastorage.org/webt/nc/w7/xt/ncw7xtfdj49fv0o2ae0cz_wr2lq.png\"\"");
+			return obj;
+		}
+		Contribution(){
+			const obj = new this.$.$piterjs_intro_page();
+			(obj.title) = () => ("Твой вклад");
+			(obj.text) = () => ("Привлекай партнёров\nПоддерживай рублём\nЗазывай докладчиков\nВыступай сам\nВступай в наши ряды");
+			return obj;
+		}
+		Proft(){
+			const obj = new this.$.$piterjs_intro_page();
+			(obj.title) = () => ("Бонусы");
+			(obj.text) = () => ("За лучшие вопросы - призы\nМы ведём трансляцию\nИ записываем видео\nУлыбайтесь фотографу");
 			return obj;
 		}
 		place_title(){
@@ -22407,15 +22431,19 @@ var $;
 			return {
 				"main": (this.Main()), 
 				"about": (this.About()), 
-				"team": (this.Team()), 
+				"projects": (this.Projects()), 
+				"comunity": (this.Community()), 
+				"geo_quest": (this.Geo_quest()), 
+				"geo_answer": (this.Geo_answer()), 
 				"roles_org": (this.Roles_org()), 
 				"roles_place": (this.Roles_place()), 
+				"team": (this.Team()), 
 				"speakers": (this.Speakers()), 
-				"speakers": (this.Partnering()), 
-				"contribution": (this.Contribution()), 
 				"schedule": (this.Schedule()), 
-				"profit": (this.Proft()), 
+				"partnering": (this.Partnering()), 
 				"sponsors": (this.Sponsors()), 
+				"contribution": (this.Contribution()), 
+				"profit": (this.Proft()), 
 				"place": (this.Place()), 
 				"afterparty": (this.Afterparty())
 			};
@@ -22432,15 +22460,19 @@ var $;
 	};
 	($mol_mem(($.$piterjs_intro.prototype), "Main"));
 	($mol_mem(($.$piterjs_intro.prototype), "About"));
-	($mol_mem(($.$piterjs_intro.prototype), "Team"));
+	($mol_mem(($.$piterjs_intro.prototype), "Projects"));
+	($mol_mem(($.$piterjs_intro.prototype), "Community"));
+	($mol_mem(($.$piterjs_intro.prototype), "Geo_quest"));
+	($mol_mem(($.$piterjs_intro.prototype), "Geo_answer"));
 	($mol_mem(($.$piterjs_intro.prototype), "Roles_org"));
 	($mol_mem(($.$piterjs_intro.prototype), "Roles_place"));
+	($mol_mem(($.$piterjs_intro.prototype), "Team"));
 	($mol_mem(($.$piterjs_intro.prototype), "Speakers"));
-	($mol_mem(($.$piterjs_intro.prototype), "Partnering"));
-	($mol_mem(($.$piterjs_intro.prototype), "Contribution"));
 	($mol_mem(($.$piterjs_intro.prototype), "Schedule"));
-	($mol_mem(($.$piterjs_intro.prototype), "Proft"));
+	($mol_mem(($.$piterjs_intro.prototype), "Partnering"));
 	($mol_mem(($.$piterjs_intro.prototype), "Sponsors"));
+	($mol_mem(($.$piterjs_intro.prototype), "Contribution"));
+	($mol_mem(($.$piterjs_intro.prototype), "Proft"));
 	($mol_mem(($.$piterjs_intro.prototype), "Place"));
 	($mol_mem(($.$piterjs_intro.prototype), "Afterparty"));
 	($mol_mem(($.$piterjs_intro.prototype), "place"));

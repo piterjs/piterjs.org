@@ -9719,15 +9719,15 @@ declare namespace $ {
 		,
 		ReturnType< $piterjs_intro_page['text'] >
 	>
-	type $piterjs_schedule__meetup_piterjs_intro_16 = $mol_type_enforce<
-		ReturnType< $piterjs_intro['meetup'] >
-		,
-		ReturnType< $piterjs_schedule['meetup'] >
-	>
-	type $piterjs_schedule__title_piterjs_intro_17 = $mol_type_enforce<
+	type $piterjs_intro_page__title_piterjs_intro_16 = $mol_type_enforce<
 		string
 		,
-		ReturnType< $piterjs_schedule['title'] >
+		ReturnType< $piterjs_intro_page['title'] >
+	>
+	type $piterjs_intro_page__text_piterjs_intro_17 = $mol_type_enforce<
+		string
+		,
+		ReturnType< $piterjs_intro_page['text'] >
 	>
 	type $piterjs_intro_page__title_piterjs_intro_18 = $mol_type_enforce<
 		string
@@ -9739,23 +9739,23 @@ declare namespace $ {
 		,
 		ReturnType< $piterjs_intro_page['text'] >
 	>
-	type $piterjs_intro_page__title_piterjs_intro_20 = $mol_type_enforce<
-		string
+	type $piterjs_schedule__meetup_piterjs_intro_20 = $mol_type_enforce<
+		ReturnType< $piterjs_intro['meetup'] >
 		,
-		ReturnType< $piterjs_intro_page['title'] >
+		ReturnType< $piterjs_schedule['meetup'] >
 	>
-	type $piterjs_intro_page__text_piterjs_intro_21 = $mol_type_enforce<
+	type $piterjs_schedule__title_piterjs_intro_21 = $mol_type_enforce<
 		string
 		,
-		ReturnType< $piterjs_intro_page['text'] >
+		ReturnType< $piterjs_schedule['title'] >
 	>
 	type $piterjs_intro_page__title_piterjs_intro_22 = $mol_type_enforce<
-		ReturnType< $piterjs_intro['place_title'] >
+		string
 		,
 		ReturnType< $piterjs_intro_page['title'] >
 	>
 	type $piterjs_intro_page__text_piterjs_intro_23 = $mol_type_enforce<
-		ReturnType< $piterjs_intro['place_notes'] >
+		string
 		,
 		ReturnType< $piterjs_intro_page['text'] >
 	>
@@ -9765,36 +9765,76 @@ declare namespace $ {
 		ReturnType< $piterjs_intro_page['title'] >
 	>
 	type $piterjs_intro_page__text_piterjs_intro_25 = $mol_type_enforce<
+		string
+		,
+		ReturnType< $piterjs_intro_page['text'] >
+	>
+	type $piterjs_intro_page__title_piterjs_intro_26 = $mol_type_enforce<
+		string
+		,
+		ReturnType< $piterjs_intro_page['title'] >
+	>
+	type $piterjs_intro_page__text_piterjs_intro_27 = $mol_type_enforce<
+		string
+		,
+		ReturnType< $piterjs_intro_page['text'] >
+	>
+	type $piterjs_intro_page__title_piterjs_intro_28 = $mol_type_enforce<
+		string
+		,
+		ReturnType< $piterjs_intro_page['title'] >
+	>
+	type $piterjs_intro_page__text_piterjs_intro_29 = $mol_type_enforce<
+		string
+		,
+		ReturnType< $piterjs_intro_page['text'] >
+	>
+	type $piterjs_intro_page__title_piterjs_intro_30 = $mol_type_enforce<
+		ReturnType< $piterjs_intro['place_title'] >
+		,
+		ReturnType< $piterjs_intro_page['title'] >
+	>
+	type $piterjs_intro_page__text_piterjs_intro_31 = $mol_type_enforce<
+		ReturnType< $piterjs_intro['place_notes'] >
+		,
+		ReturnType< $piterjs_intro_page['text'] >
+	>
+	type $piterjs_intro_page__title_piterjs_intro_32 = $mol_type_enforce<
+		string
+		,
+		ReturnType< $piterjs_intro_page['title'] >
+	>
+	type $piterjs_intro_page__text_piterjs_intro_33 = $mol_type_enforce<
 		ReturnType< $piterjs_intro['afterparty'] >
 		,
 		ReturnType< $piterjs_intro_page['text'] >
 	>
-	type $piterjs_screen__place_piterjs_intro_26 = $mol_type_enforce<
+	type $piterjs_screen__place_piterjs_intro_34 = $mol_type_enforce<
 		ReturnType< $piterjs_intro['place'] >
 		,
 		ReturnType< $piterjs_screen['place'] >
 	>
-	type $piterjs_screen__content_piterjs_intro_27 = $mol_type_enforce<
+	type $piterjs_screen__content_piterjs_intro_35 = $mol_type_enforce<
 		readonly(any)[]
 		,
 		ReturnType< $piterjs_screen['content'] >
 	>
-	type $mol_nav__keys_x_piterjs_intro_28 = $mol_type_enforce<
+	type $mol_nav__keys_x_piterjs_intro_36 = $mol_type_enforce<
 		ReturnType< $piterjs_intro['page_ids'] >
 		,
 		ReturnType< $mol_nav['keys_x'] >
 	>
-	type $mol_nav__keys_y_piterjs_intro_29 = $mol_type_enforce<
+	type $mol_nav__keys_y_piterjs_intro_37 = $mol_type_enforce<
 		ReturnType< $piterjs_intro['page_ids'] >
 		,
 		ReturnType< $mol_nav['keys_y'] >
 	>
-	type $mol_nav__current_x_piterjs_intro_30 = $mol_type_enforce<
+	type $mol_nav__current_x_piterjs_intro_38 = $mol_type_enforce<
 		ReturnType< $piterjs_intro['page'] >
 		,
 		ReturnType< $mol_nav['current_x'] >
 	>
-	type $mol_nav__current_y_piterjs_intro_31 = $mol_type_enforce<
+	type $mol_nav__current_y_piterjs_intro_39 = $mol_type_enforce<
 		ReturnType< $piterjs_intro['page'] >
 		,
 		ReturnType< $mol_nav['current_y'] >
@@ -9802,15 +9842,19 @@ declare namespace $ {
 	export class $piterjs_intro extends $mol_view {
 		Main( ): $piterjs_intro_main
 		About( ): $piterjs_intro_page
-		Team( ): $piterjs_intro_page
+		Projects( ): $piterjs_intro_page
+		Community( ): $piterjs_intro_page
+		Geo_quest( ): $piterjs_intro_page
+		Geo_answer( ): $piterjs_intro_page
 		Roles_org( ): $piterjs_intro_page
 		Roles_place( ): $piterjs_intro_page
+		Team( ): $piterjs_intro_page
 		Speakers( ): $piterjs_intro_page
-		Partnering( ): $piterjs_intro_page
-		Contribution( ): $piterjs_intro_page
 		Schedule( ): $piterjs_schedule
-		Proft( ): $piterjs_intro_page
+		Partnering( ): $piterjs_intro_page
 		Sponsors( ): $piterjs_intro_page
+		Contribution( ): $piterjs_intro_page
+		Proft( ): $piterjs_intro_page
 		place_title( ): string
 		place_notes( ): string
 		Place( ): $piterjs_intro_page
