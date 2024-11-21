@@ -22355,7 +22355,7 @@ var $;
 		Sponsors(){
 			const obj = new this.$.$piterjs_intro_page();
 			(obj.title) = () => ("Спонсоры");
-			(obj.text) = () => ("! \"\"https://habrastorage.org/webt/lj/hn/vy/ljhnvybz0o31ylka0kqpff8mnme.png\"\"\n! \"\"https://habrastorage.org/webt/w4/g6/6c/w4g66cuggs-skuvz2vnpspdtm_g.png\"\"\n! \"\"https://habrastorage.org/webt/b_/id/8y/b_id8y1art8zbhni8dgkzeegwfi.png\"\"\n  ! \"\"https://habrastorage.org/webt/fn/ji/dj/fnjidjev1ht4q_dchp4d_jdipu8.png\"\"");
+			(obj.text) = () => ("! \"\"https://habrastorage.org/webt/lj/hn/vy/ljhnvybz0o31ylka0kqpff8mnme.png\"\"\n! \"\"https://habrastorage.org/webt/w4/g6/6c/w4g66cuggs-skuvz2vnpspdtm_g.png\"\"\n! \"\"https://habrastorage.org/webt/b_/id/8y/b_id8y1art8zbhni8dgkzeegwfi.png\"\"\n  ! \"\"https://habrastorage.org/webt/xa/cr/so/xacrso7zaw-nhjcnnjedelzahpc.png\"\"");
 			return obj;
 		}
 		Contribution(){
