@@ -24,13 +24,13 @@ $piterjs_intro $mol_view
 		team <= Team $piterjs_intro_page
 			title \Команда
 			text \
-				\! ""https://i.imgur.com/wXGooly.jpeg""
-				\    ! ""https://habrastorage.org/webt/qb/wr/v4/qbwrv4ogxnynfpjfd17eivvcipu.jpeg""
+				\! ""https://i.imgur.com/WYQiVs6.jpeg""
+				\  ! ""https://i.imgur.com/wXGooly.jpeg""
+				\    ! ""https://i.imgur.com/n2Fxkqv.png""
 				\      ! ""https://i.imgur.com/V2Rkj38.jpeg""
-				\        ! ""https://i.imgur.com/WYQiVs6.jpeg""
-				\          ! ""https://i.imgur.com/n2Fxkqv.png""
-				\! ""https://i.imgur.com/L9H07ur.jpeg""
-				\  ! ""https://i.imgur.com/dRolfnB.jpeg""
+				\        ! ""https://habrastorage.org/webt/qb/wr/v4/qbwrv4ogxnynfpjfd17eivvcipu.jpeg""
+				\! ""https://i.imgur.com/dRolfnB.jpeg""
+				\  ! ""https://i.imgur.com/L9H07ur.jpeg""
 		roles_org <= Roles_org $piterjs_intro_page
 			title \Роли организаторов
 			text \
