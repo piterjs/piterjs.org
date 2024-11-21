@@ -2041,10 +2041,14 @@ $piterjs_intro $mol_view
 		comunity <= Community $piterjs_intro_page
 			title \Сообщество
 			text \
-				\YouTube: 2100
-				\VKontakte: 1900
-				\Telegram: 1300
-				\Offline: 70..100
+				\! YouTube
+				\  ! 2100
+				\! VKontakte
+				\  ! 1900
+				\! Telegram
+				\  ! 1300
+				\! Offline
+				\  ! 70..100
 		geo_quest <= Geo_quest $piterjs_intro_page
 			title \Откуда мы?
 			text \

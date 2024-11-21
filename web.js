@@ -21797,7 +21797,7 @@ var $;
 		Community(){
 			const obj = new this.$.$piterjs_intro_page();
 			(obj.title) = () => ("Сообщество");
-			(obj.text) = () => ("YouTube: 2100\nVKontakte: 1900\nTelegram: 1300\nOffline: 70..100");
+			(obj.text) = () => ("! YouTube\n  ! 2100\n! VKontakte\n  ! 1900\n! Telegram\n  ! 1300\n! Offline\n  ! 70..100");
 			return obj;
 		}
 		Geo_quest(){
