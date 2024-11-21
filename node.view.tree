@@ -2057,7 +2057,7 @@ $piterjs_intro $mol_view
 				\???
 				\???
 				\???
-				\???
+				\Где-то на Земле: 17%
 		geo_answer <= Geo_answer $piterjs_intro_page
 			title \О такие мы!
 			text \
@@ -2091,13 +2091,13 @@ $piterjs_intro $mol_view
 			title \Команда
 			text \
 				\! ""https://i.imgur.com/WYQiVs6.jpeg""
-				\  ! ""https://i.imgur.com/wXGooly.jpeg""
-				\    ! ""https://i.imgur.com/n2Fxkqv.png""
-				\      ! ""https://i.imgur.com/V2Rkj38.jpeg""
-				\        ! ""https://habrastorage.org/webt/qb/wr/v4/qbwrv4ogxnynfpjfd17eivvcipu.jpeg""
-				\! ""https://i.imgur.com/dRolfnB.jpeg""
-				\  ! ""https://i.imgur.com/L9H07ur.jpeg""
-				\    ! **Здесь можешь быть ты!**
+				\  ! ""https://i.imgur.com/n2Fxkqv.png""
+				\    ! ""https://i.imgur.com/V2Rkj38.jpeg""
+				\      ! ""https://habrastorage.org/webt/qb/wr/v4/qbwrv4ogxnynfpjfd17eivvcipu.jpeg""
+				\! ""https://i.imgur.com/wXGooly.jpeg""
+				\  ! ""https://i.imgur.com/dRolfnB.jpeg""
+				\    ! ""https://i.imgur.com/L9H07ur.jpeg""
+				\      ! **Здесь можешь быть ты!**
 		speakers <= Speakers $piterjs_intro_page
 			title \Будь докладчиком
 			text \

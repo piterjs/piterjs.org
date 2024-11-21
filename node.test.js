@@ -22307,7 +22307,7 @@ var $;
 		Geo_quest(){
 			const obj = new this.$.$piterjs_intro_page();
 			(obj.title) = () => ("Откуда мы?");
-			(obj.text) = () => ("Санкт-Петербург: 76%\nМосква: 5%\n???\n???\n???\n???");
+			(obj.text) = () => ("Санкт-Петербург: 76%\nМосква: 5%\n???\n???\n???\nГде-то на Земле: 17%");
 			return obj;
 		}
 		Geo_answer(){
@@ -22331,7 +22331,7 @@ var $;
 		Team(){
 			const obj = new this.$.$piterjs_intro_page();
 			(obj.title) = () => ("Команда");
-			(obj.text) = () => ("! \"\"https://i.imgur.com/WYQiVs6.jpeg\"\"\n  ! \"\"https://i.imgur.com/wXGooly.jpeg\"\"\n    ! \"\"https://i.imgur.com/n2Fxkqv.png\"\"\n      ! \"\"https://i.imgur.com/V2Rkj38.jpeg\"\"\n        ! \"\"https://habrastorage.org/webt/qb/wr/v4/qbwrv4ogxnynfpjfd17eivvcipu.jpeg\"\"\n! \"\"https://i.imgur.com/dRolfnB.jpeg\"\"\n  ! \"\"https://i.imgur.com/L9H07ur.jpeg\"\"\n    ! **Здесь можешь быть ты!**");
+			(obj.text) = () => ("! \"\"https://i.imgur.com/WYQiVs6.jpeg\"\"\n  ! \"\"https://i.imgur.com/n2Fxkqv.png\"\"\n    ! \"\"https://i.imgur.com/V2Rkj38.jpeg\"\"\n      ! \"\"https://habrastorage.org/webt/qb/wr/v4/qbwrv4ogxnynfpjfd17eivvcipu.jpeg\"\"\n! \"\"https://i.imgur.com/wXGooly.jpeg\"\"\n  ! \"\"https://i.imgur.com/dRolfnB.jpeg\"\"\n    ! \"\"https://i.imgur.com/L9H07ur.jpeg\"\"\n      ! **Здесь можешь быть ты!**");
 			return obj;
 		}
 		Speakers(){
