@@ -9719,43 +9719,43 @@ declare namespace $ {
 		,
 		ReturnType< $piterjs_intro_page['text'] >
 	>
-	type $piterjs_intro_page__title_piterjs_intro_16 = $mol_type_enforce<
-		string
-		,
-		ReturnType< $piterjs_intro_page['title'] >
-	>
-	type $piterjs_intro_page__text_piterjs_intro_17 = $mol_type_enforce<
-		string
-		,
-		ReturnType< $piterjs_intro_page['text'] >
-	>
-	type $piterjs_intro_page__title_piterjs_intro_18 = $mol_type_enforce<
-		ReturnType< $piterjs_intro['place_title'] >
-		,
-		ReturnType< $piterjs_intro_page['title'] >
-	>
-	type $piterjs_intro_page__text_piterjs_intro_19 = $mol_type_enforce<
-		ReturnType< $piterjs_intro['place_notes'] >
-		,
-		ReturnType< $piterjs_intro_page['text'] >
-	>
-	type $piterjs_schedule__meetup_piterjs_intro_20 = $mol_type_enforce<
+	type $piterjs_schedule__meetup_piterjs_intro_16 = $mol_type_enforce<
 		ReturnType< $piterjs_intro['meetup'] >
 		,
 		ReturnType< $piterjs_schedule['meetup'] >
 	>
-	type $piterjs_schedule__title_piterjs_intro_21 = $mol_type_enforce<
+	type $piterjs_schedule__title_piterjs_intro_17 = $mol_type_enforce<
 		string
 		,
 		ReturnType< $piterjs_schedule['title'] >
 	>
-	type $piterjs_intro_page__title_piterjs_intro_22 = $mol_type_enforce<
+	type $piterjs_intro_page__title_piterjs_intro_18 = $mol_type_enforce<
 		string
 		,
 		ReturnType< $piterjs_intro_page['title'] >
 	>
-	type $piterjs_intro_page__text_piterjs_intro_23 = $mol_type_enforce<
+	type $piterjs_intro_page__text_piterjs_intro_19 = $mol_type_enforce<
 		string
+		,
+		ReturnType< $piterjs_intro_page['text'] >
+	>
+	type $piterjs_intro_page__title_piterjs_intro_20 = $mol_type_enforce<
+		string
+		,
+		ReturnType< $piterjs_intro_page['title'] >
+	>
+	type $piterjs_intro_page__text_piterjs_intro_21 = $mol_type_enforce<
+		string
+		,
+		ReturnType< $piterjs_intro_page['text'] >
+	>
+	type $piterjs_intro_page__title_piterjs_intro_22 = $mol_type_enforce<
+		ReturnType< $piterjs_intro['place_title'] >
+		,
+		ReturnType< $piterjs_intro_page['title'] >
+	>
+	type $piterjs_intro_page__text_piterjs_intro_23 = $mol_type_enforce<
+		ReturnType< $piterjs_intro['place_notes'] >
 		,
 		ReturnType< $piterjs_intro_page['text'] >
 	>
@@ -9805,15 +9805,15 @@ declare namespace $ {
 		Team( ): $piterjs_intro_page
 		Roles_org( ): $piterjs_intro_page
 		Roles_place( ): $piterjs_intro_page
-		Contribution( ): $piterjs_intro_page
 		Speakers( ): $piterjs_intro_page
 		Partnering( ): $piterjs_intro_page
+		Contribution( ): $piterjs_intro_page
+		Schedule( ): $piterjs_schedule
+		Proft( ): $piterjs_intro_page
 		Sponsors( ): $piterjs_intro_page
 		place_title( ): string
 		place_notes( ): string
 		Place( ): $piterjs_intro_page
-		Schedule( ): $piterjs_schedule
-		Proft( ): $piterjs_intro_page
 		afterparty( ): string
 		Afterparty( ): $piterjs_intro_page
 		place( ): $piterjs_place

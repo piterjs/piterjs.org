@@ -21791,7 +21791,7 @@ var $;
 		Team(){
 			const obj = new this.$.$piterjs_intro_page();
 			(obj.title) = () => ("Команда");
-			(obj.text) = () => ("! \"\"https://i.imgur.com/wXGooly.jpeg\"\"\n    ! \"\"https://i.imgur.com/Mup6yZ5.jpeg\"\"\n      ! \"\"https://i.imgur.com/V2Rkj38.jpeg\"\"\n! \"\"https://i.imgur.com/WYQiVs6.jpeg\"\"\n    ! \"\"https://i.imgur.com/n2Fxkqv.png\"\"\n      ! \"\"https://i.imgur.com/L9H07ur.jpeg\"\"\n! \"\"https://i.imgur.com/dRolfnB.jpeg\"\"");
+			(obj.text) = () => ("! \"\"https://i.imgur.com/wXGooly.jpeg\"\"\n    ! \"\"https://habrastorage.org/webt/qb/wr/v4/qbwrv4ogxnynfpjfd17eivvcipu.jpeg\"\"\n      ! \"\"https://i.imgur.com/V2Rkj38.jpeg\"\"\n        ! \"\"https://i.imgur.com/WYQiVs6.jpeg\"\"\n          ! \"\"https://i.imgur.com/n2Fxkqv.png\"\"\n! \"\"https://i.imgur.com/L9H07ur.jpeg\"\"\n  ! \"\"https://i.imgur.com/dRolfnB.jpeg\"\"");
 			return obj;
 		}
 		Roles_org(){
@@ -21806,12 +21806,6 @@ var $;
 			(obj.text) = () => ("**Встреча** гостей\n**Ведение** мероприятия\n**Видео** съёмка\n**Фото** съёмка\nРабота с **оборудованием**\nКоммуникация с **аудиторией** online\n**Координация** всех этих людей");
 			return obj;
 		}
-		Contribution(){
-			const obj = new this.$.$piterjs_intro_page();
-			(obj.title) = () => ("Твой вклад");
-			(obj.text) = () => ("Привлекай партнёров\nПоддерживай рублём\nЗазывай докладчиков\nВыступай сам\nВступай в наши ряды");
-			return obj;
-		}
 		Speakers(){
 			const obj = new this.$.$piterjs_intro_page();
 			(obj.title) = () => ("Будь докладчиком");
@@ -21821,25 +21815,13 @@ var $;
 		Partnering(){
 			const obj = new this.$.$piterjs_intro_page();
 			(obj.title) = () => ("Стань партнёром");
-			(obj.text) = () => ("Подарки: упоминание в соцсетях и на трансляции\nКейтеринг: + лого в трансляции и на видео\nПлощадка: + вступителное слово на мероприятии");
+			(obj.text) = () => ("**Подарки**: упоминание в соцсетях и на трансляции\n**Кейтеринг**: + лого в трансляции и на видео\n**Площадка**: + вступителное слово на мероприятии");
 			return obj;
 		}
-		Sponsors(){
+		Contribution(){
 			const obj = new this.$.$piterjs_intro_page();
-			(obj.title) = () => ("Спонсоры");
-			(obj.text) = () => ("    ! \"\"https://habrastorage.org/webt/nc/w7/xt/ncw7xtfdj49fv0o2ae0cz_wr2lq.png\"\"");
-			return obj;
-		}
-		place_title(){
-			return "Мы в {place}";
-		}
-		place_notes(){
-			return "";
-		}
-		Place(){
-			const obj = new this.$.$piterjs_intro_page();
-			(obj.title) = () => ((this.place_title()));
-			(obj.text) = () => ((this.place_notes()));
+			(obj.title) = () => ("Твой вклад");
+			(obj.text) = () => ("Привлекай партнёров\nПоддерживай рублём\nЗазывай докладчиков\nВыступай сам\nВступай в наши ряды");
 			return obj;
 		}
 		Schedule(){
@@ -21852,6 +21834,24 @@ var $;
 			const obj = new this.$.$piterjs_intro_page();
 			(obj.title) = () => ("Бонусы");
 			(obj.text) = () => ("За лучшие вопросы - призы\nМы ведём трансляцию\nИ записываем видео\nУлыбайтесь фотографу");
+			return obj;
+		}
+		Sponsors(){
+			const obj = new this.$.$piterjs_intro_page();
+			(obj.title) = () => ("Спонсоры");
+			(obj.text) = () => ("! \"\"https://habrastorage.org/webt/lj/hn/vy/ljhnvybz0o31ylka0kqpff8mnme.png\"\"\n  ! \"\"https://habrastorage.org/webt/nc/w7/xt/ncw7xtfdj49fv0o2ae0cz_wr2lq.png\"\"");
+			return obj;
+		}
+		place_title(){
+			return "Мы в {place}";
+		}
+		place_notes(){
+			return "";
+		}
+		Place(){
+			const obj = new this.$.$piterjs_intro_page();
+			(obj.title) = () => ((this.place_title()));
+			(obj.text) = () => ((this.place_notes()));
 			return obj;
 		}
 		afterparty(){
@@ -21906,13 +21906,13 @@ var $;
 				"team": (this.Team()), 
 				"roles_org": (this.Roles_org()), 
 				"roles_place": (this.Roles_place()), 
-				"contribution": (this.Contribution()), 
 				"speakers": (this.Speakers()), 
 				"speakers": (this.Partnering()), 
-				"sponsors": (this.Sponsors()), 
-				"place": (this.Place()), 
+				"contribution": (this.Contribution()), 
 				"schedule": (this.Schedule()), 
 				"profit": (this.Proft()), 
+				"sponsors": (this.Sponsors()), 
+				"place": (this.Place()), 
 				"afterparty": (this.Afterparty())
 			};
 		}
@@ -21931,13 +21931,13 @@ var $;
 	($mol_mem(($.$piterjs_intro.prototype), "Team"));
 	($mol_mem(($.$piterjs_intro.prototype), "Roles_org"));
 	($mol_mem(($.$piterjs_intro.prototype), "Roles_place"));
-	($mol_mem(($.$piterjs_intro.prototype), "Contribution"));
 	($mol_mem(($.$piterjs_intro.prototype), "Speakers"));
 	($mol_mem(($.$piterjs_intro.prototype), "Partnering"));
-	($mol_mem(($.$piterjs_intro.prototype), "Sponsors"));
-	($mol_mem(($.$piterjs_intro.prototype), "Place"));
+	($mol_mem(($.$piterjs_intro.prototype), "Contribution"));
 	($mol_mem(($.$piterjs_intro.prototype), "Schedule"));
 	($mol_mem(($.$piterjs_intro.prototype), "Proft"));
+	($mol_mem(($.$piterjs_intro.prototype), "Sponsors"));
+	($mol_mem(($.$piterjs_intro.prototype), "Place"));
 	($mol_mem(($.$piterjs_intro.prototype), "Afterparty"));
 	($mol_mem(($.$piterjs_intro.prototype), "place"));
 	($mol_mem(($.$piterjs_intro.prototype), "Page"));
