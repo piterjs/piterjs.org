@@ -160,6 +160,7 @@ namespace $.$$ {
 			try {
 				return [
 					this.Online(),
+					this.Toggle_intro(),
 					... this.Domain().editable() ? [ this.Editing() ] : [ this.User() ],
 					... this.editable() ? [ this.Rights_toggle() ] : [],
 					this.Lights(),
