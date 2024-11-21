@@ -22364,7 +22364,7 @@ var $;
 		Sponsors(){
 			const obj = new this.$.$piterjs_intro_page();
 			(obj.title) = () => ("Спонсоры");
-			(obj.text) = () => ("! \"\"https://habrastorage.org/webt/lj/hn/vy/ljhnvybz0o31ylka0kqpff8mnme.png\"\"\n  ! \"\"https://habrastorage.org/webt/1s/hi/oy/1shioya9itgldmneks4itskecgm.png\"\"");
+			(obj.text) = () => ("! \"\"https://habrastorage.org/webt/lj/hn/vy/ljhnvybz0o31ylka0kqpff8mnme.png\"\"\n  ! \"\"https://habrastorage.org/webt/zw/uv/lj/zwuvljj3xguew_p8fbi81breowg.png\"\"");
 			return obj;
 		}
 		Contribution(){
