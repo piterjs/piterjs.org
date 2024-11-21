@@ -101,9 +101,9 @@ $piterjs_intro $mol_view
 		sponsors <= Sponsors $piterjs_intro_page
 			title \Спонсоры
 			text \
-				\! ""https://habrastorage.org/webt/lj/hn/vy/ljhnvybz0o31ylka0kqpff8mnme.png""
-				\  ! ""https://habrastorage.org/webt/zw/uv/lj/zwuvljj3xguew_p8fbi81breowg.png""
-				\    ! ""https://habrastorage.org/webt/86/lx/yk/86lxykzdesrhsh9eqtezoizu02e.png""
+				\""https://habrastorage.org/webt/lj/hn/vy/ljhnvybz0o31ylka0kqpff8mnme.png""
+				\""https://habrastorage.org/webt/bh/lf/1i/bhlf1iphyupibm0-0lxbxm_srem.png""
+				\""https://habrastorage.org/webt/86/lx/yk/86lxykzdesrhsh9eqtezoizu02e.png""
 		contribution <= Contribution $piterjs_intro_page
 			title \Твой вклад
 			text \
