@@ -402,7 +402,7 @@ $mol_icon_share_outline $mol_icon path \M14,5V9C7,10 4,15 3,20C5.5,16.5 9,14.9 1
 
 $mol_page $mol_view
 	dom_name \article
-	field *
+	attr *
 		^
 		tabIndex <= tabindex -1
 	sub /
@@ -655,6 +655,7 @@ $mol_textarea $mol_stack
 			row_numb* <= row_numb* 0
 			sidebar_showed <= sidebar_showed
 			highlight <= highlight \
+			syntax <= syntax $mol_syntax2
 	symbols_alt *string
 		comma \<
 		period \>
@@ -1061,6 +1062,10 @@ $mol_icon_account_group $mol_icon path \M12,5.5A3.5,3.5 0 0,1 15.5,9A3.5,3.5 0 0
 
 $mol_icon_account_group_outline $mol_icon path \M12,5A3.5,3.5 0 0,0 8.5,8.5A3.5,3.5 0 0,0 12,12A3.5,3.5 0 0,0 15.5,8.5A3.5,3.5 0 0,0 12,5M12,7A1.5,1.5 0 0,1 13.5,8.5A1.5,1.5 0 0,1 12,10A1.5,1.5 0 0,1 10.5,8.5A1.5,1.5 0 0,1 12,7M5.5,8A2.5,2.5 0 0,0 3,10.5C3,11.44 3.53,12.25 4.29,12.68C4.65,12.88 5.06,13 5.5,13C5.94,13 6.35,12.88 6.71,12.68C7.08,12.47 7.39,12.17 7.62,11.81C6.89,10.86 6.5,9.7 6.5,8.5C6.5,8.41 6.5,8.31 6.5,8.22C6.2,8.08 5.86,8 5.5,8M18.5,8C18.14,8 17.8,8.08 17.5,8.22C17.5,8.31 17.5,8.41 17.5,8.5C17.5,9.7 17.11,10.86 16.38,11.81C16.5,12 16.63,12.15 16.78,12.3C16.94,12.45 17.1,12.58 17.29,12.68C17.65,12.88 18.06,13 18.5,13C18.94,13 19.35,12.88 19.71,12.68C20.47,12.25 21,11.44 21,10.5A2.5,2.5 0 0,0 18.5,8M12,14C9.66,14 5,15.17 5,17.5V19H19V17.5C19,15.17 14.34,14 12,14M4.71,14.55C2.78,14.78 0,15.76 0,17.5V19H3V17.07C3,16.06 3.69,15.22 4.71,14.55M19.29,14.55C20.31,15.22 21,16.06 21,17.07V19H24V17.5C24,15.76 21.22,14.78 19.29,14.55M12,16C13.53,16 15.24,16.5 16.23,17H7.77C8.76,16.5 10.47,16 12,16Z
 
+$mol_icon_bullhorn $mol_icon path \M12,8H4A2,2 0 0,0 2,10V14A2,2 0 0,0 4,16H5V20A1,1 0 0,0 6,21H8A1,1 0 0,0 9,20V16H12L17,20V4L12,8M21.5,12C21.5,13.71 20.54,15.26 19,16V8C20.53,8.75 21.5,10.3 21.5,12Z
+
+$mol_icon_bullhorn_outline $mol_icon path \M12,8H4A2,2 0 0,0 2,10V14A2,2 0 0,0 4,16H5V20A1,1 0 0,0 6,21H8A1,1 0 0,0 9,20V16H12L17,20V4L12,8M15,15.6L13,14H4V10H13L15,8.4V15.6M21.5,12C21.5,13.71 20.54,15.26 19,16V8C20.53,8.75 21.5,10.3 21.5,12Z
+
 $mol_icon_chart_bar $mol_icon path \M22,21H2V3H4V19H6V10H10V19H12V6H16V19H18V14H22V21Z
 
 $mol_icon_chart_bar_stacked $mol_icon path \M22,21H2V3H4V19H6V17H10V19H12V16H16V19H18V17H22V21M18,14H22V16H18V14M12,6H16V9H12V6M16,15H12V10H16V15M6,10H10V12H6V10M10,16H6V13H10V16Z
@@ -1256,6 +1261,11 @@ $piterjs_meetup_page $mol_page
 			hint \Список гостей
 			sub /
 				<= Guests_link_icon $mol_icon_account_group_outline
+		<= Texts_link $mol_link
+			arg * texts \
+			hint \Тексты анонсов
+			sub /
+				<= Texts_link_icon $mol_icon_bullhorn_outline
 		<= Stats_link $mol_link
 			arg * stats \
 			hint \Статистика
@@ -1301,6 +1311,37 @@ $piterjs_meetup_guests $mol_page
 									needle <= filter
 						<= Person_join_moment* $mol_view
 							sub / <= person_join_moment* \
+
+$piterjs_meetup_texts $mol_page
+	theme \$mol_theme_special
+	meetup $piterjs_meetup
+	title \Тексты анонсов
+	tools /
+		<= Close $mol_link
+			arg * texts null
+			sub /
+				<= Close_icon $mol_icon_close
+	speech_text* \
+		\🎤 {start} {speaker} **{title}**
+	body /
+		<= Content $mol_list rows /
+			<= Init_labeler $mol_section
+				title \Анонс мероприятия
+				tools /
+					<= init_copy $mol_button_copy
+						text <= init_text 
+				Content <= Init_field $mol_textarea
+					value? <=> init_text? \
+						\Ура! Скоро {title}
+						\
+						\⏰ Когда: {start}
+						\📍 Где: {place} ({address})
+						\
+						\📰 Программа
+						\
+						\{program}
+						\
+						\🎫 Регистрация: {register}
 
 $mol_svg_group $mol_svg
 	dom_name \g
@@ -3082,6 +3123,8 @@ $piterjs_app $mol_view
 		meetup_public? <=> meetup_public*?
 		rights? <=> rights_meetup? false
 	Meetup_guests* $piterjs_meetup_guests
+		meetup <= meetup*
+	Meetup_texts* $piterjs_meetup_texts
 		meetup <= meetup*
 	Meetup_stats* $piterjs_meetup_stats
 		meetup <= meetup*

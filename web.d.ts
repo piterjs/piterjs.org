@@ -159,6 +159,7 @@ declare namespace $ {
 
 declare namespace $ {
     class $mol_wire_pub_sub extends $mol_wire_pub implements $mol_wire_sub {
+        [x: symbol]: () => any[];
         protected pub_from: number;
         protected cursor: $mol_wire_cursor;
         get temp(): boolean;
@@ -193,6 +194,7 @@ declare namespace $ {
 
 declare namespace $ {
     abstract class $mol_wire_fiber<Host, Args extends readonly unknown[], Result> extends $mol_wire_pub_sub {
+        [x: symbol]: string | (() => any[]);
         readonly task: (this: Host, ...args: Args) => Result;
         readonly host?: Host | undefined;
         static warm: boolean;
@@ -218,7 +220,10 @@ declare namespace $ {
         refresh(): void;
         abstract put(next: Result | Error | Promise<Result | Error>): Result | Error | Promise<Result | Error>;
         sync(): Awaited<Result>;
-        async(): Promise<Result>;
+        async_raw(): Promise<Result>;
+        async(): Promise<Result> & {
+            destructor(): void;
+        };
         step(): Promise<null>;
     }
 }
@@ -736,11 +741,12 @@ declare namespace $ {
 }
 
 declare namespace $ {
-    type $mol_view_content = $mol_view | Node | string | number | boolean;
+    type $mol_view_content = $mol_view | Node | string | number | boolean | null;
     function $mol_view_visible_width(): number;
     function $mol_view_visible_height(): number;
     function $mol_view_state_key(suffix: string): string;
     class $mol_view extends $mol_object {
+        [x: symbol]: () => any[];
         static Root<This extends typeof $mol_view>(this: This, id: number): InstanceType<This>;
         autorun(): void;
         static autobind(): void;
@@ -749,8 +755,8 @@ declare namespace $ {
         state_key(suffix?: string): string;
         dom_name(): string;
         dom_name_space(): string;
-        sub(): readonly ($mol_view | Node | string | number | boolean)[];
-        sub_visible(): readonly (string | number | boolean | $mol_view | Node)[];
+        sub(): readonly $mol_view_content[];
+        sub_visible(): readonly $mol_view_content[];
         minimal_width(): number;
         maximal_width(): number;
         minimal_height(): number;
@@ -935,7 +941,7 @@ declare namespace $.$$ {
 declare var $node: any;
 
 declare namespace $ {
-    function $mol_charset_encode(value: string): Uint8Array;
+    function $mol_charset_encode(value: string): Uint8Array<ArrayBufferLike>;
 }
 
 declare namespace $ {
@@ -993,7 +999,7 @@ declare namespace $ {
             name: string;
             dict: Dict;
         };
-        Value: Dict[keyof Dict];
+        Value: ReturnType<Value>;
     };
 }
 
@@ -1019,7 +1025,7 @@ declare namespace $ {
 
 declare namespace $ {
     function $mol_base64_url_encode(buffer: Uint8Array): string;
-    function $mol_base64_url_decode(str: string): Uint8Array;
+    function $mol_base64_url_decode(str: string): Uint8Array<ArrayBufferLike>;
 }
 
 declare namespace $ {
@@ -1100,6 +1106,7 @@ declare namespace $ {
         data = 1
     }
     class $hyoo_crowd_unit extends Object {
+        [x: symbol]: (() => any[]) | (() => string);
         readonly land: $mol_int62_string;
         readonly auth: $mol_int62_string;
         readonly head: $mol_int62_string;
@@ -1116,11 +1123,11 @@ declare namespace $ {
         [Symbol.toPrimitive](): string;
     }
     class $hyoo_crowd_unit_bin extends DataView {
-        static from_buffer(buffer: Int16Array): $hyoo_crowd_unit_bin;
-        static from_unit(unit: $hyoo_crowd_unit): $hyoo_crowd_unit_bin;
-        sign(next?: Uint8Array): Uint8Array;
+        static from_buffer(buffer: Int16Array): any;
+        static from_unit(unit: $hyoo_crowd_unit): any;
+        sign(next?: Uint8Array): Uint8Array<any>;
         size(): number;
-        sens(): Uint8Array;
+        sens(): Uint8Array<any>;
         unit(): $hyoo_crowd_unit;
     }
     function $hyoo_crowd_unit_compare(left: $hyoo_crowd_unit, right: $hyoo_crowd_unit): number;
@@ -1128,6 +1135,7 @@ declare namespace $ {
 
 declare namespace $ {
     class $hyoo_crowd_node extends $mol_object2 {
+        [x: symbol]: (() => any[]) | (() => string);
         readonly land: $hyoo_crowd_land;
         readonly head: $mol_int62_string;
         constructor(land?: $hyoo_crowd_land, head?: $mol_int62_string);
@@ -1335,6 +1343,7 @@ declare namespace $ {
 
 declare namespace $ {
     class $hyoo_crowd_clock extends Map<$mol_int62_string, number> {
+        [x: symbol]: () => any[];
         static begin: number;
         last_time: number;
         constructor(entries?: Iterable<readonly [$mol_int62_string, number]>);
@@ -1350,9 +1359,9 @@ declare namespace $ {
         tick(peer: $mol_int62_string): number;
     }
     class $hyoo_crowd_clock_bin extends DataView {
-        static from(land_id: $mol_int62_string, clocks: readonly [$hyoo_crowd_clock, $hyoo_crowd_clock], count: number): $hyoo_crowd_clock_bin;
+        static from(land_id: $mol_int62_string, clocks: readonly [$hyoo_crowd_clock, $hyoo_crowd_clock], count: number): any;
         land(): `${string}_${string}`;
-        count(): number;
+        count(): any;
     }
 }
 
@@ -1369,12 +1378,12 @@ declare namespace $ {
         Fund<Item extends typeof $hyoo_crowd_node>(Item: Item): $hyoo_crowd_fund<Item>;
         home(): $hyoo_crowd_land;
         _knights: $mol_dict<`${string}_${string}`, $hyoo_crowd_peer>;
-        _signs: WeakMap<$hyoo_crowd_unit, Uint8Array>;
+        _signs: WeakMap<$hyoo_crowd_unit, Uint8Array<ArrayBufferLike>>;
         grab(law?: readonly ($mol_int62_string | "")[], mod?: readonly ($mol_int62_string | "")[], add?: readonly ($mol_int62_string | "")[]): Promise<$hyoo_crowd_land>;
         sign_units(units: readonly $hyoo_crowd_unit[]): Promise<$hyoo_crowd_unit[]>;
         delta_land(land: $hyoo_crowd_land, clocks?: readonly [$hyoo_crowd_clock, $hyoo_crowd_clock]): Promise<$hyoo_crowd_unit[]>;
-        delta_batch(land: $hyoo_crowd_land, clocks?: readonly [$hyoo_crowd_clock, $hyoo_crowd_clock]): Promise<Uint8Array>;
-        delta(clocks?: Map<`${string}_${string}`, readonly [$hyoo_crowd_clock, $hyoo_crowd_clock]>): AsyncGenerator<Uint8Array, void, unknown>;
+        delta_batch(land: $hyoo_crowd_land, clocks?: readonly [$hyoo_crowd_clock, $hyoo_crowd_clock]): Promise<Uint8Array<ArrayBuffer>>;
+        delta(clocks?: Map<`${string}_${string}`, readonly [$hyoo_crowd_clock, $hyoo_crowd_clock]>): AsyncGenerator<Uint8Array<ArrayBuffer>, void, unknown>;
         merge(donor: $hyoo_crowd_world): Promise<void>;
         apply(delta: Uint8Array): Promise<{
             allow: $hyoo_crowd_unit[];
@@ -1389,6 +1398,7 @@ declare namespace $ {
 
 declare namespace $ {
     class $hyoo_crowd_land extends $mol_object {
+        [x: symbol]: () => any[];
         id(): `${string}_${string}`;
         toJSON(): `${string}_${string}`;
         peer(): $hyoo_crowd_peer;
@@ -1397,7 +1407,7 @@ declare namespace $ {
         get clock_auth(): $hyoo_crowd_clock;
         get clock_data(): $hyoo_crowd_clock;
         get clocks(): readonly [$hyoo_crowd_clock, $hyoo_crowd_clock];
-        get clocks_bin(): Uint8Array;
+        get clocks_bin(): Uint8Array<any>;
         readonly pub: $mol_wire_pub;
         readonly _clocks: readonly [$hyoo_crowd_clock, $hyoo_crowd_clock];
         _unit_all: Map<`${string}_${string}!${string}_${string}`, $hyoo_crowd_unit>;
@@ -2026,7 +2036,7 @@ declare namespace $.$$ {
         tab_index(): number;
         error(): string;
         hint_safe(): string;
-        sub_visible(): ($mol_speck | $mol_view_content)[];
+        sub_visible(): ($mol_view_content | $mol_speck)[];
     }
 }
 
@@ -2183,12 +2193,7 @@ declare namespace $ {
 }
 
 declare namespace $ {
-    function $mol_wait_timeout_async(this: $, timeout: number): Promise<void> & {
-        done: (res: void | PromiseLike<void>) => void;
-        fail: (error?: any) => void;
-    } & {
-        destructor: () => void;
-    };
+    function $mol_wait_timeout_async(this: $, timeout: number): Promise<void>;
     function $mol_wait_timeout(this: $, timeout: number): void;
 }
 
@@ -2204,6 +2209,7 @@ declare namespace $ {
 
 declare namespace $ {
     class $hyoo_sync_yard<Line> extends $mol_object2 {
+        [x: symbol]: () => any[];
         db_unit_persisted: WeakSet<$hyoo_crowd_unit>;
         log_pack(data: any): any;
         peer(next?: string): $hyoo_crowd_peer;
@@ -2665,7 +2671,7 @@ declare namespace $ {
         message(): string;
         headers(): Headers;
         mime(): string | null;
-        stream(): ReadableStream<Uint8Array> | null;
+        stream(): ReadableStream<Uint8Array<ArrayBufferLike>> | null;
         text(): string;
         json(): unknown;
         blob(): Blob;
@@ -2680,7 +2686,7 @@ declare namespace $ {
         };
         static response(input: RequestInfo, init?: RequestInit): $mol_fetch_response;
         static success(input: RequestInfo, init?: RequestInit): $mol_fetch_response;
-        static stream(input: RequestInfo, init?: RequestInit): ReadableStream<Uint8Array> | null;
+        static stream(input: RequestInfo, init?: RequestInit): ReadableStream<Uint8Array<ArrayBufferLike>> | null;
         static text(input: RequestInfo, init?: RequestInit): string;
         static json(input: RequestInfo, init?: RequestInit): unknown;
         static blob(input: RequestInfo, init?: RequestInit): Blob;
@@ -2696,7 +2702,7 @@ declare namespace $ {
         static absolute(path: string): $mol_file_web;
         static relative(path: string): $mol_file_web;
         static base: string;
-        buffer(next?: Uint8Array): Uint8Array;
+        buffer(next?: Uint8Array): Uint8Array<ArrayBuffer>;
         stat(next?: $mol_file_stat, virt?: 'virt'): $mol_file_stat;
         resolve(path: string): $mol_file_web;
         ensure(): void;
@@ -3508,6 +3514,7 @@ declare namespace $ {
         offset?: $mol_time_duration_config;
     };
     class $mol_time_moment extends $mol_time_base {
+        [x: symbol]: (() => any[]) | ((mode: "default" | "number" | "string") => string | number);
         constructor(config?: $mol_time_moment_config);
         readonly year: number | undefined;
         readonly month: number | undefined;
@@ -3593,9 +3600,9 @@ declare namespace $ {
         static from(serial: BufferSource): Promise<$mol_crypto_secret>;
         static pass(pass: string, salt: Uint8Array): Promise<$mol_crypto_secret>;
         static derive(private_serial: string, public_serial: string): Promise<$mol_crypto_secret>;
-        serial(): Promise<Uint8Array>;
-        encrypt(open: BufferSource, salt: BufferSource): Promise<Uint8Array>;
-        decrypt(closed: BufferSource, salt: BufferSource): Promise<Uint8Array>;
+        serial(): Promise<Uint8Array<ArrayBuffer>>;
+        encrypt(open: BufferSource, salt: BufferSource): Promise<Uint8Array<ArrayBuffer>>;
+        decrypt(closed: BufferSource, salt: BufferSource): Promise<Uint8Array<ArrayBuffer>>;
     }
 }
 
@@ -3628,7 +3635,7 @@ declare namespace $ {
 }
 
 declare namespace $ {
-    function $mol_crypto_hash(data: Uint8Array): Uint8Array;
+    function $mol_crypto_hash(data: Uint8Array): Uint8Array<ArrayBuffer>;
 }
 
 declare namespace $ {
@@ -3694,7 +3701,7 @@ declare namespace $ {
         uri(): string;
         type(next?: string): string;
         blob(next?: $mol_blob): Blob;
-        buffer(next?: Uint8Array, type?: string): Uint8Array;
+        buffer(next?: Uint8Array, type?: string): Uint8Array<ArrayBufferLike>;
         str(next?: string, type?: string): string;
         json(next?: any, type?: string): any;
     }
@@ -3800,9 +3807,9 @@ declare namespace $ {
 		foot( ): readonly($mol_view)[]
 		Foot( ): $mol_view
 		dom_name( ): string
-		field( ): ({ 
+		attr( ): ({ 
 			'tabIndex': ReturnType< $mol_page['tabindex'] >,
-		})  & ReturnType< $mol_view['field'] >
+		})  & ReturnType< $mol_view['attr'] >
 		sub( ): readonly(any)[]
 	}
 	
@@ -4320,6 +4327,25 @@ declare namespace $ {
 
 //# sourceMappingURL=stack.view.tree.d.ts.map
 declare namespace $ {
+    class $mol_syntax2<Lexems extends {
+        [name: string]: RegExp;
+    }> {
+        lexems: Lexems;
+        constructor(lexems: Lexems);
+        rules: Array<{
+            regExp: RegExp;
+            name: string;
+            size: number;
+        }>;
+        regexp: RegExp;
+        tokenize(text: string, handle: (name: string, found: string, chunks: string[], offset: number) => void): void;
+        parse(text: string, handlers: {
+            [key in keyof Lexems | '']: (found: string, chunks: string[], offset: number) => void;
+        }): void;
+    }
+}
+
+declare namespace $ {
 
 	export class $mol_text_code_token extends $mol_dimmer {
 		type( ): string
@@ -4342,25 +4368,6 @@ declare namespace $ {
 
 //# sourceMappingURL=token.view.tree.d.ts.map
 declare namespace $.$$ {
-}
-
-declare namespace $ {
-    class $mol_syntax2<Lexems extends {
-        [name: string]: RegExp;
-    }> {
-        lexems: Lexems;
-        constructor(lexems: Lexems);
-        rules: Array<{
-            regExp: RegExp;
-            name: string;
-            size: number;
-        }>;
-        regexp: RegExp;
-        tokenize(text: string, handle: (name: string, found: string, chunks: string[], offset: number) => void): void;
-        parse(text: string, handlers: {
-            [key in keyof Lexems | '']: (found: string, chunks: string[], offset: number) => void;
-        }): void;
-    }
 }
 
 declare namespace $ {
@@ -4758,6 +4765,11 @@ declare namespace $ {
 		,
 		ReturnType< $mol_text_code['highlight'] >
 	>
+	type $mol_text_code__syntax_mol_textarea_14 = $mol_type_enforce<
+		ReturnType< $mol_textarea['syntax'] >
+		,
+		ReturnType< $mol_text_code['syntax'] >
+	>
 	export class $mol_textarea extends $mol_stack {
 		clickable( next?: boolean ): boolean
 		sidebar_showed( ): boolean
@@ -4775,6 +4787,7 @@ declare namespace $ {
 		Edit( ): $mol_textarea_edit
 		row_numb( id: any): number
 		highlight( ): string
+		syntax( ): $mol_syntax2
 		View( ): $mol_text_code
 		attr( ): ({ 
 			'mol_textarea_clickable': ReturnType< $mol_textarea['clickable'] >,
@@ -4810,6 +4823,24 @@ declare namespace $.$$ {
         hover(event: PointerEvent): void;
         press(event: KeyboardEvent): void;
         row_numb(index: number): number;
+        syntax(): $mol_syntax2<{
+            'code-indent': RegExp;
+            'code-docs': RegExp;
+            'code-comment-block': RegExp;
+            'code-link': RegExp;
+            'code-comment-inline': RegExp;
+            'code-string': RegExp;
+            'code-number': RegExp;
+            'code-call': RegExp;
+            'code-sexpr': RegExp;
+            'code-field': RegExp;
+            'code-keyword': RegExp;
+            'code-global': RegExp;
+            'code-word': RegExp;
+            'code-decorator': RegExp;
+            'code-tag': RegExp;
+            'code-punctuation': RegExp;
+        }>;
     }
 }
 
@@ -4983,7 +5014,7 @@ declare namespace $.$$ {
         value_limited(val?: number): number;
         event_dec(next?: Event): void;
         event_inc(next?: Event): void;
-        value_normalized(next?: string): string;
+        round(val: number): string;
         value_string(next?: string): string;
         dec_enabled(): boolean;
         inc_enabled(): boolean;
@@ -6178,6 +6209,24 @@ declare namespace $ {
 //# sourceMappingURL=outline.view.tree.d.ts.map
 declare namespace $ {
 
+	export class $mol_icon_bullhorn extends $mol_icon {
+		path( ): string
+	}
+	
+}
+
+//# sourceMappingURL=bullhorn.view.tree.d.ts.map
+declare namespace $ {
+
+	export class $mol_icon_bullhorn_outline extends $mol_icon {
+		path( ): string
+	}
+	
+}
+
+//# sourceMappingURL=outline.view.tree.d.ts.map
+declare namespace $ {
+
 	export class $mol_icon_chart_bar extends $mol_icon {
 		path( ): string
 	}
@@ -6800,7 +6849,7 @@ declare namespace $ {
 	>
 	type $mol_link__arg_piterjs_meetup_page_82 = $mol_type_enforce<
 		({ 
-			'stats': string,
+			'texts': string,
 		}) 
 		,
 		ReturnType< $mol_link['arg'] >
@@ -6815,22 +6864,39 @@ declare namespace $ {
 		,
 		ReturnType< $mol_link['sub'] >
 	>
-	type $mol_string_button__value_piterjs_meetup_page_85 = $mol_type_enforce<
+	type $mol_link__arg_piterjs_meetup_page_85 = $mol_type_enforce<
+		({ 
+			'stats': string,
+		}) 
+		,
+		ReturnType< $mol_link['arg'] >
+	>
+	type $mol_link__hint_piterjs_meetup_page_86 = $mol_type_enforce<
+		string
+		,
+		ReturnType< $mol_link['hint'] >
+	>
+	type $mol_link__sub_piterjs_meetup_page_87 = $mol_type_enforce<
+		readonly(any)[]
+		,
+		ReturnType< $mol_link['sub'] >
+	>
+	type $mol_string_button__value_piterjs_meetup_page_88 = $mol_type_enforce<
 		ReturnType< $piterjs_meetup_page['title'] >
 		,
 		ReturnType< $mol_string_button['value'] >
 	>
-	type $mol_string_button__enabled_piterjs_meetup_page_86 = $mol_type_enforce<
+	type $mol_string_button__enabled_piterjs_meetup_page_89 = $mol_type_enforce<
 		ReturnType< $piterjs_meetup_page['editing'] >
 		,
 		ReturnType< $mol_string_button['enabled'] >
 	>
-	type $mol_string_button__hint_piterjs_meetup_page_87 = $mol_type_enforce<
+	type $mol_string_button__hint_piterjs_meetup_page_90 = $mol_type_enforce<
 		string
 		,
 		ReturnType< $mol_string_button['hint'] >
 	>
-	type $piterjs_speech_snippet__speech_piterjs_meetup_page_88 = $mol_type_enforce<
+	type $piterjs_speech_snippet__speech_piterjs_meetup_page_91 = $mol_type_enforce<
 		ReturnType< $piterjs_meetup_page['speech'] >
 		,
 		ReturnType< $piterjs_speech_snippet['speech'] >
@@ -6911,6 +6977,8 @@ declare namespace $ {
 		Rights_toggle( ): $mol_check_icon
 		Guests_link_icon( ): $mol_icon_account_group_outline
 		Guests_link( ): $mol_link
+		Texts_link_icon( ): $mol_icon_bullhorn_outline
+		Texts_link( ): $mol_link
 		Stats_link_icon( ): $mol_icon_chart_bar_stacked
 		Stats_link( ): $mol_link
 		meetup( ): $piterjs_meetup
@@ -7104,6 +7172,79 @@ declare namespace $.$$ {
         person(person: $mol_int62_string): string;
         dump_blob(): Blob;
         person_join_moment(id: $mol_int62_string): string;
+    }
+}
+
+declare namespace $.$$ {
+}
+
+declare namespace $ {
+
+	type $mol_link__arg_piterjs_meetup_texts_1 = $mol_type_enforce<
+		({ 
+			'texts': any,
+		}) 
+		,
+		ReturnType< $mol_link['arg'] >
+	>
+	type $mol_link__sub_piterjs_meetup_texts_2 = $mol_type_enforce<
+		readonly(any)[]
+		,
+		ReturnType< $mol_link['sub'] >
+	>
+	type $mol_button_copy__text_piterjs_meetup_texts_3 = $mol_type_enforce<
+		ReturnType< $piterjs_meetup_texts['init_text'] >
+		,
+		ReturnType< $mol_button_copy['text'] >
+	>
+	type $mol_textarea__value_piterjs_meetup_texts_4 = $mol_type_enforce<
+		ReturnType< $piterjs_meetup_texts['init_text'] >
+		,
+		ReturnType< $mol_textarea['value'] >
+	>
+	type $mol_section__title_piterjs_meetup_texts_5 = $mol_type_enforce<
+		string
+		,
+		ReturnType< $mol_section['title'] >
+	>
+	type $mol_section__tools_piterjs_meetup_texts_6 = $mol_type_enforce<
+		readonly(any)[]
+		,
+		ReturnType< $mol_section['tools'] >
+	>
+	type $mol_section__Content_piterjs_meetup_texts_7 = $mol_type_enforce<
+		ReturnType< $piterjs_meetup_texts['Init_field'] >
+		,
+		ReturnType< $mol_section['Content'] >
+	>
+	type $mol_list__rows_piterjs_meetup_texts_8 = $mol_type_enforce<
+		readonly(any)[]
+		,
+		ReturnType< $mol_list['rows'] >
+	>
+	export class $piterjs_meetup_texts extends $mol_page {
+		Close_icon( ): $mol_icon_close
+		Close( ): $mol_link
+		init_copy( ): $mol_button_copy
+		init_text( next?: string ): string
+		Init_field( ): $mol_textarea
+		Init_labeler( ): $mol_section
+		Content( ): $mol_list
+		theme( ): string
+		meetup( ): $piterjs_meetup
+		title( ): string
+		tools( ): readonly(any)[]
+		speech_text( id: any): string
+		body( ): readonly(any)[]
+	}
+	
+}
+
+//# sourceMappingURL=texts.view.tree.d.ts.map
+declare namespace $.$$ {
+    class $piterjs_meetup_texts extends $.$piterjs_meetup_texts {
+        speech_text(speech: $piterjs_speech): string;
+        init_text(next?: string): string;
     }
 }
 
@@ -10029,7 +10170,7 @@ declare namespace $ {
         config: {
             funcs: Funcs & Guard<Funcs>;
         };
-        Value: $mol_type_result<$mol_type_foot<Funcs>>;
+        Value: ReturnType<Value>;
     };
     export {};
 }
@@ -10041,7 +10182,7 @@ declare namespace $ {
 declare namespace $ {
     function $mol_data_array<Sub extends $mol_data_value>(sub: Sub): ((val: readonly Parameters<Sub>[0][]) => readonly ReturnType<Sub>[]) & {
         config: Sub;
-        Value: readonly ReturnType<Sub>[];
+        Value: ReturnType<Value>;
     };
 }
 
@@ -10054,7 +10195,7 @@ declare namespace $ {
 declare namespace $ {
     function $mol_data_record<Sub extends Record<string, $mol_data_value>>(sub: Sub): ((val: $mol_type_merge<$mol_type_override<Partial<{ [key in keyof Sub]: Parameters<Sub[key]>[0]; }>, Pick<{ [key in keyof Sub]: Parameters<Sub[key]>[0]; }, { [Field in keyof { [key in keyof Sub]: Parameters<Sub[key]>[0]; }]: undefined extends { [key in keyof Sub]: Parameters<Sub[key]>[0]; }[Field] ? never : Field; }[keyof Sub]>>>) => Readonly<$mol_type_merge<$mol_type_override<Partial<{ [key_1 in keyof Sub]: ReturnType<Sub[key_1]>; }>, Pick<{ [key_1 in keyof Sub]: ReturnType<Sub[key_1]>; }, { [Field_1 in keyof { [key_1 in keyof Sub]: ReturnType<Sub[key_1]>; }]: undefined extends { [key_1 in keyof Sub]: ReturnType<Sub[key_1]>; }[Field_1] ? never : Field_1; }[keyof Sub]>>>>) & {
         config: Sub;
-        Value: Readonly<$mol_type_merge<$mol_type_override<Partial<{ [key in keyof Sub]: ReturnType<Sub[key]>; }>, Pick<{ [key in keyof Sub]: ReturnType<Sub[key]>; }, { [Field in keyof { [key in keyof Sub]: ReturnType<Sub[key]>; }]: undefined extends { [key in keyof Sub]: ReturnType<Sub[key]>; }[Field] ? never : Field; }[keyof Sub]>>>>;
+        Value: ReturnType<Value>;
     };
 }
 
@@ -10444,7 +10585,7 @@ declare namespace $ {
             sub: Sub;
             fallback: Fallback | undefined;
         };
-        Value: ReturnType<Sub> | (Fallback extends undefined ? undefined : ReturnType<Extract<Fallback, () => any>>);
+        Value: ReturnType<Value>;
     };
 }
 
@@ -13554,112 +13695,117 @@ declare namespace $ {
 		,
 		ReturnType< $piterjs_meetup_guests['meetup'] >
 	>
-	type $piterjs_meetup_stats__meetup_piterjs_app_46 = $mol_type_enforce<
+	type $piterjs_meetup_texts__meetup_piterjs_app_46 = $mol_type_enforce<
+		ReturnType< $piterjs_app['meetup'] >
+		,
+		ReturnType< $piterjs_meetup_texts['meetup'] >
+	>
+	type $piterjs_meetup_stats__meetup_piterjs_app_47 = $mol_type_enforce<
 		ReturnType< $piterjs_app['meetup'] >
 		,
 		ReturnType< $piterjs_meetup_stats['meetup'] >
 	>
-	type $piterjs_meetup_stats__meetup_prev_piterjs_app_47 = $mol_type_enforce<
+	type $piterjs_meetup_stats__meetup_prev_piterjs_app_48 = $mol_type_enforce<
 		ReturnType< $piterjs_app['meetup_prev'] >
 		,
 		ReturnType< $piterjs_meetup_stats['meetup_prev'] >
 	>
-	type $piterjs_speech_page__speech_piterjs_app_48 = $mol_type_enforce<
+	type $piterjs_speech_page__speech_piterjs_app_49 = $mol_type_enforce<
 		ReturnType< $piterjs_app['speech'] >
 		,
 		ReturnType< $piterjs_speech_page['speech'] >
 	>
-	type $piterjs_speech_page__editing_piterjs_app_49 = $mol_type_enforce<
+	type $piterjs_speech_page__editing_piterjs_app_50 = $mol_type_enforce<
 		ReturnType< $piterjs_app['editing'] >
 		,
 		ReturnType< $piterjs_speech_page['editing'] >
 	>
-	type $piterjs_speech_page__speech_public_piterjs_app_50 = $mol_type_enforce<
+	type $piterjs_speech_page__speech_public_piterjs_app_51 = $mol_type_enforce<
 		ReturnType< $piterjs_app['speech_public'] >
 		,
 		ReturnType< $piterjs_speech_page['speech_public'] >
 	>
-	type $piterjs_meetup_snippet__meetup_piterjs_app_51 = $mol_type_enforce<
+	type $piterjs_meetup_snippet__meetup_piterjs_app_52 = $mol_type_enforce<
 		ReturnType< $piterjs_app['meetup'] >
 		,
 		ReturnType< $piterjs_meetup_snippet['meetup'] >
 	>
-	type $piterjs_now__place_piterjs_app_52 = $mol_type_enforce<
+	type $piterjs_now__place_piterjs_app_53 = $mol_type_enforce<
 		ReturnType< $piterjs_app['place'] >
 		,
 		ReturnType< $piterjs_now['place'] >
 	>
-	type $piterjs_intro__meetup_piterjs_app_53 = $mol_type_enforce<
+	type $piterjs_intro__meetup_piterjs_app_54 = $mol_type_enforce<
 		ReturnType< $piterjs_app['meetup_current'] >
 		,
 		ReturnType< $piterjs_intro['meetup'] >
 	>
-	type $piterjs_intro__page_piterjs_app_54 = $mol_type_enforce<
+	type $piterjs_intro__page_piterjs_app_55 = $mol_type_enforce<
 		ReturnType< $piterjs_app['intro'] >
 		,
 		ReturnType< $piterjs_intro['page'] >
 	>
-	type $piterjs_video_page__source_piterjs_app_55 = $mol_type_enforce<
+	type $piterjs_video_page__source_piterjs_app_56 = $mol_type_enforce<
 		ReturnType< $piterjs_app['video_uri'] >
 		,
 		ReturnType< $piterjs_video_page['source'] >
 	>
-	type $piterjs_video_page__editing_piterjs_app_56 = $mol_type_enforce<
+	type $piterjs_video_page__editing_piterjs_app_57 = $mol_type_enforce<
 		ReturnType< $piterjs_app['editing'] >
 		,
 		ReturnType< $piterjs_video_page['editing'] >
 	>
-	type $piterjs_place_page__place_piterjs_app_57 = $mol_type_enforce<
+	type $piterjs_place_page__place_piterjs_app_58 = $mol_type_enforce<
 		ReturnType< $piterjs_app['place'] >
 		,
 		ReturnType< $piterjs_place_page['place'] >
 	>
-	type $piterjs_place_page__editing_piterjs_app_58 = $mol_type_enforce<
+	type $piterjs_place_page__editing_piterjs_app_59 = $mol_type_enforce<
 		ReturnType< $piterjs_app['editing'] >
 		,
 		ReturnType< $piterjs_place_page['editing'] >
 	>
-	type $hyoo_meta_rights__theme_piterjs_app_59 = $mol_type_enforce<
+	type $hyoo_meta_rights__theme_piterjs_app_60 = $mol_type_enforce<
 		string
 		,
 		ReturnType< $hyoo_meta_rights['theme'] >
 	>
-	type $hyoo_meta_rights__meta_piterjs_app_60 = $mol_type_enforce<
+	type $hyoo_meta_rights__meta_piterjs_app_61 = $mol_type_enforce<
 		ReturnType< $piterjs_app['Domain'] >
 		,
 		ReturnType< $hyoo_meta_rights['meta'] >
 	>
-	type $hyoo_meta_rights__tools_piterjs_app_61 = $mol_type_enforce<
+	type $hyoo_meta_rights__tools_piterjs_app_62 = $mol_type_enforce<
 		readonly(any)[]
 		,
 		ReturnType< $hyoo_meta_rights['tools'] >
 	>
-	type $hyoo_meta_rights__theme_piterjs_app_62 = $mol_type_enforce<
+	type $hyoo_meta_rights__theme_piterjs_app_63 = $mol_type_enforce<
 		string
 		,
 		ReturnType< $hyoo_meta_rights['theme'] >
 	>
-	type $hyoo_meta_rights__meta_piterjs_app_63 = $mol_type_enforce<
+	type $hyoo_meta_rights__meta_piterjs_app_64 = $mol_type_enforce<
 		ReturnType< $piterjs_app['meetup_current'] >
 		,
 		ReturnType< $hyoo_meta_rights['meta'] >
 	>
-	type $hyoo_meta_rights__tools_piterjs_app_64 = $mol_type_enforce<
+	type $hyoo_meta_rights__tools_piterjs_app_65 = $mol_type_enforce<
 		readonly(any)[]
 		,
 		ReturnType< $hyoo_meta_rights['tools'] >
 	>
-	type $hyoo_page__side_main_id_piterjs_app_65 = $mol_type_enforce<
+	type $hyoo_page__side_main_id_piterjs_app_66 = $mol_type_enforce<
 		string
 		,
 		ReturnType< $hyoo_page['side_main_id'] >
 	>
-	type $hyoo_page__yard_piterjs_app_66 = $mol_type_enforce<
+	type $hyoo_page__yard_piterjs_app_67 = $mol_type_enforce<
 		ReturnType< $piterjs_app['Yard'] >
 		,
 		ReturnType< $hyoo_page['yard'] >
 	>
-	type $hyoo_meta_safe__tools_piterjs_app_67 = $mol_type_enforce<
+	type $hyoo_meta_safe__tools_piterjs_app_68 = $mol_type_enforce<
 		readonly(any)[]
 		,
 		ReturnType< $hyoo_meta_safe['tools'] >
@@ -13723,6 +13869,7 @@ declare namespace $ {
 		Menu( ): $mol_page
 		Meetup( id: any): $piterjs_meetup_page
 		Meetup_guests( id: any): $piterjs_meetup_guests
+		Meetup_texts( id: any): $piterjs_meetup_texts
 		Meetup_stats( id: any): $piterjs_meetup_stats
 		Speech( id: any): $piterjs_speech_page
 		Menu_meetup( id: any): $piterjs_meetup_snippet
@@ -13743,7 +13890,7 @@ declare namespace $ {
 declare namespace $.$$ {
     class $piterjs_app extends $.$piterjs_app {
         domain_id(): $mol_int62_string;
-        domain_rights(): Uint8Array;
+        domain_rights(): Uint8Array<ArrayBuffer>;
         Domain(): $piterjs_domain;
         now(next?: string | null): string | null;
         intro(next?: string | null): string;
@@ -13751,6 +13898,7 @@ declare namespace $.$$ {
         others(): boolean;
         wiki(): boolean;
         guests(): boolean;
+        texts(): boolean;
         stats(): boolean;
         safe(): boolean;
         meetup_id(next?: string | null): string | null;

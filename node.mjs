@@ -844,7 +844,7 @@ var $;
             }
             return this.cache;
         }
-        async async() {
+        async async_raw() {
             while (true) {
                 this.fresh();
                 if (this.cache instanceof Error) {
@@ -859,6 +859,12 @@ var $;
                     await new Promise(() => { });
                 }
             }
+        }
+        async() {
+            const promise = this.async_raw();
+            if (!promise.destructor)
+                promise.destructor = () => this.destructor();
+            return promise;
         }
         step() {
             return new Promise(done => {
@@ -12011,8 +12017,8 @@ var $;
 		dom_name(){
 			return "article";
 		}
-		field(){
-			return {...(super.field()), "tabIndex": (this.tabindex())};
+		attr(){
+			return {...(super.attr()), "tabIndex": (this.tabindex())};
 		}
 		sub(){
 			return [
@@ -13044,6 +13050,59 @@ var $;
 "use strict";
 
 ;
+"use strict";
+var $;
+(function ($) {
+    class $mol_syntax2 {
+        lexems;
+        constructor(lexems) {
+            this.lexems = lexems;
+            for (let name in lexems) {
+                this.rules.push({
+                    name: name,
+                    regExp: lexems[name],
+                    size: RegExp('^$|' + lexems[name].source).exec('').length - 1,
+                });
+            }
+            const parts = '(' + this.rules.map(rule => rule.regExp.source).join(')|(') + ')';
+            this.regexp = RegExp(`([\\s\\S]*?)(?:(${parts})|$(?![^]))`, 'gmu');
+        }
+        rules = [];
+        regexp;
+        tokenize(text, handle) {
+            let end = 0;
+            lexing: while (end < text.length) {
+                const start = end;
+                this.regexp.lastIndex = start;
+                var found = this.regexp.exec(text);
+                end = this.regexp.lastIndex;
+                if (start === end)
+                    throw new Error('Empty token');
+                var prefix = found[1];
+                if (prefix)
+                    handle('', prefix, [prefix], start);
+                var suffix = found[2];
+                if (!suffix)
+                    continue;
+                let offset = 4;
+                for (let rule of this.rules) {
+                    if (found[offset - 1]) {
+                        handle(rule.name, suffix, found.slice(offset, offset + rule.size), start + prefix.length);
+                        continue lexing;
+                    }
+                    offset += rule.size + 1;
+                }
+                $mol_fail(new Error('$mol_syntax2 is broken'));
+            }
+        }
+        parse(text, handlers) {
+            this.tokenize(text, (name, ...args) => handlers[name](...args));
+        }
+    }
+    $.$mol_syntax2 = $mol_syntax2;
+})($ || ($ = {}));
+
+;
 	($.$mol_text_code_token) = class $mol_text_code_token extends ($.$mol_dimmer) {
 		type(){
 			return "";
@@ -13196,59 +13255,6 @@ var $;
 "use strict";
 var $;
 (function ($) {
-    class $mol_syntax2 {
-        lexems;
-        constructor(lexems) {
-            this.lexems = lexems;
-            for (let name in lexems) {
-                this.rules.push({
-                    name: name,
-                    regExp: lexems[name],
-                    size: RegExp('^$|' + lexems[name].source).exec('').length - 1,
-                });
-            }
-            const parts = '(' + this.rules.map(rule => rule.regExp.source).join(')|(') + ')';
-            this.regexp = RegExp(`([\\s\\S]*?)(?:(${parts})|$(?![^]))`, 'gmu');
-        }
-        rules = [];
-        regexp;
-        tokenize(text, handle) {
-            let end = 0;
-            lexing: while (end < text.length) {
-                const start = end;
-                this.regexp.lastIndex = start;
-                var found = this.regexp.exec(text);
-                end = this.regexp.lastIndex;
-                if (start === end)
-                    throw new Error('Empty token');
-                var prefix = found[1];
-                if (prefix)
-                    handle('', prefix, [prefix], start);
-                var suffix = found[2];
-                if (!suffix)
-                    continue;
-                let offset = 4;
-                for (let rule of this.rules) {
-                    if (found[offset - 1]) {
-                        handle(rule.name, suffix, found.slice(offset, offset + rule.size), start + prefix.length);
-                        continue lexing;
-                    }
-                    offset += rule.size + 1;
-                }
-                $mol_fail(new Error('$mol_syntax2 is broken'));
-            }
-        }
-        parse(text, handlers) {
-            this.tokenize(text, (name, ...args) => handlers[name](...args));
-        }
-    }
-    $.$mol_syntax2 = $mol_syntax2;
-})($ || ($ = {}));
-
-;
-"use strict";
-var $;
-(function ($) {
     $.$mol_syntax2_md_flow = new $mol_syntax2({
         'quote': /^((?:(?:[>"] )(?:[^]*?)$(\r?\n?))+)([\n\r]*)/,
         'spoiler': /^((?:(?:[\?] )(?:[^]*?)$(\r?\n?))+)([\n\r]*)/,
@@ -13278,8 +13284,8 @@ var $;
         'code-docs': /\/\/\/.*?$/,
         'code-comment-block': /(?:\/\*[^]*?\*\/|\/\+[^]*?\+\/|<![^]*?>)/,
         'code-link': /(?:\w+:\/\/|#)\S+?(?=\s|\\\\|""|$)/,
-        'code-comment-inline': /\/\/.*?(?:$|\/\/)/,
-        'code-string': /(?:".*?"|'.*?'|`.*?`|\/.+?\/[dygimsu]*(?!\p{Letter})|(?:^|[ \t])\\[^\n]*\n)/u,
+        'code-comment-inline': /\/\/.*?(?:$|\/\/)|- \\(?!\\).*|#!? .*/,
+        'code-string': /(?:".*?"|'.*?'|`.*?`| ?\\\\.+?\\\\|\/.+?\/[dygimsu]*(?!\p{Letter})|[ \t]*\\[^\n]*)/u,
         'code-number': /[+-]?(?:\d*\.)?\d+\w*/,
         'code-call': /\.?\w+ *(?=\()/,
         'code-sexpr': /\((\w+ )/,
@@ -13287,7 +13293,7 @@ var $;
         'code-keyword': /\b(throw|readonly|unknown|keyof|typeof|never|from|class|struct|interface|type|function|extends|implements|module|namespace|import|export|include|require|var|val|let|const|for|do|while|until|in|out|of|new|if|then|else|switch|case|this|return|async|await|yield|try|catch|break|continue|get|set|public|private|protected|string|boolean|number|null|undefined|true|false|void|int|float|ref)\b/,
         'code-global': /[$]+\w*|\b[A-Z][a-z0-9]+[A-Z]\w*/,
         'code-word': /\w+/,
-        'code-decorator': /@\s*\S+/,
+        'code-decorator': /@.+/,
         'code-tag': /<\/?[\w-]+\/?>?|&\w+;/,
         'code-punctuation': /[\-\[\]\{\}\(\)<=>~!\?@#%&\*_\+\\\/\|;:\.,\^]+?/,
     });
@@ -13421,7 +13427,7 @@ var $;
             display: 'block',
             position: 'relative',
             font: {
-                family: 'monospace',
+                family: 'inherit',
             },
             Numb: {
                 textAlign: 'right',
@@ -13815,6 +13821,10 @@ var $;
 		highlight(){
 			return "";
 		}
+		syntax(){
+			const obj = new this.$.$mol_syntax2();
+			return obj;
+		}
 		View(){
 			const obj = new this.$.$mol_text_code();
 			(obj.text) = () => ((this.value()));
@@ -13822,6 +13832,7 @@ var $;
 			(obj.row_numb) = (id) => ((this.row_numb(id)));
 			(obj.sidebar_showed) = () => ((this.sidebar_showed()));
 			(obj.highlight) = () => ((this.highlight()));
+			(obj.syntax) = () => ((this.syntax()));
 			return obj;
 		}
 		attr(){
@@ -13893,6 +13904,7 @@ var $;
 	($mol_mem(($.$mol_textarea.prototype), "selection"));
 	($mol_mem(($.$mol_textarea.prototype), "submit"));
 	($mol_mem(($.$mol_textarea.prototype), "Edit"));
+	($mol_mem(($.$mol_textarea.prototype), "syntax"));
 	($mol_mem(($.$mol_textarea.prototype), "View"));
 	($.$mol_textarea_edit) = class $mol_textarea_edit extends ($.$mol_string) {
 		dom_name(){
@@ -13992,6 +14004,9 @@ var $;
             }
             row_numb(index) {
                 return index;
+            }
+            syntax() {
+                return this.$.$mol_syntax2_md_code;
             }
         }
         __decorate([
@@ -14256,28 +14271,50 @@ var $;
             event_inc(next) {
                 this.value_limited((this.value_limited() || 0) + this.precision_change());
             }
-            value_normalized(next) {
-                const next_num = this.value_limited(next === undefined ? next : Number(next));
-                if (Number.isNaN(next_num))
+            round(val) {
+                if (Number.isNaN(val))
+                    return '';
+                if (val === 0)
+                    return '0';
+                if (!val)
                     return '';
                 const precision_view = this.precision_view();
-                if (next_num === 0)
-                    return '0';
-                if (!next_num)
-                    return '';
+                if (!precision_view)
+                    return val.toFixed();
                 if (precision_view >= 1) {
-                    return (next_num / precision_view).toFixed();
+                    return (val / precision_view).toFixed();
                 }
                 else {
                     const fixed_number = Math.log10(1 / precision_view);
-                    return next_num.toFixed(Math.ceil(fixed_number));
+                    return val.toFixed(Math.ceil(fixed_number));
                 }
             }
             value_string(next) {
-                const current = this.value_normalized();
-                if (next !== undefined)
-                    this.value_normalized(next);
-                return next ?? current;
+                const current = this.round(this.value_limited());
+                if (next === undefined)
+                    return current;
+                const precision = this.precision_view();
+                if (precision - Math.floor(precision) === 0)
+                    next = next.replace(/[.,]/g, '');
+                next = (this.value_min() < 0 && next.startsWith('-') ? '-' : '')
+                    + next.replace(/,/g, '.').replace(/[^\d\.]/g, '').replace(/^0{2,}/, '0');
+                let dot_pos = next.indexOf('.');
+                if (dot_pos !== -1) {
+                    const prev = $mol_wire_probe(() => this.value_string()) ?? '';
+                    const dot_pos_prev = prev.indexOf('.');
+                    if (dot_pos_prev === dot_pos)
+                        dot_pos = next.lastIndexOf('.');
+                    const frac = next.slice(dot_pos + 1).replace(/\./g, '');
+                    next = (next.slice(0, dot_pos) || '0').replace(/\./g, '') + '.' + frac;
+                }
+                if (Number.isNaN(Number(next)))
+                    return next;
+                if (next.endsWith('.'))
+                    return next;
+                if (next.endsWith('-'))
+                    return next;
+                this.value_limited(Number(next || Number.NaN));
+                return next;
             }
             dec_enabled() {
                 return this.enabled() && (!((this.value() || 0) <= this.value_min()));
@@ -16294,6 +16331,28 @@ var $;
 "use strict";
 
 ;
+	($.$mol_icon_bullhorn) = class $mol_icon_bullhorn extends ($.$mol_icon) {
+		path(){
+			return "M12,8H4A2,2 0 0,0 2,10V14A2,2 0 0,0 4,16H5V20A1,1 0 0,0 6,21H8A1,1 0 0,0 9,20V16H12L17,20V4L12,8M21.5,12C21.5,13.71 20.54,15.26 19,16V8C20.53,8.75 21.5,10.3 21.5,12Z";
+		}
+	};
+
+
+;
+"use strict";
+
+;
+	($.$mol_icon_bullhorn_outline) = class $mol_icon_bullhorn_outline extends ($.$mol_icon) {
+		path(){
+			return "M12,8H4A2,2 0 0,0 2,10V14A2,2 0 0,0 4,16H5V20A1,1 0 0,0 6,21H8A1,1 0 0,0 9,20V16H12L17,20V4L12,8M15,15.6L13,14H4V10H13L15,8.4V15.6M21.5,12C21.5,13.71 20.54,15.26 19,16V8C20.53,8.75 21.5,10.3 21.5,12Z";
+		}
+	};
+
+
+;
+"use strict";
+
+;
 	($.$mol_icon_chart_bar) = class $mol_icon_chart_bar extends ($.$mol_icon) {
 		path(){
 			return "M22,21H2V3H4V19H6V10H10V19H12V6H16V19H18V14H22V21Z";
@@ -17018,6 +17077,17 @@ var $;
 			(obj.sub) = () => ([(this.Guests_link_icon())]);
 			return obj;
 		}
+		Texts_link_icon(){
+			const obj = new this.$.$mol_icon_bullhorn_outline();
+			return obj;
+		}
+		Texts_link(){
+			const obj = new this.$.$mol_link();
+			(obj.arg) = () => ({"texts": ""});
+			(obj.hint) = () => ("Тексты анонсов");
+			(obj.sub) = () => ([(this.Texts_link_icon())]);
+			return obj;
+		}
 		Stats_link_icon(){
 			const obj = new this.$.$mol_icon_chart_bar_stacked();
 			return obj;
@@ -17064,6 +17134,7 @@ var $;
 				(this.Editing()), 
 				(this.Rights_toggle()), 
 				(this.Guests_link()), 
+				(this.Texts_link()), 
 				(this.Stats_link())
 			];
 		}
@@ -17122,6 +17193,8 @@ var $;
 	($mol_mem(($.$piterjs_meetup_page.prototype), "Rights_toggle"));
 	($mol_mem(($.$piterjs_meetup_page.prototype), "Guests_link_icon"));
 	($mol_mem(($.$piterjs_meetup_page.prototype), "Guests_link"));
+	($mol_mem(($.$piterjs_meetup_page.prototype), "Texts_link_icon"));
+	($mol_mem(($.$piterjs_meetup_page.prototype), "Texts_link"));
 	($mol_mem(($.$piterjs_meetup_page.prototype), "Stats_link_icon"));
 	($mol_mem(($.$piterjs_meetup_page.prototype), "Stats_link"));
 	($mol_mem(($.$piterjs_meetup_page.prototype), "meetup"));
@@ -17661,6 +17734,133 @@ var $;
             Person_join_moment: {
                 padding: $mol_gap.text,
                 color: $mol_theme.shade,
+            },
+        });
+    })($$ = $.$$ || ($.$$ = {}));
+})($ || ($ = {}));
+
+;
+	($.$piterjs_meetup_texts) = class $piterjs_meetup_texts extends ($.$mol_page) {
+		Close_icon(){
+			const obj = new this.$.$mol_icon_close();
+			return obj;
+		}
+		Close(){
+			const obj = new this.$.$mol_link();
+			(obj.arg) = () => ({"texts": null});
+			(obj.sub) = () => ([(this.Close_icon())]);
+			return obj;
+		}
+		init_copy(){
+			const obj = new this.$.$mol_button_copy();
+			(obj.text) = () => ((this.init_text()));
+			return obj;
+		}
+		init_text(next){
+			if(next !== undefined) return next;
+			return "Ура! Скоро {title}\n\n⏰ Когда: {start}\n📍 Где: {place} ({address})\n\n📰 Программа\n\n{program}\n\n🎫 Регистрация: {register}";
+		}
+		Init_field(){
+			const obj = new this.$.$mol_textarea();
+			(obj.value) = (next) => ((this.init_text(next)));
+			return obj;
+		}
+		Init_labeler(){
+			const obj = new this.$.$mol_section();
+			(obj.title) = () => ("Анонс мероприятия");
+			(obj.tools) = () => ([(this.init_copy())]);
+			(obj.Content) = () => ((this.Init_field()));
+			return obj;
+		}
+		Content(){
+			const obj = new this.$.$mol_list();
+			(obj.rows) = () => ([(this.Init_labeler())]);
+			return obj;
+		}
+		theme(){
+			return "$mol_theme_special";
+		}
+		meetup(){
+			const obj = new this.$.$piterjs_meetup();
+			return obj;
+		}
+		title(){
+			return "Тексты анонсов";
+		}
+		tools(){
+			return [(this.Close())];
+		}
+		speech_text(id){
+			return "🎤 {start} {speaker} **{title}**";
+		}
+		body(){
+			return [(this.Content())];
+		}
+	};
+	($mol_mem(($.$piterjs_meetup_texts.prototype), "Close_icon"));
+	($mol_mem(($.$piterjs_meetup_texts.prototype), "Close"));
+	($mol_mem(($.$piterjs_meetup_texts.prototype), "init_copy"));
+	($mol_mem(($.$piterjs_meetup_texts.prototype), "init_text"));
+	($mol_mem(($.$piterjs_meetup_texts.prototype), "Init_field"));
+	($mol_mem(($.$piterjs_meetup_texts.prototype), "Init_labeler"));
+	($mol_mem(($.$piterjs_meetup_texts.prototype), "Content"));
+	($mol_mem(($.$piterjs_meetup_texts.prototype), "meetup"));
+
+
+;
+"use strict";
+
+;
+"use strict";
+var $;
+(function ($) {
+    var $$;
+    (function ($$) {
+        class $piterjs_meetup_texts extends $.$piterjs_meetup_texts {
+            speech_text(speech) {
+                return super.speech_text(speech)
+                    .replaceAll('{start}', speech.start().toString('hh:mm'))
+                    .replaceAll('{speaker}', speech.speaker().title())
+                    .replaceAll('{title}', speech.title());
+            }
+            init_text(next) {
+                if (next)
+                    return next;
+                const meetup = this.meetup();
+                const title = meetup.title();
+                const start = meetup.start()?.toString('DD Month hh:mm') ?? 'скоро';
+                const place = meetup.place().title();
+                const address = meetup.place().address();
+                const register = this.$.$mol_state_arg.make_link({ meetup: meetup.id() });
+                const program = meetup.speeches().map(speech => this.speech_text(speech)).join('\n') || 'формируется';
+                return super.init_text()
+                    .replaceAll('{title}', title)
+                    .replaceAll('{start}', start)
+                    .replaceAll('{place}', place)
+                    .replaceAll('{address}', address)
+                    .replaceAll('{program}', program)
+                    .replaceAll('{register}', register);
+            }
+        }
+        __decorate([
+            $mol_mem_key
+        ], $piterjs_meetup_texts.prototype, "speech_text", null);
+        __decorate([
+            $mol_mem
+        ], $piterjs_meetup_texts.prototype, "init_text", null);
+        $$.$piterjs_meetup_texts = $piterjs_meetup_texts;
+    })($$ = $.$$ || ($.$$ = {}));
+})($ || ($ = {}));
+
+;
+"use strict";
+var $;
+(function ($) {
+    var $$;
+    (function ($$) {
+        $mol_style_define($piterjs_meetup_texts, {
+            flex: {
+                basis: `30rem`,
             },
         });
     })($$ = $.$$ || ($.$$ = {}));
@@ -28945,6 +29145,11 @@ var $;
 			(obj.meetup) = () => ((this.meetup(id)));
 			return obj;
 		}
+		Meetup_texts(id){
+			const obj = new this.$.$piterjs_meetup_texts();
+			(obj.meetup) = () => ((this.meetup(id)));
+			return obj;
+		}
 		Meetup_stats(id){
 			const obj = new this.$.$piterjs_meetup_stats();
 			(obj.meetup) = () => ((this.meetup(id)));
@@ -29063,6 +29268,7 @@ var $;
 	($mol_mem(($.$piterjs_app.prototype), "Menu"));
 	($mol_mem_key(($.$piterjs_app.prototype), "Meetup"));
 	($mol_mem_key(($.$piterjs_app.prototype), "Meetup_guests"));
+	($mol_mem_key(($.$piterjs_app.prototype), "Meetup_texts"));
 	($mol_mem_key(($.$piterjs_app.prototype), "Meetup_stats"));
 	($mol_mem_key(($.$piterjs_app.prototype), "Speech"));
 	($mol_mem_key(($.$piterjs_app.prototype), "Menu_meetup"));
@@ -29107,6 +29313,7 @@ var $;
             others() { return this.$.$mol_state_arg.value('others') !== null; }
             wiki() { return this.$.$mol_state_arg.value('wiki') !== null; }
             guests() { return this.$.$mol_state_arg.value('guests') !== null; }
+            texts() { return this.$.$mol_state_arg.value('texts') !== null; }
             stats() { return this.$.$mol_state_arg.value('stats') !== null; }
             safe() { return this.$.$mol_state_arg.value('safe') !== null; }
             meetup_id(next) {
@@ -29138,6 +29345,7 @@ var $;
                     ...this.place_show() ? [this.Place()] : [],
                     ...this.video() ? [this.Video()] : [],
                     ...this.guests() ? [this.Meetup_guests(this.meetup_id())] : [],
+                    ...this.texts() ? [this.Meetup_texts(this.meetup_id())] : [],
                     ...this.stats() ? [this.Meetup_stats(this.meetup_id())] : [],
                     ...this.others() ? [this.Others()] : [],
                     ...this.wiki() ? this.Wiki().pages() : [],
