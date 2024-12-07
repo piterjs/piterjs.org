@@ -11482,17 +11482,20 @@ var $;
 			🎤 **{title}**
 		`,
         speech: `
-			✨ На PiterJS {meetup} в {time} для вас выступит {speaker} с докладом:
+			✨ На грядущем PiterJS для вас выступит {speaker} с докладом:
 			📜 **{title}**
 
 			{descr}
+
+			🎫 Регистрируйся, пока есть места: {meetup}
+			✔️ А если передумал идти — отмени регистрацию там же.
 		`,
         place: `
 			🎉 PiterJS {title} уже завтра в {place}: **{address}**
 			
 			🤗 Ждем тебя к {time}.
-			🙏 Если придёщь — отмени регистрацию: {meetup}
-			📽️ Но всё-равно смотри трансляцию!
+			🙏 Если не придёщь — отмени регистрацию: {meetup}
+			📽️ Но всё-равно смотри трансляцию: {video}
 		`,
         air: `
 			🎬 PiterJS {title} начинается!
@@ -12027,7 +12030,7 @@ var $;
             const title = this.title();
             const descr = this.description();
             const speaker = this.speaker().title();
-            const meetup = this.meetup()?.title() ?? '';
+            const meetup = this.$.$mol_state_arg.make_link({ meetup: this.meetup().id() });
             const date = this.start()?.toString('DD Month') ?? 'скоро';
             const time = this.start()?.toString('hh:mm') ?? '';
             return this.post_template()
