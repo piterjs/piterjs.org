@@ -17372,7 +17372,7 @@ var $;
 		}
 		Place_text(){
 			const obj = new this.$.$piterjs_meetup_texts_card();
-			(obj.title) = () => ("Анонс мероприятия");
+			(obj.title) = () => ("Напоминание за день");
 			(obj.text) = () => ((this.post_text("place")));
 			(obj.moment) = (next) => ((this.post_moment("place", next)));
 			return obj;
@@ -17393,7 +17393,7 @@ var $;
 		}
 		Retro_text(){
 			const obj = new this.$.$piterjs_meetup_texts_card();
-			(obj.title) = () => ("Ретропост");
+			(obj.title) = () => ("Ретроспектива");
 			(obj.text) = () => ((this.post_text("retro")));
 			(obj.moment) = (next) => ((this.post_moment("retro", next)));
 			return obj;
@@ -17581,7 +17581,7 @@ var $;
 		}
 		Retro_template_labeler(){
 			const obj = new this.$.$mol_labeler();
-			(obj.title) = () => ("Ретропост");
+			(obj.title) = () => ("Ретроспектива");
 			(obj.Content) = () => ((this.Retro_template()));
 			return obj;
 		}

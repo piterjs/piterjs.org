@@ -1338,7 +1338,7 @@ $piterjs_meetup_texts $mol_page
 				text <= post_text*init
 				moment? <=> post_moment*init?
 			<= Place_text $piterjs_meetup_texts_card
-				title \Анонс мероприятия
+				title \Напоминание за день
 				text <= post_text*place
 				moment? <=> post_moment*place?
 			<= Air_text $piterjs_meetup_texts_card
@@ -1350,7 +1350,7 @@ $piterjs_meetup_texts $mol_page
 				text <= post_text*afterparty
 				moment? <=> post_moment*afterparty?
 			<= Retro_text $piterjs_meetup_texts_card
-				title \Ретропост
+				title \Ретроспектива
 				text <= post_text*retro
 				moment? <=> post_moment*retro?
 
@@ -1395,7 +1395,7 @@ $piterjs_meetup_templates $mol_page
 				Content <= Afterparty_template $mol_textarea
 					value? <=> post_template*afterparty?
 			<= Retro_template_labeler $mol_labeler
-				title \Ретропост
+				title \Ретроспектива
 				Content <= Retro_template $mol_textarea
 					value? <=> post_template*retro?
 
