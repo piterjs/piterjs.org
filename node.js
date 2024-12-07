@@ -18032,70 +18032,40 @@ var $;
 			(obj.sub) = () => ([(this.Close_icon())]);
 			return obj;
 		}
-		Init_template(){
-			const obj = new this.$.$mol_textarea();
-			(obj.value) = (next) => ((this.post_template("init", next)));
-			return obj;
-		}
 		Init_template_labeler(){
-			const obj = new this.$.$mol_labeler();
+			const obj = new this.$.$piterjs_meetup_templates_field();
 			(obj.title) = () => ("Анонса мероприятия");
-			(obj.Content) = () => ((this.Init_template()));
-			return obj;
-		}
-		Init_speech_template(){
-			const obj = new this.$.$mol_textarea();
-			(obj.value) = (next) => ((this.post_template("init_speech", next)));
+			(obj.template) = (next) => ((this.post_template("init", next)));
 			return obj;
 		}
 		Init_speech_template_labeler(){
-			const obj = new this.$.$mol_labeler();
+			const obj = new this.$.$piterjs_meetup_templates_field();
 			(obj.title) = () => ("Доклад в анонсе");
-			(obj.Content) = () => ((this.Init_speech_template()));
-			return obj;
-		}
-		Place_template(){
-			const obj = new this.$.$mol_textarea();
-			(obj.value) = (next) => ((this.post_template("place", next)));
+			(obj.template) = (next) => ((this.post_template("init_speech", next)));
 			return obj;
 		}
 		Place_template_labeler(){
-			const obj = new this.$.$mol_labeler();
+			const obj = new this.$.$piterjs_meetup_templates_field();
 			(obj.title) = () => ("Напоминание за день");
-			(obj.Content) = () => ((this.Place_template()));
-			return obj;
-		}
-		Air_template(){
-			const obj = new this.$.$mol_textarea();
-			(obj.value) = (next) => ((this.post_template("air", next)));
+			(obj.template) = (next) => ((this.post_template("place", next)));
 			return obj;
 		}
 		Air_template_labeler(){
-			const obj = new this.$.$mol_labeler();
+			const obj = new this.$.$piterjs_meetup_templates_field();
 			(obj.title) = () => ("Выход в эфир");
-			(obj.Content) = () => ((this.Air_template()));
-			return obj;
-		}
-		Afterparty_template(){
-			const obj = new this.$.$mol_textarea();
-			(obj.value) = (next) => ((this.post_template("afterparty", next)));
+			(obj.template) = (next) => ((this.post_template("air", next)));
 			return obj;
 		}
 		Afterparty_template_labeler(){
-			const obj = new this.$.$mol_labeler();
+			const obj = new this.$.$piterjs_meetup_templates_field();
 			(obj.title) = () => ("Афтепати");
-			(obj.Content) = () => ((this.Afterparty_template()));
-			return obj;
-		}
-		Retro_template(){
-			const obj = new this.$.$mol_textarea();
-			(obj.value) = (next) => ((this.post_template("retro", next)));
+			(obj.template) = (next) => ((this.post_template("afterparty", next)));
 			return obj;
 		}
 		Retro_template_labeler(){
-			const obj = new this.$.$mol_labeler();
+			const obj = new this.$.$piterjs_meetup_templates_field();
 			(obj.title) = () => ("Ретроспектива");
-			(obj.Content) = () => ((this.Retro_template()));
+			(obj.template) = (next) => ((this.post_template("retro", next)));
 			return obj;
 		}
 		Content(){
@@ -18129,20 +18099,30 @@ var $;
 	};
 	($mol_mem(($.$piterjs_meetup_templates.prototype), "Close_icon"));
 	($mol_mem(($.$piterjs_meetup_templates.prototype), "Close"));
-	($mol_mem(($.$piterjs_meetup_templates.prototype), "Init_template"));
 	($mol_mem(($.$piterjs_meetup_templates.prototype), "Init_template_labeler"));
-	($mol_mem(($.$piterjs_meetup_templates.prototype), "Init_speech_template"));
 	($mol_mem(($.$piterjs_meetup_templates.prototype), "Init_speech_template_labeler"));
-	($mol_mem(($.$piterjs_meetup_templates.prototype), "Place_template"));
 	($mol_mem(($.$piterjs_meetup_templates.prototype), "Place_template_labeler"));
-	($mol_mem(($.$piterjs_meetup_templates.prototype), "Air_template"));
 	($mol_mem(($.$piterjs_meetup_templates.prototype), "Air_template_labeler"));
-	($mol_mem(($.$piterjs_meetup_templates.prototype), "Afterparty_template"));
 	($mol_mem(($.$piterjs_meetup_templates.prototype), "Afterparty_template_labeler"));
-	($mol_mem(($.$piterjs_meetup_templates.prototype), "Retro_template"));
 	($mol_mem(($.$piterjs_meetup_templates.prototype), "Retro_template_labeler"));
 	($mol_mem(($.$piterjs_meetup_templates.prototype), "Content"));
 	($mol_mem(($.$piterjs_meetup_templates.prototype), "meetup"));
+	($.$piterjs_meetup_templates_field) = class $piterjs_meetup_templates_field extends ($.$mol_expander) {
+		template(next){
+			if(next !== undefined) return next;
+			return "";
+		}
+		Template(){
+			const obj = new this.$.$mol_textarea();
+			(obj.value) = (next) => ((this.template(next)));
+			return obj;
+		}
+		content(){
+			return [(this.Template())];
+		}
+	};
+	($mol_mem(($.$piterjs_meetup_templates_field.prototype), "template"));
+	($mol_mem(($.$piterjs_meetup_templates_field.prototype), "Template"));
 
 
 ;
