@@ -1,5 +1,50 @@
 namespace $ {
 
+	export let $piterjs_meetup_post_texts = {
+		init: `
+			Ура! Скоро **PiterJS {title}**
+			
+			{descr}
+			
+			⏰ Когда: **{date} {time}**
+			📍 Где: {place} (**{address}**)
+			
+			📰 Программа
+			
+			{speeches}
+			
+			🎫 Регистрация: {meetup}
+		`,
+		init_speech: `
+			🗣️ {start} {speaker}
+			🎤 **{title}**
+		`,
+		place: `
+			🎉 PiterJS {title} уже завтра в {place}: **{address}**
+			
+			🤗 Ждем тебя к {time}.
+			🙏 Если придёщь — отмени регистрацию: {meetup}
+			📽️ Но всё-равно смотри трансляцию!
+		`,
+		air: `
+			🎬 PiterJS {title} начинается!
+			📽️ Занимайте места и смотрите трансляцию: **{video}**
+		`,
+		afterparty: `
+			✨ Вот и подошёл к концу очередной PiterJS..
+			📢 Оставляйте свои отзывы — они нам очень интересны: {meetup}
+			🎊 А кому не хватило, идём вместе на афтепати: **{afterparty}**
+		`,
+		retro: `
+			👐 Спасибо всем, что были с нами!
+			📸 Ищите себя на фоточках.
+			🙌 Особенно докладчикам — без вас ничего бы не состоялось!
+			🫶 Отдельное спасибо тем, кто оставил отзыв — вы помогаете нам становиться лучше: {meetup}
+			🤝 И конечно же, огромное спасибо от всего сообщества площадке {place} за гостеприимство и партнёрам за подарки.
+			👋 Не скучайте, мы скоро снова всех вас соберём вместе!
+		`,
+	}
+
 	export class $piterjs_meetup extends $piterjs_model {
 
 		@ $mol_mem
@@ -214,57 +259,44 @@ namespace $ {
 			const now = $mol_state_time.now( 60 * 1000 )
 			return start < now && now < end
 		}
-		
-		@ $mol_mem
-		init_template( next?: string ) {
-			return this.sub( 'init_template', $hyoo_crowd_text ).text( next ) || `
-				Ура! Скоро **PiterJS {title}**
-				
-				{descr}
-				
-				⏰ Когда: **{start}**
-				📍 Где: {place} (**{address}**)
-				
-				📰 Программа
-				
-				{speeches}
-				
-				🎫 Регистрация: {register}
-			`.replace( /\t/g, '' ).trim()
+
+		@ $mol_mem_key
+		post_template( id: keyof typeof $piterjs_meetup_post_texts, next?: string ) {
+			return this.sub( 'template', $hyoo_crowd_dict ).sub( id, $hyoo_crowd_text ).text( next )
+				|| $piterjs_meetup_post_texts[ id ].replace( /\t/g, '' ).trim()
 		}
 
-		@ $mol_mem
-		init_speech_template( next?: string ) {
-			return this.sub( 'init_speech_template', $hyoo_crowd_text ).text( next ) || `
-				🗣️ {start} {speaker}
-				🎤 **{title}**
-			`.replace( /\t/g, '' ).trim()
-		}
-
-		@ $mol_mem
-		init_text() {
+		@ $mol_mem_key
+		post_text( id: keyof typeof $piterjs_meetup_post_texts ) {
 
 			const title = this.title()
 			const descr = this.description()
-			const start = this.start()?.toString( 'DD Month hh:mm' ) ?? 'скоро'
+			const date = this.start()?.toString( 'DD Month' ) ?? 'скоро'
+			const time = this.start()?.toString( 'hh:mm' ) ?? ''
 			const place = this.place().title()
 			const address = this.place().address()
-			const register = this.$.$mol_state_arg.make_link({ meetup: this.id() })
+			const afterparty = this.afterparty()
+			const meetup = this.$.$mol_state_arg.make_link({ meetup: this.id() })
+			const video = this.video()
+
 			const speeches = this.speeches().map(
-				speech => this.init_speech_template()
+				speech => this.post_template( 'init_speech' )
 					.replaceAll( '{start}', speech.start().toString( 'hh:mm' ) )
 					.replaceAll( '{speaker}', speech.speaker().title() )
 					.replaceAll( '{title}', speech.title() )
 			).join( '\n\n' ) || 'формируется'
 			
-			return this.init_template()
+			return this.post_template( id )
 				.replaceAll( '{title}', title )
 				.replaceAll( '{descr}', descr )
-				.replaceAll( '{start}', start )
+				.replaceAll( '{date}', date )
+				.replaceAll( '{time}', time )
 				.replaceAll( '{place}', place )
 				.replaceAll( '{address}', address )
 				.replaceAll( '{speeches}', speeches )
-				.replaceAll( '{register}', register )
+				.replaceAll( '{meetup}', meetup )
+				.replaceAll( '{video}', video )
+				.replaceAll( '{afterparty}', afterparty )
 			
 		}
 

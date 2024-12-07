@@ -1,9 +1,7 @@
 $piterjs_meetup_templates $mol_page
 	theme \$mol_theme_special
 	meetup $piterjs_meetup
-		init_text => init_text
-		init_template? => init_template?
-		init_speech_template? => init_speech_template?
+		post_template*? => post_template*?
 	title \Шаблоны текстов
 	tools /
 		<= Close $mol_link
@@ -13,10 +11,26 @@ $piterjs_meetup_templates $mol_page
 	body /
 		<= Content $mol_list rows /
 			<= Init_template_labeler $mol_labeler
-				title \Шаблон анонса мероприятия
+				title \Анонса мероприятия
 				Content <= Init_template $mol_textarea
-					value? <=> init_template?
+					value? <=> post_template*init?
 			<= Init_speech_template_labeler $mol_labeler
-				title \Шаблон доклада в анонсе
+				title \Доклад в анонсе
 				Content <= Init_speech_template $mol_textarea
-					value? <=> init_speech_template?
+					value? <=> post_template*init_speech?
+			<= Place_template_labeler $mol_labeler
+				title \Напоминание за день
+				Content <= Place_template $mol_textarea
+					value? <=> post_template*place?
+			<= Air_template_labeler $mol_labeler
+				title \Выход в эфир
+				Content <= Air_template $mol_textarea
+					value? <=> post_template*air?
+			<= Afterparty_template_labeler $mol_labeler
+				title \Афтепати
+				Content <= Afterparty_template $mol_textarea
+					value? <=> post_template*afterparty?
+			<= Retro_template_labeler $mol_labeler
+				title \Ретропост
+				Content <= Retro_template $mol_textarea
+					value? <=> post_template*retro?

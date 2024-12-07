@@ -1,9 +1,7 @@
 $piterjs_meetup_texts $mol_page
 	theme \$mol_theme_special
 	meetup $piterjs_meetup
-		init_text => init_text
-		init_template? => init_template?
-		init_speech_template? => init_speech_template?
+		post_text* => post_text*
 	title \Тексты постов
 	tools /
 		<= Templates $mol_link
@@ -18,10 +16,22 @@ $piterjs_meetup_texts $mol_page
 		<= Content $mol_list rows /
 			<= Init_text $piterjs_meetup_texts_card
 				title \Анонс мероприятия
-				text <= init_text
+				text <= post_text*init
+			<= Place_text $piterjs_meetup_texts_card
+				title \Анонс мероприятия
+				text <= post_text*place
+			<= Air_text $piterjs_meetup_texts_card
+				title \Выход в эфир
+				text <= post_text*air
+			<= Arterpaty_text $piterjs_meetup_texts_card
+				title \Афтепати
+				text <= post_text*afterparty
+			<= Retro_text $piterjs_meetup_texts_card
+				title \Ретропост
+				text <= post_text*retro
 
-$piterjs_meetup_texts_card $mol_section
-	tools /
+$piterjs_meetup_texts_card $mol_expander
+	Tools $mol_view sub /
 		<= Copy $mol_button_copy
 			text <= text \
 	content / <= Text $mol_text
