@@ -11211,6 +11211,9 @@ var $;
             const now = $mol_state_time.now(60 * 1000);
             return start < now && now < end;
         }
+        init_text(next) {
+            return this.sub('init_text', $hyoo_crowd_reg).str(next);
+        }
     }
     __decorate([
         $mol_mem
@@ -11281,6 +11284,9 @@ var $;
     __decorate([
         $mol_mem
     ], $piterjs_meetup.prototype, "review_allowed", null);
+    __decorate([
+        $mol_mem
+    ], $piterjs_meetup.prototype, "init_text", null);
     $.$piterjs_meetup = $piterjs_meetup;
 })($ || ($ = {}));
 
@@ -17245,7 +17251,7 @@ var $;
 		}
 		init_text(next){
 			if(next !== undefined) return next;
-			return "Ура! Скоро {title}\n\n⏰ Когда: {start}\n📍 Где: {place} ({address})\n\n📰 Программа\n\n{program}\n\n🎫 Регистрация: {register}";
+			return "Ура! Скоро PiterJS {title}\n\n{descr}\n\n⏰ Когда: {start}\n📍 Где: {place} ({address})\n\n📰 Программа\n\n{program}\n\n🎫 Регистрация: {register}";
 		}
 		Init_field(){
 			const obj = new this.$.$mol_textarea();
@@ -17311,10 +17317,12 @@ var $;
                     .replaceAll('{title}', speech.title());
             }
             init_text(next) {
+                const meetup = this.meetup();
+                next = meetup.init_text(next);
                 if (next)
                     return next;
-                const meetup = this.meetup();
                 const title = meetup.title();
+                const descr = meetup.description();
                 const start = meetup.start()?.toString('DD Month hh:mm') ?? 'скоро';
                 const place = meetup.place().title();
                 const address = meetup.place().address();
@@ -17322,6 +17330,7 @@ var $;
                 const program = meetup.speeches().map(speech => this.speech_text(speech)).join('\n') || 'формируется';
                 return super.init_text()
                     .replaceAll('{title}', title)
+                    .replaceAll('{descr}', descr)
                     .replaceAll('{start}', start)
                     .replaceAll('{place}', place)
                     .replaceAll('{address}', address)

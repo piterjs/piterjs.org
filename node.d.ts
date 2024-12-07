@@ -3740,6 +3740,7 @@ declare namespace $ {
         review(next?: string): string;
         reviews(): string;
         review_allowed(): boolean;
+        init_text(next?: string): string;
     }
 }
 
