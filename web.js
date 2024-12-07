@@ -11256,8 +11256,12 @@ var $;
             return start < now && now < end;
         }
         post_template(id, next) {
-            return this.sub('template', $hyoo_crowd_dict).sub(id, $hyoo_crowd_text).text(next)
+            return this.sub('post_template', $hyoo_crowd_dict).sub(id, $hyoo_crowd_text).text(next)
                 || $.$piterjs_meetup_post_texts[id].replace(/\t/g, '').trim();
+        }
+        post_moment(id, next) {
+            const str = this.sub('post_moment', $hyoo_crowd_dict).sub(id, $hyoo_crowd_reg).str(next?.toString());
+            return str ? new $mol_time_moment(str) : null;
         }
         post_text(id) {
             const title = this.title();
@@ -11358,6 +11362,9 @@ var $;
     __decorate([
         $mol_mem_key
     ], $piterjs_meetup.prototype, "post_template", null);
+    __decorate([
+        $mol_mem_key
+    ], $piterjs_meetup.prototype, "post_moment", null);
     __decorate([
         $mol_mem_key
     ], $piterjs_meetup.prototype, "post_text", null);
@@ -17333,6 +17340,9 @@ var $;
 		post_text(id){
 			return (this.meetup().post_text(id));
 		}
+		post_moment(id, next){
+			return (this.meetup().post_moment(id, next));
+		}
 		Templates_icon(){
 			const obj = new this.$.$mol_icon_pencil_outline();
 			return obj;
@@ -17357,30 +17367,35 @@ var $;
 			const obj = new this.$.$piterjs_meetup_texts_card();
 			(obj.title) = () => ("Анонс мероприятия");
 			(obj.text) = () => ((this.post_text("init")));
+			(obj.moment) = (next) => ((this.post_moment("init", next)));
 			return obj;
 		}
 		Place_text(){
 			const obj = new this.$.$piterjs_meetup_texts_card();
 			(obj.title) = () => ("Анонс мероприятия");
 			(obj.text) = () => ((this.post_text("place")));
+			(obj.moment) = (next) => ((this.post_moment("place", next)));
 			return obj;
 		}
 		Air_text(){
 			const obj = new this.$.$piterjs_meetup_texts_card();
 			(obj.title) = () => ("Выход в эфир");
 			(obj.text) = () => ((this.post_text("air")));
+			(obj.moment) = (next) => ((this.post_moment("air", next)));
 			return obj;
 		}
 		Arterpaty_text(){
 			const obj = new this.$.$piterjs_meetup_texts_card();
 			(obj.title) = () => ("Афтепати");
 			(obj.text) = () => ((this.post_text("afterparty")));
+			(obj.moment) = (next) => ((this.post_moment("afterparty", next)));
 			return obj;
 		}
 		Retro_text(){
 			const obj = new this.$.$piterjs_meetup_texts_card();
 			(obj.title) = () => ("Ретропост");
 			(obj.text) = () => ((this.post_text("retro")));
+			(obj.moment) = (next) => ((this.post_moment("retro", next)));
 			return obj;
 		}
 		Content(){
@@ -17423,6 +17438,16 @@ var $;
 	($mol_mem(($.$piterjs_meetup_texts.prototype), "Content"));
 	($mol_mem(($.$piterjs_meetup_texts.prototype), "meetup"));
 	($.$piterjs_meetup_texts_card) = class $piterjs_meetup_texts_card extends ($.$mol_expander) {
+		moment(next){
+			if(next !== undefined) return next;
+			const obj = new this.$.$mol_time_moment();
+			return obj;
+		}
+		Date(){
+			const obj = new this.$.$mol_date();
+			(obj.value_moment) = (next) => ((this.moment(next)));
+			return obj;
+		}
 		text(){
 			return "";
 		}
@@ -17438,13 +17463,15 @@ var $;
 		}
 		Tools(){
 			const obj = new this.$.$mol_view();
-			(obj.sub) = () => ([(this.Copy())]);
+			(obj.sub) = () => ([(this.Date()), (this.Copy())]);
 			return obj;
 		}
 		content(){
 			return [(this.Text())];
 		}
 	};
+	($mol_mem(($.$piterjs_meetup_texts_card.prototype), "moment"));
+	($mol_mem(($.$piterjs_meetup_texts_card.prototype), "Date"));
 	($mol_mem(($.$piterjs_meetup_texts_card.prototype), "Copy"));
 	($mol_mem(($.$piterjs_meetup_texts_card.prototype), "Text"));
 	($mol_mem(($.$piterjs_meetup_texts_card.prototype), "Tools"));

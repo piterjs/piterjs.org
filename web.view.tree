@@ -1320,6 +1320,7 @@ $piterjs_meetup_texts $mol_page
 	theme \$mol_theme_special
 	meetup $piterjs_meetup
 		post_text* => post_text*
+		post_moment*? => post_moment*?
 	title \Тексты постов
 	tools /
 		<= Templates $mol_link
@@ -1335,21 +1336,27 @@ $piterjs_meetup_texts $mol_page
 			<= Init_text $piterjs_meetup_texts_card
 				title \Анонс мероприятия
 				text <= post_text*init
+				moment? <=> post_moment*init?
 			<= Place_text $piterjs_meetup_texts_card
 				title \Анонс мероприятия
 				text <= post_text*place
+				moment? <=> post_moment*place?
 			<= Air_text $piterjs_meetup_texts_card
 				title \Выход в эфир
 				text <= post_text*air
+				moment? <=> post_moment*air?
 			<= Arterpaty_text $piterjs_meetup_texts_card
 				title \Афтепати
 				text <= post_text*afterparty
+				moment? <=> post_moment*afterparty?
 			<= Retro_text $piterjs_meetup_texts_card
 				title \Ретропост
 				text <= post_text*retro
+				moment? <=> post_moment*retro?
 
 $piterjs_meetup_texts_card $mol_expander
 	Tools $mol_view sub /
+		<= Date $mol_date value_moment? <=> moment? $mol_time_moment
 		<= Copy $mol_button_copy
 			text <= text \
 	content / <= Text $mol_text

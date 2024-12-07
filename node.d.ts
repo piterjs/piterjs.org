@@ -3749,6 +3749,7 @@ declare namespace $ {
         reviews(): string;
         review_allowed(): boolean;
         post_template(id: keyof typeof $piterjs_meetup_post_texts, next?: string): string;
+        post_moment(id: keyof typeof $piterjs_meetup_post_texts, next?: $mol_time_moment): $mol_time_moment | null;
         post_text(id: keyof typeof $piterjs_meetup_post_texts): string;
     }
 }
@@ -7329,21 +7330,19 @@ declare namespace $ {
 		,
 		Parameters< ReturnType< $piterjs_meetup_texts['meetup'] >['post_text'] >[0]
 	>
-	type $mol_link__arg_piterjs_meetup_texts_2 = $mol_type_enforce<
-		({ 
-			'templates': string,
-		}) 
+	type _piterjs_meetup_texts_2 = $mol_type_enforce<
+		Parameters< $piterjs_meetup_texts['post_moment'] >[0]
 		,
-		ReturnType< $mol_link['arg'] >
+		Parameters< ReturnType< $piterjs_meetup_texts['meetup'] >['post_moment'] >[0]
 	>
-	type $mol_link__sub_piterjs_meetup_texts_3 = $mol_type_enforce<
-		readonly(any)[]
+	type _piterjs_meetup_texts_3 = $mol_type_enforce<
+		Parameters< $piterjs_meetup_texts['post_moment'] >[1]
 		,
-		ReturnType< $mol_link['sub'] >
+		Parameters< ReturnType< $piterjs_meetup_texts['meetup'] >['post_moment'] >[1]
 	>
 	type $mol_link__arg_piterjs_meetup_texts_4 = $mol_type_enforce<
 		({ 
-			'texts': any,
+			'templates': string,
 		}) 
 		,
 		ReturnType< $mol_link['arg'] >
@@ -7353,15 +7352,17 @@ declare namespace $ {
 		,
 		ReturnType< $mol_link['sub'] >
 	>
-	type $piterjs_meetup_texts_card__title_piterjs_meetup_texts_6 = $mol_type_enforce<
-		string
+	type $mol_link__arg_piterjs_meetup_texts_6 = $mol_type_enforce<
+		({ 
+			'texts': any,
+		}) 
 		,
-		ReturnType< $piterjs_meetup_texts_card['title'] >
+		ReturnType< $mol_link['arg'] >
 	>
-	type $piterjs_meetup_texts_card__text_piterjs_meetup_texts_7 = $mol_type_enforce<
-		ReturnType< $piterjs_meetup_texts['post_text'] >
+	type $mol_link__sub_piterjs_meetup_texts_7 = $mol_type_enforce<
+		readonly(any)[]
 		,
-		ReturnType< $piterjs_meetup_texts_card['text'] >
+		ReturnType< $mol_link['sub'] >
 	>
 	type $piterjs_meetup_texts_card__title_piterjs_meetup_texts_8 = $mol_type_enforce<
 		string
@@ -7373,25 +7374,25 @@ declare namespace $ {
 		,
 		ReturnType< $piterjs_meetup_texts_card['text'] >
 	>
-	type $piterjs_meetup_texts_card__title_piterjs_meetup_texts_10 = $mol_type_enforce<
+	type $piterjs_meetup_texts_card__moment_piterjs_meetup_texts_10 = $mol_type_enforce<
+		ReturnType< $piterjs_meetup_texts['post_moment'] >
+		,
+		ReturnType< $piterjs_meetup_texts_card['moment'] >
+	>
+	type $piterjs_meetup_texts_card__title_piterjs_meetup_texts_11 = $mol_type_enforce<
 		string
 		,
 		ReturnType< $piterjs_meetup_texts_card['title'] >
 	>
-	type $piterjs_meetup_texts_card__text_piterjs_meetup_texts_11 = $mol_type_enforce<
+	type $piterjs_meetup_texts_card__text_piterjs_meetup_texts_12 = $mol_type_enforce<
 		ReturnType< $piterjs_meetup_texts['post_text'] >
 		,
 		ReturnType< $piterjs_meetup_texts_card['text'] >
 	>
-	type $piterjs_meetup_texts_card__title_piterjs_meetup_texts_12 = $mol_type_enforce<
-		string
+	type $piterjs_meetup_texts_card__moment_piterjs_meetup_texts_13 = $mol_type_enforce<
+		ReturnType< $piterjs_meetup_texts['post_moment'] >
 		,
-		ReturnType< $piterjs_meetup_texts_card['title'] >
-	>
-	type $piterjs_meetup_texts_card__text_piterjs_meetup_texts_13 = $mol_type_enforce<
-		ReturnType< $piterjs_meetup_texts['post_text'] >
-		,
-		ReturnType< $piterjs_meetup_texts_card['text'] >
+		ReturnType< $piterjs_meetup_texts_card['moment'] >
 	>
 	type $piterjs_meetup_texts_card__title_piterjs_meetup_texts_14 = $mol_type_enforce<
 		string
@@ -7403,13 +7404,49 @@ declare namespace $ {
 		,
 		ReturnType< $piterjs_meetup_texts_card['text'] >
 	>
-	type $mol_list__rows_piterjs_meetup_texts_16 = $mol_type_enforce<
+	type $piterjs_meetup_texts_card__moment_piterjs_meetup_texts_16 = $mol_type_enforce<
+		ReturnType< $piterjs_meetup_texts['post_moment'] >
+		,
+		ReturnType< $piterjs_meetup_texts_card['moment'] >
+	>
+	type $piterjs_meetup_texts_card__title_piterjs_meetup_texts_17 = $mol_type_enforce<
+		string
+		,
+		ReturnType< $piterjs_meetup_texts_card['title'] >
+	>
+	type $piterjs_meetup_texts_card__text_piterjs_meetup_texts_18 = $mol_type_enforce<
+		ReturnType< $piterjs_meetup_texts['post_text'] >
+		,
+		ReturnType< $piterjs_meetup_texts_card['text'] >
+	>
+	type $piterjs_meetup_texts_card__moment_piterjs_meetup_texts_19 = $mol_type_enforce<
+		ReturnType< $piterjs_meetup_texts['post_moment'] >
+		,
+		ReturnType< $piterjs_meetup_texts_card['moment'] >
+	>
+	type $piterjs_meetup_texts_card__title_piterjs_meetup_texts_20 = $mol_type_enforce<
+		string
+		,
+		ReturnType< $piterjs_meetup_texts_card['title'] >
+	>
+	type $piterjs_meetup_texts_card__text_piterjs_meetup_texts_21 = $mol_type_enforce<
+		ReturnType< $piterjs_meetup_texts['post_text'] >
+		,
+		ReturnType< $piterjs_meetup_texts_card['text'] >
+	>
+	type $piterjs_meetup_texts_card__moment_piterjs_meetup_texts_22 = $mol_type_enforce<
+		ReturnType< $piterjs_meetup_texts['post_moment'] >
+		,
+		ReturnType< $piterjs_meetup_texts_card['moment'] >
+	>
+	type $mol_list__rows_piterjs_meetup_texts_23 = $mol_type_enforce<
 		readonly(any)[]
 		,
 		ReturnType< $mol_list['rows'] >
 	>
 	export class $piterjs_meetup_texts extends $mol_page {
 		post_text( id: any): ReturnType< ReturnType< $piterjs_meetup_texts['meetup'] >['post_text'] >
+		post_moment( id: any, next?: ReturnType< ReturnType< $piterjs_meetup_texts['meetup'] >['post_moment'] > ): ReturnType< ReturnType< $piterjs_meetup_texts['meetup'] >['post_moment'] >
 		Templates_icon( ): $mol_icon_pencil_outline
 		Templates( ): $mol_link
 		Close_icon( ): $mol_icon_close
@@ -7427,22 +7464,29 @@ declare namespace $ {
 		body( ): readonly(any)[]
 	}
 	
-	type $mol_button_copy__text_piterjs_meetup_texts_card_1 = $mol_type_enforce<
+	type $mol_date__value_moment_piterjs_meetup_texts_card_1 = $mol_type_enforce<
+		ReturnType< $piterjs_meetup_texts_card['moment'] >
+		,
+		ReturnType< $mol_date['value_moment'] >
+	>
+	type $mol_button_copy__text_piterjs_meetup_texts_card_2 = $mol_type_enforce<
 		ReturnType< $piterjs_meetup_texts_card['text'] >
 		,
 		ReturnType< $mol_button_copy['text'] >
 	>
-	type $mol_text__text_piterjs_meetup_texts_card_2 = $mol_type_enforce<
+	type $mol_text__text_piterjs_meetup_texts_card_3 = $mol_type_enforce<
 		ReturnType< $piterjs_meetup_texts_card['text'] >
 		,
 		ReturnType< $mol_text['text'] >
 	>
-	type $mol_view__sub_piterjs_meetup_texts_card_3 = $mol_type_enforce<
+	type $mol_view__sub_piterjs_meetup_texts_card_4 = $mol_type_enforce<
 		readonly(any)[]
 		,
 		ReturnType< $mol_view['sub'] >
 	>
 	export class $piterjs_meetup_texts_card extends $mol_expander {
+		moment( next?: $mol_time_moment ): $mol_time_moment
+		Date( ): $mol_date
 		text( ): string
 		Copy( ): $mol_button_copy
 		Text( ): $mol_text
