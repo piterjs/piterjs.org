@@ -3665,7 +3665,9 @@ declare namespace $ {
         review(next?: string): string;
         reviews(): string;
         review_allowed(): boolean;
-        init_text(next?: string): string;
+        init_template(next?: string): string;
+        init_speech_template(next?: string): string;
+        init_text(): string;
     }
 }
 
@@ -7181,74 +7183,194 @@ declare namespace $.$$ {
 
 declare namespace $ {
 
-	type $mol_link__arg_piterjs_meetup_texts_1 = $mol_type_enforce<
+	export class $mol_icon_pencil extends $mol_icon {
+		path( ): string
+	}
+	
+}
+
+//# sourceMappingURL=pencil.view.tree.d.ts.map
+declare namespace $ {
+
+	export class $mol_icon_pencil_outline extends $mol_icon {
+		path( ): string
+	}
+	
+}
+
+//# sourceMappingURL=outline.view.tree.d.ts.map
+declare namespace $ {
+
+	type _piterjs_meetup_texts_1 = $mol_type_enforce<
+		Parameters< $piterjs_meetup_texts['init_template'] >[0]
+		,
+		Parameters< ReturnType< $piterjs_meetup_texts['meetup'] >['init_template'] >[0]
+	>
+	type _piterjs_meetup_texts_2 = $mol_type_enforce<
+		Parameters< $piterjs_meetup_texts['init_speech_template'] >[0]
+		,
+		Parameters< ReturnType< $piterjs_meetup_texts['meetup'] >['init_speech_template'] >[0]
+	>
+	type $mol_link__arg_piterjs_meetup_texts_3 = $mol_type_enforce<
+		({ 
+			'templates': string,
+		}) 
+		,
+		ReturnType< $mol_link['arg'] >
+	>
+	type $mol_link__sub_piterjs_meetup_texts_4 = $mol_type_enforce<
+		readonly(any)[]
+		,
+		ReturnType< $mol_link['sub'] >
+	>
+	type $mol_link__arg_piterjs_meetup_texts_5 = $mol_type_enforce<
 		({ 
 			'texts': any,
 		}) 
 		,
 		ReturnType< $mol_link['arg'] >
 	>
-	type $mol_link__sub_piterjs_meetup_texts_2 = $mol_type_enforce<
+	type $mol_link__sub_piterjs_meetup_texts_6 = $mol_type_enforce<
 		readonly(any)[]
 		,
 		ReturnType< $mol_link['sub'] >
 	>
-	type $mol_button_copy__text_piterjs_meetup_texts_3 = $mol_type_enforce<
-		ReturnType< $piterjs_meetup_texts['init_text'] >
-		,
-		ReturnType< $mol_button_copy['text'] >
-	>
-	type $mol_textarea__value_piterjs_meetup_texts_4 = $mol_type_enforce<
-		ReturnType< $piterjs_meetup_texts['init_text'] >
-		,
-		ReturnType< $mol_textarea['value'] >
-	>
-	type $mol_section__title_piterjs_meetup_texts_5 = $mol_type_enforce<
+	type $piterjs_meetup_texts_card__title_piterjs_meetup_texts_7 = $mol_type_enforce<
 		string
 		,
-		ReturnType< $mol_section['title'] >
+		ReturnType< $piterjs_meetup_texts_card['title'] >
 	>
-	type $mol_section__tools_piterjs_meetup_texts_6 = $mol_type_enforce<
-		readonly(any)[]
+	type $piterjs_meetup_texts_card__text_piterjs_meetup_texts_8 = $mol_type_enforce<
+		ReturnType< $piterjs_meetup_texts['init_text'] >
 		,
-		ReturnType< $mol_section['tools'] >
+		ReturnType< $piterjs_meetup_texts_card['text'] >
 	>
-	type $mol_section__Content_piterjs_meetup_texts_7 = $mol_type_enforce<
-		ReturnType< $piterjs_meetup_texts['Init_field'] >
-		,
-		ReturnType< $mol_section['Content'] >
-	>
-	type $mol_list__rows_piterjs_meetup_texts_8 = $mol_type_enforce<
+	type $mol_list__rows_piterjs_meetup_texts_9 = $mol_type_enforce<
 		readonly(any)[]
 		,
 		ReturnType< $mol_list['rows'] >
 	>
 	export class $piterjs_meetup_texts extends $mol_page {
+		init_text( ): ReturnType< ReturnType< $piterjs_meetup_texts['meetup'] >['init_text'] >
+		init_template( next?: ReturnType< ReturnType< $piterjs_meetup_texts['meetup'] >['init_template'] > ): ReturnType< ReturnType< $piterjs_meetup_texts['meetup'] >['init_template'] >
+		init_speech_template( next?: ReturnType< ReturnType< $piterjs_meetup_texts['meetup'] >['init_speech_template'] > ): ReturnType< ReturnType< $piterjs_meetup_texts['meetup'] >['init_speech_template'] >
+		Templates_icon( ): $mol_icon_pencil_outline
+		Templates( ): $mol_link
 		Close_icon( ): $mol_icon_close
 		Close( ): $mol_link
-		init_copy( ): $mol_button_copy
-		init_text( next?: string ): string
-		Init_field( ): $mol_textarea
-		Init_labeler( ): $mol_section
+		Init_text( ): $piterjs_meetup_texts_card
 		Content( ): $mol_list
 		theme( ): string
 		meetup( ): $piterjs_meetup
 		title( ): string
 		tools( ): readonly(any)[]
-		speech_text( id: any): string
 		body( ): readonly(any)[]
+	}
+	
+	type $mol_button_copy__text_piterjs_meetup_texts_card_1 = $mol_type_enforce<
+		ReturnType< $piterjs_meetup_texts_card['text'] >
+		,
+		ReturnType< $mol_button_copy['text'] >
+	>
+	type $mol_text__text_piterjs_meetup_texts_card_2 = $mol_type_enforce<
+		ReturnType< $piterjs_meetup_texts_card['text'] >
+		,
+		ReturnType< $mol_text['text'] >
+	>
+	export class $piterjs_meetup_texts_card extends $mol_section {
+		text( ): string
+		Copy( ): $mol_button_copy
+		Text( ): $mol_text
+		tools( ): readonly(any)[]
+		content( ): readonly(any)[]
 	}
 	
 }
 
 //# sourceMappingURL=texts.view.tree.d.ts.map
 declare namespace $.$$ {
-    class $piterjs_meetup_texts extends $.$piterjs_meetup_texts {
-        speech_text(speech: $piterjs_speech): string;
-        init_text(next?: string): string;
-    }
 }
 
+declare namespace $ {
+
+	type _piterjs_meetup_templates_1 = $mol_type_enforce<
+		Parameters< $piterjs_meetup_templates['init_template'] >[0]
+		,
+		Parameters< ReturnType< $piterjs_meetup_templates['meetup'] >['init_template'] >[0]
+	>
+	type _piterjs_meetup_templates_2 = $mol_type_enforce<
+		Parameters< $piterjs_meetup_templates['init_speech_template'] >[0]
+		,
+		Parameters< ReturnType< $piterjs_meetup_templates['meetup'] >['init_speech_template'] >[0]
+	>
+	type $mol_link__arg_piterjs_meetup_templates_3 = $mol_type_enforce<
+		({ 
+			'templates': any,
+		}) 
+		,
+		ReturnType< $mol_link['arg'] >
+	>
+	type $mol_link__sub_piterjs_meetup_templates_4 = $mol_type_enforce<
+		readonly(any)[]
+		,
+		ReturnType< $mol_link['sub'] >
+	>
+	type $mol_textarea__value_piterjs_meetup_templates_5 = $mol_type_enforce<
+		ReturnType< $piterjs_meetup_templates['init_template'] >
+		,
+		ReturnType< $mol_textarea['value'] >
+	>
+	type $mol_labeler__title_piterjs_meetup_templates_6 = $mol_type_enforce<
+		string
+		,
+		ReturnType< $mol_labeler['title'] >
+	>
+	type $mol_labeler__Content_piterjs_meetup_templates_7 = $mol_type_enforce<
+		ReturnType< $piterjs_meetup_templates['Init_template'] >
+		,
+		ReturnType< $mol_labeler['Content'] >
+	>
+	type $mol_textarea__value_piterjs_meetup_templates_8 = $mol_type_enforce<
+		ReturnType< $piterjs_meetup_templates['init_speech_template'] >
+		,
+		ReturnType< $mol_textarea['value'] >
+	>
+	type $mol_labeler__title_piterjs_meetup_templates_9 = $mol_type_enforce<
+		string
+		,
+		ReturnType< $mol_labeler['title'] >
+	>
+	type $mol_labeler__Content_piterjs_meetup_templates_10 = $mol_type_enforce<
+		ReturnType< $piterjs_meetup_templates['Init_speech_template'] >
+		,
+		ReturnType< $mol_labeler['Content'] >
+	>
+	type $mol_list__rows_piterjs_meetup_templates_11 = $mol_type_enforce<
+		readonly(any)[]
+		,
+		ReturnType< $mol_list['rows'] >
+	>
+	export class $piterjs_meetup_templates extends $mol_page {
+		init_text( ): ReturnType< ReturnType< $piterjs_meetup_templates['meetup'] >['init_text'] >
+		init_template( next?: ReturnType< ReturnType< $piterjs_meetup_templates['meetup'] >['init_template'] > ): ReturnType< ReturnType< $piterjs_meetup_templates['meetup'] >['init_template'] >
+		init_speech_template( next?: ReturnType< ReturnType< $piterjs_meetup_templates['meetup'] >['init_speech_template'] > ): ReturnType< ReturnType< $piterjs_meetup_templates['meetup'] >['init_speech_template'] >
+		Close_icon( ): $mol_icon_close
+		Close( ): $mol_link
+		Init_template( ): $mol_textarea
+		Init_template_labeler( ): $mol_labeler
+		Init_speech_template( ): $mol_textarea
+		Init_speech_template_labeler( ): $mol_labeler
+		Content( ): $mol_list
+		theme( ): string
+		meetup( ): $piterjs_meetup
+		title( ): string
+		tools( ): readonly(any)[]
+		body( ): readonly(any)[]
+	}
+	
+}
+
+//# sourceMappingURL=templates.view.tree.d.ts.map
 declare namespace $.$$ {
 }
 
@@ -11019,24 +11141,6 @@ declare namespace $ {
 //# sourceMappingURL=magnify.view.tree.d.ts.map
 declare namespace $ {
 
-	export class $mol_icon_pencil extends $mol_icon {
-		path( ): string
-	}
-	
-}
-
-//# sourceMappingURL=pencil.view.tree.d.ts.map
-declare namespace $ {
-
-	export class $mol_icon_pencil_outline extends $mol_icon {
-		path( ): string
-	}
-	
-}
-
-//# sourceMappingURL=outline.view.tree.d.ts.map
-declare namespace $ {
-
 	export class $mol_ghost extends $mol_view {
 		Sub( ): $mol_view
 	}
@@ -13701,112 +13805,117 @@ declare namespace $ {
 		,
 		ReturnType< $piterjs_meetup_texts['meetup'] >
 	>
-	type $piterjs_meetup_stats__meetup_piterjs_app_47 = $mol_type_enforce<
+	type $piterjs_meetup_templates__meetup_piterjs_app_47 = $mol_type_enforce<
+		ReturnType< $piterjs_app['meetup'] >
+		,
+		ReturnType< $piterjs_meetup_templates['meetup'] >
+	>
+	type $piterjs_meetup_stats__meetup_piterjs_app_48 = $mol_type_enforce<
 		ReturnType< $piterjs_app['meetup'] >
 		,
 		ReturnType< $piterjs_meetup_stats['meetup'] >
 	>
-	type $piterjs_meetup_stats__meetup_prev_piterjs_app_48 = $mol_type_enforce<
+	type $piterjs_meetup_stats__meetup_prev_piterjs_app_49 = $mol_type_enforce<
 		ReturnType< $piterjs_app['meetup_prev'] >
 		,
 		ReturnType< $piterjs_meetup_stats['meetup_prev'] >
 	>
-	type $piterjs_speech_page__speech_piterjs_app_49 = $mol_type_enforce<
+	type $piterjs_speech_page__speech_piterjs_app_50 = $mol_type_enforce<
 		ReturnType< $piterjs_app['speech'] >
 		,
 		ReturnType< $piterjs_speech_page['speech'] >
 	>
-	type $piterjs_speech_page__editing_piterjs_app_50 = $mol_type_enforce<
+	type $piterjs_speech_page__editing_piterjs_app_51 = $mol_type_enforce<
 		ReturnType< $piterjs_app['editing'] >
 		,
 		ReturnType< $piterjs_speech_page['editing'] >
 	>
-	type $piterjs_speech_page__speech_public_piterjs_app_51 = $mol_type_enforce<
+	type $piterjs_speech_page__speech_public_piterjs_app_52 = $mol_type_enforce<
 		ReturnType< $piterjs_app['speech_public'] >
 		,
 		ReturnType< $piterjs_speech_page['speech_public'] >
 	>
-	type $piterjs_meetup_snippet__meetup_piterjs_app_52 = $mol_type_enforce<
+	type $piterjs_meetup_snippet__meetup_piterjs_app_53 = $mol_type_enforce<
 		ReturnType< $piterjs_app['meetup'] >
 		,
 		ReturnType< $piterjs_meetup_snippet['meetup'] >
 	>
-	type $piterjs_now__place_piterjs_app_53 = $mol_type_enforce<
+	type $piterjs_now__place_piterjs_app_54 = $mol_type_enforce<
 		ReturnType< $piterjs_app['place'] >
 		,
 		ReturnType< $piterjs_now['place'] >
 	>
-	type $piterjs_intro__meetup_piterjs_app_54 = $mol_type_enforce<
+	type $piterjs_intro__meetup_piterjs_app_55 = $mol_type_enforce<
 		ReturnType< $piterjs_app['meetup_current'] >
 		,
 		ReturnType< $piterjs_intro['meetup'] >
 	>
-	type $piterjs_intro__page_piterjs_app_55 = $mol_type_enforce<
+	type $piterjs_intro__page_piterjs_app_56 = $mol_type_enforce<
 		ReturnType< $piterjs_app['intro'] >
 		,
 		ReturnType< $piterjs_intro['page'] >
 	>
-	type $piterjs_video_page__source_piterjs_app_56 = $mol_type_enforce<
+	type $piterjs_video_page__source_piterjs_app_57 = $mol_type_enforce<
 		ReturnType< $piterjs_app['video_uri'] >
 		,
 		ReturnType< $piterjs_video_page['source'] >
 	>
-	type $piterjs_video_page__editing_piterjs_app_57 = $mol_type_enforce<
+	type $piterjs_video_page__editing_piterjs_app_58 = $mol_type_enforce<
 		ReturnType< $piterjs_app['editing'] >
 		,
 		ReturnType< $piterjs_video_page['editing'] >
 	>
-	type $piterjs_place_page__place_piterjs_app_58 = $mol_type_enforce<
+	type $piterjs_place_page__place_piterjs_app_59 = $mol_type_enforce<
 		ReturnType< $piterjs_app['place'] >
 		,
 		ReturnType< $piterjs_place_page['place'] >
 	>
-	type $piterjs_place_page__editing_piterjs_app_59 = $mol_type_enforce<
+	type $piterjs_place_page__editing_piterjs_app_60 = $mol_type_enforce<
 		ReturnType< $piterjs_app['editing'] >
 		,
 		ReturnType< $piterjs_place_page['editing'] >
 	>
-	type $hyoo_meta_rights__theme_piterjs_app_60 = $mol_type_enforce<
+	type $hyoo_meta_rights__theme_piterjs_app_61 = $mol_type_enforce<
 		string
 		,
 		ReturnType< $hyoo_meta_rights['theme'] >
 	>
-	type $hyoo_meta_rights__meta_piterjs_app_61 = $mol_type_enforce<
+	type $hyoo_meta_rights__meta_piterjs_app_62 = $mol_type_enforce<
 		ReturnType< $piterjs_app['Domain'] >
 		,
 		ReturnType< $hyoo_meta_rights['meta'] >
 	>
-	type $hyoo_meta_rights__tools_piterjs_app_62 = $mol_type_enforce<
+	type $hyoo_meta_rights__tools_piterjs_app_63 = $mol_type_enforce<
 		readonly(any)[]
 		,
 		ReturnType< $hyoo_meta_rights['tools'] >
 	>
-	type $hyoo_meta_rights__theme_piterjs_app_63 = $mol_type_enforce<
+	type $hyoo_meta_rights__theme_piterjs_app_64 = $mol_type_enforce<
 		string
 		,
 		ReturnType< $hyoo_meta_rights['theme'] >
 	>
-	type $hyoo_meta_rights__meta_piterjs_app_64 = $mol_type_enforce<
+	type $hyoo_meta_rights__meta_piterjs_app_65 = $mol_type_enforce<
 		ReturnType< $piterjs_app['meetup_current'] >
 		,
 		ReturnType< $hyoo_meta_rights['meta'] >
 	>
-	type $hyoo_meta_rights__tools_piterjs_app_65 = $mol_type_enforce<
+	type $hyoo_meta_rights__tools_piterjs_app_66 = $mol_type_enforce<
 		readonly(any)[]
 		,
 		ReturnType< $hyoo_meta_rights['tools'] >
 	>
-	type $hyoo_page__side_main_id_piterjs_app_66 = $mol_type_enforce<
+	type $hyoo_page__side_main_id_piterjs_app_67 = $mol_type_enforce<
 		string
 		,
 		ReturnType< $hyoo_page['side_main_id'] >
 	>
-	type $hyoo_page__yard_piterjs_app_67 = $mol_type_enforce<
+	type $hyoo_page__yard_piterjs_app_68 = $mol_type_enforce<
 		ReturnType< $piterjs_app['Yard'] >
 		,
 		ReturnType< $hyoo_page['yard'] >
 	>
-	type $hyoo_meta_safe__tools_piterjs_app_68 = $mol_type_enforce<
+	type $hyoo_meta_safe__tools_piterjs_app_69 = $mol_type_enforce<
 		readonly(any)[]
 		,
 		ReturnType< $hyoo_meta_safe['tools'] >
@@ -13871,6 +13980,7 @@ declare namespace $ {
 		Meetup( id: any): $piterjs_meetup_page
 		Meetup_guests( id: any): $piterjs_meetup_guests
 		Meetup_texts( id: any): $piterjs_meetup_texts
+		Meetup_templates( id: any): $piterjs_meetup_templates
 		Meetup_stats( id: any): $piterjs_meetup_stats
 		Speech( id: any): $piterjs_speech_page
 		Menu_meetup( id: any): $piterjs_meetup_snippet
@@ -13900,6 +14010,7 @@ declare namespace $.$$ {
         wiki(): boolean;
         guests(): boolean;
         texts(): boolean;
+        templates(): boolean;
         stats(): boolean;
         safe(): boolean;
         meetup_id(next?: string | null): string | null;
