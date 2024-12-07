@@ -3639,7 +3639,7 @@ declare namespace $ {
 }
 
 declare namespace $ {
-    let $piterjs_meetup_post_texts: {
+    let $piterjs_post_template: {
         init: string;
         init_speech: string;
         place: string;
@@ -3647,6 +3647,9 @@ declare namespace $ {
         afterparty: string;
         retro: string;
     };
+}
+
+declare namespace $ {
     class $piterjs_meetup extends $piterjs_model {
         start(next?: $mol_time_moment): $mol_time_moment;
         video(next?: string): string;
@@ -3673,9 +3676,9 @@ declare namespace $ {
         review(next?: string): string;
         reviews(): string;
         review_allowed(): boolean;
-        post_template(id: keyof typeof $piterjs_meetup_post_texts, next?: string): string;
-        post_moment(id: keyof typeof $piterjs_meetup_post_texts, next?: $mol_time_moment): $mol_time_moment | null;
-        post_text(id: keyof typeof $piterjs_meetup_post_texts): string;
+        post_template(id: keyof typeof $piterjs_post_template, next?: string): string;
+        post_moment(id: keyof typeof $piterjs_post_template, next?: $mol_time_moment): $mol_time_moment | null;
+        post_text(id: keyof typeof $piterjs_post_template): string;
     }
 }
 

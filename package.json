@@ -261,6 +261,7 @@
     "$mol_crypto_secret",
     "$piterjs_secret",
     "$mol_crypto_hash",
+    "$piterjs_post",
     "$mol_page",
     "$piterjs_meetup_page",
     "$mol_link_calendar",

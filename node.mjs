@@ -11462,7 +11462,7 @@ var $;
 "use strict";
 var $;
 (function ($) {
-    $.$piterjs_meetup_post_texts = {
+    $.$piterjs_post_template = {
         init: `
 			Ура! Скоро **PiterJS {title}**
 			
@@ -11506,6 +11506,12 @@ var $;
 			👋 Не скучайте, мы скоро снова всех вас соберём вместе!
 		`,
     };
+})($ || ($ = {}));
+
+;
+"use strict";
+var $;
+(function ($) {
     class $piterjs_meetup extends $piterjs_model {
         start(next) {
             const str = this.sub('start', $hyoo_crowd_reg).str(next?.toString());
@@ -11658,7 +11664,7 @@ var $;
         }
         post_template(id, next) {
             return this.sub('post_template', $hyoo_crowd_dict).sub(id, $hyoo_crowd_text).text(next)
-                || $.$piterjs_meetup_post_texts[id].replace(/\t/g, '').trim();
+                || $piterjs_post_template[id].replace(/\t/g, '').trim();
         }
         post_moment(id, next) {
             const str = this.sub('post_moment', $hyoo_crowd_dict).sub(id, $hyoo_crowd_reg).str(next?.toString());
