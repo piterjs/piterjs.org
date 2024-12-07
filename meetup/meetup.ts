@@ -262,8 +262,14 @@ namespace $ {
 
 		@ $mol_mem_key
 		post_template( id: keyof typeof $piterjs_meetup_post_texts, next?: string ) {
-			return this.sub( 'template', $hyoo_crowd_dict ).sub( id, $hyoo_crowd_text ).text( next )
+			return this.sub( 'post_template', $hyoo_crowd_dict ).sub( id, $hyoo_crowd_text ).text( next )
 				|| $piterjs_meetup_post_texts[ id ].replace( /\t/g, '' ).trim()
+		}
+
+		@ $mol_mem_key
+		post_moment( id: keyof typeof $piterjs_meetup_post_texts, next?: $mol_time_moment ) {
+			const str = this.sub( 'post_moment', $hyoo_crowd_dict ).sub( id, $hyoo_crowd_reg ).str( next?.toString() )
+			return str ? new $mol_time_moment( str ) : null
 		}
 
 		@ $mol_mem_key
