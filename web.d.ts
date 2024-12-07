@@ -3642,6 +3642,7 @@ declare namespace $ {
     let $piterjs_post_template: {
         init: string;
         init_speech: string;
+        speech: string;
         place: string;
         air: string;
         afterparty: string;
@@ -3744,6 +3745,8 @@ declare namespace $ {
         reviews_node(): $hyoo_crowd_dict | undefined;
         review(next?: string): string;
         reviews(): string;
+        post_template(next?: string): string;
+        post_text(): string;
     }
 }
 
@@ -7267,17 +7270,17 @@ declare namespace $ {
 		ReturnType< $piterjs_meetup_texts_card['moment'] >
 	>
 	type $piterjs_meetup_texts_card__title_piterjs_meetup_texts_11 = $mol_type_enforce<
-		string
+		ReturnType< $piterjs_meetup_texts['speech_post_title'] >
 		,
 		ReturnType< $piterjs_meetup_texts_card['title'] >
 	>
 	type $piterjs_meetup_texts_card__text_piterjs_meetup_texts_12 = $mol_type_enforce<
-		ReturnType< $piterjs_meetup_texts['post_text'] >
+		ReturnType< $piterjs_meetup_texts['speech_post_text'] >
 		,
 		ReturnType< $piterjs_meetup_texts_card['text'] >
 	>
 	type $piterjs_meetup_texts_card__moment_piterjs_meetup_texts_13 = $mol_type_enforce<
-		ReturnType< $piterjs_meetup_texts['post_moment'] >
+		ReturnType< $piterjs_meetup_texts['speech_post_moment'] >
 		,
 		ReturnType< $piterjs_meetup_texts_card['moment'] >
 	>
@@ -7326,7 +7329,22 @@ declare namespace $ {
 		,
 		ReturnType< $piterjs_meetup_texts_card['moment'] >
 	>
-	type $mol_list__rows_piterjs_meetup_texts_23 = $mol_type_enforce<
+	type $piterjs_meetup_texts_card__title_piterjs_meetup_texts_23 = $mol_type_enforce<
+		string
+		,
+		ReturnType< $piterjs_meetup_texts_card['title'] >
+	>
+	type $piterjs_meetup_texts_card__text_piterjs_meetup_texts_24 = $mol_type_enforce<
+		ReturnType< $piterjs_meetup_texts['post_text'] >
+		,
+		ReturnType< $piterjs_meetup_texts_card['text'] >
+	>
+	type $piterjs_meetup_texts_card__moment_piterjs_meetup_texts_25 = $mol_type_enforce<
+		ReturnType< $piterjs_meetup_texts['post_moment'] >
+		,
+		ReturnType< $piterjs_meetup_texts_card['moment'] >
+	>
+	type $mol_list__rows_piterjs_meetup_texts_26 = $mol_type_enforce<
 		readonly(any)[]
 		,
 		ReturnType< $mol_list['rows'] >
@@ -7339,6 +7357,11 @@ declare namespace $ {
 		Close_icon( ): $mol_icon_close
 		Close( ): $mol_link
 		Init_text( ): $piterjs_meetup_texts_card
+		speech_post_title( id: any): string
+		speech_post_text( id: any): string
+		speech_post_moment( id: any, next?: $mol_time_moment ): $mol_time_moment
+		Speech_post_text( id: any): $piterjs_meetup_texts_card
+		speech_post_texts( ): readonly(any)[]
 		Place_text( ): $piterjs_meetup_texts_card
 		Air_text( ): $piterjs_meetup_texts_card
 		Arterpaty_text( ): $piterjs_meetup_texts_card
@@ -7384,6 +7407,14 @@ declare namespace $ {
 }
 
 //# sourceMappingURL=texts.view.tree.d.ts.map
+declare namespace $.$$ {
+    class $piterjs_meetup_texts extends $.$piterjs_meetup_texts {
+        speech_post_texts(): $piterjs_meetup_texts_card[];
+        speech_post_title(speech: $piterjs_speech): string;
+        speech_post_text(speech: $piterjs_speech): string;
+    }
+}
+
 declare namespace $.$$ {
 }
 
@@ -7471,7 +7502,17 @@ declare namespace $ {
 		,
 		ReturnType< $piterjs_meetup_templates_field['template'] >
 	>
-	type $mol_list__rows_piterjs_meetup_templates_17 = $mol_type_enforce<
+	type $piterjs_meetup_templates_field__title_piterjs_meetup_templates_17 = $mol_type_enforce<
+		string
+		,
+		ReturnType< $piterjs_meetup_templates_field['title'] >
+	>
+	type $piterjs_meetup_templates_field__template_piterjs_meetup_templates_18 = $mol_type_enforce<
+		ReturnType< $piterjs_meetup_templates['post_template'] >
+		,
+		ReturnType< $piterjs_meetup_templates_field['template'] >
+	>
+	type $mol_list__rows_piterjs_meetup_templates_19 = $mol_type_enforce<
 		readonly(any)[]
 		,
 		ReturnType< $mol_list['rows'] >
@@ -7482,6 +7523,7 @@ declare namespace $ {
 		Close( ): $mol_link
 		Init_template_labeler( ): $piterjs_meetup_templates_field
 		Init_speech_template_labeler( ): $piterjs_meetup_templates_field
+		Speech_template_labeler( ): $piterjs_meetup_templates_field
 		Place_template_labeler( ): $piterjs_meetup_templates_field
 		Air_template_labeler( ): $piterjs_meetup_templates_field
 		Afterparty_template_labeler( ): $piterjs_meetup_templates_field
