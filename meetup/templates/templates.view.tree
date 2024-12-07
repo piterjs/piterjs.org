@@ -31,6 +31,6 @@ $piterjs_meetup_templates $mol_page
 				Content <= Afterparty_template $mol_textarea
 					value? <=> post_template*afterparty?
 			<= Retro_template_labeler $mol_labeler
-				title \Ретропост
+				title \Ретроспектива
 				Content <= Retro_template $mol_textarea
 					value? <=> post_template*retro?
