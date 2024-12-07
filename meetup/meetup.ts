@@ -215,6 +215,11 @@ namespace $ {
 			return start < now && now < end
 		}
 		
+		@ $mol_mem
+		init_text( next?: string ) {
+			return this.sub( 'init_text', $hyoo_crowd_reg ).str( next )
+		}
+
 	}
 
 }

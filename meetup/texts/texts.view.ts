@@ -11,19 +11,24 @@ namespace $.$$ {
 
 		@ $mol_mem
 		init_text( next?: string ) {
-			if( next ) return next
 
 			const meetup = this.meetup()
+			
+			next = meetup.init_text( next )
+			if( next ) return next
+
 			const title = meetup.title()
+			const descr = meetup.description()
 			const start = meetup.start()?.toString( 'DD Month hh:mm' ) ?? 'скоро'
 			const place = meetup.place().title()
 			const address = meetup.place().address()
 			const register = this.$.$mol_state_arg.make_link({ meetup: meetup.id() })
 
 			const program = meetup.speeches().map( speech => this.speech_text( speech ) ).join( '\n' ) || 'формируется'
-
+			
 			return super.init_text()
 				.replaceAll( '{title}', title )
+				.replaceAll( '{descr}', descr )
 				.replaceAll( '{start}', start )
 				.replaceAll( '{place}', place )
 				.replaceAll( '{address}', address )

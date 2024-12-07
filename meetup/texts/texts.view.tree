@@ -18,7 +18,9 @@ $piterjs_meetup_texts $mol_page
 						text <= init_text 
 				Content <= Init_field $mol_textarea
 					value? <=> init_text? \
-						\Ура! Скоро {title}
+						\Ура! Скоро PiterJS {title}
+						\
+						\{descr}
 						\
 						\⏰ Когда: {start}
 						\📍 Где: {place} ({address})
