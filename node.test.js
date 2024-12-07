@@ -17937,7 +17937,7 @@ var $;
 		}
 		Place_text(){
 			const obj = new this.$.$piterjs_meetup_texts_card();
-			(obj.title) = () => ("⌛ Напоминание за день");
+			(obj.title) = () => ("⌛ На кануне");
 			(obj.text) = () => ((this.post_text("place")));
 			(obj.moment) = (next) => ((this.post_moment("place", next)));
 			return obj;
@@ -18131,7 +18131,7 @@ var $;
 		}
 		Place_template_labeler(){
 			const obj = new this.$.$piterjs_meetup_templates_field();
-			(obj.title) = () => ("⌛ Напоминание за день");
+			(obj.title) = () => ("⌛ На кануне");
 			(obj.template) = (next) => ((this.post_template("place", next)));
 			return obj;
 		}
