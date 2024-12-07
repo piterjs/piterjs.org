@@ -17909,7 +17909,7 @@ var $;
 		}
 		Init_text(){
 			const obj = new this.$.$piterjs_meetup_texts_card();
-			(obj.title) = () => ("✨ Анонс мероприятия");
+			(obj.title) = () => ("✨ Анонс митапа");
 			(obj.text) = () => ((this.post_text("init")));
 			(obj.moment) = (next) => ((this.post_moment("init", next)));
 			return obj;
@@ -18113,7 +18113,7 @@ var $;
 		}
 		Init_template_labeler(){
 			const obj = new this.$.$piterjs_meetup_templates_field();
-			(obj.title) = () => ("✨ Анонса мероприятия");
+			(obj.title) = () => ("✨ Анонса митапа");
 			(obj.template) = (next) => ((this.post_template("init", next)));
 			return obj;
 		}
