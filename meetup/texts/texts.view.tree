@@ -16,23 +16,28 @@ $piterjs_meetup_texts $mol_page
 	body /
 		<= Content $mol_list rows /
 			<= Init_text $piterjs_meetup_texts_card
-				title \Анонс мероприятия
+				title \✨ Анонс мероприятия
 				text <= post_text*init
 				moment? <=> post_moment*init?
+			^ speech_post_texts /
+				<= Speech_post_text*0 $piterjs_meetup_texts_card
+					title <= speech_post_title* \🗣️ {speaker}
+					text <= speech_post_text* \
+					moment? <=> speech_post_moment*place? $mol_time_moment
 			<= Place_text $piterjs_meetup_texts_card
-				title \Напоминание за день
+				title \⌛ Напоминание за день
 				text <= post_text*place
 				moment? <=> post_moment*place?
 			<= Air_text $piterjs_meetup_texts_card
-				title \Выход в эфир
+				title \⏰ Выход в эфир
 				text <= post_text*air
 				moment? <=> post_moment*air?
 			<= Arterpaty_text $piterjs_meetup_texts_card
-				title \Афтепати
+				title \🎊 Афтепати
 				text <= post_text*afterparty
 				moment? <=> post_moment*afterparty?
 			<= Retro_text $piterjs_meetup_texts_card
-				title \Ретроспектива
+				title \🙏 Ретроспектива
 				text <= post_text*retro
 				moment? <=> post_moment*retro?
 

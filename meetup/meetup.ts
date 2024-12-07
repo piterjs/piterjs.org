@@ -218,7 +218,7 @@ namespace $ {
 		@ $mol_mem_key
 		post_template( id: keyof typeof $piterjs_post_template, next?: string ) {
 			return this.sub( 'post_template', $hyoo_crowd_dict ).sub( id, $hyoo_crowd_text ).text( next )
-				|| $piterjs_post_template[ id ].replace( /\t/g, '' ).trim()
+				|| $piterjs_post_template[ id ]
 		}
 
 		@ $mol_mem_key

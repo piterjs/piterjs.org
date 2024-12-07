@@ -2,7 +2,7 @@ namespace $ {
 
 	export let $piterjs_post_template = {
 		init: `
-			Ура! Скоро **PiterJS {title}**
+			✨ Ура! Скоро **PiterJS {title}**
 			
 			{descr}
 			
@@ -18,6 +18,12 @@ namespace $ {
 		init_speech: `
 			🗣️ {start} {speaker}
 			🎤 **{title}**
+		`,
+		speech: `
+			✨ На PiterJS {meetup} в {time} для вас выступит {speaker} с докладом:
+			📜 **{title}**
+
+			{descr}
 		`,
 		place: `
 			🎉 PiterJS {title} уже завтра в {place}: **{address}**
@@ -43,6 +49,10 @@ namespace $ {
 			🤝 И конечно же, огромное спасибо от всего сообщества площадке {place} за гостеприимство и партнёрам за подарки.
 			👋 Не скучайте, мы скоро снова всех вас соберём вместе!
 		`,
+	}
+
+	for( const name of Object.keys( $piterjs_post_template ) as ( keyof typeof $piterjs_post_template )[] ) {
+		$piterjs_post_template[ name ] = $piterjs_post_template[ name ].replace( /\t/g, '' ).trim()
 	}
 
 }

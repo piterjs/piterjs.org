@@ -60,6 +60,32 @@ namespace $ {
 			return reviews.filter( Boolean ).join( '\n---\n' )
 		}
 
+		@ $mol_mem
+		post_template( next?: string ) {
+			return this.sub( 'post_template', $hyoo_crowd_text ).text( next )
+				|| $piterjs_post_template.speech
+		}
+
+		@ $mol_mem
+		post_text() {
+
+			const title = this.title()
+			const descr = this.description()
+			const speaker = this.speaker().title()
+			const meetup = this.meetup()?.title() ?? ''
+			const date = this.start()?.toString( 'DD Month' ) ?? 'скоро'
+			const time = this.start()?.toString( 'hh:mm' ) ?? ''
+
+			return this.post_template()
+				.replaceAll( '{title}', title )
+				.replaceAll( '{descr}', descr )
+				.replaceAll( '{date}', date )
+				.replaceAll( '{time}', time )
+				.replaceAll( '{speaker}', speaker )
+				.replaceAll( '{meetup}', meetup )
+			
+		}
+
 	}
 
 }
