@@ -11,7 +11,7 @@ $piterjs_meetup_templates $mol_page
 	body /
 		<= Content $mol_list rows /
 			<= Init_template_labeler $piterjs_meetup_templates_field
-				title \✨ Анонса мероприятия
+				title \✨ Анонса митапа
 				template? <=> post_template*init?
 			<= Init_speech_template_labeler $piterjs_meetup_templates_field
 				title \🗣️ Доклад в анонсе

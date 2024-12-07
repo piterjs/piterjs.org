@@ -16,7 +16,7 @@ $piterjs_meetup_texts $mol_page
 	body /
 		<= Content $mol_list rows /
 			<= Init_text $piterjs_meetup_texts_card
-				title \✨ Анонс мероприятия
+				title \✨ Анонс митапа
 				text <= post_text*init
 				moment? <=> post_moment*init?
 			^ speech_post_texts /
