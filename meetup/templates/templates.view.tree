@@ -20,7 +20,7 @@ $piterjs_meetup_templates $mol_page
 				title \🗣️ Анонс доклада
 				template? <=> post_template*speech?
 			<= Place_template_labeler $piterjs_meetup_templates_field
-				title \⌛ Напоминание за день
+				title \⌛ На кануне
 				template? <=> post_template*place?
 			<= Air_template_labeler $piterjs_meetup_templates_field
 				title \⏰ Выход в эфир

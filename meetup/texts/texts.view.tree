@@ -25,7 +25,7 @@ $piterjs_meetup_texts $mol_page
 					text <= speech_post_text* \
 					moment? <=> speech_post_moment*place? $mol_time_moment
 			<= Place_text $piterjs_meetup_texts_card
-				title \⌛ Напоминание за день
+				title \⌛ На кануне
 				text <= post_text*place
 				moment? <=> post_moment*place?
 			<= Air_text $piterjs_meetup_texts_card
