@@ -10,27 +10,26 @@ $piterjs_meetup_templates $mol_page
 				<= Close_icon $mol_icon_close
 	body /
 		<= Content $mol_list rows /
-			<= Init_template_labeler $mol_labeler
+			<= Init_template_labeler $piterjs_meetup_templates_field
 				title \Анонса мероприятия
-				Content <= Init_template $mol_textarea
-					value? <=> post_template*init?
-			<= Init_speech_template_labeler $mol_labeler
+				template? <=> post_template*init?
+			<= Init_speech_template_labeler $piterjs_meetup_templates_field
 				title \Доклад в анонсе
-				Content <= Init_speech_template $mol_textarea
-					value? <=> post_template*init_speech?
-			<= Place_template_labeler $mol_labeler
+				template? <=> post_template*init_speech?
+			<= Place_template_labeler $piterjs_meetup_templates_field
 				title \Напоминание за день
-				Content <= Place_template $mol_textarea
-					value? <=> post_template*place?
-			<= Air_template_labeler $mol_labeler
+				template? <=> post_template*place?
+			<= Air_template_labeler $piterjs_meetup_templates_field
 				title \Выход в эфир
-				Content <= Air_template $mol_textarea
-					value? <=> post_template*air?
-			<= Afterparty_template_labeler $mol_labeler
+				template? <=> post_template*air?
+			<= Afterparty_template_labeler $piterjs_meetup_templates_field
 				title \Афтепати
-				Content <= Afterparty_template $mol_textarea
-					value? <=> post_template*afterparty?
-			<= Retro_template_labeler $mol_labeler
+				template? <=> post_template*afterparty?
+			<= Retro_template_labeler $piterjs_meetup_templates_field
 				title \Ретроспектива
-				Content <= Retro_template $mol_textarea
-					value? <=> post_template*retro?
+				template? <=> post_template*retro?
+
+$piterjs_meetup_templates_field $mol_expander
+	content /
+		<= Template $mol_textarea
+			value? <=> template? \
