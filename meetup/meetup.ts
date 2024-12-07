@@ -1,50 +1,5 @@
 namespace $ {
 
-	export let $piterjs_meetup_post_texts = {
-		init: `
-			Ура! Скоро **PiterJS {title}**
-			
-			{descr}
-			
-			⏰ Когда: **{date} {time}**
-			📍 Где: {place} (**{address}**)
-			
-			📰 Программа
-			
-			{speeches}
-			
-			🎫 Регистрация: {meetup}
-		`,
-		init_speech: `
-			🗣️ {start} {speaker}
-			🎤 **{title}**
-		`,
-		place: `
-			🎉 PiterJS {title} уже завтра в {place}: **{address}**
-			
-			🤗 Ждем тебя к {time}.
-			🙏 Если придёщь — отмени регистрацию: {meetup}
-			📽️ Но всё-равно смотри трансляцию!
-		`,
-		air: `
-			🎬 PiterJS {title} начинается!
-			📽️ Занимайте места и смотрите трансляцию: **{video}**
-		`,
-		afterparty: `
-			✨ Вот и подошёл к концу очередной PiterJS..
-			📢 Оставляйте свои отзывы — они нам очень интересны: {meetup}
-			🎊 А кому не хватило, идём вместе на афтепати: **{afterparty}**
-		`,
-		retro: `
-			👐 Спасибо всем, что были с нами!
-			📸 Ищите себя на фоточках.
-			🙌 Особенно докладчикам — без вас ничего бы не состоялось!
-			🫶 Отдельное спасибо тем, кто оставил отзыв — вы помогаете нам становиться лучше: {meetup}
-			🤝 И конечно же, огромное спасибо от всего сообщества площадке {place} за гостеприимство и партнёрам за подарки.
-			👋 Не скучайте, мы скоро снова всех вас соберём вместе!
-		`,
-	}
-
 	export class $piterjs_meetup extends $piterjs_model {
 
 		@ $mol_mem
@@ -261,19 +216,19 @@ namespace $ {
 		}
 
 		@ $mol_mem_key
-		post_template( id: keyof typeof $piterjs_meetup_post_texts, next?: string ) {
+		post_template( id: keyof typeof $piterjs_post_template, next?: string ) {
 			return this.sub( 'post_template', $hyoo_crowd_dict ).sub( id, $hyoo_crowd_text ).text( next )
-				|| $piterjs_meetup_post_texts[ id ].replace( /\t/g, '' ).trim()
+				|| $piterjs_post_template[ id ].replace( /\t/g, '' ).trim()
 		}
 
 		@ $mol_mem_key
-		post_moment( id: keyof typeof $piterjs_meetup_post_texts, next?: $mol_time_moment ) {
+		post_moment( id: keyof typeof $piterjs_post_template, next?: $mol_time_moment ) {
 			const str = this.sub( 'post_moment', $hyoo_crowd_dict ).sub( id, $hyoo_crowd_reg ).str( next?.toString() )
 			return str ? new $mol_time_moment( str ) : null
 		}
 
 		@ $mol_mem_key
-		post_text( id: keyof typeof $piterjs_meetup_post_texts ) {
+		post_text( id: keyof typeof $piterjs_post_template ) {
 
 			const title = this.title()
 			const descr = this.description()
