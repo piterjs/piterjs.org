@@ -3714,6 +3714,14 @@ declare namespace $ {
 }
 
 declare namespace $ {
+    let $piterjs_meetup_post_texts: {
+        init: string;
+        init_speech: string;
+        place: string;
+        air: string;
+        afterparty: string;
+        retro: string;
+    };
     class $piterjs_meetup extends $piterjs_model {
         start(next?: $mol_time_moment): $mol_time_moment;
         video(next?: string): string;
@@ -3740,9 +3748,8 @@ declare namespace $ {
         review(next?: string): string;
         reviews(): string;
         review_allowed(): boolean;
-        init_template(next?: string): string;
-        init_speech_template(next?: string): string;
-        init_text(): string;
+        post_template(id: keyof typeof $piterjs_meetup_post_texts, next?: string): string;
+        post_text(id: keyof typeof $piterjs_meetup_post_texts): string;
     }
 }
 
@@ -7318,63 +7325,100 @@ declare namespace $ {
 declare namespace $ {
 
 	type _piterjs_meetup_texts_1 = $mol_type_enforce<
-		Parameters< $piterjs_meetup_texts['init_template'] >[0]
+		Parameters< $piterjs_meetup_texts['post_text'] >[0]
 		,
-		Parameters< ReturnType< $piterjs_meetup_texts['meetup'] >['init_template'] >[0]
+		Parameters< ReturnType< $piterjs_meetup_texts['meetup'] >['post_text'] >[0]
 	>
-	type _piterjs_meetup_texts_2 = $mol_type_enforce<
-		Parameters< $piterjs_meetup_texts['init_speech_template'] >[0]
-		,
-		Parameters< ReturnType< $piterjs_meetup_texts['meetup'] >['init_speech_template'] >[0]
-	>
-	type $mol_link__arg_piterjs_meetup_texts_3 = $mol_type_enforce<
+	type $mol_link__arg_piterjs_meetup_texts_2 = $mol_type_enforce<
 		({ 
 			'templates': string,
 		}) 
 		,
 		ReturnType< $mol_link['arg'] >
 	>
-	type $mol_link__sub_piterjs_meetup_texts_4 = $mol_type_enforce<
+	type $mol_link__sub_piterjs_meetup_texts_3 = $mol_type_enforce<
 		readonly(any)[]
 		,
 		ReturnType< $mol_link['sub'] >
 	>
-	type $mol_link__arg_piterjs_meetup_texts_5 = $mol_type_enforce<
+	type $mol_link__arg_piterjs_meetup_texts_4 = $mol_type_enforce<
 		({ 
 			'texts': any,
 		}) 
 		,
 		ReturnType< $mol_link['arg'] >
 	>
-	type $mol_link__sub_piterjs_meetup_texts_6 = $mol_type_enforce<
+	type $mol_link__sub_piterjs_meetup_texts_5 = $mol_type_enforce<
 		readonly(any)[]
 		,
 		ReturnType< $mol_link['sub'] >
 	>
-	type $piterjs_meetup_texts_card__title_piterjs_meetup_texts_7 = $mol_type_enforce<
+	type $piterjs_meetup_texts_card__title_piterjs_meetup_texts_6 = $mol_type_enforce<
 		string
 		,
 		ReturnType< $piterjs_meetup_texts_card['title'] >
 	>
-	type $piterjs_meetup_texts_card__text_piterjs_meetup_texts_8 = $mol_type_enforce<
-		ReturnType< $piterjs_meetup_texts['init_text'] >
+	type $piterjs_meetup_texts_card__text_piterjs_meetup_texts_7 = $mol_type_enforce<
+		ReturnType< $piterjs_meetup_texts['post_text'] >
 		,
 		ReturnType< $piterjs_meetup_texts_card['text'] >
 	>
-	type $mol_list__rows_piterjs_meetup_texts_9 = $mol_type_enforce<
+	type $piterjs_meetup_texts_card__title_piterjs_meetup_texts_8 = $mol_type_enforce<
+		string
+		,
+		ReturnType< $piterjs_meetup_texts_card['title'] >
+	>
+	type $piterjs_meetup_texts_card__text_piterjs_meetup_texts_9 = $mol_type_enforce<
+		ReturnType< $piterjs_meetup_texts['post_text'] >
+		,
+		ReturnType< $piterjs_meetup_texts_card['text'] >
+	>
+	type $piterjs_meetup_texts_card__title_piterjs_meetup_texts_10 = $mol_type_enforce<
+		string
+		,
+		ReturnType< $piterjs_meetup_texts_card['title'] >
+	>
+	type $piterjs_meetup_texts_card__text_piterjs_meetup_texts_11 = $mol_type_enforce<
+		ReturnType< $piterjs_meetup_texts['post_text'] >
+		,
+		ReturnType< $piterjs_meetup_texts_card['text'] >
+	>
+	type $piterjs_meetup_texts_card__title_piterjs_meetup_texts_12 = $mol_type_enforce<
+		string
+		,
+		ReturnType< $piterjs_meetup_texts_card['title'] >
+	>
+	type $piterjs_meetup_texts_card__text_piterjs_meetup_texts_13 = $mol_type_enforce<
+		ReturnType< $piterjs_meetup_texts['post_text'] >
+		,
+		ReturnType< $piterjs_meetup_texts_card['text'] >
+	>
+	type $piterjs_meetup_texts_card__title_piterjs_meetup_texts_14 = $mol_type_enforce<
+		string
+		,
+		ReturnType< $piterjs_meetup_texts_card['title'] >
+	>
+	type $piterjs_meetup_texts_card__text_piterjs_meetup_texts_15 = $mol_type_enforce<
+		ReturnType< $piterjs_meetup_texts['post_text'] >
+		,
+		ReturnType< $piterjs_meetup_texts_card['text'] >
+	>
+	type $mol_list__rows_piterjs_meetup_texts_16 = $mol_type_enforce<
 		readonly(any)[]
 		,
 		ReturnType< $mol_list['rows'] >
 	>
 	export class $piterjs_meetup_texts extends $mol_page {
-		init_text( ): ReturnType< ReturnType< $piterjs_meetup_texts['meetup'] >['init_text'] >
-		init_template( next?: ReturnType< ReturnType< $piterjs_meetup_texts['meetup'] >['init_template'] > ): ReturnType< ReturnType< $piterjs_meetup_texts['meetup'] >['init_template'] >
-		init_speech_template( next?: ReturnType< ReturnType< $piterjs_meetup_texts['meetup'] >['init_speech_template'] > ): ReturnType< ReturnType< $piterjs_meetup_texts['meetup'] >['init_speech_template'] >
+		post_text( id: any): ReturnType< ReturnType< $piterjs_meetup_texts['meetup'] >['post_text'] >
 		Templates_icon( ): $mol_icon_pencil_outline
 		Templates( ): $mol_link
 		Close_icon( ): $mol_icon_close
 		Close( ): $mol_link
 		Init_text( ): $piterjs_meetup_texts_card
+		Place_text( ): $piterjs_meetup_texts_card
+		Air_text( ): $piterjs_meetup_texts_card
+		Arterpaty_text( ): $piterjs_meetup_texts_card
+		Retro_text( ): $piterjs_meetup_texts_card
 		Content( ): $mol_list
 		theme( ): string
 		meetup( ): $piterjs_meetup
@@ -7393,11 +7437,16 @@ declare namespace $ {
 		,
 		ReturnType< $mol_text['text'] >
 	>
-	export class $piterjs_meetup_texts_card extends $mol_section {
+	type $mol_view__sub_piterjs_meetup_texts_card_3 = $mol_type_enforce<
+		readonly(any)[]
+		,
+		ReturnType< $mol_view['sub'] >
+	>
+	export class $piterjs_meetup_texts_card extends $mol_expander {
 		text( ): string
 		Copy( ): $mol_button_copy
 		Text( ): $mol_text
-		tools( ): readonly(any)[]
+		Tools( ): $mol_view
 		content( ): readonly(any)[]
 	}
 	
@@ -7410,14 +7459,14 @@ declare namespace $.$$ {
 declare namespace $ {
 
 	type _piterjs_meetup_templates_1 = $mol_type_enforce<
-		Parameters< $piterjs_meetup_templates['init_template'] >[0]
+		Parameters< $piterjs_meetup_templates['post_template'] >[0]
 		,
-		Parameters< ReturnType< $piterjs_meetup_templates['meetup'] >['init_template'] >[0]
+		Parameters< ReturnType< $piterjs_meetup_templates['meetup'] >['post_template'] >[0]
 	>
 	type _piterjs_meetup_templates_2 = $mol_type_enforce<
-		Parameters< $piterjs_meetup_templates['init_speech_template'] >[0]
+		Parameters< $piterjs_meetup_templates['post_template'] >[1]
 		,
-		Parameters< ReturnType< $piterjs_meetup_templates['meetup'] >['init_speech_template'] >[0]
+		Parameters< ReturnType< $piterjs_meetup_templates['meetup'] >['post_template'] >[1]
 	>
 	type $mol_link__arg_piterjs_meetup_templates_3 = $mol_type_enforce<
 		({ 
@@ -7432,7 +7481,7 @@ declare namespace $ {
 		ReturnType< $mol_link['sub'] >
 	>
 	type $mol_textarea__value_piterjs_meetup_templates_5 = $mol_type_enforce<
-		ReturnType< $piterjs_meetup_templates['init_template'] >
+		ReturnType< $piterjs_meetup_templates['post_template'] >
 		,
 		ReturnType< $mol_textarea['value'] >
 	>
@@ -7447,7 +7496,7 @@ declare namespace $ {
 		ReturnType< $mol_labeler['Content'] >
 	>
 	type $mol_textarea__value_piterjs_meetup_templates_8 = $mol_type_enforce<
-		ReturnType< $piterjs_meetup_templates['init_speech_template'] >
+		ReturnType< $piterjs_meetup_templates['post_template'] >
 		,
 		ReturnType< $mol_textarea['value'] >
 	>
@@ -7461,21 +7510,87 @@ declare namespace $ {
 		,
 		ReturnType< $mol_labeler['Content'] >
 	>
-	type $mol_list__rows_piterjs_meetup_templates_11 = $mol_type_enforce<
+	type $mol_textarea__value_piterjs_meetup_templates_11 = $mol_type_enforce<
+		ReturnType< $piterjs_meetup_templates['post_template'] >
+		,
+		ReturnType< $mol_textarea['value'] >
+	>
+	type $mol_labeler__title_piterjs_meetup_templates_12 = $mol_type_enforce<
+		string
+		,
+		ReturnType< $mol_labeler['title'] >
+	>
+	type $mol_labeler__Content_piterjs_meetup_templates_13 = $mol_type_enforce<
+		ReturnType< $piterjs_meetup_templates['Place_template'] >
+		,
+		ReturnType< $mol_labeler['Content'] >
+	>
+	type $mol_textarea__value_piterjs_meetup_templates_14 = $mol_type_enforce<
+		ReturnType< $piterjs_meetup_templates['post_template'] >
+		,
+		ReturnType< $mol_textarea['value'] >
+	>
+	type $mol_labeler__title_piterjs_meetup_templates_15 = $mol_type_enforce<
+		string
+		,
+		ReturnType< $mol_labeler['title'] >
+	>
+	type $mol_labeler__Content_piterjs_meetup_templates_16 = $mol_type_enforce<
+		ReturnType< $piterjs_meetup_templates['Air_template'] >
+		,
+		ReturnType< $mol_labeler['Content'] >
+	>
+	type $mol_textarea__value_piterjs_meetup_templates_17 = $mol_type_enforce<
+		ReturnType< $piterjs_meetup_templates['post_template'] >
+		,
+		ReturnType< $mol_textarea['value'] >
+	>
+	type $mol_labeler__title_piterjs_meetup_templates_18 = $mol_type_enforce<
+		string
+		,
+		ReturnType< $mol_labeler['title'] >
+	>
+	type $mol_labeler__Content_piterjs_meetup_templates_19 = $mol_type_enforce<
+		ReturnType< $piterjs_meetup_templates['Afterparty_template'] >
+		,
+		ReturnType< $mol_labeler['Content'] >
+	>
+	type $mol_textarea__value_piterjs_meetup_templates_20 = $mol_type_enforce<
+		ReturnType< $piterjs_meetup_templates['post_template'] >
+		,
+		ReturnType< $mol_textarea['value'] >
+	>
+	type $mol_labeler__title_piterjs_meetup_templates_21 = $mol_type_enforce<
+		string
+		,
+		ReturnType< $mol_labeler['title'] >
+	>
+	type $mol_labeler__Content_piterjs_meetup_templates_22 = $mol_type_enforce<
+		ReturnType< $piterjs_meetup_templates['Retro_template'] >
+		,
+		ReturnType< $mol_labeler['Content'] >
+	>
+	type $mol_list__rows_piterjs_meetup_templates_23 = $mol_type_enforce<
 		readonly(any)[]
 		,
 		ReturnType< $mol_list['rows'] >
 	>
 	export class $piterjs_meetup_templates extends $mol_page {
-		init_text( ): ReturnType< ReturnType< $piterjs_meetup_templates['meetup'] >['init_text'] >
-		init_template( next?: ReturnType< ReturnType< $piterjs_meetup_templates['meetup'] >['init_template'] > ): ReturnType< ReturnType< $piterjs_meetup_templates['meetup'] >['init_template'] >
-		init_speech_template( next?: ReturnType< ReturnType< $piterjs_meetup_templates['meetup'] >['init_speech_template'] > ): ReturnType< ReturnType< $piterjs_meetup_templates['meetup'] >['init_speech_template'] >
+		post_template( id: any, next?: ReturnType< ReturnType< $piterjs_meetup_templates['meetup'] >['post_template'] > ): ReturnType< ReturnType< $piterjs_meetup_templates['meetup'] >['post_template'] >
 		Close_icon( ): $mol_icon_close
 		Close( ): $mol_link
 		Init_template( ): $mol_textarea
 		Init_template_labeler( ): $mol_labeler
 		Init_speech_template( ): $mol_textarea
 		Init_speech_template_labeler( ): $mol_labeler
+		Place_template( ): $mol_textarea
+		Place_template_labeler( ): $mol_labeler
+		Air_template( ): $mol_textarea
+		Air_template_labeler( ): $mol_labeler
+		Afterparty_template( ): $mol_textarea
+		Afterparty_template_labeler( ): $mol_labeler
+		Retro_template( ): $mol_textarea
+		Retro_template_labeler( ): $mol_labeler
 		Content( ): $mol_list
 		theme( ): string
 		meetup( ): $piterjs_meetup

@@ -11462,6 +11462,50 @@ var $;
 "use strict";
 var $;
 (function ($) {
+    $.$piterjs_meetup_post_texts = {
+        init: `
+			Ура! Скоро **PiterJS {title}**
+			
+			{descr}
+			
+			⏰ Когда: **{date} {time}**
+			📍 Где: {place} (**{address}**)
+			
+			📰 Программа
+			
+			{speeches}
+			
+			🎫 Регистрация: {meetup}
+		`,
+        init_speech: `
+			🗣️ {start} {speaker}
+			🎤 **{title}**
+		`,
+        place: `
+			🎉 PiterJS {title} уже завтра в {place}: **{address}**
+			
+			🤗 Ждем тебя к {time}.
+			🙏 Если придёщь — отмени регистрацию: {meetup}
+			📽️ Но всё-равно смотри трансляцию!
+		`,
+        air: `
+			🎬 PiterJS {title} начинается!
+			📽️ Занимайте места и смотрите трансляцию: **{video}**
+		`,
+        afterparty: `
+			✨ Вот и подошёл к концу очередной PiterJS..
+			📢 Оставляйте свои отзывы — они нам очень интересны: {meetup}
+			🎊 А кому не хватило, идём вместе на афтепати: **{afterparty}**
+		`,
+        retro: `
+			👐 Спасибо всем, что были с нами!
+			📸 Ищите себя на фоточках.
+			🙌 Особенно докладчикам — без вас ничего бы не состоялось!
+			🫶 Отдельное спасибо тем, кто оставил отзыв — вы помогаете нам становиться лучше: {meetup}
+			🤝 И конечно же, огромное спасибо от всего сообщества площадке {place} за гостеприимство и партнёрам за подарки.
+			👋 Не скучайте, мы скоро снова всех вас соберём вместе!
+		`,
+    };
     class $piterjs_meetup extends $piterjs_model {
         start(next) {
             const str = this.sub('start', $hyoo_crowd_reg).str(next?.toString());
@@ -11612,47 +11656,35 @@ var $;
             const now = $mol_state_time.now(60 * 1000);
             return start < now && now < end;
         }
-        init_template(next) {
-            return this.sub('init_template', $hyoo_crowd_text).text(next) || `
-				Ура! Скоро **PiterJS {title}**
-				
-				{descr}
-				
-				⏰ Когда: **{start}**
-				📍 Где: {place} (**{address}**)
-				
-				📰 Программа
-				
-				{speeches}
-				
-				🎫 Регистрация: {register}
-			`.replace(/\t/g, '').trim();
+        post_template(id, next) {
+            return this.sub('template', $hyoo_crowd_dict).sub(id, $hyoo_crowd_text).text(next)
+                || $.$piterjs_meetup_post_texts[id].replace(/\t/g, '').trim();
         }
-        init_speech_template(next) {
-            return this.sub('init_speech_template', $hyoo_crowd_text).text(next) || `
-				🗣️ {start} {speaker}
-				🎤 **{title}**
-			`.replace(/\t/g, '').trim();
-        }
-        init_text() {
+        post_text(id) {
             const title = this.title();
             const descr = this.description();
-            const start = this.start()?.toString('DD Month hh:mm') ?? 'скоро';
+            const date = this.start()?.toString('DD Month') ?? 'скоро';
+            const time = this.start()?.toString('hh:mm') ?? '';
             const place = this.place().title();
             const address = this.place().address();
-            const register = this.$.$mol_state_arg.make_link({ meetup: this.id() });
-            const speeches = this.speeches().map(speech => this.init_speech_template()
+            const afterparty = this.afterparty();
+            const meetup = this.$.$mol_state_arg.make_link({ meetup: this.id() });
+            const video = this.video();
+            const speeches = this.speeches().map(speech => this.post_template('init_speech')
                 .replaceAll('{start}', speech.start().toString('hh:mm'))
                 .replaceAll('{speaker}', speech.speaker().title())
                 .replaceAll('{title}', speech.title())).join('\n\n') || 'формируется';
-            return this.init_template()
+            return this.post_template(id)
                 .replaceAll('{title}', title)
                 .replaceAll('{descr}', descr)
-                .replaceAll('{start}', start)
+                .replaceAll('{date}', date)
+                .replaceAll('{time}', time)
                 .replaceAll('{place}', place)
                 .replaceAll('{address}', address)
                 .replaceAll('{speeches}', speeches)
-                .replaceAll('{register}', register);
+                .replaceAll('{meetup}', meetup)
+                .replaceAll('{video}', video)
+                .replaceAll('{afterparty}', afterparty);
         }
     }
     __decorate([
@@ -11725,14 +11757,11 @@ var $;
         $mol_mem
     ], $piterjs_meetup.prototype, "review_allowed", null);
     __decorate([
-        $mol_mem
-    ], $piterjs_meetup.prototype, "init_template", null);
+        $mol_mem_key
+    ], $piterjs_meetup.prototype, "post_template", null);
     __decorate([
-        $mol_mem
-    ], $piterjs_meetup.prototype, "init_speech_template", null);
-    __decorate([
-        $mol_mem
-    ], $piterjs_meetup.prototype, "init_text", null);
+        $mol_mem_key
+    ], $piterjs_meetup.prototype, "post_text", null);
     $.$piterjs_meetup = $piterjs_meetup;
 })($ || ($ = {}));
 
@@ -17814,14 +17843,8 @@ var $;
 
 ;
 	($.$piterjs_meetup_texts) = class $piterjs_meetup_texts extends ($.$mol_page) {
-		init_text(){
-			return (this.meetup().init_text());
-		}
-		init_template(next){
-			return (this.meetup().init_template(next));
-		}
-		init_speech_template(next){
-			return (this.meetup().init_speech_template(next));
+		post_text(id){
+			return (this.meetup().post_text(id));
 		}
 		Templates_icon(){
 			const obj = new this.$.$mol_icon_pencil_outline();
@@ -17846,12 +17869,42 @@ var $;
 		Init_text(){
 			const obj = new this.$.$piterjs_meetup_texts_card();
 			(obj.title) = () => ("Анонс мероприятия");
-			(obj.text) = () => ((this.init_text()));
+			(obj.text) = () => ((this.post_text("init")));
+			return obj;
+		}
+		Place_text(){
+			const obj = new this.$.$piterjs_meetup_texts_card();
+			(obj.title) = () => ("Анонс мероприятия");
+			(obj.text) = () => ((this.post_text("place")));
+			return obj;
+		}
+		Air_text(){
+			const obj = new this.$.$piterjs_meetup_texts_card();
+			(obj.title) = () => ("Выход в эфир");
+			(obj.text) = () => ((this.post_text("air")));
+			return obj;
+		}
+		Arterpaty_text(){
+			const obj = new this.$.$piterjs_meetup_texts_card();
+			(obj.title) = () => ("Афтепати");
+			(obj.text) = () => ((this.post_text("afterparty")));
+			return obj;
+		}
+		Retro_text(){
+			const obj = new this.$.$piterjs_meetup_texts_card();
+			(obj.title) = () => ("Ретропост");
+			(obj.text) = () => ((this.post_text("retro")));
 			return obj;
 		}
 		Content(){
 			const obj = new this.$.$mol_list();
-			(obj.rows) = () => ([(this.Init_text())]);
+			(obj.rows) = () => ([
+				(this.Init_text()), 
+				(this.Place_text()), 
+				(this.Air_text()), 
+				(this.Arterpaty_text()), 
+				(this.Retro_text())
+			]);
 			return obj;
 		}
 		theme(){
@@ -17876,9 +17929,13 @@ var $;
 	($mol_mem(($.$piterjs_meetup_texts.prototype), "Close_icon"));
 	($mol_mem(($.$piterjs_meetup_texts.prototype), "Close"));
 	($mol_mem(($.$piterjs_meetup_texts.prototype), "Init_text"));
+	($mol_mem(($.$piterjs_meetup_texts.prototype), "Place_text"));
+	($mol_mem(($.$piterjs_meetup_texts.prototype), "Air_text"));
+	($mol_mem(($.$piterjs_meetup_texts.prototype), "Arterpaty_text"));
+	($mol_mem(($.$piterjs_meetup_texts.prototype), "Retro_text"));
 	($mol_mem(($.$piterjs_meetup_texts.prototype), "Content"));
 	($mol_mem(($.$piterjs_meetup_texts.prototype), "meetup"));
-	($.$piterjs_meetup_texts_card) = class $piterjs_meetup_texts_card extends ($.$mol_section) {
+	($.$piterjs_meetup_texts_card) = class $piterjs_meetup_texts_card extends ($.$mol_expander) {
 		text(){
 			return "";
 		}
@@ -17892,8 +17949,10 @@ var $;
 			(obj.text) = () => ((this.text()));
 			return obj;
 		}
-		tools(){
-			return [(this.Copy())];
+		Tools(){
+			const obj = new this.$.$mol_view();
+			(obj.sub) = () => ([(this.Copy())]);
+			return obj;
 		}
 		content(){
 			return [(this.Text())];
@@ -17901,6 +17960,7 @@ var $;
 	};
 	($mol_mem(($.$piterjs_meetup_texts_card.prototype), "Copy"));
 	($mol_mem(($.$piterjs_meetup_texts_card.prototype), "Text"));
+	($mol_mem(($.$piterjs_meetup_texts_card.prototype), "Tools"));
 
 
 ;
@@ -17919,6 +17979,8 @@ var $;
         });
         $mol_style_define($piterjs_meetup_texts_card, {
             Text: {
+                margin: $mol_gap.block,
+                padding: $mol_gap.block,
                 whiteSpace: 'pre',
                 background: {
                     color: $mol_theme.card,
@@ -17930,14 +17992,8 @@ var $;
 
 ;
 	($.$piterjs_meetup_templates) = class $piterjs_meetup_templates extends ($.$mol_page) {
-		init_text(){
-			return (this.meetup().init_text());
-		}
-		init_template(next){
-			return (this.meetup().init_template(next));
-		}
-		init_speech_template(next){
-			return (this.meetup().init_speech_template(next));
+		post_template(id, next){
+			return (this.meetup().post_template(id, next));
 		}
 		Close_icon(){
 			const obj = new this.$.$mol_icon_close();
@@ -17951,29 +18007,80 @@ var $;
 		}
 		Init_template(){
 			const obj = new this.$.$mol_textarea();
-			(obj.value) = (next) => ((this.init_template(next)));
+			(obj.value) = (next) => ((this.post_template("init", next)));
 			return obj;
 		}
 		Init_template_labeler(){
 			const obj = new this.$.$mol_labeler();
-			(obj.title) = () => ("Шаблон анонса мероприятия");
+			(obj.title) = () => ("Анонса мероприятия");
 			(obj.Content) = () => ((this.Init_template()));
 			return obj;
 		}
 		Init_speech_template(){
 			const obj = new this.$.$mol_textarea();
-			(obj.value) = (next) => ((this.init_speech_template(next)));
+			(obj.value) = (next) => ((this.post_template("init_speech", next)));
 			return obj;
 		}
 		Init_speech_template_labeler(){
 			const obj = new this.$.$mol_labeler();
-			(obj.title) = () => ("Шаблон доклада в анонсе");
+			(obj.title) = () => ("Доклад в анонсе");
 			(obj.Content) = () => ((this.Init_speech_template()));
+			return obj;
+		}
+		Place_template(){
+			const obj = new this.$.$mol_textarea();
+			(obj.value) = (next) => ((this.post_template("place", next)));
+			return obj;
+		}
+		Place_template_labeler(){
+			const obj = new this.$.$mol_labeler();
+			(obj.title) = () => ("Напоминание за день");
+			(obj.Content) = () => ((this.Place_template()));
+			return obj;
+		}
+		Air_template(){
+			const obj = new this.$.$mol_textarea();
+			(obj.value) = (next) => ((this.post_template("air", next)));
+			return obj;
+		}
+		Air_template_labeler(){
+			const obj = new this.$.$mol_labeler();
+			(obj.title) = () => ("Выход в эфир");
+			(obj.Content) = () => ((this.Air_template()));
+			return obj;
+		}
+		Afterparty_template(){
+			const obj = new this.$.$mol_textarea();
+			(obj.value) = (next) => ((this.post_template("afterparty", next)));
+			return obj;
+		}
+		Afterparty_template_labeler(){
+			const obj = new this.$.$mol_labeler();
+			(obj.title) = () => ("Афтепати");
+			(obj.Content) = () => ((this.Afterparty_template()));
+			return obj;
+		}
+		Retro_template(){
+			const obj = new this.$.$mol_textarea();
+			(obj.value) = (next) => ((this.post_template("retro", next)));
+			return obj;
+		}
+		Retro_template_labeler(){
+			const obj = new this.$.$mol_labeler();
+			(obj.title) = () => ("Ретропост");
+			(obj.Content) = () => ((this.Retro_template()));
 			return obj;
 		}
 		Content(){
 			const obj = new this.$.$mol_list();
-			(obj.rows) = () => ([(this.Init_template_labeler()), (this.Init_speech_template_labeler())]);
+			(obj.rows) = () => ([
+				(this.Init_template_labeler()), 
+				(this.Init_speech_template_labeler()), 
+				(this.Place_template_labeler()), 
+				(this.Air_template_labeler()), 
+				(this.Afterparty_template_labeler()), 
+				(this.Retro_template_labeler())
+			]);
 			return obj;
 		}
 		theme(){
@@ -17999,6 +18106,14 @@ var $;
 	($mol_mem(($.$piterjs_meetup_templates.prototype), "Init_template_labeler"));
 	($mol_mem(($.$piterjs_meetup_templates.prototype), "Init_speech_template"));
 	($mol_mem(($.$piterjs_meetup_templates.prototype), "Init_speech_template_labeler"));
+	($mol_mem(($.$piterjs_meetup_templates.prototype), "Place_template"));
+	($mol_mem(($.$piterjs_meetup_templates.prototype), "Place_template_labeler"));
+	($mol_mem(($.$piterjs_meetup_templates.prototype), "Air_template"));
+	($mol_mem(($.$piterjs_meetup_templates.prototype), "Air_template_labeler"));
+	($mol_mem(($.$piterjs_meetup_templates.prototype), "Afterparty_template"));
+	($mol_mem(($.$piterjs_meetup_templates.prototype), "Afterparty_template_labeler"));
+	($mol_mem(($.$piterjs_meetup_templates.prototype), "Retro_template"));
+	($mol_mem(($.$piterjs_meetup_templates.prototype), "Retro_template_labeler"));
 	($mol_mem(($.$piterjs_meetup_templates.prototype), "Content"));
 	($mol_mem(($.$piterjs_meetup_templates.prototype), "meetup"));
 
