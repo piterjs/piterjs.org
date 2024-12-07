@@ -1,32 +1,28 @@
 $piterjs_meetup_texts $mol_page
 	theme \$mol_theme_special
 	meetup $piterjs_meetup
-	title \Тексты анонсов
+		init_text => init_text
+		init_template? => init_template?
+		init_speech_template? => init_speech_template?
+	title \Тексты постов
 	tools /
+		<= Templates $mol_link
+			arg * templates \
+			sub /
+				<= Templates_icon $mol_icon_pencil_outline
 		<= Close $mol_link
 			arg * texts null
 			sub /
 				<= Close_icon $mol_icon_close
-	speech_text* \
-		\🎤 {start} {speaker} **{title}**
 	body /
 		<= Content $mol_list rows /
-			<= Init_labeler $mol_section
+			<= Init_text $piterjs_meetup_texts_card
 				title \Анонс мероприятия
-				tools /
-					<= init_copy $mol_button_copy
-						text <= init_text 
-				Content <= Init_field $mol_textarea
-					value? <=> init_text? \
-						\Ура! Скоро PiterJS {title}
-						\
-						\{descr}
-						\
-						\⏰ Когда: {start}
-						\📍 Где: {place} ({address})
-						\
-						\📰 Программа
-						\
-						\{program}
-						\
-						\🎫 Регистрация: {register}
+				text <= init_text
+
+$piterjs_meetup_texts_card $mol_section
+	tools /
+		<= Copy $mol_button_copy
+			text <= text \
+	content / <= Text $mol_text
+		text <= text \

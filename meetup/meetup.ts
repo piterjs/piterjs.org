@@ -216,8 +216,56 @@ namespace $ {
 		}
 		
 		@ $mol_mem
-		init_text( next?: string ) {
-			return this.sub( 'init_text', $hyoo_crowd_reg ).str( next )
+		init_template( next?: string ) {
+			return this.sub( 'init_template', $hyoo_crowd_text ).text( next ) || `
+				Ура! Скоро **PiterJS {title}**
+				
+				{descr}
+				
+				⏰ Когда: **{start}**
+				📍 Где: {place} (**{address}**)
+				
+				📰 Программа
+				
+				{speeches}
+				
+				🎫 Регистрация: {register}
+			`.replace( /\t/g, '' ).trim()
+		}
+
+		@ $mol_mem
+		init_speech_template( next?: string ) {
+			return this.sub( 'init_speech_template', $hyoo_crowd_text ).text( next ) || `
+				🗣️ {start} {speaker}
+				🎤 **{title}**
+			`.replace( /\t/g, '' ).trim()
+		}
+
+		@ $mol_mem
+		init_text() {
+
+			const title = this.title()
+			const descr = this.description()
+			const start = this.start()?.toString( 'DD Month hh:mm' ) ?? 'скоро'
+			const place = this.place().title()
+			const address = this.place().address()
+			const register = this.$.$mol_state_arg.make_link({ meetup: this.id() })
+			const speeches = this.speeches().map(
+				speech => this.init_speech_template()
+					.replaceAll( '{start}', speech.start().toString( 'hh:mm' ) )
+					.replaceAll( '{speaker}', speech.speaker().title() )
+					.replaceAll( '{title}', speech.title() )
+			).join( '\n\n' ) || 'формируется'
+			
+			return this.init_template()
+				.replaceAll( '{title}', title )
+				.replaceAll( '{descr}', descr )
+				.replaceAll( '{start}', start )
+				.replaceAll( '{place}', place )
+				.replaceAll( '{address}', address )
+				.replaceAll( '{speeches}', speeches )
+				.replaceAll( '{register}', register )
+			
 		}
 
 	}

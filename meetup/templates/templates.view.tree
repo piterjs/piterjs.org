@@ -1,0 +1,22 @@
+$piterjs_meetup_templates $mol_page
+	theme \$mol_theme_special
+	meetup $piterjs_meetup
+		init_text => init_text
+		init_template? => init_template?
+		init_speech_template? => init_speech_template?
+	title \Шаблоны текстов
+	tools /
+		<= Close $mol_link
+			arg * templates null
+			sub /
+				<= Close_icon $mol_icon_close
+	body /
+		<= Content $mol_list rows /
+			<= Init_template_labeler $mol_labeler
+				title \Шаблон анонса мероприятия
+				Content <= Init_template $mol_textarea
+					value? <=> init_template?
+			<= Init_speech_template_labeler $mol_labeler
+				title \Шаблон доклада в анонсе
+				Content <= Init_speech_template $mol_textarea
+					value? <=> init_speech_template?

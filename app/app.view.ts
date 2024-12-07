@@ -40,6 +40,7 @@ namespace $.$$ {
 		
 		guests() { return this.$.$mol_state_arg.value( 'guests' ) !== null }
 		texts() { return this.$.$mol_state_arg.value( 'texts' ) !== null }
+		templates() { return this.$.$mol_state_arg.value( 'templates' ) !== null }
 		stats() { return this.$.$mol_state_arg.value( 'stats' ) !== null }
 
 		safe() { return this.$.$mol_state_arg.value( 'safe' ) !== null }
@@ -83,6 +84,7 @@ namespace $.$$ {
 				... this.video() ? [ this.Video() ] : [] ,
 				... this.guests() ? [ this.Meetup_guests( this.meetup_id() ) ] : [] ,
 				... this.texts() ? [ this.Meetup_texts( this.meetup_id() ) ] : [] ,
+				... this.templates() ? [ this.Meetup_templates( this.meetup_id() ) ] : [] ,
 				... this.stats() ? [ this.Meetup_stats( this.meetup_id() ) ] : [] ,
 				... this.others() ? [ this.Others() ] : [] ,
 				... this.wiki() ? this.Wiki().pages() : [],

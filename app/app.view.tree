@@ -70,6 +70,8 @@ $piterjs_app $mol_view
 		meetup <= meetup*
 	Meetup_texts* $piterjs_meetup_texts
 		meetup <= meetup*
+	Meetup_templates* $piterjs_meetup_templates
+		meetup <= meetup*
 	Meetup_stats* $piterjs_meetup_stats
 		meetup <= meetup*
 		meetup_prev <= meetup_prev* $piterjs_meetup
