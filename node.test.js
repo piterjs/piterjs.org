@@ -780,12 +780,13 @@ var $;
                         break;
                 }
                 if ($mol_promise_like(result) && !handled.has(result)) {
+                    handled.add(result);
                     const put = (res) => {
                         if (this.cache === result)
                             this.put(res);
                         return res;
                     };
-                    result = result.then(put, put);
+                    result = Object.assign(result.then(put, put), { destructor: result.destructor });
                 }
             }
             catch (error) {
@@ -796,10 +797,11 @@ var $;
                     result = new Error(String(error), { cause: error });
                 }
                 if ($mol_promise_like(result) && !handled.has(result)) {
-                    result = result.finally(() => {
+                    handled.add(result);
+                    result = Object.assign(result.finally(() => {
                         if (this.cache === result)
                             this.absorb();
-                    });
+                    }), { destructor: result.destructor });
                 }
             }
             if ($mol_promise_like(result) && !handled.has(result)) {
@@ -10379,9 +10381,9 @@ var $;
 "use strict";
 
 ;
-	($.$mol_icon_brightness_6) = class $mol_icon_brightness_6 extends ($.$mol_icon) {
+	($.$mol_icon_brightness_4) = class $mol_icon_brightness_4 extends ($.$mol_icon) {
 		path(){
-			return "M12,18V6A6,6 0 0,1 18,12A6,6 0 0,1 12,18M20,15.31L23.31,12L20,8.69V4H15.31L12,0.69L8.69,4H4V8.69L0.69,12L4,15.31V20H8.69L12,23.31L15.31,20H20V15.31Z";
+			return "M12,18C11.11,18 10.26,17.8 9.5,17.45C11.56,16.5 13,14.42 13,12C13,9.58 11.56,7.5 9.5,6.55C10.26,6.2 11.11,6 12,6A6,6 0 0,1 18,12A6,6 0 0,1 12,18M20,8.69V4H15.31L12,0.69L8.69,4H4V8.69L0.69,12L4,15.31V20H8.69L12,23.31L15.31,20H20V15.31L23.31,12L20,8.69Z";
 		}
 	};
 
@@ -10392,7 +10394,7 @@ var $;
 ;
 	($.$mol_lights_toggle) = class $mol_lights_toggle extends ($.$mol_check_icon) {
 		Lights_icon(){
-			const obj = new this.$.$mol_icon_brightness_6();
+			const obj = new this.$.$mol_icon_brightness_4();
 			return obj;
 		}
 		lights(next){
@@ -12167,7 +12169,7 @@ var $;
     var $$;
     (function ($$) {
         const { per, rem } = $mol_style_unit;
-        const { hsla } = $mol_style_func;
+        const { hsla, blur } = $mol_style_func;
         $mol_style_define($mol_page, {
             display: 'flex',
             flex: {
@@ -12180,6 +12182,7 @@ var $;
             maxHeight: per(100),
             boxSizing: 'border-box',
             color: $mol_theme.text,
+            backdropFilter: blur(`3px`),
             ':focus': {
                 outline: 'none',
             },
@@ -13313,7 +13316,7 @@ var $;
 })($ || ($ = {}));
 
 ;
-	($.$mol_text_code_row) = class $mol_text_code_row extends ($.$mol_paragraph) {
+	($.$mol_text_code_line) = class $mol_text_code_line extends ($.$mol_paragraph) {
 		numb(){
 			return 0;
 		}
@@ -13367,9 +13370,9 @@ var $;
 			return null;
 		}
 	};
-	($mol_mem(($.$mol_text_code_row.prototype), "Numb"));
-	($mol_mem_key(($.$mol_text_code_row.prototype), "Token"));
-	($mol_mem_key(($.$mol_text_code_row.prototype), "Token_link"));
+	($mol_mem(($.$mol_text_code_line.prototype), "Numb"));
+	($mol_mem_key(($.$mol_text_code_line.prototype), "Token"));
+	($mol_mem_key(($.$mol_text_code_line.prototype), "Token_link"));
 
 
 ;
@@ -13429,7 +13432,7 @@ var $;
 (function ($) {
     var $$;
     (function ($$) {
-        class $mol_text_code_row extends $.$mol_text_code_row {
+        class $mol_text_code_line extends $.$mol_text_code_line {
             maximal_width() {
                 return this.text().length * this.letter_width();
             }
@@ -13511,29 +13514,29 @@ var $;
         }
         __decorate([
             $mol_mem_key
-        ], $mol_text_code_row.prototype, "tokens", null);
+        ], $mol_text_code_line.prototype, "tokens", null);
         __decorate([
             $mol_mem_key
-        ], $mol_text_code_row.prototype, "row_content", null);
+        ], $mol_text_code_line.prototype, "row_content", null);
         __decorate([
             $mol_mem_key
-        ], $mol_text_code_row.prototype, "token_type", null);
+        ], $mol_text_code_line.prototype, "token_type", null);
         __decorate([
             $mol_mem_key
-        ], $mol_text_code_row.prototype, "token_content", null);
+        ], $mol_text_code_line.prototype, "token_content", null);
         __decorate([
             $mol_mem_key
-        ], $mol_text_code_row.prototype, "token_text", null);
+        ], $mol_text_code_line.prototype, "token_text", null);
         __decorate([
             $mol_mem_key
-        ], $mol_text_code_row.prototype, "token_uri", null);
+        ], $mol_text_code_line.prototype, "token_uri", null);
         __decorate([
             $mol_mem_key
-        ], $mol_text_code_row.prototype, "find_pos", null);
+        ], $mol_text_code_line.prototype, "find_pos", null);
         __decorate([
             $mol_mem_key
-        ], $mol_text_code_row.prototype, "find_token_pos", null);
-        $$.$mol_text_code_row = $mol_text_code_row;
+        ], $mol_text_code_line.prototype, "find_token_pos", null);
+        $$.$mol_text_code_line = $mol_text_code_line;
     })($$ = $.$$ || ($.$$ = {}));
 })($ || ($ = {}));
 
@@ -13544,11 +13547,11 @@ var $;
     var $$;
     (function ($$) {
         const { rem } = $mol_style_unit;
-        $mol_style_define($mol_text_code_row, {
+        $mol_style_define($mol_text_code_line, {
             display: 'block',
             position: 'relative',
             font: {
-                family: 'inherit',
+                family: 'monospace',
             },
             Numb: {
                 textAlign: 'right',
@@ -13706,7 +13709,7 @@ var $;
 			return "";
 		}
 		Row(id){
-			const obj = new this.$.$mol_text_code_row();
+			const obj = new this.$.$mol_text_code_line();
 			(obj.numb_showed) = () => ((this.sidebar_showed()));
 			(obj.numb) = () => ((this.row_numb(id)));
 			(obj.text) = () => ((this.row_text(id)));
@@ -13858,6 +13861,11 @@ var $;
             Rows: {
                 padding: $mol_gap.text,
             },
+            Row: {
+                font: {
+                    family: 'inherit',
+                },
+            },
             Copy: {
                 alignSelf: 'flex-start',
                 justifySelf: 'flex-start',
@@ -13865,7 +13873,7 @@ var $;
             '@': {
                 'mol_text_code_sidebar_showed': {
                     true: {
-                        $mol_text_code_row: {
+                        $mol_text_code_line: {
                             margin: {
                                 left: rem(1.75),
                             },
@@ -15965,7 +15973,7 @@ var $;
 			return obj;
 		}
 		Code_line(id){
-			const obj = new this.$.$mol_text_code_row();
+			const obj = new this.$.$mol_text_code_line();
 			(obj.numb_showed) = () => (false);
 			(obj.highlight) = () => ((this.highlight()));
 			(obj.text) = () => ((this.line_text(id)));

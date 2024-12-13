@@ -389,10 +389,10 @@ $mol_icon_shield $mol_icon path \M12,1L3,5V11C3,16.55 6.84,21.74 12,23C17.16,21.
 
 $mol_icon_shield_account $mol_icon path \M12,1L3,5V11C3,16.55 6.84,21.74 12,23C17.16,21.74 21,16.55 21,11V5L12,1M12,5A3,3 0 0,1 15,8A3,3 0 0,1 12,11A3,3 0 0,1 9,8A3,3 0 0,1 12,5M17.13,17C15.92,18.85 14.11,20.24 12,20.92C9.89,20.24 8.08,18.85 6.87,17C6.53,16.5 6.24,16 6,15.47C6,13.82 8.71,12.47 12,12.47C15.29,12.47 18,13.79 18,15.47C17.76,16 17.47,16.5 17.13,17Z
 
-$mol_icon_brightness_6 $mol_icon path \M12,18V6A6,6 0 0,1 18,12A6,6 0 0,1 12,18M20,15.31L23.31,12L20,8.69V4H15.31L12,0.69L8.69,4H4V8.69L0.69,12L4,15.31V20H8.69L12,23.31L15.31,20H20V15.31Z
+$mol_icon_brightness_4 $mol_icon path \M12,18C11.11,18 10.26,17.8 9.5,17.45C11.56,16.5 13,14.42 13,12C13,9.58 11.56,7.5 9.5,6.55C10.26,6.2 11.11,6 12,6A6,6 0 0,1 18,12A6,6 0 0,1 12,18M20,8.69V4H15.31L12,0.69L8.69,4H4V8.69L0.69,12L4,15.31V20H8.69L12,23.31L15.31,20H20V15.31L23.31,12L20,8.69Z
 
 $mol_lights_toggle $mol_check_icon
-	Icon <= Lights_icon $mol_icon_brightness_6
+	Icon <= Lights_icon $mol_icon_brightness_4
 	hint @ \Toggle lights
 	checked? <=> lights? false
 
@@ -570,7 +570,7 @@ $mol_text_code_token_link $mol_text_code_token
 		href <= uri \
 		target \_blank
 
-$mol_text_code_row $mol_paragraph
+$mol_text_code_line $mol_paragraph
 	text \
 	minimal_height 24
 	numb_showed true
@@ -619,7 +619,7 @@ $mol_text_code $mol_stack
 		<= Rows $mol_list
 			render_visible_only <= render_visible_only false
 			rows <= rows /
-				<= Row*0 $mol_text_code_row
+				<= Row*0 $mol_text_code_line
 					numb_showed <= sidebar_showed
 					numb <= row_numb* 0
 					text <= row_text* \
@@ -1012,7 +1012,7 @@ $mol_text $mol_list
 		dom_name \span
 		type <= line_type* \
 		sub <= line_content* /
-	Code_line* $mol_text_code_row
+	Code_line* $mol_text_code_line
 		numb_showed false
 		highlight <= highlight \
 		text <= line_text* \
