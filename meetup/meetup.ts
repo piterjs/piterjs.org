@@ -224,7 +224,7 @@ namespace $ {
 		@ $mol_mem_key
 		post_moment( id: keyof typeof $piterjs_post_template, next?: $mol_time_moment ) {
 			const str = this.sub( 'post_moment', $hyoo_crowd_dict ).sub( id, $hyoo_crowd_reg ).str( next?.toString() )
-			return str ? new $mol_time_moment( str ) : null
+			return str ? new $mol_time_moment( str ) : null!
 		}
 
 		@ $mol_mem_key
