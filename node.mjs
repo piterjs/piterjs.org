@@ -653,7 +653,7 @@ var $;
 "use strict";
 var $;
 (function ($) {
-    const handled = new WeakSet();
+    const wrappers = new WeakMap();
     class $mol_wire_fiber extends $mol_wire_pub_sub {
         task;
         host;
@@ -788,14 +788,21 @@ var $;
                         result = this.task.call(this.host, ...this.args);
                         break;
                 }
-                if ($mol_promise_like(result) && !handled.has(result)) {
-                    handled.add(result);
-                    const put = (res) => {
-                        if (this.cache === result)
-                            this.put(res);
-                        return res;
-                    };
-                    result = Object.assign(result.then(put, put), { destructor: result.destructor });
+                if ($mol_promise_like(result)) {
+                    if (wrappers.has(result)) {
+                        result = wrappers.get(result).then(a => a);
+                    }
+                    else {
+                        const put = (res) => {
+                            if (this.cache === result)
+                                this.put(res);
+                            return res;
+                        };
+                        wrappers.set(result, result = Object.assign(result.then(put, put), { destructor: result.destructor || (() => { }) }));
+                        wrappers.set(result, result);
+                        const error = new Error(`Promise in ${this}`);
+                        Object.defineProperty(result, 'stack', { get: () => error.stack });
+                    }
                 }
             }
             catch (error) {
@@ -805,21 +812,19 @@ var $;
                 else {
                     result = new Error(String(error), { cause: error });
                 }
-                if ($mol_promise_like(result) && !handled.has(result)) {
-                    handled.add(result);
-                    result = Object.assign(result.finally(() => {
-                        if (this.cache === result)
-                            this.absorb();
-                    }), { destructor: result.destructor });
+                if ($mol_promise_like(result)) {
+                    if (wrappers.has(result)) {
+                        result = wrappers.get(result);
+                    }
+                    else {
+                        wrappers.set(result, result = Object.assign(result.finally(() => {
+                            if (this.cache === result)
+                                this.absorb();
+                        }), { destructor: result.destructor || (() => { }) }));
+                        const error = new Error(`Promise in ${this}`);
+                        Object.defineProperty(result, 'stack', { get: () => error.stack });
+                    }
                 }
-            }
-            if ($mol_promise_like(result) && !handled.has(result)) {
-                result = Object.assign(result, {
-                    destructor: result['destructor'] ?? (() => { })
-                });
-                handled.add(result);
-                const error = new Error(`Promise in ${this}`);
-                Object.defineProperty(result, 'stack', { get: () => error.stack });
             }
             if (!$mol_promise_like(result)) {
                 this.track_cut();
@@ -880,6 +885,12 @@ var $;
                 };
             });
         }
+        destructor() {
+            super.destructor();
+            if ($mol_owning_check(this, this.cache)) {
+                this.cache.destructor();
+            }
+        }
     }
     $.$mol_wire_fiber = $mol_wire_fiber;
 })($ || ($ = {}));
@@ -904,6 +915,7 @@ var $;
 var $;
 (function ($) {
     $.$mol_key_store = new WeakMap();
+    const TypedArray = Object.getPrototypeOf(Uint8Array);
     function $mol_key(value) {
         if (typeof value === 'bigint')
             return value.toString() + 'n';
@@ -933,7 +945,7 @@ var $;
                 return value;
             if (value instanceof RegExp)
                 return value.toString();
-            if (value instanceof Uint8Array)
+            if (value instanceof TypedArray)
                 return [...value];
             let key = $.$mol_key_store.get(value);
             if (key)
@@ -1664,7 +1676,8 @@ var $;
                     $$.$mol_log3_warn({
                         place: '$mol_wire_task',
                         message: `Non idempotency`,
-                        existen,
+                        sub,
+                        pubs: [...sub?.pub_list ?? [], existen],
                         next,
                         hint: 'Ignore it',
                     });
@@ -1687,6 +1700,14 @@ var $;
                 this.cursor = $mol_wire_cursor.fresh;
                 if (next !== prev)
                     this.emit();
+                if ($mol_owning_catch(this, next)) {
+                    try {
+                        next[Symbol.toStringTag] = this[Symbol.toStringTag];
+                    }
+                    catch {
+                        Object.defineProperty(next, Symbol.toStringTag, { value: this[Symbol.toStringTag] });
+                    }
+                }
                 return next;
             }
             this.cursor = $mol_wire_cursor.final;
@@ -1841,10 +1862,6 @@ var $;
         }
         destructor() {
             super.destructor();
-            const prev = this.cache;
-            if ($mol_owning_check(this, prev)) {
-                prev.destructor();
-            }
             if (this.pub_from === 0) {
                 ;
                 (this.host ?? this.task)[this.field()] = null;
@@ -2319,13 +2336,15 @@ var $;
     class $mol_memo extends $mol_wrapper {
         static wrap(task) {
             const store = new WeakMap();
-            return function (next) {
+            const fun = function (next) {
                 if (next === undefined && store.has(this))
                     return store.get(this);
                 const val = task.call(this, next) ?? next;
                 store.set(this, val);
                 return val;
             };
+            Reflect.defineProperty(fun, 'name', { value: task.name + ' ' });
+            return fun;
         }
     }
     $.$mol_memo = $mol_memo;
@@ -3162,7 +3181,6 @@ var $;
             const win = this.$.$mol_dom_context;
             if (win.parent !== win.self && !win.document.hasFocus())
                 return;
-            this.focused(true);
         }
         destructor() {
             const node = $mol_wire_probe(() => this.dom_node());
@@ -3751,6 +3769,10 @@ var $;
             });
             watcher
                 .on('all', (type, path) => {
+                if (path instanceof Error) {
+                    this.$.$mol_fail_log(path);
+                    return;
+                }
                 const file = $mol_file.relative(path.replace(/\\/g, '/'));
                 file.reset();
                 if (type === 'change') {
@@ -23939,10 +23961,9 @@ var $;
     $.$mol_fetch_response = $mol_fetch_response;
     class $mol_fetch extends $mol_object2 {
         static request(input, init = {}) {
-            const native = globalThis.fetch ?? $node['undici'].fetch;
             const controller = new AbortController();
             let done = false;
-            const promise = native(input, {
+            const promise = globalThis.fetch(input, {
                 ...init,
                 signal: controller.signal,
             }).finally(() => {
