@@ -14527,7 +14527,7 @@ declare namespace $ {
 		Team( ): $piterjs_intro_page
 		Speakers( ): $piterjs_intro_page
 		Partnering( ): $piterjs_intro_page
-		Sponsors( ): $piterjs_intro_page
+		Partners( ): $piterjs_intro_page
 		Contribution( ): $piterjs_intro_page
 		Schedule( ): $piterjs_schedule
 		Proft( ): $piterjs_intro_page

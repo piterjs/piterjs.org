@@ -30358,7 +30358,7 @@ var $;
 			(obj.text) = () => ("**Подарки**: упоминание в соцсетях и на трансляции\n**Кейтеринг**: + лого в трансляции и на видео\n**Площадка**: + вступительное слово на мероприятии");
 			return obj;
 		}
-		Sponsors(){
+		Partners(){
 			const obj = new this.$.$piterjs_intro_page();
 			(obj.title) = () => ("Партнёры");
 			(obj.text) = () => ("! \"\"https://i.imgur.com/557RFhR.png\"\"\n! \"\"https://i.imgur.com/tFCueVj.png\"\"\nЗдесь мог быть ваш логотип");
@@ -30456,7 +30456,7 @@ var $;
 				"team": (this.Team()), 
 				"speakers": (this.Speakers()), 
 				"partnering": (this.Partnering()), 
-				"sponsors": (this.Sponsors()), 
+				"partners": (this.Partners()), 
 				"contribution": (this.Contribution()), 
 				"schedule": (this.Schedule()), 
 				"profit": (this.Proft()), 
@@ -30484,7 +30484,7 @@ var $;
 	($mol_mem(($.$piterjs_intro.prototype), "Team"));
 	($mol_mem(($.$piterjs_intro.prototype), "Speakers"));
 	($mol_mem(($.$piterjs_intro.prototype), "Partnering"));
-	($mol_mem(($.$piterjs_intro.prototype), "Sponsors"));
+	($mol_mem(($.$piterjs_intro.prototype), "Partners"));
 	($mol_mem(($.$piterjs_intro.prototype), "Contribution"));
 	($mol_mem(($.$piterjs_intro.prototype), "Schedule"));
 	($mol_mem(($.$piterjs_intro.prototype), "Proft"));
