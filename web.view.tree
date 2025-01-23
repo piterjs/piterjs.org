@@ -3257,7 +3257,8 @@ $piterjs_intro $mol_view
 		partners <= Partners $piterjs_intro_page
 			title \Партнёры
 			text \
-				\""https://i.imgur.com/u7X5HfD.png"" ""https://i.imgur.com/tFCueVj.png""
+				\! ""https://i.imgur.com/u7X5HfD.png""
+				\  ! ""https://i.imgur.com/tFCueVj.png""
 		contribution <= Contribution $piterjs_intro_page
 			title \Твой вклад
 			text \
