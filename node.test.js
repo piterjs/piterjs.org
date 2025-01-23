@@ -30360,8 +30360,8 @@ var $;
 		}
 		Sponsors(){
 			const obj = new this.$.$piterjs_intro_page();
-			(obj.title) = () => ("Спонсоры");
-			(obj.text) = () => ("! \"\"https://i.imgur.com/yQJcnSx.png\"\"\n! \"\"https://i.imgur.com/tFCueVj.png\"\"\nЗдесь мог быть ваш логотип");
+			(obj.title) = () => ("Партнёры");
+			(obj.text) = () => ("! \"\"https://i.imgur.com/557RFhR.png\"\"\n! \"\"https://i.imgur.com/tFCueVj.png\"\"\nЗдесь мог быть ваш логотип");
 			return obj;
 		}
 		Contribution(){

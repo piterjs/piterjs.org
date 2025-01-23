@@ -3255,9 +3255,9 @@ $piterjs_intro $mol_view
 				\**Кейтеринг**: + лого в трансляции и на видео
 				\**Площадка**: + вступительное слово на мероприятии
 		sponsors <= Sponsors $piterjs_intro_page
-			title \Спонсоры
+			title \Партнёры
 			text \
-				\! ""https://i.imgur.com/yQJcnSx.png""
+				\! ""https://i.imgur.com/557RFhR.png""
 				\! ""https://i.imgur.com/tFCueVj.png""
 				\Здесь мог быть ваш логотип
 		contribution <= Contribution $piterjs_intro_page
