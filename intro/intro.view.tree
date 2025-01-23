@@ -99,8 +99,8 @@ $piterjs_intro $mol_view
 		sponsors <= Sponsors $piterjs_intro_page
 			title \Спонсоры
 			text \
-				\! ""https://i.imgur.com/qrtiOul.jpeg""
-				\! ""https://i.imgur.com/gjf1aPz.jpeg""
+				\! ""https://i.imgur.com/yQJcnSx.png""
+				\! ""https://i.imgur.com/tFCueVj.png""
 				\Здесь мог быть ваш логотип
 		contribution <= Contribution $piterjs_intro_page
 			title \Твой вклад
