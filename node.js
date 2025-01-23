@@ -30401,7 +30401,7 @@ var $;
 			const obj = new this.$.$piterjs_intro_page();
 			(obj.text) = () => ((this.place_notes()));
 			(obj.title) = () => ((this.place_title()));
-			(obj.text) = () => ("\"\"https://i.imgur.com/83cYC9l.png\"\"");
+			(obj.text) = () => ("\"\"https://itmo.ru/file/pages/213/slogan_na_plashke_chernyy.png\"\"");
 			return obj;
 		}
 		Follow(){
