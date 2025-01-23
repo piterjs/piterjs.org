@@ -30401,6 +30401,7 @@ var $;
 			const obj = new this.$.$piterjs_intro_page();
 			(obj.text) = () => ((this.place_notes()));
 			(obj.title) = () => ((this.place_title()));
+			(obj.text) = () => ("\"\"https://i.imgur.com/83cYC9l.png\"\"");
 			return obj;
 		}
 		Follow(){
