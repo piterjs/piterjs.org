@@ -30361,7 +30361,7 @@ var $;
 		Partners(){
 			const obj = new this.$.$piterjs_intro_page();
 			(obj.title) = () => ("Партнёры");
-			(obj.text) = () => ("! \"\"https://i.imgur.com/557RFhR.png\"\"\n! \"\"https://i.imgur.com/tFCueVj.png\"\"\nЗдесь мог быть ваш логотип");
+			(obj.text) = () => ("! \"\"https://i.imgur.com/u7X5HfD.png\"\"\n! \"\"https://i.imgur.com/tFCueVj.png\"\"\nЗдесь мог быть ваш логотип");
 			return obj;
 		}
 		Contribution(){
