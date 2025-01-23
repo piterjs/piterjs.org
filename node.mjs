@@ -30406,7 +30406,7 @@ var $;
 		Follow(){
 			const obj = new this.$.$piterjs_intro_page();
 			(obj.title) = () => ("Следите за новостями");
-			(obj.text) = () => ("https://piterjs.org\nhttps://t.me/piterjs\nhttps://vk.com/piterjs\nhttps://youtube.com/piterjs");
+			(obj.text) = () => ("https://piterjs.org\nhttps://t.me/piterjs\nhttps://vk.com/piterjs\nhttps://live.vkvideo.ru/piterjs\nhttps://youtube.com/piterjs");
 			return obj;
 		}
 		afterparty(){
