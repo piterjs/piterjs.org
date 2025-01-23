@@ -3742,7 +3742,7 @@ declare namespace $ {
 }
 
 declare namespace $ {
-    function $mol_crypto_hash(data: Uint8Array): Uint8Array<ArrayBuffer>;
+    function $mol_crypto_hash(input: ArrayBufferView): Uint8Array<ArrayBuffer>;
 }
 
 declare namespace $ {
@@ -14478,36 +14478,46 @@ declare namespace $ {
 		ReturnType< $piterjs_intro_page['title'] >
 	>
 	type $piterjs_intro_page__text_piterjs_intro_30 = $mol_type_enforce<
+		string
+		,
+		ReturnType< $piterjs_intro_page['text'] >
+	>
+	type $piterjs_intro_page__title_piterjs_intro_31 = $mol_type_enforce<
+		string
+		,
+		ReturnType< $piterjs_intro_page['title'] >
+	>
+	type $piterjs_intro_page__text_piterjs_intro_32 = $mol_type_enforce<
 		ReturnType< $piterjs_intro['afterparty'] >
 		,
 		ReturnType< $piterjs_intro_page['text'] >
 	>
-	type $piterjs_screen__place_piterjs_intro_31 = $mol_type_enforce<
+	type $piterjs_screen__place_piterjs_intro_33 = $mol_type_enforce<
 		ReturnType< $piterjs_intro['place'] >
 		,
 		ReturnType< $piterjs_screen['place'] >
 	>
-	type $piterjs_screen__content_piterjs_intro_32 = $mol_type_enforce<
+	type $piterjs_screen__content_piterjs_intro_34 = $mol_type_enforce<
 		readonly(any)[]
 		,
 		ReturnType< $piterjs_screen['content'] >
 	>
-	type $mol_nav__keys_x_piterjs_intro_33 = $mol_type_enforce<
+	type $mol_nav__keys_x_piterjs_intro_35 = $mol_type_enforce<
 		ReturnType< $piterjs_intro['page_ids'] >
 		,
 		ReturnType< $mol_nav['keys_x'] >
 	>
-	type $mol_nav__keys_y_piterjs_intro_34 = $mol_type_enforce<
+	type $mol_nav__keys_y_piterjs_intro_36 = $mol_type_enforce<
 		ReturnType< $piterjs_intro['page_ids'] >
 		,
 		ReturnType< $mol_nav['keys_y'] >
 	>
-	type $mol_nav__current_x_piterjs_intro_35 = $mol_type_enforce<
+	type $mol_nav__current_x_piterjs_intro_37 = $mol_type_enforce<
 		ReturnType< $piterjs_intro['page'] >
 		,
 		ReturnType< $mol_nav['current_x'] >
 	>
-	type $mol_nav__current_y_piterjs_intro_36 = $mol_type_enforce<
+	type $mol_nav__current_y_piterjs_intro_38 = $mol_type_enforce<
 		ReturnType< $piterjs_intro['page'] >
 		,
 		ReturnType< $mol_nav['current_y'] >
@@ -14529,6 +14539,7 @@ declare namespace $ {
 		place_notes( ): string
 		place_title( ): string
 		Place( ): $piterjs_intro_page
+		Follow( ): $piterjs_intro_page
 		afterparty( ): string
 		Afterparty( ): $piterjs_intro_page
 		place( ): $piterjs_place

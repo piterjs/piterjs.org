@@ -3184,7 +3184,7 @@ $piterjs_intro $mol_view
 				\! YouTube
 				\  ! 2.4K+
 				\! VKontakte
-				\  ! 1.9K+
+				\  ! 2.0K+
 				\! Telegram
 				\  ! 1.5K+
 				\! Offline
@@ -3210,14 +3210,14 @@ $piterjs_intro $mol_view
 		roles_org <= Roles_org $piterjs_intro_page
 			title \Роли организаторов
 			text \
-				\Подготовка **докладчиков** (*Архитектор публичных выступлений*)
-				\Коммуникация с **аудиторией** (*Коммуникационный артист*)
-				\Коммуникация с **партнёрами** (*Директор по взаимодействию*)
-				\Фото и видео **монтаж** (Мастер объективов, Художник постпродакшн)
-				\**Дизайн** и эстетика бренда (*Создатель визуального ДНК*)
-				\**Сайт** и автоматизация (*Техноконтент-координатор*)
-				\**Ведение соцсетей** (*Сторителлер сообщества*)
-				\**Координация** всех этих людей (*Шеф-повар мероприятий*)
+				\Подготовка **докладчиков**
+				\Коммуникация с **аудиторией**
+				\Коммуникация с **партнёрами**
+				\Фото и видео **монтаж**
+				\**Дизайн** и эстетика бренда
+				\**Сайт** и автоматизация
+				\**Ведение соцсетей**
+				\**Координация** всех этих людей
 		roles_place <= Roles_place $piterjs_intro_page
 			title \Роли на площадке
 			text \
@@ -3281,16 +3281,16 @@ $piterjs_intro $mol_view
 				\Улыбайтесь фотографу
 		place <= Place $piterjs_intro_page
 			text <= place_notes \
-			title <= place_title \Мы в {place}
+			title <= place_title \{place}
 			text \
 				\! ""https://i.imgur.com/6anwibA.jpeg""
-		- follow <= Follow $piterjs_intro_page
+		follow <= Follow $piterjs_intro_page
 			title \Следите за новостями
 			text \
-				\vk.com/piterjs
-				\t.me/piterjs
-				\youtube.com/piterjs
-				\piterjs.org
+				\https://piterjs.org
+				\https://t.me/piterjs
+				\https://vk.com/piterjs
+				\https://youtube.com/piterjs
 		afterparty <= Afterparty $piterjs_intro_page
 			title \Afterparty!
 			text <= afterparty \
