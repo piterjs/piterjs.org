@@ -99,7 +99,7 @@ $piterjs_intro $mol_view
 		partners <= Partners $piterjs_intro_page
 			title \Партнёры
 			text \
-				\! ""https://i.imgur.com/557RFhR.png""
+				\! ""https://i.imgur.com/u7X5HfD.png""
 				\! ""https://i.imgur.com/tFCueVj.png""
 				\Здесь мог быть ваш логотип
 		contribution <= Contribution $piterjs_intro_page
