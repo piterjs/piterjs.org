@@ -3281,9 +3281,7 @@ $piterjs_intro $mol_view
 				\Улыбайтесь фотографу
 		place <= Place $piterjs_intro_page
 			text <= place_notes \
-			title <= place_title \{place}
-			text \
-				\! ""https://i.imgur.com/6anwibA.jpeg""
+			title <= place_title \Мы в {place}
 		follow <= Follow $piterjs_intro_page
 			title \Следите за новостями
 			text \

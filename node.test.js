@@ -30386,13 +30386,12 @@ var $;
 			return "";
 		}
 		place_title(){
-			return "{place}";
+			return "Мы в {place}";
 		}
 		Place(){
 			const obj = new this.$.$piterjs_intro_page();
 			(obj.text) = () => ((this.place_notes()));
 			(obj.title) = () => ((this.place_title()));
-			(obj.text) = () => ("! \"\"https://i.imgur.com/6anwibA.jpeg\"\"");
 			return obj;
 		}
 		Follow(){
