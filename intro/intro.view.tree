@@ -12,75 +12,104 @@ $piterjs_intro $mol_view
 				\Каждый месяц с 2015
 				\Спячка с 2020
 				\С 2023 снова с вами!
-		- projects <= Projects $piterjs_intro_page
+		projects <= Projects $piterjs_intro_page
 			title \Наши проекты
 			text \
 				\PiterJS **Meetups** - митапы в Петербурге
-				\PiterJS **Tour** - митапы в других городах
+				\PiterJS **Picnic** - прогулки и общение
+				\--
 				\PiterJS **Conf** - конференции
 				\PiterJS **Code+Learn** - воркшопы
-		team <= Team $piterjs_intro_page
-			title \Команда
+		comunity <= Community $piterjs_intro_page
+			title \Сообщество
 			text \
-				\! ""https://i.imgur.com/wXGooly.jpeg""
-				\  ! ""https://i.imgur.com/dRolfnB.jpeg""
-				\    ! ""https://i.imgur.com/Mup6yZ5.jpeg""
-				\      ! ""https://i.imgur.com/V2Rkj38.jpeg""
-				\! ""https://i.imgur.com/WYQiVs6.jpeg""
-				\  ! ""https://i.imgur.com/nQD3DUQ.jpeg""
-				\    ! ""https://i.imgur.com/n2Fxkqv.png""
-				\      ! ""https://i.imgur.com/L9H07ur.jpeg""
+				\! YouTube
+				\  ! 2.4K+
+				\! VKontakte
+				\  ! 2.0K+
+				\! Telegram
+				\  ! 1.5K+
+				\! Offline
+				\  ! 70..100
+		- geo_quest <= Geo_quest $piterjs_intro_page
+			title \Откуда мы?
+			text \
+				\Санкт-Петербург: 76%
+				\Москва: 5%
+				\???
+				\???
+				\???
+				\Где-то на Земле: 17%
+		- geo_answer <= Geo_answer $piterjs_intro_page
+			title \О такие мы!
+			text \
+				\Санкт-Петербург: 76%
+				\Москва: 5%
+				\**Рыбинск**: 0.75%
+				\**Самара**: 0.64%
+				\**Челябинск**: 0.61%
+				\Где-то на Земле: 17%
 		roles_org <= Roles_org $piterjs_intro_page
 			title \Роли организаторов
 			text \
-				\Программный комитет
-				\Фандрайзер
-				\Видео-мастер
-				\Дизайнер
-				\Комьюнити-менеджер
-				\Координатор
+				\Подготовка **докладчиков**
+				\Коммуникация с **аудиторией**
+				\Коммуникация с **партнёрами**
+				\Фото и видео **монтаж**
+				\**Дизайн** и эстетика бренда
+				\**Сайт** и автоматизация
+				\**Ведение соцсетей**
+				\**Координация** всех этих людей
 		roles_place <= Roles_place $piterjs_intro_page
 			title \Роли на площадке
 			text \
-				\Конферансье
-				\Техник
-				\Видео-оператор
-				\Фотограф
-				\Ведущий трансляции
-				\Хелпер
-				\Координатор
-		- friends <= Friends $piterjs_intro_page
-			title \JUG.RU
+				\**Встреча** гостей
+				\**Ведение** мероприятия
+				\**Видео** съёмка
+				\**Фото** съёмка
+				\Работа с **оборудованием**
+				\Коммуникация с **аудиторией** online
+				\**Координация** всех этих людей
+		team <= Team $piterjs_intro_page
+			title \Команда
 			text \
-				\Продюссер
-				\Инженер
-				\Монтажёр
-				\Режиссёр трансляции
-				\Ведущий мероприятия
-				\Ведущий воркшопа
-				\Подготовим
-		contribution <= Contribution $piterjs_intro_page
-			title \Твой вклад
-			text \
-				\Привлекай компанию
-				\Поддерживай рублём
-				\Вступай в наши ряды
-				\Выступай сам
+				\! ""https://i.imgur.com/KoX0d8g.jpeg""
+				- \  ! ""https://i.imgur.com/dRolfnB.jpeg""
+				\  ! ""https://habrastorage.org/webt/mb/oz/2-/mboz2-qxenahgayijecyblbo6ka.jpeg""
+				\    ! ""https://i.imgur.com/V2Rkj38.jpeg""
+				\! ""https://habrastorage.org/webt/xi/xd/hk/xixdhke23wtbhpnaz7gyuifpxnm.jpeg""
+				- \  ! ""https://i.imgur.com/wXGooly.jpeg""
+				\  ! ""https://i.imgur.com/n2Fxkqv.png""
+				\    ! ""https://i.imgur.com/4uEtyGD.jpeg""
+				\! ""https://i.imgur.com/FS8bvSe.jpeg""
+				\  ! ""https://i.imgur.com/KiAK2i0.jpeg""
+				\    ! ""https://i.imgur.com/R86XxcW.jpeg""
 		speakers <= Speakers $piterjs_intro_page
-			title \Докладчики
+			title \Стань докладчиком
 			text \
 				\Нужны всегда
 				\Даже если боишься
 				\Поможем с темой
-		sponsors <= Sponsors $piterjs_intro_page
-			title \Спонсоры
+		partnering <= Partnering $piterjs_intro_page
+			title \Стань партнёром
 			text \
-				\! ""/piterjs/logo-sponsors/kvant-logo.png""
-				\  ! ""/piterjs/logo-sponsors/Nexign_Logo.png""
-				\    ! ""/piterjs/logo-sponsors/sprinthost.ru-2.png""
-		place <= Place $piterjs_intro_page
-			title <= place_title \Мы в {place}
-			text <= place_notes \
+				\**Подарки**: упоминание в соцсетях и на трансляции
+				\**Кейтеринг**: + лого в трансляции и на видео
+				\**Площадка**: + вступительное слово на мероприятии
+		partners <= Partners $piterjs_intro_page
+			title \Партнёры
+			text \
+				\! ""https://i.imgur.com/ntlwbqL.png""
+				\  ! ""https://i.imgur.com/tFCueVj.png""
+		contribution <= Contribution $piterjs_intro_page
+			title \Твой вклад
+			text \
+				\Поддерживай рублём
+				\Привлекай партнёров
+				\Зазывай докладчиков
+				\Выступай сам
+				\Вступай в наши ряды
+				\Просто приходи
 		schedule <= Schedule $piterjs_schedule
 			meetup <= meetup
 			title \Сегодня
@@ -91,15 +120,21 @@ $piterjs_intro $mol_view
 				\Мы ведём трансляцию
 				\И записываем видео
 				\Улыбайтесь фотографу
-		- follow <= Follow $piterjs_intro_page
+		place <= Place $piterjs_intro_page
+			text <= place_notes \
+			title <= place_title \Мы в {place}
+			text \
+				\""https://itmo.ru/file/pages/213/slogan_na_plashke_chernyy.png""
+		follow <= Follow $piterjs_intro_page
 			title \Следите за новостями
 			text \
-				\vk.com/piterjs
-				\t.me/piterjs
-				\youtube.com/piterjs
-				\piterjs.org
+				\https://piterjs.org
+				\\\piterjs\https://t.me/piterjs\\
+				\\\piterjs\https://vk.com/piterjs\\
+				\\\piterjs\https://live.vkvideo.ru/piterjs\\
+				\\\piterjs\https://youtube.com/piterjs\\
 		afterparty <= Afterparty $piterjs_intro_page
-			title \Го в бар!
+			title \Afterparty!
 			text <= afterparty \
 	sub /
 		<= Screen $piterjs_screen

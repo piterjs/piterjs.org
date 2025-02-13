@@ -139,6 +139,11 @@ $piterjs_meetup_page $mol_page
 			hint \Список гостей
 			sub /
 				<= Guests_link_icon $mol_icon_account_group_outline
+		<= Texts_link $mol_link
+			arg * texts \
+			hint \Тексты анонсов
+			sub /
+				<= Texts_link_icon $mol_icon_bullhorn_outline
 		<= Stats_link $mol_link
 			arg * stats \
 			hint \Статистика

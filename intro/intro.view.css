@@ -5,6 +5,32 @@
 	line-height: 4.5vmin;
 }
 
+/* [piterjs_app_intro_screen] {
+	background: url('https://i.imgur.com/AdrrNbM.jpeg') no-repeat;
+	background-position: 50% 55%;
+}
+ */
+[piterjs_app_intro_roles_org_text] [mol_text_paragraph] {
+	max-width: 90rem;
+}
+
+[piterjs_app_intro_team_text_grid_row] {
+	display: flex;
+	justify-content: center;
+}
+
+[piterjs_app_intro_team] [mol_text_grid_cell] {
+	max-width: 280px;
+}
+
+[piterjs_intro_sponsors_text_paragraph] {
+	text-align: center;
+}
+
+[piterjs_app_intro_sponsors_text_grid_cell_embed_image] {
+	width: 100%;
+}
+
 @keyframes piterjs_intro_screen_show {
 	from {
 		transform: rotateY( 90deg );
@@ -13,5 +39,5 @@
 }
 
 [piterjs_intro_screen] > *:not([piterjs_screen_lines]) {
-	animation: piterjs_intro_screen_show .25s ease-out forwards;
+	animation: piterjs_intro_screen_show 0.4s ease-out forwards;
 }

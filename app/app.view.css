@@ -60,14 +60,6 @@
 	padding: .5rem .75rem;
 }
 
-[piterjs_app_toggle_intro] {
-	position: absolute;
-	bottom: 0;
-	right: 0;
-	width: 2rem;
-	height: 2rem;
-}
-
 [piterjs_app_user] {
 	font-size: .75rem;
 	padding: .5rem 0;
