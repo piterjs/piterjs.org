@@ -1,0 +1,38 @@
+$piterjs_meetup_templates $mol_page
+	theme \$mol_theme_special
+	meetup $piterjs_meetup
+		post_template*? => post_template*?
+	title \Шаблоны текстов
+	tools /
+		<= Close $mol_link
+			arg * templates null
+			sub /
+				<= Close_icon $mol_icon_close
+	body /
+		<= Content $mol_list rows /
+			<= Init_template_labeler $piterjs_meetup_templates_field
+				title \✨ Анонса митапа
+				template? <=> post_template*init?
+			<= Init_speech_template_labeler $piterjs_meetup_templates_field
+				title \🗣️ Доклад в анонсе
+				template? <=> post_template*init_speech?
+			<= Speech_template_labeler $piterjs_meetup_templates_field
+				title \🗣️ Анонс доклада
+				template? <=> post_template*speech?
+			<= Place_template_labeler $piterjs_meetup_templates_field
+				title \⌛ На кануне
+				template? <=> post_template*place?
+			<= Air_template_labeler $piterjs_meetup_templates_field
+				title \⏰ Выход в эфир
+				template? <=> post_template*air?
+			<= Afterparty_template_labeler $piterjs_meetup_templates_field
+				title \🎊 Афтепати
+				template? <=> post_template*afterparty?
+			<= Retro_template_labeler $piterjs_meetup_templates_field
+				title \🙏 Ретроспектива
+				template? <=> post_template*retro?
+
+$piterjs_meetup_templates_field $mol_expander
+	content /
+		<= Template $mol_textarea
+			value? <=> template? \

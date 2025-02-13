@@ -214,7 +214,53 @@ namespace $ {
 			const now = $mol_state_time.now( 60 * 1000 )
 			return start < now && now < end
 		}
-		
+
+		@ $mol_mem_key
+		post_template( id: keyof typeof $piterjs_post_template, next?: string ) {
+			return this.sub( 'post_template', $hyoo_crowd_dict ).sub( id, $hyoo_crowd_text ).text( next )
+				|| $piterjs_post_template[ id ]
+		}
+
+		@ $mol_mem_key
+		post_moment( id: keyof typeof $piterjs_post_template, next?: $mol_time_moment ) {
+			const str = this.sub( 'post_moment', $hyoo_crowd_dict ).sub( id, $hyoo_crowd_reg ).str( next?.toString() )
+			return str ? new $mol_time_moment( str ) : null!
+		}
+
+		@ $mol_mem_key
+		post_text( id: keyof typeof $piterjs_post_template ) {
+
+			const title = this.title()
+			const descr = this.description()
+			const date = this.start()?.toString( 'DD Month' ) ?? 'скоро'
+			const time = this.start()?.toString( 'hh:mm' ) ?? ''
+			const place = this.place().title()
+			const address = this.place().address()
+			const afterparty = this.afterparty()
+			const meetup = this.$.$mol_state_arg.make_link({ meetup: this.id() })
+			const video = this.video()
+
+			const speeches = this.speeches().map(
+				speech => this.post_template( 'init_speech' )
+					.replaceAll( '{start}', speech.start().toString( 'hh:mm' ) )
+					.replaceAll( '{speaker}', speech.speaker().title() )
+					.replaceAll( '{title}', speech.title() )
+			).join( '\n\n' ) || 'формируется'
+			
+			return this.post_template( id )
+				.replaceAll( '{title}', title )
+				.replaceAll( '{descr}', descr )
+				.replaceAll( '{date}', date )
+				.replaceAll( '{time}', time )
+				.replaceAll( '{place}', place )
+				.replaceAll( '{address}', address )
+				.replaceAll( '{speeches}', speeches )
+				.replaceAll( '{meetup}', meetup )
+				.replaceAll( '{video}', video )
+				.replaceAll( '{afterparty}', afterparty )
+			
+		}
+
 	}
 
 }

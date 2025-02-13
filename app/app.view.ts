@@ -39,6 +39,8 @@ namespace $.$$ {
 		wiki() { return this.$.$mol_state_arg.value( 'wiki' ) !== null }
 		
 		guests() { return this.$.$mol_state_arg.value( 'guests' ) !== null }
+		texts() { return this.$.$mol_state_arg.value( 'texts' ) !== null }
+		templates() { return this.$.$mol_state_arg.value( 'templates' ) !== null }
 		stats() { return this.$.$mol_state_arg.value( 'stats' ) !== null }
 
 		safe() { return this.$.$mol_state_arg.value( 'safe' ) !== null }
@@ -83,6 +85,8 @@ namespace $.$$ {
 				... this.place_show() ? [ this.Place() ] : [] ,
 				... this.video() ? [ this.Video() ] : [] ,
 				... this.guests() ? [ this.Meetup_guests( this.meetup_id() ) ] : [] ,
+				... this.texts() ? [ this.Meetup_texts( this.meetup_id() ) ] : [] ,
+				... this.templates() ? [ this.Meetup_templates( this.meetup_id() ) ] : [] ,
 				... this.stats() ? [ this.Meetup_stats( this.meetup_id() ) ] : [] ,
 				... this.others() ? [ this.Others() ] : [] ,
 				... this.wiki() ? this.Wiki().pages() : [],
@@ -163,6 +167,7 @@ namespace $.$$ {
 			try {
 				return [
 					this.Online(),
+					this.Toggle_intro(),
 					... this.Domain().editable() ? [ this.Editing() ] : [ this.User() ],
 					... this.editable() ? [ this.Rights_toggle() ] : [],
 					this.Lights(),
