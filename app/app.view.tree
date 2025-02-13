@@ -41,10 +41,17 @@ $piterjs_app $mol_view
 		body /
 			<= Menu_content $mol_view sub /
 				<= Links $mol_list rows /
+					<= Love_link $mol_link
+						arg *
+							love \
+							wiki null
+							meetup null
+						title <= love_title
 					<= Wiki_link $mol_link
 						arg *
 							wiki \
 							meetup null
+							love null
 						title \База знаний
 					- <= Others_link $mol_link
 						uri \#others
@@ -112,3 +119,10 @@ $piterjs_app $mol_view
 				arg * safe null
 				sub /
 					<= Safe_close_icon $mol_icon_close
+	Love $hyoo_match_app
+		menu_title <= love_title \Piter💛JS
+		menu_tools /
+			<= Love_close $mol_link
+				arg * love null
+				sub /
+					<= Love_close_icon $mol_icon_close
