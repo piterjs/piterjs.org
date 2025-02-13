@@ -73,3 +73,7 @@
 	padding: .5rem 0;
 	color: var(--mol_theme_shade);
 }
+
+[piterjs_app_love_intro] {
+	margin: 0;
+}
