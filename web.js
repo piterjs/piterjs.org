@@ -296,9 +296,8 @@ var $;
             if (sub_pos !== end) {
                 this.peer_move(end, sub_pos);
             }
-            this.data.pop();
-            this.data.pop();
-            if (this.data.length === this.sub_from)
+            this.data.length = end;
+            if (end === this.sub_from)
                 this.reap();
         }
         reap() { }
@@ -530,9 +529,8 @@ var $;
                 const sub = this.data[cursor];
                 const pos = this.data[cursor + 1];
                 sub.pub_off(pos);
-                this.data.pop();
-                this.data.pop();
             }
+            this.data.length = this.sub_from;
             this.cursor = this.pub_from;
             this.track_cut();
             this.cursor = $mol_wire_cursor.final;
@@ -541,23 +539,15 @@ var $;
             if (this.cursor < this.pub_from) {
                 $mol_fail(new Error('Cut of non begun sub'));
             }
-            let tail = 0;
+            let end = this.data.length;
             for (let cursor = this.cursor; cursor < this.sub_from; cursor += 2) {
                 const pub = this.data[cursor];
                 pub?.sub_off(this.data[cursor + 1]);
-                if (this.sub_from < this.data.length) {
-                    this.peer_move(this.data.length - 2, cursor);
-                    this.data.pop();
-                    this.data.pop();
-                }
-                else {
-                    ++tail;
-                }
+                end -= 2;
+                if (this.sub_from <= end)
+                    this.peer_move(end, cursor);
             }
-            for (; tail; --tail) {
-                this.data.pop();
-                this.data.pop();
-            }
+            this.data.length = end;
             this.sub_from = this.cursor;
         }
         complete() { }
@@ -1166,7 +1156,7 @@ var $;
                 tpl += (typeof chunks[i][1] === 'string') ? '%s: %s\n' : '%s: %o\n';
             }
             const style = `color:${color};font-weight:bolder`;
-            this.console[level](tpl, style, ...[].concat(...chunks));
+            this.console[level](tpl.trim(), style, ...[].concat(...chunks));
             const self = this;
             return () => self.console.groupEnd();
         };
@@ -1968,6 +1958,38 @@ var $;
 "use strict";
 var $;
 (function ($) {
+    class $mol_promise extends Promise {
+        done;
+        fail;
+        constructor(executor) {
+            let done;
+            let fail;
+            super((d, f) => {
+                done = d;
+                fail = f;
+                executor?.(d, f);
+            });
+            this.done = done;
+            this.fail = fail;
+        }
+    }
+    $.$mol_promise = $mol_promise;
+})($ || ($ = {}));
+
+;
+"use strict";
+var $;
+(function ($) {
+    class $mol_promise_blocker extends $mol_promise {
+        static [Symbol.toStringTag] = '$mol_promise_blocker';
+    }
+    $.$mol_promise_blocker = $mol_promise_blocker;
+})($ || ($ = {}));
+
+;
+"use strict";
+var $;
+(function ($) {
     class $mol_decor {
         value;
         constructor(value) {
@@ -2158,7 +2180,7 @@ var $;
 "use strict";
 var $;
 (function ($) {
-    $mol_style_attach("mol/theme/theme.css", ":root {\n\t--mol_theme_hue: 210deg;\n\t--mol_theme_hue_spread: 90deg;\n}\n\n:where([mol_theme]) {\n\tcolor: var(--mol_theme_text);\n\tfill: var(--mol_theme_text);\n\tbackground-color: var(--mol_theme_back);\n}\n\t\n:root, [mol_theme=\"$mol_theme_dark\"], :where([mol_theme=\"$mol_theme_dark\"]) [mol_theme]  {\n\n\t--mol_theme_luma: -1;\n\t--mol_theme_image: invert(1) hue-rotate( 180deg );\n\n\t--mol_theme_back: hsl( var(--mol_theme_hue), 20%, 10% );\n\t--mol_theme_card: hsl( var(--mol_theme_hue), 50%, 20%, .25 );\n\t--mol_theme_field: hsl( var(--mol_theme_hue), 50%, 8%, .25 );\n\t--mol_theme_hover: hsl( var(--mol_theme_hue), 0%, 50%, .1 );\n\t\n\t--mol_theme_text: hsl( var(--mol_theme_hue), 0%, 80% );\n\t--mol_theme_shade: hsl( var(--mol_theme_hue), 0%, 60%, 1 );\n\t--mol_theme_line: hsl( var(--mol_theme_hue), 0%, 50%, .25 );\n\t--mol_theme_focus: hsl( calc( var(--mol_theme_hue) + 180deg ), 100%, 65% );\n\t\n\t--mol_theme_control: hsl( var(--mol_theme_hue), 60%, 65% );\n\t--mol_theme_current: hsl( calc( var(--mol_theme_hue) - var(--mol_theme_hue_spread) ), 60%, 65% );\n\t--mol_theme_special: hsl( calc( var(--mol_theme_hue) + var(--mol_theme_hue_spread) ), 60%, 65% );\n\n\t/* --mol_theme_back: oklch( 20% .03 var(--mol_theme_hue) );\n\t--mol_theme_card: oklch( 35% .05 var(--mol_theme_hue) / .25 );\n\t--mol_theme_field: oklch( 0% 0 var(--mol_theme_hue) / .25 );\n\t--mol_theme_hover: oklch( 70% 0 var(--mol_theme_hue) / .1 );\n\t\n\t--mol_theme_text: oklch( 80% 0 var(--mol_theme_hue) );\n\t--mol_theme_shade: oklch( 60% 0 var(--mol_theme_hue) );\n\t--mol_theme_line: oklch( 50% 0 var(--mol_theme_hue) / .2 );\n\t--mol_theme_focus: oklch( 80% .2 calc( var(--mol_theme_hue) + 120deg ) );\n\t\n\t--mol_theme_control: oklch( 70% .1 var(--mol_theme_hue) );\n\t--mol_theme_current: oklch( 80% .2 calc( var(--mol_theme_hue) - 60deg ) );\n\t--mol_theme_special: oklch( 80% .3 calc( var(--mol_theme_hue) + 60deg ) ); */\n\n}\n\n[mol_theme=\"$mol_theme_light\"], :where([mol_theme=\"$mol_theme_light\"]) [mol_theme] {\n\t\n\t--mol_theme_luma: 1;\n\t--mol_theme_image: none;\n\t\n\t--mol_theme_back: hsl( var(--mol_theme_hue), 20%, 92% );\n\t--mol_theme_card: hsl( var(--mol_theme_hue), 50%, 100%, .5 );\n\t--mol_theme_field: hsl( var(--mol_theme_hue), 50%, 100%, .75 );\n\t--mol_theme_hover: hsl( var(--mol_theme_hue), 0%, 50%, .1 );\n\t\n\t--mol_theme_text: hsl( var(--mol_theme_hue), 0%, 0% );\n\t--mol_theme_shade: hsl( var(--mol_theme_hue), 0%, 40%, 1 );\n\t--mol_theme_line: hsl( var(--mol_theme_hue), 0%, 50%, .25 );\n\t--mol_theme_focus: hsl( calc( var(--mol_theme_hue) + 180deg ), 100%, 40% );\n\t\n\t--mol_theme_control: hsl( var(--mol_theme_hue), 80%, 30% );\n\t--mol_theme_current: hsl( calc( var(--mol_theme_hue) - var(--mol_theme_hue_spread) ), 80%, 30% );\n\t--mol_theme_special: hsl( calc( var(--mol_theme_hue) + var(--mol_theme_hue_spread) ), 80%, 30% );\n\t\n\t/* --mol_theme_back: oklch( 93% .01 var(--mol_theme_hue) );\n\t--mol_theme_card: oklch( 100% .02 var(--mol_theme_hue) / .25 );\n\t--mol_theme_field: oklch( 100% 0 var(--mol_theme_hue) / .5 );\n\t--mol_theme_hover: oklch( 70% 0 var(--mol_theme_hue) / .1 );\n\t\n\t--mol_theme_text: oklch( 20% 0 var(--mol_theme_hue) );\n\t--mol_theme_shade: oklch( 60% 0 var(--mol_theme_hue) );\n\t--mol_theme_line: oklch( 70% 0 var(--mol_theme_hue) / .2 );\n\t--mol_theme_focus: oklch( 20% .8 calc( var(--mol_theme_hue) + 120deg ) );\n\t\n\t--mol_theme_control: oklch( 45% .25 var(--mol_theme_hue) );\n\t--mol_theme_current: oklch( 45% .5 calc( var(--mol_theme_hue) - 60deg ) );\n\t--mol_theme_special: oklch( 45% .5 calc( var(--mol_theme_hue) + 60deg ) ); */\n\n}\n\n:where( :root, [mol_theme=\"$mol_theme_dark\"] ) [mol_theme=\"$mol_theme_base\"] {\n\t--mol_theme_back: hsl( var(--mol_theme_hue), 50%, 30% );\n\t--mol_theme_card: hsl( var(--mol_theme_hue), 40%, 20%, .25 );\n\t/* --mol_theme_back: oklch( 25% .05 var(--mol_theme_hue) );\n\t--mol_theme_card: oklch( 35% .1 var(--mol_theme_hue) / .25 ); */\n}\n:where( [mol_theme=\"$mol_theme_light\"] ) [mol_theme=\"$mol_theme_base\"] {\n\t--mol_theme_back: hsl( var(--mol_theme_hue), 50%, 80% );\n\t--mol_theme_card: hsl( var(--mol_theme_hue), 80%, 95%, .25 );\n\t/* --mol_theme_back: oklch( 95% .02 var(--mol_theme_hue) );\n\t--mol_theme_card: oklch( 80% .05 var(--mol_theme_hue) / .25 ); */\n}\n\n:where( :root, [mol_theme=\"$mol_theme_dark\"] ) [mol_theme=\"$mol_theme_accent\"] {\n\t--mol_theme_back: hsl( calc( var(--mol_theme_hue) + 180deg ), 90%, 30% );\n\t--mol_theme_card: hsl( calc( var(--mol_theme_hue) + 180deg ), 80%, 20%, .25 );\n\t/* --mol_theme_back: oklch( 40% .2 calc( var(--mol_theme_hue) + 120deg ) );\n\t--mol_theme_card: oklch( 50% .3 calc( var(--mol_theme_hue) + 120deg ) / .25 ); */\n}\n:where( [mol_theme=\"$mol_theme_light\"] ) [mol_theme=\"$mol_theme_accent\"] {\n\t--mol_theme_back: hsl( calc( var(--mol_theme_hue) + 180deg ), 90%, 75% );\n\t--mol_theme_card: hsl( calc( var(--mol_theme_hue) + 180deg ), 80%, 90%, .25 );\n\t/* --mol_theme_back: oklch( 90% .03 calc( var(--mol_theme_hue) + 120deg ) );\n\t--mol_theme_card: oklch( 80% .05 calc( var(--mol_theme_hue) + 120deg ) / .25 ); */\n}\n\n:where( :root, [mol_theme=\"$mol_theme_dark\"] ) [mol_theme=\"$mol_theme_current\"] {\n\t--mol_theme_back: hsl( calc( var(--mol_theme_hue) - var(--mol_theme_hue_spread) ), 50%, 30% );\n\t--mol_theme_card: hsl( calc( var(--mol_theme_hue) - var(--mol_theme_hue_spread) ), 40%, 20%, .25 );\n\t/* --mol_theme_back: oklch( 25% .05 calc( var(--mol_theme_hue) - 60deg ) );\n\t--mol_theme_card: oklch( 35% .1 calc( var(--mol_theme_hue) - 60deg ) / .25 ); */\n}\n:where( [mol_theme=\"$mol_theme_light\"] ) [mol_theme=\"$mol_theme_current\"] {\n\t--mol_theme_back: hsl( calc( var(--mol_theme_hue) - var(--mol_theme_hue_spread) ), 50%, 92% );\n\t--mol_theme_card: hsl( calc( var(--mol_theme_hue) - var(--mol_theme_hue_spread) ), 80%, 100%, .5 );\n\t/* --mol_theme_back: oklch( 95% .02 calc( var(--mol_theme_hue) - 60deg ) );\n\t--mol_theme_card: oklch( 80% .05 calc( var(--mol_theme_hue) - 60deg ) / .25 ); */\n}\n\n:where( :root, [mol_theme=\"$mol_theme_dark\"] ) [mol_theme=\"$mol_theme_special\"] {\n\t--mol_theme_back: hsl( calc( var(--mol_theme_hue) + var(--mol_theme_hue_spread) ), 50%, 30% );\n\t--mol_theme_card: hsl( calc( var(--mol_theme_hue) + var(--mol_theme_hue_spread) ), 40%, 20%, .25 );\n\t/* --mol_theme_back: oklch( 25% .05 calc( var(--mol_theme_hue) + 60deg ) );\n\t--mol_theme_card: oklch( 35% .1 calc( var(--mol_theme_hue) + 60deg ) / .25 ); */\n}\n:where( [mol_theme=\"$mol_theme_light\"] ) [mol_theme=\"$mol_theme_special\"] {\n\t--mol_theme_back: hsl( calc( var(--mol_theme_hue) + var(--mol_theme_hue_spread) ), 50%, 92% );\n\t--mol_theme_card: hsl( calc( var(--mol_theme_hue) + var(--mol_theme_hue_spread) ), 80%, 100%, .5 );\n\t/* --mol_theme_back: oklch( 95% .02 calc( var(--mol_theme_hue) + 60deg ) );\n\t--mol_theme_card: oklch( 80% .05 calc( var(--mol_theme_hue) + 60deg ) / .25 ); */\n}\n");
+    $mol_style_attach("mol/theme/theme.css", ":root {\n\t--mol_theme_hue: 240deg;\n\t--mol_theme_hue_spread: 90deg;\n}\n\n:where([mol_theme]) {\n\tcolor: var(--mol_theme_text);\n\tfill: var(--mol_theme_text);\n\tbackground-color: var(--mol_theme_back);\n}\n\t\n:root, [mol_theme=\"$mol_theme_dark\"], :where([mol_theme=\"$mol_theme_dark\"]) [mol_theme]  {\n\n\t--mol_theme_luma: -1;\n\t--mol_theme_image: invert(1) hue-rotate( 180deg );\n\n\t--mol_theme_back: hsl( var(--mol_theme_hue), 20%, 10% );\n\t--mol_theme_card: hsl( var(--mol_theme_hue), 50%, 20%, .25 );\n\t--mol_theme_field: hsl( var(--mol_theme_hue), 50%, 8%, .25 );\n\t--mol_theme_hover: hsl( var(--mol_theme_hue), 0%, 50%, .1 );\n\t\n\t--mol_theme_text: hsl( var(--mol_theme_hue), 0%, 80% );\n\t--mol_theme_shade: hsl( var(--mol_theme_hue), 0%, 60%, 1 );\n\t--mol_theme_line: hsl( var(--mol_theme_hue), 0%, 50%, .25 );\n\t--mol_theme_focus: hsl( calc( var(--mol_theme_hue) + 180deg ), 100%, 65% );\n\t\n\t--mol_theme_control: hsl( var(--mol_theme_hue), 60%, 65% );\n\t--mol_theme_current: hsl( calc( var(--mol_theme_hue) - var(--mol_theme_hue_spread) ), 60%, 65% );\n\t--mol_theme_special: hsl( calc( var(--mol_theme_hue) + var(--mol_theme_hue_spread) ), 60%, 65% );\n\n} @supports( color: oklch( 0% 0 0deg ) ) {\n:root, [mol_theme=\"$mol_theme_dark\"], :where([mol_theme=\"$mol_theme_dark\"]) [mol_theme]  {\n\t\n\t--mol_theme_back: oklch( 20% .03 var(--mol_theme_hue) );\n\t--mol_theme_card: oklch( 30% .05 var(--mol_theme_hue) / .25 );\n\t--mol_theme_field: oklch( 15% 0 var(--mol_theme_hue) / .25 );\n\t--mol_theme_hover: oklch( 70% 0 var(--mol_theme_hue) / .1 );\n\t\n\t--mol_theme_text: oklch( 80% 0 var(--mol_theme_hue) );\n\t--mol_theme_shade: oklch( 60% 0 var(--mol_theme_hue) );\n\t--mol_theme_line: oklch( 60% 0 var(--mol_theme_hue) / .25 );\n\t--mol_theme_focus: oklch( 80% .2 calc( var(--mol_theme_hue) + 180deg ) );\n\t\n\t--mol_theme_control: oklch( 70% .1 var(--mol_theme_hue) );\n\t--mol_theme_current: oklch( 70% .2 calc( var(--mol_theme_hue) - var(--mol_theme_hue_spread) ) );\n\t--mol_theme_special: oklch( 70% .2 calc( var(--mol_theme_hue) + var(--mol_theme_hue_spread) ) );\n\n} }\n\n[mol_theme=\"$mol_theme_light\"], :where([mol_theme=\"$mol_theme_light\"]) [mol_theme] {\n\t\n\t--mol_theme_luma: 1;\n\t--mol_theme_image: none;\n\t\n\t--mol_theme_back: hsl( var(--mol_theme_hue), 20%, 92% );\n\t--mol_theme_card: hsl( var(--mol_theme_hue), 50%, 100%, .5 );\n\t--mol_theme_field: hsl( var(--mol_theme_hue), 50%, 100%, .75 );\n\t--mol_theme_hover: hsl( var(--mol_theme_hue), 0%, 50%, .1 );\n\t\n\t--mol_theme_text: hsl( var(--mol_theme_hue), 0%, 0% );\n\t--mol_theme_shade: hsl( var(--mol_theme_hue), 0%, 40%, 1 );\n\t--mol_theme_line: hsl( var(--mol_theme_hue), 0%, 50%, .25 );\n\t--mol_theme_focus: hsl( calc( var(--mol_theme_hue) + 180deg ), 100%, 40% );\n\t\n\t--mol_theme_control: hsl( var(--mol_theme_hue), 80%, 30% );\n\t--mol_theme_current: hsl( calc( var(--mol_theme_hue) - var(--mol_theme_hue_spread) ), 80%, 30% );\n\t--mol_theme_special: hsl( calc( var(--mol_theme_hue) + var(--mol_theme_hue_spread) ), 80%, 30% );\n\n} @supports( color: oklch( 0% 0 0deg ) ) {\n[mol_theme=\"$mol_theme_light\"], :where([mol_theme=\"$mol_theme_light\"]) [mol_theme] {\n\t--mol_theme_back: oklch( 92% .01 var(--mol_theme_hue) );\n\t--mol_theme_card: oklch( 99% .01 var(--mol_theme_hue) / .5 );\n\t--mol_theme_field: oklch( 100% 0 var(--mol_theme_hue) / .5 );\n\t--mol_theme_hover: oklch( 70% 0 var(--mol_theme_hue) / .1 );\n\t\n\t--mol_theme_text: oklch( 20% 0 var(--mol_theme_hue) );\n\t--mol_theme_shade: oklch( 60% 0 var(--mol_theme_hue) );\n\t--mol_theme_line: oklch( 50% 0 var(--mol_theme_hue) / .25 );\n\t--mol_theme_focus: oklch( 60% .2 calc( var(--mol_theme_hue) + 180deg ) );\n\t\n\t--mol_theme_control: oklch( 40% .15 var(--mol_theme_hue) );\n\t--mol_theme_current: oklch( 50% .2 calc( var(--mol_theme_hue) - var(--mol_theme_hue_spread) ) );\n\t--mol_theme_special: oklch( 50% .2 calc( var(--mol_theme_hue) + var(--mol_theme_hue_spread) ) );\n\n} }\n\n:where( :root, [mol_theme=\"$mol_theme_dark\"] ) [mol_theme=\"$mol_theme_base\"] {\n\t--mol_theme_back: oklch( 25% .05 var(--mol_theme_hue) );\n\t--mol_theme_card: oklch( 35% .1 var(--mol_theme_hue) / .25 );\n}\n:where( [mol_theme=\"$mol_theme_light\"] ) [mol_theme=\"$mol_theme_base\"] {\n\t--mol_theme_back: oklch( 85% .05 var(--mol_theme_hue) );\n\t--mol_theme_card: oklch( 98% .03 var(--mol_theme_hue) / .25 );\n}\n\n:where( :root, [mol_theme=\"$mol_theme_dark\"] ) [mol_theme=\"$mol_theme_current\"] {\n\t--mol_theme_back: oklch( 25% .05 calc( var(--mol_theme_hue) - var(--mol_theme_hue_spread) ) );\n\t--mol_theme_card: oklch( 35% .1 calc( var(--mol_theme_hue) - var(--mol_theme_hue_spread) ) / .25 );\n}\n:where( [mol_theme=\"$mol_theme_light\"] ) [mol_theme=\"$mol_theme_current\"] {\n\t--mol_theme_back: oklch( 85% .05 calc( var(--mol_theme_hue) - var(--mol_theme_hue_spread) ) );\n\t--mol_theme_card: oklch( 98% .03 calc( var(--mol_theme_hue) - var(--mol_theme_hue_spread) ) / .25 );\n}\n\n:where( :root, [mol_theme=\"$mol_theme_dark\"] ) [mol_theme=\"$mol_theme_special\"] {\n\t--mol_theme_back: oklch( 25% .05 calc( var(--mol_theme_hue) + var(--mol_theme_hue_spread) ) );\n\t--mol_theme_card: oklch( 35% .1 calc( var(--mol_theme_hue) + var(--mol_theme_hue_spread) ) / .25 );\n}\n:where( [mol_theme=\"$mol_theme_light\"] ) [mol_theme=\"$mol_theme_special\"] {\n\t--mol_theme_back: oklch( 85% .05 calc( var(--mol_theme_hue) + var(--mol_theme_hue_spread) ) );\n\t--mol_theme_card: oklch( 98% .03 calc( var(--mol_theme_hue) + var(--mol_theme_hue_spread) ) / .25 );\n}\n\n:where( :root, [mol_theme=\"$mol_theme_dark\"] ) [mol_theme=\"$mol_theme_accent\"] {\n\t--mol_theme_back: oklch( 35% .1 calc( var(--mol_theme_hue) + 180deg ) );\n\t--mol_theme_card: oklch( 45% .15 calc( var(--mol_theme_hue) + 180deg ) / .25 );\n}\n:where( [mol_theme=\"$mol_theme_light\"] ) [mol_theme=\"$mol_theme_accent\"] {\n\t--mol_theme_back: oklch( 83% .1 calc( var(--mol_theme_hue) + 180deg ) );\n\t--mol_theme_card: oklch( 98% .03 calc( var(--mol_theme_hue) + 180deg ) / .25 );\n}\n\n");
 })($ || ($ = {}));
 
 ;
@@ -2339,7 +2361,9 @@ var $;
             }
             catch (error) {
                 $mol_fail_log(error);
-                const mol_view_error = $mol_promise_like(error) ? 'Promise' : error.name || error.constructor.name;
+                const mol_view_error = $mol_promise_like(error)
+                    ? error.constructor[Symbol.toStringTag] ?? 'Promise'
+                    : error.name || error.constructor.name;
                 $mol_dom_render_attributes(node, { mol_view_error });
                 if ($mol_promise_like(error))
                     break render;
@@ -2612,7 +2636,7 @@ var $;
 "use strict";
 var $;
 (function ($) {
-    $mol_style_attach("mol/view/view/view.css", "[mol_view] {\n\ttransition-property: height, width, min-height, min-width, max-width, max-height, transform;\n\ttransition-duration: .2s;\n\ttransition-timing-function: ease-out;\n\t-webkit-appearance: none;\n\tbox-sizing: border-box;\n\tdisplay: flex;\n\tflex-shrink: 0;\n\tcontain: style;\n\tscrollbar-color: var(--mol_theme_line) transparent;\n\tscrollbar-width: thin;\n}\t\n\n[mol_view]::selection {\n\tbackground: var(--mol_theme_line);\n}\t\n\n[mol_view]::-webkit-scrollbar {\n\twidth: .25rem;\n\theight: .25rem;\n}\n\n[mol_view]::-webkit-scrollbar-corner {\n\tbackground-color: var(--mol_theme_line);\n}\n\n[mol_view]::-webkit-scrollbar-track {\n\tbackground-color: transparent;\n}\n\n[mol_view]::-webkit-scrollbar-thumb {\n\tbackground-color: var(--mol_theme_line);\n\tborder-radius: var(--mol_gap_round);\n}\n\n[mol_view] > * {\n\tword-break: inherit;\n}\n\n[mol_view_root] {\n\tmargin: 0;\n\tpadding: 0;\n\twidth: 100%;\n\theight: 100%;\n\tbox-sizing: border-box;\n\tfont-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;\n\tfont-size: 1rem;\n\tline-height: 1.5rem;\n\tbackground: var(--mol_theme_back);\n\tcolor: var(--mol_theme_text);\n\tcontain: unset; /** Fixes bg ignoring when applied to body on Chrome */\n\ttab-size: 4;\n\toverscroll-behavior: contain; /** Disable navigation gestures **/\n}\n\n@media print {\n\t[mol_view_root] {\n\t\theight: auto;\n\t}\n}\n\n[mol_view][mol_view_error]:not([mol_view_error=\"Promise\"]) {\n\tbackground-image: repeating-linear-gradient(\n\t\t-45deg,\n\t\t#f92323,\n\t\t#f92323 .5rem,\n\t\t#ff3d3d .5rem,\n\t\t#ff3d3d 1.5rem\n\t);\n\tcolor: black;\n\talign-items: center;\n\tjustify-content: center;\n}\n\n@keyframes mol_view_wait {\n\tfrom {\n\t\topacity: .25;\n\t}\n\t20% {\n\t\topacity: .75;\n\t}\n\tto {\n\t\topacity: .25;\n\t}\n}\n\n:where([mol_view][mol_view_error=\"Promise\"]) {\n\tbackground: var(--mol_theme_hover);\n}\n\n[mol_view][mol_view_error=\"Promise\"] {\n\tanimation: mol_view_wait 1s steps(20,end) infinite;\n}\n");
+    $mol_style_attach("mol/view/view/view.css", "[mol_view] {\n\ttransition-property: height, width, min-height, min-width, max-width, max-height, transform;\n\ttransition-duration: .2s;\n\ttransition-timing-function: ease-out;\n\t-webkit-appearance: none;\n\tbox-sizing: border-box;\n\tdisplay: flex;\n\tflex-shrink: 0;\n\tcontain: style;\n\tscrollbar-color: var(--mol_theme_line) transparent;\n\tscrollbar-width: thin;\n}\t\n\n[mol_view]::selection {\n\tbackground: var(--mol_theme_line);\n}\t\n\n[mol_view]::-webkit-scrollbar {\n\twidth: .25rem;\n\theight: .25rem;\n}\n\n[mol_view]::-webkit-scrollbar-corner {\n\tbackground-color: var(--mol_theme_line);\n}\n\n[mol_view]::-webkit-scrollbar-track {\n\tbackground-color: transparent;\n}\n\n[mol_view]::-webkit-scrollbar-thumb {\n\tbackground-color: var(--mol_theme_line);\n\tborder-radius: var(--mol_gap_round);\n}\n\n[mol_view] > * {\n\tword-break: inherit;\n}\n\n[mol_view_root] {\n\tmargin: 0;\n\tpadding: 0;\n\twidth: 100%;\n\theight: 100%;\n\tbox-sizing: border-box;\n\tfont-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;\n\tfont-size: 1rem;\n\tline-height: 1.5rem;\n\tbackground: var(--mol_theme_back);\n\tcolor: var(--mol_theme_text);\n\tcontain: unset; /** Fixes bg ignoring when applied to body on Chrome */\n\ttab-size: 4;\n\toverscroll-behavior: contain; /** Disable navigation gestures **/\n}\n\n@media print {\n\t[mol_view_root] {\n\t\theight: auto;\n\t}\n}\n[mol_view][mol_view_error]:not([mol_view_error=\"Promise\"], [mol_view_error=\"$mol_promise_blocker\"]) {\n\tbackground-image: repeating-linear-gradient(\n\t\t-45deg,\n\t\t#f92323,\n\t\t#f92323 .5rem,\n\t\t#ff3d3d .5rem,\n\t\t#ff3d3d 1.5rem\n\t);\n\tcolor: black;\n\talign-items: center;\n\tjustify-content: center;\n}\n\n@keyframes mol_view_wait {\n\tfrom {\n\t\topacity: .25;\n\t}\n\t20% {\n\t\topacity: .75;\n\t}\n\tto {\n\t\topacity: .25;\n\t}\n}\n\n:where([mol_view][mol_view_error=\"$mol_promise_blocker\"]),\n:where([mol_view][mol_view_error=\"Promise\"]) {\n\tbackground: var(--mol_theme_hover);\n}\n\n[mol_view][mol_view_error=\"Promise\"] {\n\tanimation: mol_view_wait 1s steps(20,end) infinite;\n}\n");
 })($ || ($ = {}));
 
 ;
@@ -3139,17 +3163,36 @@ var $;
 "use strict";
 var $;
 (function ($) {
+    function cause_serialize(cause) {
+        return JSON.stringify(cause, null, '  ')
+            .replace(/\(/, '<')
+            .replace(/\)/, ' >');
+    }
+    function frame_normalize(frame) {
+        return (typeof frame === 'string' ? frame : cause_serialize(frame))
+            .trim()
+            .replace(/at /gm, '   at ')
+            .replace(/^(?!    +at )(.*)/gm, '    at | $1 (#)');
+    }
     class $mol_error_mix extends AggregateError {
         cause;
         name = $$.$mol_func_name(this.constructor).replace(/^\$/, '') + '_Error';
         constructor(message, cause = {}, ...errors) {
             super(errors, message, { cause });
             this.cause = cause;
-            const stack_get = Object.getOwnPropertyDescriptor(this, 'stack')?.get ?? (() => super.stack);
+            const desc = Object.getOwnPropertyDescriptor(this, 'stack');
+            const stack_get = () => desc?.get?.() ?? super.stack ?? desc?.value ?? this.message;
             Object.defineProperty(this, 'stack', {
-                get: () => (stack_get.call(this) ?? this.message) + '\n' + [JSON.stringify(this.cause, null, '  ') ?? 'no cause', ...this.errors.map(e => e.stack)].map(e => e.trim()
-                    .replace(/at /gm, '   at ')
-                    .replace(/^(?!    +at )(.*)/gm, '    at | $1 (#)')).join('\n')
+                get: () => stack_get() + '\n' + [
+                    this.cause ?? 'no cause',
+                    ...this.errors.flatMap(e => [
+                        e.stack,
+                        ...e instanceof $mol_error_mix || !e.cause ? [] : [e.cause]
+                    ])
+                ].map(frame_normalize).join('\n')
+            });
+            Object.defineProperty(this, 'cause', {
+                get: () => cause
             });
         }
         static [Symbol.toPrimitive]() {
@@ -6849,27 +6892,8 @@ var $;
 "use strict";
 var $;
 (function ($) {
-    function $mol_promise() {
-        let done;
-        let fail;
-        const promise = new Promise((d, f) => {
-            done = d;
-            fail = f;
-        });
-        return Object.assign(promise, {
-            done,
-            fail,
-        });
-    }
-    $.$mol_promise = $mol_promise;
-})($ || ($ = {}));
-
-;
-"use strict";
-var $;
-(function ($) {
     function $mol_wait_timeout_async(timeout) {
-        const promise = $mol_promise();
+        const promise = new $mol_promise();
         const task = new this.$mol_after_timeout(timeout, () => promise.done());
         return Object.assign(promise, {
             destructor: () => task.destructor()
@@ -9495,7 +9519,7 @@ var $;
             event_change(next) {
                 if (!next)
                     return;
-                const el = next.target;
+                const el = this.dom_node();
                 const from = el.selectionStart;
                 const to = el.selectionEnd;
                 try {
@@ -9556,13 +9580,17 @@ var $;
             }
             selection_start() {
                 const el = this.dom_node();
-                if (el.selectionStart === null)
+                if (!this.focused())
+                    return undefined;
+                if (el.selectionStart == null)
                     return undefined;
                 return this.selection()[0];
             }
             selection_end() {
                 const el = this.dom_node();
-                if (el.selectionEnd === null)
+                if (!this.focused())
+                    return undefined;
+                if (el.selectionEnd == null)
                     return undefined;
                 return this.selection()[1];
             }
@@ -11204,6 +11232,227 @@ var $;
 "use strict";
 var $;
 (function ($) {
+    function $mol_base64_ae_encode(buffer) {
+        return $mol_base64_encode(buffer).replace(/\+/g, 'æ').replace(/\//g, 'Æ').replace(/=/g, '');
+    }
+    $.$mol_base64_ae_encode = $mol_base64_ae_encode;
+    function $mol_base64_ae_decode(str) {
+        return $mol_base64_decode(str.replace(/æ/g, '+').replace(/Æ/g, '/'));
+    }
+    $.$mol_base64_ae_decode = $mol_base64_ae_decode;
+})($ || ($ = {}));
+
+;
+"use strict";
+var $;
+(function ($) {
+    class $mol_buffer extends DataView {
+        static from(array) {
+            if (typeof array === 'number')
+                array = new Uint8Array(array);
+            if (typeof array === 'string')
+                array = $mol_base64_ae_decode(array);
+            return new this(array.buffer, array.byteOffset, array.byteLength);
+        }
+        static toString() {
+            return $$.$mol_func_name(this);
+        }
+        getUint48(offset, LE = false) {
+            if (offset % 4) {
+                return this.getUint16(offset, LE) + this.getUint32(offset + 2, LE) * 2 ** 16;
+            }
+            else {
+                return this.getUint32(offset, LE) + this.getUint16(offset + 4, LE) * 2 ** 32;
+            }
+        }
+        setUint48(offset, value, LE = false) {
+            if (offset % 4) {
+                this.setUint16(offset, value & ((1 << 16) - 1), LE);
+                this.setUint32(offset + 2, (value / 2 ** 16) | 0, LE);
+            }
+            else {
+                this.setUint32(offset, value | 0, LE);
+                this.setUint16(offset + 4, (value / 2 ** 32) | 0, LE);
+            }
+        }
+        int8(offset, next) {
+            if (next === undefined)
+                return this.getInt8(offset);
+            if (next >= -(2 ** 7) && next < 2 ** 7)
+                return this.setInt8(offset, next), next;
+            $mol_fail(new Error(`Wrong int8 value ${next}`));
+        }
+        uint8(offset, next) {
+            if (next === undefined)
+                return this.getUint8(offset);
+            if (next >= 0 && next < 2 ** 8)
+                return this.setUint8(offset, next), next;
+            $mol_fail(new Error(`Wrong uint8 value ${next}`));
+        }
+        int16(offset, next) {
+            if (next === undefined)
+                return this.getInt16(offset, true);
+            if (next >= -(2 ** 15) && next < 2 ** 15)
+                return this.setInt16(offset, next, true), next;
+            $mol_fail(new Error(`Wrong int16 value ${next}`));
+        }
+        uint16(offset, next) {
+            if (next === undefined)
+                return this.getUint16(offset, true);
+            if (next >= 0 && next < 2 ** 16)
+                return this.setUint16(offset, next, true), next;
+            $mol_fail(new Error(`Wrong uint16 value ${next}`));
+        }
+        int32(offset, next) {
+            if (next === undefined)
+                return this.getInt32(offset, true);
+            if (next >= -(2 ** 31) && next < 2 ** 31)
+                return this.setInt32(offset, next, true), next;
+            $mol_fail(new Error(`Wrong int32 value ${next}`));
+        }
+        uint32(offset, next) {
+            if (next === undefined)
+                return this.getUint32(offset, true);
+            if (next >= 0 && next < 2 ** 32)
+                return this.setUint32(offset, next, true), next;
+            $mol_fail(new Error(`Wrong uint32 value ${next}`));
+        }
+        uint48(offset, next) {
+            if (next === undefined)
+                return this.getUint48(offset, true);
+            if (next >= 0 && next < 2 ** 48)
+                return this.setUint48(offset, next, true), next;
+            $mol_fail(new Error(`Wrong uint48 value ${next}`));
+        }
+        int64(offset, next) {
+            if (next === undefined)
+                return this.getBigInt64(offset, true);
+            if (next >= -(2 ** 63) && next < 2 ** 63)
+                return this.setBigInt64(offset, next, true), next;
+            $mol_fail(new Error(`Wrong int64 value ${next}`));
+        }
+        uint64(offset, next) {
+            if (next === undefined)
+                return this.getBigUint64(offset, true);
+            if (next >= 0 && next < 2 ** 64)
+                return this.setBigUint64(offset, next, true), next;
+            $mol_fail(new Error(`Wrong uint64 value ${next}`));
+        }
+        float32(offset, next) {
+            if (next !== undefined)
+                this.setFloat32(offset, next, true);
+            return this.getFloat32(offset, true);
+        }
+        float64(offset, next) {
+            if (next !== undefined)
+                this.setFloat64(offset, next, true);
+            return this.getFloat64(offset, true);
+        }
+        asArray() {
+            return new Uint8Array(this.buffer, this.byteOffset, this.byteLength);
+        }
+        toString() {
+            return $mol_base64_ae_encode(this.asArray());
+        }
+    }
+    $.$mol_buffer = $mol_buffer;
+})($ || ($ = {}));
+
+;
+"use strict";
+var $;
+(function ($) {
+    function $mol_crypto_salt() {
+        return $mol_crypto_native.getRandomValues(new Uint8Array(16));
+    }
+    $.$mol_crypto_salt = $mol_crypto_salt;
+    $.$mol_crypto_salt_once = new Uint8Array([1, 2, 3, 4, 5, 6, 7, 8, 9, 0, 1, 2, 3, 4, 5, 6]);
+})($ || ($ = {}));
+
+;
+"use strict";
+var $;
+(function ($) {
+    function restack(error) {
+        error = new Error(error instanceof Error ? error.message : String(error), { cause: error });
+        $mol_fail_hidden(error);
+    }
+    class $mol_crypto_sacred extends $mol_buffer {
+        static size = 16;
+        static make() {
+            return this.from($mol_crypto_salt());
+        }
+        static from(serial) {
+            if (typeof serial === 'string') {
+                serial = new Uint8Array([
+                    ...$mol_base64_url_decode(serial),
+                ]);
+            }
+            if (!(serial instanceof Uint8Array)) {
+                serial = new Uint8Array(serial.buffer, serial.byteOffset, serial.byteLength);
+            }
+            ;
+            serial[0] = 0;
+            const sacred = super.from(serial);
+            return sacred;
+        }
+        static async from_native(native) {
+            const buf = await $mol_crypto_native.subtle.exportKey('raw', native).catch(restack);
+            const sacred = this.from(new Uint8Array(buf));
+            sacred._native = native;
+            return sacred;
+        }
+        constructor(buffer, byteOffset, byteLength) {
+            super(buffer, byteOffset, byteLength);
+            if (this.getUint8(0) !== 0)
+                $mol_fail(new Error('Buffer should starts with 0 byte'));
+        }
+        toString() {
+            return $mol_base64_url_encode(this.asArray());
+        }
+        _native;
+        async native() {
+            return this._native ?? (this._native = await $mol_crypto_native.subtle.importKey('raw', this, {
+                name: 'AES-CBC',
+                length: 128,
+            }, true, ['encrypt', 'decrypt']).catch(restack));
+        }
+        async encrypt(open, salt) {
+            return new Uint8Array(await $mol_crypto_native.subtle.encrypt({
+                name: 'AES-CBC',
+                length: 128,
+                tagLength: 32,
+                iv: salt,
+            }, await this.native(), open).catch(restack));
+        }
+        async decrypt(closed, salt) {
+            return new Uint8Array(await $mol_crypto_native.subtle.decrypt({
+                name: 'AES-CBC',
+                length: 128,
+                tagLength: 32,
+                iv: salt,
+            }, await this.native(), closed).catch(restack));
+        }
+        async close(sacred, salt) {
+            const buf = new Uint8Array(sacred.buffer, sacred.byteOffset + 1, sacred.byteLength - 1);
+            return this.encrypt(buf, salt);
+        }
+        async open(buf, salt) {
+            const buf2 = new Uint8Array(16);
+            buf2.set(await this.decrypt(buf, salt), 1);
+            return new $mol_crypto_sacred(buf2.buffer);
+        }
+    }
+    __decorate([
+        $mol_memo.method
+    ], $mol_crypto_sacred.prototype, "toString", null);
+    $.$mol_crypto_sacred = $mol_crypto_sacred;
+})($ || ($ = {}));
+
+;
+"use strict";
+var $;
+(function ($) {
     const algorithm = {
         name: 'AES-CBC',
         length: 128,
@@ -12237,7 +12486,10 @@ var $;
                     radius: $mol_gap.round,
                 },
                 box: {
-                    shadow: [[0, `0.5rem`, `0.5rem`, `-0.5rem`, hsla(0, 0, 0, .25)]],
+                    shadow: [
+                        [0, `-0.5rem`, `0.5rem`, `-0.5rem`, hsla(0, 0, 0, .25)],
+                        [0, `0.5rem`, `0.5rem`, `-0.5rem`, hsla(0, 0, 0, .25)],
+                    ],
                 },
                 zIndex: 2,
                 '@media': {
@@ -12311,7 +12563,10 @@ var $;
                     radius: $mol_gap.round,
                 },
                 box: {
-                    shadow: [[0, `-0.5rem`, `0.5rem`, `-0.5rem`, hsla(0, 0, 0, .25)]],
+                    shadow: [
+                        [0, `-0.5rem`, `0.5rem`, `-0.5rem`, hsla(0, 0, 0, .25)],
+                        [0, `0.5rem`, `0.5rem`, `-0.5rem`, hsla(0, 0, 0, .25)],
+                    ],
                 },
                 zIndex: 1,
                 padding: $mol_gap.block,
@@ -22465,7 +22720,8 @@ var $;
 				"video": null, 
 				"place": null, 
 				"others": null, 
-				"wiki": null
+				"wiki": null, 
+				"love": null
 			};
 		}
 		meetup(){
@@ -28512,6 +28768,2883 @@ var $;
 })($ || ($ = {}));
 
 ;
+	($.$mol_book2_catalog) = class $mol_book2_catalog extends ($.$mol_book2) {
+		Menu_title(){
+			return (this.Menu().Title());
+		}
+		menu_title(){
+			return "";
+		}
+		Menu_tools(){
+			return (this.Menu().Tools());
+		}
+		Menu_logo(){
+			return null;
+		}
+		menu_head(){
+			return [(this.Menu_title()), (this.Menu_tools())];
+		}
+		menu_filter(next){
+			if(next !== undefined) return next;
+			return "";
+		}
+		Menu_filter(){
+			const obj = new this.$.$mol_search();
+			(obj.query) = (next) => ((this.menu_filter(next)));
+			return obj;
+		}
+		Menu_links_empty(){
+			const obj = new this.$.$mol_view();
+			return obj;
+		}
+		arg(id){
+			return {};
+		}
+		menu_link_arg(id){
+			return (this.arg(id));
+		}
+		spread_title(id){
+			return "";
+		}
+		Menu_link_title(id){
+			const obj = new this.$.$mol_dimmer();
+			(obj.needle) = () => ((this.menu_filter()));
+			(obj.haystack) = () => ((this.spread_title(id)));
+			return obj;
+		}
+		menu_link_content(id){
+			return [(this.Menu_link_title(id))];
+		}
+		Menu_link(id){
+			const obj = new this.$.$mol_link();
+			(obj.arg) = () => ((this.menu_link_arg(id)));
+			(obj.sub) = () => ((this.menu_link_content(id)));
+			return obj;
+		}
+		menu_links(){
+			return [(this.Menu_link("0"))];
+		}
+		Menu_links(){
+			const obj = new this.$.$mol_list();
+			(obj.Empty) = () => ((this.Menu_links_empty()));
+			(obj.rows) = () => ((this.menu_links()));
+			return obj;
+		}
+		menu_body(){
+			return [(this.Menu_filter()), (this.Menu_links())];
+		}
+		menu_foot(){
+			return [];
+		}
+		Menu(){
+			const obj = new this.$.$mol_page();
+			(obj.title) = () => ((this.menu_title()));
+			(obj.Logo) = () => ((this.Menu_logo()));
+			(obj.tools) = () => ([...(this.menu_tools()), ...(this.addon_tools())]);
+			(obj.head) = () => ((this.menu_head()));
+			(obj.body) = () => ((this.menu_body()));
+			(obj.foot) = () => ((this.menu_foot()));
+			return obj;
+		}
+		spread_close_arg(){
+			return {};
+		}
+		Spread_close_icon(){
+			const obj = new this.$.$mol_icon_close();
+			return obj;
+		}
+		param(){
+			return "";
+		}
+		spread(next){
+			if(next !== undefined) return next;
+			return "";
+		}
+		spreads(){
+			return {};
+		}
+		Spread(id){
+			const obj = new this.$.$mol_view();
+			return obj;
+		}
+		Spread_default(){
+			return null;
+		}
+		spread_ids(){
+			return [];
+		}
+		menu_filter_enabled(){
+			return false;
+		}
+		spread_ids_filtered(){
+			return [];
+		}
+		menu_tools(){
+			return [];
+		}
+		addon_tools(){
+			return [];
+		}
+		pages(){
+			return [(this.Menu())];
+		}
+		Spread_close(){
+			const obj = new this.$.$mol_link();
+			(obj.arg) = () => ((this.spread_close_arg()));
+			(obj.hint) = () => ((this.$.$mol_locale.text("$mol_book2_catalog_Spread_close_hint")));
+			(obj.sub) = () => ([(this.Spread_close_icon())]);
+			return obj;
+		}
+	};
+	($mol_mem(($.$mol_book2_catalog.prototype), "menu_filter"));
+	($mol_mem(($.$mol_book2_catalog.prototype), "Menu_filter"));
+	($mol_mem(($.$mol_book2_catalog.prototype), "Menu_links_empty"));
+	($mol_mem_key(($.$mol_book2_catalog.prototype), "Menu_link_title"));
+	($mol_mem_key(($.$mol_book2_catalog.prototype), "Menu_link"));
+	($mol_mem(($.$mol_book2_catalog.prototype), "Menu_links"));
+	($mol_mem(($.$mol_book2_catalog.prototype), "Menu"));
+	($mol_mem(($.$mol_book2_catalog.prototype), "Spread_close_icon"));
+	($mol_mem(($.$mol_book2_catalog.prototype), "spread"));
+	($mol_mem_key(($.$mol_book2_catalog.prototype), "Spread"));
+	($mol_mem(($.$mol_book2_catalog.prototype), "Spread_close"));
+
+
+;
+"use strict";
+
+;
+"use strict";
+var $;
+(function ($) {
+    var $$;
+    (function ($$) {
+        class $mol_book2_catalog extends $.$mol_book2_catalog {
+            spread_current() {
+                return this.spread() === '' ? this.Spread_default() : this.Spread(this.spread());
+            }
+            pages() {
+                const spread = this.spread_current();
+                return [
+                    this.Menu(),
+                    ...spread
+                        ? spread instanceof $mol_book2
+                            ? spread.pages()
+                            : [spread]
+                        : [],
+                ];
+            }
+            auto() {
+                const spread = this.spread_current();
+                if (spread instanceof $mol_book2)
+                    spread.auto();
+            }
+            spread_ids() {
+                return Object.keys(this.spreads());
+            }
+            menu_body() {
+                return [
+                    ...this.menu_filter_enabled() ? [this.Menu_filter()] : [],
+                    this.Menu_links(),
+                ];
+            }
+            menu_filter_enabled() {
+                return this.spread_ids().length >= 10;
+            }
+            menu_links() {
+                return this.spread_ids_filtered()
+                    .map(spread => this.Menu_link(spread));
+            }
+            spread_ids_filtered() {
+                return this.spread_ids()
+                    .filter($mol_match_text(this.menu_filter(), spread => [this.spread_title(spread)]));
+            }
+            Spread(id) {
+                return this.spreads()[id];
+            }
+            Spread_default() {
+                return this.spreads()[''];
+            }
+            spread(next) {
+                return this.$.$mol_state_arg.value(this.param(), next) ?? '';
+            }
+            arg(spread) {
+                return { [this.param()]: spread || null };
+            }
+            spread_close_arg() {
+                return { [this.param()]: null };
+            }
+            spread_title(spread) {
+                const page = this.Spread(spread);
+                return page instanceof $mol_book2
+                    && page.menu_title()
+                    || page.title()
+                    || spread;
+            }
+        }
+        __decorate([
+            $mol_mem
+        ], $mol_book2_catalog.prototype, "pages", null);
+        __decorate([
+            $mol_mem
+        ], $mol_book2_catalog.prototype, "spread_ids", null);
+        __decorate([
+            $mol_mem
+        ], $mol_book2_catalog.prototype, "menu_body", null);
+        __decorate([
+            $mol_mem
+        ], $mol_book2_catalog.prototype, "menu_links", null);
+        __decorate([
+            $mol_mem
+        ], $mol_book2_catalog.prototype, "spread_ids_filtered", null);
+        __decorate([
+            $mol_mem
+        ], $mol_book2_catalog.prototype, "spread", null);
+        $$.$mol_book2_catalog = $mol_book2_catalog;
+    })($$ = $.$$ || ($.$$ = {}));
+})($ || ($ = {}));
+
+;
+"use strict";
+var $;
+(function ($) {
+    $mol_style_attach("mol/book2/catalog/catalog.view.css", "[mol_book2_catalog_menu_filter] {\n\tflex-shrink: 0;\n\tflex-grow: 0;\n\talign-self: stretch;\n}\n\n");
+})($ || ($ = {}));
+
+;
+	($.$mol_icon_face) = class $mol_icon_face extends ($.$mol_icon) {
+		path(){
+			return "M9,11.75C8.31,11.75 7.75,12.31 7.75,13C7.75,13.69 8.31,14.25 9,14.25C9.69,14.25 10.25,13.69 10.25,13C10.25,12.31 9.69,11.75 9,11.75M15,11.75C14.31,11.75 13.75,12.31 13.75,13C13.75,13.69 14.31,14.25 15,14.25C15.69,14.25 16.25,13.69 16.25,13C16.25,12.31 15.69,11.75 15,11.75M12,2C6.48,2 2,6.48 2,12C2,17.52 6.48,22 12,22C17.52,22 22,17.52 22,12C22,6.48 17.52,2 12,2M12,20C7.59,20 4,16.41 4,12C4,11.71 4,11.42 4.05,11.14C6.41,10.09 8.28,8.16 9.26,5.77C11.07,8.33 14.05,10 17.42,10C18.2,10 18.95,9.91 19.67,9.74C19.88,10.45 20,11.21 20,12C20,16.41 16.41,20 12,20Z";
+		}
+	};
+
+
+;
+"use strict";
+
+;
+	($.$mol_icon_face_agent) = class $mol_icon_face_agent extends ($.$mol_icon) {
+		path(){
+			return "M18.72,14.76C19.07,13.91 19.26,13 19.26,12C19.26,11.28 19.15,10.59 18.96,9.95C18.31,10.1 17.63,10.18 16.92,10.18C13.86,10.18 11.15,8.67 9.5,6.34C8.61,8.5 6.91,10.26 4.77,11.22C4.73,11.47 4.73,11.74 4.73,12A7.27,7.27 0 0,0 12,19.27C13.05,19.27 14.06,19.04 14.97,18.63C15.54,19.72 15.8,20.26 15.78,20.26C14.14,20.81 12.87,21.08 12,21.08C9.58,21.08 7.27,20.13 5.57,18.42C4.53,17.38 3.76,16.11 3.33,14.73H2V10.18H3.09C3.93,6.04 7.6,2.92 12,2.92C14.4,2.92 16.71,3.87 18.42,5.58C19.69,6.84 20.54,8.45 20.89,10.18H22V14.67H22V14.69L22,14.73H21.94L18.38,18L13.08,17.4V15.73H17.91L18.72,14.76M9.27,11.77C9.57,11.77 9.86,11.89 10.07,12.11C10.28,12.32 10.4,12.61 10.4,12.91C10.4,13.21 10.28,13.5 10.07,13.71C9.86,13.92 9.57,14.04 9.27,14.04C8.64,14.04 8.13,13.54 8.13,12.91C8.13,12.28 8.64,11.77 9.27,11.77M14.72,11.77C15.35,11.77 15.85,12.28 15.85,12.91C15.85,13.54 15.35,14.04 14.72,14.04C14.09,14.04 13.58,13.54 13.58,12.91A1.14,1.14 0 0,1 14.72,11.77Z";
+		}
+	};
+
+
+;
+"use strict";
+
+;
+	($.$hyoo_match_intro) = class $hyoo_match_intro extends ($.$mol_page) {
+		Next(){
+			const obj = new this.$.$mol_link();
+			(obj.title) = () => ("Поехали 💨");
+			(obj.arg) = () => ({"": "settings"});
+			return obj;
+		}
+		Content(){
+			const obj = new this.$.$mol_text();
+			(obj.text) = () => ("\" 🚧 Без рекламы и премиумов\n\" 🎭 Без фейков и мёртвых душ\n\" 📸 Только самые свежие фотки\n\" 🎲 Святой рандом и никакого AI\n\n! **Правила**\n  ! \\\\Почему это работает?\\https://page.hyoo.ru/#!=rkjlvv_lle0qa\\\\\n\n\" 🤳 Заполни свой \\\\профиль\\#!=settings\\\\\n\" 📅 Обновляй фото каждый день\n\" 💗 Лайкай других \\\\персон\\#!=look\\\\\n\" 💬 Общайся при взаимности\n\" 🔄 Возвращайся через час\n\n**Это всё не ради денег, но ради любви**\n\n\" Расскажи о \\\\match.hyoo.ru\\https://match.hyoo.ru/\\\\ всем\n\" Поддержи \\\\рублём\\https://boosty.to/hyoo\\\\ если не влом");
+			return obj;
+		}
+		title(){
+			return "Знакомимся";
+		}
+		foot(){
+			return [(this.Next())];
+		}
+		body(){
+			return [(this.Content())];
+		}
+	};
+	($mol_mem(($.$hyoo_match_intro.prototype), "Next"));
+	($mol_mem(($.$hyoo_match_intro.prototype), "Content"));
+
+
+;
+"use strict";
+
+;
+"use strict";
+var $;
+(function ($) {
+    class $hyoo_crowd_counter extends $hyoo_crowd_reg {
+        list() {
+            return this.yoke([])?.residents() ?? [];
+        }
+        times() {
+            const land = this.yoke([]);
+            land?.pub.promote();
+            return Object.fromEntries([...land?._unit_all.values() ?? []]
+                .filter(unit => unit.data && unit.kind() === $hyoo_crowd_unit_kind.join)
+                .map(unit => [unit.auth, $hyoo_crowd_time_stamp(unit.time)]));
+        }
+        total() {
+            return this.list().length;
+        }
+        counted(next) {
+            const yoke = this.yoke([]);
+            switch (next) {
+                case true:
+                    yoke?.join();
+                    return Boolean(yoke);
+                case false:
+                    yoke?.leave();
+                    return false;
+                case undefined: return yoke?.residents().includes(this.land.peer_id());
+            }
+        }
+    }
+    __decorate([
+        $mol_mem
+    ], $hyoo_crowd_counter.prototype, "times", null);
+    $.$hyoo_crowd_counter = $hyoo_crowd_counter;
+})($ || ($ = {}));
+
+;
+"use strict";
+var $;
+(function ($) {
+    class $hyoo_match_single extends $hyoo_meta_model {
+        ready() {
+            if (!this.title())
+                return false;
+            if (!this.greet())
+                return false;
+            if (!this.contacts())
+                return false;
+            if (!this.age_self())
+                return false;
+            if (!this.sex_self())
+                return false;
+            if (!this.age_pref_all().length)
+                return false;
+            if (!this.sex_pref_all().length)
+                return false;
+            if (!this.places().length)
+                return false;
+            if (!this.photo_fresh())
+                return false;
+            return true;
+        }
+        photo_node() {
+            return this.yoke('$hyoo_match_single:photo', $hyoo_crowd_blob);
+        }
+        photo(next) {
+            return this.photo_node()?.blob(next);
+        }
+        photo_stamp() {
+            return this.photo_node()?.land.last_stamp() || new $mol_time_moment('2000-01-01').valueOf();
+        }
+        photo_fresh() {
+            const stamp = this.photo_node()?.land.last_stamp();
+            if (!stamp)
+                return false;
+            return stamp > $mol_state_time.now(60 * 1000) - 1000 * 60 * 60 * 32;
+        }
+        photo_moment() {
+            return new $mol_time_moment(this.photo_stamp());
+        }
+        greet(next) {
+            return this.sub('$hyoo_match_single:greet', $hyoo_crowd_text).text(next);
+        }
+        contacts(next) {
+            return this.sub('$hyoo_match_single:contacts', $hyoo_crowd_text).text(next);
+        }
+        places(next) {
+            return this.sub('$hyoo_match_single:places', $hyoo_crowd_list).list(next).map(String);
+        }
+        univer(next) {
+            return this.sub('$hyoo_match_single:univer', $hyoo_crowd_reg).str(next);
+        }
+        sex_self(next) {
+            return this.sub('$hyoo_match_single:sex_self', $hyoo_crowd_reg).str(next);
+        }
+        age_self(next) {
+            return this.sub('$hyoo_match_single:age_self', $hyoo_crowd_reg).str(next);
+        }
+        sex_pref_node() {
+            return this.sub('$hyoo_match_single:sex_pref', $hyoo_crowd_list);
+        }
+        sex_pref_all(next) {
+            return this.sex_pref_node().list(next).map(String);
+        }
+        sex_pref(name, next) {
+            return this.sex_pref_node().has(name, next);
+        }
+        age_pref_node() {
+            return this.sub('$hyoo_match_single:age_pref', $hyoo_crowd_list);
+        }
+        age_pref_all(next) {
+            return this.age_pref_node().list(next).map(String);
+        }
+        age_pref(name, next) {
+            return this.age_pref_node().has(name, next);
+        }
+        likes() {
+            return this.sub('$hyoo_match_single:likes:2', $hyoo_crowd_counter);
+        }
+        liked(next) {
+            return this.likes().counted(next);
+        }
+        mutual() {
+            const Single = this.world().Fund($hyoo_match_single);
+            return this.likes().list()
+                .map(id => Single.Item(id))
+                .filter(pair => pair.likes().list().includes(this.id()));
+        }
+        skipped() {
+            return this.yoke('$hyoo_match_single:skipped:2', $hyoo_crowd_list);
+        }
+    }
+    __decorate([
+        $mol_mem
+    ], $hyoo_match_single.prototype, "ready", null);
+    __decorate([
+        $mol_mem
+    ], $hyoo_match_single.prototype, "photo_node", null);
+    __decorate([
+        $mol_mem
+    ], $hyoo_match_single.prototype, "photo", null);
+    __decorate([
+        $mol_mem
+    ], $hyoo_match_single.prototype, "photo_stamp", null);
+    __decorate([
+        $mol_mem
+    ], $hyoo_match_single.prototype, "photo_fresh", null);
+    __decorate([
+        $mol_mem
+    ], $hyoo_match_single.prototype, "photo_moment", null);
+    __decorate([
+        $mol_mem
+    ], $hyoo_match_single.prototype, "greet", null);
+    __decorate([
+        $mol_mem
+    ], $hyoo_match_single.prototype, "contacts", null);
+    __decorate([
+        $mol_mem
+    ], $hyoo_match_single.prototype, "places", null);
+    __decorate([
+        $mol_mem
+    ], $hyoo_match_single.prototype, "univer", null);
+    __decorate([
+        $mol_mem
+    ], $hyoo_match_single.prototype, "sex_self", null);
+    __decorate([
+        $mol_mem
+    ], $hyoo_match_single.prototype, "age_self", null);
+    __decorate([
+        $mol_mem
+    ], $hyoo_match_single.prototype, "sex_pref_node", null);
+    __decorate([
+        $mol_mem
+    ], $hyoo_match_single.prototype, "sex_pref_all", null);
+    __decorate([
+        $mol_mem_key
+    ], $hyoo_match_single.prototype, "sex_pref", null);
+    __decorate([
+        $mol_mem
+    ], $hyoo_match_single.prototype, "age_pref_node", null);
+    __decorate([
+        $mol_mem
+    ], $hyoo_match_single.prototype, "age_pref_all", null);
+    __decorate([
+        $mol_mem_key
+    ], $hyoo_match_single.prototype, "age_pref", null);
+    __decorate([
+        $mol_mem
+    ], $hyoo_match_single.prototype, "likes", null);
+    __decorate([
+        $mol_mem
+    ], $hyoo_match_single.prototype, "liked", null);
+    __decorate([
+        $mol_mem
+    ], $hyoo_match_single.prototype, "mutual", null);
+    __decorate([
+        $mol_mem
+    ], $hyoo_match_single.prototype, "skipped", null);
+    $.$hyoo_match_single = $hyoo_match_single;
+})($ || ($ = {}));
+
+;
+	($.$mol_video_player) = class $mol_video_player extends ($.$mol_view) {
+		uri(){
+			return "";
+		}
+		controls(){
+			return true;
+		}
+		autoplay(){
+			return true;
+		}
+		inline(){
+			return true;
+		}
+		loop(){
+			return false;
+		}
+		muted(){
+			return false;
+		}
+		poster(){
+			return "";
+		}
+		stream(){
+			return null;
+		}
+		revolume(next){
+			if(next !== undefined) return next;
+			return null;
+		}
+		retime(next){
+			if(next !== undefined) return next;
+			return null;
+		}
+		redurate(next){
+			if(next !== undefined) return next;
+			return null;
+		}
+		playing_event(next){
+			if(next !== undefined) return next;
+			return null;
+		}
+		play_event(next){
+			if(next !== undefined) return next;
+			return null;
+		}
+		pause_event(next){
+			if(next !== undefined) return next;
+			return null;
+		}
+		dom_name(){
+			return "video";
+		}
+		playing(next){
+			if(next !== undefined) return next;
+			return false;
+		}
+		play(){
+			return null;
+		}
+		pause(){
+			return null;
+		}
+		volume(next){
+			if(next !== undefined) return next;
+			return 0;
+		}
+		time(next){
+			if(next !== undefined) return next;
+			return 0;
+		}
+		duration(){
+			return 0;
+		}
+		attr(){
+			return {
+				"src": (this.uri()), 
+				"controls": (this.controls()), 
+				"autoplay": (this.autoplay()), 
+				"playsinline": (this.inline()), 
+				"loop": (this.loop()), 
+				"muted": (this.muted()), 
+				"poster": (this.poster())
+			};
+		}
+		field(){
+			return {"srcObject": (this.stream())};
+		}
+		event(){
+			return {
+				"volumechange": (next) => (this.revolume(next)), 
+				"timeupdate": (next) => (this.retime(next)), 
+				"durationchange": (next) => (this.redurate(next)), 
+				"playing": (next) => (this.playing_event(next)), 
+				"play": (next) => (this.play_event(next)), 
+				"pause": (next) => (this.pause_event(next))
+			};
+		}
+	};
+	($mol_mem(($.$mol_video_player.prototype), "revolume"));
+	($mol_mem(($.$mol_video_player.prototype), "retime"));
+	($mol_mem(($.$mol_video_player.prototype), "redurate"));
+	($mol_mem(($.$mol_video_player.prototype), "playing_event"));
+	($mol_mem(($.$mol_video_player.prototype), "play_event"));
+	($mol_mem(($.$mol_video_player.prototype), "pause_event"));
+	($mol_mem(($.$mol_video_player.prototype), "playing"));
+	($mol_mem(($.$mol_video_player.prototype), "volume"));
+	($mol_mem(($.$mol_video_player.prototype), "time"));
+
+
+;
+"use strict";
+
+;
+"use strict";
+var $;
+(function ($) {
+    var $$;
+    (function ($$) {
+        class $mol_video_player extends $.$mol_video_player {
+            dom_node() {
+                return super.dom_node();
+            }
+            volume(next) {
+                this.revolume();
+                if (next === undefined) {
+                    return this.dom_node().volume;
+                }
+                else {
+                    return this.dom_node().volume = Math.max(0, Math.min(next, 1));
+                }
+            }
+            time(next) {
+                this.retime();
+                if (next === undefined) {
+                    return this.dom_node().currentTime;
+                }
+                else {
+                    return this.dom_node().currentTime = Math.max(0, Math.min(next, this.duration()));
+                }
+            }
+            duration() {
+                this.redurate();
+                return this.dom_node().duration;
+            }
+            playing(next) {
+                const node = this.dom_node();
+                this.playing_event();
+                this.play_event();
+                if (next === undefined)
+                    return !node.paused;
+                if (next && node.paused)
+                    $mol_wire_sync(node).play();
+                if (!next && !node.paused)
+                    node.pause();
+                return !node.paused;
+            }
+            play() {
+                this.playing(true);
+            }
+            pause() {
+                this.playing(false);
+            }
+        }
+        __decorate([
+            $mol_mem
+        ], $mol_video_player.prototype, "volume", null);
+        __decorate([
+            $mol_mem
+        ], $mol_video_player.prototype, "time", null);
+        __decorate([
+            $mol_mem
+        ], $mol_video_player.prototype, "duration", null);
+        __decorate([
+            $mol_mem
+        ], $mol_video_player.prototype, "playing", null);
+        $$.$mol_video_player = $mol_video_player;
+    })($$ = $.$$ || ($.$$ = {}));
+})($ || ($ = {}));
+
+;
+"use strict";
+var $;
+(function ($) {
+    $mol_style_attach("mol/video/player/player.view.css", "[mol_video_player] {\n\tflex: 1 1 auto;\n}\n");
+})($ || ($ = {}));
+
+;
+	($.$mol_video_camera) = class $mol_video_camera extends ($.$mol_video_player) {
+		transform(){
+			return "";
+		}
+		facing(){
+			return "user";
+		}
+		aspect(){
+			return 1;
+		}
+		size(){
+			return 720;
+		}
+		width(){
+			return (this.size());
+		}
+		height(){
+			return (this.size());
+		}
+		brightness(){
+			return 128;
+		}
+		sharpness(){
+			return 2;
+		}
+		contrast(){
+			return 32;
+		}
+		saturation(){
+			return 64;
+		}
+		temperature(){
+			return 4000;
+		}
+		torch(){
+			return false;
+		}
+		controls(){
+			return false;
+		}
+		style(){
+			return {"transform": (this.transform())};
+		}
+		video_constraints(){
+			return {
+				"facingMode": (this.facing()), 
+				"aspectRatio": (this.aspect()), 
+				"width": {"ideal": (this.width())}, 
+				"height": {"ideal": (this.height())}
+			};
+		}
+		video_settings(){
+			return {
+				"brightness": (this.brightness()), 
+				"sharpness": (this.sharpness()), 
+				"contrast": (this.contrast()), 
+				"saturation": (this.saturation()), 
+				"advanced": [{"colorTemperature": (this.temperature())}, {"torch": (this.torch())}]
+			};
+		}
+	};
+
+
+;
+"use strict";
+
+;
+"use strict";
+var $;
+(function ($) {
+    var $$;
+    (function ($$) {
+        class $mol_video_camera extends $.$mol_video_camera {
+            stream_raw() {
+                const stream = $mol_wire_sync(navigator.mediaDevices).getUserMedia({
+                    video: this.video_constraints(),
+                });
+                return Object.assign(stream, {
+                    destructor: () => stream.getTracks().forEach(track => track.stop())
+                });
+            }
+            stream() {
+                const settings = this.video_settings();
+                const stream = this.stream_raw();
+                for (const track of stream.getVideoTracks()) {
+                    for (const param in settings) {
+                        if (param === 'advanced') {
+                            for (const constraint of settings.advanced) {
+                                try {
+                                    track.applyConstraints({ advanced: [constraint] });
+                                }
+                                catch (error) {
+                                    $mol_fail_log(error);
+                                }
+                            }
+                        }
+                        else if (settings[param] !== null) {
+                            try {
+                                track.applyConstraints({ [param]: settings[param] });
+                            }
+                            catch (error) {
+                                $mol_fail_log(error);
+                            }
+                        }
+                    }
+                }
+                return stream;
+            }
+            dom_node_actual() {
+                return super.dom_node_actual();
+            }
+            transform() {
+                return this.facing() === 'user' ? 'scaleX(-1)' : '';
+            }
+        }
+        __decorate([
+            $mol_mem
+        ], $mol_video_camera.prototype, "stream_raw", null);
+        __decorate([
+            $mol_mem
+        ], $mol_video_camera.prototype, "stream", null);
+        $$.$mol_video_camera = $mol_video_camera;
+    })($$ = $.$$ || ($.$$ = {}));
+})($ || ($ = {}));
+
+;
+	($.$mol_form_group) = class $mol_form_group extends ($.$mol_view) {};
+
+
+;
+"use strict";
+var $;
+(function ($) {
+    $mol_style_attach("mol/form/group/group.view.css", "[mol_form_group] {\n\tflex-wrap: wrap;\n\tgap: var(--mol_gap_block);\n}\n\n[mol_form_group] > * {\n\tflex: 1 1 18rem;\n}\n");
+})($ || ($ = {}));
+
+;
+"use strict";
+
+;
+	($.$hyoo_match_univer) = class $hyoo_match_univer extends ($.$mol_select) {
+		options(){
+			return [
+				"Академия тыла", 
+				"Архи Строй", 
+				"Бонч-Бруевича", 
+				"Вагановка", 
+				"Ветеринарный", 
+				"Воен Мед", 
+				"Воен Мор", 
+				"Военмех", 
+				"ГИКиТ", 
+				"ГУАП", 
+				"Герцена", 
+				"Гидромет", 
+				"Горный", 
+				"Гос Пед Мед", 
+				"Граж авиа", 
+				"Духовная академия", 
+				"ИТМО", 
+				"Консерватория", 
+				"Корабелка", 
+				"Кулёк", 
+				"ЛЭТИ", 
+				"Лесгафта", 
+				"Лесопилка", 
+				"МБИ", 
+				"МВД", 
+				"МЧС", 
+				"Макаровка", 
+				"Мечникова", 
+				"Михайловка", 
+				"Можайка", 
+				"Муха", 
+				"Пед Мед", 
+				"Первый мед", 
+				"Политех", 
+				"Профсоюзов", 
+				"Путей сообщения", 
+				"РХГА", 
+				"Репина", 
+				"СПбГУ", 
+				"Связи", 
+				"Театралка", 
+				"Текстильный", 
+				"Техноложка", 
+				"Финэк", 
+				"Фрейда", 
+				"Хим-Фарма", 
+				"Христиански"
+			];
+		}
+	};
+
+
+;
+"use strict";
+
+;
+	($.$mol_select_list) = class $mol_select_list extends ($.$mol_view) {
+		Badges(){
+			return [];
+		}
+		badge_title(id){
+			return "badge";
+		}
+		remove(id, next){
+			if(next !== undefined) return next;
+			return null;
+		}
+		badge_hint(){
+			return (this.$.$mol_locale.text("$mol_select_list_badge_hint"));
+		}
+		enabled(){
+			return true;
+		}
+		drop_enabled(){
+			return (this.enabled());
+		}
+		event_select(id, next){
+			if(next !== undefined) return next;
+			return null;
+		}
+		align_hor(){
+			return "right";
+		}
+		options(){
+			return [];
+		}
+		options_pickable(){
+			return (this.options());
+		}
+		pick(next){
+			if(next !== undefined) return next;
+			return "";
+		}
+		option_title(id){
+			return "";
+		}
+		pick_enabled(){
+			return (this.enabled());
+		}
+		pick_hint(){
+			return (this.$.$mol_locale.text("$mol_select_list_pick_hint"));
+		}
+		filter_pattern(next){
+			return (this.Pick().filter_pattern(next));
+		}
+		Pick_icon(){
+			const obj = new this.$.$mol_icon_plus();
+			return obj;
+		}
+		Pick(){
+			const obj = new this.$.$mol_select();
+			(obj.event_select) = (id, next) => ((this.event_select(id, next)));
+			(obj.align_hor) = () => ((this.align_hor()));
+			(obj.options) = () => ((this.options_pickable()));
+			(obj.value) = (next) => ((this.pick(next)));
+			(obj.option_label) = (id) => ((this.option_title(id)));
+			(obj.trigger_enabled) = () => ((this.pick_enabled()));
+			(obj.hint) = () => ((this.pick_hint()));
+			(obj.Trigger_icon) = () => ((this.Pick_icon()));
+			return obj;
+		}
+		value(next){
+			if(next !== undefined) return next;
+			return [];
+		}
+		dictionary(){
+			return {};
+		}
+		badges_list(){
+			return (this.Badges());
+		}
+		Badge(id){
+			const obj = new this.$.$mol_button_minor();
+			(obj.title) = () => ((this.badge_title(id)));
+			(obj.click) = (next) => ((this.remove(id, next)));
+			(obj.hint) = () => ((this.badge_hint()));
+			(obj.enabled) = () => ((this.drop_enabled()));
+			return obj;
+		}
+		sub(){
+			return [(this.Pick()), ...(this.badges_list())];
+		}
+	};
+	($mol_mem_key(($.$mol_select_list.prototype), "remove"));
+	($mol_mem_key(($.$mol_select_list.prototype), "event_select"));
+	($mol_mem(($.$mol_select_list.prototype), "pick"));
+	($mol_mem(($.$mol_select_list.prototype), "Pick_icon"));
+	($mol_mem(($.$mol_select_list.prototype), "Pick"));
+	($mol_mem(($.$mol_select_list.prototype), "value"));
+	($mol_mem_key(($.$mol_select_list.prototype), "Badge"));
+
+
+;
+"use strict";
+
+;
+"use strict";
+var $;
+(function ($) {
+    var $$;
+    (function ($$) {
+        class $mol_select_list extends $.$mol_select_list {
+            value(val) {
+                return super.value(val);
+            }
+            pick(key) {
+                if (!key)
+                    return '';
+                this.value([...this.value(), key]);
+                return '';
+            }
+            event_select(id, event) {
+                event?.preventDefault();
+                this.pick(id);
+            }
+            options() {
+                return Object.keys(this.dictionary());
+            }
+            options_pickable() {
+                if (!this.enabled())
+                    return [];
+                const exists = new Set(this.value());
+                return this.options().filter(key => !exists.has(key));
+            }
+            option_title(key) {
+                const value = this.dictionary()[key];
+                return value == null ? key : value;
+            }
+            badge_title(key) {
+                return this.option_title(key);
+            }
+            pick_enabled() {
+                return this.options_pickable().length > 0;
+            }
+            Badges() {
+                return this.value()
+                    .map(id => this.Badge(id))
+                    .reverse();
+            }
+            title() {
+                return this.value().map(key => this.option_title(key)).join(' + ');
+            }
+            remove(key) {
+                this.value(this.value().filter(id => id !== key));
+            }
+        }
+        __decorate([
+            $mol_mem
+        ], $mol_select_list.prototype, "pick", null);
+        __decorate([
+            $mol_mem
+        ], $mol_select_list.prototype, "options", null);
+        __decorate([
+            $mol_mem
+        ], $mol_select_list.prototype, "options_pickable", null);
+        __decorate([
+            $mol_mem
+        ], $mol_select_list.prototype, "pick_enabled", null);
+        __decorate([
+            $mol_mem
+        ], $mol_select_list.prototype, "title", null);
+        __decorate([
+            $mol_action
+        ], $mol_select_list.prototype, "remove", null);
+        $$.$mol_select_list = $mol_select_list;
+    })($$ = $.$$ || ($.$$ = {}));
+})($ || ($ = {}));
+
+;
+"use strict";
+var $;
+(function ($) {
+    var $$;
+    (function ($$) {
+        const { rem } = $mol_style_unit;
+        $mol_style_define($mol_select_list, {
+            flex: {
+                wrap: 'wrap',
+                shrink: 1,
+                grow: 1,
+            },
+        });
+    })($$ = $.$$ || ($.$$ = {}));
+})($ || ($ = {}));
+
+;
+	($.$hyoo_match_places) = class $hyoo_match_places extends ($.$mol_select_list) {
+		dictionary(){
+			return {
+				"RU-SPE": "Санкт-Петербург", 
+				"RU-MOW": "Москва", 
+				"UA-40": "Севастополь", 
+				"RU-AMU": "Амурская область", 
+				"RU-ARK": "Архангельская область", 
+				"RU-AST": "Астраханская область", 
+				"RU-BEL": "Белгородская область", 
+				"RU-BRY": "Брянская область", 
+				"RU-VLA": "Владимирская область", 
+				"RU-VGG": "Волгоградская область", 
+				"RU-VLG": "Вологодская область", 
+				"RU-VOR": "Воронежская область", 
+				"RU-IVA": "Ивановская область", 
+				"RU-IRK": "Иркутская область", 
+				"RU-KGD": "Калининградская область", 
+				"RU-KLU": "Калужская область", 
+				"RU-KEM": "Кемеровская область", 
+				"RU-KIR": "Кировская область", 
+				"RU-KOS": "Костромская область", 
+				"RU-KGN": "Курганская область", 
+				"RU-KRS": "Курская область", 
+				"RU-LEN": "Ленинградская область", 
+				"RU-LIP": "Липецкая область", 
+				"RU-MAG": "Магаданская область", 
+				"RU-MOS": "Московская область", 
+				"RU-MUR": "Мурманская область", 
+				"RU-NIZ": "Нижегородская область", 
+				"RU-NGR": "Новгородская область", 
+				"RU-NVS": "Новосибирская область", 
+				"RU-OMS": "Омская область", 
+				"RU-ORE": "Оренбургская область", 
+				"RU-ORL": "Орловская область", 
+				"RU-PNZ": "Пензенская область", 
+				"RU-PSK": "Псковская область", 
+				"RU-ROS": "Ростовская область", 
+				"RU-RYA": "Рязанская область", 
+				"RU-SAM": "Самарская область", 
+				"RU-SAR": "Саратовская область", 
+				"RU-SAK": "Сахалинская область", 
+				"RU-SVE": "Свердловская область", 
+				"RU-SMO": "Смоленская область", 
+				"RU-TAM": "Тамбовская область", 
+				"RU-TVE": "Тверская область", 
+				"RU-TOM": "Томская область", 
+				"RU-TUL": "Тульская область", 
+				"RU-TYU": "Тюменская область", 
+				"RU-ULY": "Ульяновская область", 
+				"RU-CHE": "Челябинская область", 
+				"RU-YAR": "Ярославская область", 
+				"RU-AD": "Адыгея ", 
+				"RU-BA": "Башкортостан", 
+				"RU-BU": "Бурятия", 
+				"RU-DA": "Дагестан", 
+				"RU-IN": "Ингушетия", 
+				"RU-KB": "Кабардино-Балкария", 
+				"RU-KL": "Калмыкия", 
+				"RU-KC": "Карачаево-Черкесия", 
+				"RU-KR": "Карелия", 
+				"RU-ME": "Марий Эл", 
+				"RU-MO": "Мордовия", 
+				"RU-AL": "Республика Алтай", 
+				"RU-KO": "Республика Коми", 
+				"RU-SA": "Якутия", 
+				"RU-SE": "Северная Осетия", 
+				"RU-TA": "Татарстан", 
+				"RU-TY": "Тыва", 
+				"RU-UD": "Удмуртия", 
+				"RU-KK": "Хакасия", 
+				"RU-CE": "Чечня", 
+				"RU-CU": "Чувашия", 
+				"RU-ALT": "Алтайский край ", 
+				"RU-ZAB": "Забайкальский край", 
+				"RU-KAM": "Камчатский край", 
+				"RU-KDA": "Краснодарский край", 
+				"RU-KYA": "Красноярский край", 
+				"RU-PER": "Пермский край", 
+				"RU-PRI": "Приморский край", 
+				"RU-STA": "Ставропольский край", 
+				"RU-KHA": "Хабаровский край", 
+				"RU-NEN": "Ненецкий АО", 
+				"RU-KHM": "Ханты-Мансийский АО", 
+				"RU-CHU": "Чукотский АО", 
+				"RU-YAN": "Ямало-Ненецкий АО", 
+				"RU-YEV": "Еврейская АО", 
+				"UA-43": "Крым", 
+				"RU": "Россия", 
+				"By": "Беларусь", 
+				"UA": "Украина", 
+				"KG": "Киргизия", 
+				"KZ": "Казахстан", 
+				"MD": "Молдавия", 
+				"RO": "Румыния", 
+				"TJ": "Таджикистан", 
+				"UZ": "Узбекистан", 
+				"IL": "Израиль", 
+				"US": "США", 
+				"AU": "Австралия", 
+				"AM": "Армения", 
+				"CN": "Китай", 
+				"PL": "Польша", 
+				"SK": "Словакия", 
+				"FI": "Финляндия", 
+				"HR": "Хорватия", 
+				"CZ": "Чехия", 
+				"LV": "Латвия", 
+				"GE": "Грузия", 
+				"europa": "Европа", 
+				"asia": "Азия", 
+				"africa": "Африка", 
+				"aerica-south": "Южная Америка", 
+				"america-nord": "Северная Америка", 
+				"antarctica": "Антарктида", 
+				"oceania": "Oceania", 
+				"earth": "Земля", 
+				"moon": "Луна", 
+				"mars": "Марс"
+			};
+		}
+	};
+
+
+;
+"use strict";
+
+;
+	($.$hyoo_match_single_settings) = class $hyoo_match_single_settings extends ($.$mol_page) {
+		ready(){
+			return (this.single().ready());
+		}
+		photo_fresh(){
+			return (this.single().photo_fresh());
+		}
+		name(next){
+			return (this.single().title(next));
+		}
+		greet(next){
+			return (this.single().greet(next));
+		}
+		contacts(next){
+			return (this.single().contacts(next));
+		}
+		places(next){
+			return (this.single().places(next));
+		}
+		univer(next){
+			return (this.single().univer(next));
+		}
+		sex_self(next){
+			return (this.single().sex_self(next));
+		}
+		age_self(next){
+			return (this.single().age_self(next));
+		}
+		sex_pref(id, next){
+			return (this.single().sex_pref(id, next));
+		}
+		sex_pref_all(){
+			return (this.single().sex_pref_all());
+		}
+		age_pref(id, next){
+			return (this.single().age_pref(id, next));
+		}
+		age_pref_all(){
+			return (this.single().age_pref_all());
+		}
+		Invisible(){
+			const obj = new this.$.$mol_paragraph();
+			(obj.title) = () => ("🙈 Не виден");
+			return obj;
+		}
+		Visible(){
+			const obj = new this.$.$mol_paragraph();
+			(obj.title) = () => ("👀 Виден всем");
+			return obj;
+		}
+		Incoplete(){
+			const obj = new this.$.$mol_paragraph();
+			(obj.title) = () => ("❌ Профиль недозаполнен");
+			return obj;
+		}
+		Next(){
+			const obj = new this.$.$mol_link();
+			(obj.title) = () => ("✅ Смотреть других");
+			(obj.arg) = () => ({"": "look"});
+			return obj;
+		}
+		shot_bid(){
+			return "Нужно свежее";
+		}
+		live(next){
+			if(next !== undefined) return next;
+			return true;
+		}
+		photo(){
+			return "";
+		}
+		Photo(){
+			const obj = new this.$.$mol_image();
+			(obj.uri) = () => ((this.photo()));
+			return obj;
+		}
+		video(){
+			return (this.Camera().dom_node_actual());
+		}
+		Camera(){
+			const obj = new this.$.$mol_video_camera();
+			(obj.aspect) = () => (1);
+			return obj;
+		}
+		Shot_hint(){
+			const obj = new this.$.$mol_paragraph();
+			(obj.title) = () => ("Жми чтобы сфотаться");
+			return obj;
+		}
+		shot_content(){
+			return [
+				(this.Photo()), 
+				(this.Camera()), 
+				(this.Shot_hint())
+			];
+		}
+		Shot(){
+			const obj = new this.$.$mol_check();
+			(obj.checked) = (next) => ((this.live(next)));
+			(obj.sub) = () => ((this.shot_content()));
+			return obj;
+		}
+		Shot_field(){
+			const obj = new this.$.$mol_form_field();
+			(obj.name) = () => ("Сегодняшнее фото");
+			(obj.bids) = () => ([(this.shot_bid())]);
+			(obj.Content) = () => ((this.Shot()));
+			return obj;
+		}
+		Name(){
+			const obj = new this.$.$mol_string();
+			(obj.value) = (next) => ((this.name(next)));
+			return obj;
+		}
+		Name_field(){
+			const obj = new this.$.$mol_form_field();
+			(obj.name) = () => ("Имя");
+			(obj.bids) = () => ([(this.bid_required("name"))]);
+			(obj.Content) = () => ((this.Name()));
+			return obj;
+		}
+		Age_self(){
+			const obj = new this.$.$mol_switch();
+			(obj.value) = (next) => ((this.age_self(next)));
+			(obj.options) = () => ({
+				"young": "Молодых", 
+				"adult": "Взрослых", 
+				"mature": "Зрелых"
+			});
+			return obj;
+		}
+		Sex_self(){
+			const obj = new this.$.$mol_switch();
+			(obj.value) = (next) => ((this.sex_self(next)));
+			(obj.options) = () => ({"female": "Женщин", "male": "Мужчин"});
+			return obj;
+		}
+		Self_controls(){
+			const obj = new this.$.$mol_view();
+			(obj.sub) = () => ([(this.Age_self()), (this.Sex_self())]);
+			return obj;
+		}
+		Self(){
+			const obj = new this.$.$mol_form_field();
+			(obj.name) = () => ("Я из этих ...");
+			(obj.bids) = () => ([(this.bid_required("age_self")), (this.bid_required("sex_self"))]);
+			(obj.Content) = () => ((this.Self_controls()));
+			return obj;
+		}
+		Age_pref(){
+			const obj = new this.$.$mol_check_list();
+			(obj.option_checked) = (id, next) => ((this.age_pref(id, next)));
+			(obj.options) = () => ({
+				"young": "Молодые", 
+				"adult": "Взрослые", 
+				"mature": "Зрелые"
+			});
+			return obj;
+		}
+		Sex_pref(){
+			const obj = new this.$.$mol_check_list();
+			(obj.option_checked) = (id, next) => ((this.sex_pref(id, next)));
+			(obj.options) = () => ({"female": "Женщины", "male": "Мужчины"});
+			return obj;
+		}
+		Pref_controls(){
+			const obj = new this.$.$mol_view();
+			(obj.sub) = () => ([(this.Age_pref()), (this.Sex_pref())]);
+			return obj;
+		}
+		Pref(){
+			const obj = new this.$.$mol_form_field();
+			(obj.name) = () => ((this.$.$mol_locale.text("$hyoo_match_single_settings_Pref_name")));
+			(obj.bids) = () => ([(this.bid_one("age_pref_all")), (this.bid_one("sex_pref_all"))]);
+			(obj.Content) = () => ((this.Pref_controls()));
+			return obj;
+		}
+		Tags(){
+			const obj = new this.$.$mol_form_group();
+			(obj.sub) = () => ([(this.Self()), (this.Pref())]);
+			return obj;
+		}
+		Univer(){
+			const obj = new this.$.$hyoo_match_univer();
+			(obj.value) = (next) => ((this.univer(next)));
+			return obj;
+		}
+		Univer_field(){
+			const obj = new this.$.$mol_form_field();
+			(obj.name) = () => ("Универ");
+			(obj.bids) = () => ([]);
+			(obj.Content) = () => ((this.Univer()));
+			return obj;
+		}
+		places_enabled(){
+			return true;
+		}
+		Places(){
+			const obj = new this.$.$hyoo_match_places();
+			(obj.value) = (next) => ((this.places(next)));
+			(obj.pick_enabled) = () => ((this.places_enabled()));
+			return obj;
+		}
+		Places_field(){
+			const obj = new this.$.$mol_form_field();
+			(obj.name) = () => ("Регионы");
+			(obj.bids) = () => ([(this.bid_one("places"))]);
+			(obj.Content) = () => ((this.Places()));
+			return obj;
+		}
+		Location(){
+			const obj = new this.$.$mol_form_group();
+			(obj.sub) = () => ([(this.Univer_field()), (this.Places_field())]);
+			return obj;
+		}
+		Greet(){
+			const obj = new this.$.$mol_textarea();
+			(obj.hint) = () => ("заинтересуйте вашу пару");
+			(obj.value) = (next) => ((this.greet(next)));
+			return obj;
+		}
+		Greet_field(){
+			const obj = new this.$.$mol_form_field();
+			(obj.name) = () => ("Приветствие");
+			(obj.bids) = () => ([(this.bid_required("greet"))]);
+			(obj.Content) = () => ((this.Greet()));
+			return obj;
+		}
+		Contacts_hint(){
+			const obj = new this.$.$mol_paragraph();
+			(obj.title) = () => ("Для взаимных");
+			return obj;
+		}
+		Contacts(){
+			const obj = new this.$.$mol_textarea();
+			(obj.hint) = () => ("как с вами связаться");
+			(obj.value) = (next) => ((this.contacts(next)));
+			return obj;
+		}
+		Contacts_field(){
+			const obj = new this.$.$mol_form_field();
+			(obj.name) = () => ("Контакты");
+			(obj.bids) = () => ([(this.bid_required("contacts"))]);
+			(obj.Content) = () => ((this.Contacts()));
+			return obj;
+		}
+		title(){
+			return "Профиль";
+		}
+		single(){
+			const obj = new this.$.$hyoo_match_single();
+			return obj;
+		}
+		bid_required(id){
+			return "Обязательно";
+		}
+		bid_one(id){
+			return "Хотябы один";
+		}
+		tools(){
+			return [(this.Invisible()), (this.Visible())];
+		}
+		foot(){
+			return [(this.Incoplete()), (this.Next())];
+		}
+		body(){
+			return [
+				(this.Shot_field()), 
+				(this.Name_field()), 
+				(this.Tags()), 
+				(this.Location()), 
+				(this.Greet_field()), 
+				(this.Contacts_hint()), 
+				(this.Contacts_field())
+			];
+		}
+	};
+	($mol_mem(($.$hyoo_match_single_settings.prototype), "Invisible"));
+	($mol_mem(($.$hyoo_match_single_settings.prototype), "Visible"));
+	($mol_mem(($.$hyoo_match_single_settings.prototype), "Incoplete"));
+	($mol_mem(($.$hyoo_match_single_settings.prototype), "Next"));
+	($mol_mem(($.$hyoo_match_single_settings.prototype), "live"));
+	($mol_mem(($.$hyoo_match_single_settings.prototype), "Photo"));
+	($mol_mem(($.$hyoo_match_single_settings.prototype), "Camera"));
+	($mol_mem(($.$hyoo_match_single_settings.prototype), "Shot_hint"));
+	($mol_mem(($.$hyoo_match_single_settings.prototype), "Shot"));
+	($mol_mem(($.$hyoo_match_single_settings.prototype), "Shot_field"));
+	($mol_mem(($.$hyoo_match_single_settings.prototype), "Name"));
+	($mol_mem(($.$hyoo_match_single_settings.prototype), "Name_field"));
+	($mol_mem(($.$hyoo_match_single_settings.prototype), "Age_self"));
+	($mol_mem(($.$hyoo_match_single_settings.prototype), "Sex_self"));
+	($mol_mem(($.$hyoo_match_single_settings.prototype), "Self_controls"));
+	($mol_mem(($.$hyoo_match_single_settings.prototype), "Self"));
+	($mol_mem(($.$hyoo_match_single_settings.prototype), "Age_pref"));
+	($mol_mem(($.$hyoo_match_single_settings.prototype), "Sex_pref"));
+	($mol_mem(($.$hyoo_match_single_settings.prototype), "Pref_controls"));
+	($mol_mem(($.$hyoo_match_single_settings.prototype), "Pref"));
+	($mol_mem(($.$hyoo_match_single_settings.prototype), "Tags"));
+	($mol_mem(($.$hyoo_match_single_settings.prototype), "Univer"));
+	($mol_mem(($.$hyoo_match_single_settings.prototype), "Univer_field"));
+	($mol_mem(($.$hyoo_match_single_settings.prototype), "Places"));
+	($mol_mem(($.$hyoo_match_single_settings.prototype), "Places_field"));
+	($mol_mem(($.$hyoo_match_single_settings.prototype), "Location"));
+	($mol_mem(($.$hyoo_match_single_settings.prototype), "Greet"));
+	($mol_mem(($.$hyoo_match_single_settings.prototype), "Greet_field"));
+	($mol_mem(($.$hyoo_match_single_settings.prototype), "Contacts_hint"));
+	($mol_mem(($.$hyoo_match_single_settings.prototype), "Contacts"));
+	($mol_mem(($.$hyoo_match_single_settings.prototype), "Contacts_field"));
+	($mol_mem(($.$hyoo_match_single_settings.prototype), "single"));
+
+
+;
+"use strict";
+var $;
+(function ($) {
+    var $$;
+    (function ($$) {
+        class $hyoo_match_single_settings extends $.$hyoo_match_single_settings {
+            photo() {
+                return URL.createObjectURL(this.single().photo());
+            }
+            shot_bid() {
+                if (this.photo_fresh())
+                    return '';
+                return super.shot_bid();
+            }
+            live(next) {
+                if (next === undefined) {
+                    const photo = this.single().photo();
+                    return !(photo && photo.size);
+                }
+                if (next)
+                    return true;
+                const pic = $mol_picture.fit(this.video(), 720);
+                const blob = pic.format('image/jpeg');
+                this.single().photo(blob);
+                return false;
+            }
+            shot_content() {
+                return this.live()
+                    ? [this.Camera(), this.Shot_hint()]
+                    : [this.Photo(), this.Shot_hint()];
+            }
+            tools() {
+                return [
+                    ...this.ready() ? [this.Visible()] : [this.Invisible()],
+                ];
+            }
+            Incoplete() {
+                if (this.ready())
+                    return null;
+                return super.Incoplete();
+            }
+            Next() {
+                if (!this.ready())
+                    return null;
+                return super.Next();
+            }
+            bid_required(name) {
+                if (this[name]())
+                    return '';
+                return super.bid_required(name);
+            }
+            bid_one(name) {
+                if (this[name]().length)
+                    return '';
+                return super.bid_one(name);
+            }
+            places_enabled() {
+                return this.places().length < 4;
+            }
+        }
+        __decorate([
+            $mol_mem
+        ], $hyoo_match_single_settings.prototype, "photo", null);
+        __decorate([
+            $mol_mem
+        ], $hyoo_match_single_settings.prototype, "live", null);
+        __decorate([
+            $mol_mem
+        ], $hyoo_match_single_settings.prototype, "shot_content", null);
+        __decorate([
+            $mol_mem
+        ], $hyoo_match_single_settings.prototype, "tools", null);
+        $$.$hyoo_match_single_settings = $hyoo_match_single_settings;
+    })($$ = $.$$ || ($.$$ = {}));
+})($ || ($ = {}));
+
+;
+"use strict";
+
+;
+"use strict";
+var $;
+(function ($) {
+    var $$;
+    (function ($$) {
+        $mol_style_define($hyoo_match_single_settings, {
+            Tools: {
+                flex: {
+                    grow: 0,
+                },
+            },
+            Body_content: {
+                gap: $mol_gap.block,
+            },
+            Invisible: {
+                padding: $mol_gap.text,
+            },
+            Visible: {
+                padding: $mol_gap.text,
+            },
+            Incoplete: {
+                color: $mol_theme.focus,
+                padding: $mol_gap.text,
+            },
+            Shot: {
+                padding: $mol_gap.block,
+                aspectRatio: 1,
+            },
+            Camera: {
+                aspectRatio: 1,
+                border: {
+                    radius: $mol_gap.round,
+                },
+            },
+            Shot_hint: {
+                position: 'absolute',
+                left: $mol_gap.block,
+                top: $mol_gap.block,
+                color: $mol_theme.text,
+                padding: $mol_gap.text,
+            },
+            Contacts_hint: {
+                padding: $mol_gap.text,
+                color: $mol_theme.shade,
+                margin: { bottom: `-3.25rem` },
+                alignSelf: `flex-end`,
+                zIndex: $mol_layer.speck,
+            },
+            Places: {
+                flex: {
+                    shrink: 0,
+                    grow: 0,
+                },
+            },
+            $mol_check_list: {
+                flex: {
+                    direction: 'column',
+                },
+            },
+        });
+    })($$ = $.$$ || ($.$$ = {}));
+})($ || ($ = {}));
+
+;
+"use strict";
+var $;
+(function ($) {
+    function $mol_array_shuffle(array) {
+        const res = array.slice();
+        for (let index = res.length - 1; index > 0; index--) {
+            const index_swap = Math.floor(Math.random() * (index + 1));
+            const temp = res[index];
+            res[index] = res[index_swap];
+            res[index_swap] = temp;
+        }
+        return res;
+    }
+    $.$mol_array_shuffle = $mol_array_shuffle;
+})($ || ($ = {}));
+
+;
+"use strict";
+var $;
+(function ($) {
+    class $hyoo_match_lobby extends $hyoo_meta_model {
+        lookup(path) {
+            const key = $mol_int62_hash_string(path.join('/'));
+            return this.sub(key, $hyoo_crowd_list);
+        }
+        lookup_has(path, next) {
+            return this.lookup(path).has(this.land.peer_id(), next);
+        }
+        lookup_list(path) {
+            return this.lookup(path).list()
+                .map(val => $mol_int62_string_ensure(val))
+                .filter($mol_guard_defined);
+        }
+        collect_all([place, age_self, sex_self, age_pref, sex_pref]) {
+            let ids = new Set();
+            for (const p of place) {
+                for (const as of age_self) {
+                    for (const ss of sex_self) {
+                        for (const ap of age_pref) {
+                            for (const sp of sex_pref) {
+                                for (const id of this.lookup_list([p, as, ss, ap, sp])) {
+                                    ids.add(id);
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            return ids;
+        }
+        find_pair(self) {
+            if (!self.ready())
+                return null;
+            const age_self = self.age_self();
+            const sex_self = self.sex_self();
+            const age_pref = self.age_pref_all();
+            const sex_pref = self.sex_pref_all();
+            const skipped = self.skipped();
+            const Single = this.world().Fund($hyoo_match_single);
+            for (const id of self.likes().list()) {
+                const single = Single.Item(id);
+                if (!single.liked() && skipped.has(id))
+                    continue;
+                if (!single.ready())
+                    continue;
+                return single;
+            }
+            for (const place of self.places()) {
+                let ids = [];
+                for (const age of age_pref) {
+                    for (const sex of sex_pref) {
+                        const list = this.lookup_list([place, age, sex, age_self, sex_self]);
+                        for (const id of list)
+                            ids.push(id);
+                    }
+                }
+                for (const id of $mol_array_shuffle(ids)) {
+                    if (skipped.has(id))
+                        continue;
+                    const single = Single.Item(id);
+                    if (!single.ready())
+                        continue;
+                    return single;
+                }
+            }
+            return null;
+        }
+    }
+    __decorate([
+        $mol_mem_key
+    ], $hyoo_match_lobby.prototype, "lookup", null);
+    __decorate([
+        $mol_action
+    ], $hyoo_match_lobby.prototype, "find_pair", null);
+    $.$hyoo_match_lobby = $hyoo_match_lobby;
+})($ || ($ = {}));
+
+;
+	($.$hyoo_match_single_card) = class $hyoo_match_single_card extends ($.$mol_view) {
+		name(){
+			return (this.single().title());
+		}
+		greet(){
+			return (this.single().greet());
+		}
+		contacts(){
+			return (this.single().contacts());
+		}
+		places(){
+			return (this.single().places());
+		}
+		sex_self(){
+			return (this.single().sex_self());
+		}
+		age_self(){
+			return (this.single().age_self());
+		}
+		sex_pref(){
+			return (this.single().sex_pref_all());
+		}
+		age_pref(){
+			return (this.single().age_pref_all());
+		}
+		photo(){
+			return "";
+		}
+		Photo(){
+			const obj = new this.$.$mol_image();
+			(obj.uri) = () => ((this.photo()));
+			return obj;
+		}
+		Name(){
+			const obj = new this.$.$mol_paragraph();
+			(obj.title) = () => ((this.name()));
+			return obj;
+		}
+		tags(){
+			return "";
+		}
+		Tags(){
+			const obj = new this.$.$mol_paragraph();
+			(obj.title) = () => ((this.tags()));
+			return obj;
+		}
+		Places(){
+			const obj = new this.$.$hyoo_match_places();
+			(obj.enabled) = () => (false);
+			(obj.Pick) = () => (null);
+			(obj.value) = (next) => ((this.places()));
+			return obj;
+		}
+		Filters(){
+			const obj = new this.$.$mol_view();
+			(obj.sub) = () => ([
+				(this.Name()), 
+				(this.Tags()), 
+				(this.Places())
+			]);
+			return obj;
+		}
+		Brief(){
+			const obj = new this.$.$mol_text();
+			(obj.text) = () => ((this.greet()));
+			return obj;
+		}
+		Contacts(){
+			const obj = new this.$.$mol_text();
+			(obj.text) = () => ((this.contacts()));
+			return obj;
+		}
+		Info(){
+			const obj = new this.$.$mol_list();
+			(obj.rows) = () => ([
+				(this.Filters()), 
+				(this.Brief()), 
+				(this.Contacts())
+			]);
+			return obj;
+		}
+		single(){
+			const obj = new this.$.$hyoo_match_single();
+			return obj;
+		}
+		minimal_width(){
+			return 120;
+		}
+		minimal_height(){
+			return 120;
+		}
+		sub(){
+			return [(this.Photo()), (this.Info())];
+		}
+	};
+	($mol_mem(($.$hyoo_match_single_card.prototype), "Photo"));
+	($mol_mem(($.$hyoo_match_single_card.prototype), "Name"));
+	($mol_mem(($.$hyoo_match_single_card.prototype), "Tags"));
+	($mol_mem(($.$hyoo_match_single_card.prototype), "Places"));
+	($mol_mem(($.$hyoo_match_single_card.prototype), "Filters"));
+	($mol_mem(($.$hyoo_match_single_card.prototype), "Brief"));
+	($mol_mem(($.$hyoo_match_single_card.prototype), "Contacts"));
+	($mol_mem(($.$hyoo_match_single_card.prototype), "Info"));
+	($mol_mem(($.$hyoo_match_single_card.prototype), "single"));
+
+
+;
+"use strict";
+var $;
+(function ($) {
+    var $$;
+    (function ($$) {
+        class $hyoo_match_single_card extends $.$hyoo_match_single_card {
+            photo() {
+                return URL.createObjectURL(this.single().photo());
+            }
+            tags() {
+                return `${this.age_self()} ${this.sex_self()} ▶ ${this.age_pref().join(' ')} | ${this.sex_pref().join(' ')}`;
+            }
+        }
+        __decorate([
+            $mol_mem
+        ], $hyoo_match_single_card.prototype, "photo", null);
+        __decorate([
+            $mol_mem
+        ], $hyoo_match_single_card.prototype, "tags", null);
+        $$.$hyoo_match_single_card = $hyoo_match_single_card;
+    })($$ = $.$$ || ($.$$ = {}));
+})($ || ($ = {}));
+
+;
+"use strict";
+
+;
+"use strict";
+var $;
+(function ($) {
+    var $$;
+    (function ($$) {
+        $mol_style_define($hyoo_match_single_card, {
+            background: {
+                color: $mol_theme.card,
+            },
+            flex: {
+                wrap: 'wrap',
+            },
+            Photo: {
+                padding: $mol_gap.block,
+                width: '7.5rem',
+                aspectRatio: 1,
+                flex: {
+                    shrink: 0,
+                },
+            },
+            Filters: {
+                flex: {
+                    wrap: 'wrap',
+                },
+            },
+            Name: {
+                padding: $mol_gap.text,
+            },
+            Tags: {
+                padding: $mol_gap.text,
+                gap: $mol_gap.space,
+                color: $mol_theme.shade,
+                flex: {
+                    wrap: 'wrap',
+                },
+            },
+            Places: {
+                flex: {
+                    grow: 0,
+                },
+            },
+            Info: {
+                flex: {
+                    basis: '20rem',
+                    grow: 1,
+                },
+            },
+        });
+    })($$ = $.$$ || ($.$$ = {}));
+})($ || ($ = {}));
+
+;
+	($.$hyoo_match_lobby_page) = class $hyoo_match_lobby_page extends ($.$mol_page) {
+		single(id){
+			const obj = new this.$.$hyoo_match_single();
+			return obj;
+		}
+		Single(id){
+			const obj = new this.$.$hyoo_match_single_card();
+			(obj.single) = () => ((this.single(id)));
+			return obj;
+		}
+		single_list(){
+			return [(this.Single("0_0"))];
+		}
+		Single_list(){
+			const obj = new this.$.$mol_list();
+			(obj.rows) = () => ((this.single_list()));
+			return obj;
+		}
+		title(){
+			return "Народ";
+		}
+		lobby(){
+			const obj = new this.$.$hyoo_match_lobby();
+			return obj;
+		}
+		body(){
+			return [(this.Single_list())];
+		}
+	};
+	($mol_mem_key(($.$hyoo_match_lobby_page.prototype), "single"));
+	($mol_mem_key(($.$hyoo_match_lobby_page.prototype), "Single"));
+	($mol_mem(($.$hyoo_match_lobby_page.prototype), "Single_list"));
+	($mol_mem(($.$hyoo_match_lobby_page.prototype), "lobby"));
+
+
+;
+"use strict";
+var $;
+(function ($) {
+    var $$;
+    (function ($$) {
+        class $hyoo_match_lobby_page extends $.$hyoo_match_lobby_page {
+            singles() {
+                if (!this.lobby().editable())
+                    return [];
+                return this.lobby().land.residents().slice().reverse();
+            }
+            single_list() {
+                return this.singles().map(id => this.Single(id));
+            }
+            single(id) {
+                return this.lobby().world().Fund($hyoo_match_single).Item(id);
+            }
+        }
+        __decorate([
+            $mol_mem
+        ], $hyoo_match_lobby_page.prototype, "singles", null);
+        __decorate([
+            $mol_mem
+        ], $hyoo_match_lobby_page.prototype, "single_list", null);
+        __decorate([
+            $mol_mem_key
+        ], $hyoo_match_lobby_page.prototype, "single", null);
+        $$.$hyoo_match_lobby_page = $hyoo_match_lobby_page;
+    })($$ = $.$$ || ($.$$ = {}));
+})($ || ($ = {}));
+
+;
+"use strict";
+
+;
+"use strict";
+var $;
+(function ($) {
+    var $$;
+    (function ($$) {
+        $mol_style_define($hyoo_match_lobby_page, {
+            flex: {
+                basis: `40rem`,
+                grow: 1,
+            },
+            Single_list: {
+                gap: $mol_gap.block,
+            },
+        });
+    })($$ = $.$$ || ($.$$ = {}));
+})($ || ($ = {}));
+
+;
+	($.$mol_icon_share_variant) = class $mol_icon_share_variant extends ($.$mol_icon) {
+		path(){
+			return "M18,16.08C17.24,16.08 16.56,16.38 16.04,16.85L8.91,12.7C8.96,12.47 9,12.24 9,12C9,11.76 8.96,11.53 8.91,11.3L15.96,7.19C16.5,7.69 17.21,8 18,8A3,3 0 0,0 21,5A3,3 0 0,0 18,2A3,3 0 0,0 15,5C15,5.24 15.04,5.47 15.09,5.7L8.04,9.81C7.5,9.31 6.79,9 6,9A3,3 0 0,0 3,12A3,3 0 0,0 6,15C6.79,15 7.5,14.69 8.04,14.19L15.16,18.34C15.11,18.55 15.08,18.77 15.08,19C15.08,20.61 16.39,21.91 18,21.91C19.61,21.91 20.92,20.61 20.92,19A2.92,2.92 0 0,0 18,16.08Z";
+		}
+	};
+
+
+;
+"use strict";
+
+;
+	($.$mol_button_share) = class $mol_button_share extends ($.$mol_button_minor) {
+		Icon(){
+			const obj = new this.$.$mol_icon_share_variant();
+			return obj;
+		}
+		title(){
+			return "";
+		}
+		uri(){
+			return "";
+		}
+		capture(){
+			return null;
+		}
+		hint(){
+			return (this.$.$mol_locale.text("$mol_button_share_hint"));
+		}
+		sub(){
+			return [(this.Icon()), (this.title())];
+		}
+	};
+	($mol_mem(($.$mol_button_share.prototype), "Icon"));
+
+
+;
+"use strict";
+
+;
+"use strict";
+var $;
+(function ($) {
+    var $$;
+    (function ($$) {
+        class $mol_button_share extends $.$mol_button_share {
+            capture() {
+                return this.$.$mol_dom_context.document.body;
+            }
+            uri() {
+                return this.$.$mol_state_arg.href();
+            }
+            async click() {
+                const title = this.title();
+                const url = this.uri() ?? undefined;
+                const files = [];
+                let el = this.capture();
+                if (el) {
+                    if (el instanceof $mol_view)
+                        el = el.dom_tree();
+                    const canvas = await $mol_dom_capture_canvas(el);
+                    const blob = await new Promise(done => canvas.toBlob(done));
+                    const file = new File([blob], title + '.png', { type: blob.type });
+                    files.push(file);
+                }
+                await this.$.$mol_dom_context.navigator.share({ title, files, url });
+            }
+        }
+        $$.$mol_button_share = $mol_button_share;
+    })($$ = $.$$ || ($.$$ = {}));
+})($ || ($ = {}));
+
+;
+	($.$hyoo_match_final) = class $hyoo_match_final extends ($.$mol_page) {
+		reset(next){
+			if(next !== undefined) return next;
+			return null;
+		}
+		Reset(){
+			const obj = new this.$.$mol_button_minor();
+			(obj.title) = () => ("Заново 💦");
+			(obj.click) = (next) => ((this.reset(next)));
+			return obj;
+		}
+		Result(){
+			const obj = new this.$.$mol_text();
+			(obj.text) = () => ("Никого пока нет под твои критерии 😭");
+			return obj;
+		}
+		Share(){
+			const obj = new this.$.$mol_button_share();
+			(obj.capture) = () => ((this.Content()));
+			(obj.uri) = () => ("/");
+			(obj.title) = () => ("Расскажи остальным:");
+			return obj;
+		}
+		Content(){
+			const obj = new this.$.$mol_text();
+			(obj.text) = () => ("\" 💞 Поздравляем всех, кто уже нашёл свою вторую половинку!\n\" 💔 А кто сейчас грустит один - заползай на match.hyoo.ru - сервис знакомств от студента ИТМО, у которого сердце за тебя болит.\n\" ✨ Никаких фейков, мёртвых душ, рекламы, премиумов и геймификаций. Ищи, знакомься, общайся. Пока не найдёшь, наконец, свою судьбу.\n\" 🤙 Поделись в своих каналах и закидывай в чаты, где обитаешь, и где наверняка есть такие же страждущие.\n\" 🙏 Проект не коммерческий, так что вся надежда на тебя: чем больше соберём одиночек, тем меньше станет одиночек.");
+			return obj;
+		}
+		title(){
+			return "Ждём персон";
+		}
+		self(){
+			const obj = new this.$.$hyoo_match_single();
+			return obj;
+		}
+		foot(){
+			return [(this.Reset())];
+		}
+		body(){
+			return [
+				(this.Result()), 
+				(this.Share()), 
+				(this.Content())
+			];
+		}
+	};
+	($mol_mem(($.$hyoo_match_final.prototype), "reset"));
+	($mol_mem(($.$hyoo_match_final.prototype), "Reset"));
+	($mol_mem(($.$hyoo_match_final.prototype), "Result"));
+	($mol_mem(($.$hyoo_match_final.prototype), "Share"));
+	($mol_mem(($.$hyoo_match_final.prototype), "Content"));
+	($mol_mem(($.$hyoo_match_final.prototype), "self"));
+
+
+;
+"use strict";
+var $;
+(function ($) {
+    var $$;
+    (function ($$) {
+        class $hyoo_match_final extends $.$hyoo_match_final {
+            reset() {
+                this.self().skipped().list([]);
+            }
+        }
+        $$.$hyoo_match_final = $hyoo_match_final;
+    })($$ = $.$$ || ($.$$ = {}));
+})($ || ($ = {}));
+
+;
+"use strict";
+
+;
+"use strict";
+var $;
+(function ($) {
+    var $$;
+    (function ($$) {
+        $mol_style_define($hyoo_match_final, {
+            Content: {
+                background: {
+                    image: [
+                        ['linear-gradient( hsla( 0deg, 0%, calc( 50% + var(--mol_theme_luma) * 50% ), .666 ), hsla( 0deg, 0%, calc( 50% + var(--mol_theme_luma) * 50% ), .666 ) )'],
+                        ['linear-gradient( to right bottom, violet, purple )'],
+                    ],
+                },
+            },
+        });
+    })($$ = $.$$ || ($.$$ = {}));
+})($ || ($ = {}));
+
+;
+	($.$mol_icon_window_close) = class $mol_icon_window_close extends ($.$mol_icon) {
+		path(){
+			return "M13.46,12L19,17.54V19H17.54L12,13.46L6.46,19H5V17.54L10.54,12L5,6.46V5H6.46L12,10.54L17.54,5H19V6.46L13.46,12Z";
+		}
+	};
+
+
+;
+"use strict";
+
+;
+	($.$mol_icon_heart_flash) = class $mol_icon_heart_flash extends ($.$mol_icon) {
+		path(){
+			return "M16.5,2.83C14.76,2.83 13.09,3.64 12,4.9C10.91,3.64 9.24,2.83 7.5,2.83C4.42,2.83 2,5.24 2,8.33C2,12.1 5.4,15.19 10.55,19.86L12,21.17L13.45,19.86C18.6,15.19 22,12.1 22,8.33C22,5.24 19.58,2.83 16.5,2.83M12,17.83V13.83H9L12,6.83V10.83H15";
+		}
+	};
+
+
+;
+"use strict";
+
+;
+	($.$mol_icon_heart_outline) = class $mol_icon_heart_outline extends ($.$mol_icon) {
+		path(){
+			return "M12.1,18.55L12,18.65L11.89,18.55C7.14,14.24 4,11.39 4,8.5C4,6.5 5.5,5 7.5,5C9.04,5 10.54,6 11.07,7.36H12.93C13.46,6 14.96,5 16.5,5C18.5,5 20,6.5 20,8.5C20,11.39 16.86,14.24 12.1,18.55M16.5,3C14.76,3 13.09,3.81 12,5.08C10.91,3.81 9.24,3 7.5,3C4.42,3 2,5.41 2,8.5C2,12.27 5.4,15.36 10.55,20.03L12,21.35L13.45,20.03C18.6,15.36 22,12.27 22,8.5C22,5.41 19.58,3 16.5,3Z";
+		}
+	};
+
+
+;
+"use strict";
+
+;
+	($.$hyoo_match_single_page) = class $hyoo_match_single_page extends ($.$mol_page) {
+		name(){
+			return (this.pair().title());
+		}
+		greet(){
+			return (this.pair().greet());
+		}
+		contacts(){
+			return (this.pair().contacts());
+		}
+		places(){
+			return (this.pair().places());
+		}
+		photo_moment(){
+			return (this.pair().photo_moment());
+		}
+		Moment(){
+			const obj = new this.$.$mol_date();
+			(obj.enabled) = () => (false);
+			(obj.value_moment) = () => ((this.photo_moment()));
+			return obj;
+		}
+		photo(){
+			return "";
+		}
+		Photo(){
+			const obj = new this.$.$mol_image();
+			(obj.uri) = () => ((this.photo()));
+			return obj;
+		}
+		skip(next){
+			if(next !== undefined) return next;
+			return null;
+		}
+		Skip_icon(){
+			const obj = new this.$.$mol_icon_window_close();
+			return obj;
+		}
+		Skip(){
+			const obj = new this.$.$mol_button_minor();
+			(obj.hint) = () => ("Пропустить");
+			(obj.click) = (next) => ((this.skip(next)));
+			(obj.sub) = () => ([(this.Skip_icon())]);
+			return obj;
+		}
+		Mutual_icon(){
+			const obj = new this.$.$mol_icon_heart_flash();
+			return obj;
+		}
+		Mutual(){
+			const obj = new this.$.$mol_row();
+			(obj.sub) = () => ([(this.Mutual_icon())]);
+			return obj;
+		}
+		like(next){
+			if(next !== undefined) return next;
+			return null;
+		}
+		Like_icon(){
+			const obj = new this.$.$mol_icon_heart_outline();
+			return obj;
+		}
+		Like(){
+			const obj = new this.$.$mol_button_minor();
+			(obj.hint) = () => ("Нравится");
+			(obj.click) = (next) => ((this.like(next)));
+			(obj.sub) = () => ([(this.Like_icon())]);
+			return obj;
+		}
+		gallery(){
+			return [
+				(this.Photo()), 
+				(this.Skip()), 
+				(this.Mutual()), 
+				(this.Like())
+			];
+		}
+		Gallery(){
+			const obj = new this.$.$mol_stack();
+			(obj.sub) = () => ((this.gallery()));
+			return obj;
+		}
+		match_hint(){
+			return "++Удача!++ --У вас есть {timeout} мин. для свидания.--";
+		}
+		Match_hint(){
+			const obj = new this.$.$mol_text();
+			(obj.text) = () => ((this.match_hint()));
+			return obj;
+		}
+		Contacts(){
+			const obj = new this.$.$mol_text();
+			(obj.text) = () => ((this.contacts()));
+			return obj;
+		}
+		Match(){
+			const obj = new this.$.$mol_list();
+			(obj.rows) = () => ([(this.Match_hint()), (this.Contacts())]);
+			return obj;
+		}
+		Places(){
+			const obj = new this.$.$hyoo_match_places();
+			(obj.enabled) = () => (false);
+			(obj.Pick) = () => (null);
+			(obj.value) = (next) => ((this.places()));
+			return obj;
+		}
+		Brief(){
+			const obj = new this.$.$mol_text();
+			(obj.text) = () => ((this.greet()));
+			return obj;
+		}
+		title(){
+			return "Персоны";
+		}
+		self(){
+			const obj = new this.$.$hyoo_match_single();
+			return obj;
+		}
+		pair(){
+			const obj = new this.$.$hyoo_match_single();
+			return obj;
+		}
+		mutual(){
+			return false;
+		}
+		title_content(){
+			return [(this.name())];
+		}
+		tools(){
+			return [(this.Moment())];
+		}
+		body(){
+			return [
+				(this.Gallery()), 
+				(this.Match()), 
+				(this.Places()), 
+				(this.Brief())
+			];
+		}
+	};
+	($mol_mem(($.$hyoo_match_single_page.prototype), "Moment"));
+	($mol_mem(($.$hyoo_match_single_page.prototype), "Photo"));
+	($mol_mem(($.$hyoo_match_single_page.prototype), "skip"));
+	($mol_mem(($.$hyoo_match_single_page.prototype), "Skip_icon"));
+	($mol_mem(($.$hyoo_match_single_page.prototype), "Skip"));
+	($mol_mem(($.$hyoo_match_single_page.prototype), "Mutual_icon"));
+	($mol_mem(($.$hyoo_match_single_page.prototype), "Mutual"));
+	($mol_mem(($.$hyoo_match_single_page.prototype), "like"));
+	($mol_mem(($.$hyoo_match_single_page.prototype), "Like_icon"));
+	($mol_mem(($.$hyoo_match_single_page.prototype), "Like"));
+	($mol_mem(($.$hyoo_match_single_page.prototype), "Gallery"));
+	($mol_mem(($.$hyoo_match_single_page.prototype), "Match_hint"));
+	($mol_mem(($.$hyoo_match_single_page.prototype), "Contacts"));
+	($mol_mem(($.$hyoo_match_single_page.prototype), "Match"));
+	($mol_mem(($.$hyoo_match_single_page.prototype), "Places"));
+	($mol_mem(($.$hyoo_match_single_page.prototype), "Brief"));
+	($mol_mem(($.$hyoo_match_single_page.prototype), "self"));
+	($mol_mem(($.$hyoo_match_single_page.prototype), "pair"));
+
+
+;
+"use strict";
+var $;
+(function ($) {
+    var $$;
+    (function ($$) {
+        class $hyoo_match_single_page extends $.$hyoo_match_single_page {
+            photo() {
+                return URL.createObjectURL(this.pair().photo());
+            }
+            self() {
+                return this.pair().world().home().chief.as($hyoo_match_single);
+            }
+            like() {
+                const pair = this.pair();
+                pair.liked(true);
+                this.self().skipped().add(pair.id());
+            }
+            skip() {
+                const pair = this.pair();
+                pair.liked(false);
+                this.self().skipped().add(pair.id());
+            }
+            mutual() {
+                if (!this.pair().liked())
+                    return false;
+                if (!this.self().likes().list().includes(this.pair().id()))
+                    return false;
+                return true;
+            }
+            dating_range() {
+                if (!this.mutual())
+                    return null;
+                return new $mol_time_interval({
+                    start: new $mol_time_moment($mol_state_time.now(1000)),
+                    end: new $mol_time_moment(this.self().skipped().land.last_stamp()).shift('PT60m'),
+                });
+            }
+            match_hint() {
+                const min = Math.max(0, this.dating_range()?.duration.count('PT1m') ?? 0).toFixed(0);
+                return super.match_hint().replace('{timeout}', min);
+            }
+            Match() {
+                return this.mutual() ? super.Match() : null;
+            }
+            gallery() {
+                return [
+                    this.Photo(),
+                    this.mutual()
+                        ? this.Mutual()
+                        : this.Like(),
+                    ...(this.dating_range()?.duration.valueOf() ?? 0) > 0 ? [] : [this.Skip()],
+                ];
+            }
+        }
+        __decorate([
+            $mol_mem
+        ], $hyoo_match_single_page.prototype, "photo", null);
+        __decorate([
+            $mol_mem
+        ], $hyoo_match_single_page.prototype, "self", null);
+        __decorate([
+            $mol_mem
+        ], $hyoo_match_single_page.prototype, "mutual", null);
+        __decorate([
+            $mol_mem
+        ], $hyoo_match_single_page.prototype, "dating_range", null);
+        __decorate([
+            $mol_mem
+        ], $hyoo_match_single_page.prototype, "match_hint", null);
+        __decorate([
+            $mol_mem
+        ], $hyoo_match_single_page.prototype, "gallery", null);
+        $$.$hyoo_match_single_page = $hyoo_match_single_page;
+    })($$ = $.$$ || ($.$$ = {}));
+})($ || ($ = {}));
+
+;
+"use strict";
+
+;
+"use strict";
+var $;
+(function ($) {
+    var $$;
+    (function ($$) {
+        $mol_style_define($hyoo_match_single_page, {
+            Gallery: {
+                padding: $mol_gap.block,
+            },
+            Photo: {
+                maxHeight: '80vh',
+                justifySelf: 'stretch',
+                aspectRatio: 1,
+            },
+            Skip: {
+                alignSelf: 'stretch',
+                justifySelf: 'self-end',
+                alignItems: 'flex-end',
+                justifyContent: 'flex-end',
+                width: '50%',
+                '--mol_theme_hover': 'transparent',
+            },
+            Skip_icon: {
+                width: '50%',
+                height: 'auto',
+            },
+            Mutual: {
+                alignSelf: 'flex-end',
+                justifySelf: 'self-start',
+                padding: $mol_gap.block,
+                width: '50%',
+                color: $mol_theme.special,
+                '--mol_theme_hover': 'transparent',
+            },
+            Mutual_icon: {
+                width: '50%',
+                height: 'auto',
+            },
+            Like: {
+                alignSelf: 'stretch',
+                justifySelf: 'self-start',
+                alignItems: 'flex-end',
+                justifyContent: 'flex-start',
+                width: '50%',
+                color: $mol_theme.special,
+                '--mol_theme_hover': 'transparent',
+            },
+            Like_icon: {
+                width: '50%',
+                height: 'auto',
+            },
+            Places: {
+                flex: {
+                    shrink: 0,
+                    grow: 0,
+                },
+            },
+        });
+    })($$ = $.$$ || ($.$$ = {}));
+})($ || ($ = {}));
+
+;
+	($.$hyoo_match_app) = class $hyoo_match_app extends ($.$mol_book2_catalog) {
+		Theme(){
+			const obj = new this.$.$mol_theme_auto();
+			return obj;
+		}
+		lobby_update(){
+			return null;
+		}
+		redirects(){
+			return null;
+		}
+		Lights(){
+			const obj = new this.$.$mol_lights_toggle();
+			return obj;
+		}
+		stats(){
+			return "";
+		}
+		Stats(){
+			const obj = new this.$.$mol_paragraph();
+			(obj.title) = () => ((this.stats()));
+			return obj;
+		}
+		yard(){
+			const obj = new this.$.$hyoo_sync_client();
+			return obj;
+		}
+		Online(){
+			const obj = new this.$.$hyoo_sync_online();
+			(obj.yard) = () => ((this.yard()));
+			return obj;
+		}
+		Source(){
+			const obj = new this.$.$mol_link_source();
+			(obj.uri) = () => ("https://github.com/hyoo-ru/match.hyoo.ru/");
+			return obj;
+		}
+		Support_icon(){
+			const obj = new this.$.$mol_icon_face_agent();
+			return obj;
+		}
+		Support(){
+			const obj = new this.$.$mol_link_iconed();
+			(obj.hint) = () => ("Поддержка");
+			(obj.uri) = () => ("https://vk.com/hyoo_match");
+			(obj.sub) = () => ([(this.Support_icon())]);
+			return obj;
+		}
+		Intro(){
+			const obj = new this.$.$hyoo_match_intro();
+			return obj;
+		}
+		Settings(){
+			const obj = new this.$.$hyoo_match_single_settings();
+			(obj.single) = () => ((this.self()));
+			return obj;
+		}
+		look_pages(){
+			return [];
+		}
+		Look(){
+			const obj = new this.$.$mol_book2();
+			(obj.pages) = () => ((this.look_pages()));
+			return obj;
+		}
+		Safe(){
+			const obj = new this.$.$hyoo_meta_safe();
+			(obj.yard) = () => ((this.yard()));
+			return obj;
+		}
+		Lobby(){
+			const obj = new this.$.$hyoo_match_lobby_page();
+			(obj.lobby) = () => ((this.lobby()));
+			return obj;
+		}
+		lobby(){
+			const obj = new this.$.$hyoo_match_lobby();
+			return obj;
+		}
+		self(){
+			const obj = new this.$.$hyoo_match_single();
+			return obj;
+		}
+		pair(){
+			const obj = new this.$.$hyoo_match_single();
+			return obj;
+		}
+		plugins(){
+			return [(this.Theme())];
+		}
+		auto(){
+			return [(this.lobby_update()), (this.redirects())];
+		}
+		menu_title(){
+			return "match.hyoo.ru";
+		}
+		menu_tools(){
+			return [(this.Lights())];
+		}
+		menu_body(){
+			return [(this.Menu_links()), (this.Stats())];
+		}
+		menu_foot(){
+			return [
+				(this.Online()), 
+				(this.Source()), 
+				(this.Support())
+			];
+		}
+		Placeholder(){
+			return null;
+		}
+		Final(){
+			const obj = new this.$.$hyoo_match_final();
+			(obj.self) = () => ((this.self()));
+			return obj;
+		}
+		Pair(){
+			const obj = new this.$.$hyoo_match_single_page();
+			(obj.pair) = () => ((this.pair()));
+			return obj;
+		}
+		spreads(){
+			return {
+				"": (this.Intro()), 
+				"settings": (this.Settings()), 
+				"look": (this.Look()), 
+				"safe": (this.Safe()), 
+				"lobby": (this.Lobby())
+			};
+		}
+	};
+	($mol_mem(($.$hyoo_match_app.prototype), "Theme"));
+	($mol_mem(($.$hyoo_match_app.prototype), "Lights"));
+	($mol_mem(($.$hyoo_match_app.prototype), "Stats"));
+	($mol_mem(($.$hyoo_match_app.prototype), "yard"));
+	($mol_mem(($.$hyoo_match_app.prototype), "Online"));
+	($mol_mem(($.$hyoo_match_app.prototype), "Source"));
+	($mol_mem(($.$hyoo_match_app.prototype), "Support_icon"));
+	($mol_mem(($.$hyoo_match_app.prototype), "Support"));
+	($mol_mem(($.$hyoo_match_app.prototype), "Intro"));
+	($mol_mem(($.$hyoo_match_app.prototype), "Settings"));
+	($mol_mem(($.$hyoo_match_app.prototype), "Look"));
+	($mol_mem(($.$hyoo_match_app.prototype), "Safe"));
+	($mol_mem(($.$hyoo_match_app.prototype), "Lobby"));
+	($mol_mem(($.$hyoo_match_app.prototype), "lobby"));
+	($mol_mem(($.$hyoo_match_app.prototype), "self"));
+	($mol_mem(($.$hyoo_match_app.prototype), "pair"));
+	($mol_mem(($.$hyoo_match_app.prototype), "Final"));
+	($mol_mem(($.$hyoo_match_app.prototype), "Pair"));
+
+
+;
+"use strict";
+var $;
+(function ($) {
+    class $mol_vk extends $mol_object2 {
+        static init() {
+            this.send('VKWebAppInit');
+        }
+        static send(handler, params = {}) {
+            const glob = $mol_dom_context;
+            glob.AndroidBridge?.[handler](JSON.stringify(params));
+            glob.webkit?.messageHandlers?.[handler].postMessage(params);
+            glob.ReactNativeWebView?.postMessage({ handler, params });
+            glob.parent?.postMessage({ handler, params, type: 'vk-connect' }, '*');
+        }
+    }
+    $.$mol_vk = $mol_vk;
+    setTimeout(() => $mol_vk.init());
+})($ || ($ = {}));
+
+;
+"use strict";
+var $;
+(function ($) {
+    var $$;
+    (function ($$) {
+        class $hyoo_match_app extends $.$hyoo_match_app {
+            self() {
+                return this.yard().home().chief.as($hyoo_match_single);
+            }
+            pair() {
+                this.self().skipped().list();
+                const found = this.lobby().find_pair(this.self());
+                if (!found)
+                    this.lobby().land.clocks;
+                else
+                    found.liked();
+                return found;
+            }
+            lobby() {
+                const land_id = 'a0bbhe_21ksc6';
+                const rights = new Uint8Array($mol_fetch.buffer(require(`/hyoo/match/app/${land_id}!${land_id}.bin`)));
+                $mol_wire_sync(this.yard().world()).apply(rights);
+                return this.yard().land(land_id).chief.as($hyoo_match_lobby);
+            }
+            intro() {
+                return this.yard().land('sqw0i3_b8924n').chief.as($hyoo_page_side);
+            }
+            lobby_update() {
+                const self = this.self();
+                const lobby = this.lobby();
+                const ready = self.ready();
+                const places = new Set(self.places());
+                const age = self.age_self();
+                const sex = self.sex_self();
+                const places_options = Object.values(this.Settings().Places().options());
+                const age_self_options = Object.keys(this.Settings().Age_self().options());
+                const sex_self_options = Object.keys(this.Settings().Sex_self().options());
+                const age_pref_options = Object.keys(this.Settings().Age_pref().options());
+                const sex_pref_options = Object.keys(this.Settings().Sex_pref().options());
+                for (let place of places_options) {
+                    for (let age_self of age_self_options) {
+                        for (let sex_self of sex_self_options) {
+                            for (let age_pref of age_pref_options) {
+                                for (let sex_pref of sex_pref_options) {
+                                    lobby.lookup_has([place, age_self, sex_self, age_pref, sex_pref], ready
+                                        && places.has(place)
+                                        && age_self === age
+                                        && sex_self === sex
+                                        && self.age_pref(age_pref)
+                                        && self.sex_pref(sex_pref));
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            stats() {
+                const lobby = this.lobby();
+                const place = Object.values(this.Settings().Places().options());
+                const age_pref = Object.keys(this.Settings().Age_pref().options());
+                const sex_pref = Object.keys(this.Settings().Sex_pref().options());
+                const girls = $mol_si_short(lobby.collect_all([place, ['young'], ['female'], age_pref, sex_pref]).size);
+                const boys = $mol_si_short(lobby.collect_all([place, ['young'], ['male'], age_pref, sex_pref]).size);
+                const womans = $mol_si_short(lobby.collect_all([place, ['adult'], ['female'], age_pref, sex_pref]).size);
+                const mans = $mol_si_short(lobby.collect_all([place, ['adult'], ['male'], age_pref, sex_pref]).size);
+                const grannies = $mol_si_short(lobby.collect_all([place, ['mature'], ['female'], age_pref, sex_pref]).size);
+                const gaffers = $mol_si_short(lobby.collect_all([place, ['mature'], ['male'], age_pref, sex_pref]).size);
+                return `👧${girls}\t👦${boys}\n👩${womans}\t👨${mans}\n👵${grannies}\t👴${gaffers}`;
+            }
+            look_pages() {
+                if (!this.pair())
+                    return [this.Final()];
+                return [this.Pair()];
+            }
+            redirects() {
+                if (this.spread() === 'look') {
+                    if (!this.self().ready())
+                        this.spread('settings');
+                }
+            }
+            menu_links() {
+                if (this.lobby().editable())
+                    return super.menu_links();
+                return super.menu_links().filter(item => item !== this.Menu_link('lobby'));
+            }
+        }
+        __decorate([
+            $mol_mem
+        ], $hyoo_match_app.prototype, "self", null);
+        __decorate([
+            $mol_mem
+        ], $hyoo_match_app.prototype, "pair", null);
+        __decorate([
+            $mol_mem
+        ], $hyoo_match_app.prototype, "lobby", null);
+        __decorate([
+            $mol_mem
+        ], $hyoo_match_app.prototype, "intro", null);
+        __decorate([
+            $mol_mem
+        ], $hyoo_match_app.prototype, "lobby_update", null);
+        __decorate([
+            $mol_mem
+        ], $hyoo_match_app.prototype, "stats", null);
+        __decorate([
+            $mol_mem
+        ], $hyoo_match_app.prototype, "look_pages", null);
+        __decorate([
+            $mol_mem
+        ], $hyoo_match_app.prototype, "menu_links", null);
+        $$.$hyoo_match_app = $hyoo_match_app;
+    })($$ = $.$$ || ($.$$ = {}));
+})($ || ($ = {}));
+
+;
+"use strict";
+
+;
+"use strict";
+var $;
+(function ($) {
+    var $$;
+    (function ($$) {
+        $mol_style_define($hyoo_match_app, {
+            background: {
+                image: [
+                    ['linear-gradient( hsla( 0deg, 0%, calc( 50% + var(--mol_theme_luma) * 50% ), .666 ), hsla( 0deg, 0%, calc( 50% + var(--mol_theme_luma) * 50% ), .666 ) )'],
+                    ['linear-gradient( to right bottom, purple, violet )'],
+                ],
+                size: ['cover'],
+                position: 'center',
+            },
+            Intro: {
+                margin: [0, 'auto'],
+                flex: {
+                    basis: '40rem',
+                },
+            },
+            Final: {
+                margin: [0, 'auto'],
+                flex: {
+                    basis: '40rem',
+                },
+            },
+            Settings: {
+                margin: [0, 'auto'],
+                flex: {
+                    basis: `40rem`,
+                },
+            },
+            Pair: {
+                margin: [0, 'auto'],
+                flex: {
+                    basis: `40rem`,
+                },
+            },
+            Menu: {
+                Body: {
+                    justifyContent: 'space-between',
+                },
+            },
+            Stats: {
+                padding: $mol_gap.text,
+                whiteSpace: 'pre-line',
+            },
+        });
+    })($$ = $.$$ || ($.$$ = {}));
+})($ || ($ = {}));
+
+;
+var $node = $node || {} ; $node[ "/hyoo/match/app/a0bbhe_21ksc6!a0bbhe_21ksc6.bin" ] = "data:application/octet-stream;base64,4nYSJHa1XQfidhIkdrVdB+J2EiR2tV0H4nYSJHa1XQcAAAAAAAAAAAAAAAAAAAAABk2V7wAAWAAidkZuSnpKNDNadnl1VEExLXFNcGNaQUJMdzNva0NoZk9qbDN5bGhFR3o0d0lCQzRjV01hZjJ5QlRzMjhFQWNlUzJUTS1YZm5OSThCdGU2azd5WlpKVDQiwTa8aZnLjfnECd1Eg+TFiGdA3zuKG3e8ISr5gW/84nzgQsPiNNFgJv+RwiekFOiFQNaaQa4K5Y4Z0m5dcp/nWeJ2EiR2tV0H4nYSJHa1XQfidhIkdrVdB+PP4hHPDJHgAAAAAAAAAAAAAAAAAAAAAAdNle8AAAEAMwAAAAAAAACHZU00lLWe4X2wI1Pps9LcJbzbCyjjKWZb9MrU+R0q56gFMKHR6a9sRWAwQ0G1XJsVoJvmqQYT32vVLI5UfqJu4nYSJHa1XQfidhIkdrVdB+J2EiR2tV0HAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACE2V7wAAAQAxAAAAAAAAABZCkNV+R/lNoc7gLAfXt3EJVrLF3IdHfXDg0Ox6lm3V1lPCVqSQywxbO/oediF+3ZzWddEwTe/XG21tXZ3/hO0="
+
+;
 	($.$piterjs_app) = class $piterjs_app extends ($.$mol_view) {
 		meetups(){
 			return (this.Domain().meetups());
@@ -28650,15 +31783,29 @@ var $;
 				(this.Lights())
 			];
 		}
+		Love_link(){
+			const obj = new this.$.$mol_link();
+			(obj.arg) = () => ({
+				"love": "", 
+				"wiki": null, 
+				"meetup": null
+			});
+			(obj.title) = () => ((this.love_title()));
+			return obj;
+		}
 		Wiki_link(){
 			const obj = new this.$.$mol_link();
-			(obj.arg) = () => ({"wiki": "", "meetup": null});
+			(obj.arg) = () => ({
+				"wiki": "", 
+				"meetup": null, 
+				"love": null
+			});
 			(obj.title) = () => ("База знаний");
 			return obj;
 		}
 		Links(){
 			const obj = new this.$.$mol_list();
-			(obj.rows) = () => ([(this.Wiki_link())]);
+			(obj.rows) = () => ([(this.Love_link()), (this.Wiki_link())]);
 			return obj;
 		}
 		menu_meetups(){
@@ -28754,6 +31901,19 @@ var $;
 			const obj = new this.$.$mol_link();
 			(obj.arg) = () => ({"safe": null});
 			(obj.sub) = () => ([(this.Safe_close_icon())]);
+			return obj;
+		}
+		love_title(){
+			return "Piter💛JS";
+		}
+		Love_close_icon(){
+			const obj = new this.$.$mol_icon_close();
+			return obj;
+		}
+		Love_close(){
+			const obj = new this.$.$mol_link();
+			(obj.arg) = () => ({"love": null});
+			(obj.sub) = () => ([(this.Love_close_icon())]);
 			return obj;
 		}
 		Domain(){
@@ -28867,6 +32027,12 @@ var $;
 			(obj.tools) = () => ([(this.Safe_close())]);
 			return obj;
 		}
+		Love(){
+			const obj = new this.$.$hyoo_match_app();
+			(obj.menu_title) = () => ((this.love_title()));
+			(obj.menu_tools) = () => ([(this.Love_close())]);
+			return obj;
+		}
 	};
 	($mol_mem(($.$piterjs_app.prototype), "Theme"));
 	($mol_mem(($.$piterjs_app.prototype), "place"));
@@ -28890,6 +32056,7 @@ var $;
 	($mol_mem(($.$piterjs_app.prototype), "Rights_toggle"));
 	($mol_mem(($.$piterjs_app.prototype), "User"));
 	($mol_mem(($.$piterjs_app.prototype), "Lights"));
+	($mol_mem(($.$piterjs_app.prototype), "Love_link"));
 	($mol_mem(($.$piterjs_app.prototype), "Wiki_link"));
 	($mol_mem(($.$piterjs_app.prototype), "Links"));
 	($mol_mem(($.$piterjs_app.prototype), "Meetups"));
@@ -28911,6 +32078,8 @@ var $;
 	($mol_mem(($.$piterjs_app.prototype), "Rights_meetup_close"));
 	($mol_mem(($.$piterjs_app.prototype), "Safe_close_icon"));
 	($mol_mem(($.$piterjs_app.prototype), "Safe_close"));
+	($mol_mem(($.$piterjs_app.prototype), "Love_close_icon"));
+	($mol_mem(($.$piterjs_app.prototype), "Love_close"));
 	($mol_mem(($.$piterjs_app.prototype), "Domain"));
 	($mol_mem(($.$piterjs_app.prototype), "Menu"));
 	($mol_mem_key(($.$piterjs_app.prototype), "Meetup"));
@@ -28929,6 +32098,7 @@ var $;
 	($mol_mem(($.$piterjs_app.prototype), "Rights_meetup"));
 	($mol_mem(($.$piterjs_app.prototype), "Wiki"));
 	($mol_mem(($.$piterjs_app.prototype), "Safe"));
+	($mol_mem(($.$piterjs_app.prototype), "Love"));
 
 
 ;
@@ -28965,6 +32135,7 @@ var $;
             templates() { return this.$.$mol_state_arg.value('templates') !== null; }
             stats() { return this.$.$mol_state_arg.value('stats') !== null; }
             safe() { return this.$.$mol_state_arg.value('safe') !== null; }
+            love() { return this.$.$mol_state_arg.value('love') !== null; }
             meetup_id(next) {
                 const id = this.$.$mol_state_arg.value('meetup', next);
                 if (!id)
@@ -28999,6 +32170,7 @@ var $;
                     ...this.stats() ? [this.Meetup_stats(this.meetup_id())] : [],
                     ...this.others() ? [this.Others()] : [],
                     ...this.wiki() ? this.Wiki().pages() : [],
+                    ...this.love() ? this.Love().pages() : [],
                 ];
                 if (pages.length === 1)
                     pages.push(this.Now());
@@ -29137,7 +32309,7 @@ var $;
 "use strict";
 var $;
 (function ($) {
-    $mol_style_attach("piterjs/app/app.view.css", "[piterjs_app] {\n\tdisplay: flex;\n}\n\n[piterjs_app][mol_theme=\"$mol_theme_dark\"] {\n\t--mol_theme_focus: #FFE515;\n\t--mol_theme_current: #FFE515;\n}\n\n[piterjs_app][mol_theme=\"$mol_theme_light\"] {\n\t--mol_theme_focus: #c2ab03;\n\t--mol_theme_current: #c2ab03;\n}\n\n[piterjs_app] [mol_theme=\"$mol_theme_base\"] {\n\t--mol_theme_back: #FFE515;\n\t--mol_theme_text: black;\n\t--mol_theme_shade: rgba( 0 , 0 , 0 , .5 );\n\t--mol_theme_control: black;\n\tstroke: currentColor;\n}\n\n[piterjs_app] [mol_theme=\"$mol_theme_accent\"] {\n\t--mol_theme_back: #f7df1e;\n\t--mol_theme_text: black;\n\t--mol_theme_hover: hsl(53, 93%, 44%);\n\tstroke: currentColor;\n}\n\n[piterjs_app_menu] {\n\tflex: 0 0 15rem;\n}\n\n[piterjs_app_menu_content] {\n\tdisplay: flex;\n\tflex-direction: column;\n\tjustify-content: space-between;\n}\n\n[piterjs_app_links] {\n\tflex: none;\n}\n\n[piterjs_app_conf] {\n\twhite-space: nowrap;\n\tdisplay: flex;\n\tjustify-content: space-between;\n\tpadding: 0;\n}\n\n[piterjs_app_conf_title] {\n\tmargin: .5rem .75rem;\n}\n\n[piterjs_app_conf_date] {\n\tmargin: .5rem .75rem;\n}\n\n[piterjs_app_others_link] {\n\tpadding: .5rem .75rem;\n}\n\n[piterjs_app_user] {\n\tfont-size: .75rem;\n\tpadding: .5rem 0;\n\tcolor: var(--mol_theme_shade);\n}\n");
+    $mol_style_attach("piterjs/app/app.view.css", "[piterjs_app] {\n\tdisplay: flex;\n}\n\n[piterjs_app][mol_theme=\"$mol_theme_dark\"] {\n\t--mol_theme_focus: #FFE515;\n\t--mol_theme_current: #FFE515;\n}\n\n[piterjs_app][mol_theme=\"$mol_theme_light\"] {\n\t--mol_theme_focus: #c2ab03;\n\t--mol_theme_current: #c2ab03;\n}\n\n[piterjs_app] [mol_theme=\"$mol_theme_base\"] {\n\t--mol_theme_back: #FFE515;\n\t--mol_theme_text: black;\n\t--mol_theme_shade: rgba( 0 , 0 , 0 , .5 );\n\t--mol_theme_control: black;\n\tstroke: currentColor;\n}\n\n[piterjs_app] [mol_theme=\"$mol_theme_accent\"] {\n\t--mol_theme_back: #f7df1e;\n\t--mol_theme_text: black;\n\t--mol_theme_hover: hsl(53, 93%, 44%);\n\tstroke: currentColor;\n}\n\n[piterjs_app_menu] {\n\tflex: 0 0 15rem;\n}\n\n[piterjs_app_menu_content] {\n\tdisplay: flex;\n\tflex-direction: column;\n\tjustify-content: space-between;\n}\n\n[piterjs_app_links] {\n\tflex: none;\n}\n\n[piterjs_app_conf] {\n\twhite-space: nowrap;\n\tdisplay: flex;\n\tjustify-content: space-between;\n\tpadding: 0;\n}\n\n[piterjs_app_conf_title] {\n\tmargin: .5rem .75rem;\n}\n\n[piterjs_app_conf_date] {\n\tmargin: .5rem .75rem;\n}\n\n[piterjs_app_others_link] {\n\tpadding: .5rem .75rem;\n}\n\n[piterjs_app_user] {\n\tfont-size: .75rem;\n\tpadding: .5rem 0;\n\tcolor: var(--mol_theme_shade);\n}\n\n[piterjs_app] [mol_page] {\n\tmargin: 0;\n}\n");
 })($ || ($ = {}));
 
 ;
