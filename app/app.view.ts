@@ -45,6 +45,8 @@ namespace $.$$ {
 
 		safe() { return this.$.$mol_state_arg.value( 'safe' ) !== null }
 		
+		love() { return this.$.$mol_state_arg.value( 'love' ) !== null }
+		
 		@ $mol_mem
 		meetup_id( next? : string | null ) {
 			
@@ -88,6 +90,7 @@ namespace $.$$ {
 				... this.stats() ? [ this.Meetup_stats( this.meetup_id() ) ] : [] ,
 				... this.others() ? [ this.Others() ] : [] ,
 				... this.wiki() ? this.Wiki().pages() : [],
+				... this.love() ? this.Love().pages() : [],
 			]
 			if( pages.length === 1 ) pages.push( this.Now() )
 			return pages

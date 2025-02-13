@@ -65,3 +65,7 @@
 	padding: .5rem 0;
 	color: var(--mol_theme_shade);
 }
+
+[piterjs_app] [mol_page] {
+	margin: 0;
+}
