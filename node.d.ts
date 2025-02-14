@@ -10062,7 +10062,6 @@ declare namespace $ {
 			'place': any,
 			'others': any,
 			'wiki': any,
-			'love': any,
 		}) 
 		meetup( ): $piterjs_meetup
 		sub( ): readonly(any)[]
@@ -13643,1589 +13642,6 @@ declare namespace $ {
 
 declare namespace $ {
 
-	type $mol_search__query_mol_book2_catalog_1 = $mol_type_enforce<
-		ReturnType< $mol_book2_catalog['menu_filter'] >
-		,
-		ReturnType< $mol_search['query'] >
-	>
-	type $mol_dimmer__needle_mol_book2_catalog_2 = $mol_type_enforce<
-		ReturnType< $mol_book2_catalog['menu_filter'] >
-		,
-		ReturnType< $mol_dimmer['needle'] >
-	>
-	type $mol_dimmer__haystack_mol_book2_catalog_3 = $mol_type_enforce<
-		ReturnType< $mol_book2_catalog['spread_title'] >
-		,
-		ReturnType< $mol_dimmer['haystack'] >
-	>
-	type $mol_link__arg_mol_book2_catalog_4 = $mol_type_enforce<
-		ReturnType< $mol_book2_catalog['menu_link_arg'] >
-		,
-		ReturnType< $mol_link['arg'] >
-	>
-	type $mol_link__sub_mol_book2_catalog_5 = $mol_type_enforce<
-		ReturnType< $mol_book2_catalog['menu_link_content'] >
-		,
-		ReturnType< $mol_link['sub'] >
-	>
-	type $mol_list__Empty_mol_book2_catalog_6 = $mol_type_enforce<
-		ReturnType< $mol_book2_catalog['Menu_links_empty'] >
-		,
-		ReturnType< $mol_list['Empty'] >
-	>
-	type $mol_list__rows_mol_book2_catalog_7 = $mol_type_enforce<
-		ReturnType< $mol_book2_catalog['menu_links'] >
-		,
-		ReturnType< $mol_list['rows'] >
-	>
-	type $mol_page__title_mol_book2_catalog_8 = $mol_type_enforce<
-		ReturnType< $mol_book2_catalog['menu_title'] >
-		,
-		ReturnType< $mol_page['title'] >
-	>
-	type $mol_page__Logo_mol_book2_catalog_9 = $mol_type_enforce<
-		ReturnType< $mol_book2_catalog['Menu_logo'] >
-		,
-		ReturnType< $mol_page['Logo'] >
-	>
-	type $mol_page__tools_mol_book2_catalog_10 = $mol_type_enforce<
-		readonly(any)[]
-		,
-		ReturnType< $mol_page['tools'] >
-	>
-	type $mol_page__head_mol_book2_catalog_11 = $mol_type_enforce<
-		ReturnType< $mol_book2_catalog['menu_head'] >
-		,
-		ReturnType< $mol_page['head'] >
-	>
-	type $mol_page__body_mol_book2_catalog_12 = $mol_type_enforce<
-		ReturnType< $mol_book2_catalog['menu_body'] >
-		,
-		ReturnType< $mol_page['body'] >
-	>
-	type $mol_page__foot_mol_book2_catalog_13 = $mol_type_enforce<
-		ReturnType< $mol_book2_catalog['menu_foot'] >
-		,
-		ReturnType< $mol_page['foot'] >
-	>
-	type $mol_link__arg_mol_book2_catalog_14 = $mol_type_enforce<
-		ReturnType< $mol_book2_catalog['spread_close_arg'] >
-		,
-		ReturnType< $mol_link['arg'] >
-	>
-	type $mol_link__hint_mol_book2_catalog_15 = $mol_type_enforce<
-		string
-		,
-		ReturnType< $mol_link['hint'] >
-	>
-	type $mol_link__sub_mol_book2_catalog_16 = $mol_type_enforce<
-		readonly(any)[]
-		,
-		ReturnType< $mol_link['sub'] >
-	>
-	export class $mol_book2_catalog extends $mol_book2 {
-		Menu_title( ): ReturnType< ReturnType< $mol_book2_catalog['Menu'] >['Title'] >
-		menu_title( ): string
-		Menu_tools( ): ReturnType< ReturnType< $mol_book2_catalog['Menu'] >['Tools'] >
-		Menu_logo( ): any
-		menu_head( ): readonly(any)[]
-		menu_filter( next?: string ): string
-		Menu_filter( ): $mol_search
-		Menu_links_empty( ): $mol_view
-		arg( id: any): Record<string, any>
-		menu_link_arg( id: any): ReturnType< $mol_book2_catalog['arg'] >
-		spread_title( id: any): string
-		Menu_link_title( id: any): $mol_dimmer
-		menu_link_content( id: any): readonly(any)[]
-		Menu_link( id: any): $mol_link
-		menu_links( ): readonly(any)[]
-		Menu_links( ): $mol_list
-		menu_body( ): readonly(any)[]
-		menu_foot( ): readonly(any)[]
-		Menu( ): $mol_page
-		spread_close_arg( ): Record<string, any>
-		Spread_close_icon( ): $mol_icon_close
-		param( ): string
-		spread( next?: string ): string
-		spreads( ): Record<string, any>
-		Spread( id: any): $mol_view
-		Spread_default( ): any
-		spread_ids( ): readonly(string)[]
-		menu_filter_enabled( ): boolean
-		spread_ids_filtered( ): readonly(string)[]
-		menu_tools( ): readonly(any)[]
-		addon_tools( ): readonly(any)[]
-		pages( ): readonly(any)[]
-		Spread_close( ): $mol_link
-	}
-	
-}
-
-//# sourceMappingURL=catalog.view.tree.d.ts.map
-declare namespace $.$$ {
-    class $mol_book2_catalog extends $.$mol_book2_catalog {
-        spread_current(): any;
-        pages(): any[];
-        auto(): void;
-        spread_ids(): readonly string[];
-        menu_body(): ($.$mol_list | $.$mol_search)[];
-        menu_filter_enabled(): boolean;
-        menu_links(): $.$mol_link[];
-        spread_ids_filtered(): string[];
-        Spread(id: string): $mol_view;
-        Spread_default(): any;
-        spread(next?: string): string;
-        arg(spread: string): {
-            [x: string]: string | null;
-        };
-        spread_close_arg(): {
-            [x: string]: null;
-        };
-        spread_title(spread: string): string;
-    }
-}
-
-declare namespace $ {
-}
-
-declare namespace $ {
-
-	export class $mol_icon_face extends $mol_icon {
-		path( ): string
-	}
-	
-}
-
-//# sourceMappingURL=face.view.tree.d.ts.map
-declare namespace $ {
-
-	export class $mol_icon_face_agent extends $mol_icon {
-		path( ): string
-	}
-	
-}
-
-//# sourceMappingURL=agent.view.tree.d.ts.map
-declare namespace $ {
-
-	type $mol_link__title_hyoo_match_intro_1 = $mol_type_enforce<
-		string
-		,
-		ReturnType< $mol_link['title'] >
-	>
-	type $mol_link__arg_hyoo_match_intro_2 = $mol_type_enforce<
-		({ 
-			'': string,
-		}) 
-		,
-		ReturnType< $mol_link['arg'] >
-	>
-	type $mol_text__text_hyoo_match_intro_3 = $mol_type_enforce<
-		string
-		,
-		ReturnType< $mol_text['text'] >
-	>
-	export class $hyoo_match_intro extends $mol_page {
-		Next( ): $mol_link
-		Content( ): $mol_text
-		title( ): string
-		foot( ): readonly(any)[]
-		body( ): readonly(any)[]
-	}
-	
-}
-
-//# sourceMappingURL=intro.view.tree.d.ts.map
-declare namespace $ {
-    class $hyoo_crowd_counter extends $hyoo_crowd_reg {
-        list(): readonly `${string}_${string}`[];
-        times(): {
-            [k: string]: number;
-        };
-        total(): number;
-        counted(next?: boolean): boolean | undefined;
-    }
-}
-
-declare namespace $ {
-    class $hyoo_match_single extends $hyoo_meta_model {
-        ready(): boolean;
-        photo_node(): $hyoo_crowd_blob | null;
-        photo(next?: $mol_blob): Blob | undefined;
-        photo_stamp(): number;
-        photo_fresh(): boolean;
-        photo_moment(): $mol_time_moment;
-        greet(next?: string): string;
-        contacts(next?: string): string;
-        places(next?: readonly string[]): string[];
-        univer(next?: string): string;
-        sex_self(next?: string): string;
-        age_self(next?: string): string;
-        sex_pref_node(): $hyoo_crowd_list;
-        sex_pref_all(next?: readonly string[]): string[];
-        sex_pref(name: string, next?: boolean): boolean;
-        age_pref_node(): $hyoo_crowd_list;
-        age_pref_all(next?: readonly string[]): string[];
-        age_pref(name: string, next?: boolean): boolean;
-        likes(): $hyoo_crowd_counter;
-        liked(next?: boolean): boolean | undefined;
-        mutual(): $hyoo_match_single[];
-        skipped(): $hyoo_crowd_list | null;
-    }
-}
-
-declare namespace $ {
-
-	export class $mol_video_player extends $mol_view {
-		uri( ): string
-		controls( ): boolean
-		autoplay( ): boolean
-		inline( ): boolean
-		loop( ): boolean
-		muted( ): boolean
-		poster( ): string
-		stream( ): any
-		revolume( next?: any ): any
-		retime( next?: any ): any
-		redurate( next?: any ): any
-		playing_event( next?: any ): any
-		play_event( next?: any ): any
-		pause_event( next?: any ): any
-		dom_name( ): string
-		playing( next?: boolean ): boolean
-		play( ): any
-		pause( ): any
-		volume( next?: number ): number
-		time( next?: number ): number
-		duration( ): number
-		attr( ): ({ 
-			'src': ReturnType< $mol_video_player['uri'] >,
-			'controls': ReturnType< $mol_video_player['controls'] >,
-			'autoplay': ReturnType< $mol_video_player['autoplay'] >,
-			'playsinline': ReturnType< $mol_video_player['inline'] >,
-			'loop': ReturnType< $mol_video_player['loop'] >,
-			'muted': ReturnType< $mol_video_player['muted'] >,
-			'poster': ReturnType< $mol_video_player['poster'] >,
-		}) 
-		field( ): ({ 
-			'srcObject': ReturnType< $mol_video_player['stream'] >,
-		}) 
-		event( ): ({ 
-			volumechange( next?: ReturnType< $mol_video_player['revolume'] > ): ReturnType< $mol_video_player['revolume'] >,
-			timeupdate( next?: ReturnType< $mol_video_player['retime'] > ): ReturnType< $mol_video_player['retime'] >,
-			durationchange( next?: ReturnType< $mol_video_player['redurate'] > ): ReturnType< $mol_video_player['redurate'] >,
-			playing( next?: ReturnType< $mol_video_player['playing_event'] > ): ReturnType< $mol_video_player['playing_event'] >,
-			play( next?: ReturnType< $mol_video_player['play_event'] > ): ReturnType< $mol_video_player['play_event'] >,
-			pause( next?: ReturnType< $mol_video_player['pause_event'] > ): ReturnType< $mol_video_player['pause_event'] >,
-		}) 
-	}
-	
-}
-
-//# sourceMappingURL=player.view.tree.d.ts.map
-declare namespace $.$$ {
-    class $mol_video_player extends $.$mol_video_player {
-        dom_node(): HTMLVideoElement;
-        volume(next?: number): number;
-        time(next?: number): number;
-        duration(): number;
-        playing(next?: boolean): boolean;
-        play(): void;
-        pause(): void;
-    }
-}
-
-declare namespace $ {
-}
-
-declare namespace $ {
-
-	export class $mol_video_camera extends $mol_video_player {
-		transform( ): string
-		facing( ): string
-		aspect( ): number
-		size( ): number
-		width( ): ReturnType< $mol_video_camera['size'] >
-		height( ): ReturnType< $mol_video_camera['size'] >
-		brightness( ): number
-		sharpness( ): number
-		contrast( ): number
-		saturation( ): number
-		temperature( ): number
-		torch( ): boolean
-		controls( ): boolean
-		style( ): ({ 
-			'transform': ReturnType< $mol_video_camera['transform'] >,
-		}) 
-		video_constraints( ): ({ 
-			'facingMode': ReturnType< $mol_video_camera['facing'] >,
-			'aspectRatio': ReturnType< $mol_video_camera['aspect'] >,
-			'width': ({ 
-				'ideal': ReturnType< $mol_video_camera['width'] >,
-			}) ,
-			'height': ({ 
-				'ideal': ReturnType< $mol_video_camera['height'] >,
-			}) ,
-		}) 
-		video_settings( ): ({ 
-			'brightness': ReturnType< $mol_video_camera['brightness'] >,
-			'sharpness': ReturnType< $mol_video_camera['sharpness'] >,
-			'contrast': ReturnType< $mol_video_camera['contrast'] >,
-			'saturation': ReturnType< $mol_video_camera['saturation'] >,
-			'advanced': readonly(any)[],
-		}) 
-	}
-	
-}
-
-//# sourceMappingURL=camera.view.tree.d.ts.map
-declare namespace $.$$ {
-    class $mol_video_camera extends $.$mol_video_camera {
-        stream_raw(): MediaStream & {
-            destructor: () => void;
-        };
-        stream(): MediaStream & {
-            destructor: () => void;
-        };
-        dom_node_actual(): HTMLVideoElement;
-        transform(): string;
-    }
-}
-
-declare namespace $ {
-}
-
-declare namespace $ {
-
-	export class $mol_form_group extends $mol_view {
-	}
-	
-}
-
-//# sourceMappingURL=group.view.tree.d.ts.map
-declare namespace $ {
-
-	export class $hyoo_match_univer extends $mol_select {
-		options( ): readonly(any)[]
-	}
-	
-}
-
-//# sourceMappingURL=univer.view.tree.d.ts.map
-declare namespace $ {
-
-	type __mol_select_list_1 = $mol_type_enforce<
-		Parameters< $mol_select_list['filter_pattern'] >[0]
-		,
-		Parameters< ReturnType< $mol_select_list['Pick'] >['filter_pattern'] >[0]
-	>
-	type $mol_select__event_select_mol_select_list_2 = $mol_type_enforce<
-		ReturnType< $mol_select_list['event_select'] >
-		,
-		ReturnType< $mol_select['event_select'] >
-	>
-	type $mol_select__align_hor_mol_select_list_3 = $mol_type_enforce<
-		ReturnType< $mol_select_list['align_hor'] >
-		,
-		ReturnType< $mol_select['align_hor'] >
-	>
-	type $mol_select__options_mol_select_list_4 = $mol_type_enforce<
-		ReturnType< $mol_select_list['options_pickable'] >
-		,
-		ReturnType< $mol_select['options'] >
-	>
-	type $mol_select__value_mol_select_list_5 = $mol_type_enforce<
-		ReturnType< $mol_select_list['pick'] >
-		,
-		ReturnType< $mol_select['value'] >
-	>
-	type $mol_select__option_label_mol_select_list_6 = $mol_type_enforce<
-		ReturnType< $mol_select_list['option_title'] >
-		,
-		ReturnType< $mol_select['option_label'] >
-	>
-	type $mol_select__trigger_enabled_mol_select_list_7 = $mol_type_enforce<
-		ReturnType< $mol_select_list['pick_enabled'] >
-		,
-		ReturnType< $mol_select['trigger_enabled'] >
-	>
-	type $mol_select__hint_mol_select_list_8 = $mol_type_enforce<
-		ReturnType< $mol_select_list['pick_hint'] >
-		,
-		ReturnType< $mol_select['hint'] >
-	>
-	type $mol_select__Trigger_icon_mol_select_list_9 = $mol_type_enforce<
-		ReturnType< $mol_select_list['Pick_icon'] >
-		,
-		ReturnType< $mol_select['Trigger_icon'] >
-	>
-	type $mol_button_minor__title_mol_select_list_10 = $mol_type_enforce<
-		ReturnType< $mol_select_list['badge_title'] >
-		,
-		ReturnType< $mol_button_minor['title'] >
-	>
-	type $mol_button_minor__click_mol_select_list_11 = $mol_type_enforce<
-		ReturnType< $mol_select_list['remove'] >
-		,
-		ReturnType< $mol_button_minor['click'] >
-	>
-	type $mol_button_minor__hint_mol_select_list_12 = $mol_type_enforce<
-		ReturnType< $mol_select_list['badge_hint'] >
-		,
-		ReturnType< $mol_button_minor['hint'] >
-	>
-	type $mol_button_minor__enabled_mol_select_list_13 = $mol_type_enforce<
-		ReturnType< $mol_select_list['drop_enabled'] >
-		,
-		ReturnType< $mol_button_minor['enabled'] >
-	>
-	type $mol_select_list_sub__14 = $mol_type_enforce<
-		ReturnType< $mol_select_list['badges_list'] >[number]
-		,
-		$mol_view
-	>
-	export class $mol_select_list extends $mol_view {
-		Badges( ): readonly($mol_view)[]
-		badge_title( id: any): string
-		remove( id: any, next?: any ): any
-		badge_hint( ): string
-		enabled( ): boolean
-		drop_enabled( ): ReturnType< $mol_select_list['enabled'] >
-		event_select( id: any, next?: any ): any
-		align_hor( ): string
-		options( ): readonly(string)[]
-		options_pickable( ): ReturnType< $mol_select_list['options'] >
-		pick( next?: string ): string
-		option_title( id: any): string
-		pick_enabled( ): ReturnType< $mol_select_list['enabled'] >
-		pick_hint( ): string
-		filter_pattern( next?: ReturnType< ReturnType< $mol_select_list['Pick'] >['filter_pattern'] > ): ReturnType< ReturnType< $mol_select_list['Pick'] >['filter_pattern'] >
-		Pick_icon( ): $mol_icon_plus
-		Pick( ): $mol_select
-		value( next?: readonly(string)[] ): readonly(string)[]
-		dictionary( ): Record<string, any>
-		badges_list( ): ReturnType< $mol_select_list['Badges'] >
-		Badge( id: any): $mol_button_minor
-		sub( ): readonly($mol_view)[]
-	}
-	
-}
-
-//# sourceMappingURL=list.view.tree.d.ts.map
-declare namespace $.$$ {
-    class $mol_select_list extends $.$mol_select_list {
-        value(val?: readonly string[]): readonly string[];
-        pick(key?: string): string;
-        event_select(id: string, event?: MouseEvent): void;
-        options(): readonly string[];
-        options_pickable(): readonly string[];
-        option_title(key: string): string;
-        badge_title(key: string): string;
-        pick_enabled(): boolean;
-        Badges(): $mol_button_minor[];
-        title(): string;
-        remove(key: string): void;
-    }
-}
-
-declare namespace $.$$ {
-}
-
-declare namespace $ {
-
-	export class $hyoo_match_places extends $mol_select_list {
-		dictionary( ): ({ 
-			'RU-SPE': string,
-			'RU-MOW': string,
-			'UA-40': string,
-			'RU-AMU': string,
-			'RU-ARK': string,
-			'RU-AST': string,
-			'RU-BEL': string,
-			'RU-BRY': string,
-			'RU-VLA': string,
-			'RU-VGG': string,
-			'RU-VLG': string,
-			'RU-VOR': string,
-			'RU-IVA': string,
-			'RU-IRK': string,
-			'RU-KGD': string,
-			'RU-KLU': string,
-			'RU-KEM': string,
-			'RU-KIR': string,
-			'RU-KOS': string,
-			'RU-KGN': string,
-			'RU-KRS': string,
-			'RU-LEN': string,
-			'RU-LIP': string,
-			'RU-MAG': string,
-			'RU-MOS': string,
-			'RU-MUR': string,
-			'RU-NIZ': string,
-			'RU-NGR': string,
-			'RU-NVS': string,
-			'RU-OMS': string,
-			'RU-ORE': string,
-			'RU-ORL': string,
-			'RU-PNZ': string,
-			'RU-PSK': string,
-			'RU-ROS': string,
-			'RU-RYA': string,
-			'RU-SAM': string,
-			'RU-SAR': string,
-			'RU-SAK': string,
-			'RU-SVE': string,
-			'RU-SMO': string,
-			'RU-TAM': string,
-			'RU-TVE': string,
-			'RU-TOM': string,
-			'RU-TUL': string,
-			'RU-TYU': string,
-			'RU-ULY': string,
-			'RU-CHE': string,
-			'RU-YAR': string,
-			'RU-AD': string,
-			'RU-BA': string,
-			'RU-BU': string,
-			'RU-DA': string,
-			'RU-IN': string,
-			'RU-KB': string,
-			'RU-KL': string,
-			'RU-KC': string,
-			'RU-KR': string,
-			'RU-ME': string,
-			'RU-MO': string,
-			'RU-AL': string,
-			'RU-KO': string,
-			'RU-SA': string,
-			'RU-SE': string,
-			'RU-TA': string,
-			'RU-TY': string,
-			'RU-UD': string,
-			'RU-KK': string,
-			'RU-CE': string,
-			'RU-CU': string,
-			'RU-ALT': string,
-			'RU-ZAB': string,
-			'RU-KAM': string,
-			'RU-KDA': string,
-			'RU-KYA': string,
-			'RU-PER': string,
-			'RU-PRI': string,
-			'RU-STA': string,
-			'RU-KHA': string,
-			'RU-NEN': string,
-			'RU-KHM': string,
-			'RU-CHU': string,
-			'RU-YAN': string,
-			'RU-YEV': string,
-			'UA-43': string,
-			'RU': string,
-			'By': string,
-			'UA': string,
-			'KG': string,
-			'KZ': string,
-			'MD': string,
-			'RO': string,
-			'TJ': string,
-			'UZ': string,
-			'IL': string,
-			'US': string,
-			'AU': string,
-			'AM': string,
-			'CN': string,
-			'PL': string,
-			'SK': string,
-			'FI': string,
-			'HR': string,
-			'CZ': string,
-			'LV': string,
-			'GE': string,
-			'europa': string,
-			'asia': string,
-			'africa': string,
-			'aerica-south': string,
-			'america-nord': string,
-			'antarctica': string,
-			'oceania': string,
-			'earth': string,
-			'moon': string,
-			'mars': string,
-		}) 
-	}
-	
-}
-
-//# sourceMappingURL=palces.view.tree.d.ts.map
-declare namespace $ {
-
-	type __hyoo_match_single_settings_1 = $mol_type_enforce<
-		Parameters< $hyoo_match_single_settings['name'] >[0]
-		,
-		Parameters< ReturnType< $hyoo_match_single_settings['single'] >['title'] >[0]
-	>
-	type __hyoo_match_single_settings_2 = $mol_type_enforce<
-		Parameters< $hyoo_match_single_settings['greet'] >[0]
-		,
-		Parameters< ReturnType< $hyoo_match_single_settings['single'] >['greet'] >[0]
-	>
-	type __hyoo_match_single_settings_3 = $mol_type_enforce<
-		Parameters< $hyoo_match_single_settings['contacts'] >[0]
-		,
-		Parameters< ReturnType< $hyoo_match_single_settings['single'] >['contacts'] >[0]
-	>
-	type __hyoo_match_single_settings_4 = $mol_type_enforce<
-		Parameters< $hyoo_match_single_settings['places'] >[0]
-		,
-		Parameters< ReturnType< $hyoo_match_single_settings['single'] >['places'] >[0]
-	>
-	type __hyoo_match_single_settings_5 = $mol_type_enforce<
-		Parameters< $hyoo_match_single_settings['univer'] >[0]
-		,
-		Parameters< ReturnType< $hyoo_match_single_settings['single'] >['univer'] >[0]
-	>
-	type __hyoo_match_single_settings_6 = $mol_type_enforce<
-		Parameters< $hyoo_match_single_settings['sex_self'] >[0]
-		,
-		Parameters< ReturnType< $hyoo_match_single_settings['single'] >['sex_self'] >[0]
-	>
-	type __hyoo_match_single_settings_7 = $mol_type_enforce<
-		Parameters< $hyoo_match_single_settings['age_self'] >[0]
-		,
-		Parameters< ReturnType< $hyoo_match_single_settings['single'] >['age_self'] >[0]
-	>
-	type __hyoo_match_single_settings_8 = $mol_type_enforce<
-		Parameters< $hyoo_match_single_settings['sex_pref'] >[0]
-		,
-		Parameters< ReturnType< $hyoo_match_single_settings['single'] >['sex_pref'] >[0]
-	>
-	type __hyoo_match_single_settings_9 = $mol_type_enforce<
-		Parameters< $hyoo_match_single_settings['sex_pref'] >[1]
-		,
-		Parameters< ReturnType< $hyoo_match_single_settings['single'] >['sex_pref'] >[1]
-	>
-	type __hyoo_match_single_settings_10 = $mol_type_enforce<
-		Parameters< $hyoo_match_single_settings['age_pref'] >[0]
-		,
-		Parameters< ReturnType< $hyoo_match_single_settings['single'] >['age_pref'] >[0]
-	>
-	type __hyoo_match_single_settings_11 = $mol_type_enforce<
-		Parameters< $hyoo_match_single_settings['age_pref'] >[1]
-		,
-		Parameters< ReturnType< $hyoo_match_single_settings['single'] >['age_pref'] >[1]
-	>
-	type $mol_paragraph__title_hyoo_match_single_settings_12 = $mol_type_enforce<
-		string
-		,
-		ReturnType< $mol_paragraph['title'] >
-	>
-	type $mol_paragraph__title_hyoo_match_single_settings_13 = $mol_type_enforce<
-		string
-		,
-		ReturnType< $mol_paragraph['title'] >
-	>
-	type $mol_paragraph__title_hyoo_match_single_settings_14 = $mol_type_enforce<
-		string
-		,
-		ReturnType< $mol_paragraph['title'] >
-	>
-	type $mol_link__title_hyoo_match_single_settings_15 = $mol_type_enforce<
-		string
-		,
-		ReturnType< $mol_link['title'] >
-	>
-	type $mol_link__arg_hyoo_match_single_settings_16 = $mol_type_enforce<
-		({ 
-			'': string,
-		}) 
-		,
-		ReturnType< $mol_link['arg'] >
-	>
-	type $mol_image__uri_hyoo_match_single_settings_17 = $mol_type_enforce<
-		ReturnType< $hyoo_match_single_settings['photo'] >
-		,
-		ReturnType< $mol_image['uri'] >
-	>
-	type $mol_video_camera__aspect_hyoo_match_single_settings_18 = $mol_type_enforce<
-		number
-		,
-		ReturnType< $mol_video_camera['aspect'] >
-	>
-	type $mol_paragraph__title_hyoo_match_single_settings_19 = $mol_type_enforce<
-		string
-		,
-		ReturnType< $mol_paragraph['title'] >
-	>
-	type $mol_check__checked_hyoo_match_single_settings_20 = $mol_type_enforce<
-		ReturnType< $hyoo_match_single_settings['live'] >
-		,
-		ReturnType< $mol_check['checked'] >
-	>
-	type $mol_check__sub_hyoo_match_single_settings_21 = $mol_type_enforce<
-		ReturnType< $hyoo_match_single_settings['shot_content'] >
-		,
-		ReturnType< $mol_check['sub'] >
-	>
-	type $mol_form_field__name_hyoo_match_single_settings_22 = $mol_type_enforce<
-		string
-		,
-		ReturnType< $mol_form_field['name'] >
-	>
-	type $mol_form_field__bids_hyoo_match_single_settings_23 = $mol_type_enforce<
-		readonly(any)[]
-		,
-		ReturnType< $mol_form_field['bids'] >
-	>
-	type $mol_form_field__Content_hyoo_match_single_settings_24 = $mol_type_enforce<
-		ReturnType< $hyoo_match_single_settings['Shot'] >
-		,
-		ReturnType< $mol_form_field['Content'] >
-	>
-	type $mol_string__value_hyoo_match_single_settings_25 = $mol_type_enforce<
-		ReturnType< $hyoo_match_single_settings['name'] >
-		,
-		ReturnType< $mol_string['value'] >
-	>
-	type $mol_form_field__name_hyoo_match_single_settings_26 = $mol_type_enforce<
-		string
-		,
-		ReturnType< $mol_form_field['name'] >
-	>
-	type $mol_form_field__bids_hyoo_match_single_settings_27 = $mol_type_enforce<
-		readonly(any)[]
-		,
-		ReturnType< $mol_form_field['bids'] >
-	>
-	type $mol_form_field__Content_hyoo_match_single_settings_28 = $mol_type_enforce<
-		ReturnType< $hyoo_match_single_settings['Name'] >
-		,
-		ReturnType< $mol_form_field['Content'] >
-	>
-	type $mol_switch__value_hyoo_match_single_settings_29 = $mol_type_enforce<
-		ReturnType< $hyoo_match_single_settings['age_self'] >
-		,
-		ReturnType< $mol_switch['value'] >
-	>
-	type $mol_switch__options_hyoo_match_single_settings_30 = $mol_type_enforce<
-		({ 
-			'young': string,
-			'adult': string,
-			'mature': string,
-		}) 
-		,
-		ReturnType< $mol_switch['options'] >
-	>
-	type $mol_switch__value_hyoo_match_single_settings_31 = $mol_type_enforce<
-		ReturnType< $hyoo_match_single_settings['sex_self'] >
-		,
-		ReturnType< $mol_switch['value'] >
-	>
-	type $mol_switch__options_hyoo_match_single_settings_32 = $mol_type_enforce<
-		({ 
-			'female': string,
-			'male': string,
-		}) 
-		,
-		ReturnType< $mol_switch['options'] >
-	>
-	type $mol_view__sub_hyoo_match_single_settings_33 = $mol_type_enforce<
-		readonly(any)[]
-		,
-		ReturnType< $mol_view['sub'] >
-	>
-	type $mol_form_field__name_hyoo_match_single_settings_34 = $mol_type_enforce<
-		string
-		,
-		ReturnType< $mol_form_field['name'] >
-	>
-	type $mol_form_field__bids_hyoo_match_single_settings_35 = $mol_type_enforce<
-		readonly(any)[]
-		,
-		ReturnType< $mol_form_field['bids'] >
-	>
-	type $mol_form_field__Content_hyoo_match_single_settings_36 = $mol_type_enforce<
-		ReturnType< $hyoo_match_single_settings['Self_controls'] >
-		,
-		ReturnType< $mol_form_field['Content'] >
-	>
-	type $mol_check_list__option_checked_hyoo_match_single_settings_37 = $mol_type_enforce<
-		ReturnType< $hyoo_match_single_settings['age_pref'] >
-		,
-		ReturnType< $mol_check_list['option_checked'] >
-	>
-	type $mol_check_list__options_hyoo_match_single_settings_38 = $mol_type_enforce<
-		({ 
-			'young': string,
-			'adult': string,
-			'mature': string,
-		}) 
-		,
-		ReturnType< $mol_check_list['options'] >
-	>
-	type $mol_check_list__option_checked_hyoo_match_single_settings_39 = $mol_type_enforce<
-		ReturnType< $hyoo_match_single_settings['sex_pref'] >
-		,
-		ReturnType< $mol_check_list['option_checked'] >
-	>
-	type $mol_check_list__options_hyoo_match_single_settings_40 = $mol_type_enforce<
-		({ 
-			'female': string,
-			'male': string,
-		}) 
-		,
-		ReturnType< $mol_check_list['options'] >
-	>
-	type $mol_view__sub_hyoo_match_single_settings_41 = $mol_type_enforce<
-		readonly(any)[]
-		,
-		ReturnType< $mol_view['sub'] >
-	>
-	type $mol_form_field__name_hyoo_match_single_settings_42 = $mol_type_enforce<
-		string
-		,
-		ReturnType< $mol_form_field['name'] >
-	>
-	type $mol_form_field__bids_hyoo_match_single_settings_43 = $mol_type_enforce<
-		readonly(any)[]
-		,
-		ReturnType< $mol_form_field['bids'] >
-	>
-	type $mol_form_field__Content_hyoo_match_single_settings_44 = $mol_type_enforce<
-		ReturnType< $hyoo_match_single_settings['Pref_controls'] >
-		,
-		ReturnType< $mol_form_field['Content'] >
-	>
-	type $mol_form_group__sub_hyoo_match_single_settings_45 = $mol_type_enforce<
-		readonly(any)[]
-		,
-		ReturnType< $mol_form_group['sub'] >
-	>
-	type $hyoo_match_univer__value_hyoo_match_single_settings_46 = $mol_type_enforce<
-		ReturnType< $hyoo_match_single_settings['univer'] >
-		,
-		ReturnType< $hyoo_match_univer['value'] >
-	>
-	type $mol_form_field__name_hyoo_match_single_settings_47 = $mol_type_enforce<
-		string
-		,
-		ReturnType< $mol_form_field['name'] >
-	>
-	type $mol_form_field__bids_hyoo_match_single_settings_48 = $mol_type_enforce<
-		readonly(any)[]
-		,
-		ReturnType< $mol_form_field['bids'] >
-	>
-	type $mol_form_field__Content_hyoo_match_single_settings_49 = $mol_type_enforce<
-		ReturnType< $hyoo_match_single_settings['Univer'] >
-		,
-		ReturnType< $mol_form_field['Content'] >
-	>
-	type $hyoo_match_places__value_hyoo_match_single_settings_50 = $mol_type_enforce<
-		ReturnType< $hyoo_match_single_settings['places'] >
-		,
-		ReturnType< $hyoo_match_places['value'] >
-	>
-	type $hyoo_match_places__pick_enabled_hyoo_match_single_settings_51 = $mol_type_enforce<
-		ReturnType< $hyoo_match_single_settings['places_enabled'] >
-		,
-		ReturnType< $hyoo_match_places['pick_enabled'] >
-	>
-	type $mol_form_field__name_hyoo_match_single_settings_52 = $mol_type_enforce<
-		string
-		,
-		ReturnType< $mol_form_field['name'] >
-	>
-	type $mol_form_field__bids_hyoo_match_single_settings_53 = $mol_type_enforce<
-		readonly(any)[]
-		,
-		ReturnType< $mol_form_field['bids'] >
-	>
-	type $mol_form_field__Content_hyoo_match_single_settings_54 = $mol_type_enforce<
-		ReturnType< $hyoo_match_single_settings['Places'] >
-		,
-		ReturnType< $mol_form_field['Content'] >
-	>
-	type $mol_form_group__sub_hyoo_match_single_settings_55 = $mol_type_enforce<
-		readonly(any)[]
-		,
-		ReturnType< $mol_form_group['sub'] >
-	>
-	type $mol_textarea__hint_hyoo_match_single_settings_56 = $mol_type_enforce<
-		string
-		,
-		ReturnType< $mol_textarea['hint'] >
-	>
-	type $mol_textarea__value_hyoo_match_single_settings_57 = $mol_type_enforce<
-		ReturnType< $hyoo_match_single_settings['greet'] >
-		,
-		ReturnType< $mol_textarea['value'] >
-	>
-	type $mol_form_field__name_hyoo_match_single_settings_58 = $mol_type_enforce<
-		string
-		,
-		ReturnType< $mol_form_field['name'] >
-	>
-	type $mol_form_field__bids_hyoo_match_single_settings_59 = $mol_type_enforce<
-		readonly(any)[]
-		,
-		ReturnType< $mol_form_field['bids'] >
-	>
-	type $mol_form_field__Content_hyoo_match_single_settings_60 = $mol_type_enforce<
-		ReturnType< $hyoo_match_single_settings['Greet'] >
-		,
-		ReturnType< $mol_form_field['Content'] >
-	>
-	type $mol_paragraph__title_hyoo_match_single_settings_61 = $mol_type_enforce<
-		string
-		,
-		ReturnType< $mol_paragraph['title'] >
-	>
-	type $mol_textarea__hint_hyoo_match_single_settings_62 = $mol_type_enforce<
-		string
-		,
-		ReturnType< $mol_textarea['hint'] >
-	>
-	type $mol_textarea__value_hyoo_match_single_settings_63 = $mol_type_enforce<
-		ReturnType< $hyoo_match_single_settings['contacts'] >
-		,
-		ReturnType< $mol_textarea['value'] >
-	>
-	type $mol_form_field__name_hyoo_match_single_settings_64 = $mol_type_enforce<
-		string
-		,
-		ReturnType< $mol_form_field['name'] >
-	>
-	type $mol_form_field__bids_hyoo_match_single_settings_65 = $mol_type_enforce<
-		readonly(any)[]
-		,
-		ReturnType< $mol_form_field['bids'] >
-	>
-	type $mol_form_field__Content_hyoo_match_single_settings_66 = $mol_type_enforce<
-		ReturnType< $hyoo_match_single_settings['Contacts'] >
-		,
-		ReturnType< $mol_form_field['Content'] >
-	>
-	export class $hyoo_match_single_settings extends $mol_page {
-		ready( ): ReturnType< ReturnType< $hyoo_match_single_settings['single'] >['ready'] >
-		photo_fresh( ): ReturnType< ReturnType< $hyoo_match_single_settings['single'] >['photo_fresh'] >
-		name( next?: ReturnType< ReturnType< $hyoo_match_single_settings['single'] >['title'] > ): ReturnType< ReturnType< $hyoo_match_single_settings['single'] >['title'] >
-		greet( next?: ReturnType< ReturnType< $hyoo_match_single_settings['single'] >['greet'] > ): ReturnType< ReturnType< $hyoo_match_single_settings['single'] >['greet'] >
-		contacts( next?: ReturnType< ReturnType< $hyoo_match_single_settings['single'] >['contacts'] > ): ReturnType< ReturnType< $hyoo_match_single_settings['single'] >['contacts'] >
-		places( next?: ReturnType< ReturnType< $hyoo_match_single_settings['single'] >['places'] > ): ReturnType< ReturnType< $hyoo_match_single_settings['single'] >['places'] >
-		univer( next?: ReturnType< ReturnType< $hyoo_match_single_settings['single'] >['univer'] > ): ReturnType< ReturnType< $hyoo_match_single_settings['single'] >['univer'] >
-		sex_self( next?: ReturnType< ReturnType< $hyoo_match_single_settings['single'] >['sex_self'] > ): ReturnType< ReturnType< $hyoo_match_single_settings['single'] >['sex_self'] >
-		age_self( next?: ReturnType< ReturnType< $hyoo_match_single_settings['single'] >['age_self'] > ): ReturnType< ReturnType< $hyoo_match_single_settings['single'] >['age_self'] >
-		sex_pref( id: any, next?: ReturnType< ReturnType< $hyoo_match_single_settings['single'] >['sex_pref'] > ): ReturnType< ReturnType< $hyoo_match_single_settings['single'] >['sex_pref'] >
-		sex_pref_all( ): ReturnType< ReturnType< $hyoo_match_single_settings['single'] >['sex_pref_all'] >
-		age_pref( id: any, next?: ReturnType< ReturnType< $hyoo_match_single_settings['single'] >['age_pref'] > ): ReturnType< ReturnType< $hyoo_match_single_settings['single'] >['age_pref'] >
-		age_pref_all( ): ReturnType< ReturnType< $hyoo_match_single_settings['single'] >['age_pref_all'] >
-		Invisible( ): $mol_paragraph
-		Visible( ): $mol_paragraph
-		Incoplete( ): $mol_paragraph
-		Next( ): $mol_link
-		shot_bid( ): string
-		live( next?: boolean ): boolean
-		photo( ): string
-		Photo( ): $mol_image
-		video( ): ReturnType< ReturnType< $hyoo_match_single_settings['Camera'] >['dom_node_actual'] >
-		Camera( ): $mol_video_camera
-		Shot_hint( ): $mol_paragraph
-		shot_content( ): readonly(any)[]
-		Shot( ): $mol_check
-		Shot_field( ): $mol_form_field
-		Name( ): $mol_string
-		Name_field( ): $mol_form_field
-		Age_self( ): $mol_switch
-		Sex_self( ): $mol_switch
-		Self_controls( ): $mol_view
-		Self( ): $mol_form_field
-		Age_pref( ): $mol_check_list
-		Sex_pref( ): $mol_check_list
-		Pref_controls( ): $mol_view
-		Pref( ): $mol_form_field
-		Tags( ): $mol_form_group
-		Univer( ): $hyoo_match_univer
-		Univer_field( ): $mol_form_field
-		places_enabled( ): boolean
-		Places( ): $hyoo_match_places
-		Places_field( ): $mol_form_field
-		Location( ): $mol_form_group
-		Greet( ): $mol_textarea
-		Greet_field( ): $mol_form_field
-		Contacts_hint( ): $mol_paragraph
-		Contacts( ): $mol_textarea
-		Contacts_field( ): $mol_form_field
-		title( ): string
-		single( ): $hyoo_match_single
-		bid_required( id: any): string
-		bid_one( id: any): string
-		tools( ): readonly(any)[]
-		foot( ): readonly(any)[]
-		body( ): readonly(any)[]
-	}
-	
-}
-
-//# sourceMappingURL=settings.view.tree.d.ts.map
-declare namespace $.$$ {
-    class $hyoo_match_single_settings extends $.$hyoo_match_single_settings {
-        photo(): string;
-        shot_bid(): string;
-        live(next?: boolean): boolean;
-        shot_content(): ($.$mol_paragraph | $.$mol_video_camera)[] | ($.$mol_paragraph | $.$mol_image)[];
-        tools(): $.$mol_paragraph[];
-        Incoplete(): $.$mol_paragraph;
-        Next(): $.$mol_link;
-        bid_required(name: $mol_type_keys_extract<Omit<$hyoo_match_single_settings, `bid_${string}`>, () => string>): string;
-        bid_one(name: $mol_type_keys_extract<Omit<$hyoo_match_single_settings, `bid_${string}`>, () => any[]>): string;
-        places_enabled(): boolean;
-    }
-}
-
-declare namespace $.$$ {
-}
-
-declare namespace $ {
-    function $mol_array_shuffle<Item>(array: readonly Item[]): Item[];
-}
-
-declare namespace $ {
-    class $hyoo_match_lobby extends $hyoo_meta_model {
-        lookup(path: [place: string, age_self: string, sex_self: string, age_pref: string, sex_pref: string]): $hyoo_crowd_list;
-        lookup_has(path: [place: string, age_self: string, sex_self: string, age_pref: string, sex_pref: string], next?: boolean): boolean;
-        lookup_list(path: [place: string, age_self: string, sex_self: string, age_pref: string, sex_pref: string]): `${string}_${string}`[];
-        collect_all([place, age_self, sex_self, age_pref, sex_pref]: [
-            place: string[],
-            age_self: string[],
-            sex_self: string[],
-            age_pref: string[],
-            sex_pref: string[]
-        ]): Set<`${string}_${string}`>;
-        find_pair(self: $hyoo_match_single): $hyoo_match_single | null;
-    }
-}
-
-declare namespace $ {
-
-	type $mol_image__uri_hyoo_match_single_card_1 = $mol_type_enforce<
-		ReturnType< $hyoo_match_single_card['photo'] >
-		,
-		ReturnType< $mol_image['uri'] >
-	>
-	type $mol_paragraph__title_hyoo_match_single_card_2 = $mol_type_enforce<
-		ReturnType< $hyoo_match_single_card['name'] >
-		,
-		ReturnType< $mol_paragraph['title'] >
-	>
-	type $mol_paragraph__title_hyoo_match_single_card_3 = $mol_type_enforce<
-		ReturnType< $hyoo_match_single_card['tags'] >
-		,
-		ReturnType< $mol_paragraph['title'] >
-	>
-	type $hyoo_match_places__enabled_hyoo_match_single_card_4 = $mol_type_enforce<
-		boolean
-		,
-		ReturnType< $hyoo_match_places['enabled'] >
-	>
-	type $hyoo_match_places__Pick_hyoo_match_single_card_5 = $mol_type_enforce<
-		any
-		,
-		ReturnType< $hyoo_match_places['Pick'] >
-	>
-	type $hyoo_match_places__value_hyoo_match_single_card_6 = $mol_type_enforce<
-		ReturnType< $hyoo_match_single_card['places'] >
-		,
-		ReturnType< $hyoo_match_places['value'] >
-	>
-	type $mol_view__sub_hyoo_match_single_card_7 = $mol_type_enforce<
-		readonly(any)[]
-		,
-		ReturnType< $mol_view['sub'] >
-	>
-	type $mol_text__text_hyoo_match_single_card_8 = $mol_type_enforce<
-		ReturnType< $hyoo_match_single_card['greet'] >
-		,
-		ReturnType< $mol_text['text'] >
-	>
-	type $mol_text__text_hyoo_match_single_card_9 = $mol_type_enforce<
-		ReturnType< $hyoo_match_single_card['contacts'] >
-		,
-		ReturnType< $mol_text['text'] >
-	>
-	type $mol_list__rows_hyoo_match_single_card_10 = $mol_type_enforce<
-		readonly(any)[]
-		,
-		ReturnType< $mol_list['rows'] >
-	>
-	export class $hyoo_match_single_card extends $mol_view {
-		name( ): ReturnType< ReturnType< $hyoo_match_single_card['single'] >['title'] >
-		greet( ): ReturnType< ReturnType< $hyoo_match_single_card['single'] >['greet'] >
-		contacts( ): ReturnType< ReturnType< $hyoo_match_single_card['single'] >['contacts'] >
-		places( ): ReturnType< ReturnType< $hyoo_match_single_card['single'] >['places'] >
-		sex_self( ): ReturnType< ReturnType< $hyoo_match_single_card['single'] >['sex_self'] >
-		age_self( ): ReturnType< ReturnType< $hyoo_match_single_card['single'] >['age_self'] >
-		sex_pref( ): ReturnType< ReturnType< $hyoo_match_single_card['single'] >['sex_pref_all'] >
-		age_pref( ): ReturnType< ReturnType< $hyoo_match_single_card['single'] >['age_pref_all'] >
-		photo( ): string
-		Photo( ): $mol_image
-		Name( ): $mol_paragraph
-		tags( ): string
-		Tags( ): $mol_paragraph
-		Places( ): $hyoo_match_places
-		Filters( ): $mol_view
-		Brief( ): $mol_text
-		Contacts( ): $mol_text
-		Info( ): $mol_list
-		single( ): $hyoo_match_single
-		minimal_width( ): number
-		minimal_height( ): number
-		sub( ): readonly(any)[]
-	}
-	
-}
-
-//# sourceMappingURL=card.view.tree.d.ts.map
-declare namespace $.$$ {
-    class $hyoo_match_single_card extends $.$hyoo_match_single_card {
-        photo(): string;
-        tags(): string;
-    }
-}
-
-declare namespace $.$$ {
-}
-
-declare namespace $ {
-
-	type $hyoo_match_single_card__single_hyoo_match_lobby_page_1 = $mol_type_enforce<
-		ReturnType< $hyoo_match_lobby_page['single'] >
-		,
-		ReturnType< $hyoo_match_single_card['single'] >
-	>
-	type $mol_list__rows_hyoo_match_lobby_page_2 = $mol_type_enforce<
-		ReturnType< $hyoo_match_lobby_page['single_list'] >
-		,
-		ReturnType< $mol_list['rows'] >
-	>
-	export class $hyoo_match_lobby_page extends $mol_page {
-		single( id: any): $hyoo_match_single
-		Single( id: any): $hyoo_match_single_card
-		single_list( ): readonly(any)[]
-		Single_list( ): $mol_list
-		title( ): string
-		lobby( ): $hyoo_match_lobby
-		body( ): readonly(any)[]
-	}
-	
-}
-
-//# sourceMappingURL=page.view.tree.d.ts.map
-declare namespace $.$$ {
-    class $hyoo_match_lobby_page extends $.$hyoo_match_lobby_page {
-        singles(): `${string}_${string}`[];
-        single_list(): $.$hyoo_match_single_card[];
-        single(id: $mol_int62_string): $hyoo_match_single;
-    }
-}
-
-declare namespace $.$$ {
-}
-
-declare namespace $ {
-
-	export class $mol_icon_share_variant extends $mol_icon {
-		path( ): string
-	}
-	
-}
-
-//# sourceMappingURL=variant.view.tree.d.ts.map
-declare namespace $ {
-
-	export class $mol_button_share extends $mol_button_minor {
-		Icon( ): $mol_icon_share_variant
-		title( ): string
-		uri( ): string
-		capture( ): any
-		hint( ): string
-		sub( ): readonly(any)[]
-	}
-	
-}
-
-//# sourceMappingURL=share.view.tree.d.ts.map
-declare namespace $.$$ {
-    class $mol_button_share extends $.$mol_button_share {
-        capture(): any;
-        uri(): string;
-        click(): Promise<void>;
-    }
-}
-
-declare namespace $.$$ {
-    class $hyoo_match_final extends $.$hyoo_match_final {
-        reset(): void;
-    }
-}
-
-declare namespace $ {
-
-	type $mol_button_minor__title_hyoo_match_final_1 = $mol_type_enforce<
-		string
-		,
-		ReturnType< $mol_button_minor['title'] >
-	>
-	type $mol_button_minor__click_hyoo_match_final_2 = $mol_type_enforce<
-		ReturnType< $hyoo_match_final['reset'] >
-		,
-		ReturnType< $mol_button_minor['click'] >
-	>
-	type $mol_text__text_hyoo_match_final_3 = $mol_type_enforce<
-		string
-		,
-		ReturnType< $mol_text['text'] >
-	>
-	type $mol_button_share__capture_hyoo_match_final_4 = $mol_type_enforce<
-		ReturnType< $hyoo_match_final['Content'] >
-		,
-		ReturnType< $mol_button_share['capture'] >
-	>
-	type $mol_button_share__uri_hyoo_match_final_5 = $mol_type_enforce<
-		string
-		,
-		ReturnType< $mol_button_share['uri'] >
-	>
-	type $mol_button_share__title_hyoo_match_final_6 = $mol_type_enforce<
-		string
-		,
-		ReturnType< $mol_button_share['title'] >
-	>
-	type $mol_text__text_hyoo_match_final_7 = $mol_type_enforce<
-		string
-		,
-		ReturnType< $mol_text['text'] >
-	>
-	export class $hyoo_match_final extends $mol_page {
-		reset( next?: any ): any
-		Reset( ): $mol_button_minor
-		Result( ): $mol_text
-		Share( ): $mol_button_share
-		Content( ): $mol_text
-		title( ): string
-		self( ): $hyoo_match_single
-		foot( ): readonly(any)[]
-		body( ): readonly(any)[]
-	}
-	
-}
-
-//# sourceMappingURL=final.view.tree.d.ts.map
-declare namespace $.$$ {
-}
-
-declare namespace $ {
-
-	export class $mol_icon_window_close extends $mol_icon {
-		path( ): string
-	}
-	
-}
-
-//# sourceMappingURL=close.view.tree.d.ts.map
-declare namespace $ {
-
-	export class $mol_icon_heart_flash extends $mol_icon {
-		path( ): string
-	}
-	
-}
-
-//# sourceMappingURL=flash.view.tree.d.ts.map
-declare namespace $ {
-
-	export class $mol_icon_heart_outline extends $mol_icon {
-		path( ): string
-	}
-	
-}
-
-//# sourceMappingURL=outline.view.tree.d.ts.map
-declare namespace $ {
-
-	type $mol_date__enabled_hyoo_match_single_page_1 = $mol_type_enforce<
-		boolean
-		,
-		ReturnType< $mol_date['enabled'] >
-	>
-	type $mol_date__value_moment_hyoo_match_single_page_2 = $mol_type_enforce<
-		ReturnType< $hyoo_match_single_page['photo_moment'] >
-		,
-		ReturnType< $mol_date['value_moment'] >
-	>
-	type $mol_image__uri_hyoo_match_single_page_3 = $mol_type_enforce<
-		ReturnType< $hyoo_match_single_page['photo'] >
-		,
-		ReturnType< $mol_image['uri'] >
-	>
-	type $mol_button_minor__hint_hyoo_match_single_page_4 = $mol_type_enforce<
-		string
-		,
-		ReturnType< $mol_button_minor['hint'] >
-	>
-	type $mol_button_minor__click_hyoo_match_single_page_5 = $mol_type_enforce<
-		ReturnType< $hyoo_match_single_page['skip'] >
-		,
-		ReturnType< $mol_button_minor['click'] >
-	>
-	type $mol_button_minor__sub_hyoo_match_single_page_6 = $mol_type_enforce<
-		readonly(any)[]
-		,
-		ReturnType< $mol_button_minor['sub'] >
-	>
-	type $mol_row__sub_hyoo_match_single_page_7 = $mol_type_enforce<
-		readonly(any)[]
-		,
-		ReturnType< $mol_row['sub'] >
-	>
-	type $mol_button_minor__hint_hyoo_match_single_page_8 = $mol_type_enforce<
-		string
-		,
-		ReturnType< $mol_button_minor['hint'] >
-	>
-	type $mol_button_minor__click_hyoo_match_single_page_9 = $mol_type_enforce<
-		ReturnType< $hyoo_match_single_page['like'] >
-		,
-		ReturnType< $mol_button_minor['click'] >
-	>
-	type $mol_button_minor__sub_hyoo_match_single_page_10 = $mol_type_enforce<
-		readonly(any)[]
-		,
-		ReturnType< $mol_button_minor['sub'] >
-	>
-	type $mol_stack__sub_hyoo_match_single_page_11 = $mol_type_enforce<
-		ReturnType< $hyoo_match_single_page['gallery'] >
-		,
-		ReturnType< $mol_stack['sub'] >
-	>
-	type $mol_text__text_hyoo_match_single_page_12 = $mol_type_enforce<
-		ReturnType< $hyoo_match_single_page['match_hint'] >
-		,
-		ReturnType< $mol_text['text'] >
-	>
-	type $mol_text__text_hyoo_match_single_page_13 = $mol_type_enforce<
-		ReturnType< $hyoo_match_single_page['contacts'] >
-		,
-		ReturnType< $mol_text['text'] >
-	>
-	type $mol_list__rows_hyoo_match_single_page_14 = $mol_type_enforce<
-		readonly(any)[]
-		,
-		ReturnType< $mol_list['rows'] >
-	>
-	type $hyoo_match_places__enabled_hyoo_match_single_page_15 = $mol_type_enforce<
-		boolean
-		,
-		ReturnType< $hyoo_match_places['enabled'] >
-	>
-	type $hyoo_match_places__Pick_hyoo_match_single_page_16 = $mol_type_enforce<
-		any
-		,
-		ReturnType< $hyoo_match_places['Pick'] >
-	>
-	type $hyoo_match_places__value_hyoo_match_single_page_17 = $mol_type_enforce<
-		ReturnType< $hyoo_match_single_page['places'] >
-		,
-		ReturnType< $hyoo_match_places['value'] >
-	>
-	type $mol_text__text_hyoo_match_single_page_18 = $mol_type_enforce<
-		ReturnType< $hyoo_match_single_page['greet'] >
-		,
-		ReturnType< $mol_text['text'] >
-	>
-	export class $hyoo_match_single_page extends $mol_page {
-		name( ): ReturnType< ReturnType< $hyoo_match_single_page['pair'] >['title'] >
-		greet( ): ReturnType< ReturnType< $hyoo_match_single_page['pair'] >['greet'] >
-		contacts( ): ReturnType< ReturnType< $hyoo_match_single_page['pair'] >['contacts'] >
-		places( ): ReturnType< ReturnType< $hyoo_match_single_page['pair'] >['places'] >
-		photo_moment( ): ReturnType< ReturnType< $hyoo_match_single_page['pair'] >['photo_moment'] >
-		Moment( ): $mol_date
-		photo( ): string
-		Photo( ): $mol_image
-		skip( next?: any ): any
-		Skip_icon( ): $mol_icon_window_close
-		Skip( ): $mol_button_minor
-		Mutual_icon( ): $mol_icon_heart_flash
-		Mutual( ): $mol_row
-		like( next?: any ): any
-		Like_icon( ): $mol_icon_heart_outline
-		Like( ): $mol_button_minor
-		gallery( ): readonly(any)[]
-		Gallery( ): $mol_stack
-		match_hint( ): string
-		Match_hint( ): $mol_text
-		Contacts( ): $mol_text
-		Match( ): $mol_list
-		Places( ): $hyoo_match_places
-		Brief( ): $mol_text
-		title( ): string
-		self( ): $hyoo_match_single
-		pair( ): $hyoo_match_single
-		mutual( ): boolean
-		title_content( ): readonly(any)[]
-		tools( ): readonly(any)[]
-		body( ): readonly(any)[]
-	}
-	
-}
-
-//# sourceMappingURL=page.view.tree.d.ts.map
-declare namespace $.$$ {
-    class $hyoo_match_single_page extends $.$hyoo_match_single_page {
-        photo(): string;
-        self(): $hyoo_match_single;
-        like(): void;
-        skip(): void;
-        mutual(): boolean;
-        dating_range(): $mol_time_interval | null;
-        match_hint(): string;
-        Match(): $.$mol_list;
-        gallery(): ($mol_button_minor | $.$mol_image | $mol_row)[];
-    }
-}
-
-declare namespace $.$$ {
-}
-
-declare namespace $ {
-    class $mol_vk extends $mol_object2 {
-        static init(): void;
-        static send(handler: string, params?: Record<string, any>): void;
-    }
-}
-
-declare namespace $ {
-
-	type $mol_paragraph__title_hyoo_match_app_1 = $mol_type_enforce<
-		ReturnType< $hyoo_match_app['stats'] >
-		,
-		ReturnType< $mol_paragraph['title'] >
-	>
-	type $hyoo_sync_online__yard_hyoo_match_app_2 = $mol_type_enforce<
-		ReturnType< $hyoo_match_app['yard'] >
-		,
-		ReturnType< $hyoo_sync_online['yard'] >
-	>
-	type $mol_link_source__uri_hyoo_match_app_3 = $mol_type_enforce<
-		string
-		,
-		ReturnType< $mol_link_source['uri'] >
-	>
-	type $mol_link_iconed__hint_hyoo_match_app_4 = $mol_type_enforce<
-		string
-		,
-		ReturnType< $mol_link_iconed['hint'] >
-	>
-	type $mol_link_iconed__uri_hyoo_match_app_5 = $mol_type_enforce<
-		string
-		,
-		ReturnType< $mol_link_iconed['uri'] >
-	>
-	type $mol_link_iconed__sub_hyoo_match_app_6 = $mol_type_enforce<
-		readonly(any)[]
-		,
-		ReturnType< $mol_link_iconed['sub'] >
-	>
-	type $hyoo_match_single_settings__single_hyoo_match_app_7 = $mol_type_enforce<
-		ReturnType< $hyoo_match_app['self'] >
-		,
-		ReturnType< $hyoo_match_single_settings['single'] >
-	>
-	type $mol_book2__pages_hyoo_match_app_8 = $mol_type_enforce<
-		ReturnType< $hyoo_match_app['look_pages'] >
-		,
-		ReturnType< $mol_book2['pages'] >
-	>
-	type $hyoo_meta_safe__yard_hyoo_match_app_9 = $mol_type_enforce<
-		ReturnType< $hyoo_match_app['yard'] >
-		,
-		ReturnType< $hyoo_meta_safe['yard'] >
-	>
-	type $hyoo_match_lobby_page__lobby_hyoo_match_app_10 = $mol_type_enforce<
-		ReturnType< $hyoo_match_app['lobby'] >
-		,
-		ReturnType< $hyoo_match_lobby_page['lobby'] >
-	>
-	type $hyoo_match_final__self_hyoo_match_app_11 = $mol_type_enforce<
-		ReturnType< $hyoo_match_app['self'] >
-		,
-		ReturnType< $hyoo_match_final['self'] >
-	>
-	type $hyoo_match_single_page__pair_hyoo_match_app_12 = $mol_type_enforce<
-		ReturnType< $hyoo_match_app['pair'] >
-		,
-		ReturnType< $hyoo_match_single_page['pair'] >
-	>
-	export class $hyoo_match_app extends $mol_book2_catalog {
-		Theme( ): $mol_theme_auto
-		lobby_update( ): any
-		redirects( ): any
-		Lights( ): $mol_lights_toggle
-		stats( ): string
-		Stats( ): $mol_paragraph
-		yard( ): $hyoo_sync_client
-		Online( ): $hyoo_sync_online
-		Source( ): $mol_link_source
-		Support_icon( ): $mol_icon_face_agent
-		Support( ): $mol_link_iconed
-		Intro( ): $hyoo_match_intro
-		Settings( ): $hyoo_match_single_settings
-		look_pages( ): readonly(any)[]
-		Look( ): $mol_book2
-		Safe( ): $hyoo_meta_safe
-		Lobby( ): $hyoo_match_lobby_page
-		lobby( ): $hyoo_match_lobby
-		self( ): $hyoo_match_single
-		pair( ): $hyoo_match_single
-		plugins( ): readonly(any)[]
-		auto( ): readonly(any)[]
-		menu_title( ): string
-		menu_tools( ): readonly(any)[]
-		menu_body( ): readonly(any)[]
-		menu_foot( ): readonly(any)[]
-		Placeholder( ): any
-		Final( ): $hyoo_match_final
-		Pair( ): $hyoo_match_single_page
-		spreads( ): ({ 
-			'': ReturnType< $hyoo_match_app['Intro'] >,
-			'settings': ReturnType< $hyoo_match_app['Settings'] >,
-			'look': ReturnType< $hyoo_match_app['Look'] >,
-			'safe': ReturnType< $hyoo_match_app['Safe'] >,
-			'lobby': ReturnType< $hyoo_match_app['Lobby'] >,
-		}) 
-	}
-	
-}
-
-//# sourceMappingURL=app.view.tree.d.ts.map
-declare namespace $.$$ {
-    class $hyoo_match_app extends $.$hyoo_match_app {
-        self(): $hyoo_match_single;
-        pair(): $hyoo_match_single;
-        lobby(): $hyoo_match_lobby;
-        intro(): $hyoo_page_side;
-        lobby_update(): void;
-        stats(): string;
-        look_pages(): $.$hyoo_match_final[] | $.$hyoo_match_single_page[];
-        redirects(): void;
-        menu_links(): readonly any[];
-    }
-}
-
-declare namespace $.$$ {
-}
-
-declare namespace $ {
-
 	type __piterjs_app_1 = $mol_type_enforce<
 		Parameters< $piterjs_app['meetup'] >[0]
 		,
@@ -15335,69 +13751,64 @@ declare namespace $ {
 	>
 	type $mol_link__arg_piterjs_app_22 = $mol_type_enforce<
 		({ 
-			'love': string,
-			'wiki': any,
+			'wiki': string,
 			'meetup': any,
 		}) 
 		,
 		ReturnType< $mol_link['arg'] >
 	>
 	type $mol_link__title_piterjs_app_23 = $mol_type_enforce<
-		ReturnType< $piterjs_app['love_title'] >
-		,
-		ReturnType< $mol_link['title'] >
-	>
-	type $mol_link__arg_piterjs_app_24 = $mol_type_enforce<
-		({ 
-			'wiki': string,
-			'meetup': any,
-			'love': any,
-		}) 
-		,
-		ReturnType< $mol_link['arg'] >
-	>
-	type $mol_link__title_piterjs_app_25 = $mol_type_enforce<
 		string
 		,
 		ReturnType< $mol_link['title'] >
 	>
-	type $mol_list__rows_piterjs_app_26 = $mol_type_enforce<
+	type $mol_list__rows_piterjs_app_24 = $mol_type_enforce<
 		readonly(any)[]
 		,
 		ReturnType< $mol_list['rows'] >
 	>
-	type $mol_list__rows_piterjs_app_27 = $mol_type_enforce<
+	type $mol_list__rows_piterjs_app_25 = $mol_type_enforce<
 		ReturnType< $piterjs_app['menu_meetups'] >
 		,
 		ReturnType< $mol_list['rows'] >
 	>
-	type $mol_view__sub_piterjs_app_28 = $mol_type_enforce<
+	type $mol_view__sub_piterjs_app_26 = $mol_type_enforce<
 		readonly(any)[]
 		,
 		ReturnType< $mol_view['sub'] >
 	>
-	type $mol_view__sub_piterjs_app_29 = $mol_type_enforce<
+	type $mol_view__sub_piterjs_app_27 = $mol_type_enforce<
 		readonly(any)[]
 		,
 		ReturnType< $mol_view['sub'] >
 	>
-	type $mol_link__uri_piterjs_app_30 = $mol_type_enforce<
+	type $mol_link__uri_piterjs_app_28 = $mol_type_enforce<
 		string
 		,
 		ReturnType< $mol_link['uri'] >
 	>
-	type $mol_link__sub_piterjs_app_31 = $mol_type_enforce<
+	type $mol_link__sub_piterjs_app_29 = $mol_type_enforce<
 		readonly(any)[]
 		,
 		ReturnType< $mol_link['sub'] >
 	>
-	type $mol_view__sub_piterjs_app_32 = $mol_type_enforce<
+	type $mol_view__sub_piterjs_app_30 = $mol_type_enforce<
 		readonly(any)[]
 		,
 		ReturnType< $mol_view['sub'] >
 	>
-	type $mol_check__checked_piterjs_app_33 = $mol_type_enforce<
+	type $mol_check__checked_piterjs_app_31 = $mol_type_enforce<
 		ReturnType< $piterjs_app['rights'] >
+		,
+		ReturnType< $mol_check['checked'] >
+	>
+	type $mol_check__sub_piterjs_app_32 = $mol_type_enforce<
+		readonly(any)[]
+		,
+		ReturnType< $mol_check['sub'] >
+	>
+	type $mol_check__checked_piterjs_app_33 = $mol_type_enforce<
+		ReturnType< $piterjs_app['rights_meetup'] >
 		,
 		ReturnType< $mol_check['checked'] >
 	>
@@ -15406,214 +13817,182 @@ declare namespace $ {
 		,
 		ReturnType< $mol_check['sub'] >
 	>
-	type $mol_check__checked_piterjs_app_35 = $mol_type_enforce<
-		ReturnType< $piterjs_app['rights_meetup'] >
-		,
-		ReturnType< $mol_check['checked'] >
-	>
-	type $mol_check__sub_piterjs_app_36 = $mol_type_enforce<
-		readonly(any)[]
-		,
-		ReturnType< $mol_check['sub'] >
-	>
-	type $mol_link__arg_piterjs_app_37 = $mol_type_enforce<
+	type $mol_link__arg_piterjs_app_35 = $mol_type_enforce<
 		({ 
 			'safe': any,
 		}) 
 		,
 		ReturnType< $mol_link['arg'] >
 	>
-	type $mol_link__sub_piterjs_app_38 = $mol_type_enforce<
+	type $mol_link__sub_piterjs_app_36 = $mol_type_enforce<
 		readonly(any)[]
 		,
 		ReturnType< $mol_link['sub'] >
 	>
-	type $mol_link__arg_piterjs_app_39 = $mol_type_enforce<
-		({ 
-			'love': any,
-		}) 
-		,
-		ReturnType< $mol_link['arg'] >
-	>
-	type $mol_link__sub_piterjs_app_40 = $mol_type_enforce<
-		readonly(any)[]
-		,
-		ReturnType< $mol_link['sub'] >
-	>
-	type $mol_page__title_piterjs_app_41 = $mol_type_enforce<
+	type $mol_page__title_piterjs_app_37 = $mol_type_enforce<
 		string
 		,
 		ReturnType< $mol_page['title'] >
 	>
-	type $mol_page__tools_piterjs_app_42 = $mol_type_enforce<
+	type $mol_page__tools_piterjs_app_38 = $mol_type_enforce<
 		ReturnType< $piterjs_app['tools'] >
 		,
 		ReturnType< $mol_page['tools'] >
 	>
-	type $mol_page__foot_piterjs_app_43 = $mol_type_enforce<
+	type $mol_page__foot_piterjs_app_39 = $mol_type_enforce<
 		ReturnType< $piterjs_app['foot'] >
 		,
 		ReturnType< $mol_page['foot'] >
 	>
-	type $mol_page__body_piterjs_app_44 = $mol_type_enforce<
+	type $mol_page__body_piterjs_app_40 = $mol_type_enforce<
 		readonly(any)[]
 		,
 		ReturnType< $mol_page['body'] >
 	>
-	type $piterjs_meetup_page__meetup_piterjs_app_45 = $mol_type_enforce<
+	type $piterjs_meetup_page__meetup_piterjs_app_41 = $mol_type_enforce<
 		ReturnType< $piterjs_app['meetup'] >
 		,
 		ReturnType< $piterjs_meetup_page['meetup'] >
 	>
-	type $piterjs_meetup_page__editing_piterjs_app_46 = $mol_type_enforce<
+	type $piterjs_meetup_page__editing_piterjs_app_42 = $mol_type_enforce<
 		ReturnType< $piterjs_app['editing'] >
 		,
 		ReturnType< $piterjs_meetup_page['editing'] >
 	>
-	type $piterjs_meetup_page__meetup_public_piterjs_app_47 = $mol_type_enforce<
+	type $piterjs_meetup_page__meetup_public_piterjs_app_43 = $mol_type_enforce<
 		ReturnType< $piterjs_app['meetup_public'] >
 		,
 		ReturnType< $piterjs_meetup_page['meetup_public'] >
 	>
-	type $piterjs_meetup_page__rights_piterjs_app_48 = $mol_type_enforce<
+	type $piterjs_meetup_page__rights_piterjs_app_44 = $mol_type_enforce<
 		ReturnType< $piterjs_app['rights_meetup'] >
 		,
 		ReturnType< $piterjs_meetup_page['rights'] >
 	>
-	type $piterjs_meetup_guests__meetup_piterjs_app_49 = $mol_type_enforce<
+	type $piterjs_meetup_guests__meetup_piterjs_app_45 = $mol_type_enforce<
 		ReturnType< $piterjs_app['meetup'] >
 		,
 		ReturnType< $piterjs_meetup_guests['meetup'] >
 	>
-	type $piterjs_meetup_texts__meetup_piterjs_app_50 = $mol_type_enforce<
+	type $piterjs_meetup_texts__meetup_piterjs_app_46 = $mol_type_enforce<
 		ReturnType< $piterjs_app['meetup'] >
 		,
 		ReturnType< $piterjs_meetup_texts['meetup'] >
 	>
-	type $piterjs_meetup_templates__meetup_piterjs_app_51 = $mol_type_enforce<
+	type $piterjs_meetup_templates__meetup_piterjs_app_47 = $mol_type_enforce<
 		ReturnType< $piterjs_app['meetup'] >
 		,
 		ReturnType< $piterjs_meetup_templates['meetup'] >
 	>
-	type $piterjs_meetup_stats__meetup_piterjs_app_52 = $mol_type_enforce<
+	type $piterjs_meetup_stats__meetup_piterjs_app_48 = $mol_type_enforce<
 		ReturnType< $piterjs_app['meetup'] >
 		,
 		ReturnType< $piterjs_meetup_stats['meetup'] >
 	>
-	type $piterjs_meetup_stats__meetup_prev_piterjs_app_53 = $mol_type_enforce<
+	type $piterjs_meetup_stats__meetup_prev_piterjs_app_49 = $mol_type_enforce<
 		ReturnType< $piterjs_app['meetup_prev'] >
 		,
 		ReturnType< $piterjs_meetup_stats['meetup_prev'] >
 	>
-	type $piterjs_speech_page__speech_piterjs_app_54 = $mol_type_enforce<
+	type $piterjs_speech_page__speech_piterjs_app_50 = $mol_type_enforce<
 		ReturnType< $piterjs_app['speech'] >
 		,
 		ReturnType< $piterjs_speech_page['speech'] >
 	>
-	type $piterjs_speech_page__editing_piterjs_app_55 = $mol_type_enforce<
+	type $piterjs_speech_page__editing_piterjs_app_51 = $mol_type_enforce<
 		ReturnType< $piterjs_app['editing'] >
 		,
 		ReturnType< $piterjs_speech_page['editing'] >
 	>
-	type $piterjs_speech_page__speech_public_piterjs_app_56 = $mol_type_enforce<
+	type $piterjs_speech_page__speech_public_piterjs_app_52 = $mol_type_enforce<
 		ReturnType< $piterjs_app['speech_public'] >
 		,
 		ReturnType< $piterjs_speech_page['speech_public'] >
 	>
-	type $piterjs_meetup_snippet__meetup_piterjs_app_57 = $mol_type_enforce<
+	type $piterjs_meetup_snippet__meetup_piterjs_app_53 = $mol_type_enforce<
 		ReturnType< $piterjs_app['meetup'] >
 		,
 		ReturnType< $piterjs_meetup_snippet['meetup'] >
 	>
-	type $piterjs_now__place_piterjs_app_58 = $mol_type_enforce<
+	type $piterjs_now__place_piterjs_app_54 = $mol_type_enforce<
 		ReturnType< $piterjs_app['place'] >
 		,
 		ReturnType< $piterjs_now['place'] >
 	>
-	type $piterjs_intro__meetup_piterjs_app_59 = $mol_type_enforce<
+	type $piterjs_intro__meetup_piterjs_app_55 = $mol_type_enforce<
 		ReturnType< $piterjs_app['meetup_current'] >
 		,
 		ReturnType< $piterjs_intro['meetup'] >
 	>
-	type $piterjs_intro__page_piterjs_app_60 = $mol_type_enforce<
+	type $piterjs_intro__page_piterjs_app_56 = $mol_type_enforce<
 		ReturnType< $piterjs_app['intro'] >
 		,
 		ReturnType< $piterjs_intro['page'] >
 	>
-	type $piterjs_video_page__source_piterjs_app_61 = $mol_type_enforce<
+	type $piterjs_video_page__source_piterjs_app_57 = $mol_type_enforce<
 		ReturnType< $piterjs_app['video_uri'] >
 		,
 		ReturnType< $piterjs_video_page['source'] >
 	>
-	type $piterjs_video_page__editing_piterjs_app_62 = $mol_type_enforce<
+	type $piterjs_video_page__editing_piterjs_app_58 = $mol_type_enforce<
 		ReturnType< $piterjs_app['editing'] >
 		,
 		ReturnType< $piterjs_video_page['editing'] >
 	>
-	type $piterjs_place_page__place_piterjs_app_63 = $mol_type_enforce<
+	type $piterjs_place_page__place_piterjs_app_59 = $mol_type_enforce<
 		ReturnType< $piterjs_app['place'] >
 		,
 		ReturnType< $piterjs_place_page['place'] >
 	>
-	type $piterjs_place_page__editing_piterjs_app_64 = $mol_type_enforce<
+	type $piterjs_place_page__editing_piterjs_app_60 = $mol_type_enforce<
 		ReturnType< $piterjs_app['editing'] >
 		,
 		ReturnType< $piterjs_place_page['editing'] >
 	>
-	type $hyoo_meta_rights__theme_piterjs_app_65 = $mol_type_enforce<
+	type $hyoo_meta_rights__theme_piterjs_app_61 = $mol_type_enforce<
 		string
 		,
 		ReturnType< $hyoo_meta_rights['theme'] >
 	>
-	type $hyoo_meta_rights__meta_piterjs_app_66 = $mol_type_enforce<
+	type $hyoo_meta_rights__meta_piterjs_app_62 = $mol_type_enforce<
 		ReturnType< $piterjs_app['Domain'] >
 		,
 		ReturnType< $hyoo_meta_rights['meta'] >
 	>
-	type $hyoo_meta_rights__tools_piterjs_app_67 = $mol_type_enforce<
+	type $hyoo_meta_rights__tools_piterjs_app_63 = $mol_type_enforce<
 		readonly(any)[]
 		,
 		ReturnType< $hyoo_meta_rights['tools'] >
 	>
-	type $hyoo_meta_rights__theme_piterjs_app_68 = $mol_type_enforce<
+	type $hyoo_meta_rights__theme_piterjs_app_64 = $mol_type_enforce<
 		string
 		,
 		ReturnType< $hyoo_meta_rights['theme'] >
 	>
-	type $hyoo_meta_rights__meta_piterjs_app_69 = $mol_type_enforce<
+	type $hyoo_meta_rights__meta_piterjs_app_65 = $mol_type_enforce<
 		ReturnType< $piterjs_app['meetup_current'] >
 		,
 		ReturnType< $hyoo_meta_rights['meta'] >
 	>
-	type $hyoo_meta_rights__tools_piterjs_app_70 = $mol_type_enforce<
+	type $hyoo_meta_rights__tools_piterjs_app_66 = $mol_type_enforce<
 		readonly(any)[]
 		,
 		ReturnType< $hyoo_meta_rights['tools'] >
 	>
-	type $hyoo_page__side_main_id_piterjs_app_71 = $mol_type_enforce<
+	type $hyoo_page__side_main_id_piterjs_app_67 = $mol_type_enforce<
 		string
 		,
 		ReturnType< $hyoo_page['side_main_id'] >
 	>
-	type $hyoo_page__yard_piterjs_app_72 = $mol_type_enforce<
+	type $hyoo_page__yard_piterjs_app_68 = $mol_type_enforce<
 		ReturnType< $piterjs_app['Yard'] >
 		,
 		ReturnType< $hyoo_page['yard'] >
 	>
-	type $hyoo_meta_safe__tools_piterjs_app_73 = $mol_type_enforce<
+	type $hyoo_meta_safe__tools_piterjs_app_69 = $mol_type_enforce<
 		readonly(any)[]
 		,
 		ReturnType< $hyoo_meta_safe['tools'] >
-	>
-	type $hyoo_match_app__menu_title_piterjs_app_74 = $mol_type_enforce<
-		ReturnType< $piterjs_app['love_title'] >
-		,
-		ReturnType< $hyoo_match_app['menu_title'] >
-	>
-	type $hyoo_match_app__menu_tools_piterjs_app_75 = $mol_type_enforce<
-		readonly(any)[]
-		,
-		ReturnType< $hyoo_match_app['menu_tools'] >
 	>
 	export class $piterjs_app extends $mol_view {
 		meetups( ): ReturnType< ReturnType< $piterjs_app['Domain'] >['meetups'] >
@@ -15646,7 +14025,6 @@ declare namespace $ {
 		User( ): $mol_view
 		Lights( ): $mol_lights_toggle
 		foot( ): readonly(any)[]
-		Love_link( ): $mol_link
 		Wiki_link( ): $mol_link
 		Links( ): $mol_list
 		menu_meetups( ): readonly(any)[]
@@ -15669,9 +14047,6 @@ declare namespace $ {
 		Rights_meetup_close( ): $mol_check
 		Safe_close_icon( ): $mol_icon_close
 		Safe_close( ): $mol_link
-		love_title( ): string
-		Love_close_icon( ): $mol_icon_close
-		Love_close( ): $mol_link
 		Domain( ): $piterjs_domain
 		plugins( ): readonly(any)[]
 		sub( ): readonly(any)[]
@@ -15692,7 +14067,6 @@ declare namespace $ {
 		Rights_meetup( ): $hyoo_meta_rights
 		Wiki( ): $hyoo_page
 		Safe( ): $hyoo_meta_safe
-		Love( ): $hyoo_match_app
 	}
 	
 }
@@ -15713,7 +14087,6 @@ declare namespace $.$$ {
         templates(): boolean;
         stats(): boolean;
         safe(): boolean;
-        love(): boolean;
         meetup_id(next?: string | null): string | null;
         meetup_add(): void;
         speech_id(next?: string): string | null;

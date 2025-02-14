@@ -1,7 +1,6 @@
 {
 	"$hyoo_map_Draw_hint": "Рисовать на карте",
 	"$hyoo_map_Photo_hint": "Реальные фото",
-	"$hyoo_match_single_settings_Pref_name": "Мне нравятся ...",
 	"$hyoo_meta_link_all_title": "Все",
 	"$hyoo_meta_menu_Add_hint": "Создать ещё",
 	"$hyoo_meta_menu_Editing_hint": "Редактировать список",
@@ -53,8 +52,6 @@
 	"$hyoo_page_side_view_Info_toggle_hint": "О странице",
 	"$hyoo_page_side_view_Menu_toggle_hint": "Отображение меню",
 	"$hyoo_page_side_view_Search_toggle_hint": "Поиск по странице",
-	"$mol_book2_catalog_Spread_close_hint": "Закрыть страницу",
-	"$mol_button_share_hint": "Поделиться",
 	"$mol_date_next_hint": "Следующий месяц",
 	"$mol_date_prev_hint": "Предыдущий месяц",
 	"$mol_hint_hint_close": "Скрыть",
@@ -67,8 +64,6 @@
 	"$mol_search_hint": "Поиск..",
 	"$mol_select_filter_hint": "Фильтр..",
 	"$mol_select_hint": "Выбрать..",
-	"$mol_select_list_badge_hint": "Убрать",
-	"$mol_select_list_pick_hint": "Добавить..",
 	"$mol_select_no_options_message": "Нет вариантов",
 	"$mol_text_code_Copy_hint": "Скопировать весь код",
 	"$mol_text_header_Link_hint": "Ссылка на эту секцию"
