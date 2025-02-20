@@ -30133,7 +30133,7 @@ var $;
 			const obj = new this.$.$piterjs_intro_page();
 			(obj.text) = () => ((this.place_notes()));
 			(obj.title) = () => ((this.place_title()));
-			(obj.text) = () => ("\"\"https://i.imgur.com/9cBS6I8.png\"\"");
+			(obj.text) = () => ("\"\"https://i.imgur.com/CqpZAzE.png\"\"");
 			return obj;
 		}
 		Follow(){
