@@ -269,6 +269,7 @@
     "$mol_buffer",
     "$mol_base64_ae",
     "$mol_crypto_salt",
+    "$mol_crypto_restack",
     "$piterjs_secret",
     "$mol_crypto_hash",
     "$mol_page",

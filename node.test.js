@@ -11704,10 +11704,17 @@ var $;
 "use strict";
 var $;
 (function ($) {
-    function restack(error) {
+    function $mol_crypto_restack(error) {
         error = new Error(error instanceof Error ? error.message : String(error), { cause: error });
         $mol_fail_hidden(error);
     }
+    $.$mol_crypto_restack = $mol_crypto_restack;
+})($ || ($ = {}));
+
+;
+"use strict";
+var $;
+(function ($) {
     class $mol_crypto_sacred extends $mol_buffer {
         static size = 16;
         static make() {
@@ -11728,7 +11735,7 @@ var $;
             return sacred;
         }
         static async from_native(native) {
-            const buf = await $mol_crypto_native.subtle.exportKey('raw', native).catch(restack);
+            const buf = await $mol_crypto_native.subtle.exportKey('raw', native).catch($mol_crypto_restack);
             const sacred = this.from(new Uint8Array(buf));
             sacred._native = native;
             return sacred;
@@ -11746,7 +11753,7 @@ var $;
             return this._native ?? (this._native = await $mol_crypto_native.subtle.importKey('raw', this, {
                 name: 'AES-CBC',
                 length: 128,
-            }, true, ['encrypt', 'decrypt']).catch(restack));
+            }, true, ['encrypt', 'decrypt']).catch($mol_crypto_restack));
         }
         async encrypt(open, salt) {
             return new Uint8Array(await $mol_crypto_native.subtle.encrypt({
@@ -11754,7 +11761,7 @@ var $;
                 length: 128,
                 tagLength: 32,
                 iv: salt,
-            }, await this.native(), open).catch(restack));
+            }, await this.native(), open).catch($mol_crypto_restack));
         }
         async decrypt(closed, salt) {
             return new Uint8Array(await $mol_crypto_native.subtle.decrypt({
@@ -11762,7 +11769,7 @@ var $;
                 length: 128,
                 tagLength: 32,
                 iv: salt,
-            }, await this.native(), closed).catch(restack));
+            }, await this.native(), closed).catch($mol_crypto_restack));
         }
         async close(sacred, salt) {
             const buf = new Uint8Array(sacred.buffer, sacred.byteOffset + 1, sacred.byteLength - 1);
@@ -30576,7 +30583,7 @@ var $;
 		Projects(){
 			const obj = new this.$.$piterjs_intro_page();
 			(obj.title) = () => ("Наши проекты");
-			(obj.text) = () => ("PiterJS **Meetups** - митапы в Петербурге\nPiterJS **Picnic** - прогулки и общение\n--\nPiterJS **Conf** - конференции\nPiterJS **Code+Learn** - воркшопы");
+			(obj.text) = () => ("PiterJS **Meetups** - митапы в Петербурге\nPiterJS **Picnic** - прогулки и общение\nPiterJS **Reflect** - рефлексивные подкасты\n--\nPiterJS **Conf** - конференции\nPiterJS **Code+Learn** - воркшопы");
 			return obj;
 		}
 		Community(){
@@ -30600,7 +30607,7 @@ var $;
 		Team(){
 			const obj = new this.$.$piterjs_intro_page();
 			(obj.title) = () => ("Команда");
-			(obj.text) = () => ("! \"\"https://i.imgur.com/KoX0d8g.jpeg\"\"\n  ! \"\"https://habrastorage.org/webt/mb/oz/2-/mboz2-qxenahgayijecyblbo6ka.jpeg\"\"\n    ! \"\"https://i.imgur.com/V2Rkj38.jpeg\"\"\n! \"\"https://habrastorage.org/webt/xi/xd/hk/xixdhke23wtbhpnaz7gyuifpxnm.jpeg\"\"\n  ! \"\"https://i.imgur.com/n2Fxkqv.png\"\"\n    ! \"\"https://i.imgur.com/4uEtyGD.jpeg\"\"\n! \"\"https://i.imgur.com/FS8bvSe.jpeg\"\"\n  ! \"\"https://i.imgur.com/KiAK2i0.jpeg\"\"\n    ! \"\"https://i.imgur.com/R86XxcW.jpeg\"\"");
+			(obj.text) = () => ("! \"\"https://i.imgur.com/KoX0d8g.jpeg\"\"\n  ! \"\"https://habrastorage.org/webt/mb/oz/2-/mboz2-qxenahgayijecyblbo6ka.jpeg\"\"\n    ! \"\"https://i.imgur.com/V2Rkj38.jpeg\"\"\n\n! \"\"https://habrastorage.org/webt/xi/xd/hk/xixdhke23wtbhpnaz7gyuifpxnm.jpeg\"\"\n  ! \"\"https://i.imgur.com/n2Fxkqv.png\"\"\n    ! \"\"https://i.imgur.com/FS8bvSe.jpeg\"\"\n      ! \"\"https://i.imgur.com/KiAK2i0.jpeg\"\"");
 			return obj;
 		}
 		Speakers(){
@@ -35809,7 +35816,7 @@ var $;
                 kty: "EC",
                 x: str.slice(0, 43),
                 y: str.slice(43, 86),
-            }, ecdsa, Boolean('extractable'), ['verify']);
+            }, ecdsa, Boolean('extractable'), ['verify']).catch($mol_crypto_restack);
         }
         async native_derive() {
             const serial = this.toString();
@@ -35818,10 +35825,10 @@ var $;
                 key_ops: [],
                 x: serial.slice(0, 43),
                 y: serial.slice(43, 86),
-            }, ecdh, true, []);
+            }, ecdh, true, []).catch($mol_crypto_restack);
         }
         async verify(data, sign) {
-            return await $mol_crypto_native.subtle.verify(ecdsa, await this.native(), sign, data);
+            return await $mol_crypto_native.subtle.verify(ecdsa, await this.native(), sign, data).catch($mol_crypto_restack);
         }
     }
     __decorate([
@@ -35836,8 +35843,8 @@ var $;
         static size_bin = 96;
         static size_sign = 64;
         static async generate() {
-            const pair = await $mol_crypto_native.subtle.generateKey(ecdsa, Boolean('extractable'), ['sign', 'verify']);
-            const { x, y, d } = await $mol_crypto_native.subtle.exportKey('jwk', pair.privateKey);
+            const pair = await $mol_crypto_native.subtle.generateKey(ecdsa, Boolean('extractable'), ['sign', 'verify']).catch($mol_crypto_restack);
+            const { x, y, d } = await $mol_crypto_native.subtle.exportKey('jwk', pair.privateKey).catch($mol_crypto_restack);
             return this.from(x + y + d);
         }
         async native() {
@@ -35850,7 +35857,7 @@ var $;
                 x: str.slice(0, 43),
                 y: str.slice(43, 86),
                 d: str.slice(86, 129),
-            }, ecdsa, Boolean('extractable'), ['sign']);
+            }, ecdsa, Boolean('extractable'), ['sign']).catch($mol_crypto_restack);
         }
         async native_derive() {
             const serial = this.toString();
@@ -35860,13 +35867,13 @@ var $;
                 x: serial.slice(0, 43),
                 y: serial.slice(43, 86),
                 d: serial.slice(86, 129),
-            }, ecdh, Boolean('extractable'), ['deriveKey', 'deriveBits']);
+            }, ecdh, Boolean('extractable'), ['deriveKey', 'deriveBits']).catch($mol_crypto_restack);
         }
         public() {
             return new $mol_crypto_key_public(this.buffer, this.byteOffset, this.byteOffset + 64);
         }
         async sign(data) {
-            return new Uint8Array(await $mol_crypto_native.subtle.sign(ecdsa, await this.native(), data));
+            return new Uint8Array(await $mol_crypto_native.subtle.sign(ecdsa, await this.native(), data).catch($mol_crypto_restack));
         }
     }
     __decorate([
