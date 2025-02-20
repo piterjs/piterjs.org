@@ -85,7 +85,7 @@ $piterjs_intro $mol_view
 				- \    ! ""https://i.imgur.com/4uEtyGD.jpeg""
 				\    ! ""https://i.imgur.com/FS8bvSe.jpeg""
 				- \      ! ""https://i.imgur.com/KiAK2i0.jpeg""
-				\    ! ""https://i.imgur.com/R86XxcW.jpeg""
+				\      ! ""https://i.imgur.com/R86XxcW.jpeg""
 		speakers <= Speakers $piterjs_intro_page
 			title \Стань докладчиком
 			text \
