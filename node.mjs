@@ -30634,7 +30634,7 @@ var $;
 		Partners(){
 			const obj = new this.$.$piterjs_intro_page();
 			(obj.title) = () => ("Партнёры");
-			(obj.text) = () => ("! \"\"https://i.imgur.com/ntlwbqL.png\"\"\n  ! \"\"https://i.imgur.com/tFCueVj.png\"\"");
+			(obj.text) = () => ("! \"\"https://i.imgur.com/ntlwbqL.png\"\"");
 			return obj;
 		}
 		Contribution(){
@@ -30665,7 +30665,7 @@ var $;
 			const obj = new this.$.$piterjs_intro_page();
 			(obj.text) = () => ((this.place_notes()));
 			(obj.title) = () => ((this.place_title()));
-			(obj.text) = () => ("\"\"https://itmo.ru/file/pages/213/slogan_na_plashke_chernyy.png\"\"");
+			(obj.text) = () => ("\"\"https://i.imgur.com/9cBS6I8.png\"\"");
 			return obj;
 		}
 		Follow(){

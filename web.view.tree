@@ -3260,7 +3260,7 @@ $piterjs_intro $mol_view
 			title \Партнёры
 			text \
 				\! ""https://i.imgur.com/ntlwbqL.png""
-				\  ! ""https://i.imgur.com/tFCueVj.png""
+				- \  ! ""https://i.imgur.com/tFCueVj.png""
 		contribution <= Contribution $piterjs_intro_page
 			title \Твой вклад
 			text \
@@ -3284,7 +3284,7 @@ $piterjs_intro $mol_view
 			text <= place_notes \
 			title <= place_title \Мы в {place}
 			text \
-				\""https://itmo.ru/file/pages/213/slogan_na_plashke_chernyy.png""
+				\""https://i.imgur.com/9cBS6I8.png""
 		follow <= Follow $piterjs_intro_page
 			title \Следите за новостями
 			text \
