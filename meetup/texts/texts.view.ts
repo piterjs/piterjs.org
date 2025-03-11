@@ -13,6 +13,10 @@ namespace $.$$ {
 		speech_post_text( speech: $piterjs_speech ) {
 			return speech.post_text()
 		}
+
+		speech_post_moment( speech: $piterjs_speech, next?: $mol_time_moment ) {
+			return this.post_moment( 'speech=' + speech.id(), next )
+		}
 		
 	}
 }
