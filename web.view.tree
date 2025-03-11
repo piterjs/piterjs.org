@@ -4,9 +4,9 @@ $mol_theme_auto $mol_plugin
 $mol_scroll $mol_view
 	scroll_top? 0
 	scroll_left? 0
-	field *
+	attr *
 		^
-		tabIndex <= tabindex -1
+		tabindex <= tabindex -1
 	event *
 		^
 		scroll?event <=> event_scroll?event null
@@ -1343,7 +1343,7 @@ $piterjs_meetup_texts $mol_page
 				<= Speech_post_text*0 $piterjs_meetup_texts_card
 					title <= speech_post_title* \🗣️ {speaker}
 					text <= speech_post_text* \
-					moment? <=> speech_post_moment*place? $mol_time_moment
+					moment? <=> speech_post_moment*? $mol_time_moment
 			<= Place_text $piterjs_meetup_texts_card
 				title \⌛ На кануне
 				text <= post_text*place

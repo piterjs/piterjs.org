@@ -1662,9 +1662,9 @@ declare namespace $ {
 		event_scroll( next?: any ): any
 		scroll_top( next?: number ): number
 		scroll_left( next?: number ): number
-		field( ): ({ 
-			'tabIndex': ReturnType< $mol_scroll['tabindex'] >,
-		})  & ReturnType< $mol_view['field'] >
+		attr( ): ({ 
+			'tabindex': ReturnType< $mol_scroll['tabindex'] >,
+		})  & ReturnType< $mol_view['attr'] >
 		event( ): ({ 
 			scroll( next?: ReturnType< $mol_scroll['event_scroll'] > ): ReturnType< $mol_scroll['event_scroll'] >,
 		})  & ReturnType< $mol_view['event'] >
@@ -3708,6 +3708,7 @@ declare namespace $ {
 
 declare namespace $ {
     class $mol_buffer extends DataView<ArrayBuffer> {
+        [Symbol.toStringTag]: string;
         static from<This extends typeof $mol_buffer>(this: This, array: number | string | ArrayBufferView<ArrayBuffer>): InstanceType<This>;
         static toString(): string;
         getUint48(offset: number, LE?: boolean): number;
@@ -7583,6 +7584,7 @@ declare namespace $.$$ {
         speech_post_texts(): $piterjs_meetup_texts_card[];
         speech_post_title(speech: $piterjs_speech): string;
         speech_post_text(speech: $piterjs_speech): string;
+        speech_post_moment(speech: $piterjs_speech, next?: $mol_time_moment): $mol_time_moment;
     }
 }
 

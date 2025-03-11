@@ -1059,7 +1059,7 @@ var $;
         if (len !== right.byteLength)
             return false;
         if (left instanceof DataView)
-            return compare_buffer(new Uint8Array(left.buffer, left.byteOffset, left.byteLength), new Uint8Array(right.buffer, left.byteOffset, left.byteLength));
+            return compare_buffer(new Uint8Array(left.buffer, left.byteOffset, left.byteLength), new Uint8Array(right.buffer, right.byteOffset, right.byteLength));
         for (let i = 0; i < len; ++i) {
             if (left[i] !== right[i])
                 return false;
@@ -3198,9 +3198,14 @@ var $;
             return $mol_dev_format_span({}, $mol_dev_format_native(this));
         }
         *view_find(check, path = []) {
-            if (check(this))
-                return yield [...path, this];
+            if (path.length === 0 && check(this))
+                return yield [this];
             try {
+                for (const item of this.sub()) {
+                    if (item instanceof $mol_view && check(item)) {
+                        return yield [...path, this, item];
+                    }
+                }
                 for (const item of this.sub()) {
                     if (item instanceof $mol_view) {
                         yield* item.view_find(check, [...path, this]);
@@ -6697,8 +6702,8 @@ var $;
 			if(next !== undefined) return next;
 			return 0;
 		}
-		field(){
-			return {...(super.field()), "tabIndex": (this.tabindex())};
+		attr(){
+			return {...(super.attr()), "tabindex": (this.tabindex())};
 		}
 		event(){
 			return {...(super.event()), "scroll": (next) => (this.event_scroll(next))};
@@ -11578,6 +11583,7 @@ var $;
 var $;
 (function ($) {
     class $mol_buffer extends DataView {
+        [Symbol.toStringTag] = this.constructor.name + '<>';
         static from(array) {
             if (typeof array === 'number')
                 array = new Uint8Array(array);
@@ -14057,7 +14063,7 @@ var $;
         'code-keyword': /\b(throw|readonly|unknown|keyof|typeof|never|from|class|struct|interface|type|function|extends|implements|module|namespace|import|export|include|require|var|val|let|const|for|do|while|until|in|out|of|new|if|then|else|switch|case|this|return|async|await|yield|try|catch|break|continue|get|set|public|private|protected|string|boolean|number|null|undefined|true|false|void|int|float|ref)\b/,
         'code-global': /[$]+\w*|\b[A-Z][a-z0-9]+[A-Z]\w*/,
         'code-word': /\w+/,
-        'code-decorator': /@.+/,
+        'code-decorator': /@\s*\S+/,
         'code-tag': /<\/?[\w-]+\/?>?|&\w+;/,
         'code-punctuation': /[\-\[\]\{\}\(\)<=>~!\?@#%&\*_\+\\\/\|;:\.,\^]+?/,
     });
@@ -18580,7 +18586,7 @@ var $;
 			const obj = new this.$.$piterjs_meetup_texts_card();
 			(obj.title) = () => ((this.speech_post_title(id)));
 			(obj.text) = () => ((this.speech_post_text(id)));
-			(obj.moment) = (next) => ((this.speech_post_moment("place", next)));
+			(obj.moment) = (next) => ((this.speech_post_moment(id, next)));
 			return obj;
 		}
 		speech_post_texts(){
@@ -18714,6 +18720,9 @@ var $;
             }
             speech_post_text(speech) {
                 return speech.post_text();
+            }
+            speech_post_moment(speech, next) {
+                return this.post_moment('speech=' + speech.id(), next);
             }
         }
         __decorate([
@@ -35870,7 +35879,7 @@ var $;
             }, ecdh, Boolean('extractable'), ['deriveKey', 'deriveBits']).catch($mol_crypto_restack);
         }
         public() {
-            return new $mol_crypto_key_public(this.buffer, this.byteOffset, this.byteOffset + 64);
+            return new $mol_crypto_key_public(this.asArray().slice(0, 64).buffer);
         }
         async sign(data) {
             return new Uint8Array(await $mol_crypto_native.subtle.sign(ecdsa, await this.native(), data).catch($mol_crypto_restack));
