@@ -3,7 +3,6 @@ $piterjs_speech_poster $piterjs_screen
 		title => title
 		start => start
 		speaker => speaker
-	theme \$mol_theme_light
 	attr *
 		^
 		piterjs_speech_poster_aspect <= aspect \1:1
