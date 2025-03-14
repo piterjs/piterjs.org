@@ -1522,8 +1522,14 @@ declare namespace $ {
         added1(this: $mol_vector<number, Length>, diff: readonly number[] & {
             length: Length;
         }): this;
+        substracted1(this: $mol_vector<number, Length>, diff: readonly number[] & {
+            length: Length;
+        }): this;
         multed0(this: $mol_vector<number, Length>, mult: number): this;
         multed1(this: $mol_vector<number, Length>, mults: readonly number[] & {
+            length: Length;
+        }): this;
+        divided1(this: $mol_vector<number, Length>, mults: readonly number[] & {
             length: Length;
         }): this;
         powered0(this: $mol_vector<number, Length>, mult: number): this;
@@ -9301,7 +9307,6 @@ declare namespace $ {
 		Name( ): $mol_paragraph
 		Main( ): $mol_view
 		speech( ): $piterjs_speech
-		theme( ): string
 		attr( ): ({ 
 			'piterjs_speech_poster_aspect': ReturnType< $piterjs_speech_poster['aspect'] >,
 		})  & ReturnType< $piterjs_screen['attr'] >
@@ -10144,14 +10149,15 @@ declare namespace $ {
 		ReturnType< $mol_svg_image['pos'] >
 	>
 	type $mol_svg_image__size_mol_plot_map_tiles_4 = $mol_type_enforce<
-		readonly(any)[]
+		ReturnType< $mol_plot_map_tiles['tile_dims_real'] >
 		,
 		ReturnType< $mol_svg_image['size'] >
 	>
 	export class $mol_plot_map_tiles extends $mol_plot_graph {
-		tiles( ): readonly(any)[]
+		tiles( ): readonly($mol_view)[]
 		tile_transform( id: any): string
 		tile_uri( id: any): string
+		tile_dims_real( ): readonly(number)[]
 		tile_size_real( ): number
 		level( ): number
 		level_pyramid( ): number
