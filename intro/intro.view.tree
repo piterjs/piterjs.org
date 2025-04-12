@@ -11,15 +11,15 @@ $piterjs_intro $mol_view
 				\JS и всё, что рядом
 				\Каждый месяц с 2015
 				\Спячка с 2020
-				\С 2023 снова с вами!
+				\С 2023 снова с вами и уже проводим 20-й митап
 		projects <= Projects $piterjs_intro_page
 			title \Наши проекты
 			text \
 				\PiterJS **Meetups** - митапы в Петербурге
 				\PiterJS **Picnic** - прогулки и общение
-				\PiterJS **Reflect** - рефлексивные подкасты
+				\PiterJS **Reflect** - рефлексивные подкасты (PiterJS Эксперты)
 				\--
-				\PiterJS **Conf** - конференции
+				\PiterJS **Conf** - конференции (cледите за нами в Telegram)
 				\PiterJS **Code+Learn** - воркшопы
 		comunity <= Community $piterjs_intro_page
 			title \Сообщество
@@ -29,9 +29,9 @@ $piterjs_intro $mol_view
 				\! VKontakte
 				\  ! 2.0K+
 				\! Telegram
-				\  ! 1.5K+
+				\  ! 1.7K+
 				\! Offline
-				\  ! 70..100
+				\  ! 100+ (сильно зависим от вместительности площадки)
 		- geo_quest <= Geo_quest $piterjs_intro_page
 			title \Откуда мы?
 			text \
@@ -53,7 +53,7 @@ $piterjs_intro $mol_view
 		roles_org <= Roles_org $piterjs_intro_page
 			title \Роли организаторов
 			text \
-				\Подготовка **докладчиков**
+				\Подготовка **докладчиков** ПК
 				\Коммуникация с **аудиторией**
 				\Коммуникация с **партнёрами**
 				\Фото и видео **монтаж**
@@ -88,9 +88,9 @@ $piterjs_intro $mol_view
 		speakers <= Speakers $piterjs_intro_page
 			title \Стань докладчиком
 			text \
-				\Нужны всегда
-				\Даже если боишься
-				\Поможем с темой
+				\Будем вам рады всегда - заполняйте CFP (добавить QR)
+				\Начни деятельность спикера с нами
+				\Поможем опредилиться с темой и проведем прогон, где поделимся экспертным фидбеком
 		partners <= Partners $piterjs_intro_page
 			title \Партнёры
 			text \
