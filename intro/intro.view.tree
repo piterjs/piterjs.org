@@ -15,14 +15,14 @@ $piterjs_intro $mol_view
 		projects <= Projects $piterjs_intro_page
 			title \Наши проекты
 			text \
-				\PiterJS **Meetups** - митапы в Петербурге
-				\PiterJS **Picnic** - прогулки и общение
-				\PiterJS **Reflect** - рефлексивные подкасты
+				\**PiterJS** - митапы по JS в Петербурге
+				\PiterJS **Reflect** - подкасты по мотивам митапов
+				\PiterJS **Conf** - конференции от JS
 				\--
-				\PiterJS **Conf** - конференции
-				\PiterJS **Code+Learn** - воркшопы
+				\**PiterUX** - митапы по дизайну
+				\**PiterHUG** - прогулки, общение, софты
 		comunity <= Community $piterjs_intro_page
-			title \Сообщество
+			title \Сообщество PiterJS
 			text \
 				\! YouTube
 				\  ! 2.4K+
@@ -74,28 +74,26 @@ $piterjs_intro $mol_view
 		team <= Team $piterjs_intro_page
 			title \Команда
 			text \
-				\! ""https://i.imgur.com/KoX0d8g.jpeg""
-				- \  ! ""https://i.imgur.com/dRolfnB.jpeg""
-				\  ! ""https://habrastorage.org/webt/mb/oz/2-/mboz2-qxenahgayijecyblbo6ka.jpeg""
-				\    ! ""https://i.imgur.com/KiAK2i0.jpeg""
-				\      ! ""https://i.imgur.com/V2Rkj38.jpeg""
-				\! ""https://i.imgur.com/qU059B2.jpeg""
-				- \  ! ""https://i.imgur.com/wXGooly.jpeg""
+				- \! ""https://i.imgur.com/KoX0d8g.jpeg""
+				\! ""https://i.imgur.com/KiAK2i0.jpeg""
 				\  ! ""https://i.imgur.com/n2Fxkqv.png""
-				- \    ! ""https://i.imgur.com/4uEtyGD.jpeg""
-				\    ! ""https://i.imgur.com/FS8bvSe.jpeg""
-				\      ! ""https://i.imgur.com/R86XxcW.jpeg""
+				\    ! ""https://i.imgur.com/V2Rkj38.jpeg""
+				\--
+				\! ""https://i.imgur.com/qU059B2.jpeg""
+				\  ! ""https://habrastorage.org/webt/mb/oz/2-/mboz2-qxenahgayijecyblbo6ka.jpeg""
+				- \    ! ""https://i.imgur.com/FS8bvSe.jpeg""
+				- \      ! ""https://i.imgur.com/R86XxcW.jpeg""
 		speakers <= Speakers $piterjs_intro_page
 			title \Стань докладчиком
 			text \
 				\Нужны всегда
 				\Даже если боишься
 				\Поможем с темой
-		partners <= Partners $piterjs_intro_page
+		- partners <= Partners $piterjs_intro_page
 			title \Партнёры
 			text \
-				\! ""https://i.imgur.com/ntlwbqL.png""
-				- \  ! ""https://i.imgur.com/tFCueVj.png""
+			\! ""https://i.imgur.com/ntlwbqL.png""
+			- \  ! ""https://i.imgur.com/tFCueVj.png""
 		partnering <= Partnering $piterjs_intro_page
 			title \Стань партнёром
 			text \
@@ -125,7 +123,7 @@ $piterjs_intro $mol_view
 			text <= place_notes \
 			title <= place_title \Мы в {place}
 			text \
-				\""https://i.imgur.com/CqpZAzE.png""
+				\""https://habrastorage.org/webt/xi/ao/wd/xiaowdwsnoz3pnmfexsnqcspwsu.png""
 		follow <= Follow $piterjs_intro_page
 			title \Следите за новостями
 			text \
