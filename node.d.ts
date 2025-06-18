@@ -322,6 +322,10 @@ declare namespace $ {
 }
 
 declare namespace $ {
+    function $mol_maybe<Value>(value: Value | null | undefined): Value[];
+}
+
+declare namespace $ {
     type $mol_tree2_path = Array<string | number | null>;
     type $mol_tree2_hack<Context> = (input: $mol_tree2, belt: $mol_tree2_belt<Context>, context: Context) => readonly $mol_tree2[];
     type $mol_tree2_belt<Context> = Record<string, $mol_tree2_hack<Context>>;
@@ -342,6 +346,7 @@ declare namespace $ {
         static fromString(str: string, uri?: string): $mol_tree2;
         toString(): string;
         insert(value: $mol_tree2 | null, ...path: $mol_tree2_path): $mol_tree2;
+        update(value: readonly $mol_tree2[], ...path: $mol_tree2_path): readonly $mol_tree2[];
         select(...path: $mol_tree2_path): $mol_tree2;
         filter(path: string[], value?: string): $mol_tree2;
         hack_self<Context extends {
@@ -773,7 +778,7 @@ declare namespace $ {
 
 declare namespace $ {
     export type $mol_style_properties = Partial<$mol_type_override<CSSStyleDeclaration, Overrides>>;
-    type Common = 'inherit' | 'initial' | 'unset' | 'revert' | 'revert-layer' | $mol_style_func<'var'>;
+    type Common = 'inherit' | 'initial' | 'unset' | 'revert' | 'revert-layer' | 'none' | $mol_style_func<'var'>;
     export type $mol_style_properties_color = 'aliceblue' | 'antiquewhite' | 'aqua' | 'aquamarine' | 'azure' | 'beige' | 'bisque' | 'black' | 'blanchedalmond' | 'blue' | 'blueviolet' | 'brown' | 'burlywood' | 'cadetblue' | 'chartreuse' | 'chocolate' | 'coral' | 'cornflowerblue' | 'cornsilk' | 'crimson' | 'cyan' | 'darkblue' | 'darkcyan' | 'darkgoldenrod' | 'darkgray' | 'darkgreen' | 'darkgrey' | 'darkkhaki' | 'darkmagenta' | 'darkolivegreen' | 'darkorange' | 'darkorchid' | 'darkred' | 'darksalmon' | 'darkseagreen' | 'darkslateblue' | 'darkslategrey' | 'darkturquoise' | 'darkviolet' | 'deeppink' | 'deepskyblue' | 'dimgray' | 'dimgrey' | 'dodgerblue' | 'firebrick' | 'floralwhite' | 'forestgreen' | 'fuchsia' | 'gainsboro' | 'ghostwhite' | 'gold' | 'goldenrod' | 'gray' | 'green' | 'greenyellow' | 'grey' | 'honeydew' | 'hotpink' | 'indianred' | 'indigo' | 'ivory' | 'khaki' | 'lavender' | 'lavenderblush' | 'lawngreen' | 'lemonchiffon' | 'lightblue' | 'lightcoral' | 'lightcyan' | 'lightgoldenrodyellow' | 'lightgray' | 'lightgreen' | 'lightgrey' | 'lightpink' | 'lightsalmon' | 'lightseagreen' | 'lightskyblue' | 'lightslategray' | 'lightslategrey' | 'lightsteelblue' | 'lightyellow' | 'lime' | 'limegreen' | 'linen' | 'magenta' | 'maroon' | 'mediumaquamarine' | 'mediumblue' | 'mediumorchid' | 'mediumpurple' | 'mediumseagreen' | 'mediumslateblue' | 'mediumspringgreen' | 'mediumturquoise' | 'mediumvioletred' | 'midnightblue' | 'mintcream' | 'mistyrose' | 'moccasin' | 'navajowhite' | 'navy' | 'oldlace' | 'olive' | 'olivedrab' | 'orange' | 'orangered' | 'orchid' | 'palegoldenrod' | 'palegreen' | 'paleturquoise' | 'palevioletred' | 'papayawhip' | 'peachpuff' | 'peru' | 'pink' | 'plum' | 'powderblue' | 'purple' | 'rebeccapurple' | 'red' | 'rosybrown' | 'royalblue' | 'saddlebrown' | 'salmon' | 'sandybrown' | 'seagreen' | 'seashell' | 'sienna' | 'silver' | 'skyblue' | 'slateblue' | 'slategray' | 'slategrey' | 'snow' | 'springgreen' | 'steelblue' | 'tan' | 'teal' | 'thistle' | 'tomato' | 'turquoise' | 'violet' | 'wheat' | 'white' | 'whitesmoke' | 'yellow' | 'yellowgreen' | 'transparent' | 'currentcolor' | $mol_style_func<'hsla' | 'rgba' | 'var'> | `#${string}`;
     type Length = 0 | `${number}${$mol_style_unit_length}` | $mol_style_func<'calc' | 'var' | 'clamp'>;
     type Size = 'auto' | 'max-content' | 'min-content' | 'fit-content' | Length | Common;
@@ -930,7 +935,7 @@ declare namespace $ {
 }
 
 declare namespace $ {
-    const $mol_theme: Record<"image" | "line" | "text" | "field" | "focus" | "back" | "hover" | "card" | "current" | "special" | "control" | "shade", $mol_style_func<"var", unknown>>;
+    const $mol_theme: Record<"image" | "line" | "text" | "field" | "focus" | "back" | "hover" | "card" | "current" | "special" | "control" | "shade" | "spirit", $mol_style_func<"var", unknown>>;
 }
 
 declare namespace $ {
@@ -1994,17 +1999,29 @@ declare namespace $ {
 
 declare namespace $ {
 
-	type $mol_view__title_mol_book2_1 = $mol_type_enforce<
+	type $mol_book2_sub__1 = $mol_type_enforce<
+		ReturnType< $mol_book2['pages'] >[number]
+		,
+		$mol_view
+	>
+	type $mol_book2_sub__2 = $mol_type_enforce<
+		ReturnType< $mol_book2['placeholders'] >[number]
+		,
+		$mol_view
+	>
+	type $mol_view__title_mol_book2_3 = $mol_type_enforce<
 		string
 		,
 		ReturnType< $mol_view['title'] >
 	>
 	export class $mol_book2 extends $mol_scroll {
-		pages( ): readonly($mol_view)[]
-		menu_title( ): string
-		sub( ): ReturnType< $mol_book2['pages'] >
-		minimal_width( ): number
+		pages_deep( ): readonly($mol_view)[]
+		pages( ): ReturnType< $mol_book2['pages_deep'] >
 		Placeholder( ): $mol_view
+		placeholders( ): readonly($mol_view)[]
+		menu_title( ): string
+		sub( ): readonly($mol_view)[]
+		minimal_width( ): number
 		Gap( id: any): $mol_view
 	}
 	
@@ -2013,9 +2030,10 @@ declare namespace $ {
 //# sourceMappingURL=book2.view.tree.d.ts.map
 declare namespace $.$$ {
     class $mol_book2 extends $.$mol_book2 {
+        pages_deep(): $mol_view[];
         title(): string;
         menu_title(): string;
-        sub(): readonly $mol_view[];
+        sub(): $mol_view[];
         bring(): void;
     }
 }
@@ -2190,6 +2208,7 @@ declare namespace $ {
 	export class $mol_speck extends $mol_view {
 		theme( ): string
 		value( ): any
+		minimal_width( ): number
 		attr( ): ({ 
 			'mol_theme': ReturnType< $mol_speck['theme'] >,
 		})  & ReturnType< $mol_view['attr'] >
@@ -2726,10 +2745,6 @@ declare namespace $ {
 }
 
 declare namespace $ {
-    function $mol_maybe<Value>(value: Value | null | undefined): Value[];
-}
-
-declare namespace $ {
 }
 
 declare namespace $ {
@@ -2972,6 +2987,8 @@ declare namespace $ {
 		Empty( ): $mol_view
 		Gap_before( ): $mol_view
 		Gap_after( ): $mol_view
+		item_height_min( id: any): number
+		item_width_min( id: any): number
 		view_window( ): readonly(any)[]
 	}
 	
@@ -2983,10 +3000,13 @@ declare namespace $.$$ {
         sub(): readonly $mol_view[];
         render_visible_only(): boolean;
         view_window(next?: [number, number]): [number, number];
+        item_height_min(index: number): number;
+        row_width_min(index: number): number;
         gap_before(): number;
         gap_after(): number;
         sub_visible(): $mol_view[];
         minimal_height(): number;
+        minimal_width(): number;
         force_render(path: Set<$mol_view>): void;
     }
 }
@@ -3161,52 +3181,57 @@ declare namespace $ {
 		,
 		ReturnType< $mol_button_minor['hint'] >
 	>
-	type $mol_button_minor__click_mol_search_11 = $mol_type_enforce<
+	type $mol_button_minor__enabled_mol_search_11 = $mol_type_enforce<
+		ReturnType< $mol_search['enabled'] >
+		,
+		ReturnType< $mol_button_minor['enabled'] >
+	>
+	type $mol_button_minor__click_mol_search_12 = $mol_type_enforce<
 		ReturnType< $mol_search['clear'] >
 		,
 		ReturnType< $mol_button_minor['click'] >
 	>
-	type $mol_button_minor__sub_mol_search_12 = $mol_type_enforce<
+	type $mol_button_minor__sub_mol_search_13 = $mol_type_enforce<
 		readonly(any)[]
 		,
 		ReturnType< $mol_button_minor['sub'] >
 	>
-	type $mol_list__rows_mol_search_13 = $mol_type_enforce<
+	type $mol_list__rows_mol_search_14 = $mol_type_enforce<
 		ReturnType< $mol_search['menu_items'] >
 		,
 		ReturnType< $mol_list['rows'] >
 	>
-	type $mol_scroll__sub_mol_search_14 = $mol_type_enforce<
+	type $mol_scroll__sub_mol_search_15 = $mol_type_enforce<
 		readonly(any)[]
 		,
 		ReturnType< $mol_scroll['sub'] >
 	>
-	type $mol_dimmer__haystack_mol_search_15 = $mol_type_enforce<
+	type $mol_dimmer__haystack_mol_search_16 = $mol_type_enforce<
 		ReturnType< $mol_search['suggest_label'] >
 		,
 		ReturnType< $mol_dimmer['haystack'] >
 	>
-	type $mol_dimmer__needle_mol_search_16 = $mol_type_enforce<
+	type $mol_dimmer__needle_mol_search_17 = $mol_type_enforce<
 		ReturnType< $mol_search['query'] >
 		,
 		ReturnType< $mol_dimmer['needle'] >
 	>
-	type $mol_search_plugins__17 = $mol_type_enforce<
+	type $mol_search_plugins__18 = $mol_type_enforce<
 		ReturnType< $mol_pop['plugins'] >[number]
 		,
 		$mol_plugin
 	>
-	type $mol_view__sub_mol_search_18 = $mol_type_enforce<
+	type $mol_view__sub_mol_search_19 = $mol_type_enforce<
 		ReturnType< $mol_search['anchor_content'] >
 		,
 		ReturnType< $mol_view['sub'] >
 	>
-	type $mol_button_minor__click_mol_search_19 = $mol_type_enforce<
+	type $mol_button_minor__click_mol_search_20 = $mol_type_enforce<
 		ReturnType< $mol_search['suggest_select'] >
 		,
 		ReturnType< $mol_button_minor['click'] >
 	>
-	type $mol_button_minor__sub_mol_search_20 = $mol_type_enforce<
+	type $mol_button_minor__sub_mol_search_21 = $mol_type_enforce<
 		ReturnType< $mol_search['suggest_content'] >
 		,
 		ReturnType< $mol_button_minor['sub'] >
@@ -5173,96 +5198,107 @@ declare namespace $ {
 }
 
 declare namespace $ {
-
-	export class $mol_icon_minus extends $mol_icon {
-		path( ): string
-	}
-	
-}
-
-//# sourceMappingURL=minus.view.tree.d.ts.map
-declare namespace $ {
 }
 
 declare namespace $ {
 
-	type $mol_string__type_mol_number_1 = $mol_type_enforce<
-		ReturnType< $mol_number['type'] >
+	type $mol_hotkey__key_mol_number_1 = $mol_type_enforce<
+		({ 
+			down( next?: ReturnType< $mol_number['event_dec'] > ): ReturnType< $mol_number['event_dec'] >,
+			up( next?: ReturnType< $mol_number['event_inc'] > ): ReturnType< $mol_number['event_inc'] >,
+			pageDown( next?: ReturnType< $mol_number['event_dec_boost'] > ): ReturnType< $mol_number['event_dec_boost'] >,
+			pageUp( next?: ReturnType< $mol_number['event_inc_boost'] > ): ReturnType< $mol_number['event_inc_boost'] >,
+		}) 
 		,
-		ReturnType< $mol_string['type'] >
+		ReturnType< $mol_hotkey['key'] >
 	>
-	type $mol_string__value_mol_number_2 = $mol_type_enforce<
-		ReturnType< $mol_number['value_string'] >
-		,
-		ReturnType< $mol_string['value'] >
-	>
-	type $mol_string__hint_mol_number_3 = $mol_type_enforce<
-		ReturnType< $mol_number['hint'] >
-		,
-		ReturnType< $mol_string['hint'] >
-	>
-	type $mol_string__enabled_mol_number_4 = $mol_type_enforce<
-		ReturnType< $mol_number['string_enabled'] >
-		,
-		ReturnType< $mol_string['enabled'] >
-	>
-	type $mol_string__submit_mol_number_5 = $mol_type_enforce<
-		ReturnType< $mol_number['submit'] >
-		,
-		ReturnType< $mol_string['submit'] >
-	>
-	type $mol_button_minor__event_click_mol_number_6 = $mol_type_enforce<
+	type $mol_button_minor__event_click_mol_number_2 = $mol_type_enforce<
 		ReturnType< $mol_number['event_dec'] >
 		,
 		ReturnType< $mol_button_minor['event_click'] >
 	>
-	type $mol_button_minor__enabled_mol_number_7 = $mol_type_enforce<
+	type $mol_button_minor__enabled_mol_number_3 = $mol_type_enforce<
 		ReturnType< $mol_number['dec_enabled'] >
 		,
 		ReturnType< $mol_button_minor['enabled'] >
 	>
-	type $mol_button_minor__sub_mol_number_8 = $mol_type_enforce<
+	type $mol_button_minor__sub_mol_number_4 = $mol_type_enforce<
 		readonly(any)[]
 		,
 		ReturnType< $mol_button_minor['sub'] >
 	>
-	type $mol_button_minor__event_click_mol_number_9 = $mol_type_enforce<
+	type $mol_string__type_mol_number_5 = $mol_type_enforce<
+		ReturnType< $mol_number['type'] >
+		,
+		ReturnType< $mol_string['type'] >
+	>
+	type $mol_string__keyboard_mol_number_6 = $mol_type_enforce<
+		string
+		,
+		ReturnType< $mol_string['keyboard'] >
+	>
+	type $mol_string__value_mol_number_7 = $mol_type_enforce<
+		ReturnType< $mol_number['value_string'] >
+		,
+		ReturnType< $mol_string['value'] >
+	>
+	type $mol_string__hint_mol_number_8 = $mol_type_enforce<
+		ReturnType< $mol_number['hint'] >
+		,
+		ReturnType< $mol_string['hint'] >
+	>
+	type $mol_string__enabled_mol_number_9 = $mol_type_enforce<
+		ReturnType< $mol_number['string_enabled'] >
+		,
+		ReturnType< $mol_string['enabled'] >
+	>
+	type $mol_string__submit_mol_number_10 = $mol_type_enforce<
+		ReturnType< $mol_number['submit'] >
+		,
+		ReturnType< $mol_string['submit'] >
+	>
+	type $mol_button_minor__event_click_mol_number_11 = $mol_type_enforce<
 		ReturnType< $mol_number['event_inc'] >
 		,
 		ReturnType< $mol_button_minor['event_click'] >
 	>
-	type $mol_button_minor__enabled_mol_number_10 = $mol_type_enforce<
+	type $mol_button_minor__enabled_mol_number_12 = $mol_type_enforce<
 		ReturnType< $mol_number['inc_enabled'] >
 		,
 		ReturnType< $mol_button_minor['enabled'] >
 	>
-	type $mol_button_minor__sub_mol_number_11 = $mol_type_enforce<
+	type $mol_button_minor__sub_mol_number_13 = $mol_type_enforce<
 		readonly(any)[]
 		,
 		ReturnType< $mol_button_minor['sub'] >
 	>
 	export class $mol_number extends $mol_view {
 		precision( ): number
+		event_dec( next?: any ): any
+		event_inc( next?: any ): any
+		event_dec_boost( next?: any ): any
+		event_inc_boost( next?: any ): any
+		Hotkey( ): $mol_hotkey
+		dec_enabled( ): ReturnType< $mol_number['enabled'] >
+		dec_icon( ): $mol_icon_chevron_left
+		Dec( ): $mol_button_minor
 		type( ): string
 		value_string( next?: string ): string
 		hint( ): string
 		string_enabled( ): ReturnType< $mol_number['enabled'] >
 		submit( next?: any ): any
 		String( ): $mol_string
-		event_dec( next?: any ): any
-		dec_enabled( ): ReturnType< $mol_number['enabled'] >
-		dec_icon( ): $mol_icon_minus
-		Dec( ): $mol_button_minor
-		event_inc( next?: any ): any
 		inc_enabled( ): ReturnType< $mol_number['enabled'] >
-		inc_icon( ): $mol_icon_plus
+		inc_icon( ): $mol_icon_chevron_right
 		Inc( ): $mol_button_minor
 		precision_view( ): ReturnType< $mol_number['precision'] >
 		precision_change( ): ReturnType< $mol_number['precision'] >
+		boost( ): number
 		value_min( ): number
 		value_max( ): number
 		value( next?: number ): number
 		enabled( ): boolean
+		plugins( ): readonly(any)[]
 		sub( ): readonly(any)[]
 	}
 	
@@ -5274,6 +5310,8 @@ declare namespace $.$$ {
         value_limited(val?: number): number;
         event_dec(next?: Event): void;
         event_inc(next?: Event): void;
+        event_dec_boost(next?: Event): void;
+        event_inc_boost(next?: Event): void;
         round(val: number): string;
         value_string(next?: string): string;
         dec_enabled(): boolean;
@@ -5605,6 +5643,7 @@ declare namespace $.$$ {
         cell_expanded(id: {
             row: string[];
         }, next?: boolean): boolean;
+        sub(): readonly any[];
     }
 }
 
@@ -5692,16 +5731,14 @@ declare namespace $ {
 		ReturnType< $mol_link['sub'] >
 	>
 	export class $mol_embed_native extends $mol_scroll {
-		mime( ): string
+		uri( next?: string ): string
 		title( ): string
 		Fallback( ): $mol_link
 		uri_change( next?: any ): any
-		uri( next?: string ): string
 		dom_name( ): string
 		window( ): any
 		attr( ): ({ 
-			'data': ReturnType< $mol_embed_native['uri'] >,
-			'type': ReturnType< $mol_embed_native['mime'] >,
+			'src': ReturnType< $mol_embed_native['uri'] >,
 		})  & ReturnType< $mol_scroll['attr'] >
 		sub( ): readonly(any)[]
 		message( ): ({ 
@@ -5718,6 +5755,7 @@ declare namespace $.$$ {
         load(frame: HTMLIFrameElement): Promise<Window>;
         uri_resource(): string;
         message_listener(): $mol_dom_listener;
+        sub(): readonly any[];
         message_receive(event?: MessageEvent<[string, string]>): void;
         uri_change(event: MessageEvent<[string, string]>): void;
         auto(): (Window | $mol_dom_listener)[];
@@ -5740,14 +5778,9 @@ declare namespace $ {
 
 	export class $mol_frame extends $mol_embed_native {
 		allow( ): string
-		uri( next?: string ): string
 		html( ): any
-		dom_name( ): string
 		attr( ): ({ 
-			'data': any,
-			'type': any,
 			'allow': ReturnType< $mol_frame['allow'] >,
-			'src': ReturnType< $mol_frame['uri'] >,
 			'srcdoc': ReturnType< $mol_frame['html'] >,
 		})  & ReturnType< $mol_embed_native['attr'] >
 		fullscreen( ): boolean
@@ -11924,6 +11957,7 @@ declare namespace $ {
 		forward( next?: any ): any
 		Forward_icon( ): $mol_icon_chevron_right
 		Forward( ): $mol_button_minor
+		step( ): number
 		sub( ): readonly(any)[]
 	}
 	
@@ -14640,43 +14674,43 @@ declare namespace $ {
 		,
 		ReturnType< $piterjs_intro_page['text'] >
 	>
-	type $piterjs_intro_page__title_piterjs_intro_20 = $mol_type_enforce<
-		string
-		,
-		ReturnType< $piterjs_intro_page['title'] >
-	>
-	type $piterjs_intro_page__text_piterjs_intro_21 = $mol_type_enforce<
-		string
-		,
-		ReturnType< $piterjs_intro_page['text'] >
-	>
-	type $piterjs_schedule__meetup_piterjs_intro_22 = $mol_type_enforce<
+	type $piterjs_schedule__meetup_piterjs_intro_20 = $mol_type_enforce<
 		ReturnType< $piterjs_intro['meetup'] >
 		,
 		ReturnType< $piterjs_schedule['meetup'] >
 	>
-	type $piterjs_schedule__title_piterjs_intro_23 = $mol_type_enforce<
+	type $piterjs_schedule__title_piterjs_intro_21 = $mol_type_enforce<
 		string
 		,
 		ReturnType< $piterjs_schedule['title'] >
 	>
-	type $piterjs_intro_page__title_piterjs_intro_24 = $mol_type_enforce<
+	type $piterjs_intro_page__title_piterjs_intro_22 = $mol_type_enforce<
 		string
 		,
 		ReturnType< $piterjs_intro_page['title'] >
 	>
-	type $piterjs_intro_page__text_piterjs_intro_25 = $mol_type_enforce<
+	type $piterjs_intro_page__text_piterjs_intro_23 = $mol_type_enforce<
 		string
 		,
 		ReturnType< $piterjs_intro_page['text'] >
 	>
-	type $piterjs_intro_page__text_piterjs_intro_26 = $mol_type_enforce<
+	type $piterjs_intro_page__text_piterjs_intro_24 = $mol_type_enforce<
 		ReturnType< $piterjs_intro['place_notes'] >
 		,
 		ReturnType< $piterjs_intro_page['text'] >
 	>
-	type $piterjs_intro_page__title_piterjs_intro_27 = $mol_type_enforce<
+	type $piterjs_intro_page__title_piterjs_intro_25 = $mol_type_enforce<
 		ReturnType< $piterjs_intro['place_title'] >
+		,
+		ReturnType< $piterjs_intro_page['title'] >
+	>
+	type $piterjs_intro_page__text_piterjs_intro_26 = $mol_type_enforce<
+		string
+		,
+		ReturnType< $piterjs_intro_page['text'] >
+	>
+	type $piterjs_intro_page__title_piterjs_intro_27 = $mol_type_enforce<
+		string
 		,
 		ReturnType< $piterjs_intro_page['title'] >
 	>
@@ -14691,46 +14725,36 @@ declare namespace $ {
 		ReturnType< $piterjs_intro_page['title'] >
 	>
 	type $piterjs_intro_page__text_piterjs_intro_30 = $mol_type_enforce<
-		string
-		,
-		ReturnType< $piterjs_intro_page['text'] >
-	>
-	type $piterjs_intro_page__title_piterjs_intro_31 = $mol_type_enforce<
-		string
-		,
-		ReturnType< $piterjs_intro_page['title'] >
-	>
-	type $piterjs_intro_page__text_piterjs_intro_32 = $mol_type_enforce<
 		ReturnType< $piterjs_intro['afterparty'] >
 		,
 		ReturnType< $piterjs_intro_page['text'] >
 	>
-	type $piterjs_screen__place_piterjs_intro_33 = $mol_type_enforce<
+	type $piterjs_screen__place_piterjs_intro_31 = $mol_type_enforce<
 		ReturnType< $piterjs_intro['place'] >
 		,
 		ReturnType< $piterjs_screen['place'] >
 	>
-	type $piterjs_screen__content_piterjs_intro_34 = $mol_type_enforce<
+	type $piterjs_screen__content_piterjs_intro_32 = $mol_type_enforce<
 		readonly(any)[]
 		,
 		ReturnType< $piterjs_screen['content'] >
 	>
-	type $mol_nav__keys_x_piterjs_intro_35 = $mol_type_enforce<
+	type $mol_nav__keys_x_piterjs_intro_33 = $mol_type_enforce<
 		ReturnType< $piterjs_intro['page_ids'] >
 		,
 		ReturnType< $mol_nav['keys_x'] >
 	>
-	type $mol_nav__keys_y_piterjs_intro_36 = $mol_type_enforce<
+	type $mol_nav__keys_y_piterjs_intro_34 = $mol_type_enforce<
 		ReturnType< $piterjs_intro['page_ids'] >
 		,
 		ReturnType< $mol_nav['keys_y'] >
 	>
-	type $mol_nav__current_x_piterjs_intro_37 = $mol_type_enforce<
+	type $mol_nav__current_x_piterjs_intro_35 = $mol_type_enforce<
 		ReturnType< $piterjs_intro['page'] >
 		,
 		ReturnType< $mol_nav['current_x'] >
 	>
-	type $mol_nav__current_y_piterjs_intro_38 = $mol_type_enforce<
+	type $mol_nav__current_y_piterjs_intro_36 = $mol_type_enforce<
 		ReturnType< $piterjs_intro['page'] >
 		,
 		ReturnType< $mol_nav['current_y'] >
@@ -14744,7 +14768,6 @@ declare namespace $ {
 		Roles_place( ): $piterjs_intro_page
 		Team( ): $piterjs_intro_page
 		Speakers( ): $piterjs_intro_page
-		Partners( ): $piterjs_intro_page
 		Partnering( ): $piterjs_intro_page
 		Contribution( ): $piterjs_intro_page
 		Schedule( ): $piterjs_schedule

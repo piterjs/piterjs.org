@@ -13,9 +13,11 @@ $mol_scroll $mol_view
 
 $mol_book2 $mol_scroll
 	menu_title \
-	sub <= pages /$mol_view
+	sub /$mol_view
+		^ pages <= pages_deep /$mol_view
+		^ placeholders /$mol_view
+			<= Placeholder $mol_view
 	minimal_width 0
-	Placeholder $mol_view
 	Gap* $mol_view title \
 
 $mol_svg $mol_view
@@ -67,6 +69,7 @@ $mol_icon $mol_svg_root
 $mol_icon_plus $mol_icon path \M19,13H13V19H11V13H5V11H11V5H13V11H19V13Z
 
 $mol_speck $mol_view
+	minimal_width 12
 	attr *
 		^
 		mol_theme <= theme \$mol_theme_accent
@@ -224,6 +227,8 @@ $mol_list $mol_view
 	Empty $mol_view
 	Gap_before $mol_view style * paddingTop <= gap_before 0
 	Gap_after $mol_view style * paddingTop <= gap_after 0
+	item_height_min* 1
+	item_width_min* 1
 	view_window /
 		0
 		0
@@ -297,6 +302,7 @@ $mol_search $mol_pop
 				bring => bring
 			<= Clear $mol_button_minor
 				hint @ \Clear
+				enabled <= enabled true
 				click?event <=> clear?event null
 				sub /
 					<= Clear_icon $mol_icon_close
@@ -725,32 +731,39 @@ $mol_form_field $mol_labeler
 			sub / <= bid \
 	content / <= control null
 
-$mol_icon_minus $mol_icon path \M19,13H5V11H19V13Z
-
 $mol_number $mol_view
 	precision_view <= precision 1
 	precision_change <= precision 1
+	boost 10
 	value_min -Infinity
 	value_max +Infinity
 	value? +NaN
 	enabled true
+	plugins /
+		<= Hotkey $mol_hotkey
+			key *
+				down? <=> event_dec? null
+				up? <=> event_inc? null
+				pageDown? <=> event_dec_boost? null
+				pageUp? <=> event_inc_boost? null
 	sub /
+		<= Dec $mol_button_minor
+			event_click? <=> event_dec? null
+			enabled <= dec_enabled <= enabled
+			sub / <= dec_icon $mol_icon_chevron_left
 		<= String $mol_string
 			- \ we don't want native number controls in mobile devices
 			- \ https://stackoverflow.com/questions/3790935/can-i-hide-the-html5-number-input-s-spin-box
-			type <= type \tel
+			type <= type \text
+			keyboard \decimal
 			value? <=> value_string? \
 			hint <= hint \ 
 			enabled <= string_enabled <= enabled
 			submit? <=> submit? null
-		<= Dec $mol_button_minor
-			event_click? <=> event_dec? null
-			enabled <= dec_enabled <= enabled
-			sub / <= dec_icon $mol_icon_minus
 		<= Inc $mol_button_minor
 			event_click? <=> event_inc? null
 			enabled <= inc_enabled <= enabled
-			sub / <= inc_icon $mol_icon_plus
+			sub / <= inc_icon $mol_icon_chevron_right
 
 $mol_icon_heart $mol_icon path \M12,21.35L10.55,20.03C5.4,15.36 2,12.27 2,8.5C2,5.41 4.42,3 7.5,3C9.24,3 10.91,3.81 12,5.08C13.09,3.81 14.76,3 16.5,3C19.58,3 22,5.41 22,8.5C22,12.27 18.6,15.36 13.45,20.03L12,21.35Z
 
@@ -870,13 +883,11 @@ $mol_link_iconed $mol_link
 	host \
 
 $mol_embed_native $mol_scroll
-	uri? \
-	dom_name \object
+	dom_name \iframe
 	window null
 	attr *
 		^
-		data <= uri
-		type <= mime \
+		src <= uri? \about:config
 	sub /
 		<= Fallback $mol_link
 			uri <= uri
@@ -888,13 +899,9 @@ $mol_embed_native $mol_scroll
 $mol_icon_youtube $mol_icon path \M10,15L15.19,12L10,9V15M21.56,7.17C21.69,7.64 21.78,8.27 21.84,9.07C21.91,9.87 21.94,10.56 21.94,11.16L22,12C22,14.19 21.84,15.8 21.56,16.83C21.31,17.73 20.73,18.31 19.83,18.56C19.36,18.69 18.5,18.78 17.18,18.84C15.88,18.91 14.69,18.94 13.59,18.94L12,19C7.81,19 5.2,18.84 4.17,18.56C3.27,18.31 2.69,17.73 2.44,16.83C2.31,16.36 2.22,15.73 2.16,14.93C2.09,14.13 2.06,13.44 2.06,12.84L2,12C2,9.81 2.16,8.2 2.44,7.17C2.69,6.27 3.27,5.69 4.17,5.44C4.64,5.31 5.5,5.22 6.82,5.16C8.12,5.09 9.31,5.06 10.41,5.06L12,5C16.19,5 18.8,5.16 19.83,5.44C20.73,5.69 21.31,6.27 21.56,7.17Z
 
 $mol_frame $mol_embed_native
-	dom_name \iframe
 	attr *
 		^
-		data null
-		type null
 		allow <= allow \
-		src <= uri? \about:config
 		srcdoc <= html null
 	fullscreen true
 	accelerometer true
@@ -2533,6 +2540,7 @@ $hyoo_page_side_menu $hyoo_meta_menu
 			title => title
 
 $mol_paginator $mol_bar
+	step 1
 	sub /
 		<= Backward $mol_button_minor
 			hint <= backward_hint @ \Backward
@@ -3172,14 +3180,14 @@ $piterjs_intro $mol_view
 		projects <= Projects $piterjs_intro_page
 			title \Наши проекты
 			text \
-				\PiterJS **Meetups** - митапы в Петербурге
-				\PiterJS **Picnic** - прогулки и общение
-				\PiterJS **Reflect** - рефлексивные подкасты
+				\**PiterJS** - митапы по JS в Петербурге
+				\PiterJS **Reflect** - подкасты по мотивам митапов
+				\PiterJS **Conf** - конференции от JS
 				\--
-				\PiterJS **Conf** - конференции
-				\PiterJS **Code+Learn** - воркшопы
+				\**PiterUX** - митапы по дизайну
+				\**PiterHUG** - прогулки, общение, софты
 		comunity <= Community $piterjs_intro_page
-			title \Сообщество
+			title \Сообщество PiterJS
 			text \
 				\! YouTube
 				\  ! 2.4K+
@@ -3231,28 +3239,26 @@ $piterjs_intro $mol_view
 		team <= Team $piterjs_intro_page
 			title \Команда
 			text \
-				\! ""https://i.imgur.com/KoX0d8g.jpeg""
-				- \  ! ""https://i.imgur.com/dRolfnB.jpeg""
-				\  ! ""https://habrastorage.org/webt/mb/oz/2-/mboz2-qxenahgayijecyblbo6ka.jpeg""
-				\    ! ""https://i.imgur.com/KiAK2i0.jpeg""
-				\      ! ""https://i.imgur.com/V2Rkj38.jpeg""
-				\! ""https://i.imgur.com/qU059B2.jpeg""
-				- \  ! ""https://i.imgur.com/wXGooly.jpeg""
+				- \! ""https://i.imgur.com/KoX0d8g.jpeg""
+				\! ""https://i.imgur.com/KiAK2i0.jpeg""
 				\  ! ""https://i.imgur.com/n2Fxkqv.png""
-				- \    ! ""https://i.imgur.com/4uEtyGD.jpeg""
-				\    ! ""https://i.imgur.com/FS8bvSe.jpeg""
-				\      ! ""https://i.imgur.com/R86XxcW.jpeg""
+				\    ! ""https://i.imgur.com/V2Rkj38.jpeg""
+				\--
+				\! ""https://i.imgur.com/qU059B2.jpeg""
+				\  ! ""https://habrastorage.org/webt/mb/oz/2-/mboz2-qxenahgayijecyblbo6ka.jpeg""
+				- \    ! ""https://i.imgur.com/FS8bvSe.jpeg""
+				- \      ! ""https://i.imgur.com/R86XxcW.jpeg""
 		speakers <= Speakers $piterjs_intro_page
 			title \Стань докладчиком
 			text \
 				\Нужны всегда
 				\Даже если боишься
 				\Поможем с темой
-		partners <= Partners $piterjs_intro_page
+		- partners <= Partners $piterjs_intro_page
 			title \Партнёры
 			text \
-				\! ""https://i.imgur.com/ntlwbqL.png""
-				- \  ! ""https://i.imgur.com/tFCueVj.png""
+			\! ""https://i.imgur.com/ntlwbqL.png""
+			- \  ! ""https://i.imgur.com/tFCueVj.png""
 		partnering <= Partnering $piterjs_intro_page
 			title \Стань партнёром
 			text \
@@ -3282,7 +3288,7 @@ $piterjs_intro $mol_view
 			text <= place_notes \
 			title <= place_title \Мы в {place}
 			text \
-				\""https://i.imgur.com/CqpZAzE.png""
+				\""https://habrastorage.org/webt/xi/ao/wd/xiaowdwsnoz3pnmfexsnqcspwsu.png""
 		follow <= Follow $piterjs_intro_page
 			title \Следите за новостями
 			text \
