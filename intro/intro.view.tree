@@ -81,6 +81,7 @@ $piterjs_intro $mol_view
 				\--
 				\! ""https://i.imgur.com/qU059B2.jpeg""
 				\  ! ""https://habrastorage.org/webt/mb/oz/2-/mboz2-qxenahgayijecyblbo6ka.jpeg""
+				\    ! ""https://i.imgur.com/F8qrBYo.png""
 				- \    ! ""https://i.imgur.com/FS8bvSe.jpeg""
 				- \      ! ""https://i.imgur.com/R86XxcW.jpeg""
 		speakers <= Speakers $piterjs_intro_page
