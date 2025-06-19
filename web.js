@@ -30327,6 +30327,12 @@ var $;
 			(obj.text) = () => ("За лучшие вопросы - призы\nМы ведём трансляцию\nИ записываем видео\nУлыбайтесь фотографу");
 			return obj;
 		}
+		Partners(){
+			const obj = new this.$.$piterjs_intro_page();
+			(obj.title) = () => ("Партнёры");
+			(obj.text) = () => ("\"\"https://i.imgur.com/tFCueVj.png\"\"");
+			return obj;
+		}
 		place_notes(){
 			return "";
 		}
@@ -30405,6 +30411,7 @@ var $;
 				"contribution": (this.Contribution()), 
 				"schedule": (this.Schedule()), 
 				"profit": (this.Proft()), 
+				"partners": (this.Partners()), 
 				"place": (this.Place()), 
 				"follow": (this.Follow()), 
 				"afterparty": (this.Afterparty())
@@ -30432,6 +30439,7 @@ var $;
 	($mol_mem(($.$piterjs_intro.prototype), "Contribution"));
 	($mol_mem(($.$piterjs_intro.prototype), "Schedule"));
 	($mol_mem(($.$piterjs_intro.prototype), "Proft"));
+	($mol_mem(($.$piterjs_intro.prototype), "Partners"));
 	($mol_mem(($.$piterjs_intro.prototype), "Place"));
 	($mol_mem(($.$piterjs_intro.prototype), "Follow"));
 	($mol_mem(($.$piterjs_intro.prototype), "Afterparty"));
