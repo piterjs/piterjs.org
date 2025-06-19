@@ -30294,7 +30294,7 @@ var $;
 		Team(){
 			const obj = new this.$.$piterjs_intro_page();
 			(obj.title) = () => ("Команда");
-			(obj.text) = () => ("! \"\"https://i.imgur.com/KiAK2i0.jpeg\"\"\n  ! \"\"https://i.imgur.com/n2Fxkqv.png\"\"\n    ! \"\"https://i.imgur.com/V2Rkj38.jpeg\"\"\n--\n! \"\"https://i.imgur.com/qU059B2.jpeg\"\"\n  ! \"\"https://habrastorage.org/webt/mb/oz/2-/mboz2-qxenahgayijecyblbo6ka.jpeg\"\"");
+			(obj.text) = () => ("! \"\"https://i.imgur.com/KiAK2i0.jpeg\"\"\n  ! \"\"https://i.imgur.com/n2Fxkqv.png\"\"\n    ! \"\"https://i.imgur.com/V2Rkj38.jpeg\"\"\n--\n! \"\"https://i.imgur.com/qU059B2.jpeg\"\"\n  ! \"\"https://habrastorage.org/webt/mb/oz/2-/mboz2-qxenahgayijecyblbo6ka.jpeg\"\"\n    ! \"\"https://i.imgur.com/F8qrBYo.png\"\"");
 			return obj;
 		}
 		Speakers(){
