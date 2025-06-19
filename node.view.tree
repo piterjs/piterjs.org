@@ -3279,7 +3279,7 @@ $piterjs_intro $mol_view
 				\Мы ведём трансляцию
 				\И записываем видео
 				\Улыбайтесь фотографу
-		partners <= Partners $piterjs_intro_page
+		- partners <= Partners $piterjs_intro_page
 			title \Партнёры
 			text \
 				- \! ""https://i.imgur.com/ntlwbqL.png""
