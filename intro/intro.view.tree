@@ -89,11 +89,6 @@ $piterjs_intro $mol_view
 				\Нужны всегда
 				\Даже если боишься
 				\Поможем с темой
-		- partners <= Partners $piterjs_intro_page
-			title \Партнёры
-			text \
-			\! ""https://i.imgur.com/ntlwbqL.png""
-			- \  ! ""https://i.imgur.com/tFCueVj.png""
 		partnering <= Partnering $piterjs_intro_page
 			title \Стань партнёром
 			text \
@@ -119,6 +114,11 @@ $piterjs_intro $mol_view
 				\Мы ведём трансляцию
 				\И записываем видео
 				\Улыбайтесь фотографу
+		partners <= Partners $piterjs_intro_page
+			title \Партнёры
+			text \
+				- \! ""https://i.imgur.com/ntlwbqL.png""
+				\""https://i.imgur.com/tFCueVj.png""
 		place <= Place $piterjs_intro_page
 			text <= place_notes \
 			title <= place_title \Мы в {place}
