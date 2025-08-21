@@ -130,11 +130,11 @@ namespace $ {
 			if( typeof closed === 'string' ) return closed
 
 			try {
-				return $mol_charset_decode( secret.decrypt( closed as Uint8Array, salt ) )
+				return $mol_charset_decode( secret.decrypt( closed as Uint8Array<ArrayBuffer>, salt ) )
 			} catch( error ) {
 				try {
 					const secret = $mol_wire_sync( this.peer_secret_old( id )! )
-					return $mol_charset_decode( secret.decrypt( closed as Uint8Array, $mol_charset_encode( this.id() ) ) )
+					return $mol_charset_decode( secret.decrypt( closed as Uint8Array<ArrayBuffer>, $mol_charset_encode( this.id() ) ) )
 				} catch( error ) {
 					$mol_fail_log( error )
 					return ''
