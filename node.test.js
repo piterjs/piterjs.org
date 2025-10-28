@@ -23852,7 +23852,7 @@ var $;
 			return (this.source());
 		}
 		Frame(){
-			const obj = new this.$.$mol_frame();
+			const obj = new this.$.$mol_embed_any();
 			(obj.uri) = () => ((this.uri()));
 			return obj;
 		}

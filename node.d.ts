@@ -10290,10 +10290,10 @@ declare namespace $ {
 		,
 		ReturnType< $mol_link['sub'] >
 	>
-	type $mol_frame__uri_piterjs_video_page_6 = $mol_type_enforce<
+	type $mol_embed_any__uri_piterjs_video_page_6 = $mol_type_enforce<
 		ReturnType< $piterjs_video_page['uri'] >
 		,
-		ReturnType< $mol_frame['uri'] >
+		ReturnType< $mol_embed_any['uri'] >
 	>
 	export class $piterjs_video_page extends $mol_page {
 		source( next?: string ): string
@@ -10302,7 +10302,7 @@ declare namespace $ {
 		Close_icon( ): $mol_icon_close
 		Close( ): $mol_link
 		uri( ): ReturnType< $piterjs_video_page['source'] >
-		Frame( ): $mol_frame
+		Frame( ): $mol_embed_any
 		title( ): string
 		tools( ): readonly(any)[]
 		body( ): readonly(any)[]
