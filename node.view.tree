@@ -70,13 +70,7 @@ $mol_icon $mol_svg_root
 $mol_icon_plus $mol_icon path \M19,13H13V19H11V13H5V11H11V5H13V11H19V13Z
 
 $mol_speck $mol_view
-	minimal_width 12
-	attr *
-		^
-		mol_theme <= theme \$mol_theme_accent
-	style *
-		^
-		minHeight \1em
+	theme \$mol_theme_accent
 	sub /
 		<= value null
 
@@ -86,9 +80,9 @@ $mol_button $mol_view
 	event_click?event null
 	event *
 		^
-		click?event <=> event_activate?event null
+		click?event <=> activate?event <=> event_activate?event null
 		dblclick?event <=> clicks?event null
-		keydown?event <=> event_key_press?event null 
+		keydown?event <=> key_press?event <=> event_key_press?event null
 	attr *
 		^
 		disabled <= disabled false
@@ -223,13 +217,14 @@ $mol_nav $mol_plugin
 
 $mol_list $mol_view
 	render_visible_only true
-	render_over 0
+	render_over 0.1
 	sub <= rows /$mol_view
-	Empty $mol_view
-	Gap_before $mol_view style * paddingTop <= gap_before 0
-	Gap_after $mol_view style * paddingTop <= gap_after 0
+		<= Gap_before $mol_view style * paddingTop <= gap_before 0
+		<= Empty $mol_view
+		<= Gap_after $mol_view style * paddingTop <= gap_after 0
 	item_height_min* 1
 	item_width_min* 1
+	view_window_shift? 0
 	view_window /
 		0
 		0
@@ -865,7 +860,7 @@ $mol_image $mol_view
 		^
 		src <= uri \
 		title <= hint
-		alt <= title
+		alt <= title \
 		loading <= loading \lazy
 		decoding <= decoding \async
 		crossOrigin <= cors null
@@ -935,6 +930,8 @@ $mol_embed_youtube $mol_embed_service
 
 $mol_embed_rutube $mol_embed_service
 
+$mol_embed_vklive $mol_embed_service
+
 $mol_embed_any $mol_view
 	Image $mol_image
 		title <= title \
@@ -946,6 +943,9 @@ $mol_embed_any $mol_view
 		title <= title \
 		uri <= uri \
 	Rutube $mol_embed_rutube
+		title <= title \
+		uri <= uri \
+	Vklive $mol_embed_vklive
 		title <= title \
 		uri <= uri \
 
@@ -1105,6 +1105,16 @@ $piterjs_speech_snippet $mol_link
 			<= Title $mol_view
 				sub / <= title \
 
+$mol_button_major $mol_button_minor
+	theme \$mol_theme_base
+
+$mol_status $mol_view
+	status <= title
+	minimal_height 24
+	minimal_width 0
+	sub /
+		<= message \
+
 $mol_row $mol_view
 
 $mol_form $mol_list
@@ -1113,12 +1123,21 @@ $mol_form $mol_list
 	event *
 		^
 		keydown?event <=> keydown?event null
-	submit?event null
+	save?event null
+	message_done @ \Saved
+	message_invalid @ \Form is not valid
 	rows /
 		<= Body $mol_list
 			sub <= body <= form_fields /$mol_form_field
 		<= Foot $mol_row
 			sub <= foot <= buttons /$mol_view
+				<= Submit $mol_button_major
+					title <= submit_title @ \Save
+					hint <= submit_hint \
+					activate? => submit_activate?
+					click? <=> submit? null
+				<= Result $mol_status
+					message <= result? null
 
 $mol_text_list $mol_text
 	auto_scroll null
@@ -2314,9 +2333,6 @@ $hyoo_meta_link $mol_link
 		<= Title $mol_dimmer
 			haystack <= title
 			needle <= highlight \
-
-$mol_button_major $mol_button_minor
-	theme \$mol_theme_base
 
 $mol_bar $mol_view
 
