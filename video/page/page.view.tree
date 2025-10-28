@@ -10,5 +10,5 @@ $piterjs_video_page $mol_page
 			sub /
 				<= Close_icon $mol_icon_close
 	body /
-		<= Frame $mol_frame
+		<= Frame $mol_embed_any
 			uri <= uri <= source
