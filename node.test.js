@@ -3079,12 +3079,41 @@ var $;
 "use strict";
 var $;
 (function ($) {
-    const TextEncoder = globalThis.TextEncoder ?? $node.util.TextEncoder;
-    const encoder = new TextEncoder();
-    function $mol_charset_encode(value) {
-        return encoder.encode(value);
+    let buf = new Uint8Array(2 ** 12);
+    function $mol_charset_encode(str) {
+        const capacity = str.length * 3;
+        if (buf.byteLength < capacity)
+            buf = new Uint8Array(capacity);
+        return buf.slice(0, $mol_charset_encode_to(str, buf));
     }
     $.$mol_charset_encode = $mol_charset_encode;
+    function $mol_charset_encode_to(str, buf, from = 0) {
+        let pos = from;
+        for (let i = 0; i < str.length; i++) {
+            let code = str.charCodeAt(i);
+            if (code < 0x80) {
+                buf[pos++] = code;
+            }
+            else if (code < 0x800) {
+                buf[pos++] = 0xc0 | (code >> 6);
+                buf[pos++] = 0x80 | (code & 0x3f);
+            }
+            else if (code < 0xd800 || code >= 0xe000) {
+                buf[pos++] = 0xe0 | (code >> 12);
+                buf[pos++] = 0x80 | ((code >> 6) & 0x3f);
+                buf[pos++] = 0x80 | (code & 0x3f);
+            }
+            else {
+                const point = ((code - 0xd800) << 10) + str.charCodeAt(++i) + 0x2400;
+                buf[pos++] = 0xf0 | (point >> 18);
+                buf[pos++] = 0x80 | ((point >> 12) & 0x3f);
+                buf[pos++] = 0x80 | ((point >> 6) & 0x3f);
+                buf[pos++] = 0x80 | (point & 0x3f);
+            }
+        }
+        return pos - from;
+    }
+    $.$mol_charset_encode_to = $mol_charset_encode_to;
 })($ || ($ = {}));
 
 ;
@@ -12147,6 +12176,11 @@ var $;
             if (next >= 0n && next < 2n ** 64n)
                 return this.setBigUint64(offset, next, true), next;
             $mol_fail(new Error(`Wrong uint64 value ${next}`));
+        }
+        float16(offset, next) {
+            if (next !== undefined)
+                this.setFloat16(offset, next, true);
+            return this.getFloat16(offset, true);
         }
         float32(offset, next) {
             if (next !== undefined)
@@ -31169,7 +31203,7 @@ var $;
 		}
 		About(){
 			const obj = new this.$.$piterjs_intro_page();
-			(obj.title) = () => ("Кто мы?");
+			(obj.title) = () => ("Кто мы??");
 			(obj.text) = () => ("Митапы в Питере\nJS и всё, что рядом\nКаждый месяц с 2015\nСпячка с 2020\nС 2023 снова с вами!");
 			return obj;
 		}
@@ -31182,7 +31216,7 @@ var $;
 		Community(){
 			const obj = new this.$.$piterjs_intro_page();
 			(obj.title) = () => ("Сообщество PiterJS");
-			(obj.text) = () => ("! YouTube\n  ! 2.4K+\n! VKontakte\n  ! 2.0K+\n! Telegram\n  ! 1.5K+\n! Offline\n  ! 70..100");
+			(obj.text) = () => ("! YouTube\n  ! 2.5K+\n! VKontakte\n  ! 2.1K+\n! Telegram\n  ! 1.K+\n! Offline\n  ! 70..100");
 			return obj;
 		}
 		Roles_org(){
@@ -31200,7 +31234,7 @@ var $;
 		Team(){
 			const obj = new this.$.$piterjs_intro_page();
 			(obj.title) = () => ("Команда");
-			(obj.text) = () => ("! \"\"https://i.imgur.com/KoX0d8g.jpeg\"\"\n  ! \"\"https://i.imgur.com/KiAK2i0.jpeg\"\"\n    ! \"\"https://i.imgur.com/n2Fxkqv.png\"\"\n      ! \"\"https://i.imgur.com/V2Rkj38.jpeg\"\"\n--\n! \"\"https://i.imgur.com/qU059B2.jpeg\"\"\n  ! \"\"https://habrastorage.org/webt/mb/oz/2-/mboz2-qxenahgayijecyblbo6ka.jpeg\"\"\n    ! \"\"https://i.imgur.com/F8qrBYo.png\"\"");
+			(obj.text) = () => ("! \"\"https://i.imgur.com/KoX0d8g.jpeg\"\"\n  ! \"\"https://i.imgur.com/KiAK2i0.jpeg\"\"\n    ! \"\"https://i.imgur.com/n2Fxkqv.png\"\"\n      ! \"\"https://i.imgur.com/V2Rkj38.jpeg\"\"\n--\n! \"\"https://i.imgur.com/qU059B2.jpeg\"\"\n  ! \"\"https://habrastorage.org/webt/mb/oz/2-/mboz2-qxenahgayijecyblbo6ka.jpeg\"\"\n    ! \"\"https://habrastorage.org/webt/pd/ii/9l/pdii9lgzgihcg9vb3etx_hug4rg.jpeg\"\"\n      ! \"\"https://i.imgur.com/R86XxcW.jpeg\"\"");
 			return obj;
 		}
 		Speakers(){
@@ -31249,7 +31283,7 @@ var $;
 			const obj = new this.$.$piterjs_intro_page();
 			(obj.text) = () => ((this.place_notes()));
 			(obj.title) = () => ((this.place_title()));
-			(obj.text) = () => ("\"\"https://habrastorage.org/webt/nh/np/oy/nhnpoyyb6ayimlhpxcyxptxwtza.jpeg\"\"");
+			(obj.text) = () => ("\"\"https://habrastorage.org/webt/f2/4u/qy/f24uqy41o0oekgoxo4feyxz1tdu.png\"\"");
 			return obj;
 		}
 		Follow(){
@@ -33820,10 +33854,23 @@ var $;
 var $;
 (function ($) {
     $mol_test({
-        'encode utf8 string'() {
-            const str = 'Hello, ΧΨΩЫ';
-            const encoded = new Uint8Array([72, 101, 108, 108, 111, 44, 32, 206, 167, 206, 168, 206, 169, 208, 171]);
-            $mol_assert_like($mol_charset_encode(str), encoded);
+        'encode empty'() {
+            $mol_assert_equal($mol_charset_encode(''), new Uint8Array([]));
+        },
+        'encode 1 octet'() {
+            $mol_assert_equal($mol_charset_encode('F'), new Uint8Array([0x46]));
+        },
+        'encode 2 octet'() {
+            $mol_assert_equal($mol_charset_encode('Б'), new Uint8Array([0xd0, 0x91]));
+        },
+        'encode 3 octet'() {
+            $mol_assert_equal($mol_charset_encode('ह'), new Uint8Array([0xe0, 0xa4, 0xb9]));
+        },
+        'encode 4 octet'() {
+            $mol_assert_equal($mol_charset_encode('𐍈'), new Uint8Array([0xf0, 0x90, 0x8d, 0x88]));
+        },
+        'encode surrogate pair'() {
+            $mol_assert_equal($mol_charset_encode('😀'), new Uint8Array([0xf0, 0x9f, 0x98, 0x80]));
         },
     });
 })($ || ($ = {}));

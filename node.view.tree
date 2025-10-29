@@ -3192,7 +3192,7 @@ $piterjs_intro $mol_view
 	pages *$piterjs_intro_page
 		main <= Main $piterjs_intro_main meetup <= meetup
 		about <= About $piterjs_intro_page
-			title \Кто мы?
+			title \Кто мы??
 			text \
 				\Митапы в Питере
 				\JS и всё, что рядом
@@ -3212,11 +3212,11 @@ $piterjs_intro $mol_view
 			title \Сообщество PiterJS
 			text \
 				\! YouTube
-				\  ! 2.4K+
+				\  ! 2.5K+
 				\! VKontakte
-				\  ! 2.0K+
+				\  ! 2.1K+
 				\! Telegram
-				\  ! 1.5K+
+				\  ! 1.K+
 				\! Offline
 				\  ! 70..100
 		- geo_quest <= Geo_quest $piterjs_intro_page
@@ -3268,9 +3268,10 @@ $piterjs_intro $mol_view
 				\--
 				\! ""https://i.imgur.com/qU059B2.jpeg""
 				\  ! ""https://habrastorage.org/webt/mb/oz/2-/mboz2-qxenahgayijecyblbo6ka.jpeg""
-				\    ! ""https://i.imgur.com/F8qrBYo.png""
+				\    ! ""https://habrastorage.org/webt/pd/ii/9l/pdii9lgzgihcg9vb3etx_hug4rg.jpeg""
+				\      ! ""https://i.imgur.com/R86XxcW.jpeg""
+				- \    ! ""https://i.imgur.com/F8qrBYo.png""
 				- \    ! ""https://i.imgur.com/FS8bvSe.jpeg""
-				- \      ! ""https://i.imgur.com/R86XxcW.jpeg""
 		speakers <= Speakers $piterjs_intro_page
 			title \Стань докладчиком
 			text \
@@ -3311,7 +3312,7 @@ $piterjs_intro $mol_view
 			text <= place_notes \
 			title <= place_title \Мы в {place}
 			text \
-				\""https://habrastorage.org/webt/nh/np/oy/nhnpoyyb6ayimlhpxcyxptxwtza.jpeg""
+				\""https://habrastorage.org/webt/f2/4u/qy/f24uqy41o0oekgoxo4feyxz1tdu.png""
 		follow <= Follow $piterjs_intro_page
 			title \Следите за новостями
 			text \
