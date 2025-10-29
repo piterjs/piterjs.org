@@ -31216,7 +31216,7 @@ var $;
 		Community(){
 			const obj = new this.$.$piterjs_intro_page();
 			(obj.title) = () => ("Сообщество PiterJS");
-			(obj.text) = () => ("! YouTube\n  ! 2.5K+\n! VKontakte\n  ! 2.1K+\n! Telegram\n  ! 1.K+\n! Offline\n  ! 70..100");
+			(obj.text) = () => ("! YouTube\n  ! 2.5K+\n! VKontakte\n  ! 2.1K+\n! Telegram\n  ! 1.8K+\n! Offline\n  ! 70..100");
 			return obj;
 		}
 		Roles_org(){
