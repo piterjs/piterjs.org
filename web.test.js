@@ -681,8 +681,6 @@ var $;
         for (let i = 1; i < args.length; ++i) {
             if ($mol_compare_deep(args[0], args[i]))
                 continue;
-            if (args[0] instanceof $mol_dom_context.Element && args[i] instanceof $mol_dom_context.Element && args[0].outerHTML === args[i].outerHTML)
-                continue;
             return $mol_fail(new Error(`Equality assertion failure`, { cause: { 0: args[0], [i]: args[i] } }));
         }
     }
@@ -2689,10 +2687,10 @@ var $;
                     return prev;
                 },
             });
-            $mol_assert_equal(list, $mol_jsx("body", null,
+            $mol_assert_equal(list.outerHTML, ($mol_jsx("body", null,
                 $mol_jsx("p", { "data-rev": "old" }, "a"),
                 $mol_jsx("p", { "data-rev": "old" }, "b"),
-                $mol_jsx("p", { "data-rev": "old" }, "c")));
+                $mol_jsx("p", { "data-rev": "old" }, "c"))).outerHTML);
         },
         'insert items'() {
             const list = $mol_jsx("body", null,
@@ -2714,13 +2712,13 @@ var $;
                     return prev;
                 },
             });
-            $mol_assert_equal(list, $mol_jsx("body", null,
+            $mol_assert_equal(list.outerHTML, ($mol_jsx("body", null,
                 $mol_jsx("p", { "data-rev": "old" }, "a"),
                 $mol_jsx("p", { "data-rev": "old" }, "b"),
                 $mol_jsx("p", { "data-rev": "new" }, "X"),
                 $mol_jsx("p", { "data-rev": "new" }, "Y"),
                 $mol_jsx("p", { "data-rev": "old" }, "c"),
-                $mol_jsx("p", { "data-rev": "old" }, "d")));
+                $mol_jsx("p", { "data-rev": "old" }, "d"))).outerHTML);
         },
         'append items'() {
             const list = $mol_jsx("body", null,
@@ -2739,10 +2737,10 @@ var $;
                     return prev;
                 },
             });
-            $mol_assert_equal(list, $mol_jsx("body", null,
+            $mol_assert_equal(list.outerHTML, ($mol_jsx("body", null,
                 $mol_jsx("p", { "data-rev": "old" }, "a"),
                 $mol_jsx("p", { "data-rev": "new" }, "b"),
-                $mol_jsx("p", { "data-rev": "new" }, "c")));
+                $mol_jsx("p", { "data-rev": "new" }, "c"))).outerHTML);
         },
         'split item'() {
             const list = $mol_jsx("body", null,
@@ -2763,11 +2761,11 @@ var $;
                     return prev;
                 },
             });
-            $mol_assert_equal(list, $mol_jsx("body", null,
+            $mol_assert_equal(list.outerHTML, ($mol_jsx("body", null,
                 $mol_jsx("p", { "data-rev": "old" }, "a"),
                 $mol_jsx("p", { "data-rev": "new" }, "b"),
                 $mol_jsx("p", { "data-rev": "up" }, "c"),
-                $mol_jsx("p", { "data-rev": "old" }, "d")));
+                $mol_jsx("p", { "data-rev": "old" }, "d"))).outerHTML);
         },
         'drop items'() {
             const list = $mol_jsx("body", null,
@@ -2791,11 +2789,11 @@ var $;
                     return prev;
                 },
             });
-            $mol_assert_equal(list, $mol_jsx("body", null,
+            $mol_assert_equal(list.outerHTML, ($mol_jsx("body", null,
                 $mol_jsx("p", { "data-rev": "old" }, "A"),
                 $mol_jsx("p", { "data-rev": "old" }, "B"),
                 $mol_jsx("p", { "data-rev": "old" }, "C"),
-                $mol_jsx("p", { "data-rev": "old" }, "D")));
+                $mol_jsx("p", { "data-rev": "old" }, "D"))).outerHTML);
         },
         'update items'() {
             const list = $mol_jsx("body", null,
@@ -2817,11 +2815,11 @@ var $;
                     return prev;
                 },
             });
-            $mol_assert_equal(list, $mol_jsx("body", null,
+            $mol_assert_equal(list.outerHTML, ($mol_jsx("body", null,
                 $mol_jsx("p", { "data-rev": "old" }, "a"),
                 $mol_jsx("p", { "data-rev": "up" }, "X"),
                 $mol_jsx("p", { "data-rev": "up" }, "Y"),
-                $mol_jsx("p", { "data-rev": "old" }, "d")));
+                $mol_jsx("p", { "data-rev": "old" }, "d"))).outerHTML);
         },
     });
 })($ || ($ = {}));
@@ -4683,6 +4681,20 @@ var $;
             $mol_assert_not($mol_compare_array(new Uint8Array, new TestClass));
         },
     });
+})($ || ($ = {}));
+
+;
+"use strict";
+var $;
+(function ($_1) {
+    var $$;
+    (function ($$) {
+        $mol_test({
+            async "Get and parse"($) {
+                $mol_assert_equal(await $mol_wire_async($mol_fetch).text('data:text/plain,foo'), 'foo');
+            },
+        });
+    })($$ = $_1.$$ || ($_1.$$ = {}));
 })($ || ($ = {}));
 
 ;
