@@ -46,11 +46,14 @@ declare namespace $ {
     function $mol_fail_log(error: unknown): boolean;
 }
 
+declare namespace $ {
+    function $node_autoinstall(this: typeof $, name: string): void;
+}
+
 interface $node {
     [key: string]: any;
 }
 declare var $node: $node;
-declare const cache: Map<string, any>;
 
 declare namespace $ {
     function $mol_func_name(this: $, func: Function): string;
@@ -111,6 +114,7 @@ declare namespace $ {
         static toJSON(): any;
         destructor(): void;
         static destructor(): void;
+        [Symbol.dispose](): void;
         toString(): string;
     }
 }
@@ -464,8 +468,8 @@ declare namespace $ {
         dir: string;
     }> {
     }
-    const $mol_run_spawn: (...args: Parameters<(typeof $node)["child_process"]["spawn"]>) => import("child_process").ChildProcess;
-    const $mol_run_spawn_sync: (...args: Parameters<(typeof $node)["child_process"]["spawnSync"]>) => import("child_process").SpawnSyncReturns<string | NonSharedBuffer>;
+    const $mol_run_spawn: (...args: Parameters<(typeof $node)["child_process"]["spawn"]>) => import("node:child_process").ChildProcess;
+    const $mol_run_spawn_sync: (...args: Parameters<(typeof $node)["child_process"]["spawnSync"]>) => import("node:child_process").SpawnSyncReturns<string | NonSharedBuffer>;
     type $mol_run_options = {
         command: readonly string[] | string;
         dir: string;
@@ -474,18 +478,14 @@ declare namespace $ {
     };
     class $mol_run extends $mol_object {
         static async_enabled(): boolean;
-        static spawn(options: $mol_run_options): $mol_run_error_context | import("child_process").SpawnSyncReturns<string | NonSharedBuffer>;
+        static spawn(options: $mol_run_options): import("node:child_process").SpawnSyncReturns<string | NonSharedBuffer> | $mol_run_error_context;
         static spawn_async({ dir, sync, timeout, command, env }: $mol_run_options & {
             sync?: boolean;
-        }): import("child_process").SpawnSyncReturns<string | NonSharedBuffer> | (Promise<$mol_run_error_context> & {
+        }): import("node:child_process").SpawnSyncReturns<string | NonSharedBuffer> | (Promise<$mol_run_error_context> & {
             destructor: () => void;
         });
         static error_message(res?: $mol_run_error_context): string;
     }
-}
-
-declare namespace $ {
-    function $mol_exec(this: $, dir: string, command: string, ...args: readonly string[]): $mol_run_error_context | import("child_process").SpawnSyncReturns<string | NonSharedBuffer>;
 }
 
 declare namespace $ {
@@ -975,6 +975,7 @@ declare namespace $ {
         }): number;
         read(): Uint8Array<ArrayBuffer>;
         truncate(size: number): void;
+        flush(): void;
         close(): void;
         destructor(): void;
     }
@@ -991,6 +992,7 @@ declare namespace $ {
         }): number;
         truncate(size: number): void;
         read(): Uint8Array<ArrayBuffer>;
+        flush(): void;
         close(): void;
     }
 }
