@@ -3314,8 +3314,6 @@ $piterjs_intro $mol_view
 		place <= Place $piterjs_intro_page
 			text <= place_notes \
 			title <= place_title \Мы в {place}
-			text \
-				\""https://habrastorage.org/webt/f2/4u/qy/f24uqy41o0oekgoxo4feyxz1tdu.png""
 		follow <= Follow $piterjs_intro_page
 			title \Следите за новостями
 			text \

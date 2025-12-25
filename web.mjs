@@ -30946,7 +30946,6 @@ var $;
 			const obj = new this.$.$piterjs_intro_page();
 			(obj.text) = () => ((this.place_notes()));
 			(obj.title) = () => ((this.place_title()));
-			(obj.text) = () => ("\"\"https://habrastorage.org/webt/f2/4u/qy/f24uqy41o0oekgoxo4feyxz1tdu.png\"\"");
 			return obj;
 		}
 		Follow(){
