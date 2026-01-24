@@ -398,6 +398,10 @@ declare namespace $ {
 }
 
 declare namespace $ {
+    function $mol_array_chunks<Item>(array: readonly Item[], rule: number | ((item: Item, index: number) => boolean)): Item[][];
+}
+
+declare namespace $ {
     function $mol_tree2_from_json(json: any, span?: $mol_span): $mol_tree2;
 }
 
@@ -895,6 +899,11 @@ declare namespace $ {
 }
 
 declare namespace $ {
+    function $mol_wait_user_async(this: $): Promise<unknown>;
+    function $mol_wait_user(this: $): unknown;
+}
+
+declare namespace $ {
     class $mol_storage extends $mol_object2 {
         static native(): StorageManager;
         static persisted(next?: boolean, cache?: 'cache'): boolean;
@@ -953,6 +962,10 @@ declare namespace $ {
 
 declare namespace $ {
     function $mol_charset_decode(buffer: AllowSharedBufferSource, encoding?: $mol_charset_encoding): string;
+}
+
+declare namespace $ {
+    function $mol_charset_buffer(size: number): Uint8Array<ArrayBuffer>;
 }
 
 declare namespace $ {
@@ -2725,31 +2738,99 @@ declare namespace $ {
 
 declare namespace $ {
 
-	type $mol_pop_bubble__align_mol_pop_1 = $mol_type_enforce<
-		ReturnType< $mol_pop['align'] >
-		,
-		ReturnType< $mol_pop_bubble['align'] >
-	>
-	type $mol_pop_bubble__content_mol_pop_2 = $mol_type_enforce<
+	export class $mol_ghost extends $mol_view {
+		Sub( ): $mol_view
+	}
+	
+}
+
+//# sourceMappingURL=ghost.view.tree.d.ts.map
+declare namespace $.$$ {
+    class $mol_ghost extends $.$mol_ghost {
+        dom_node_external(next?: Element): Element;
+        dom_node_actual(): Element;
+        dom_tree(): Element;
+        title(): string;
+        minimal_width(): number;
+        minimal_height(): number;
+    }
+}
+
+declare namespace $ {
+
+	export class $mol_follower extends $mol_ghost {
+		transform( ): string
+		Anchor( ): $mol_view
+		align( ): readonly(number)[]
+		offset( ): readonly(number)[]
+		style( ): ({ 
+			'transform': ReturnType< $mol_follower['transform'] >,
+		})  & ReturnType< $mol_ghost['style'] >
+	}
+	
+}
+
+//# sourceMappingURL=follower.view.tree.d.ts.map
+declare namespace $.$$ {
+    class $mol_follower extends $.$mol_follower {
+        pos(): {
+            left: number;
+            top: number;
+        } | null;
+        transform(): string;
+    }
+}
+
+declare namespace $ {
+}
+
+declare namespace $ {
+
+	type $mol_pop_bubble__content_mol_pop_1 = $mol_type_enforce<
 		ReturnType< $mol_pop['bubble_content'] >
 		,
 		ReturnType< $mol_pop_bubble['content'] >
 	>
-	type $mol_pop_bubble__height_max_mol_pop_3 = $mol_type_enforce<
+	type $mol_pop_bubble__height_max_mol_pop_2 = $mol_type_enforce<
 		ReturnType< $mol_pop['height_max'] >
 		,
 		ReturnType< $mol_pop_bubble['height_max'] >
 	>
+	type $mol_follower__offset_mol_pop_3 = $mol_type_enforce<
+		ReturnType< $mol_pop['bubble_offset'] >
+		,
+		ReturnType< $mol_follower['offset'] >
+	>
+	type $mol_follower__align_mol_pop_4 = $mol_type_enforce<
+		ReturnType< $mol_pop['bubble_align'] >
+		,
+		ReturnType< $mol_follower['align'] >
+	>
+	type $mol_follower__Anchor_mol_pop_5 = $mol_type_enforce<
+		ReturnType< $mol_pop['Anchor'] >
+		,
+		ReturnType< $mol_follower['Anchor'] >
+	>
+	type $mol_follower__Sub_mol_pop_6 = $mol_type_enforce<
+		ReturnType< $mol_pop['Bubble'] >
+		,
+		ReturnType< $mol_follower['Sub'] >
+	>
 	export class $mol_pop extends $mol_view {
+		bubble( ): any
 		Anchor( ): any
-		align( ): string
+		bubble_offset( ): readonly(number)[]
+		bubble_align( ): readonly(number)[]
 		bubble_content( ): readonly($mol_view_content)[]
 		height_max( ): number
 		Bubble( ): $mol_pop_bubble
+		Follower( ): $mol_follower
 		showed( next?: boolean ): boolean
 		align_vert( ): string
 		align_hor( ): string
+		align( ): string
 		prefer( ): string
+		auto( ): readonly(any)[]
 		sub( ): readonly(any)[]
 		sub_visible( ): readonly(any)[]
 	}
@@ -2757,14 +2838,13 @@ declare namespace $ {
 	export class $mol_pop_bubble extends $mol_view {
 		content( ): readonly($mol_view_content)[]
 		height_max( ): number
-		align( ): string
 		sub( ): ReturnType< $mol_pop_bubble['content'] >
 		style( ): ({ 
 			'maxHeight': ReturnType< $mol_pop_bubble['height_max'] >,
 		})  & ReturnType< $mol_view['style'] >
 		attr( ): ({ 
-			'mol_pop_align': ReturnType< $mol_pop_bubble['align'] >,
 			'tabindex': number,
+			'popover': string,
 		})  & ReturnType< $mol_view['attr'] >
 	}
 	
@@ -2779,24 +2859,22 @@ declare namespace $.$$ {
         align(): string;
         align_vert(): "suspense" | "top" | "bottom";
         align_hor(): "suspense" | "left" | "right";
-        View_port(): $mol_view;
-        view_port(): {
-            width: number;
-            height: number;
-            left: number;
-            right: number;
-            top: number;
-            bottom: number;
-        } | {
-            left: number;
-            top: number;
-            width: number;
-            height: number;
-        };
+        bubble_offset(): number[];
+        bubble_align(): number[];
+        bubble(): void;
     }
 }
 
 declare namespace $ {
+}
+
+declare namespace $ {
+    class $mol_dom_event<EventType extends Event> extends $mol_object {
+        readonly native: EventType;
+        constructor(native: EventType);
+        prevented(next?: boolean): boolean;
+        static wrap<EventType extends Event>(event: EventType): $mol_dom_event<EventType>;
+    }
 }
 
 declare namespace $ {
@@ -3464,6 +3542,7 @@ declare namespace $ {
 		bubble_content( ): readonly(any)[]
 		Filter( ): $mol_search
 		Trigger_icon( ): $mol_icon_dots_vertical
+		trigger_enabled( ): ReturnType< $mol_select['enabled'] >
 	}
 	
 }
@@ -3724,7 +3803,7 @@ declare namespace $ {
 }
 
 declare namespace $ {
-    type $mol_time_duration_config = number | string | {
+    type $mol_time_duration_config = number | string | readonly [number, number, number, number, number, number] | {
         year?: number;
         month?: number;
         day?: number;
@@ -3747,6 +3826,7 @@ declare namespace $ {
         valueOf(): number;
         toJSON(): string;
         toString(pattern?: string): string;
+        toArray(): readonly [number, number, number, number, number, number];
         [Symbol.toPrimitive](mode: 'default' | 'number' | 'string'): string | number;
         static patterns: {
             '#Y': (duration: $mol_time_duration) => string;
@@ -3779,7 +3859,7 @@ declare namespace $ {
         saturday = 5,
         sunday = 6
     }
-    type $mol_time_moment_config = number | Date | string | {
+    type $mol_time_moment_config = number | Date | string | readonly (number | undefined)[] | {
         year?: number;
         month?: number;
         day?: number;
@@ -3809,6 +3889,7 @@ declare namespace $ {
         valueOf(): number;
         toJSON(): string;
         toString(pattern?: string): string;
+        toArray(): readonly [number | undefined, number | undefined, number | undefined, number | undefined, number | undefined, number | undefined, number | undefined];
         [Symbol.toPrimitive](mode: 'default' | 'number' | 'string'): string | number;
         [$mol_dev_format_head](): any[];
         static patterns: {
@@ -5453,15 +5534,15 @@ declare namespace $ {
 //# sourceMappingURL=box.view.tree.d.ts.map
 declare namespace $ {
 
-	type $mol_paragraph__dom_name_mol_section_1 = $mol_type_enforce<
+	type $mol_view__dom_name_mol_section_1 = $mol_type_enforce<
 		ReturnType< $mol_section['title_dom_name'] >
 		,
-		ReturnType< $mol_paragraph['dom_name'] >
+		ReturnType< $mol_view['dom_name'] >
 	>
-	type $mol_paragraph__title_mol_section_2 = $mol_type_enforce<
-		ReturnType< $mol_section['title'] >
+	type $mol_view__sub_mol_section_2 = $mol_type_enforce<
+		readonly(any)[]
 		,
-		ReturnType< $mol_paragraph['title'] >
+		ReturnType< $mol_view['sub'] >
 	>
 	type $mol_view__sub_mol_section_3 = $mol_type_enforce<
 		ReturnType< $mol_section['tools'] >
@@ -5480,7 +5561,7 @@ declare namespace $ {
 	>
 	export class $mol_section extends $mol_list {
 		title_dom_name( ): string
-		Title( ): $mol_paragraph
+		Title( ): $mol_view
 		tools( ): readonly(any)[]
 		Tools( ): $mol_view
 		head( ): readonly(any)[]
@@ -11475,26 +11556,6 @@ declare namespace $ {
 //# sourceMappingURL=magnify.view.tree.d.ts.map
 declare namespace $ {
 
-	export class $mol_ghost extends $mol_view {
-		Sub( ): $mol_view
-	}
-	
-}
-
-//# sourceMappingURL=ghost.view.tree.d.ts.map
-declare namespace $.$$ {
-    class $mol_ghost extends $.$mol_ghost {
-        dom_node_external(next?: Element): Element;
-        dom_node_actual(): Element;
-        dom_tree(): Element;
-        title(): string;
-        minimal_width(): number;
-        minimal_height(): number;
-    }
-}
-
-declare namespace $ {
-
 	export class $mol_drag extends $mol_ghost {
 		start( next?: any ): any
 		drag_start( next?: ReturnType< $mol_drag['start'] > ): ReturnType< $mol_drag['start'] >
@@ -12695,8 +12756,8 @@ declare namespace $ {
         readonly header: string;
         readonly table: string;
         readonly list: string;
-        readonly quote: string;
         readonly cut: string;
+        readonly quote: string;
         readonly paragraph: string;
         readonly script: string;
         readonly win_end: string;
