@@ -3222,16 +3222,10 @@ $piterjs_intro $mol_view
 				\Митапы в Питере
 				\JS и всё, что рядом
 				\Каждый месяц с 2015
-				\Спячка с 2020
-				\С 2023 снова с вами!
 		projects <= Projects $piterjs_intro_page
-			title \Наши проекты
+			title \Другие проекты
 			text \
-				\**PiterJS** - митапы по JS в Петербурге
-				\PiterJS **Reflect** - подкасты по мотивам митапов
-				\PiterJS **Conf** - конференции от JS
-				\--
-				\**PiterUX** - митапы по дизайну
+				\**PiterUX** - митапы о дизайне
 				\**PiterHUG** - прогулки, общение, софты
 		comunity <= Community $piterjs_intro_page
 			title \Сообщество PiterJS
@@ -3241,27 +3235,9 @@ $piterjs_intro $mol_view
 				\! VKontakte
 				\  ! 2.1K+
 				\! Telegram
-				\  ! 1.8K+
+				\  ! 1.9K+
 				\! Offline
-				\  ! 70..100
-		- geo_quest <= Geo_quest $piterjs_intro_page
-			title \Откуда мы?
-			text \
-				\Санкт-Петербург: 76%
-				\Москва: 5%
-				\???
-				\???
-				\???
-				\Где-то на Земле: 17%
-		- geo_answer <= Geo_answer $piterjs_intro_page
-			title \О такие мы!
-			text \
-				\Санкт-Петербург: 76%
-				\Москва: 5%
-				\**Рыбинск**: 0.75%
-				\**Самара**: 0.64%
-				\**Челябинск**: 0.61%
-				\Где-то на Земле: 17%
+				\  ! ~70
 		roles_org <= Roles_org $piterjs_intro_page
 			title \Роли организаторов
 			text \
@@ -3271,7 +3247,6 @@ $piterjs_intro $mol_view
 				\Фото и видео **монтаж**
 				\**Дизайн** и эстетика бренда
 				\**Сайт** и автоматизация
-				\**Ведение соцсетей**
 				\**Координация** всех этих людей
 		roles_place <= Roles_place $piterjs_intro_page
 			title \Роли на площадке
@@ -3286,17 +3261,16 @@ $piterjs_intro $mol_view
 		team <= Team $piterjs_intro_page
 			title \Команда
 			text \
-				- \! ""https://i.imgur.com/KoX0d8g.jpeg""
-				- \  ! ""https://i.imgur.com/KiAK2i0.jpeg""
 				- \--
 				- \  ! ""https://habrastorage.org/webt/mb/oz/2-/mboz2-qxenahgayijecyblbo6ka.jpeg""
 				- \    ! ""https://i.imgur.com/F8qrBYo.png""
-				- \    ! ""https://i.imgur.com/FS8bvSe.jpeg""
-				\! ""https://i.imgur.com/qU059B2.jpeg""
-				\  ! ""https://habrastorage.org/webt/pd/ii/9l/pdii9lgzgihcg9vb3etx_hug4rg.jpeg""
-				\    ! ""https://i.imgur.com/n2Fxkqv.png""
-				\      ! ""https://i.imgur.com/V2Rkj38.jpeg""
-				\        ! ""https://i.imgur.com/R86XxcW.jpeg""
+				\! ""https://habrastorage.org/webt/c5/tf/-i/c5tf-il8mfpbxxegoi_i5h6egxu.png""
+				\  ! ""https://habrastorage.org/webt/kf/qg/9l/kfqg9lp0ez5eey44-rlszbwozma.png""
+				\    ! ""https://habrastorage.org/webt/8e/dq/rh/8edqrhvfwy92wyra4yulzc3uvyi.png""
+				\      ! ""https://habrastorage.org/webt/pd/ii/9l/pdii9lgzgihcg9vb3etx_hug4rg.jpeg""
+				\! ""https://habrastorage.org/webt/vv/rj/2f/vvrj2ffi-kztfpzdsbiiv-goqso.png""
+				\  ! ""https://habrastorage.org/webt/dw/3a/ui/dw3auiirk0vffjg3xnn4em775dq.png""
+				\    ! ""https://habrastorage.org/webt/cd/po/2w/cdpo2wbzt2bd0lism1hvcui3bgs.png""
 		speakers <= Speakers $piterjs_intro_page
 			title \Стань докладчиком
 			text \
@@ -3321,14 +3295,14 @@ $piterjs_intro $mol_view
 		schedule <= Schedule $piterjs_schedule
 			meetup <= meetup
 			title \Сегодня
-		profit <= Proft $piterjs_intro_page
+		- profit <= Proft $piterjs_intro_page
 			title \Бонусы
 			text \
 				\За лучшие вопросы - призы
 				\Мы ведём трансляцию
 				\И записываем видео
 				\Улыбайтесь фотографу
-		partners <= Partners $piterjs_intro_page
+		- partners <= Partners $piterjs_intro_page
 			title \Партнёры
 			text \
 				\! ""https://i.imgur.com/ntlwbqL.png""

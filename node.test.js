@@ -11941,7 +11941,7 @@ var $;
             if (config instanceof Array) {
                 ;
                 [this.year, this.month, this.day, this.hour, this.minute, this.second] = config;
-                if (config[6])
+                if (config[6] !== undefined)
                     this.offset = new $mol_time_duration(config[6] * 60_000);
                 return;
             }
@@ -31551,25 +31551,25 @@ var $;
 		About(){
 			const obj = new this.$.$piterjs_intro_page();
 			(obj.title) = () => ("Кто мы??");
-			(obj.text) = () => ("Митапы в Питере\nJS и всё, что рядом\nКаждый месяц с 2015\nСпячка с 2020\nС 2023 снова с вами!");
+			(obj.text) = () => ("Митапы в Питере\nJS и всё, что рядом\nКаждый месяц с 2015");
 			return obj;
 		}
 		Projects(){
 			const obj = new this.$.$piterjs_intro_page();
-			(obj.title) = () => ("Наши проекты");
-			(obj.text) = () => ("**PiterJS** - митапы по JS в Петербурге\nPiterJS **Reflect** - подкасты по мотивам митапов\nPiterJS **Conf** - конференции от JS\n--\n**PiterUX** - митапы по дизайну\n**PiterHUG** - прогулки, общение, софты");
+			(obj.title) = () => ("Другие проекты");
+			(obj.text) = () => ("**PiterUX** - митапы о дизайне\n**PiterHUG** - прогулки, общение, софты");
 			return obj;
 		}
 		Community(){
 			const obj = new this.$.$piterjs_intro_page();
 			(obj.title) = () => ("Сообщество PiterJS");
-			(obj.text) = () => ("! YouTube\n  ! 2.5K+\n! VKontakte\n  ! 2.1K+\n! Telegram\n  ! 1.8K+\n! Offline\n  ! 70..100");
+			(obj.text) = () => ("! YouTube\n  ! 2.5K+\n! VKontakte\n  ! 2.1K+\n! Telegram\n  ! 1.9K+\n! Offline\n  ! ~70");
 			return obj;
 		}
 		Roles_org(){
 			const obj = new this.$.$piterjs_intro_page();
 			(obj.title) = () => ("Роли организаторов");
-			(obj.text) = () => ("Подготовка **докладчиков**\nКоммуникация с **аудиторией**\nКоммуникация с **партнёрами**\nФото и видео **монтаж**\n**Дизайн** и эстетика бренда\n**Сайт** и автоматизация\n**Ведение соцсетей**\n**Координация** всех этих людей");
+			(obj.text) = () => ("Подготовка **докладчиков**\nКоммуникация с **аудиторией**\nКоммуникация с **партнёрами**\nФото и видео **монтаж**\n**Дизайн** и эстетика бренда\n**Сайт** и автоматизация\n**Координация** всех этих людей");
 			return obj;
 		}
 		Roles_place(){
@@ -31581,7 +31581,7 @@ var $;
 		Team(){
 			const obj = new this.$.$piterjs_intro_page();
 			(obj.title) = () => ("Команда");
-			(obj.text) = () => ("! \"\"https://i.imgur.com/qU059B2.jpeg\"\"\n  ! \"\"https://habrastorage.org/webt/pd/ii/9l/pdii9lgzgihcg9vb3etx_hug4rg.jpeg\"\"\n    ! \"\"https://i.imgur.com/n2Fxkqv.png\"\"\n      ! \"\"https://i.imgur.com/V2Rkj38.jpeg\"\"\n        ! \"\"https://i.imgur.com/R86XxcW.jpeg\"\"");
+			(obj.text) = () => ("! \"\"https://habrastorage.org/webt/c5/tf/-i/c5tf-il8mfpbxxegoi_i5h6egxu.png\"\"\n  ! \"\"https://habrastorage.org/webt/kf/qg/9l/kfqg9lp0ez5eey44-rlszbwozma.png\"\"\n    ! \"\"https://habrastorage.org/webt/8e/dq/rh/8edqrhvfwy92wyra4yulzc3uvyi.png\"\"\n      ! \"\"https://habrastorage.org/webt/pd/ii/9l/pdii9lgzgihcg9vb3etx_hug4rg.jpeg\"\"\n! \"\"https://habrastorage.org/webt/vv/rj/2f/vvrj2ffi-kztfpzdsbiiv-goqso.png\"\"\n  ! \"\"https://habrastorage.org/webt/dw/3a/ui/dw3auiirk0vffjg3xnn4em775dq.png\"\"\n    ! \"\"https://habrastorage.org/webt/cd/po/2w/cdpo2wbzt2bd0lism1hvcui3bgs.png\"\"");
 			return obj;
 		}
 		Speakers(){
@@ -31606,18 +31606,6 @@ var $;
 			const obj = new this.$.$piterjs_schedule();
 			(obj.meetup) = () => ((this.meetup()));
 			(obj.title) = () => ("Сегодня");
-			return obj;
-		}
-		Proft(){
-			const obj = new this.$.$piterjs_intro_page();
-			(obj.title) = () => ("Бонусы");
-			(obj.text) = () => ("За лучшие вопросы - призы\nМы ведём трансляцию\nИ записываем видео\nУлыбайтесь фотографу");
-			return obj;
-		}
-		Partners(){
-			const obj = new this.$.$piterjs_intro_page();
-			(obj.title) = () => ("Партнёры");
-			(obj.text) = () => ("! \"\"https://i.imgur.com/ntlwbqL.png\"\"");
 			return obj;
 		}
 		place_notes(){
@@ -31696,8 +31684,6 @@ var $;
 				"partnering": (this.Partnering()), 
 				"contribution": (this.Contribution()), 
 				"schedule": (this.Schedule()), 
-				"profit": (this.Proft()), 
-				"partners": (this.Partners()), 
 				"place": (this.Place()), 
 				"follow": (this.Follow()), 
 				"afterparty": (this.Afterparty())
@@ -31724,8 +31710,6 @@ var $;
 	($mol_mem(($.$piterjs_intro.prototype), "Partnering"));
 	($mol_mem(($.$piterjs_intro.prototype), "Contribution"));
 	($mol_mem(($.$piterjs_intro.prototype), "Schedule"));
-	($mol_mem(($.$piterjs_intro.prototype), "Proft"));
-	($mol_mem(($.$piterjs_intro.prototype), "Partners"));
 	($mol_mem(($.$piterjs_intro.prototype), "Place"));
 	($mol_mem(($.$piterjs_intro.prototype), "Follow"));
 	($mol_mem(($.$piterjs_intro.prototype), "Afterparty"));
@@ -36798,6 +36782,11 @@ var $;
         'comparison'() {
             const iso = '2021-01-02T03:04:05.678+09:10';
             $mol_assert_equal(new $mol_time_moment(iso), new $mol_time_moment(iso));
+        },
+        'array keeps zero offset'() {
+            const moment = new $mol_time_moment('2026-01-25T16:37:36.129+00:00');
+            const restored = new $mol_time_moment(moment.toArray());
+            $mol_assert_equal(restored.offset?.count('PT1m'), 0);
         },
     });
 })($ || ($ = {}));
