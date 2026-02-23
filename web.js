@@ -31163,7 +31163,7 @@ var $;
 		Team(){
 			const obj = new this.$.$piterjs_intro_page();
 			(obj.title) = () => ("Команда");
-			(obj.text) = () => ("  ! \"\"https://habrastorage.org/webt/kf/qg/9l/kfqg9lp0ez5eey44-rlszbwozma.png\"\"\n! \"\"https://habrastorage.org/webt/pd/ii/9l/pdii9lgzgihcg9vb3etx_hug4rg.jpeg\"\"\n  ! \"\"https://habrastorage.org/webt/c5/tf/-i/c5tf-il8mfpbxxegoi_i5h6egxu.png\"\"\n    ! \"\"https://habrastorage.org/webt/-8/6s/kw/-86skwqsvqzvodiauw3fv_vt1h8.png\"\"\n      ! \"\"https://habrastorage.org/webt/dw/3a/ui/dw3auiirk0vffjg3xnn4em775dq.png\"\"\n! \"\"https://habrastorage.org/webt/8e/dq/rh/8edqrhvfwy92wyra4yulzc3uvyi.png\"\"\n  ! \"\"https://habrastorage.org/webt/vv/rj/2f/vvrj2ffi-kztfpzdsbiiv-goqso.png\"\"\n    ! \"\"https://habrastorage.org/webt/cd/po/2w/cdpo2wbzt2bd0lism1hvcui3bgs.png\"\"");
+			(obj.text) = () => ("! \"\"https://habrastorage.org/webt/pd/ii/9l/pdii9lgzgihcg9vb3etx_hug4rg.jpeg\"\"\n  ! \"\"https://habrastorage.org/webt/-8/6s/kw/-86skwqsvqzvodiauw3fv_vt1h8.png\"\"\n    ! \"\"https://habrastorage.org/webt/c5/tf/-i/c5tf-il8mfpbxxegoi_i5h6egxu.png\"\"\n  ! \"\"https://habrastorage.org/webt/c5/tf/-i/c5tf-il8mfpbxxegoi_i5h6egxu.png\"\"\n    ! \"\"https://habrastorage.org/webt/-8/6s/kw/-86skwqsvqzvodiauw3fv_vt1h8.png\"\"\n      ! \"\"https://habrastorage.org/webt/dw/3a/ui/dw3auiirk0vffjg3xnn4em775dq.png\"\"\n! \"\"https://habrastorage.org/webt/8e/dq/rh/8edqrhvfwy92wyra4yulzc3uvyi.png\"\"\n  ! \"\"https://habrastorage.org/webt/vv/rj/2f/vvrj2ffi-kztfpzdsbiiv-goqso.png\"\"\n    ! \"\"https://habrastorage.org/webt/cd/po/2w/cdpo2wbzt2bd0lism1hvcui3bgs.png\"\"");
 			return obj;
 		}
 		Speakers(){
@@ -31190,12 +31190,6 @@ var $;
 			(obj.title) = () => ("Сегодня");
 			return obj;
 		}
-		Partners(){
-			const obj = new this.$.$piterjs_intro_page();
-			(obj.title) = () => ("Партнёры");
-			(obj.text) = () => ("! \"\"https://i.imgur.com/ntlwbqL.png\"\"");
-			return obj;
-		}
 		place_notes(){
 			return "";
 		}
@@ -31206,7 +31200,6 @@ var $;
 			const obj = new this.$.$piterjs_intro_page();
 			(obj.text) = () => ((this.place_notes()));
 			(obj.title) = () => ((this.place_title()));
-			(obj.text) = () => ("\"\"https://habrastorage.org/webt/nh/np/oy/nhnpoyyb6ayimlhpxcyxptxwtza.jpeg\"\"");
 			return obj;
 		}
 		Follow(){
@@ -31273,7 +31266,6 @@ var $;
 				"partnering": (this.Partnering()), 
 				"contribution": (this.Contribution()), 
 				"schedule": (this.Schedule()), 
-				"partners": (this.Partners()), 
 				"place": (this.Place()), 
 				"follow": (this.Follow()), 
 				"afterparty": (this.Afterparty())
@@ -31300,7 +31292,6 @@ var $;
 	($mol_mem(($.$piterjs_intro.prototype), "Partnering"));
 	($mol_mem(($.$piterjs_intro.prototype), "Contribution"));
 	($mol_mem(($.$piterjs_intro.prototype), "Schedule"));
-	($mol_mem(($.$piterjs_intro.prototype), "Partners"));
 	($mol_mem(($.$piterjs_intro.prototype), "Place"));
 	($mol_mem(($.$piterjs_intro.prototype), "Follow"));
 	($mol_mem(($.$piterjs_intro.prototype), "Afterparty"));
