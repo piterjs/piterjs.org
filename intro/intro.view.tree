@@ -54,8 +54,6 @@ $piterjs_intro $mol_view
 				- \    ! ""https://i.imgur.com/F8qrBYo.png""
 				\  ! ""https://habrastorage.org/webt/kf/qg/9l/kfqg9lp0ez5eey44-rlszbwozma.png""
 				\! ""https://habrastorage.org/webt/pd/ii/9l/pdii9lgzgihcg9vb3etx_hug4rg.jpeg""
-				\  ! ""https://habrastorage.org/webt/-8/6s/kw/-86skwqsvqzvodiauw3fv_vt1h8.png""
-				\    ! ""https://habrastorage.org/webt/c5/tf/-i/c5tf-il8mfpbxxegoi_i5h6egxu.png""
 				\  ! ""https://habrastorage.org/webt/c5/tf/-i/c5tf-il8mfpbxxegoi_i5h6egxu.png""
 				\    ! ""https://habrastorage.org/webt/-8/6s/kw/-86skwqsvqzvodiauw3fv_vt1h8.png""
 				\      ! ""https://habrastorage.org/webt/dw/3a/ui/dw3auiirk0vffjg3xnn4em775dq.png""
@@ -101,8 +99,8 @@ $piterjs_intro $mol_view
 		place <= Place $piterjs_intro_page
 			text <= place_notes \
 			title <= place_title \Мы в {place}
-      text  \
-          \""https://habrastorage.org/webt/nh/np/oy/nhnpoyyb6ayimlhpxcyxptxwtza.jpeg""
+			text \
+				\""https://habrastorage.org/webt/nh/np/oy/nhnpoyyb6ayimlhpxcyxptxwtza.jpeg""
 		follow <= Follow $piterjs_intro_page
 			title \Следите за новостями
 			text \
