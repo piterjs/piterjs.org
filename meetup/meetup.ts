@@ -236,9 +236,9 @@ namespace $ {
 			const time = this.start()?.toString( 'hh:mm' ) ?? ''
 			const place = this.place().title()
 			const address = this.place().address()
-			const afterparty = this.afterparty()
+			const afterparty = this.afterparty() ?? ''
 			const meetup = this.$.$mol_state_arg.make_link({ meetup: this.id() })
-			const video = this.video()
+			const video = this.video() ?? ''
 
 			const speeches = this.speeches().map(
 				speech => this.post_template( 'init_speech' )
