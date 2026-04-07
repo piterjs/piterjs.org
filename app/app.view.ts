@@ -49,10 +49,17 @@ namespace $.$$ {
 		meetup_id( next? : string | null ) {
 			
 			const id = this.$.$mol_state_arg.value( 'meetup' , next )
-			if( !id ) return id
+			if( id ) {
+				const ids2 = $mol_int62_string_ensure( id )
+				if( ids2 ) return ids2
+				return null
+			}
 
-			const ids2 = $mol_int62_string_ensure( id )
-			if( ids2 ) return ids2
+			const speech_id = this.speech_id()
+			if( speech_id ) {
+				const meetup = this.speech( speech_id as $mol_int62_string ).meetup()
+				if( meetup ) return meetup.id()
+			}
 
 			return null
 
