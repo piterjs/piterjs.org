@@ -81,13 +81,6 @@ namespace $.$$ {
 		pages() {
 			if( this.intro() != null ) return [ this.Intro() ]
 
-			if( this.speech_id() && !this.meetup_id() ) {
-				const meetup = this.speech( this.speech_id() as $mol_int62_string ).meetup()
-				if( meetup ) this.$.$mol_state_arg.href(
-					this.$.$mol_state_arg.make_link({ meetup: meetup.id(), speech: this.speech_id()! })
-				)
-			}
-
 			const pages = [
 				this.Menu() ,
 				... this.rights() ? [ this.Rights() ] : [] ,
