@@ -49,18 +49,9 @@ namespace $.$$ {
 		meetup_id( next? : string | null ) {
 			
 			const id = this.$.$mol_state_arg.value( 'meetup' , next )
-			if( id ) {
-				const ids2 = $mol_int62_string_ensure( id )
-				if( ids2 ) return ids2
-				return null
-			}
-
-			const speech_id = this.speech_id()
-			if( speech_id ) {
-				const meetup = this.speech( speech_id as $mol_int62_string ).meetup()
-				if( meetup ) return meetup.id()
-			}
-
+			if( !id ) return null
+			const ids2 = $mol_int62_string_ensure( id )
+			if( ids2 ) return ids2
 			return null
 
 		}
@@ -81,19 +72,22 @@ namespace $.$$ {
 		pages() {
 			if( this.intro() != null ) return [ this.Intro() ]
 
+			const meetup = this.meetup_current()
+			const meetup_id = meetup?.id() ?? null
+
 			const pages = [
 				this.Menu() ,
 				... this.rights() ? [ this.Rights() ] : [] ,
 				... this.safe() ? [ this.Safe() ] : [],
-				... this.meetup_id() ? [ this.Meetup( this.meetup_id() ) ] : [] ,
+				... meetup_id ? [ this.Meetup( meetup_id ) ] : [] ,
 				... this.rights_meetup() ? [ this.Rights_meetup() ] : [] ,
 				... this.speech_id() ? [ this.Speech( this.speech_id() ) ] : [] ,
 				... this.place_show() ? [ this.Place() ] : [] ,
 				... this.video() ? [ this.Video() ] : [] ,
-				... this.guests() ? [ this.Meetup_guests( this.meetup_id() ) ] : [] ,
-				... this.texts() ? [ this.Meetup_texts( this.meetup_id() ) ] : [] ,
-				... this.templates() ? [ this.Meetup_templates( this.meetup_id() ) ] : [] ,
-				... this.stats() ? [ this.Meetup_stats( this.meetup_id() ) ] : [] ,
+				... this.guests() ? [ this.Meetup_guests( meetup_id ) ] : [] ,
+				... this.texts() ? [ this.Meetup_texts( meetup_id ) ] : [] ,
+				... this.templates() ? [ this.Meetup_templates( meetup_id ) ] : [] ,
+				... this.stats() ? [ this.Meetup_stats( meetup_id ) ] : [] ,
 				... this.others() ? [ this.Others() ] : [] ,
 				... this.wiki() ? this.Wiki().pages() : [],
 			]
@@ -109,7 +103,15 @@ namespace $.$$ {
 
 		@ $mol_mem
 		meetup_current() {
-			return this.meetup_id() ? this.meetup( this.meetup_id() ) : this.meetups()[0]
+			if( this.meetup_id() ) return this.meetup( this.meetup_id() )
+
+			const speech_id = this.speech_id()
+			if( speech_id ) {
+				const meetup = this.speech( speech_id as $mol_int62_string ).meetup()
+				if( meetup ) return meetup
+			}
+
+			return this.meetups()[0]
 		}
 
 		@ $mol_mem
