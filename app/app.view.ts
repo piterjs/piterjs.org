@@ -47,13 +47,11 @@ namespace $.$$ {
 		
 		@ $mol_mem
 		meetup_id( next? : string | null ) {
-			
 			const id = this.$.$mol_state_arg.value( 'meetup' , next )
 			if( !id ) return null
 			const ids2 = $mol_int62_string_ensure( id )
 			if( ids2 ) return ids2
 			return null
-
 		}
 
 		@ $mol_action
@@ -175,7 +173,7 @@ namespace $.$$ {
 				return [
 					this.Online(),
 					this.Toggle_intro(),
-					... this.Domain().editable() ? [ this.Editing() ] : [ this.User() ],
+					... this.Domain().editable() ? [ this.Editing() ] : [ this.Editing() ],
 					... this.editable() ? [ this.Rights_toggle() ] : [],
 					this.Lights(),
 				]
