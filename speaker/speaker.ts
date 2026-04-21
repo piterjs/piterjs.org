@@ -19,9 +19,9 @@ namespace $ {
 
 		@ $mol_mem
 		photo_uri() {
-			
-			return URL.createObjectURL( this.photo_blob() )
-			
+			const blob = this.photo_blob()
+			if( !blob?.size ) return ''
+			return URL.createObjectURL( blob )
 		}
 		
 		@ $mol_mem

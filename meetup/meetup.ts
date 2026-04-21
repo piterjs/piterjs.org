@@ -125,7 +125,7 @@ namespace $ {
 			if( !this.joined_node()?.has( id ) ) return ''
 			
 			const closed = this.joined_node()?.sub( id, $hyoo_crowd_reg ).value()
-			if( !close ) return ''
+			if( !closed ) return ''
 
 			if( typeof closed === 'string' ) return closed
 
