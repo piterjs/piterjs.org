@@ -41,7 +41,7 @@ var $;
 "use strict";
 var $;
 (function ($) {
-    const mod = require('module');
+    const mod = require /****/('module');
     const internals = mod.builtinModules;
     function $node_internal_check(name) {
         if (name.startsWith('node:'))
@@ -81,7 +81,7 @@ var $;
 var $;
 (function ($) {
     function $mol_fail_hidden(error) {
-        throw error;
+        throw error; /// Use 'Never Pause Here' breakpoint in DevTools or simply blackbox this script
     }
     $.$mol_fail_hidden = $mol_fail_hidden;
 })($ || ($ = {}));
@@ -139,8 +139,8 @@ var $;
 "use strict";
 var $;
 (function ($) {
-    const path = require('path');
-    const mod = require('module');
+    const path = require /****/('path');
+    const mod = require /****/('module');
     const localRequire = mod.createRequire(path.join(process.cwd(), 'package.json'));
     function $node_autoinstall(name) {
         try {
@@ -247,6 +247,7 @@ var $;
                     ])
                 ].map(frame_normalize).join('\n')
             });
+            // в nodejs, что б не дублировалось cause в консоли
             Object.defineProperty(this, 'cause', {
                 get: () => cause
             });
@@ -280,6 +281,11 @@ var $;
 var $;
 (function ($) {
     const instances = new WeakSet();
+    /**
+     * Proxy that delegates all to lazy returned target.
+     *
+     * 	$mol_delegate( Array.prototype , ()=> fetch_array() )
+     */
     function $mol_delegate(proto, target) {
         const proxy = new Proxy(proto, {
             get: (_, field) => {
@@ -423,6 +429,9 @@ var $;
         [Symbol.dispose]() {
             this.destructor();
         }
+        //[ Symbol.toPrimitive ]( hint: string ) {
+        //	return hint === 'number' ? this.valueOf() : this.toString()
+        //}
         toString() {
             return this[Symbol.toStringTag] || this.constructor.name + '<>';
         }
@@ -473,6 +482,7 @@ var $;
 "use strict";
 var $;
 (function ($) {
+    /** Generates unique identifier. */
     function $mol_guid(length = 8, exists = () => false) {
         for (;;) {
             let id = Math.random().toString(36).substring(2, length + 2).toUpperCase();
@@ -488,11 +498,16 @@ var $;
 "use strict";
 var $;
 (function ($) {
+    /** Special status statuses. */
     let $mol_wire_cursor;
     (function ($mol_wire_cursor) {
+        /** Update required. */
         $mol_wire_cursor[$mol_wire_cursor["stale"] = -1] = "stale";
+        /** Some of (transitive) pub update required. */
         $mol_wire_cursor[$mol_wire_cursor["doubt"] = -2] = "doubt";
+        /** Actual state but may be dropped. */
         $mol_wire_cursor[$mol_wire_cursor["fresh"] = -3] = "fresh";
+        /** State will never be changed. */
         $mol_wire_cursor[$mol_wire_cursor["final"] = -4] = "final";
     })($mol_wire_cursor = $.$mol_wire_cursor || ($.$mol_wire_cursor = {}));
 })($ || ($ = {}));
@@ -501,6 +516,9 @@ var $;
 "use strict";
 var $;
 (function ($) {
+    /**
+     * Collects subscribers in compact array. 28B
+     */
     class $mol_wire_pub extends Object {
         constructor(id = `$mol_wire_pub:${$mol_guid()}`) {
             super();
@@ -508,10 +526,17 @@ var $;
         }
         [Symbol.toStringTag];
         data = [];
+        // Derived objects should be Arrays.
         static get [Symbol.species]() {
             return Array;
         }
-        sub_from = 0;
+        /**
+         * Index of first subscriber.
+         */
+        sub_from = 0; // 4B
+        /**
+         * All current subscribers.
+         */
         get sub_list() {
             const res = [];
             for (let i = this.sub_from; i < this.data.length; i += 2) {
@@ -519,14 +544,23 @@ var $;
             }
             return res;
         }
+        /**
+         * Has any subscribers or not.
+         */
         get sub_empty() {
             return this.sub_from === this.data.length;
         }
+        /**
+         * Subscribe subscriber to this publisher events and return position of subscriber that required to unsubscribe.
+         */
         sub_on(sub, pub_pos) {
             const pos = this.data.length;
             this.data.push(sub, pub_pos);
             return pos;
         }
+        /**
+         * Unsubscribe subscriber from this publisher events by subscriber position provided by `on(pub)`.
+         */
         sub_off(sub_pos) {
             if (!(sub_pos < this.data.length)) {
                 $mol_fail(new Error(`Wrong pos ${sub_pos}`));
@@ -539,21 +573,39 @@ var $;
             if (end === this.sub_from)
                 this.reap();
         }
+        /**
+         * Called when last sub was unsubscribed.
+         **/
         reap() { }
+        /**
+         * Autowire this publisher with current subscriber.
+         **/
         promote() {
             $mol_wire_auto()?.track_next(this);
         }
+        /**
+         * Enforce actualization. Should not throw errors.
+         */
         fresh() { }
+        /**
+         * Allow to put data to caches in the subtree.
+         */
         complete() { }
         get incompleted() {
             return false;
         }
+        /**
+         * Notify subscribers about self changes.
+         */
         emit(quant = $mol_wire_cursor.stale) {
             for (let i = this.sub_from; i < this.data.length; i += 2) {
                 ;
                 this.data[i].absorb(quant, this.data[i + 1]);
             }
         }
+        /**
+         * Moves peer from one position to another. Doesn't clear data at old position!
+         */
         peer_move(from_pos, to_pos) {
             const peer = this.data[from_pos];
             const self_pos = this.data[from_pos + 1];
@@ -561,6 +613,9 @@ var $;
             this.data[to_pos + 1] = self_pos;
             peer.peer_repos(self_pos, to_pos);
         }
+        /**
+         * Updates self position in the peer.
+         */
         peer_repos(peer_pos, self_pos) {
             this.data[peer_pos + 1] = self_pos;
         }
@@ -576,10 +631,16 @@ var $;
 var $;
 (function ($) {
     $.$mol_wire_auto_sub = null;
+    /**
+     * When fulfilled, all publishers are promoted to this subscriber on access to its.
+     */
     function $mol_wire_auto(next = $.$mol_wire_auto_sub) {
         return $.$mol_wire_auto_sub = next;
     }
     $.$mol_wire_auto = $mol_wire_auto;
+    /**
+     * Affection queue. Used to prevent accidental stack overflow on emit.
+     */
     $.$mol_wire_affected = [];
 })($ || ($ = {}));
 
@@ -587,6 +648,7 @@ var $;
 "use strict";
 var $;
 (function ($) {
+    // https://docs.google.com/document/d/1FTascZXT9cxfetuPRT2eXPQKXui4nWFivUnS_335T3U/preview#
     $['devtoolsFormatters'] ||= [];
     function $mol_dev_format_register(config) {
         $['devtoolsFormatters'].push(config);
@@ -638,6 +700,7 @@ var $;
                 return false;
             if (!val)
                 return false;
+            // if( Error.isError( val ) ) true
             if (val[$.$mol_dev_format_body])
                 return true;
             return false;
@@ -655,12 +718,16 @@ var $;
                     return $.$mol_dev_format_accent($mol_dev_format_native(val), '💨', $mol_dev_format_native(error), '');
                 }
             }
+            // if( Error.isError( val ) ) {
+            // 	return $mol_dev_format_native( val )
+            // }
             return null;
         },
     });
     function $mol_dev_format_native(obj) {
         if (typeof obj === 'undefined')
             return $.$mol_dev_format_shade('undefined');
+        // if( ![ 'object', 'function', 'symbol' ].includes( typeof obj )  ) return obj
         return [
             'object',
             {
@@ -718,6 +785,15 @@ var $;
         'margin-left': '13px'
     });
     class Stack extends Array {
+        // [ Symbol.toPrimitive ]() {
+        // 	return this.toString()
+        // }
+        match(...args) {
+            return this.toString().match(...args);
+        }
+        split(...args) {
+            return this.toString().split(...args);
+        }
         toString() {
             return this.join('\n');
         }
@@ -740,6 +816,7 @@ var $;
             this.method = call.getMethodName() ?? '';
             if (this.method === this.function)
                 this.method = '';
+            // const func = c.getFunction()
             this.pos = [call.getEnclosingLineNumber() ?? 0, call.getEnclosingColumnNumber() ?? 0];
             this.eval = call.getEvalOrigin() ?? '';
             this.source = call.getScriptNameOrSourceURL() ?? '';
@@ -786,9 +863,16 @@ var $;
 "use strict";
 var $;
 (function ($) {
+    /**
+     * Publisher that can auto collect other publishers. 32B
+     *
+     * 	P1 P2 P3 P4 S1 S2 S3
+     * 	^           ^
+     * 	pubs_from   subs_from
+     */
     class $mol_wire_pub_sub extends $mol_wire_pub {
-        pub_from = 0;
-        cursor = $mol_wire_cursor.stale;
+        pub_from = 0; // 4B
+        cursor = $mol_wire_cursor.stale; // 4B
         get temp() {
             return false;
         }
@@ -906,10 +990,27 @@ var $;
                 return;
             this.cursor = quant;
             this.emit($mol_wire_cursor.doubt);
+            // if( pos >= 0 && pos < this.sub_from - 2 ) {
+            // 	const pub = this.data[ pos ] as $mol_wire_pub
+            // 	if( pub instanceof $mol_wire_task ) return
+            // 	for(
+            // 		let cursor = this.pub_from;
+            // 		cursor < this.sub_from;
+            // 		cursor += 2
+            // 	) {
+            // 		const pub = this.data[ cursor ] as $mol_wire_pub
+            // 		if( pub instanceof $mol_wire_task ) {
+            // 			pub.destructor()
+            // 		}
+            // 	}
+            // }
         }
         [$mol_dev_format_head]() {
             return $mol_dev_format_native(this);
         }
+        /**
+         * Is subscribed to any publisher or not.
+         */
         get pub_empty() {
             return this.sub_from === this.pub_from;
         }
@@ -950,6 +1051,13 @@ var $;
 var $;
 (function ($) {
     const wrappers = new WeakMap();
+    /**
+     * Suspendable task with support both sync/async api.
+     *
+     * 	A1 A2 A3 A4 P1 P2 P3 P4 S1 S2 S3
+     * 	^           ^           ^
+     * 	args_from   pubs_from   subs_from
+     **/
     class $mol_wire_fiber extends $mol_wire_pub_sub {
         task;
         host;
@@ -970,6 +1078,7 @@ var $;
             });
         }
         static sync() {
+            // Sync whole fiber graph
             while (this.planning.size) {
                 for (const fiber of this.planning) {
                     this.planning.delete(fiber);
@@ -980,6 +1089,7 @@ var $;
                     fiber.fresh();
                 }
             }
+            // Collect garbage
             while (this.reaping.size) {
                 const fibers = this.reaping;
                 this.reaping = new Set;
@@ -1131,6 +1241,10 @@ var $;
             this.cursor = $mol_wire_cursor.stale;
             this.fresh();
         }
+        /**
+         * Synchronous execution. Throws Promise when waits async task (SuspenseAPI provider).
+         * Should be called inside SuspenseAPI consumer (ie fiber).
+         */
         sync() {
             if (!$mol_wire_fiber.warm) {
                 return this.result();
@@ -1145,6 +1259,10 @@ var $;
             }
             return this.cache;
         }
+        /**
+         * Asynchronous execution.
+         * It's SuspenseAPI consumer. So SuspenseAPI providers can be called inside.
+         */
         async async_raw() {
             while (true) {
                 this.fresh();
@@ -1157,6 +1275,7 @@ var $;
                 if (!$mol_promise_like(this.cache))
                     return this.cache;
                 if (this.cursor === $mol_wire_cursor.final) {
+                    // never ends on destructed fiber
                     await new Promise(() => { });
                 }
             }
@@ -1204,6 +1323,10 @@ var $;
 var $;
 (function ($) {
     $.$mol_compare_deep_cache = new WeakMap();
+    /**
+     * Deeply compares two values. Returns true if equal.
+     * Define `Symbol.toPrimitive` to customize.
+     */
     function $mol_compare_deep(left, right) {
         if (Object.is(left, right))
             return true;
@@ -1343,6 +1466,7 @@ var $;
 "use strict";
 var $;
 (function ($) {
+    /** Log begin of collapsed group only when some logged inside, returns func to close group */
     function $mol_log3_area_lazy(event) {
         const self = this.$;
         const stack = self.$mol_log3_stack;
@@ -1367,6 +1491,7 @@ var $;
 "use strict";
 var $;
 (function ($) {
+    /** Position in any resource. */
     class $mol_span extends $mol_object2 {
         uri;
         source;
@@ -1382,13 +1507,17 @@ var $;
             this.length = length;
             this[Symbol.toStringTag] = this.uri + ('#' + this.row + ':' + this.col + '/' + this.length);
         }
+        /** Span for begin of unknown resource */
         static unknown = $mol_span.begin('?');
+        /** Makes new span for begin of resource. */
         static begin(uri, source = '') {
             return new $mol_span(uri, source, 1, 1, 0);
         }
+        /** Makes new span for end of resource. */
         static end(uri, source) {
             return new $mol_span(uri, source, 1, source.length + 1, 0);
         }
+        /** Makes new span for entire resource. */
         static entire(uri, source) {
             return new $mol_span(uri, source, 1, 1, source.length);
         }
@@ -1403,15 +1532,19 @@ var $;
                 length: this.length
             };
         }
+        /** Makes new error for this span. */
         error(message, Class = Error) {
             return new Class(`${message} (${this})`);
         }
+        /** Makes new span for same uri. */
         span(row, col, length) {
             return new $mol_span(this.uri, this.source, row, col, length);
         }
+        /** Makes new span after end of this. */
         after(length = 0) {
             return new $mol_span(this.uri, this.source, this.row, this.col + this.length, length);
         }
+        /** Makes new span between begin and end. */
         slice(begin, end = -1) {
             let len = this.length;
             if (begin < 0)
@@ -1434,6 +1567,7 @@ var $;
 "use strict";
 var $;
 (function ($) {
+    /** Serializes tree to string in tree format. */
     function $mol_tree2_to_string(tree) {
         let output = [];
         function dump(tree, prefix = '') {
@@ -1477,12 +1611,25 @@ var $;
 "use strict";
 var $;
 (function ($) {
+    /**
+     * Abstract Syntax Tree with human readable serialization.
+     * Avoid direct instantiation. Use static factories instead.
+     * @see https://github.com/nin-jin/tree.d
+     */
     class $mol_tree2 extends Object {
         type;
         value;
         kids;
         span;
-        constructor(type, value, kids, span) {
+        constructor(
+        /** Type of structural node, `value` should be empty */
+        type, 
+        /** Content of data node, `type` should be empty */
+        value, 
+        /** Child nodes */
+        kids, 
+        /** Position in most far source resource */
+        span) {
             super();
             this.type = type;
             this.value = value;
@@ -1490,12 +1637,15 @@ var $;
             this.span = span;
             this[Symbol.toStringTag] = type || '\\' + value;
         }
+        /** Makes collection node. */
         static list(kids, span = $mol_span.unknown) {
             return new $mol_tree2('', '', kids, span);
         }
+        /** Makes new derived collection node. */
         list(kids) {
             return $mol_tree2.list(kids, this.span);
         }
+        /** Makes data node for any string. */
         static data(value, kids = [], span = $mol_span.unknown) {
             const chunks = value.split('\n');
             if (chunks.length > 1) {
@@ -1509,21 +1659,26 @@ var $;
             }
             return new $mol_tree2('', value, kids, span);
         }
+        /** Makes new derived data node. */
         data(value, kids = []) {
             return $mol_tree2.data(value, kids, this.span);
         }
+        /** Makes struct node. */
         static struct(type, kids = [], span = $mol_span.unknown) {
             if (/[ \n\t\\]/.test(type)) {
                 $$.$mol_fail(span.error(`Wrong type ${JSON.stringify(type)}`));
             }
             return new $mol_tree2(type, '', kids, span);
         }
+        /** Makes new derived structural node. */
         struct(type, kids = []) {
             return $mol_tree2.struct(type, kids, this.span);
         }
+        /** Makes new derived node with different kids id defined. */
         clone(kids, span = this.span) {
             return new $mol_tree2(this.type, this.value, kids, span);
         }
+        /** Returns multiline text content. */
         text() {
             var values = [];
             for (var kid of this.kids) {
@@ -1533,15 +1688,20 @@ var $;
             }
             return this.value + values.join('\n');
         }
+        /** Parses tree format. */
+        /** @deprecated Use $mol_tree2_from_string */
         static fromString(str, uri = 'unknown') {
             return $$.$mol_tree2_from_string(str, uri);
         }
+        /** Serializes to tree format. */
         toString() {
             return $$.$mol_tree2_to_string(this);
         }
+        /** Makes new tree with node overrided by path. */
         insert(value, ...path) {
             return this.update($mol_maybe(value), ...path)[0];
         }
+        /** Makes new tree with node overrided by path. */
         update(value, ...path) {
             if (path.length === 0)
                 return value;
@@ -1574,6 +1734,7 @@ var $;
                 return [this.clone(kids)];
             }
         }
+        /** Query nodes by path. */
         select(...path) {
             let next = [this];
             for (const type of path) {
@@ -1600,6 +1761,7 @@ var $;
             }
             return this.list(next);
         }
+        /** Filter kids by path or value. */
         filter(path, value) {
             const sub = this.kids.filter(item => {
                 var found = item.select(...path);
@@ -1627,9 +1789,11 @@ var $;
                 $mol_fail_hidden(error);
             }
         }
+        /** Transform tree through context with transformers */
         hack(belt, context = {}) {
             return [].concat(...this.kids.map(child => child.hack_self(belt, context)));
         }
+        /** Makes Error with node coordinates. */
         error(message, Class = Error) {
             return this.span.error(`${message}\n${this.clone([])}`, Class);
         }
@@ -1647,6 +1811,7 @@ var $;
 "use strict";
 var $;
 (function ($) {
+    /** Syntax error with cordinates and source line snippet. */
     class $mol_error_syntax extends SyntaxError {
         reason;
         line;
@@ -1665,6 +1830,7 @@ var $;
 "use strict";
 var $;
 (function ($) {
+    /** Parses tree format from string. */
     function $mol_tree2_from_string(str, uri = '?') {
         const span = $mol_span.entire(uri, str);
         var root = $mol_tree2.list([], span);
@@ -1674,6 +1840,7 @@ var $;
             var indent = 0;
             var line_start = pos;
             row++;
+            // read indent
             while (str.length > pos && str[pos] == '\t') {
                 indent++;
                 pos++;
@@ -1682,8 +1849,10 @@ var $;
                 min_indent = indent;
             }
             indent -= min_indent;
+            // invalid tab size
             if (indent < 0 || indent >= stack.length) {
                 const sp = span.span(row, 1, pos - line_start);
+                // skip error line
                 while (str.length > pos && str[pos] != '\n') {
                     pos++;
                 }
@@ -1698,7 +1867,9 @@ var $;
             }
             stack.length = indent + 1;
             var parent = stack[indent];
+            // parse types
             while (str.length > pos && str[pos] != '\\' && str[pos] != '\n') {
+                // type can not contain space and tab
                 var error_start = pos;
                 while (str.length > pos && (str[pos] == ' ' || str[pos] == '\t')) {
                     pos++;
@@ -1710,6 +1881,7 @@ var $;
                     const sp = span.span(row, error_start - line_start + 1, pos - error_start);
                     this.$mol_fail(new this.$mol_error_syntax(`Wrong nodes separator`, str.substring(line_start, line_end), sp));
                 }
+                // read type
                 var type_start = pos;
                 while (str.length > pos &&
                     str[pos] != '\\' &&
@@ -1724,10 +1896,12 @@ var $;
                     parent_kids.push(next);
                     parent = next;
                 }
+                // read one space if exists
                 if (str.length > pos && str[pos] == ' ') {
                     pos++;
                 }
             }
+            // read data
             if (str.length > pos && str[pos] == '\\') {
                 var data_start = pos;
                 while (str.length > pos && str[pos] != '\n') {
@@ -1738,6 +1912,7 @@ var $;
                 parent_kids.push(next);
                 parent = next;
             }
+            // now must be end of text
             if (str.length === pos && stack.length > 0) {
                 const sp = span.span(row, pos - line_start + 1, 1);
                 this.$mol_fail(new this.$mol_error_syntax(`Unexpected EOF, LF required`, str.substring(line_start, str.length), sp));
@@ -1830,6 +2005,7 @@ var $;
 "use strict";
 var $;
 (function ($) {
+    /** Module for working with terminal. Text coloring when output in terminal */
     class $mol_term_color {
         static reset = this.ansi(0, 0);
         static bold = this.ansi(1, 22);
@@ -1879,7 +2055,7 @@ var $;
     function $mol_log3_node_make(level, output, type, color) {
         return function $mol_log3_logger(event) {
             if (!event.time)
-                event = { time: new Date().toISOString(), ...event };
+                event = { ...event, time: new Date().toISOString() };
             let tree = this.$mol_tree2_from_json(event);
             tree = tree.struct(type, tree.kids);
             let str = color(tree.toString());
@@ -1901,6 +2077,7 @@ var $;
 "use strict";
 var $;
 (function ($) {
+    /** One-shot fiber */
     class $mol_wire_task extends $mol_wire_fiber {
         static getter(task) {
             return function $mol_wire_task_get(host, args) {
@@ -1926,6 +2103,7 @@ var $;
                 }
                 const key = (host?.[Symbol.toStringTag] ?? host) + ('.' + task.name + '<#>');
                 const next = new $mol_wire_task(key, task, host, args);
+                // Disabled because non-idempotency is required for try-catch
                 if (existen?.temp) {
                     $$.$mol_log3_warn({
                         place: '$mol_wire_task',
@@ -1958,7 +2136,7 @@ var $;
                     try {
                         next[Symbol.toStringTag] = this[Symbol.toStringTag];
                     }
-                    catch {
+                    catch { // Promises throw in strict mode
                         Object.defineProperty(next, Symbol.toStringTag, { value: this[Symbol.toStringTag] });
                     }
                 }
@@ -2011,6 +2189,10 @@ var $;
         props[field] = get_val;
         return get_val;
     }
+    /**
+     * Convert asynchronous (promise-based) API to synchronous by wrapping function and method calls in a fiber.
+     * @see https://mol.hyoo.ru/#!section=docs/=1fcpsq_1wh0h2
+     */
     function $mol_wire_sync(obj) {
         return new Proxy(obj, {
             get(obj, field) {
@@ -2252,6 +2434,10 @@ var $;
 "use strict";
 var $;
 (function ($) {
+    /**
+     * CSS Units
+     * @see https://mol.hyoo.ru/#!section=docs/=xwq9q5_f966fg
+     */
     class $mol_style_unit extends $mol_decor {
         literal;
         constructor(value, literal) {
@@ -2298,6 +2484,10 @@ var $;
 var $;
 (function ($) {
     const { per } = $mol_style_unit;
+    /**
+     * CSS Functions
+     * @see https://mol.hyoo.ru/#!section=docs/=xwq9q5_f966fg
+     */
     class $mol_style_func extends $mol_decor {
         name;
         constructor(name, value) {
@@ -2392,6 +2582,7 @@ var $;
 "use strict";
 var $;
 (function ($) {
+    /** Create record of CSS variables. */
     function $mol_style_prop(prefix, keys) {
         const record = keys.reduce((rec, key) => {
             rec[key] = $mol_style_func.vary(`--${prefix}_${key}`);
@@ -2404,1513 +2595,12 @@ var $;
 
 ;
 "use strict";
-
-;
-"use strict";
 var $;
 (function ($) {
-    const TypedArray = Object.getPrototypeOf(Uint8Array);
-    function $mol_key(value) {
-        primitives: {
-            if (typeof value === 'bigint')
-                return value.toString() + 'n';
-            if (typeof value === 'symbol')
-                return `Symbol(${value.description})`;
-            if (!value)
-                return JSON.stringify(value);
-            if (typeof value !== 'object' && typeof value !== 'function')
-                return JSON.stringify(value);
-        }
-        caching: {
-            let key = $mol_key_store.get(value);
-            if (key)
-                return key;
-        }
-        objects: {
-            if (value instanceof TypedArray) {
-                return `${value[Symbol.toStringTag]}([${[...value].map(v => $mol_key(v))}])`;
-            }
-            if (Array.isArray(value))
-                return `[${value.map(v => $mol_key(v))}]`;
-            if (value instanceof RegExp)
-                return value.toString();
-            if (value instanceof Date)
-                return `Date(${value.valueOf()})`;
-        }
-        structures: {
-            const proto = Reflect.getPrototypeOf(value);
-            if (!proto || !Reflect.getPrototypeOf(proto)) {
-                return `{${Object.entries(value).map(([k, v]) => JSON.stringify(k) + ':' + $mol_key(v))}}`;
-            }
-        }
-        handlers: {
-            if ($mol_key_handle in value) {
-                return value[$mol_key_handle]();
-            }
-        }
-        containers: {
-            const key = JSON.stringify('#' + $mol_guid());
-            $mol_key_store.set(value, key);
-            return key;
-        }
-    }
-    $.$mol_key = $mol_key;
-})($ || ($ = {}));
-
-;
-"use strict";
-var $;
-(function ($) {
-    class $mol_after_timeout extends $mol_object2 {
-        delay;
-        task;
-        id;
-        constructor(delay, task) {
-            super();
-            this.delay = delay;
-            this.task = task;
-            this.id = setTimeout(task, delay);
-        }
-        destructor() {
-            clearTimeout(this.id);
-        }
-    }
-    $.$mol_after_timeout = $mol_after_timeout;
-})($ || ($ = {}));
-
-;
-"use strict";
-var $;
-(function ($) {
-    class $mol_after_frame extends $mol_after_timeout {
-        task;
-        constructor(task) {
-            super(16, task);
-            this.task = task;
-        }
-    }
-    $.$mol_after_frame = $mol_after_frame;
-})($ || ($ = {}));
-
-;
-"use strict";
-var $;
-(function ($) {
-    function $mol_wire_method(host, field, descr) {
-        if (!descr)
-            descr = Reflect.getOwnPropertyDescriptor(host, field);
-        const orig = descr?.value ?? host[field];
-        const sup = Reflect.getPrototypeOf(host);
-        if (typeof sup[field] === 'function') {
-            Object.defineProperty(orig, 'name', { value: sup[field].name });
-        }
-        const temp = $mol_wire_task.getter(orig);
-        const value = function (...args) {
-            const fiber = temp(this ?? null, args);
-            return fiber.sync();
-        };
-        Object.defineProperty(value, 'name', { value: orig.name + ' ' });
-        Object.assign(value, { orig });
-        const descr2 = { ...descr, value };
-        Reflect.defineProperty(host, field, descr2);
-        return descr2;
-    }
-    $.$mol_wire_method = $mol_wire_method;
-})($ || ($ = {}));
-
-;
-"use strict";
-
-;
-"use strict";
-
-;
-"use strict";
-var $;
-(function ($) {
-    class $mol_wire_atom extends $mol_wire_fiber {
-        static solo(host, task) {
-            const field = task.name + '()';
-            const existen = Object.getOwnPropertyDescriptor(host ?? task, field)?.value;
-            if (existen)
-                return existen;
-            const prefix = host?.[Symbol.toStringTag] ?? (host instanceof Function ? $$.$mol_func_name(host) : host);
-            const key = prefix + ('.' + task.name + '<>');
-            const fiber = new $mol_wire_atom(key, task, host, []);
-            (host ?? task)[field] = fiber;
-            return fiber;
-        }
-        static plex(host, task, key) {
-            const field = task.name + '()';
-            let dict = Object.getOwnPropertyDescriptor(host ?? task, field)?.value;
-            const prefix = host?.[Symbol.toStringTag] ?? (host instanceof Function ? $$.$mol_func_name(host) : host);
-            const key_str = $mol_key(key);
-            if (dict) {
-                const existen = dict.get(key_str);
-                if (existen)
-                    return existen;
-            }
-            else {
-                dict = (host ?? task)[field] = new Map();
-            }
-            const id = prefix + ('.' + task.name) + ('<' + key_str.replace(/^"|"$/g, "'") + '>');
-            const fiber = new $mol_wire_atom(id, task, host, [key]);
-            dict.set(key_str, fiber);
-            return fiber;
-        }
-        static watching = new Set();
-        static watcher = null;
-        static watch() {
-            $mol_wire_atom.watcher = new $mol_after_frame($mol_wire_atom.watch);
-            for (const atom of $mol_wire_atom.watching) {
-                if (atom.cursor === $mol_wire_cursor.final) {
-                    $mol_wire_atom.watching.delete(atom);
-                }
-                else {
-                    atom.cursor = $mol_wire_cursor.stale;
-                    atom.fresh();
-                }
-            }
-        }
-        watch() {
-            if (!$mol_wire_atom.watcher) {
-                $mol_wire_atom.watcher = new $mol_after_frame($mol_wire_atom.watch);
-            }
-            $mol_wire_atom.watching.add(this);
-        }
-        resync(args) {
-            for (let cursor = this.pub_from; cursor < this.sub_from; cursor += 2) {
-                const pub = this.data[cursor];
-                if (pub && pub instanceof $mol_wire_task) {
-                    pub.destructor();
-                }
-            }
-            return this.put(this.task.call(this.host, ...args));
-        }
-        once() {
-            return this.sync();
-        }
-        channel() {
-            return Object.assign((next) => {
-                if (next !== undefined)
-                    return this.resync([...this.args, next]);
-                if (!$mol_wire_fiber.warm)
-                    return this.result();
-                if ($mol_wire_auto()?.temp) {
-                    return this.once();
-                }
-                else {
-                    return this.sync();
-                }
-            }, { atom: this });
-        }
-        destructor() {
-            super.destructor();
-            if (this.pub_from === 0) {
-                ;
-                (this.host ?? this.task)[this.field()] = null;
-            }
-            else {
-                const key = $mol_key(this.args[0]);
-                const map = (this.host ?? this.task)[this.field()];
-                if (!map.has(key))
-                    this.$.$mol_log3_warn({
-                        place: this,
-                        message: 'Absent key on destruction',
-                        hint: 'Check for $mol_key(key) is not changed',
-                    });
-                map.delete(key);
-            }
-        }
-        put(next) {
-            const prev = this.cache;
-            update: if (next !== prev) {
-                try {
-                    if ($mol_compare_deep(prev, next))
-                        break update;
-                }
-                catch (error) {
-                    $mol_fail_log(error);
-                }
-                if ($mol_owning_check(this, prev)) {
-                    prev.destructor();
-                }
-                if ($mol_owning_catch(this, next)) {
-                    try {
-                        next[Symbol.toStringTag] = this[Symbol.toStringTag];
-                    }
-                    catch {
-                        Object.defineProperty(next, Symbol.toStringTag, { value: this[Symbol.toStringTag] });
-                    }
-                }
-                if (!this.sub_empty)
-                    this.emit();
-            }
-            this.cache = next;
-            this.cursor = $mol_wire_cursor.fresh;
-            if ($mol_promise_like(next))
-                return next;
-            this.complete_pubs();
-            return next;
-        }
-    }
-    __decorate([
-        $mol_wire_method
-    ], $mol_wire_atom.prototype, "resync", null);
-    __decorate([
-        $mol_wire_method
-    ], $mol_wire_atom.prototype, "once", null);
-    $.$mol_wire_atom = $mol_wire_atom;
-})($ || ($ = {}));
-
-;
-"use strict";
-var $;
-(function ($) {
-    function $mol_wire_solo(host, field, descr) {
-        if (!descr)
-            descr = Reflect.getOwnPropertyDescriptor(host, field);
-        const orig = descr?.value ?? host[field];
-        const sup = Reflect.getPrototypeOf(host);
-        if (typeof sup[field] === 'function') {
-            Object.defineProperty(orig, 'name', { value: sup[field].name });
-        }
-        const descr2 = {
-            ...descr,
-            value: function (...args) {
-                let atom = $mol_wire_atom.solo(this, orig);
-                if ((args.length === 0) || (args[0] === undefined)) {
-                    if (!$mol_wire_fiber.warm)
-                        return atom.result();
-                    if ($mol_wire_auto()?.temp) {
-                        return atom.once();
-                    }
-                    else {
-                        return atom.sync();
-                    }
-                }
-                return atom.resync(args);
-            }
-        };
-        Reflect.defineProperty(descr2.value, 'name', { value: orig.name + ' ' });
-        Reflect.defineProperty(descr2.value, 'length', { value: orig.length });
-        Object.assign(descr2.value, { orig });
-        Reflect.defineProperty(host, field, descr2);
-        return descr2;
-    }
-    $.$mol_wire_solo = $mol_wire_solo;
-})($ || ($ = {}));
-
-;
-"use strict";
-var $;
-(function ($) {
-    function $mol_wire_plex(host, field, descr) {
-        if (!descr)
-            descr = Reflect.getOwnPropertyDescriptor(host, field);
-        const orig = descr?.value ?? host[field];
-        const sup = Reflect.getPrototypeOf(host);
-        if (typeof sup[field] === 'function') {
-            Object.defineProperty(orig, 'name', { value: sup[field].name });
-        }
-        const descr2 = {
-            ...descr,
-            value: function (...args) {
-                let atom = $mol_wire_atom.plex(this, orig, args[0]);
-                if ((args.length === 1) || (args[1] === undefined)) {
-                    if (!$mol_wire_fiber.warm)
-                        return atom.result();
-                    if ($mol_wire_auto()?.temp) {
-                        return atom.once();
-                    }
-                    else {
-                        return atom.sync();
-                    }
-                }
-                return atom.resync(args);
-            }
-        };
-        Reflect.defineProperty(descr2.value, 'name', { value: orig.name + ' ' });
-        Reflect.defineProperty(descr2.value, 'length', { value: orig.length });
-        Object.assign(descr2.value, { orig });
-        Reflect.defineProperty(host, field, descr2);
-        return descr2;
-    }
-    $.$mol_wire_plex = $mol_wire_plex;
-})($ || ($ = {}));
-
-;
-"use strict";
-var $;
-(function ($) {
-    $.$mol_mem = $mol_wire_solo;
-    $.$mol_mem_key = $mol_wire_plex;
-})($ || ($ = {}));
-
-;
-"use strict";
-var $;
-(function ($) {
-    $.$mol_action = $mol_wire_method;
-})($ || ($ = {}));
-
-;
-"use strict";
-var $;
-(function ($) {
-    class $mol_state_arg extends $mol_object {
-        prefix;
-        static prolog = '';
-        static separator = ' ';
-        static href(next) {
-            return next || process.argv.slice(2).join(' ');
-        }
-        static href_normal() {
-            return this.link({});
-        }
-        static dict(next) {
-            if (next !== void 0)
-                this.href(this.make_link(next));
-            var href = this.href();
-            var chunks = href.split(' ');
-            var params = {};
-            chunks.forEach(chunk => {
-                if (!chunk)
-                    return;
-                var vals = chunk.split('=').map(decodeURIComponent);
-                params[vals.shift()] = vals.join('=');
-            });
-            return params;
-        }
-        static value(key, next) {
-            if (next === void 0)
-                return this.dict()[key] ?? null;
-            this.href(this.link({ [key]: next }));
-            return next;
-        }
-        static link(next) {
-            const params = {};
-            var prev = this.dict();
-            for (var key in prev) {
-                params[key] = prev[key];
-            }
-            for (var key in next) {
-                params[key] = next[key];
-            }
-            return this.make_link(params);
-        }
-        static make_link(next) {
-            const chunks = [];
-            for (const key in next) {
-                if (next[key] !== null) {
-                    chunks.push([key, next[key]].map(encodeURIComponent).join('='));
-                }
-            }
-            return chunks.join(' ');
-        }
-        static go(next) {
-            this.href(this.link(next));
-        }
-        static commit() { }
-        constructor(prefix = '') {
-            super();
-            this.prefix = prefix;
-        }
-        value(key, next) {
-            return this.constructor.value(this.prefix + key, next);
-        }
-        sub(postfix) {
-            return new this.constructor(this.prefix + postfix + '.');
-        }
-        link(next) {
-            const prefix = this.prefix;
-            const dict = {};
-            for (var key in next) {
-                dict[prefix + key] = next[key];
-            }
-            return this.constructor.link(dict);
-        }
-    }
-    __decorate([
-        $mol_mem
-    ], $mol_state_arg, "href", null);
-    __decorate([
-        $mol_mem
-    ], $mol_state_arg, "href_normal", null);
-    __decorate([
-        $mol_mem
-    ], $mol_state_arg, "dict", null);
-    __decorate([
-        $mol_mem_key
-    ], $mol_state_arg, "value", null);
-    __decorate([
-        $mol_action
-    ], $mol_state_arg, "go", null);
-    $.$mol_state_arg = $mol_state_arg;
-})($ || ($ = {}));
-
-;
-"use strict";
-var $;
-(function ($) {
-    class $mol_media extends $mol_object2 {
-        static match(query, next) {
-            if (next !== undefined)
-                return next;
-            const res = this.$.$mol_dom_context.matchMedia?.(query) ?? {};
-            res.onchange = () => this.match(query, res.matches);
-            return res.matches;
-        }
-    }
-    __decorate([
-        $mol_mem_key
-    ], $mol_media, "match", null);
-    $.$mol_media = $mol_media;
-})($ || ($ = {}));
-
-;
-"use strict";
-var $;
-(function ($) {
-    function $mol_wire_solid() {
-        let current = $mol_wire_auto();
-        if (current.temp)
-            current = current.host;
-        if (current.reap !== nothing) {
-            current?.sub_on(sub, sub.data.length);
-        }
-        current.reap = nothing;
-    }
-    $.$mol_wire_solid = $mol_wire_solid;
-    const nothing = () => { };
-    const sub = new $mol_wire_pub_sub;
-})($ || ($ = {}));
-
-;
-"use strict";
-var $;
-(function ($) {
-    $.$mol_mem_persist = $mol_wire_solid;
-})($ || ($ = {}));
-
-;
-"use strict";
-var $;
-(function ($) {
-    function $mol_wire_probe(task, def) {
-        const warm = $mol_wire_fiber.warm;
-        try {
-            $mol_wire_fiber.warm = false;
-            const res = task();
-            if (res === undefined)
-                return def;
-            return res;
-        }
-        finally {
-            $mol_wire_fiber.warm = warm;
-        }
-    }
-    $.$mol_wire_probe = $mol_wire_probe;
-})($ || ($ = {}));
-
-;
-"use strict";
-var $;
-(function ($) {
-    $.$mol_mem_cached = $mol_wire_probe;
-})($ || ($ = {}));
-
-;
-"use strict";
-var $;
-(function ($) {
-    function $mol_wait_user_async() {
-        return new Promise(done => $mol_dom.addEventListener('click', function onclick() {
-            $mol_dom.removeEventListener('click', onclick);
-            done(null);
-        }));
-    }
-    $.$mol_wait_user_async = $mol_wait_user_async;
-    function $mol_wait_user() {
-        return this.$mol_wire_sync(this).$mol_wait_user_async();
-    }
-    $.$mol_wait_user = $mol_wait_user;
-})($ || ($ = {}));
-
-;
-"use strict";
-var $;
-(function ($) {
-    class $mol_storage extends $mol_object2 {
-        static native() {
-            return this.$.$mol_dom_context.navigator.storage ?? {
-                persisted: async () => false,
-                persist: async () => false,
-                estimate: async () => ({}),
-                getDirectory: async () => null,
-            };
-        }
-        static persisted(next, cache) {
-            $mol_mem_persist();
-            if (cache)
-                return Boolean(next);
-            const native = this.native();
-            if (next && !$mol_mem_cached(() => this.persisted())) {
-                this.$.$mol_wait_user_async()
-                    .then(() => native.persist())
-                    .then(actual => {
-                    setTimeout(() => this.persisted(actual, 'cache'), 5000);
-                    if (actual)
-                        this.$.$mol_log3_done({ place: `$mol_storage`, message: `Persist: Yes` });
-                    else
-                        this.$.$mol_log3_fail({ place: `$mol_storage`, message: `Persist: No` });
-                });
-            }
-            return next ?? $mol_wire_sync(native).persisted();
-        }
-        static estimate() {
-            return $mol_wire_sync(this.native() ?? {}).estimate();
-        }
-        static dir() {
-            return $mol_wire_sync(this.native()).getDirectory();
-        }
-    }
-    __decorate([
-        $mol_mem
-    ], $mol_storage, "native", null);
-    __decorate([
-        $mol_mem
-    ], $mol_storage, "persisted", null);
-    $.$mol_storage = $mol_storage;
-})($ || ($ = {}));
-
-;
-"use strict";
-var $;
-(function ($) {
-    class $mol_state_local extends $mol_object {
-        static 'native()';
-        static native() {
-            if (this['native()'])
-                return this['native()'];
-            check: try {
-                const native = $mol_dom_context.localStorage;
-                if (!native)
-                    break check;
-                native.setItem('', '');
-                native.removeItem('');
-                return this['native()'] = native;
-            }
-            catch (error) {
-                console.warn(error);
-            }
-            return this['native()'] = {
-                getItem(key) {
-                    return this[':' + key];
-                },
-                setItem(key, value) {
-                    this[':' + key] = value;
-                },
-                removeItem(key) {
-                    this[':' + key] = void 0;
-                }
-            };
-        }
-        static changes(next) { return next; }
-        static value(key, next) {
-            this.changes();
-            if (next === void 0)
-                return JSON.parse(this.native().getItem(key) || 'null');
-            if (next === null) {
-                this.native().removeItem(key);
-            }
-            else {
-                this.native().setItem(key, JSON.stringify(next));
-                this.$.$mol_storage.persisted(true);
-            }
-            return next;
-        }
-        prefix() { return ''; }
-        value(key, next) {
-            return $mol_state_local.value(this.prefix() + '.' + key, next);
-        }
-    }
-    __decorate([
-        $mol_mem
-    ], $mol_state_local, "changes", null);
-    __decorate([
-        $mol_mem_key
-    ], $mol_state_local, "value", null);
-    $.$mol_state_local = $mol_state_local;
-})($ || ($ = {}));
-
-;
-"use strict";
-var $;
-(function ($) {
-    function $mol_const(value) {
-        const getter = (() => value);
-        getter['()'] = value;
-        getter[Symbol.toStringTag] = value;
-        getter[$mol_dev_format_head] = () => $mol_dev_format_span({}, '()=> ', $mol_dev_format_auto(value));
-        return getter;
-    }
-    $.$mol_const = $mol_const;
-})($ || ($ = {}));
-
-;
-"use strict";
-var $;
-(function ($) {
-    function $mol_wire_async(obj) {
-        let fiber;
-        const temp = $mol_wire_task.getter(obj);
-        return new Proxy(obj, {
-            get(obj, field) {
-                const val = obj[field];
-                if (typeof val !== 'function')
-                    return val;
-                let fiber;
-                const temp = $mol_wire_task.getter(val);
-                return function $mol_wire_async(...args) {
-                    fiber?.destructor();
-                    fiber = temp(obj, args);
-                    return fiber.async();
-                };
-            },
-            apply(obj, self, args) {
-                fiber?.destructor();
-                fiber = temp(self, args);
-                return fiber.async();
-            },
-        });
-    }
-    $.$mol_wire_async = $mol_wire_async;
-})($ || ($ = {}));
-
-;
-"use strict";
-var $;
-(function ($) {
-    class $mol_lock extends $mol_object {
-        promise = null;
-        async wait() {
-            let next = () => { };
-            let destructed = false;
-            const task = $mol_wire_auto();
-            if (!task)
-                return next;
-            const destructor = task.destructor.bind(task);
-            task.destructor = () => {
-                destructor();
-                destructed = true;
-                next();
-            };
-            let promise;
-            do {
-                promise = this.promise;
-                await promise;
-                if (destructed)
-                    return next;
-            } while (promise !== this.promise);
-            this.promise = new Promise(done => { next = done; });
-            return next;
-        }
-        grab() { return $mol_wire_sync(this).wait(); }
-    }
-    $.$mol_lock = $mol_lock;
-})($ || ($ = {}));
-
-;
-"use strict";
-var $;
-(function ($) {
-    function $mol_compare_array(a, b) {
-        if (a === b)
-            return true;
-        if (Object.getPrototypeOf(a) !== Object.getPrototypeOf(b))
-            return false;
-        if (a.length !== b.length)
-            return false;
-        for (let i = 0; i < a.length; i++)
-            if (a[i] !== b[i])
-                return false;
-        return true;
-    }
-    $.$mol_compare_array = $mol_compare_array;
-})($ || ($ = {}));
-
-;
-"use strict";
-
-;
-"use strict";
-var $;
-(function ($) {
-    const decoders = {};
-    function $mol_charset_decode(buffer, encoding = 'utf8') {
-        let decoder = decoders[encoding];
-        if (!decoder)
-            decoder = decoders[encoding] = new TextDecoder(encoding);
-        return decoder.decode(buffer);
-    }
-    $.$mol_charset_decode = $mol_charset_decode;
-})($ || ($ = {}));
-
-;
-"use strict";
-var $;
-(function ($) {
-    let buf = new Uint8Array(2 ** 12);
-    function $mol_charset_buffer(size) {
-        if (buf.byteLength < size)
-            buf = new Uint8Array(size);
-        return buf;
-    }
-    $.$mol_charset_buffer = $mol_charset_buffer;
-})($ || ($ = {}));
-
-;
-"use strict";
-var $;
-(function ($) {
-    function $mol_charset_encode(str) {
-        const buf = $mol_charset_buffer(str.length * 3);
-        return buf.slice(0, $mol_charset_encode_to(str, buf));
-    }
-    $.$mol_charset_encode = $mol_charset_encode;
-    function $mol_charset_encode_to(str, buf, from = 0) {
-        let pos = from;
-        for (let i = 0; i < str.length; i++) {
-            let code = str.charCodeAt(i);
-            if (code < 0x80) {
-                buf[pos++] = code;
-            }
-            else if (code < 0x800) {
-                buf[pos++] = 0xc0 | (code >> 6);
-                buf[pos++] = 0x80 | (code & 0x3f);
-            }
-            else if (code < 0xd800 || code >= 0xe000) {
-                buf[pos++] = 0xe0 | (code >> 12);
-                buf[pos++] = 0x80 | ((code >> 6) & 0x3f);
-                buf[pos++] = 0x80 | (code & 0x3f);
-            }
-            else {
-                const point = ((code - 0xd800) << 10) + str.charCodeAt(++i) + 0x2400;
-                buf[pos++] = 0xf0 | (point >> 18);
-                buf[pos++] = 0x80 | ((point >> 12) & 0x3f);
-                buf[pos++] = 0x80 | ((point >> 6) & 0x3f);
-                buf[pos++] = 0x80 | (point & 0x3f);
-            }
-        }
-        return pos - from;
-    }
-    $.$mol_charset_encode_to = $mol_charset_encode_to;
-    function $mol_charset_encode_size(str) {
-        let size = 0;
-        for (let i = 0; i < str.length; i++) {
-            let code = str.charCodeAt(i);
-            if (code < 0x80)
-                size += 1;
-            else if (code < 0x800)
-                size += 2;
-            else if (code < 0xd800 || code >= 0xe000)
-                size += 3;
-            else
-                size += 4;
-        }
-        return size;
-    }
-    $.$mol_charset_encode_size = $mol_charset_encode_size;
-})($ || ($ = {}));
-
-;
-"use strict";
-var $;
-(function ($) {
-    class $mol_file_transaction extends $mol_object {
-        path() { return ''; }
-        modes() { return []; }
-        write(options) {
-            throw new Error('Not implemented');
-        }
-        read() {
-            throw new Error('Not implemented');
-        }
-        truncate(size) {
-            throw new Error('Not implemented');
-        }
-        flush() {
-            throw new Error('Not implemented');
-        }
-        close() {
-            throw new Error('Not implemented');
-        }
-        destructor() {
-            this.close();
-        }
-    }
-    $.$mol_file_transaction = $mol_file_transaction;
-})($ || ($ = {}));
-
-;
-"use strict";
-var $;
-(function ($) {
-    let file_modes;
-    (function (file_modes) {
-        file_modes[file_modes["create"] = $node.fs.constants.O_CREAT] = "create";
-        file_modes[file_modes["exists_truncate"] = $node.fs.constants.O_TRUNC] = "exists_truncate";
-        file_modes[file_modes["exists_fail"] = $node.fs.constants.O_EXCL] = "exists_fail";
-        file_modes[file_modes["read_only"] = $node.fs.constants.O_RDONLY] = "read_only";
-        file_modes[file_modes["write_only"] = $node.fs.constants.O_WRONLY] = "write_only";
-        file_modes[file_modes["read_write"] = $node.fs.constants.O_RDWR] = "read_write";
-        file_modes[file_modes["append"] = $node.fs.constants.O_APPEND] = "append";
-    })(file_modes || (file_modes = {}));
-    function mode_mask(modes) {
-        return modes.reduce((res, mode) => res | file_modes[mode], 0);
-    }
-    class $mol_file_transaction_node extends $mol_file_transaction {
-        descr() {
-            $mol_wire_solid();
-            return $node.fs.openSync(this.path(), mode_mask(this.modes()));
-        }
-        write({ buffer, offset = 0, length, position = null }) {
-            if (Array.isArray(buffer)) {
-                return $node.fs.writevSync(this.descr(), buffer, position ?? undefined);
-            }
-            if (typeof buffer === 'string') {
-                return $node.fs.writeSync(this.descr(), buffer, position);
-            }
-            length = length ?? buffer.byteLength;
-            return $node.fs.writeSync(this.descr(), buffer, offset, length, position);
-        }
-        truncate(size) {
-            $node.fs.ftruncateSync(this.descr());
-        }
-        read() {
-            return $mol_file_node_buffer_normalize($node.fs.readFileSync(this.descr()));
-        }
-        flush() {
-            $node.fs.fsyncSync(this.descr());
-        }
-        close() {
-            $node.fs.closeSync(this.descr());
-        }
-    }
-    __decorate([
-        $mol_mem
-    ], $mol_file_transaction_node.prototype, "descr", null);
-    $.$mol_file_transaction_node = $mol_file_transaction_node;
-    $.$mol_file_transaction = $mol_file_transaction_node;
-})($ || ($ = {}));
-
-;
-"use strict";
-var $;
-(function ($) {
-    class $mol_file_base extends $mol_object {
-        static absolute(path) {
-            return this.make({
-                path: $mol_const(path)
-            });
-        }
-        static relative(path) {
-            throw new Error('Not implemented yet');
-        }
-        static base = '';
-        path() {
-            return '.';
-        }
-        parent() {
-            return this.resolve('..');
-        }
-        exists_cut() { return this.exists(); }
-        root() {
-            const path = this.path();
-            const base = this.constructor.base;
-            return base.startsWith(path) || this == this.parent();
-        }
-        stat(next, virt) {
-            const path = this.path();
-            const parent = this.parent();
-            if (!this.root()) {
-                parent.version();
-            }
-            parent.watcher();
-            if (virt)
-                return next ?? null;
-            return next ?? this.info(path);
-        }
-        static changed = new Set;
-        static frame = null;
-        static changed_add(type, path) {
-            if (/([\/\\]\.|___$)/.test(path))
-                return;
-            const file = this.relative(path.at(-1) === '/' ? path.slice(0, -1) : path);
-            this.changed.add(file);
-            if (!this.watching)
-                return;
-            this.frame?.destructor();
-            this.frame = new this.$.$mol_after_timeout(this.watch_debounce(), () => {
-                if (!this.watching)
-                    return;
-                this.watching = false;
-                $mol_wire_async(this).flush();
-            });
-        }
-        static watch_debounce() { return 500; }
-        static flush() {
-            for (const file of this.changed) {
-                const parent = file.parent();
-                try {
-                    if ($mol_wire_probe(() => parent.sub()))
-                        parent.sub(null);
-                    file.reset();
-                }
-                catch (error) {
-                    if ($mol_fail_catch(error))
-                        $mol_fail_log(error);
-                }
-            }
-            this.changed.clear();
-            this.watching = true;
-        }
-        static watching = true;
-        static lock = new $mol_lock;
-        static watch_off(path) {
-            this.watching = false;
-            this.flush();
-            this.watching = false;
-            this.changed.add(this.absolute(path));
-        }
-        static unwatched(side_effect, affected_dir) {
-            const unlock = this.lock.grab();
-            this.watch_off(affected_dir);
-            try {
-                const result = side_effect();
-                this.flush();
-                unlock();
-                return result;
-            }
-            catch (e) {
-                if (!$mol_promise_like(e)) {
-                    this.flush();
-                    unlock();
-                }
-                $mol_fail_hidden(e);
-            }
-        }
-        reset() {
-            this.stat(null);
-        }
-        modified() { return this.stat()?.mtime ?? null; }
-        version() {
-            const next = this.stat()?.mtime.getTime().toString(36).toUpperCase() ?? '';
-            return next;
-        }
-        info(path) { return null; }
-        ensure() { }
-        drop() { }
-        copy(to) { }
-        read() { return new Uint8Array; }
-        write(buffer) { }
-        kids() {
-            return [];
-        }
-        readable(opts) {
-            return new ReadableStream;
-        }
-        writable(opts) {
-            return new WritableStream;
-        }
-        buffer(next) {
-            let readed = new Uint8Array();
-            if (next === undefined) {
-                if (this.version())
-                    readed = this.read();
-            }
-            const prev = $mol_mem_cached(() => this.buffer());
-            const changed = prev === undefined || !$mol_compare_array(prev, next ?? readed);
-            if (prev !== undefined && changed) {
-                this.$.$mol_log3_rise({
-                    place: `$mol_file_node.buffer()`,
-                    message: 'Changed',
-                    path: this.relate(),
-                });
-            }
-            if (next === undefined)
-                return changed ? readed : prev;
-            if (!changed && this.exists())
-                return prev;
-            this.parent().exists(true);
-            this.stat(this.stat_make(next.length), 'virt');
-            this.write(next);
-            return next;
-        }
-        stat_make(size) {
-            const now = new Date();
-            return {
-                type: 'file',
-                size,
-                atime: now,
-                mtime: now,
-                ctime: now,
-            };
-        }
-        clone(to) {
-            if (!this.exists())
-                return null;
-            const target = this.constructor.absolute(to);
-            try {
-                this.version();
-                target.parent().exists(true);
-                this.copy(to);
-                target.reset();
-                return target;
-            }
-            catch (error) {
-                if ($mol_fail_catch(error)) {
-                    console.error(error);
-                }
-            }
-            return null;
-        }
-        watcher() {
-            return {
-                destructor() { }
-            };
-        }
-        exists(next) {
-            const exists = Boolean(this.stat());
-            if (next === undefined)
-                return exists;
-            if (next === exists)
-                return exists;
-            if (next) {
-                this.parent().exists(true);
-                this.ensure();
-            }
-            else {
-                this.drop();
-            }
-            this.reset();
-            return next;
-        }
-        type() {
-            return this.stat()?.type ?? '';
-        }
-        name() {
-            return this.path().replace(/^.*\//, '');
-        }
-        ext() {
-            const match = /((?:\.\w+)+)$/.exec(this.path());
-            return match ? match[1].substring(1) : '';
-        }
-        text(next, virt) {
-            if (next !== undefined)
-                this.exists();
-            return this.text_int(next, virt);
-        }
-        text_int(next, virt) {
-            if (virt) {
-                this.stat(this.stat_make(0), 'virt');
-                return next;
-            }
-            if (next === undefined) {
-                return $mol_charset_decode(this.buffer());
-            }
-            else {
-                const buffer = $mol_charset_encode(next);
-                this.buffer(buffer);
-                return next;
-            }
-        }
-        sub(reset) {
-            if (!this.exists())
-                return [];
-            if (this.type() !== 'dir')
-                return [];
-            this.version();
-            return this.kids().filter(file => file.exists());
-        }
-        resolve(path) {
-            throw new Error('implement');
-        }
-        relate(base = this.constructor.relative('.')) {
-            const base_path = base.path();
-            const path = this.path();
-            return path.startsWith(base_path) ? path.slice(base_path.length) : path;
-        }
-        find(include, exclude) {
-            const found = [];
-            const sub = this.sub();
-            for (const child of sub) {
-                const child_path = child.path();
-                if (exclude && child_path.match(exclude))
-                    continue;
-                if (!include || child_path.match(include))
-                    found.push(child);
-                if (child.type() === 'dir') {
-                    const sub_child = child.find(include, exclude);
-                    for (const child of sub_child)
-                        found.push(child);
-                }
-            }
-            return found;
-        }
-        size() {
-            switch (this.type()) {
-                case 'file': return this.stat()?.size ?? 0;
-                default: return 0;
-            }
-        }
-        toJSON() {
-            return this.path();
-        }
-        open(...modes) {
-            return this.$.$mol_file_transaction.make({
-                path: () => this.path(),
-                modes: () => modes
-            });
-        }
-    }
-    __decorate([
-        $mol_action
-    ], $mol_file_base.prototype, "exists_cut", null);
-    __decorate([
-        $mol_mem
-    ], $mol_file_base.prototype, "stat", null);
-    __decorate([
-        $mol_mem
-    ], $mol_file_base.prototype, "modified", null);
-    __decorate([
-        $mol_mem
-    ], $mol_file_base.prototype, "version", null);
-    __decorate([
-        $mol_mem_key
-    ], $mol_file_base.prototype, "readable", null);
-    __decorate([
-        $mol_mem_key
-    ], $mol_file_base.prototype, "writable", null);
-    __decorate([
-        $mol_mem
-    ], $mol_file_base.prototype, "buffer", null);
-    __decorate([
-        $mol_action
-    ], $mol_file_base.prototype, "stat_make", null);
-    __decorate([
-        $mol_mem_key
-    ], $mol_file_base.prototype, "clone", null);
-    __decorate([
-        $mol_mem
-    ], $mol_file_base.prototype, "exists", null);
-    __decorate([
-        $mol_mem
-    ], $mol_file_base.prototype, "type", null);
-    __decorate([
-        $mol_mem
-    ], $mol_file_base.prototype, "text_int", null);
-    __decorate([
-        $mol_mem
-    ], $mol_file_base.prototype, "sub", null);
-    __decorate([
-        $mol_mem
-    ], $mol_file_base.prototype, "size", null);
-    __decorate([
-        $mol_action
-    ], $mol_file_base.prototype, "open", null);
-    __decorate([
-        $mol_mem_key
-    ], $mol_file_base, "absolute", null);
-    __decorate([
-        $mol_action
-    ], $mol_file_base, "flush", null);
-    __decorate([
-        $mol_action
-    ], $mol_file_base, "watch_off", null);
-    $.$mol_file_base = $mol_file_base;
-})($ || ($ = {}));
-
-;
-"use strict";
-var $;
-(function ($) {
-    class $mol_file extends $mol_file_base {
-    }
-    $.$mol_file = $mol_file;
-})($ || ($ = {}));
-
-;
-"use strict";
-var $;
-(function ($) {
-    function stat_convert(stat) {
-        if (!stat)
-            return null;
-        let type;
-        if (stat.isDirectory())
-            type = 'dir';
-        if (stat.isFile())
-            type = 'file';
-        if (stat.isSymbolicLink())
-            type = 'link';
-        if (!type)
-            return $mol_fail(new Error(`Unsupported file type`));
-        return {
-            type,
-            size: Number(stat.size),
-            atime: stat.atime,
-            mtime: stat.mtime,
-            ctime: stat.ctime
-        };
-    }
-    function $mol_file_node_buffer_normalize(buf) {
-        return new Uint8Array(buf.buffer, buf.byteOffset, buf.byteLength);
-    }
-    $.$mol_file_node_buffer_normalize = $mol_file_node_buffer_normalize;
-    class $mol_file_node extends $mol_file {
-        static relative(path) {
-            return this.absolute($node.path.resolve(this.base, path).replace(/\\/g, '/'));
-        }
-        watcher(reset) {
-            const path = this.path();
-            const root = this.root();
-            if (!root && !this.exists())
-                return super.watcher();
-            let watcher;
-            try {
-                watcher = $node.fs.watch(path);
-            }
-            catch (error) {
-                if (!(error instanceof Error))
-                    error = new Error('Unknown watch error', { cause: error });
-                error.message += '\n' + path;
-                if (root || error.code !== 'ENOENT') {
-                    this.$.$mol_fail_log(error);
-                }
-                return super.watcher();
-            }
-            watcher.on('change', (type, name) => {
-                if (!name)
-                    return;
-                const path = $node.path.join(this.path(), name.toString());
-                this.constructor.changed_add(type, path);
-            });
-            watcher.on('error', e => this.$.$mol_fail_log(e));
-            let destructed = false;
-            watcher.on('close', () => {
-                if (!destructed)
-                    setTimeout(() => $mol_wire_async(this).watcher(null), 500);
-            });
-            return {
-                destructor() {
-                    destructed = true;
-                    watcher.close();
-                }
-            };
-        }
-        info(path) {
-            try {
-                return stat_convert($node.fs.statSync(path));
-            }
-            catch (error) {
-                if (this.$.$mol_fail_catch(error)) {
-                    if (error.code === 'ENOENT')
-                        return null;
-                    if (error.code === 'EPERM')
-                        return null;
-                    error.message += '\n' + path;
-                    this.$.$mol_fail_hidden(error);
-                }
-            }
-            return null;
-        }
-        ensure() {
-            const path = this.path();
-            try {
-                $node.fs.mkdirSync(path, { recursive: true });
-                return null;
-            }
-            catch (e) {
-                if (this.$.$mol_fail_catch(e)) {
-                    if (e.code === 'EEXIST')
-                        return null;
-                    e.message += '\n' + path;
-                    this.$.$mol_fail_hidden(e);
-                }
-            }
-        }
-        copy(to) {
-            $node.fs.copyFileSync(this.path(), to);
-        }
-        drop() {
-            $node.fs.unlinkSync(this.path());
-        }
-        read() {
-            const path = this.path();
-            try {
-                return $mol_file_node_buffer_normalize($node.fs.readFileSync(path));
-            }
-            catch (error) {
-                if (!$mol_promise_like(error)) {
-                    error.message += '\n' + path;
-                }
-                $mol_fail_hidden(error);
-            }
-        }
-        write(buffer) {
-            const path = this.path();
-            try {
-                $node.fs.writeFileSync(path, buffer);
-            }
-            catch (error) {
-                if (this.$.$mol_fail_catch(error)) {
-                    error.message += '\n' + path;
-                }
-                return this.$.$mol_fail_hidden(error);
-            }
-        }
-        kids() {
-            const path = this.path();
-            try {
-                const kids = $node.fs.readdirSync(path)
-                    .filter(name => !/^\.+$/.test(name))
-                    .map(name => this.resolve(name));
-                return kids;
-            }
-            catch (e) {
-                if (this.$.$mol_fail_catch(e)) {
-                    if (e.code === 'ENOENT')
-                        return [];
-                    e.message += '\n' + path;
-                }
-                $mol_fail_hidden(e);
-            }
-        }
-        resolve(path) {
-            return this.constructor
-                .relative($node.path.join(this.path(), path));
-        }
-        relate(base = this.constructor.relative('.')) {
-            return $node.path.relative(base.path(), this.path()).replace(/\\/g, '/');
-        }
-        readable(opts) {
-            const { Readable } = $node['node:stream'];
-            const stream = $node.fs.createReadStream(this.path(), {
-                flags: 'r',
-                autoClose: true,
-                start: opts?.start,
-                end: opts?.end,
-                encoding: 'binary',
-            });
-            return Readable.toWeb(stream);
-        }
-        writable(opts) {
-            const { Writable } = $node['node:stream'];
-            const stream = $node.fs.createWriteStream(this.path(), {
-                flags: 'w+',
-                autoClose: true,
-                start: opts?.start,
-                encoding: 'binary',
-            });
-            return Writable.toWeb(stream);
-        }
-    }
-    __decorate([
-        $mol_mem
-    ], $mol_file_node.prototype, "watcher", null);
-    __decorate([
-        $mol_action
-    ], $mol_file_node.prototype, "info", null);
-    __decorate([
-        $mol_action
-    ], $mol_file_node.prototype, "ensure", null);
-    __decorate([
-        $mol_action
-    ], $mol_file_node.prototype, "copy", null);
-    __decorate([
-        $mol_action
-    ], $mol_file_node.prototype, "drop", null);
-    __decorate([
-        $mol_action
-    ], $mol_file_node.prototype, "read", null);
-    __decorate([
-        $mol_action
-    ], $mol_file_node.prototype, "write", null);
-    __decorate([
-        $mol_mem_key
-    ], $mol_file_node.prototype, "readable", null);
-    __decorate([
-        $mol_mem
-    ], $mol_file_node.prototype, "writable", null);
-    $.$mol_file_node = $mol_file_node;
-    $.$mol_file = $mol_file_node;
-})($ || ($ = {}));
-
-;
-"use strict";
-var $;
-(function ($) {
-    class $mol_state_local_node extends $mol_state_local {
-        static dir() {
-            const base = process.env.XDG_DATA_HOME || ($node.os.homedir() + '/.local/share');
-            return $mol_file.absolute(base).resolve('./mol_state_local');
-        }
-        static value(key, next) {
-            const file = this.dir().resolve(encodeURIComponent(key) + '.json');
-            if (next === null) {
-                file.exists(false);
-                return null;
-            }
-            const arg = next === undefined ? undefined : JSON.stringify(next);
-            return JSON.parse(file.text(arg) || 'null');
-        }
-    }
-    __decorate([
-        $mol_mem
-    ], $mol_state_local_node, "dir", null);
-    __decorate([
-        $mol_mem_key
-    ], $mol_state_local_node, "value", null);
-    $.$mol_state_local_node = $mol_state_local_node;
-    $.$mol_state_local = $mol_state_local_node;
-})($ || ($ = {}));
-
-;
-"use strict";
-var $;
-(function ($) {
-    function parse(theme) {
-        if (theme === 'true')
-            return true;
-        if (theme === 'false')
-            return false;
-        return null;
-    }
-    function $mol_lights(next) {
-        const arg = parse(this.$mol_state_arg.value('mol_lights'));
-        const base = this.$mol_media.match('(prefers-color-scheme: light)');
-        if (next === undefined) {
-            return arg ?? this.$mol_state_local.value('$mol_lights') ?? base;
-        }
-        else {
-            if (arg === null) {
-                this.$mol_state_local.value('$mol_lights', next === base ? null : next);
-            }
-            else {
-                this.$mol_state_arg.value('mol_lights', String(next));
-            }
-            return next;
-        }
-    }
-    $.$mol_lights = $mol_lights;
-})($ || ($ = {}));
-
-;
-"use strict";
-var $;
-(function ($) {
+    /**
+     * Theme css variables
+     * @see https://mol.hyoo.ru/#!section=demos/demo=mol_textarea_demo
+     */
     $.$mol_theme = $mol_style_prop('mol_theme', [
         'back',
         'hover',
@@ -3925,6 +2615,8 @@ var $;
         'field',
         'image',
         'spirit',
+        'hue',
+        'hue_spread',
     ]);
 })($ || ($ = {}));
 
@@ -3932,24 +2624,28 @@ var $;
 "use strict";
 var $;
 (function ($) {
-    $mol_style_attach("mol/theme/theme.css", ":root {\n\t--mol_theme_hue: 240deg;\n\t--mol_theme_hue_spread: 90deg;\n\tcolor-scheme: dark light;\n}\n\n:where([mol_theme]) {\n\tcolor: var(--mol_theme_text);\n\tfill: var(--mol_theme_text);\n\tbackground-color: var(--mol_theme_back);\n}\n\t\n:root, [mol_theme=\"$mol_theme_dark\"], :where([mol_theme=\"$mol_theme_dark\"]) [mol_theme]  {\n\n\t--mol_theme_luma: -1;\n\t--mol_theme_image: invert(1) hue-rotate( 180deg );\n\t--mol_theme_spirit: hsl( 0deg, 0%, 0%, .75 );\n\n\t--mol_theme_back: hsl( var(--mol_theme_hue), 20%, 10% );\n\t--mol_theme_card: hsl( var(--mol_theme_hue), 50%, 20%, .25 );\n\t--mol_theme_field: hsl( var(--mol_theme_hue), 50%, 8%, .25 );\n\t--mol_theme_hover: hsl( var(--mol_theme_hue), 0%, 50%, .1 );\n\t\n\t--mol_theme_text: hsl( var(--mol_theme_hue), 0%, 80% );\n\t--mol_theme_shade: hsl( var(--mol_theme_hue), 0%, 60%, 1 );\n\t--mol_theme_line: hsl( var(--mol_theme_hue), 0%, 50%, .25 );\n\t--mol_theme_focus: hsl( calc( var(--mol_theme_hue) + 180deg ), 100%, 65% );\n\t\n\t--mol_theme_control: hsl( var(--mol_theme_hue), 60%, 65% );\n\t--mol_theme_current: hsl( calc( var(--mol_theme_hue) - var(--mol_theme_hue_spread) ), 60%, 65% );\n\t--mol_theme_special: hsl( calc( var(--mol_theme_hue) + var(--mol_theme_hue_spread) ), 60%, 65% );\n\n} @supports( color: oklch( 0% 0 0deg ) ) {\n:root, [mol_theme=\"$mol_theme_dark\"], :where([mol_theme=\"$mol_theme_dark\"]) [mol_theme]  {\n\t\n\t--mol_theme_back: oklch( 20% .03 var(--mol_theme_hue) );\n\t--mol_theme_card: oklch( 30% .05 var(--mol_theme_hue) / .25 );\n\t--mol_theme_field: oklch( 15% 0 var(--mol_theme_hue) / .25 );\n\t--mol_theme_hover: oklch( 70% 0 var(--mol_theme_hue) / .1 );\n\t\n\t--mol_theme_text: oklch( 80% 0 var(--mol_theme_hue) );\n\t--mol_theme_shade: oklch( 60% 0 var(--mol_theme_hue) );\n\t--mol_theme_line: oklch( 60% 0 var(--mol_theme_hue) / .25 );\n\t--mol_theme_focus: oklch( 80% .2 calc( var(--mol_theme_hue) + 180deg ) );\n\t\n\t--mol_theme_control: oklch( 70% .1 var(--mol_theme_hue) );\n\t--mol_theme_current: oklch( 70% .2 calc( var(--mol_theme_hue) - var(--mol_theme_hue_spread) ) );\n\t--mol_theme_special: oklch( 70% .2 calc( var(--mol_theme_hue) + var(--mol_theme_hue_spread) ) );\n\n} }\n\n[mol_theme=\"$mol_theme_light\"], :where([mol_theme=\"$mol_theme_light\"]) [mol_theme] {\n\t\n\t--mol_theme_luma: 1;\n\t--mol_theme_image: none;\n\t--mol_theme_spirit: hsl( 0deg, 0%, 100%, .75 );\n\t\n\t--mol_theme_back: hsl( var(--mol_theme_hue), 20%, 92% );\n\t--mol_theme_card: hsl( var(--mol_theme_hue), 50%, 100%, .5 );\n\t--mol_theme_field: hsl( var(--mol_theme_hue), 50%, 100%, .75 );\n\t--mol_theme_hover: hsl( var(--mol_theme_hue), 0%, 50%, .1 );\n\t\n\t--mol_theme_text: hsl( var(--mol_theme_hue), 0%, 0% );\n\t--mol_theme_shade: hsl( var(--mol_theme_hue), 0%, 40%, 1 );\n\t--mol_theme_line: hsl( var(--mol_theme_hue), 0%, 50%, .25 );\n\t--mol_theme_focus: hsl( calc( var(--mol_theme_hue) + 180deg ), 100%, 40% );\n\t\n\t--mol_theme_control: hsl( var(--mol_theme_hue), 80%, 30% );\n\t--mol_theme_current: hsl( calc( var(--mol_theme_hue) - var(--mol_theme_hue_spread) ), 80%, 30% );\n\t--mol_theme_special: hsl( calc( var(--mol_theme_hue) + var(--mol_theme_hue_spread) ), 80%, 30% );\n\n} @supports( color: oklch( 0% 0 0deg ) ) {\n[mol_theme=\"$mol_theme_light\"], :where([mol_theme=\"$mol_theme_light\"]) [mol_theme] {\n\t--mol_theme_back: oklch( 92% .01 var(--mol_theme_hue) );\n\t--mol_theme_card: oklch( 99% .01 var(--mol_theme_hue) / .5 );\n\t--mol_theme_field: oklch( 100% 0 var(--mol_theme_hue) / .5 );\n\t--mol_theme_hover: oklch( 50% 0 var(--mol_theme_hue) / .1 );\n\t\n\t--mol_theme_text: oklch( 20% 0 var(--mol_theme_hue) );\n\t--mol_theme_shade: oklch( 60% 0 var(--mol_theme_hue) );\n\t--mol_theme_line: oklch( 50% 0 var(--mol_theme_hue) / .25 );\n\t--mol_theme_focus: oklch( 60% .2 calc( var(--mol_theme_hue) + 180deg ) );\n\t\n\t--mol_theme_control: oklch( 40% .15 var(--mol_theme_hue) );\n\t--mol_theme_current: oklch( 50% .2 calc( var(--mol_theme_hue) - var(--mol_theme_hue_spread) ) );\n\t--mol_theme_special: oklch( 50% .2 calc( var(--mol_theme_hue) + var(--mol_theme_hue_spread) ) );\n\n} }\n\n:where( :root, [mol_theme=\"$mol_theme_dark\"] ) [mol_theme=\"$mol_theme_base\"] {\n\t--mol_theme_back: oklch( 25% .075 var(--mol_theme_hue) );\n\t--mol_theme_card: oklch( 35% .1 var(--mol_theme_hue) / .25 );\n}\n:where( [mol_theme=\"$mol_theme_light\"] ) [mol_theme=\"$mol_theme_base\"] {\n\t--mol_theme_back: oklch( 85% .075 var(--mol_theme_hue) );\n\t--mol_theme_card: oklch( 98% .03 var(--mol_theme_hue) / .25 );\n}\n\n:where( :root, [mol_theme=\"$mol_theme_dark\"] ) [mol_theme=\"$mol_theme_current\"] {\n\t--mol_theme_back: oklch( 25% .05 calc( var(--mol_theme_hue) - var(--mol_theme_hue_spread) ) );\n\t--mol_theme_card: oklch( 35% .1 calc( var(--mol_theme_hue) - var(--mol_theme_hue_spread) ) / .25 );\n}\n:where( [mol_theme=\"$mol_theme_light\"] ) [mol_theme=\"$mol_theme_current\"] {\n\t--mol_theme_back: oklch( 85% .05 calc( var(--mol_theme_hue) - var(--mol_theme_hue_spread) ) );\n\t--mol_theme_card: oklch( 98% .03 calc( var(--mol_theme_hue) - var(--mol_theme_hue_spread) ) / .25 );\n}\n\n:where( :root, [mol_theme=\"$mol_theme_dark\"] ) [mol_theme=\"$mol_theme_special\"] {\n\t--mol_theme_back: oklch( 25% .05 calc( var(--mol_theme_hue) + var(--mol_theme_hue_spread) ) );\n\t--mol_theme_card: oklch( 35% .1 calc( var(--mol_theme_hue) + var(--mol_theme_hue_spread) ) / .25 );\n}\n:where( [mol_theme=\"$mol_theme_light\"] ) [mol_theme=\"$mol_theme_special\"] {\n\t--mol_theme_back: oklch( 85% .05 calc( var(--mol_theme_hue) + var(--mol_theme_hue_spread) ) );\n\t--mol_theme_card: oklch( 98% .03 calc( var(--mol_theme_hue) + var(--mol_theme_hue_spread) ) / .25 );\n}\n\n:where( :root, [mol_theme=\"$mol_theme_dark\"] ) [mol_theme=\"$mol_theme_accent\"] {\n\t--mol_theme_back: oklch( 35% .1 calc( var(--mol_theme_hue) + 180deg ) );\n\t--mol_theme_card: oklch( 45% .15 calc( var(--mol_theme_hue) + 180deg ) / .25 );\n}\n:where( [mol_theme=\"$mol_theme_light\"] ) [mol_theme=\"$mol_theme_accent\"] {\n\t--mol_theme_back: oklch( 83% .1 calc( var(--mol_theme_hue) + 180deg ) );\n\t--mol_theme_card: oklch( 98% .03 calc( var(--mol_theme_hue) + 180deg ) / .25 );\n}\n\n");
+    $mol_style_attach("mol/theme/theme.css", ":root {\n\t--mol_theme_hue: 240deg;\n\t--mol_theme_hue_spread: 90deg;\n\tcolor-scheme: dark light;\n}\n\nbody, :where([mol_theme]) {\n\tcolor: var(--mol_theme_text);\n\tfill: var(--mol_theme_text);\n\tbackground-color: var(--mol_theme_back);\n}\n\t\n:root, [mol_theme=\"$mol_theme_dark\"], :where([mol_theme=\"$mol_theme_dark\"]) [mol_theme]  {\n\n\t--mol_theme_luma: -1;\n\t--mol_theme_image: invert(1) hue-rotate( 180deg );\n\t--mol_theme_spirit: hsl( 0deg, 0%, 0%, .75 );\n\n\t--mol_theme_back: hsl( var(--mol_theme_hue), 20%, 10% );\n\t--mol_theme_card: hsl( var(--mol_theme_hue), 50%, 20%, .25 );\n\t--mol_theme_field: hsl( var(--mol_theme_hue), 50%, 8%, .25 );\n\t--mol_theme_hover: hsl( var(--mol_theme_hue), 0%, 50%, .1 );\n\t\n\t--mol_theme_text: hsl( var(--mol_theme_hue), 0%, 80% );\n\t--mol_theme_shade: hsl( var(--mol_theme_hue), 0%, 60%, 1 );\n\t--mol_theme_line: hsl( var(--mol_theme_hue), 0%, 50%, .25 );\n\t--mol_theme_focus: hsl( calc( var(--mol_theme_hue) + 180deg ), 100%, 65% );\n\t\n\t--mol_theme_control: hsl( var(--mol_theme_hue), 60%, 65% );\n\t--mol_theme_current: hsl( calc( var(--mol_theme_hue) - var(--mol_theme_hue_spread) ), 60%, 65% );\n\t--mol_theme_special: hsl( calc( var(--mol_theme_hue) + var(--mol_theme_hue_spread) ), 60%, 65% );\n\n} @supports( color: oklch( 0% 0 0deg ) ) {\n:root, [mol_theme=\"$mol_theme_dark\"], :where([mol_theme=\"$mol_theme_dark\"]) [mol_theme]  {\n\t\n\t--mol_theme_back: oklch( 20% .03 var(--mol_theme_hue) );\n\t--mol_theme_card: oklch( 30% .05 var(--mol_theme_hue) / .25 );\n\t--mol_theme_field: oklch( 15% 0 var(--mol_theme_hue) / .25 );\n\t--mol_theme_hover: oklch( 70% 0 var(--mol_theme_hue) / .1 );\n\t\n\t--mol_theme_text: oklch( 80% 0 var(--mol_theme_hue) );\n\t--mol_theme_shade: oklch( 60% 0 var(--mol_theme_hue) );\n\t--mol_theme_line: oklch( 60% 0 var(--mol_theme_hue) / .25 );\n\t--mol_theme_focus: oklch( 80% .2 calc( var(--mol_theme_hue) + 180deg ) );\n\t\n\t--mol_theme_control: oklch( 70% .1 var(--mol_theme_hue) );\n\t--mol_theme_current: oklch( 70% .2 calc( var(--mol_theme_hue) - var(--mol_theme_hue_spread) ) );\n\t--mol_theme_special: oklch( 70% .2 calc( var(--mol_theme_hue) + var(--mol_theme_hue_spread) ) );\n\n} }\n\n[mol_theme=\"$mol_theme_light\"], :where([mol_theme=\"$mol_theme_light\"]) [mol_theme] {\n\t\n\t--mol_theme_luma: 1;\n\t--mol_theme_image: none;\n\t--mol_theme_spirit: hsl( 0deg, 0%, 100%, .75 );\n\t\n\t--mol_theme_back: hsl( var(--mol_theme_hue), 20%, 92% );\n\t--mol_theme_card: hsl( var(--mol_theme_hue), 50%, 100%, .5 );\n\t--mol_theme_field: hsl( var(--mol_theme_hue), 50%, 100%, .75 );\n\t--mol_theme_hover: hsl( var(--mol_theme_hue), 0%, 50%, .1 );\n\t\n\t--mol_theme_text: hsl( var(--mol_theme_hue), 0%, 0% );\n\t--mol_theme_shade: hsl( var(--mol_theme_hue), 0%, 40%, 1 );\n\t--mol_theme_line: hsl( var(--mol_theme_hue), 0%, 50%, .25 );\n\t--mol_theme_focus: hsl( calc( var(--mol_theme_hue) + 180deg ), 100%, 40% );\n\t\n\t--mol_theme_control: hsl( var(--mol_theme_hue), 80%, 30% );\n\t--mol_theme_current: hsl( calc( var(--mol_theme_hue) - var(--mol_theme_hue_spread) ), 80%, 30% );\n\t--mol_theme_special: hsl( calc( var(--mol_theme_hue) + var(--mol_theme_hue_spread) ), 80%, 30% );\n\n} @supports( color: oklch( 0% 0 0deg ) ) {\n[mol_theme=\"$mol_theme_light\"], :where([mol_theme=\"$mol_theme_light\"]) [mol_theme] {\n\t--mol_theme_back: oklch( 92% .01 var(--mol_theme_hue) );\n\t--mol_theme_card: oklch( 99% .01 var(--mol_theme_hue) / .5 );\n\t--mol_theme_field: oklch( 100% 0 var(--mol_theme_hue) / .5 );\n\t--mol_theme_hover: oklch( 50% 0 var(--mol_theme_hue) / .1 );\n\t\n\t--mol_theme_text: oklch( 20% 0 var(--mol_theme_hue) );\n\t--mol_theme_shade: oklch( 60% 0 var(--mol_theme_hue) );\n\t--mol_theme_line: oklch( 50% 0 var(--mol_theme_hue) / .25 );\n\t--mol_theme_focus: oklch( 60% .2 calc( var(--mol_theme_hue) + 180deg ) );\n\t\n\t--mol_theme_control: oklch( 40% .15 var(--mol_theme_hue) );\n\t--mol_theme_current: oklch( 50% .2 calc( var(--mol_theme_hue) - var(--mol_theme_hue_spread) ) );\n\t--mol_theme_special: oklch( 50% .2 calc( var(--mol_theme_hue) + var(--mol_theme_hue_spread) ) );\n\n} }\n\n:where( :root, [mol_theme=\"$mol_theme_dark\"] ) [mol_theme=\"$mol_theme_base\"] {\n\t--mol_theme_back: oklch( 25% .075 var(--mol_theme_hue) );\n\t--mol_theme_card: oklch( 35% .1 var(--mol_theme_hue) / .25 );\n}\n:where( [mol_theme=\"$mol_theme_light\"] ) [mol_theme=\"$mol_theme_base\"] {\n\t--mol_theme_back: oklch( 85% .075 var(--mol_theme_hue) );\n\t--mol_theme_card: oklch( 98% .03 var(--mol_theme_hue) / .25 );\n}\n\n:where( :root, [mol_theme=\"$mol_theme_dark\"] ) [mol_theme=\"$mol_theme_current\"] {\n\t--mol_theme_back: oklch( 25% .05 calc( var(--mol_theme_hue) - var(--mol_theme_hue_spread) ) );\n\t--mol_theme_card: oklch( 35% .1 calc( var(--mol_theme_hue) - var(--mol_theme_hue_spread) ) / .25 );\n}\n:where( [mol_theme=\"$mol_theme_light\"] ) [mol_theme=\"$mol_theme_current\"] {\n\t--mol_theme_back: oklch( 85% .05 calc( var(--mol_theme_hue) - var(--mol_theme_hue_spread) ) );\n\t--mol_theme_card: oklch( 98% .03 calc( var(--mol_theme_hue) - var(--mol_theme_hue_spread) ) / .25 );\n}\n\n:where( :root, [mol_theme=\"$mol_theme_dark\"] ) [mol_theme=\"$mol_theme_special\"] {\n\t--mol_theme_back: oklch( 25% .05 calc( var(--mol_theme_hue) + var(--mol_theme_hue_spread) ) );\n\t--mol_theme_card: oklch( 35% .1 calc( var(--mol_theme_hue) + var(--mol_theme_hue_spread) ) / .25 );\n}\n:where( [mol_theme=\"$mol_theme_light\"] ) [mol_theme=\"$mol_theme_special\"] {\n\t--mol_theme_back: oklch( 85% .05 calc( var(--mol_theme_hue) + var(--mol_theme_hue_spread) ) );\n\t--mol_theme_card: oklch( 98% .03 calc( var(--mol_theme_hue) + var(--mol_theme_hue_spread) ) / .25 );\n}\n\n:where( :root, [mol_theme=\"$mol_theme_dark\"] ) [mol_theme=\"$mol_theme_accent\"] {\n\t--mol_theme_back: oklch( 35% .1 calc( var(--mol_theme_hue) + 180deg ) );\n\t--mol_theme_card: oklch( 45% .15 calc( var(--mol_theme_hue) + 180deg ) / .25 );\n}\n:where( [mol_theme=\"$mol_theme_light\"] ) [mol_theme=\"$mol_theme_accent\"] {\n\t--mol_theme_back: oklch( 83% .1 calc( var(--mol_theme_hue) + 180deg ) );\n\t--mol_theme_card: oklch( 98% .03 calc( var(--mol_theme_hue) + 180deg ) / .25 );\n}\n\n");
 })($ || ($ = {}));
+
+;
+"use strict";
+// namespace $ {
+// 	$mol_style_attach( '$mol_theme_lights', `:root { --mol_theme_back: oklch( ${ $$.$mol_lights() ? 92 : 20 }% .01 var(--mol_theme_hue) ) }` )
+// }
 
 ;
 "use strict";
 var $;
 (function ($) {
-    $mol_style_attach('$mol_theme_lights', `:root { --mol_theme_back: oklch( ${$$.$mol_lights() ? 92 : 20}% .01 var(--mol_theme_hue) ) }`);
-})($ || ($ = {}));
-
-;
-"use strict";
-var $;
-(function ($) {
+    /**
+     * Gap in CSS
+     * @see https://page.hyoo.ru/#!=msdb74_bm7nsq
+     */
     $.$mol_gap = $mol_style_prop('mol_gap', [
         'page',
         'block',
         'text',
+        'emoji',
         'round',
         'space',
         'blur',
@@ -3960,7 +2656,7 @@ var $;
 "use strict";
 var $;
 (function ($) {
-    $mol_style_attach("mol/gap/gap.css", ":root {\n\t--mol_gap_page: 3rem;\n\t--mol_gap_block: .75rem;\n\t--mol_gap_text: .5rem .75rem;\n\t--mol_gap_round: .25rem;\n\t--mol_gap_space: .25rem;\n\t--mol_gap_blur: .5rem;\n}\n");
+    $mol_style_attach("mol/gap/gap.css", ":root {\n\t--mol_gap_page: 3rem;\n\t--mol_gap_block: .75rem;\n\t--mol_gap_text: .5rem .75rem;\n\t--mol_gap_emoji: .5rem;\n\t--mol_gap_round: .25rem;\n\t--mol_gap_space: .25rem;\n\t--mol_gap_blur: .5rem;\n}\n");
 })($ || ($ = {}));
 
 ;
@@ -4034,6 +2730,12 @@ var $;
         createDocumentFragment: () => $mol_dom_context.document.createDocumentFragment(),
     };
     $.$mol_jsx_frag = '';
+    /**
+     * JSX adapter that makes DOM tree.
+     * Generates global unique ids for every DOM-element by components tree with ids.
+     * Ensures all local ids are unique.
+     * Can reuse an existing nodes by GUIDs when used inside [`mol_jsx_attach`](https://github.com/hyoo-ru/mam_mol/tree/master/jsx/attach).
+     */
     function $mol_jsx(Elem, props, ...childNodes) {
         const id = props && props.id || '';
         const guid = id ? $.$mol_jsx_prefix ? $.$mol_jsx_prefix + '/' + id : id : $.$mol_jsx_prefix;
@@ -4161,6 +2863,377 @@ var $;
 "use strict";
 var $;
 (function ($) {
+    const TypedArray = Object.getPrototypeOf(Uint8Array);
+    /** Returns string key for any value. */
+    function $mol_key(value) {
+        primitives: {
+            if (typeof value === 'bigint')
+                return value.toString() + 'n';
+            if (typeof value === 'symbol')
+                return `Symbol(${value.description})`;
+            if (!value)
+                return JSON.stringify(value); // 0, null, ""
+            if (typeof value !== 'object' && typeof value !== 'function')
+                return JSON.stringify(value); // boolean, number, string
+        }
+        caching: {
+            let key = $mol_key_store.get(value);
+            if (key)
+                return key;
+        }
+        objects: {
+            if (value instanceof TypedArray) {
+                return `${value[Symbol.toStringTag]}([${[...value].map(v => $mol_key(v))}])`;
+            }
+            if (Array.isArray(value))
+                return `[${value.map(v => $mol_key(v))}]`;
+            if (value instanceof RegExp)
+                return value.toString();
+            if (value instanceof Date)
+                return `Date(${value.valueOf()})`;
+        }
+        structures: {
+            const proto = Reflect.getPrototypeOf(value);
+            if (!proto || !Reflect.getPrototypeOf(proto)) {
+                return `{${Object.entries(value).map(([k, v]) => JSON.stringify(k) + ':' + $mol_key(v))}}`;
+            }
+        }
+        handlers: {
+            if ($mol_key_handle in value) {
+                return value[$mol_key_handle]();
+            }
+        }
+        containers: {
+            const key = JSON.stringify('#' + $mol_guid());
+            $mol_key_store.set(value, key);
+            return key;
+        }
+    }
+    $.$mol_key = $mol_key;
+})($ || ($ = {}));
+
+;
+"use strict";
+var $;
+(function ($) {
+    class $mol_after_timeout extends $mol_object2 {
+        delay;
+        task;
+        id;
+        constructor(delay, task) {
+            super();
+            this.delay = delay;
+            this.task = task;
+            this.id = setTimeout(task, delay);
+        }
+        destructor() {
+            clearTimeout(this.id);
+        }
+    }
+    $.$mol_after_timeout = $mol_after_timeout;
+})($ || ($ = {}));
+
+;
+"use strict";
+var $;
+(function ($) {
+    class $mol_after_frame extends $mol_after_timeout {
+        task;
+        constructor(task) {
+            super(16, task);
+            this.task = task;
+        }
+    }
+    $.$mol_after_frame = $mol_after_frame;
+})($ || ($ = {}));
+
+;
+"use strict";
+var $;
+(function ($) {
+    /**
+     * Decorates method to fiber to ensure it is executed only once inside other fiber.
+     */
+    function $mol_wire_method(host, field, descr) {
+        if (!descr)
+            descr = Reflect.getOwnPropertyDescriptor(host, field);
+        const orig = descr?.value ?? host[field];
+        const sup = Reflect.getPrototypeOf(host);
+        if (typeof sup[field] === 'function') {
+            Object.defineProperty(orig, 'name', { value: sup[field].name });
+        }
+        const temp = $mol_wire_task.getter(orig);
+        const value = function (...args) {
+            const fiber = temp(this ?? null, args);
+            return fiber.sync();
+        };
+        Object.defineProperty(value, 'name', { value: orig.name + ' ' });
+        Object.assign(value, { orig });
+        const descr2 = { ...descr, value };
+        Reflect.defineProperty(host, field, descr2);
+        return descr2;
+    }
+    $.$mol_wire_method = $mol_wire_method;
+})($ || ($ = {}));
+
+;
+"use strict";
+
+;
+"use strict";
+
+;
+"use strict";
+var $;
+(function ($) {
+    /** Long-living fiber. */
+    class $mol_wire_atom extends $mol_wire_fiber {
+        static solo(host, task) {
+            const field = task.name + '()';
+            const existen = Object.getOwnPropertyDescriptor(host ?? task, field)?.value;
+            if (existen)
+                return existen;
+            const prefix = host?.[Symbol.toStringTag] ?? (host instanceof Function ? $$.$mol_func_name(host) : host);
+            const key = prefix + ('.' + task.name + '<>');
+            const fiber = new $mol_wire_atom(key, task, host, []);
+            (host ?? task)[field] = fiber;
+            return fiber;
+        }
+        static plex(host, task, key) {
+            const field = task.name + '()';
+            let dict = Object.getOwnPropertyDescriptor(host ?? task, field)?.value;
+            const prefix = host?.[Symbol.toStringTag] ?? (host instanceof Function ? $$.$mol_func_name(host) : host);
+            const key_str = $mol_key(key);
+            if (dict) {
+                const existen = dict.get(key_str);
+                if (existen)
+                    return existen;
+            }
+            else {
+                dict = (host ?? task)[field] = new Map();
+            }
+            const id = prefix + ('.' + task.name) + ('<' + key_str.replace(/^"|"$/g, "'") + '>');
+            const fiber = new $mol_wire_atom(id, task, host, [key]);
+            dict.set(key_str, fiber);
+            return fiber;
+        }
+        static watching = new Set();
+        static watcher = null;
+        static watch() {
+            $mol_wire_atom.watcher = new $mol_after_frame($mol_wire_atom.watch);
+            for (const atom of $mol_wire_atom.watching) {
+                if (atom.cursor === $mol_wire_cursor.final) {
+                    $mol_wire_atom.watching.delete(atom);
+                }
+                else {
+                    atom.cursor = $mol_wire_cursor.stale;
+                    atom.fresh();
+                }
+            }
+        }
+        watch() {
+            if (!$mol_wire_atom.watcher) {
+                $mol_wire_atom.watcher = new $mol_after_frame($mol_wire_atom.watch);
+            }
+            $mol_wire_atom.watching.add(this);
+        }
+        /**
+         * Update atom value through another temp fiber.
+         */
+        resync(args) {
+            // enforce pulling tasks abort
+            for (let cursor = this.pub_from; cursor < this.sub_from; cursor += 2) {
+                const pub = this.data[cursor];
+                if (pub && pub instanceof $mol_wire_task) {
+                    pub.destructor();
+                }
+            }
+            return this.put(this.task.call(this.host, ...args));
+        }
+        once() {
+            return this.sync();
+        }
+        channel() {
+            return Object.assign((next) => {
+                if (next !== undefined)
+                    return this.resync([...this.args, next]);
+                if (!$mol_wire_fiber.warm)
+                    return this.result();
+                if ($mol_wire_auto()?.temp) {
+                    return this.once();
+                }
+                else {
+                    return this.sync();
+                }
+            }, { atom: this });
+        }
+        destructor() {
+            super.destructor();
+            if (this.pub_from === 0) {
+                ;
+                (this.host ?? this.task)[this.field()] = null;
+            }
+            else {
+                const key = $mol_key(this.args[0]);
+                const map = (this.host ?? this.task)[this.field()];
+                if (!map.has(key))
+                    this.$.$mol_log3_warn({
+                        place: this,
+                        message: 'Absent key on destruction',
+                        hint: 'Check for $mol_key(key) is not changed',
+                    });
+                map.delete(key);
+            }
+        }
+        put(next) {
+            const prev = this.cache;
+            update: if (next !== prev) {
+                try {
+                    if ($mol_compare_deep(prev, next))
+                        break update;
+                }
+                catch (error) {
+                    $mol_fail_log(error);
+                }
+                if ($mol_owning_check(this, prev)) {
+                    prev.destructor();
+                }
+                if ($mol_owning_catch(this, next)) {
+                    try {
+                        next[Symbol.toStringTag] = this[Symbol.toStringTag];
+                    }
+                    catch { // Promises throw in strict mode
+                        Object.defineProperty(next, Symbol.toStringTag, { value: this[Symbol.toStringTag] });
+                    }
+                }
+                if (!this.sub_empty)
+                    this.emit();
+            }
+            this.cache = next;
+            this.cursor = $mol_wire_cursor.fresh;
+            if ($mol_promise_like(next))
+                return next;
+            this.complete_pubs();
+            return next;
+        }
+    }
+    __decorate([
+        $mol_wire_method
+    ], $mol_wire_atom.prototype, "resync", null);
+    __decorate([
+        $mol_wire_method
+    ], $mol_wire_atom.prototype, "once", null);
+    $.$mol_wire_atom = $mol_wire_atom;
+})($ || ($ = {}));
+
+;
+"use strict";
+var $;
+(function ($) {
+    /** Decorates solo object channel to [mol_wire_atom](../atom/atom.ts). */
+    function $mol_wire_solo(host, field, descr) {
+        if (!descr)
+            descr = Reflect.getOwnPropertyDescriptor(host, field);
+        const orig = descr?.value ?? host[field];
+        const sup = Reflect.getPrototypeOf(host);
+        if (typeof sup[field] === 'function') {
+            Object.defineProperty(orig, 'name', { value: sup[field].name });
+        }
+        const descr2 = {
+            ...descr,
+            value: function (...args) {
+                let atom = $mol_wire_atom.solo(this, orig);
+                if ((args.length === 0) || (args[0] === undefined)) {
+                    if (!$mol_wire_fiber.warm)
+                        return atom.result();
+                    if ($mol_wire_auto()?.temp) {
+                        return atom.once();
+                    }
+                    else {
+                        return atom.sync();
+                    }
+                }
+                return atom.resync(args);
+            }
+        };
+        Reflect.defineProperty(descr2.value, 'name', { value: orig.name + ' ' });
+        Reflect.defineProperty(descr2.value, 'length', { value: orig.length });
+        Object.assign(descr2.value, { orig });
+        Reflect.defineProperty(host, field, descr2);
+        return descr2;
+    }
+    $.$mol_wire_solo = $mol_wire_solo;
+})($ || ($ = {}));
+
+;
+"use strict";
+var $;
+(function ($) {
+    /** Reactive memoizing multiplexed property decorator. */
+    function $mol_wire_plex(host, field, descr) {
+        if (!descr)
+            descr = Reflect.getOwnPropertyDescriptor(host, field);
+        const orig = descr?.value ?? host[field];
+        const sup = Reflect.getPrototypeOf(host);
+        if (typeof sup[field] === 'function') {
+            Object.defineProperty(orig, 'name', { value: sup[field].name });
+        }
+        const descr2 = {
+            ...descr,
+            value: function (...args) {
+                let atom = $mol_wire_atom.plex(this, orig, args[0]);
+                if ((args.length === 1) || (args[1] === undefined)) {
+                    if (!$mol_wire_fiber.warm)
+                        return atom.result();
+                    if ($mol_wire_auto()?.temp) {
+                        return atom.once();
+                    }
+                    else {
+                        return atom.sync();
+                    }
+                }
+                return atom.resync(args);
+            }
+        };
+        Reflect.defineProperty(descr2.value, 'name', { value: orig.name + ' ' });
+        Reflect.defineProperty(descr2.value, 'length', { value: orig.length });
+        Object.assign(descr2.value, { orig });
+        Reflect.defineProperty(host, field, descr2);
+        return descr2;
+    }
+    $.$mol_wire_plex = $mol_wire_plex;
+})($ || ($ = {}));
+
+;
+"use strict";
+var $;
+(function ($) {
+    /**
+     * Reactive memoizing solo property decorator from [mol_wire](../wire/README.md)
+     * @example
+     * '@' $mol_mem
+     * name(next?: string) {
+     * 	return next ?? 'default'
+     * }
+     * @see https://mol.hyoo.ru/#!section=docs/=qxmh6t_sinbmb
+     */
+    $.$mol_mem = $mol_wire_solo;
+    /**
+     * Reactive memoizing multiplexed property decorator [mol_wire](../wire/README.md)
+     * @example
+     * '@' $mol_mem_key
+     * name(id: number, next?: string) {
+     *  return next ?? 'default'
+     * }
+     * @see https://mol.hyoo.ru/#!section=docs/=qxmh6t_sinbmb
+     */
+    $.$mol_mem_key = $mol_wire_plex;
+})($ || ($ = {}));
+
+;
+"use strict";
+var $;
+(function ($) {
     function $mol_guard_defined(value) {
         return value !== null && value !== undefined;
     }
@@ -4250,10 +3323,10 @@ var $;
         static wrap(task) {
             const store = new WeakMap();
             const fun = function (next) {
-                if (next === undefined && store.has(this))
-                    return store.get(this);
+                if (next === undefined && store.has(this ?? fun))
+                    return store.get(this ?? fun);
                 const val = task.call(this, next) ?? next;
-                store.set(this, val);
+                store.set(this ?? fun, val);
                 return val;
             };
             Reflect.defineProperty(fun, 'name', { value: task.name + ' ' });
@@ -4277,6 +3350,31 @@ var $;
 "use strict";
 var $;
 (function ($) {
+    /** Run code without state changes */
+    function $mol_wire_probe(task, def) {
+        const warm = $mol_wire_fiber.warm;
+        try {
+            $mol_wire_fiber.warm = false;
+            const res = task();
+            if (res === undefined)
+                return def;
+            return res;
+        }
+        finally {
+            $mol_wire_fiber.warm = warm;
+        }
+    }
+    $.$mol_wire_probe = $mol_wire_probe;
+})($ || ($ = {}));
+
+;
+"use strict";
+var $;
+(function ($) {
+    /**
+     * Real-time refresh current atom.
+     * Don't use if possible. May reduce performance.
+     */
     function $mol_wire_watch() {
         const atom = $mol_wire_auto();
         if (atom instanceof $mol_wire_atom) {
@@ -4287,6 +3385,46 @@ var $;
         }
     }
     $.$mol_wire_watch = $mol_wire_watch;
+})($ || ($ = {}));
+
+;
+"use strict";
+var $;
+(function ($) {
+    /**
+     * Returns closure that returns constant value.
+     * @example
+     * const rnd = $mol_const( Math.random() )
+     */
+    function $mol_const(value) {
+        const getter = (() => value);
+        getter['()'] = value;
+        getter[Symbol.toStringTag] = value;
+        getter[$mol_dev_format_head] = () => $mol_dev_format_span({}, '()=> ', $mol_dev_format_auto(value));
+        return getter;
+    }
+    $.$mol_const = $mol_const;
+})($ || ($ = {}));
+
+;
+"use strict";
+var $;
+(function ($) {
+    /**
+     * Disable reaping of current subscriber
+     */
+    function $mol_wire_solid() {
+        let current = $mol_wire_auto();
+        if (current.temp)
+            current = current.host;
+        if (current.reap !== nothing) {
+            current?.sub_on(sub, sub.data.length);
+        }
+        current.reap = nothing;
+    }
+    $.$mol_wire_solid = $mol_wire_solid;
+    const nothing = () => { };
+    const sub = new $mol_wire_pub_sub;
 })($ || ($ = {}));
 
 ;
@@ -4376,6 +3514,37 @@ var $;
 
 ;
 "use strict";
+var $;
+(function ($) {
+    /** Convert a pseudo-synchronous (Suspense API) API to an explicit asynchronous one (for integrating with external systems). */
+    function $mol_wire_async(obj) {
+        let fiber;
+        const temp = $mol_wire_task.getter(obj);
+        return new Proxy(obj, {
+            get(obj, field) {
+                const val = obj[field];
+                if (typeof val !== 'function')
+                    return val;
+                let fiber;
+                const temp = $mol_wire_task.getter(val);
+                return function $mol_wire_async(...args) {
+                    fiber?.destructor();
+                    fiber = temp(obj, args);
+                    return fiber.async();
+                };
+            },
+            apply(obj, self, args) {
+                fiber?.destructor();
+                fiber = temp(self, args);
+                return fiber.async();
+            },
+        });
+    }
+    $.$mol_wire_async = $mol_wire_async;
+})($ || ($ = {}));
+
+;
+"use strict";
 
 ;
 "use strict";
@@ -4384,11 +3553,12 @@ var $;
 "use strict";
 var $;
 (function ($) {
-    $mol_style_attach("mol/view/view/view.css", "@view-transition {\n\tnavigation: auto;\n}\n\n[mol_view] {\n\ttransition-property: height, width, min-height, min-width, max-width, max-height, transform, scale, translate, rotate;\n\ttransition-duration: .2s;\n\ttransition-timing-function: ease-out;\n\t-webkit-appearance: none;\n\tbox-sizing: border-box;\n\tdisplay: flex;\n\tflex-shrink: 0;\n\tcontain: style;\n\tscrollbar-color: var(--mol_theme_line) transparent;\n\tscrollbar-width: thin;\n}\t\n\n[mol_view]::selection {\n\tbackground: var(--mol_theme_line);\n}\t\n\n[mol_view]::-webkit-scrollbar {\n\twidth: .25rem;\n\theight: .25rem;\n}\n\n[mol_view]::-webkit-scrollbar-corner {\n\tbackground-color: var(--mol_theme_line);\n}\n\n[mol_view]::-webkit-scrollbar-track {\n\tbackground-color: transparent;\n}\n\n[mol_view]::-webkit-scrollbar-thumb {\n\tbackground-color: var(--mol_theme_line);\n\tborder-radius: var(--mol_gap_round);\n}\n\n[mol_view] > * {\n\tword-break: inherit;\n}\n\n[mol_view_root] {\n\tmargin: 0;\n\tpadding: 0;\n\twidth: 100%;\n\theight: 100%;\n\tbox-sizing: border-box;\n\tfont-family: system-ui, 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;\n\tfont-size: 1rem;\n\tline-height: 1.5rem;\n\t/* background: var(--mol_theme_back);\n\tcolor: var(--mol_theme_text); */\n\tcontain: unset; /** Fixes bg ignoring when applied to body on Chrome */\n\ttab-size: 4;\n\toverscroll-behavior: contain; /** Disable navigation gestures **/\n}\n\n@media print {\n\t[mol_view_root] {\n\t\theight: auto;\n\t}\n}\n[mol_view][mol_view_error]:not([mol_view_error=\"Promise\"], [mol_view_error=\"$mol_promise_blocker\"]) {\n\tbackground-image: repeating-linear-gradient(\n\t\t-45deg,\n\t\t#f92323,\n\t\t#f92323 .5rem,\n\t\t#ff3d3d .5rem,\n\t\t#ff3d3d 1.5rem\n\t);\n\tcolor: black;\n\talign-items: center;\n\tjustify-content: center;\n}\n\n@keyframes mol_view_wait {\n\tfrom {\n\t\topacity: .25;\n\t}\n\t20% {\n\t\topacity: .75;\n\t}\n\tto {\n\t\topacity: .25;\n\t}\n}\n\n:where([mol_view][mol_view_error=\"$mol_promise_blocker\"]),\n:where([mol_view][mol_view_error=\"Promise\"]) {\n\tbackground: var(--mol_theme_hover);\n}\n\n[mol_view][mol_view_error=\"Promise\"] {\n\tanimation: mol_view_wait 1s steps(20,end) infinite;\n}\n");
+    $mol_style_attach("mol/view/view/view.css", "@view-transition {\n\tnavigation: auto;\n}\n\n[mol_view] {\n\ttransition-property: height, width, min-height, min-width, max-width, max-height, transform, scale, translate, rotate;\n\ttransition-duration: .2s;\n\ttransition-timing-function: ease-out;\n\t-webkit-appearance: none;\n\tbox-sizing: border-box;\n\tdisplay: flex;\n\tflex-shrink: 0;\n\tcontain: style;\n\tscrollbar-color: var(--mol_theme_line) transparent;\n\tscrollbar-width: thin;\n}\t\n\n[mol_view]::selection {\n\tbackground: var(--mol_theme_line);\n}\t\n\n[mol_view]::-webkit-scrollbar {\n\twidth: .25rem;\n\theight: .25rem;\n}\n\n[mol_view]::-webkit-scrollbar-corner {\n\tbackground-color: var(--mol_theme_line);\n}\n\n[mol_view]::-webkit-scrollbar-track {\n\tbackground-color: transparent;\n}\n\n[mol_view]::-webkit-scrollbar-thumb {\n\tbackground-color: var(--mol_theme_line);\n\tborder-radius: var(--mol_gap_round);\n}\n\n[mol_view] > * {\n\tword-break: inherit;\n}\n\n[mol_view_root] {\n\tmargin: 0;\n\tpadding: 0;\n\twidth: 100%;\n\theight: 100%;\n\tbox-sizing: border-box;\n\tfont-family: system-ui, 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;\n\tfont-size: 1rem;\n\tline-height: 1.5rem;\n\t/* background: var(--mol_theme_back);\n\tcolor: var(--mol_theme_text); */\n\tcontain: unset; /** Fixes bg ignoring when applied to body on Chrome */\n\ttab-size: 4;\n\t/*overscroll-behavior: contain; /** Disable navigation gestures **/\n}\n\n@media print {\n\t[mol_view_root] {\n\t\theight: auto;\n\t}\n}\n[mol_view][mol_view_error]:not([mol_view_error=\"Promise\"], [mol_view_error=\"$mol_promise_blocker\"]) {\n\tbackground-image: repeating-linear-gradient(\n\t\t-45deg,\n\t\t#f92323,\n\t\t#f92323 .5rem,\n\t\t#ff3d3d .5rem,\n\t\t#ff3d3d 1.5rem\n\t);\n\tcolor: black;\n\talign-items: center;\n\tjustify-content: center;\n}\n\n@keyframes mol_view_wait {\n\tfrom {\n\t\topacity: .25;\n\t}\n\t20% {\n\t\topacity: .75;\n\t}\n\tto {\n\t\topacity: .25;\n\t}\n}\n\n:where([mol_view][mol_view_error=\"$mol_promise_blocker\"]),\n:where([mol_view][mol_view_error=\"Promise\"]) {\n\tbackground: var(--mol_theme_hover);\n}\n\n[mol_view][mol_view_error=\"Promise\"] {\n\tanimation: mol_view_wait 1s steps(20,end) infinite;\n}\n");
 })($ || ($ = {}));
 
 ;
 "use strict";
+/** @jsx $mol_jsx */
 var $;
 (function ($) {
     function $mol_view_visible_width() {
@@ -4403,6 +3573,11 @@ var $;
         return suffix;
     }
     $.$mol_view_state_key = $mol_view_state_key;
+    /**
+     * The base class for all visual components. It provides the infrastructure for reactive lazy rendering, handling exceptions.
+     * @see https://mol.hyoo.ru/#!section=docs/=vv2nig_s5zr0f
+     */
+    /// Reactive statefull lazy ViewModel
     class $mol_view extends $mol_object {
         static Root(id) {
             return new this;
@@ -4467,16 +3642,22 @@ var $;
         state_key(suffix = '') {
             return this.$.$mol_view_state_key(suffix);
         }
+        /// Name of element that created when element not found in DOM
         dom_name() {
             return $mol_dom_qname(this.constructor.toString()) || 'div';
         }
+        /// NameSpace of element that created when element not found in DOM
         dom_name_space() { return 'http://www.w3.org/1999/xhtml'; }
+        /// Raw child views
         sub() {
             return [];
         }
+        /// Visible sub views with defined ambient context
+        /// Render all by default
         sub_visible() {
             return this.sub();
         }
+        /// Minimal width that used for lazy rendering
         minimal_width() {
             let min = 0;
             try {
@@ -4498,6 +3679,7 @@ var $;
         maximal_width() {
             return this.minimal_width();
         }
+        /// Minimal height that used for lazy rendering
         minimal_height() {
             let min = 0;
             try {
@@ -4517,11 +3699,11 @@ var $;
         view_rect() {
             if ($mol_wire_probe(() => this.view_rect()) === undefined) {
                 $mol_wire_watch();
-                return null;
+                return null; // don't touch DOM to prevent instant reflow
             }
             else {
                 const { width, height, left, right, top, bottom } = this.dom_node().getBoundingClientRect();
-                return { width, height, left, right, top, bottom };
+                return { width, height, left, right, top, bottom }; // pick to optimize compare
             }
         }
         dom_id() {
@@ -4711,6 +3893,7 @@ var $;
         [$mol_dev_format_head]() {
             return $mol_dev_format_span({}, $mol_dev_format_native(this));
         }
+        /** Deep search view by predicate. */
         *view_find(check, path = []) {
             if (path.length === 0 && check(this))
                 return yield [this];
@@ -4739,6 +3922,7 @@ var $;
                 $mol_fail_log(error);
             }
         }
+        /** Renders path of views to DOM. */
         force_render(path) {
             const kids = this.sub();
             const index = kids.findIndex(item => {
@@ -4753,6 +3937,7 @@ var $;
                 kids[index].force_render(path);
             }
         }
+        /** Renders view to DOM and scroll to it. */
         ensure_visible(view, align = "start") {
             const path = this.view_find(v => v === view).next().value;
             this.force_render(new Set(path));
@@ -4767,6 +3952,9 @@ var $;
             const win = this.$.$mol_dom_context;
             if (win.parent !== win.self && !win.document.hasFocus())
                 return;
+            // new this.$.$mol_after_frame( ()=> {
+            // 	this.dom_node().scrollIntoView({ block: 'start', inline: 'nearest' })
+            // } )
             new this.$.$mol_after_timeout(0, () => {
                 this.focused(true);
             });
@@ -4847,6 +4035,7 @@ var $;
 "use strict";
 var $;
 (function ($) {
+    /** Plugin is component without its own DOM element, but instead uses the owner DOM element */
     class $mol_plugin extends $mol_view {
         dom_node_external(next) {
             return next ?? $mol_owning_get(this).host.dom_node();
@@ -4882,8 +4071,1185 @@ var $;
 "use strict";
 var $;
 (function ($) {
+    /**
+     * Decorates method to fiber to ensure it is executed only once inside other fiber from [mol_wire](../wire/README.md)
+     * @see https://mol.hyoo.ru/#!section=docs/=1fcpsq_1wh0h2
+     */
+    $.$mol_action = $mol_wire_method;
+})($ || ($ = {}));
+
+;
+"use strict";
+var $;
+(function ($) {
+    /** State of arguments like `foo=bar xxx` */
+    class $mol_state_arg extends $mol_object {
+        prefix;
+        static prolog = '';
+        static separator = ' ';
+        static href(next) {
+            return next || process.argv.slice(2).join(' ');
+        }
+        static href_normal() {
+            return this.link({});
+        }
+        static dict(next) {
+            if (next !== void 0)
+                this.href(this.make_link(next));
+            var href = this.href();
+            var chunks = href.split(' ');
+            var params = {};
+            chunks.forEach(chunk => {
+                if (!chunk)
+                    return;
+                var vals = chunk.split('=').map(decodeURIComponent);
+                params[vals.shift()] = vals.join('=');
+            });
+            return params;
+        }
+        static value(key, next) {
+            if (next === void 0)
+                return this.dict()[key] ?? null;
+            this.href(this.link({ [key]: next }));
+            return next;
+        }
+        static link(next) {
+            const params = {};
+            var prev = this.dict();
+            for (var key in prev) {
+                params[key] = prev[key];
+            }
+            for (var key in next) {
+                params[key] = next[key];
+            }
+            return this.make_link(params);
+        }
+        static make_link(next) {
+            const chunks = [];
+            for (const key in next) {
+                if (next[key] !== null) {
+                    chunks.push([key, next[key]].map(encodeURIComponent).join('='));
+                }
+            }
+            return chunks.join(' ');
+        }
+        static go(next) {
+            this.href(this.link(next));
+        }
+        static commit() { }
+        constructor(prefix = '') {
+            super();
+            this.prefix = prefix;
+        }
+        value(key, next) {
+            return this.constructor.value(this.prefix + key, next);
+        }
+        sub(postfix) {
+            return new this.constructor(this.prefix + postfix + '.');
+        }
+        link(next) {
+            const prefix = this.prefix;
+            const dict = {};
+            for (var key in next) {
+                dict[prefix + key] = next[key];
+            }
+            return this.constructor.link(dict);
+        }
+    }
+    __decorate([
+        $mol_mem
+    ], $mol_state_arg, "href", null);
+    __decorate([
+        $mol_mem
+    ], $mol_state_arg, "href_normal", null);
+    __decorate([
+        $mol_mem
+    ], $mol_state_arg, "dict", null);
+    __decorate([
+        $mol_mem_key
+    ], $mol_state_arg, "value", null);
+    __decorate([
+        $mol_action
+    ], $mol_state_arg, "go", null);
+    $.$mol_state_arg = $mol_state_arg;
+})($ || ($ = {}));
+
+;
+"use strict";
+var $;
+(function ($) {
+    class $mol_media extends $mol_object2 {
+        static match(query, next) {
+            if (next !== undefined)
+                return next;
+            const res = this.$.$mol_dom_context.matchMedia?.(query) ?? {};
+            res.onchange = () => this.match(query, res.matches);
+            return res.matches;
+        }
+    }
+    __decorate([
+        $mol_mem_key
+    ], $mol_media, "match", null);
+    $.$mol_media = $mol_media;
+})($ || ($ = {}));
+
+;
+"use strict";
+var $;
+(function ($) {
+    $.$mol_mem_persist = $mol_wire_solid;
+})($ || ($ = {}));
+
+;
+"use strict";
+var $;
+(function ($) {
+    $.$mol_mem_cached = $mol_wire_probe;
+})($ || ($ = {}));
+
+;
+"use strict";
+var $;
+(function ($) {
+    function $mol_wait_user_async() {
+        return new Promise(done => $mol_dom.addEventListener('click', function onclick() {
+            $mol_dom.removeEventListener('click', onclick);
+            done(null);
+        }));
+    }
+    $.$mol_wait_user_async = $mol_wait_user_async;
+    function $mol_wait_user() {
+        return this.$mol_wire_sync(this).$mol_wait_user_async();
+    }
+    $.$mol_wait_user = $mol_wait_user;
+})($ || ($ = {}));
+
+;
+"use strict";
+var $;
+(function ($) {
+    class $mol_storage extends $mol_object2 {
+        static native() {
+            return this.$.$mol_dom_context.navigator.storage ?? {
+                persisted: async () => false,
+                persist: async () => false,
+                estimate: async () => ({}),
+                getDirectory: async () => null,
+            };
+        }
+        static persisted(next, cache) {
+            $mol_mem_persist();
+            if (cache)
+                return Boolean(next);
+            const native = this.native();
+            if (next && !$mol_mem_cached(() => this.persisted())) {
+                this.$.$mol_wait_user_async()
+                    .then(() => native.persist())
+                    .then(actual => {
+                    setTimeout(() => this.persisted(actual, 'cache'), 5000);
+                    if (actual)
+                        this.$.$mol_log3_done({ place: `$mol_storage`, message: `Persist: Yes` });
+                    else
+                        this.$.$mol_log3_fail({ place: `$mol_storage`, message: `Persist: No` });
+                });
+            }
+            return next ?? $mol_wire_sync(native).persisted();
+        }
+        static estimate() {
+            return $mol_wire_sync(this.native() ?? {}).estimate();
+        }
+        static dir() {
+            return $mol_wire_sync(this.native()).getDirectory();
+        }
+    }
+    __decorate([
+        $mol_mem
+    ], $mol_storage, "native", null);
+    __decorate([
+        $mol_mem
+    ], $mol_storage, "persisted", null);
+    $.$mol_storage = $mol_storage;
+})($ || ($ = {}));
+
+;
+"use strict";
+var $;
+(function ($) {
+    class $mol_state_local extends $mol_object {
+        static 'native()';
+        static native() {
+            if (this['native()'])
+                return this['native()'];
+            check: try {
+                const native = $mol_dom_context.localStorage;
+                if (!native)
+                    break check;
+                native.setItem('', '');
+                native.removeItem('');
+                return this['native()'] = native;
+            }
+            catch (error) {
+                console.warn(error);
+            }
+            return this['native()'] = {
+                getItem(key) {
+                    return this[':' + key];
+                },
+                setItem(key, value) {
+                    this[':' + key] = value;
+                },
+                removeItem(key) {
+                    this[':' + key] = void 0;
+                }
+            };
+        }
+        static changes(next) { return next; }
+        static value(key, next) {
+            this.changes();
+            if (next === void 0)
+                return JSON.parse(this.native().getItem(key) || 'null');
+            if (next === null) {
+                this.native().removeItem(key);
+            }
+            else {
+                this.native().setItem(key, JSON.stringify(next));
+                this.$.$mol_storage.persisted(true);
+            }
+            return next;
+        }
+        prefix() { return ''; }
+        value(key, next) {
+            return $mol_state_local.value(this.prefix() + '.' + key, next);
+        }
+    }
+    __decorate([
+        $mol_mem
+    ], $mol_state_local, "changes", null);
+    __decorate([
+        $mol_mem_key
+    ], $mol_state_local, "value", null);
+    $.$mol_state_local = $mol_state_local;
+})($ || ($ = {}));
+
+;
+"use strict";
+var $;
+(function ($) {
+    class $mol_lock extends $mol_object {
+        promise = null;
+        async wait() {
+            let next = () => { };
+            let destructed = false;
+            const task = $mol_wire_auto();
+            if (!task)
+                return next;
+            const destructor = task.destructor.bind(task);
+            task.destructor = () => {
+                destructor();
+                destructed = true;
+                next();
+            };
+            let promise;
+            do {
+                promise = this.promise;
+                await promise;
+                if (destructed)
+                    return next;
+            } while (promise !== this.promise);
+            this.promise = new Promise(done => { next = done; });
+            return next;
+        }
+        grab() { return $mol_wire_sync(this).wait(); }
+    }
+    $.$mol_lock = $mol_lock;
+})($ || ($ = {}));
+
+;
+"use strict";
+var $;
+(function ($) {
+    function $mol_compare_array(a, b) {
+        if (a === b)
+            return true;
+        if (Object.getPrototypeOf(a) !== Object.getPrototypeOf(b))
+            return false;
+        if (a.length !== b.length)
+            return false;
+        for (let i = 0; i < a.length; i++)
+            if (a[i] !== b[i])
+                return false;
+        return true;
+    }
+    $.$mol_compare_array = $mol_compare_array;
+})($ || ($ = {}));
+
+;
+"use strict";
+
+;
+"use strict";
+var $;
+(function ($) {
+    const decoders = {};
+    function $mol_charset_decode(buffer, encoding = 'utf8') {
+        let decoder = decoders[encoding];
+        if (!decoder)
+            decoder = decoders[encoding] = new TextDecoder(encoding);
+        return decoder.decode(buffer);
+    }
+    $.$mol_charset_decode = $mol_charset_decode;
+})($ || ($ = {}));
+
+;
+"use strict";
+var $;
+(function ($) {
+    let buf = new Uint8Array(2 ** 12); // 4KB Mem Page
+    /** Temporary buffer. Recursive usage isn't supported. */
+    function $mol_charset_buffer(size) {
+        if (buf.byteLength < size)
+            buf = new Uint8Array(size);
+        return buf;
+    }
+    $.$mol_charset_buffer = $mol_charset_buffer;
+})($ || ($ = {}));
+
+;
+"use strict";
+var $;
+(function ($) {
+    function $mol_charset_encode(str) {
+        const buf = $mol_charset_buffer(str.length * 3);
+        return buf.slice(0, $mol_charset_encode_to(str, buf));
+    }
+    $.$mol_charset_encode = $mol_charset_encode;
+    function $mol_charset_encode_to(str, buf, from = 0) {
+        let pos = from;
+        for (let i = 0; i < str.length; i++) {
+            let code = str.charCodeAt(i);
+            if (code < 0x80) { // ASCII - 1 octet
+                buf[pos++] = code;
+            }
+            else if (code < 0x800) { // 2 octet
+                buf[pos++] = 0xc0 | (code >> 6);
+                buf[pos++] = 0x80 | (code & 0x3f);
+            }
+            else if (code < 0xd800 || code >= 0xe000) { // 3 octet
+                buf[pos++] = 0xe0 | (code >> 12);
+                buf[pos++] = 0x80 | ((code >> 6) & 0x3f);
+                buf[pos++] = 0x80 | (code & 0x3f);
+            }
+            else { // surrogate pair
+                const point = ((code - 0xd800) << 10) + str.charCodeAt(++i) + 0x2400;
+                buf[pos++] = 0xf0 | (point >> 18);
+                buf[pos++] = 0x80 | ((point >> 12) & 0x3f);
+                buf[pos++] = 0x80 | ((point >> 6) & 0x3f);
+                buf[pos++] = 0x80 | (point & 0x3f);
+            }
+        }
+        return pos - from;
+    }
+    $.$mol_charset_encode_to = $mol_charset_encode_to;
+    function $mol_charset_encode_size(str) {
+        let size = 0;
+        for (let i = 0; i < str.length; i++) {
+            let code = str.charCodeAt(i);
+            if (code < 0x80)
+                size += 1;
+            else if (code < 0x800)
+                size += 2;
+            else if (code < 0xd800 || code >= 0xe000)
+                size += 3;
+            else
+                size += 4;
+        }
+        return size;
+    }
+    $.$mol_charset_encode_size = $mol_charset_encode_size;
+})($ || ($ = {}));
+
+;
+"use strict";
+var $;
+(function ($) {
+    class $mol_file_transaction extends $mol_object {
+        path() { return ''; }
+        modes() { return []; }
+        write(options) {
+            throw new Error('Not implemented');
+        }
+        read() {
+            throw new Error('Not implemented');
+        }
+        truncate(size) {
+            throw new Error('Not implemented');
+        }
+        flush() {
+            throw new Error('Not implemented');
+        }
+        close() {
+            throw new Error('Not implemented');
+        }
+        destructor() {
+            this.close();
+        }
+    }
+    $.$mol_file_transaction = $mol_file_transaction;
+})($ || ($ = {}));
+
+;
+"use strict";
+var $;
+(function ($) {
+    let file_modes;
+    (function (file_modes) {
+        /** create if it doesn't already exist */
+        file_modes[file_modes["create"] = $node.fs.constants.O_CREAT] = "create";
+        /** truncate to zero size if it already exists */
+        file_modes[file_modes["exists_truncate"] = $node.fs.constants.O_TRUNC] = "exists_truncate";
+        /** throw exception if it already exists */
+        file_modes[file_modes["exists_fail"] = $node.fs.constants.O_EXCL] = "exists_fail";
+        file_modes[file_modes["read_only"] = $node.fs.constants.O_RDONLY] = "read_only";
+        file_modes[file_modes["write_only"] = $node.fs.constants.O_WRONLY] = "write_only";
+        file_modes[file_modes["read_write"] = $node.fs.constants.O_RDWR] = "read_write";
+        /** data will be appended to the end */
+        file_modes[file_modes["append"] = $node.fs.constants.O_APPEND] = "append";
+    })(file_modes || (file_modes = {}));
+    function mode_mask(modes) {
+        return modes.reduce((res, mode) => res | file_modes[mode], 0);
+    }
+    class $mol_file_transaction_node extends $mol_file_transaction {
+        descr() {
+            $mol_wire_solid();
+            return $node.fs.openSync(this.path(), mode_mask(this.modes()));
+        }
+        write({ buffer, offset = 0, length, position = null }) {
+            if (Array.isArray(buffer)) {
+                return $node.fs.writevSync(this.descr(), buffer, position ?? undefined);
+            }
+            if (typeof buffer === 'string') {
+                return $node.fs.writeSync(this.descr(), buffer, position);
+            }
+            length = length ?? buffer.byteLength;
+            return $node.fs.writeSync(this.descr(), buffer, offset, length, position);
+        }
+        truncate(size) {
+            $node.fs.ftruncateSync(this.descr());
+        }
+        read() {
+            return $mol_file_node_buffer_normalize($node.fs.readFileSync(this.descr()));
+        }
+        flush() {
+            $node.fs.fsyncSync(this.descr());
+        }
+        close() {
+            $node.fs.closeSync(this.descr());
+        }
+    }
+    __decorate([
+        $mol_mem
+    ], $mol_file_transaction_node.prototype, "descr", null);
+    $.$mol_file_transaction_node = $mol_file_transaction_node;
+    $.$mol_file_transaction = $mol_file_transaction_node;
+})($ || ($ = {}));
+
+;
+"use strict";
+var $;
+(function ($) {
+    class $mol_file_base extends $mol_object {
+        static absolute(path) {
+            return this.make({
+                path: $mol_const(path)
+            });
+        }
+        static relative(path) {
+            throw new Error('Not implemented yet');
+        }
+        static base = '';
+        path() {
+            return '.';
+        }
+        parent() {
+            return this.resolve('..');
+        }
+        exists_cut() { return this.exists(); }
+        root() {
+            const path = this.path();
+            const base = this.constructor.base;
+            // Если путь выше или равен base или если parent такойже как и this - считаем это корнем
+            return base.startsWith(path) || this == this.parent();
+        }
+        stat(next, virt) {
+            const path = this.path();
+            const parent = this.parent();
+            // Отслеживать проверку наличия родительской папки не стоит до корня диска
+            // Лучше ограничить mam-ом
+            if (!this.root()) {
+                /*
+                Если parent папка удалилась, надо ресетнуть все объекты в ней на любой глубине.
+                Например, rm -rf с последующим git pull: parent папка может удалиться, потом создасться,
+                а текущая папка успеет только удалиться до момента выполнения stat.
+                Поэтому parent.exists() не запустит перевычисления, нужна именно parent.version()
+
+                Однако, parent.version() меняется не только при удалении, будет ложное срабатывание
+                С этим придется мириться, красивого решения пока нет.
+                */
+                parent.version();
+            }
+            parent.watcher();
+            if (virt)
+                return next ?? null;
+            return next ?? this.info(path);
+        }
+        static changed = new Set;
+        static frame = null;
+        static changed_add(type, path) {
+            if (/([\/\\]\.|___$)/.test(path))
+                return;
+            const file = this.relative(path.at(-1) === '/' ? path.slice(0, -1) : path);
+            // console.log(type, path)
+            // add (change): добавился файл - у parent надо обновить список sub, если он был заюзан
+            // change, unlink (rename): обновился или удалился файл - ресетим
+            // addDir (change), добавилась папка, у parent обновляем список директорий в sub
+            // дочерние ресетим
+            // unlinkDir (rename), удалилась папка, ресетим ее
+            // stat у всех дочерних обновится сам, т.к. связан с parent.version()
+            this.changed.add(file);
+            if (!this.watching)
+                return;
+            // throttle, пока события поступают не сбрасываем.
+            // аналог awaitWriteFinish из chokidar
+            // интервалы между change-сообщениями модифицируемого файла должны быть меньше watch_debounce
+            this.frame?.destructor();
+            this.frame = new this.$.$mol_after_timeout(this.watch_debounce(), () => {
+                if (!this.watching)
+                    return;
+                this.watching = false;
+                $mol_wire_async(this).flush();
+            });
+        }
+        /**
+         * Должно быть больше, чем время между событиями от вотчера при записи внешним процессом.
+         * Иначе запуск ресетов паралельно с изменением может привести к неконсистентности.
+         */
+        static watch_debounce() { return 500; }
+        static flush() {
+            // Пока flush работает, вотчер сюда не заходит, но может добавлять новые изменения
+            // на каждом перезапуске они применятся
+            // Пока run выполняется, изменения накапливаются, в конце run вызывается flush
+            // Пока применяются изменения, run должен ожидать конца flush
+            for (const file of this.changed) {
+                const parent = file.parent();
+                try {
+                    if ($mol_wire_probe(() => parent.sub()))
+                        parent.sub(null);
+                    file.reset();
+                }
+                catch (error) {
+                    if ($mol_fail_catch(error))
+                        $mol_fail_log(error);
+                }
+            }
+            this.changed.clear();
+            this.watching = true;
+            // this.watch_wd?.destructor()
+            // this.watch_wd = null
+        }
+        static watching = true;
+        static lock = new $mol_lock;
+        static watch_off(path) {
+            this.watching = false;
+            // run должен ожидать конца flush
+            this.flush();
+            this.watching = false;
+            /*
+            watch запаздывает и событие может прилететь через 3 сек после окончания сайд эффекта
+            поэтому добавляем папку, которую меняет side_effect
+            Когда дойдет до выполнения flush, он ресетнет ее
+            
+            Иначе будут лишние срабатывания
+            Например, удалили hyoo/board, watch ресетит и exists начинает отдавать false, срабатывает git clone
+            Сразу после него событие addDir еще не успело прийти,
+            на следующем перезапуске вызывается git pull, т.к.
+            с точки зрения реактивной системы hyoo/board еще не существует.
+            */
+            this.changed.add(this.absolute(path));
+        }
+        // protected static watch_wd = null as null | $mol_after_timeout
+        static unwatched(side_effect, affected_dir) {
+            // ждем, пока выполнится предыдущий unwatched
+            const unlock = this.lock.grab();
+            this.watch_off(affected_dir);
+            try {
+                const result = side_effect();
+                this.flush();
+                unlock();
+                return result;
+            }
+            catch (e) {
+                if (!$mol_promise_like(e)) {
+                    this.flush();
+                    unlock();
+                }
+                $mol_fail_hidden(e);
+            }
+        }
+        reset() {
+            this.stat(null);
+        }
+        modified() { return this.stat()?.mtime ?? null; }
+        version() {
+            const next = this.stat()?.mtime.getTime().toString(36).toUpperCase() ?? '';
+            // console.log('version', next, this.path())
+            return next;
+        }
+        info(path) { return null; }
+        ensure() { }
+        drop() { }
+        copy(to) { }
+        read() { return new Uint8Array; }
+        write(buffer) { }
+        kids() {
+            return [];
+        }
+        readable(opts) {
+            return new ReadableStream;
+        }
+        writable(opts) {
+            return new WritableStream;
+        }
+        // open( ... modes: readonly $mol_file_mode[] ) { return 0 }
+        buffer(next) {
+            // Если версия пустая - возвращаем пустой буфер
+            let readed = new Uint8Array();
+            if (next === undefined) {
+                // Если меняется версия файла, буфер надо перечитать
+                if (this.version())
+                    readed = this.read();
+            }
+            const prev = $mol_mem_cached(() => this.buffer());
+            const changed = prev === undefined || !$mol_compare_array(prev, next ?? readed);
+            if (prev !== undefined && changed) {
+                // Логируем, если повторно читаем/пишем и буфер поменялся
+                this.$.$mol_log3_rise({
+                    place: `$mol_file_node.buffer()`,
+                    message: 'Changed',
+                    path: this.relate(),
+                });
+            }
+            if (next === undefined)
+                return changed ? readed : prev;
+            // Если буфер при записи не поменялся и файл не удаляли перед этим - не записываем новую версию.
+            // Если записывать, это приведет к смене mtime и вотчер снова триггернется, даже если содержимое файла не поменялось.
+            // В этом алгоритме есть изъян.
+            // Если файл записали, потом отключили вотчер, кто-то из вне его поменял, потом включили вотчер, снова записали тот же буфер,
+            // то буфер не запишется на диск, т.к. кэш не консистентен с диском.
+            if (!changed && this.exists())
+                return prev;
+            this.parent().exists(true);
+            this.stat(this.stat_make(next.length), 'virt');
+            this.write(next);
+            return next;
+        }
+        stat_make(size) {
+            const now = new Date();
+            return {
+                type: 'file',
+                size,
+                atime: now,
+                mtime: now,
+                ctime: now,
+            };
+        }
+        clone(to) {
+            if (!this.exists())
+                return null;
+            const target = this.constructor.absolute(to);
+            try {
+                this.version();
+                target.parent().exists(true);
+                this.copy(to);
+                target.reset();
+                return target;
+            }
+            catch (error) {
+                if ($mol_fail_catch(error)) {
+                    console.error(error);
+                }
+            }
+            return null;
+        }
+        // static watch_root = ''
+        // static watcher_warned = false
+        watcher() {
+            // const constructor = this.constructor as typeof $mol_file_base
+            // if (! constructor.watcher_warned) {
+            // 	console.warn(`${constructor}.watcher() not implemented`)
+            // 	constructor.watcher_warned = true
+            // }
+            return {
+                destructor() { }
+            };
+        }
+        exists(next) {
+            const exists = Boolean(this.stat());
+            // console.log('exists current', exists, 'next', next, this.path())
+            if (next === undefined)
+                return exists;
+            if (next === exists)
+                return exists;
+            if (next) {
+                this.parent().exists(true);
+                this.ensure();
+            }
+            else {
+                this.drop();
+            }
+            this.reset();
+            return next;
+        }
+        type() {
+            return this.stat()?.type ?? '';
+        }
+        name() {
+            return this.path().replace(/^.*\//, '');
+        }
+        ext() {
+            const match = /((?:\.\w+)+)$/.exec(this.path());
+            return match ? match[1].substring(1) : '';
+        }
+        text(next, virt) {
+            // Если записываем text, и вотчер ресетнул записанный файл,
+            // то надо снова его обновить, вызвать логику, которая делала пуш в text.
+            // Например файл удалили, потом снова создали, версия поменялась - перезаписываем
+            // Если использовать version, то вновь созданный файл, через вотчер запустит свое пересоздание
+            if (next !== undefined)
+                this.exists();
+            return this.text_int(next, virt);
+        }
+        text_int(next, virt) {
+            if (virt) {
+                this.stat(this.stat_make(0), 'virt');
+                return next;
+            }
+            if (next === undefined) {
+                return $mol_charset_decode(this.buffer());
+            }
+            else {
+                const buffer = $mol_charset_encode(next);
+                this.buffer(buffer);
+                return next;
+            }
+        }
+        sub(reset) {
+            if (!this.exists())
+                return [];
+            if (this.type() !== 'dir')
+                return [];
+            this.version();
+            // Если дочерний file удалился, список надо обновить
+            return this.kids().filter(file => file.exists());
+        }
+        resolve(path) {
+            throw new Error('implement');
+        }
+        relate(base = this.constructor.relative('.')) {
+            const base_path = base.path();
+            const path = this.path();
+            return path.startsWith(base_path) ? path.slice(base_path.length) : path;
+        }
+        find(include, exclude) {
+            const found = [];
+            const sub = this.sub();
+            for (const child of sub) {
+                const child_path = child.path();
+                if (exclude && child_path.match(exclude))
+                    continue;
+                if (!include || child_path.match(include))
+                    found.push(child);
+                if (child.type() === 'dir') {
+                    const sub_child = child.find(include, exclude);
+                    for (const child of sub_child)
+                        found.push(child);
+                }
+            }
+            return found;
+        }
+        size() {
+            switch (this.type()) {
+                case 'file': return this.stat()?.size ?? 0;
+                default: return 0;
+            }
+        }
+        toJSON() {
+            return this.path();
+        }
+        open(...modes) {
+            return this.$.$mol_file_transaction.make({
+                path: () => this.path(),
+                modes: () => modes
+            });
+        }
+    }
+    __decorate([
+        $mol_action
+    ], $mol_file_base.prototype, "exists_cut", null);
+    __decorate([
+        $mol_mem
+    ], $mol_file_base.prototype, "stat", null);
+    __decorate([
+        $mol_mem
+    ], $mol_file_base.prototype, "modified", null);
+    __decorate([
+        $mol_mem
+    ], $mol_file_base.prototype, "version", null);
+    __decorate([
+        $mol_mem_key
+    ], $mol_file_base.prototype, "readable", null);
+    __decorate([
+        $mol_mem_key
+    ], $mol_file_base.prototype, "writable", null);
+    __decorate([
+        $mol_mem
+    ], $mol_file_base.prototype, "buffer", null);
+    __decorate([
+        $mol_action
+    ], $mol_file_base.prototype, "stat_make", null);
+    __decorate([
+        $mol_mem_key
+    ], $mol_file_base.prototype, "clone", null);
+    __decorate([
+        $mol_mem
+    ], $mol_file_base.prototype, "exists", null);
+    __decorate([
+        $mol_mem
+    ], $mol_file_base.prototype, "type", null);
+    __decorate([
+        $mol_mem
+    ], $mol_file_base.prototype, "text_int", null);
+    __decorate([
+        $mol_mem
+    ], $mol_file_base.prototype, "sub", null);
+    __decorate([
+        $mol_mem
+    ], $mol_file_base.prototype, "size", null);
+    __decorate([
+        $mol_action
+    ], $mol_file_base.prototype, "open", null);
+    __decorate([
+        $mol_mem_key
+    ], $mol_file_base, "absolute", null);
+    __decorate([
+        $mol_action
+    ], $mol_file_base, "flush", null);
+    __decorate([
+        $mol_action
+    ], $mol_file_base, "watch_off", null);
+    $.$mol_file_base = $mol_file_base;
+})($ || ($ = {}));
+
+;
+"use strict";
+var $;
+(function ($) {
+    class $mol_file extends $mol_file_base {
+    }
+    $.$mol_file = $mol_file;
+})($ || ($ = {}));
+
+;
+"use strict";
+var $;
+(function ($) {
+    function stat_convert(stat) {
+        if (!stat)
+            return null;
+        let type;
+        if (stat.isDirectory())
+            type = 'dir';
+        if (stat.isFile())
+            type = 'file';
+        if (stat.isSymbolicLink())
+            type = 'link';
+        if (!type)
+            return $mol_fail(new Error(`Unsupported file type`));
+        return {
+            type,
+            size: Number(stat.size),
+            atime: stat.atime,
+            mtime: stat.mtime,
+            ctime: stat.ctime
+        };
+    }
+    function $mol_file_node_buffer_normalize(buf) {
+        return new Uint8Array(buf.buffer, buf.byteOffset, buf.byteLength);
+    }
+    $.$mol_file_node_buffer_normalize = $mol_file_node_buffer_normalize;
+    class $mol_file_node extends $mol_file {
+        static relative(path) {
+            return this.absolute($node.path.resolve(this.base, path).replace(/\\/g, '/'));
+        }
+        watcher(reset) {
+            const path = this.path();
+            const root = this.root();
+            // Если папки/файла нет, watch упадет с ошибкой
+            // exists обратится к parent.version и parent.watcher
+            // Поэтому у root-папки и выше не надо вызывать exists, иначе поднимется выше base до корня диска
+            // exists вызывать надо, что б пересоздавать вотчер при появлении папки или файла
+            if (!root && !this.exists())
+                return super.watcher();
+            let watcher;
+            try {
+                // Между exists и watch файл может удалиться, в любом случае надо обрабатывать ENOENT
+                watcher = $node.fs.watch(path);
+            }
+            catch (error) {
+                if (!(error instanceof Error))
+                    error = new Error('Unknown watch error', { cause: error });
+                error.message += '\n' + path;
+                if (root || error.code !== 'ENOENT') {
+                    this.$.$mol_fail_log(error);
+                }
+                // Если файла нет - вотчер не создается, создастся потом, когда exists поменяется на true.
+                // Если создание упало с другой ошибкой - не ломаем работу mol_file, деградируем до не реактивной fs.
+                return super.watcher();
+            }
+            watcher.on('change', (type, name) => {
+                if (!name)
+                    return;
+                const path = $node.path.join(this.path(), name.toString());
+                this.constructor.changed_add(type, path);
+            });
+            watcher.on('error', e => this.$.$mol_fail_log(e));
+            let destructed = false;
+            watcher.on('close', () => {
+                // Если в процессе работы вотчер сам закрылся, надо его переоткрыть
+                if (!destructed)
+                    setTimeout(() => $mol_wire_async(this).watcher(null), 500);
+            });
+            return {
+                destructor() {
+                    destructed = true;
+                    watcher.close();
+                }
+            };
+        }
+        info(path) {
+            try {
+                return stat_convert($node.fs.statSync(path));
+            }
+            catch (error) {
+                if (this.$.$mol_fail_catch(error)) {
+                    if (error.code === 'ENOENT')
+                        return null;
+                    if (error.code === 'EPERM')
+                        return null;
+                    error.message += '\n' + path;
+                    this.$.$mol_fail_hidden(error);
+                }
+            }
+            return null;
+        }
+        ensure() {
+            const path = this.path();
+            try {
+                $node.fs.mkdirSync(path, { recursive: true });
+                return null;
+            }
+            catch (e) {
+                if (this.$.$mol_fail_catch(e)) {
+                    if (e.code === 'EEXIST')
+                        return null;
+                    e.message += '\n' + path;
+                    this.$.$mol_fail_hidden(e);
+                }
+            }
+        }
+        copy(to) {
+            $node.fs.copyFileSync(this.path(), to);
+        }
+        drop() {
+            $node.fs.unlinkSync(this.path());
+        }
+        read() {
+            const path = this.path();
+            try {
+                return $mol_file_node_buffer_normalize($node.fs.readFileSync(path));
+            }
+            catch (error) {
+                if (!$mol_promise_like(error)) {
+                    error.message += '\n' + path;
+                }
+                $mol_fail_hidden(error);
+            }
+        }
+        write(buffer) {
+            const path = this.path();
+            try {
+                $node.fs.writeFileSync(path, buffer);
+            }
+            catch (error) {
+                if (this.$.$mol_fail_catch(error)) {
+                    error.message += '\n' + path;
+                }
+                return this.$.$mol_fail_hidden(error);
+            }
+        }
+        kids() {
+            const path = this.path();
+            try {
+                const kids = $node.fs.readdirSync(path)
+                    .filter(name => !/^\.+$/.test(name))
+                    .map(name => this.resolve(name));
+                return kids;
+            }
+            catch (e) {
+                if (this.$.$mol_fail_catch(e)) {
+                    if (e.code === 'ENOENT')
+                        return [];
+                    e.message += '\n' + path;
+                }
+                $mol_fail_hidden(e);
+            }
+        }
+        resolve(path) {
+            return this.constructor
+                .relative($node.path.join(this.path(), path));
+        }
+        relate(base = this.constructor.relative('.')) {
+            return $node.path.relative(base.path(), this.path()).replace(/\\/g, '/');
+        }
+        readable(opts) {
+            const { Readable } = $node['node:stream'];
+            const stream = $node.fs.createReadStream(this.path(), {
+                flags: 'r',
+                autoClose: true,
+                start: opts?.start,
+                end: opts?.end,
+                encoding: 'binary',
+            });
+            return Readable.toWeb(stream);
+        }
+        writable(opts) {
+            const { Writable } = $node['node:stream'];
+            const stream = $node.fs.createWriteStream(this.path(), {
+                flags: 'w+',
+                autoClose: true,
+                start: opts?.start,
+                encoding: 'binary',
+            });
+            return Writable.toWeb(stream);
+        }
+    }
+    __decorate([
+        $mol_mem
+    ], $mol_file_node.prototype, "watcher", null);
+    __decorate([
+        $mol_action
+    ], $mol_file_node.prototype, "info", null);
+    __decorate([
+        $mol_action
+    ], $mol_file_node.prototype, "ensure", null);
+    __decorate([
+        $mol_action
+    ], $mol_file_node.prototype, "copy", null);
+    __decorate([
+        $mol_action
+    ], $mol_file_node.prototype, "drop", null);
+    __decorate([
+        $mol_action
+    ], $mol_file_node.prototype, "read", null);
+    __decorate([
+        $mol_action
+    ], $mol_file_node.prototype, "write", null);
+    __decorate([
+        $mol_mem_key
+    ], $mol_file_node.prototype, "readable", null);
+    __decorate([
+        $mol_mem
+    ], $mol_file_node.prototype, "writable", null);
+    $.$mol_file_node = $mol_file_node;
+    $.$mol_file = $mol_file_node;
+})($ || ($ = {}));
+
+;
+"use strict";
+var $;
+(function ($) {
+    class $mol_state_local_node extends $mol_state_local {
+        static dir() {
+            const base = process.env.XDG_DATA_HOME || ($node.os.homedir() + '/.local/share');
+            return $mol_file.absolute(base).resolve('./mol_state_local');
+        }
+        static value(key, next) {
+            const file = this.dir().resolve(encodeURIComponent(key) + '.json');
+            if (next === null) {
+                file.exists(false);
+                return null;
+            }
+            const arg = next === undefined ? undefined : JSON.stringify(next);
+            return JSON.parse(file.text(arg) || 'null');
+        }
+    }
+    __decorate([
+        $mol_mem
+    ], $mol_state_local_node, "dir", null);
+    __decorate([
+        $mol_mem_key
+    ], $mol_state_local_node, "value", null);
+    $.$mol_state_local_node = $mol_state_local_node;
+    $.$mol_state_local = $mol_state_local_node;
+})($ || ($ = {}));
+
+;
+"use strict";
+var $;
+(function ($) {
+    function parse(theme) {
+        if (theme === 'true')
+            return true;
+        if (theme === 'false')
+            return false;
+        return null;
+    }
+    /**
+     * Switcher between light/dark themes (usually for `mol_theme_auto` plugin).
+     * @see https://mol.hyoo.ru/#!section=demos/demo=mol_lights_demo
+     */
+    function $mol_lights(next) {
+        const arg = parse(this.$mol_state_arg.value('mol_lights'));
+        const base = this.$mol_media.match('(prefers-color-scheme: light)');
+        if (next === undefined) {
+            return arg ?? this.$mol_state_local.value('$mol_lights') ?? base;
+        }
+        else {
+            if (arg === null) {
+                this.$mol_state_local.value('$mol_lights', next === base ? null : next);
+            }
+            else {
+                this.$mol_state_arg.value('mol_lights', String(next));
+            }
+            return next;
+        }
+    }
+    $.$mol_lights = $mol_lights;
+})($ || ($ = {}));
+
+;
+"use strict";
+
+
+;
+"use strict";
+var $;
+(function ($) {
     var $$;
     (function ($$) {
+        /**
+         * The [plugin](../../plugin/readme.md) which defines theme based on [mol_lights](../../lights/readme.md).
+         * @see https://mol.hyoo.ru/#!section=demos/demo=mol_lights_demo
+         */
         class $mol_theme_auto extends $.$mol_theme_auto {
             theme() {
                 return this.$.$mol_lights() ? this.light() : this.dark();
@@ -4895,6 +5261,9 @@ var $;
 
 ;
 "use strict";
+// namespace $ {
+// 	$mol_report_bugsnag = '18acf016ed2a2a4cc4445daa9dd2dd3c'
+// }
 
 ;
 "use strict";
@@ -4995,6 +5364,10 @@ var $;
 "use strict";
 var $;
 (function ($) {
+    /**
+     * Checks for value of given enum and returns expected type.
+     * @see https://mol.hyoo.ru/#!section=demos/demo=mol_data_enum_demo
+     */
     function $mol_data_enum(name, dict) {
         const index = {};
         for (let key in dict) {
@@ -5048,6 +5421,7 @@ var $;
         $.$mol_base64_url_encode = $mol_base64_url_encode_node;
     }
     function $mol_base64_url_decode_node(str) {
+        // without Uint8Array breaks $mol_compare_deep
         const buffer = Buffer.from(str, 'base64url');
         return new Uint8Array(buffer.buffer, buffer.byteOffset, buffer.byteLength);
     }
@@ -5061,11 +5435,13 @@ var $;
 "use strict";
 var $;
 (function ($) {
+    /** @FIXME Need polyfill for Safari and Node (https://github.com/microsoft/MSR-JavaScript-Crypto/) */
     const algorithm = {
         name: 'ECDSA',
         hash: 'SHA-256',
         namedCurve: "P-256",
     };
+    /** Asymmetric signing pair with shortest payload */
     async function $mol_crypto_auditor_pair() {
         const pair = await $mol_crypto_native.subtle.generateKey(algorithm, true, ['sign', 'verify']);
         return {
@@ -5074,8 +5450,10 @@ var $;
         };
     }
     $.$mol_crypto_auditor_pair = $mol_crypto_auditor_pair;
+    /** Asymmetric signing public key wrapper with shortest payload */
     class $mol_crypto_auditor_public extends Object {
         native;
+        /** Key size in bytes. */
         static size_str = 86;
         static size_bin = 64;
         constructor(native) {
@@ -5096,10 +5474,12 @@ var $;
                 y: serial.slice(43, 86),
             }, algorithm, true, ['verify']));
         }
+        /** 86 bytes */
         async serial() {
             const { x, y } = await $mol_crypto_native.subtle.exportKey('jwk', this.native);
             return x + y;
         }
+        /** 64 bytes */
         async toArray() {
             const { x, y, d } = await $mol_crypto_native.subtle.exportKey('jwk', this.native);
             return new Uint8Array([
@@ -5112,8 +5492,10 @@ var $;
         }
     }
     $.$mol_crypto_auditor_public = $mol_crypto_auditor_public;
+    /** Asymmetric signing private key wrapper with shortest payload */
     class $mol_crypto_auditor_private extends Object {
         native;
+        /** Key size in bytes. */
         static size_str = 129;
         static size_bin = 96;
         constructor(native) {
@@ -5136,10 +5518,12 @@ var $;
                 d: serial.slice(86, 129),
             }, algorithm, true, ['sign']));
         }
+        /** 129 bytes */
         async serial() {
             const { x, y, d } = await $mol_crypto_native.subtle.exportKey('jwk', this.native);
             return x + y + d;
         }
+        /** 96 bytes */
         async toArray() {
             const { x, y, d } = await $mol_crypto_native.subtle.exportKey('jwk', this.native);
             return new Uint8Array([
@@ -5148,14 +5532,17 @@ var $;
                 ...$mol_base64_url_decode(d),
             ]);
         }
+        /** 64 bytes */
         async sign(data) {
             return await $mol_crypto_native.subtle.sign(algorithm, this.native, data);
         }
+        /** Makes public key from private */
         async public() {
             return await $mol_crypto_auditor_public.from($mol_crypto_auditor_private_to_public(await this.serial()));
         }
     }
     $.$mol_crypto_auditor_private = $mol_crypto_auditor_private;
+    /** Sign size in bytes. */
     $.$mol_crypto_auditor_sign_size = 64;
     function $mol_crypto_auditor_private_to_public(serial) {
         return serial.slice(0, 86);
@@ -5207,16 +5594,23 @@ var $;
     const level = $mol_data_enum('level', $hyoo_crowd_peer_level);
     let $hyoo_crowd_unit_kind;
     (function ($hyoo_crowd_unit_kind) {
+        /** Grab Land by King */
         $hyoo_crowd_unit_kind[$hyoo_crowd_unit_kind["grab"] = 0] = "grab";
+        /** Join Peer to Land */
         $hyoo_crowd_unit_kind[$hyoo_crowd_unit_kind["join"] = 1] = "join";
+        /* Give Level for Peer for Land */
         $hyoo_crowd_unit_kind[$hyoo_crowd_unit_kind["give"] = 2] = "give";
+        /** Add Data to Land by joined Peer with right Level */
         $hyoo_crowd_unit_kind[$hyoo_crowd_unit_kind["data"] = 3] = "data";
     })($hyoo_crowd_unit_kind = $.$hyoo_crowd_unit_kind || ($.$hyoo_crowd_unit_kind = {}));
     let $hyoo_crowd_unit_group;
     (function ($hyoo_crowd_unit_group) {
+        /** Join and Give units */
         $hyoo_crowd_unit_group[$hyoo_crowd_unit_group["auth"] = 0] = "auth";
+        /** Data units */
         $hyoo_crowd_unit_group[$hyoo_crowd_unit_group["data"] = 1] = "data";
     })($hyoo_crowd_unit_group = $.$hyoo_crowd_unit_group || ($.$hyoo_crowd_unit_group = {}));
+    /** Independent part of data. */
     class $hyoo_crowd_unit extends Object {
         land;
         auth;
@@ -5227,7 +5621,24 @@ var $;
         time;
         data;
         bin;
-        constructor(land, auth, head, self, next, prev, time, data, bin) {
+        constructor(
+        /** Identifier of land. */
+        land, 
+        /** Identifier of auth. */
+        auth, 
+        /** Identifier of head node. */
+        head, 
+        /** Self identifier inside head after prev before next. */
+        self, 
+        /** Identifier of next node. */
+        next, 
+        /** Identifier of prev node. */
+        prev, 
+        /** Monotonic real clock. 4B / info = 31b */
+        time, 
+        /** type-size = bin<0 | null=0 | json>0 */
+        /** Associated atomic data. mem = 4B+ / bin = (0|8B)+ / type-size-info = 16b */
+        data, bin) {
             super();
             this.land = land;
             this.auth = auth;
@@ -5355,9 +5766,28 @@ var $;
             buff.set(next);
             return buff;
         }
+        // land( next?: $mol_int62_pair ) {
+        // 	if( next ) {
+        // 		this.setInt32( offset.land_lo, next.lo, true )
+        // 		this.setInt32( offset.land_hi, next.hi, true )
+        // 		return next
+        // 	} else {
+        // 		return {
+        // 			lo: this.getInt32( offset.land_lo, true ),
+        // 			hi: this.getInt32( offset.land_hi, true ),
+        // 		}
+        // 	}
+        // }
         size() {
             return Math.ceil(Math.abs(this.getInt16(offset.size, true)) / 8) * 8 + offset.data + $mol_crypto_auditor_sign_size;
         }
+        // data() {
+        // 	const info = this.getUint16( offset.data )
+        // 	const size = Math.abs( info )
+        // 	const buf = new Uint8Array( this.buffer, this.byteOffset + offset.sens, size )
+        // 	const data = info > 0 ? JSON.parse( $mol_charset_decode( buf ) ) : info < 0 ? buf : null
+        // 	return data
+        // }
         sens() {
             return new Uint8Array(this.buffer, this.byteOffset, this.size() - $mol_crypto_auditor_sign_size);
         }
@@ -5423,6 +5853,7 @@ var $;
 "use strict";
 var $;
 (function ($) {
+    /** Stateless non-unique adapter to CROWD Tree for given Head. */
     class $hyoo_crowd_node extends $mol_object2 {
         land;
         head;
@@ -5445,16 +5876,20 @@ var $;
         world() {
             return this.land.world();
         }
+        /** Returns another representation of this node. */
         as(Node) {
             return this.world()?.Fund(Node).Item(`${this.land.id()}!${this.head}`) ?? new Node(this.land, this.head);
         }
+        /** Ordered inner alive Units. */
         units() {
             return this.land.unit_alives(this.head);
         }
+        /** Ordered inner alive Node. */
         nodes(Node) {
             const fund = this.world()?.Fund(Node);
             return this.units().map(unit => fund?.Item(`${this.land.id()}!${unit.self}`) ?? new Node(this.land, unit.self));
         }
+        /** Returns true when node value is never changed. */
         virgin() {
             return this.land.unit_list(this.head).length === 0;
         }
@@ -5482,6 +5917,7 @@ var $;
 var $;
 (function ($) {
     class $hyoo_crowd_reg extends $hyoo_crowd_node {
+        /** Atomic value. */
         value(next) {
             const unit = this.units().at(-1);
             if (next === undefined)
@@ -5491,12 +5927,15 @@ var $;
             this.land.put(this.head, unit?.self ?? this.land.id_new(), '0_0', next);
             return next;
         }
+        /** Atomic string. */
         str(next) {
             return String(this.value(next) ?? '');
         }
+        /** Atomic number. */
         numb(next) {
             return Number(this.value(next));
         }
+        /** Atomic boolean. */
         bool(next) {
             return Boolean(this.value(next));
         }
@@ -5521,6 +5960,7 @@ var $;
 var $;
 (function ($) {
     class $hyoo_crowd_struct extends $hyoo_crowd_node {
+        /** Returns inner node for key. */
         sub(key, Node) {
             const head = $mol_int62_hash_string(key + '\n' + this.head);
             return this.world()?.Fund(Node).Item(`${this.land.id()}!${head}`) ?? new Node(this.land, head);
@@ -5543,9 +5983,9 @@ var $;
         if (!replace)
             replace = (next, prev, lead) => insert(next, drop(prev, lead));
         if (to > prev.length)
-            to = prev.length;
+            to = prev.length; // $mol_fail( new RangeError( `To(${ to }) greater then length(${ prev.length })` ) )
         if (from > to)
-            from = to;
+            from = to; // $mol_fail( new RangeError( `From(${ to }) greater then to(${ to })` ) )
         let p = from;
         let n = 0;
         let lead = p ? prev[p - 1] : null;
@@ -5589,8 +6029,11 @@ var $;
 "use strict";
 var $;
 (function ($) {
+    let x = /x/[Symbol.matchAll];
+    /** Type safe reguar expression builder */
     class $mol_regexp extends RegExp {
         groups;
+        /** Prefer to use $mol_regexp.from */
         constructor(source, flags = 'gsu', groups = []) {
             super(source, flags);
             this.groups = groups;
@@ -5610,12 +6053,14 @@ var $;
                 this.lastIndex = index;
             }
         }
+        /** Parses input and returns found capture groups or null */
         [Symbol.match](str) {
             const res = [...this[Symbol.matchAll](str)].filter(r => r.groups).map(r => r[0]);
             if (!res.length)
                 return null;
             return res;
         }
+        /** Splits string by regexp edges */
         [Symbol.split](str) {
             const res = [];
             let token_last = null;
@@ -5670,12 +6115,14 @@ var $;
         get native() {
             return new RegExp(this.source, this.flags);
         }
+        /** Makes regexp that greedy repeats this pattern with delimiter */
         static separated(chunk, sep) {
             return $mol_regexp.from([
                 $mol_regexp.repeat_greedy([[chunk], sep], 0),
                 chunk,
             ]);
         }
+        /** Makes regexp that non-greedy repeats this pattern from min to max count */
         static repeat(source, min = 0, max = Number.POSITIVE_INFINITY) {
             const regexp = $mol_regexp.from(source);
             const upper = Number.isFinite(max) ? max : '';
@@ -5691,6 +6138,7 @@ var $;
             };
             return regexp2;
         }
+        /** Makes regexp that greedy repeats this pattern from min to max count */
         static repeat_greedy(source, min = 0, max = Number.POSITIVE_INFINITY) {
             const regexp = $mol_regexp.from(source);
             const upper = Number.isFinite(max) ? max : '';
@@ -5706,6 +6154,7 @@ var $;
             };
             return regexp2;
         }
+        /** Makes regexp that match any of options */
         static vary(sources, flags = 'gsu') {
             const groups = [];
             const chunks = sources.map(source => {
@@ -5715,17 +6164,21 @@ var $;
             });
             return new $mol_regexp(`(?:${chunks.join('|')})`, flags, groups);
         }
+        /** Makes regexp that allow absent of this pattern */
         static optional(source) {
             return $mol_regexp.repeat_greedy(source, 0, 1);
         }
+        /** Makes regexp that look ahead for pattern */
         static force_after(source) {
             const regexp = $mol_regexp.from(source);
             return new $mol_regexp(`(?=${regexp.source})`, regexp.flags, regexp.groups);
         }
+        /** Makes regexp that look ahead for pattern */
         static forbid_after(source) {
             const regexp = $mol_regexp.from(source);
             return new $mol_regexp(`(?!${regexp.source})`, regexp.flags, regexp.groups);
         }
+        /** Converts some js values to regexp */
         static from(source, { ignoreCase, multiline } = {
             ignoreCase: false,
             multiline: false,
@@ -5826,9 +6279,11 @@ var $;
                 return regexp;
             }
         }
+        /** Makes regexp which includes only unicode category */
         static unicode_only(...category) {
             return new $mol_regexp(`\\p{${category.join('=')}}`);
         }
+        /** Makes regexp which excludes unicode category */
         static unicode_except(...category) {
             return new $mol_regexp(`\\P{${category.join('=')}}`);
         }
@@ -5946,6 +6401,7 @@ var $;
 var $;
 (function ($) {
     class $hyoo_crowd_list extends $hyoo_crowd_node {
+        /** Data list representation. */
         list(next) {
             const units = this.units();
             if (next === undefined) {
@@ -6022,6 +6478,7 @@ var $;
 var $;
 (function ($) {
     class $hyoo_crowd_text extends $hyoo_crowd_node {
+        /** Text representation. Based on list of strings. */
         text(next) {
             if (next === undefined) {
                 return this.str();
@@ -6053,6 +6510,7 @@ var $;
                 return next;
             }
         }
+        /** Text representation. Based on list of strings. */
         str(next) {
             if (next === undefined) {
                 let str = '';
@@ -6144,7 +6602,7 @@ var $;
                 return next;
             }
             else {
-                this.units();
+                this.units(); // track text to recalc selection on its change
                 return reg.value()
                     ?.map(point => this.offset_by_point(point)[1]) ?? [0, 0];
             }
@@ -6157,6 +6615,7 @@ var $;
 "use strict";
 var $;
 (function ($) {
+    /** Registry of nodes as domain entities. */
     class $hyoo_crowd_fund extends $mol_object {
         world;
         node_class;
@@ -6189,7 +6648,11 @@ var $;
 "use strict";
 var $;
 (function ($) {
+    /** @deprecated */
     $.$mol_dict_key = $mol_key;
+    /**
+     * Dictionary with extended keys support
+     */
     class $mol_dict extends Map {
         get(key) {
             return super.get($mol_key(key));
@@ -6236,6 +6699,7 @@ var $;
                     if (iteration.done)
                         return iteration;
                     iteration.value = [JSON.parse(iteration.value[0]), iteration.value[1]];
+                    // iteration.value[0] = JSON.parse( iteration.value[0] as any as string )
                     return iteration;
                 }
             };
@@ -6251,10 +6715,12 @@ var $;
 "use strict";
 var $;
 (function ($) {
+    /** Internal int31 representation of current time. */
     function $hyoo_crowd_time_now() {
         return Math.floor(Date.now() / 100) - 1767e7;
     }
     $.$hyoo_crowd_time_now = $hyoo_crowd_time_now;
+    /** Returns unix timestamp for internal time representation. */
     function $hyoo_crowd_time_stamp(time) {
         return 1767e9 + time * 100;
     }
@@ -6265,8 +6731,10 @@ var $;
 "use strict";
 var $;
 (function ($) {
+    /** Vector clock. Stores real timestamps. */
     class $hyoo_crowd_clock extends Map {
         static begin = -1 * 2 ** 30;
+        /** Maximum time for all peers. */
         last_time = $hyoo_crowd_clock.begin;
         constructor(entries) {
             super(entries);
@@ -6276,16 +6744,19 @@ var $;
                 this.see_time(time);
             }
         }
+        /** Synchronize this clock with another. */
         sync(right) {
             for (const [peer, time] of right) {
                 this.see_peer(peer, time);
             }
         }
+        /** Increase `last` to latest. */
         see_time(time) {
             if (time < this.last_time)
                 return;
             this.last_time = time;
         }
+        /** Add new `time` for `peer` and increase `last`. */
         see_peer(peer, time) {
             if (!this.fresh(peer, time))
                 return;
@@ -6300,9 +6771,11 @@ var $;
                 }), bin.getInt32(cursor + 8 + 4 * group, true));
             }
         }
+        /** Checks if time from future. */
         fresh(peer, time) {
             return time > this.time(peer);
         }
+        /** Checks if this clock from future of another. */
         ahead(clock) {
             for (const [peer, time] of this) {
                 if (clock.fresh(peer, time))
@@ -6319,6 +6792,7 @@ var $;
         last_stamp() {
             return $hyoo_crowd_time_stamp(this.last_time);
         }
+        /** Gererates new time for peer that greater then other seen. */
         tick(peer) {
             let time = this.now();
             if (time <= this.last_time) {
@@ -6416,6 +6890,7 @@ var $;
         _knights = new $mol_dict();
         _signs = new WeakMap();
         async grab(law = [''], mod = [], add = []) {
+            // if( !law.length && !mod.length && !add.length ) $mol_fail( new Error( 'Grabbing dead land' ) )
             const knight = await $hyoo_crowd_peer.generate();
             this._knights.set(knight.id, knight);
             const land_inner = this.land(knight.id);
@@ -6496,7 +6971,7 @@ var $;
         }
         async audit_delta(land, delta) {
             const all = new Map();
-            const desync = 60 * 60 * 10;
+            const desync = 60 * 60 * 10; // 1 hour
             const deadline = land.clock_data.now() + desync;
             const get_unit = (id) => {
                 return all.get(id) ?? land._unit_all.get(id);
@@ -6595,6 +7070,7 @@ var $;
 "use strict";
 var $;
 (function ($) {
+    /** Conflict-free Reinterpretable Ordered Washed Data Tree */
     class $hyoo_crowd_land extends $mol_object {
         id() {
             return $mol_int62_to_string($mol_int62_random());
@@ -6628,21 +7104,26 @@ var $;
         }
         pub = new $mol_wire_pub;
         _clocks = [new $hyoo_crowd_clock, new $hyoo_crowd_clock];
+        /** unit by head + self */
         _unit_all = new Map();
         unit(head, self) {
             return this._unit_all.get(`${head}!${self}`);
         }
+        /** units by head */
         _unit_lists = new Map();
+        /** Units by Head without tombstones */
         _unit_alives = new Map();
         size() {
             return this._unit_all.size;
         }
+        /** Returns list of all Units for Node. */
         unit_list(head) {
             let kids = this._unit_lists.get(head);
             if (!kids)
                 this._unit_lists.set(head, kids = Object.assign([], { dirty: false }));
             return kids;
         }
+        /** Returns list of alive Units for Node. */
         unit_alives(head) {
             this.pub.promote();
             let kids = this._unit_alives.get(head);
@@ -6655,23 +7136,27 @@ var $;
             }
             return kids;
         }
+        /** Node by id and type. */
         node(head, Node) {
             return new Node(this, head);
         }
+        /** Root Node. */
         chief = this.node('0_0', $hyoo_crowd_struct);
+        /** Generates new identifier. */
         id_new() {
             for (let i = 0; i < 1000; ++i) {
                 const id = $mol_int62_to_string($mol_int62_random());
                 if (id === '0_0')
-                    continue;
+                    continue; // zero reserved for empty
                 if (id === this.id())
-                    continue;
+                    continue; // reserved for rights
                 if (this._unit_lists.has(id))
-                    continue;
+                    continue; // skip already exists
                 return id;
             }
             throw new Error(`Can't generate ID after 1000 times`);
         }
+        /** Makes independent clone with defined peer. */
         fork(auth) {
             const fork = $hyoo_crowd_land.make({
                 id: $mol_const(this.id()),
@@ -6679,6 +7164,7 @@ var $;
             });
             return fork.apply(this.delta());
         }
+        /** Makes Delta bettween Clock and now. */
         delta(clocks = [new $hyoo_crowd_clock, new $hyoo_crowd_clock]) {
             this.pub.promote();
             const delta = [];
@@ -6739,6 +7225,7 @@ var $;
             kids.dirty = false;
             return kids;
         }
+        /** Applies Delta to current state. */
         apply(delta) {
             for (const next of delta) {
                 this._clocks[next.group()].see_peer(next.auth, next.time);
@@ -6762,6 +7249,7 @@ var $;
             return this;
         }
         _joined = false;
+        /** Register public key of current peer **/
         join() {
             if (this._joined)
                 return;
@@ -6780,6 +7268,7 @@ var $;
             this._joined = true;
             this.pub.emit();
         }
+        /** Unregister public key of current peer **/
         leave() {
             const auth = this.peer();
             if (!auth)
@@ -6808,6 +7297,7 @@ var $;
         level_base(next) {
             this.level('0_0', next);
         }
+        /** Access level for peer. Use empty string for current peer. **/
         level(peer, next) {
             if (next)
                 this.join();
@@ -6838,6 +7328,7 @@ var $;
             this.pub.promote();
             return this._unit_all.size > 0;
         }
+        /** All peers who have special rights to write o land. */
         peers() {
             this.pub.promote();
             const lords = [];
@@ -6850,6 +7341,7 @@ var $;
             }
             return lords;
         }
+        /** All peers who joined to land except king. */
         residents() {
             this.pub.promote();
             const lords = [];
@@ -6862,6 +7354,7 @@ var $;
             }
             return lords;
         }
+        /** All peers who have alive data inside land. */
         authors() {
             this.pub.promote();
             const authors = new Set();
@@ -6893,6 +7386,7 @@ var $;
         selection(peer) {
             return this.world().land_sync(peer).chief.sub('$hyoo_crowd_land..selection', $hyoo_crowd_reg);
         }
+        /** Places data to tree. */
         put(head, self, prev, data) {
             this.join();
             const old_id = `${head}!${self}`;
@@ -6910,18 +7404,25 @@ var $;
             const unit_new = new $hyoo_crowd_unit(this.id(), auth, head, self, next, prev, time, data, null);
             this._unit_all.set(old_id, unit_new);
             unit_list.splice(seat, 0, unit_new);
+            // unit_list.dirty = true
             this._unit_alives.set(head, undefined);
+            // this.apply([ unit_new ])
             this.pub.emit();
             return unit_new;
         }
+        /** Marks unit as deleted and wipes its data. */
         wipe(unit) {
             if (unit.data === null)
                 return unit;
+            // for( const kid of this.unit_list( unit.self ) ) {
+            // 	this.wipe( kid )
+            // }
             const unit_list = this.unit_list(unit.head);
             const seat = unit_list.indexOf(unit);
             const prev = seat > 0 ? unit_list[seat - 1].self : seat < 0 ? unit.prev : '0_0';
             return this.put(unit.head, unit.self, prev, null);
         }
+        /** Moves Unit after another Prev inside some Head. */
         move(unit, head, prev) {
             const unit_list = this.unit_list(unit.head);
             const seat = unit_list.indexOf(unit);
@@ -6931,6 +7432,7 @@ var $;
                 this.put(next.head, next.self, unit_list[unit_list.indexOf(next) - 2]?.self ?? '0_0', next.data);
             this.put(head, unit.self, prev, unit.data);
         }
+        /** Moves Unit at given Seat inside given Head. */
         insert(unit, head, seat) {
             const list = this.unit_list(head);
             const prev = seat ? list[seat - 1].self : '0_0';
@@ -7156,6 +7658,10 @@ var $;
         notes(next) {
             return this.sub('notes', $hyoo_crowd_reg).str(next);
         }
+        // @ $mol_mem
+        // site() {
+        // 	return $mol_data_wrapper( $mol_data_string , URL )( this.data().site )
+        // }
         capacity_max(next) {
             return this.sub('capacity_max', $hyoo_crowd_reg).numb(next);
         }
@@ -7170,7 +7676,7 @@ var $;
             return new $mol_vector_2d(...coords);
         }
         colors() {
-            return ['yellow', 'yellow'];
+            return ['yellow', 'yellow']; // $mol_data_array( $mol_data_string )( this.data().colors )
         }
     }
     __decorate([
@@ -7362,7 +7868,7 @@ var $;
                         }
                     }
                 }
-                else if (key === '@media') {
+                else if (key === '@media' || key === '@container') {
                     const media = config[key];
                     for (let query of Object.keys(media).reverse()) {
                         rules.push('}\n');
@@ -7401,6 +7907,11 @@ var $;
 "use strict";
 var $;
 (function ($) {
+    /**
+     * CSS in TS.
+     * Statically typed CSS style sheets. Following samples show which CSS code are generated from TS code.
+     * @see https://mol.hyoo.ru/#!section=docs/=xwq9q5_f966fg
+     */
     function $mol_style_define(Component, config) {
         return $mol_style_attach(Component.name, $mol_style_sheet(Component, config));
     }
@@ -7410,12 +7921,17 @@ var $;
 ;
 "use strict";
 
+
 ;
 "use strict";
 var $;
 (function ($) {
     var $$;
     (function ($$) {
+        /**
+         * Scrolling pane.
+         * @see https://mol.hyoo.ru/#!section=demos/demo=mol_scroll_demo
+         */
         class $mol_scroll extends $.$mol_scroll {
             scroll_top(next, cache) {
                 const el = this.dom_node();
@@ -7465,6 +7981,7 @@ var $;
                 direction: 'column',
                 grow: 1,
                 shrink: 1,
+                // basis: 0,
             },
             outline: 'none',
             align: {
@@ -7482,6 +7999,7 @@ var $;
             contain: 'content',
             '>': {
                 $mol_view: {
+                    // transform: 'translateZ(0)', // enforce gpu scroll in all agents
                     gridArea: '1/1',
                 },
             },
@@ -7544,6 +8062,10 @@ var $;
 "use strict";
 var $;
 (function ($) {
+    /**
+     * Z-index values for layers
+     * https://page.hyoo.ru/#!=xthcpx_wqmiba
+     */
     $.$mol_layer = $mol_style_prop('mol_layer', [
         'hover',
         'focus',
@@ -7566,12 +8088,17 @@ var $;
 ;
 "use strict";
 
+
 ;
 "use strict";
 var $;
 (function ($) {
     var $$;
     (function ($$) {
+        /**
+         * Root component for adaptivity to various screen sizes. Implements booklet UX.
+         * @see https://mol.hyoo.ru/#!section=demos/demo=mol_book2_demo
+         */
         class $mol_book2 extends $.$mol_book2 {
             pages_deep() {
                 let result = [];
@@ -7614,6 +8141,7 @@ var $;
                             left: p.offsetLeft + p.offsetWidth - b.offsetWidth,
                             behavior: 'smooth',
                         });
+                        // new this.$.$mol_after_timeout( 1000, ()=> n.bring() )
                     });
                     break;
                 }
@@ -7668,6 +8196,7 @@ var $;
 "use strict";
 var $;
 (function ($) {
+    /** State of time moment */
     class $mol_state_time extends $mol_object {
         static task(precision, reset) {
             if (precision) {
@@ -7694,12 +8223,14 @@ var $;
 ;
 "use strict";
 
+
 ;
 "use strict";
 var $;
 (function ($) {
     var $$;
     (function ($$) {
+        /** Base SVG component to display SVG images or icons. */
         class $mol_svg extends $.$mol_svg {
             computed_style() {
                 const win = this.$.$mol_dom_context;
@@ -7759,6 +8290,7 @@ var $;
 ;
 "use strict";
 
+
 ;
 	($.$mol_svg_path) = class $mol_svg_path extends ($.$mol_svg) {
 		geometry(){
@@ -7775,6 +8307,7 @@ var $;
 
 ;
 "use strict";
+
 
 ;
 	($.$piterjs_screen_lines) = class $piterjs_screen_lines extends ($.$mol_svg_root) {
@@ -7825,6 +8358,7 @@ var $;
 ;
 "use strict";
 
+
 ;
 	($.$piterjs_screen) = class $piterjs_screen extends ($.$mol_view) {
 		color_open(){
@@ -7862,6 +8396,7 @@ var $;
 ;
 "use strict";
 
+
 ;
 "use strict";
 var $;
@@ -7869,6 +8404,12 @@ var $;
     var $$;
     (function ($$) {
         class $piterjs_screen extends $.$piterjs_screen {
+            // 		color_open() {
+            // 			return this.place().colors()[0]
+            // 		}
+            // 		color_close() {
+            // 			return this.place().colors()[1] || this.color_open()
+            // 		}
             sub() {
                 return [
                     this.Open(),
@@ -7924,6 +8465,7 @@ var $;
 ;
 "use strict";
 
+
 ;
 	($.$mol_icon_plus) = class $mol_icon_plus extends ($.$mol_icon) {
 		path(){
@@ -7934,6 +8476,7 @@ var $;
 
 ;
 "use strict";
+
 
 ;
 	($.$mol_speck) = class $mol_speck extends ($.$mol_view) {
@@ -7958,6 +8501,7 @@ var $;
 
 ;
 "use strict";
+
 
 ;
 	($.$mol_button) = class $mol_button extends ($.$mol_view) {
@@ -8048,6 +8592,10 @@ var $;
 "use strict";
 var $;
 (function ($) {
+    /**
+    * Key names code for hotkey
+    * @see [mol_hotkey](../../hotkey/hotkey.view.ts)
+    */
     let $mol_keyboard_code;
     (function ($mol_keyboard_code) {
         $mol_keyboard_code[$mol_keyboard_code["backspace"] = 8] = "backspace";
@@ -8156,12 +8704,17 @@ var $;
 ;
 "use strict";
 
+
 ;
 "use strict";
 var $;
 (function ($) {
     var $$;
     (function ($$) {
+        /**
+         * Simple button.
+         * @see https://mol.hyoo.ru/#!section=demos/demo=mol_button_demo
+         */
         class $mol_button extends $.$mol_button {
             disabled() {
                 return !this.enabled();
@@ -8177,6 +8730,7 @@ var $;
                     this.status([null]);
                 }
                 catch (error) {
+                    // Calling actions from catch section, if throwing promise breaks idempotency
                     Promise.resolve().then(() => this.status([error]));
                     $mol_fail_hidden(error);
                 }
@@ -8246,6 +8800,7 @@ var $;
 ;
 "use strict";
 
+
 ;
 	($.$mol_button_minor) = class $mol_button_minor extends ($.$mol_button_typed) {};
 
@@ -8260,6 +8815,7 @@ var $;
 ;
 "use strict";
 
+
 ;
 	($.$mol_icon_key) = class $mol_icon_key extends ($.$mol_icon) {
 		path(){
@@ -8271,6 +8827,7 @@ var $;
 ;
 "use strict";
 
+
 ;
 	($.$mol_icon_key_variant) = class $mol_icon_key_variant extends ($.$mol_icon) {
 		path(){
@@ -8281,6 +8838,7 @@ var $;
 
 ;
 "use strict";
+
 
 ;
 	($.$mol_link) = class $mol_link extends ($.$mol_view) {
@@ -8354,12 +8912,17 @@ var $;
 ;
 "use strict";
 
+
 ;
 "use strict";
 var $;
 (function ($) {
     var $$;
     (function ($$) {
+        /**
+         * Dynamic hyperlink. It can add, change or remove parameters. A link that leads to the current page has [mol_link_current] attribute set to true.
+         * @see https://mol.hyoo.ru/#!section=demos/demo=mol_link_demo
+         */
         class $mol_link extends $.$mol_link {
             uri_toggle() {
                 return this.current() ? this.uri_off() : this.uri();
@@ -8410,6 +8973,8 @@ var $;
                 }
                 catch (error) {
                     $mol_fail_log(error);
+                    if (error instanceof Error)
+                        return '💥' + error.message;
                     return '';
                 }
             }
@@ -8525,6 +9090,7 @@ var $;
 "use strict";
 var $;
 (function ($) {
+    /** Starts subtasks concurrently instead of serial. */
     function $mol_wire_race(...tasks) {
         const results = tasks.map(task => {
             try {
@@ -8551,6 +9117,7 @@ var $;
 (function ($) {
     $.$hyoo_sync_masters = [
         `sync.hyoo.ru`,
+        //`sync-pmzz.onrender.com`,
     ];
 })($ || ($ = {}));
 
@@ -8671,6 +9238,12 @@ var $;
             $mol_wire_sync(this).db_land_save(land, units);
             for (const unit of units)
                 this.db_unit_persisted.add(unit);
+            // this.$.$mol_log3_rise({
+            // 	place: this,
+            // 	land: land.id(),
+            // 	message: 'Base Save',
+            // 	units: this.log_pack( units ),
+            // })
         }
         db_land_init(land) {
             try {
@@ -8690,6 +9263,12 @@ var $;
                 this.db_unit_persisted.add(unit);
             units.sort($hyoo_crowd_unit_compare);
             land.apply(units);
+            // this.$.$mol_log3_rise({
+            // 	place: this,
+            // 	land: land.id(),
+            // 	message: 'Base Load',
+            // 	units: this.log_pack( units ),
+            // })
         }
         async db_land_load(land) {
             return [];
@@ -8722,6 +9301,11 @@ var $;
         }
         line_land_clocks({ line, land }, next) {
             $mol_wire_solid();
+            // try{
+            // 	this.master()
+            // } catch( error ) {
+            // 	$mol_fail_log( error )
+            // }
             return next;
         }
         line_sync(line) {
@@ -8736,13 +9320,29 @@ var $;
             if (!units.length)
                 return;
             this.line_send_units(line, units);
+            /*this.$.$mol_log3_rise({
+                place: this,
+                land: land.id(),
+                message: 'Sync Sent',
+                line: $mol_key( line ),
+                units: this.log_pack( units ),
+            })*/
             for (const unit of units) {
                 clocks[unit.group()].see_peer(unit.auth, unit.time);
             }
         }
         line_land_init({ line, land }) {
             this.db_land_init(land);
+            // const lands = this.line_land_clocks({ line, land })
+            // if( lands ) return
             this.line_send_clocks(line, land);
+            // this.$.$mol_log3_come({
+            // 	place: this,
+            // 	land: land.id(),
+            // 	message: 'Sync Open',
+            // 	line: $mol_key( line ),
+            // 	clocks: land._clocks,
+            // })
         }
         line_land_neck({ line, land }, next = []) {
             return next;
@@ -8786,6 +9386,13 @@ var $;
                     }
                     else {
                         this.line_lands(line, [...lands, land]);
+                        // this.$.$mol_log3_done({
+                        // 	place: this,
+                        // 	land: land.id(),
+                        // 	message: 'Sync Pair',
+                        // 	line: $mol_key( line ),
+                        // 	clocks,
+                        // })
                     }
                     return;
                 }
@@ -8890,6 +9497,7 @@ var $;
 "use strict";
 var $;
 (function ($) {
+    /** Converts IDBResult to Promise */
     function $mol_db_response(request) {
         return new Promise((done, fail) => {
             request.onerror = () => fail(new Error(request.error.message));
@@ -8903,6 +9511,14 @@ var $;
 "use strict";
 var $;
 (function ($) {
+    /**
+     * Creates new or returns existen database with automatic schema migration.
+     * Schema version is based on migrations count.
+     * Migrations code mustn't be changed after deploy.
+     * Only adding migrations at the end is allowed.
+     * Only new migrations will be applyed to existen DB.
+     * Schema changes allowed only through migratios.
+     */
     async function $mol_db(name, ...migrations) {
         const request = this.$mol_dom_context.indexedDB.open(name, migrations.length ? migrations.length + 1 : undefined);
         request.onupgradeneeded = event => {
@@ -8921,6 +9537,7 @@ var $;
 "use strict";
 var $;
 (function ($) {
+    /** IndexedDB ObjectStore wrapper. */
     class $mol_db_store {
         native;
         constructor(native) {
@@ -8935,6 +9552,7 @@ var $;
         get incremental() {
             return this.native.autoIncrement;
         }
+        /** Returns dictionary of all existen Indexes. */
         get indexes() {
             return new Proxy({}, {
                 ownKeys: () => [...this.native.indexNames],
@@ -8942,9 +9560,11 @@ var $;
                 get: (_, name) => new $mol_db_index(this.native.index(name))
             });
         }
+        /** Creates new Index */
         index_make(name, path = [], unique = false, multiEntry = false) {
             return this.native.createIndex(name, path, { multiEntry, unique });
         }
+        /** Drops existen Index */
         index_drop(name) {
             this.native.deleteIndex(name);
             return this;
@@ -8955,21 +9575,27 @@ var $;
         get db() {
             return this.transaction.db;
         }
+        /** Deletes all stored Documents */
         clear() {
             return $mol_db_response(this.native.clear());
         }
+        /** Counts Documents by primary key(s) */
         count(keys) {
             return $mol_db_response(this.native.count(keys));
         }
+        /** Stores single Document by primary key. */
         put(doc, key) {
             return $mol_db_response(this.native.put(doc, key));
         }
+        /** Returns Document by primary key. */
         get(key) {
             return $mol_db_response(this.native.get(key));
         }
+        /** Selects Documents by primary keys. */
         select(key, count) {
             return $mol_db_response(this.native.getAll(key, count));
         }
+        /** Deletes Documents by primary key(s). */
         drop(keys) {
             return $mol_db_response(this.native.delete(keys));
         }
@@ -8984,6 +9610,7 @@ var $;
 "use strict";
 var $;
 (function ($) {
+    /** IndexedDB Index wrapper. */
     class $mol_db_index {
         native;
         constructor(native) {
@@ -9010,12 +9637,15 @@ var $;
         get db() {
             return this.store.db;
         }
+        /** Counts Documents by key(s) */
         count(keys) {
             return $mol_db_response(this.native.count(keys));
         }
+        /** Returns Document by primary key. */
         get(key) {
             return $mol_db_response(this.native.get(key));
         }
+        /** Selects Documents by primary keys. */
         select(key, count) {
             return $mol_db_response(this.native.getAll(key, count));
         }
@@ -9051,32 +9681,46 @@ var $;
 "use strict";
 var $;
 (function ($) {
+    /** IndexedDB instance wrapper. */
     class $mol_db_database {
         native;
         constructor(native) {
             this.native = native;
         }
+        /** Returns database name. */
         get name() {
             return this.native.name;
         }
+        /** Returns database schema version. */
         get version() {
             return this.native.version;
         }
+        /** Returns all stores names. */
         get stores() {
             return [...this.native.objectStoreNames];
         }
+        /** Create read-only transaction. */
         read(...names) {
             return new $mol_db_transaction(this.native.transaction(names, 'readonly', { durability: 'relaxed' })).stores;
         }
+        /** Create read/write transaction. */
         change(...names) {
             return new $mol_db_transaction(this.native.transaction(names, 'readwrite', { durability: 'relaxed' }));
         }
+        /**
+         * Deletes database.
+         * DB can be deleted only after end of all transactions.
+         */
         kill() {
             this.native.close();
             const request = $mol_dom_context.indexedDB.deleteDatabase(this.name);
             request.onblocked = console.warn;
             return $mol_db_response(request);
         }
+        /**
+         * Closes DB connection.
+         * Connection really be closed only after end of all transactions.
+         */
         destructor() {
             this.native.close();
         }
@@ -9088,11 +9732,13 @@ var $;
 "use strict";
 var $;
 (function ($) {
+    /** IndexedDB Transaction wrapper. */
     class $mol_db_transaction {
         native;
         constructor(native) {
             this.native = native;
         }
+        /** Returns dictionary of all existen Stores. */
         get stores() {
             return new Proxy({}, {
                 ownKeys: () => [...this.native.objectStoreNames],
@@ -9102,18 +9748,22 @@ var $;
                     : undefined,
             });
         }
+        /** Creates new Store */
         store_make(name) {
             return this.native.db.createObjectStore(name, { autoIncrement: true });
         }
+        /** Drops existen Store */
         store_drop(name) {
             this.native.db.deleteObjectStore(name);
             return this;
         }
+        /** Instant abort transaction. Any errors aborts transactions automatically. */
         abort() {
             if (this.native.error)
                 return;
             this.native.abort();
         }
+        /** Instant commits transaction. Without errors commit proceed automatically later. */
         commit() {
             this.native.commit?.();
             return new Promise((done, fail) => {
@@ -9234,6 +9884,29 @@ var $;
                 };
             });
         }
+        // @ $mol_mem
+        // server() {
+        // 	return new $mol_dom_listener(
+        // 		$mol_dom_context,
+        // 		'message',
+        // 		$mol_wire_async( ( event: MessageEvent<[ string, $mol_int62_string, readonly $hyoo_crowd_unit[] ]> )=> {
+        // 			if( !event ) return
+        // 			if( !Array.isArray( event.data ) ) return
+        // 			switch( event.data[0] ) {
+        // 				case 'hyoo_sync_units': {
+        // 					const [, land_id, units ] = event.data
+        // 					const line = event.source! as Window
+        // 					const land = this.land( land_id )
+        // 					land.apply( units )
+        // 					this.slaves([ ... new Set([ ... this.slaves(), line ]) ])
+        // 					this.line_lands( line, [ ... new Set([ ... this.line_lands( line ), land ]) ] )
+        // 					this.line_land_clocks({ line, land })
+        // 					line.postMessage([ 'hyoo_sync_units', land.id(), [] ])
+        // 				}
+        // 			}
+        // 		} )
+        // 	)
+        // }
         line_send_clocks(line, land) {
             if (line instanceof WebSocket) {
                 line.send(land.clocks_bin);
@@ -9278,12 +9951,16 @@ var $;
 ;
 "use strict";
 
+
 ;
 "use strict";
 var $;
 (function ($) {
     var $$;
     (function ($$) {
+        /**
+         * Mixin view logic to DOM node of another component.
+         */
         class $mol_ghost extends $.$mol_ghost {
             dom_node_external(next) {
                 return this.Sub().dom_node(next);
@@ -9353,12 +10030,16 @@ var $;
 ;
 "use strict";
 
+
 ;
 "use strict";
 var $;
 (function ($) {
     var $$;
     (function ($$) {
+        /**
+         * Marker on top of another component with tracking of its position.
+         */
         class $mol_follower extends $.$mol_follower {
             pos() {
                 const self_rect = this.view_rect();
@@ -9494,12 +10175,17 @@ var $;
 ;
 "use strict";
 
+
 ;
 "use strict";
 var $;
 (function ($) {
     var $$;
     (function ($$) {
+        /**
+         * `Bubble` that can be shown anchored to `Anchor` element.
+         * @see https://mol.hyoo.ru/#!section=demos/demo=mol_pop_demo
+         */
         class $mol_pop extends $.$mol_pop {
             showed(next = false) {
                 this.focused();
@@ -9696,12 +10382,17 @@ var $;
 ;
 "use strict";
 
+
 ;
 "use strict";
 var $;
 (function ($) {
     var $$;
     (function ($$) {
+        /**
+         * Checkbox UI component. See Variants for more concrete implementations.
+         * @see https://mol.hyoo.ru/#!section=demos/demo=mol_check_box_demo
+         */
         class $mol_check extends $.$mol_check {
             click(next) {
                 const event = next ? $mol_dom_event.wrap(next) : null;
@@ -9772,12 +10463,18 @@ var $;
 ;
 "use strict";
 
+
 ;
 "use strict";
 var $;
 (function ($) {
     var $$;
     (function ($$) {
+        /**
+         * Pop-up display and hide by mouse click, also hide by unfocus.
+         * Based on [mol_pop](https://mol.hyoo.ru/#!section=demos/demo=mol_pop_demo) component.
+         * @see https://mol.hyoo.ru/#!section=demos/demo=mol_pick_demo
+         */
         class $mol_pick extends $.$mol_pick {
             keydown(event) {
                 if (!this.trigger_enabled())
@@ -9825,6 +10522,7 @@ var $;
 
 ;
 "use strict";
+
 
 ;
 "use strict";
@@ -9916,12 +10614,17 @@ var $;
 ;
 "use strict";
 
+
 ;
 "use strict";
 var $;
 (function ($) {
     var $$;
     (function ($$) {
+        /**
+         * Output text with dimmed mismatched substrings.
+         * @see https://mol.hyoo.ru/#!section=demos/demo=mol_dimmer_demo
+         */
         class $mol_dimmer extends $.$mol_dimmer {
             parts() {
                 const needle = this.needle();
@@ -9971,6 +10674,10 @@ var $;
 "use strict";
 var $;
 (function ($) {
+    /**
+     * Localisation in $mol framework
+     * @see https://mol.hyoo.ru/#!section=docs/=s5aqnb_odub8l
+     */
     class $mol_locale extends $mol_object {
         static lang_default() {
             return 'en';
@@ -10103,12 +10810,17 @@ var $;
 ;
 "use strict";
 
+
 ;
 "use strict";
 var $;
 (function ($) {
     var $$;
     (function ($$) {
+        /**
+         * Plugin which can navigate in list of items
+         * @see https://mol.hyoo.ru/#!section=demos/demo=mol_nav_demo
+         */
         class $mol_nav extends $.$mol_nav {
             event_key(event) {
                 if (!event)
@@ -10275,12 +10987,18 @@ var $;
 ;
 "use strict";
 
+
 ;
 "use strict";
 var $;
 (function ($) {
     var $$;
     (function ($$) {
+        /**
+         * The list of rows with lazy/virtual rendering support based on `minimal_height` of rows.
+         * `mol_list` should contain only components that inherits `mol_view`. You should not place raw strings or numbers in list.
+         * @see https://mol.hyoo.ru/#!section=demos/demo=mol_list_demo
+         */
         class $mol_list extends $.$mol_list {
             sub() {
                 const rows = this.rows();
@@ -10297,6 +11015,7 @@ var $;
             render_visible_only() {
                 return this.$.$mol_support_css_overflow_anchor();
             }
+            _view_window_last = [0, 0];
             view_window(next) {
                 const kids = this.sub();
                 if (kids.length < 3)
@@ -10306,7 +11025,7 @@ var $;
                 const rect = this.view_rect();
                 if (next)
                     return next;
-                let [min, max] = $mol_mem_cached(() => this.view_window()) ?? [0, 0];
+                let [min, max] = $mol_mem_cached(() => this.view_window()) ?? this._view_window_last;
                 const shift = this.view_window_shift();
                 this.view_window_shift(0);
                 min += shift;
@@ -10322,9 +11041,11 @@ var $;
                 const gap_after = $mol_mem_cached(() => this.gap_after()) ?? 0;
                 let top = Math.ceil(rect?.top ?? 0) + gap_before;
                 let bottom = Math.ceil(rect?.bottom ?? 0) - gap_after;
+                // change nothing when already covers all limits
                 if (top <= limit_top && bottom >= limit_bottom) {
                     return [min2, max2];
                 }
+                // jumps when fully over limits
                 if (anchoring && ((bottom < limit_top) || (top > limit_bottom))) {
                     min = 0;
                     top = Math.ceil(rect?.top ?? 0);
@@ -10341,18 +11062,22 @@ var $;
                 }
                 let top2 = top;
                 let bottom2 = bottom;
+                // force recalc min when overlapse top limit
                 if (anchoring && (top < limit_top) && (bottom < limit_bottom) && (max < kids.length)) {
                     min2 = max;
                     top2 = bottom;
                 }
+                // force recalc max when overlapse bottom limit
                 if ((bottom > limit_bottom) && (top > limit_top) && (min > 0)) {
                     max2 = min;
                     bottom2 = top;
                 }
+                // extend min to cover top limit
                 while (anchoring && ((top2 > limit_top) && (min2 > 0))) {
                     --min2;
                     top2 -= this.item_height_min(min2);
                 }
+                // extend max to cover bottom limit
                 while (bottom2 < limit_bottom && max2 < kids.length) {
                     bottom2 += this.item_height_min(max2);
                     ++max2;
@@ -10395,7 +11120,7 @@ var $;
             sub_visible() {
                 return [
                     ...this.gap_before() ? [this.Gap_before()] : [],
-                    ...this.sub().slice(...this.view_window()),
+                    ...this.sub().slice(...this._view_window_last = this.view_window()),
                     ...this.gap_after() ? [this.Gap_after()] : [],
                 ];
             }
@@ -10485,12 +11210,17 @@ var $;
 ;
 "use strict";
 
+
 ;
 "use strict";
 var $;
 (function ($) {
     var $$;
     (function ($$) {
+        /**
+         * Plugin which adds handlers for keyboard keys.
+         * @see [mol_keyboard_code](../keyboard/code/code.ts)
+         */
         class $mol_hotkey extends $.$mol_hotkey {
             key() {
                 return super.key();
@@ -10640,12 +11370,17 @@ var $;
 ;
 "use strict";
 
+
 ;
 "use strict";
 var $;
 (function ($) {
     var $$;
     (function ($$) {
+        /**
+         * An input field for entering single line text.
+         * @see https://mol.hyoo.ru/#!section=demos/demo=mol_string_demo
+         */
         class $mol_string extends $.$mol_string {
             event_change(next) {
                 if (!next)
@@ -10756,6 +11491,7 @@ var $;
 
 ;
 "use strict";
+
 
 ;
 	($.$mol_search) = class $mol_search extends ($.$mol_pop) {
@@ -10914,12 +11650,17 @@ var $;
 ;
 "use strict";
 
+
 ;
 "use strict";
 var $;
 (function ($) {
     var $$;
     (function ($$) {
+        /**
+         * Search input with suggest and clear button.
+         * @see https://mol.hyoo.ru/#!section=demos/demo=mol_search_demo
+         */
         class $mol_search extends $.$mol_search {
             anchor_content() {
                 return [
@@ -11009,6 +11750,7 @@ var $;
 
 ;
 "use strict";
+
 
 ;
 	($.$mol_select) = class $mol_select extends ($.$mol_pick) {
@@ -11163,12 +11905,17 @@ var $;
 ;
 "use strict";
 
+
 ;
 "use strict";
 var $;
 (function ($) {
     var $$;
     (function ($$) {
+        /**
+         * Allow user to select value from various options and displays current value.
+         * @see https://mol.hyoo.ru/#!section=demos/demo=mol_select_demo_colors
+         */
         class $mol_select extends $.$mol_select {
             filter_pattern(next) {
                 this.focused();
@@ -11275,6 +12022,10 @@ var $;
 "use strict";
 var $;
 (function ($) {
+    /**
+     * 48-bit streamable array hash function
+     * Based on cyrb53: https://stackoverflow.com/a/52171480
+     */
     function $mol_hash_numbers(buff, seed = 0) {
         let h1 = 0xdeadbeef ^ seed;
         let h2 = 0x41c6ce57 ^ seed;
@@ -11294,6 +12045,10 @@ var $;
 "use strict";
 var $;
 (function ($) {
+    /**
+     * 48-bit streamable string hash function
+     * Based on cyrb53: https://stackoverflow.com/a/52171480
+     */
     function $mol_hash_string(str, seed = 0) {
         let nums = new Array(str.length);
         for (let i = 0; i < str.length; ++i)
@@ -11306,12 +12061,17 @@ var $;
 ;
 "use strict";
 
+
 ;
 "use strict";
 var $;
 (function ($) {
     var $$;
     (function ($$) {
+        /**
+         * Avatar uniquely-generated by id string
+         * @see https://mol.hyoo.ru/#!section=demos/demo=mol_avatar_demo
+         */
         class $mol_avatar extends $.$mol_avatar {
             path() {
                 const id = $mol_hash_string(this.id());
@@ -11355,6 +12115,7 @@ var $;
 ;
 "use strict";
 
+
 ;
 	($.$mol_icon_sync_off) = class $mol_icon_sync_off extends ($.$mol_icon) {
 		path(){
@@ -11365,6 +12126,7 @@ var $;
 
 ;
 "use strict";
+
 
 ;
 	($.$hyoo_sync_online) = class $hyoo_sync_online extends ($.$mol_select) {
@@ -11439,6 +12201,7 @@ var $;
 
 ;
 "use strict";
+
 
 ;
 "use strict";
@@ -11521,6 +12284,7 @@ var $;
 ;
 "use strict";
 
+
 ;
 	($.$mol_icon_presentation_play) = class $mol_icon_presentation_play extends ($.$mol_icon) {
 		path(){
@@ -11531,6 +12295,7 @@ var $;
 
 ;
 "use strict";
+
 
 ;
 	($.$mol_check_icon) = class $mol_check_icon extends ($.$mol_check) {};
@@ -11546,6 +12311,7 @@ var $;
 ;
 "use strict";
 
+
 ;
 	($.$mol_icon_settings) = class $mol_icon_settings extends ($.$mol_icon) {
 		path(){
@@ -11556,6 +12322,7 @@ var $;
 
 ;
 "use strict";
+
 
 ;
 	($.$mol_icon_settings_outline) = class $mol_icon_settings_outline extends ($.$mol_icon) {
@@ -11568,6 +12335,7 @@ var $;
 ;
 "use strict";
 
+
 ;
 	($.$mol_icon_shield) = class $mol_icon_shield extends ($.$mol_icon) {
 		path(){
@@ -11578,6 +12346,7 @@ var $;
 
 ;
 "use strict";
+
 
 ;
 	($.$mol_icon_shield_account) = class $mol_icon_shield_account extends ($.$mol_icon) {
@@ -11590,6 +12359,7 @@ var $;
 ;
 "use strict";
 
+
 ;
 	($.$mol_icon_brightness_4) = class $mol_icon_brightness_4 extends ($.$mol_icon) {
 		path(){
@@ -11600,6 +12370,7 @@ var $;
 
 ;
 "use strict";
+
 
 ;
 	($.$mol_lights_toggle) = class $mol_lights_toggle extends ($.$mol_check_icon) {
@@ -11628,12 +12399,17 @@ var $;
 ;
 "use strict";
 
+
 ;
 "use strict";
 var $;
 (function ($) {
     var $$;
     (function ($$) {
+        /**
+         * Toggle for Switcher between light/dark themes (usually for `mol_theme_auto` plugin).
+         * @see https://mol.hyoo.ru/#!section=demos/demo=mol_lights_demo
+         */
         class $mol_lights_toggle extends $.$mol_lights_toggle {
             lights(next) {
                 return this.$.$mol_lights(next);
@@ -11654,6 +12430,7 @@ var $;
 ;
 "use strict";
 
+
 ;
 	($.$mol_icon_share_outline) = class $mol_icon_share_outline extends ($.$mol_icon) {
 		path(){
@@ -11664,6 +12441,7 @@ var $;
 
 ;
 "use strict";
+
 
 ;
 "use strict";
@@ -11704,6 +12482,12 @@ var $;
 "use strict";
 var $;
 (function ($) {
+    /**
+     * Small, simple, powerful, and fast TypeScript/JavaScript library for proper date/time/duration/interval arithmetic.
+     *
+     * Immutable iso8601 time duration representation.
+     * @see http://localhost:9080/mol/app/docs/-/test.html#!demo=mol_time_demo
+     */
     class $mol_time_duration extends $mol_time_base {
         constructor(config = 0) {
             super();
@@ -11904,6 +12688,7 @@ var $;
             '.sss': (moment) => {
                 if (moment.second == null)
                     return '';
+                // if( moment.second === ( moment.second | 0 ) ) return ''
                 return '.' + $mol_time_moment.patterns['sss'](moment);
             },
             'sss': (moment) => {
@@ -11937,6 +12722,12 @@ var $;
             return numb;
         $mol_fail(new Error(`Wrong time component ${str}`));
     }
+    /**
+     * Small, simple, powerful, and fast TypeScript/JavaScript library for proper date/time/duration/interval arithmetic.
+     *
+     * Immutable iso8601 time moment representation.
+     * @see http://localhost:9080/mol/app/docs/-/test.html#!demo=mol_time_demo
+     */
     class $mol_time_moment extends $mol_time_base {
         constructor(config = new Date) {
             super();
@@ -12101,6 +12892,12 @@ var $;
         [$mol_dev_format_head]() {
             return $mol_dev_format_span({}, $mol_dev_format_native(this), ' ', $mol_dev_format_accent(this.toString('YYYY-MM-DD hh:mm:ss.sss Z')));
         }
+        /// Mnemonics:
+        ///  * single letter for numbers: M - month number, D - day of month.
+        ///  * uppercase letters for dates, lowercase for times: M - month number , m - minutes number
+        ///  * repeated letters for define register count: YYYY - full year, YY - shot year, MM - padded month number
+        ///  * words for word representation: Month - month name, WeekDay - day of week name
+        ///  * shortcuts: WD - short day of week, Mon - short month name.
         static patterns = {
             'YYYY': (moment) => {
                 if (moment.year == null)
@@ -12424,6 +13221,7 @@ var $;
 var $;
 (function ($) {
     function $mol_base64_decode_node(base64Str) {
+        // without Uint8Array breaks $mol_compare_deep
         const buffer = Buffer.from(base64Str, 'base64');
         return new Uint8Array(buffer.buffer, buffer.byteOffset, buffer.byteLength);
     }
@@ -12483,6 +13281,7 @@ var $;
                 this.setUint16(offset + 4, (value / 2 ** 32) | 0, LE);
             }
         }
+        /** 1-byte signed integer channel for offset. */
         int8(offset, next) {
             if (next === undefined)
                 return this.getInt8(offset);
@@ -12490,6 +13289,7 @@ var $;
                 return this.setInt8(offset, next), next;
             $mol_fail(new Error(`Wrong int8 value ${next}`));
         }
+        /** 1-byte unsigned integer channel for offset. */
         uint8(offset, next) {
             if (next === undefined)
                 return this.getUint8(offset);
@@ -12497,6 +13297,7 @@ var $;
                 return this.setUint8(offset, next), next;
             $mol_fail(new Error(`Wrong uint8 value ${next}`));
         }
+        /** 2-byte signed integer little-endian channel for offset. */
         int16(offset, next) {
             if (next === undefined)
                 return this.getInt16(offset, true);
@@ -12504,6 +13305,7 @@ var $;
                 return this.setInt16(offset, next, true), next;
             $mol_fail(new Error(`Wrong int16 value ${next}`));
         }
+        /** 2-byte unsigned integer little-endian channel for offset. */
         uint16(offset, next) {
             if (next === undefined)
                 return this.getUint16(offset, true);
@@ -12511,6 +13313,7 @@ var $;
                 return this.setUint16(offset, next, true), next;
             $mol_fail(new Error(`Wrong uint16 value ${next}`));
         }
+        /** 4-byte signed integer little-endian channel for offset. */
         int32(offset, next) {
             if (next === undefined)
                 return this.getInt32(offset, true);
@@ -12518,6 +13321,7 @@ var $;
                 return this.setInt32(offset, next, true), next;
             $mol_fail(new Error(`Wrong int32 value ${next}`));
         }
+        /** 4-byte unsigned integer little-endian channel for offset. */
         uint32(offset, next) {
             if (next === undefined)
                 return this.getUint32(offset, true);
@@ -12525,6 +13329,7 @@ var $;
                 return this.setUint32(offset, next, true), next;
             $mol_fail(new Error(`Wrong uint32 value ${next}`));
         }
+        /** 8-byte signed integer little-endian channel for offset. */
         int64(offset, next) {
             if (next === undefined)
                 return this.getBigInt64(offset, true);
@@ -12532,6 +13337,7 @@ var $;
                 return this.setBigInt64(offset, next, true), next;
             $mol_fail(new Error(`Wrong int64 value ${next}`));
         }
+        /** 6-byte unsigned integer little-endian channel for offset. */
         uint48(offset, next) {
             if (next === undefined)
                 return this.getUint48(offset, true);
@@ -12539,6 +13345,7 @@ var $;
                 return this.setUint48(offset, next, true), next;
             $mol_fail(new Error(`Wrong uint48 value ${next}`));
         }
+        /** 8-byte unsigned integer little-endian channel for offset. */
         uint64(offset, next) {
             if (next === undefined)
                 return this.getBigUint64(offset, true);
@@ -12546,24 +13353,29 @@ var $;
                 return this.setBigUint64(offset, next, true), next;
             $mol_fail(new Error(`Wrong uint64 value ${next}`));
         }
+        /** 2-byte float little-endian channel for offset. */
         float16(offset, next) {
             if (next !== undefined)
                 this.setFloat16(offset, next, true);
             return this.getFloat16(offset, true);
         }
+        /** 4-byte float little-endian channel for offset. */
         float32(offset, next) {
             if (next !== undefined)
                 this.setFloat32(offset, next, true);
             return this.getFloat32(offset, true);
         }
+        /** 8-byte float little-endian channel for offset. */
         float64(offset, next) {
             if (next !== undefined)
                 this.setFloat64(offset, next, true);
             return this.getFloat64(offset, true);
         }
+        /** A Uint8Array view for the same buffer. */
         asArray() {
             return new Uint8Array(this.buffer, this.byteOffset, this.byteLength);
         }
+        /** base64ae string from buffer. */
         toString() {
             return $mol_base64_ae_encode(this.asArray());
         }
@@ -12575,17 +13387,26 @@ var $;
 "use strict";
 var $;
 (function ($) {
-    function $mol_crypto_salt() {
+    /** 16 unique bytes. */
+    function $mol_crypto2_nonce() {
         return $mol_crypto_native.getRandomValues(new Uint8Array(16));
     }
-    $.$mol_crypto_salt = $mol_crypto_salt;
-    $.$mol_crypto_salt_once = new Uint8Array([1, 2, 3, 4, 5, 6, 7, 8, 9, 0, 1, 2, 3, 4, 5, 6]);
+    $.$mol_crypto2_nonce = $mol_crypto2_nonce;
 })($ || ($ = {}));
 
 ;
 "use strict";
 var $;
 (function ($) {
+    /** @deprecated Use $mol_crypto2_nonce */
+    $.$mol_crypto_salt = $mol_crypto2_nonce;
+})($ || ($ = {}));
+
+;
+"use strict";
+var $;
+(function ($) {
+    /** Derived debuggable error with stack */
     function $mol_crypto_restack(error) {
         error = new Error(error instanceof Error ? error.message : String(error), { cause: error });
         $mol_fail_hidden(error);
@@ -12597,11 +13418,15 @@ var $;
 "use strict";
 var $;
 (function ($) {
+    /** Symmetric cipher with shortest payload. */
     class $mol_crypto_sacred extends $mol_buffer {
+        /** Key size in bytes. */
         static size = 16;
+        /** Makes new random secret. */
         static make() {
             return this.from($mol_crypto_salt());
         }
+        /** Makes from string of buffer view. */
         static from(serial) {
             if (typeof serial === 'string') {
                 serial = new Uint8Array([
@@ -12631,12 +13456,14 @@ var $;
             return $mol_base64_url_encode(this.asArray());
         }
         _native;
+        /** Native crypto secret */
         async native() {
             return this._native ?? (this._native = await $mol_crypto_native.subtle.importKey('raw', this, {
                 name: 'AES-CBC',
                 length: 128,
             }, true, ['encrypt', 'decrypt']).catch($mol_crypto_restack));
         }
+        /** Encrypt any binary message. 16n bytes */
         async encrypt(open, salt) {
             return new Uint8Array(await $mol_crypto_native.subtle.encrypt({
                 name: 'AES-CBC',
@@ -12645,6 +13472,7 @@ var $;
                 iv: salt,
             }, await this.native(), open).catch($mol_crypto_restack));
         }
+        /** Decrypt any binary message. */
         async decrypt(closed, salt) {
             return new Uint8Array(await $mol_crypto_native.subtle.decrypt({
                 name: 'AES-CBC',
@@ -12653,12 +13481,14 @@ var $;
                 iv: salt,
             }, await this.native(), closed).catch($mol_crypto_restack));
         }
+        /** Encrypts 0xFF prefixed buffer. 16 bytes */
         async close(opened, salt) {
             if (opened.getUint8(0) !== 0xFF)
                 throw new Error('Closable buffer should starts with 0xFF');
             const trimed = new Uint8Array(opened.buffer, opened.byteOffset + 1, opened.byteLength - 1);
             return this.encrypt(trimed, salt);
         }
+        /** Decrypts 0xFF prefixed buffer. 16 bytes */
         async open(closed, salt) {
             const trimed = await this.decrypt(closed, salt);
             if (trimed.byteLength !== closed.byteLength - 1)
@@ -12684,8 +13514,13 @@ var $;
         length: 128,
         tagLength: 32,
     };
+    /**
+     * Symmetric cipher with shortest payload.
+     * @deprecated Use $mol_crypto_sacred.
+     */
     class $mol_crypto_secret extends Object {
         native;
+        /** Key size in bytes. */
         static size = 16;
         constructor(native) {
             super();
@@ -12727,9 +13562,11 @@ var $;
             }, private_key, algorithm, true, ["encrypt", "decrypt"]);
             return new this(secret);
         }
+        /** 16 bytes */
         async serial() {
             return new Uint8Array(await $mol_crypto_native.subtle.exportKey('raw', this.native));
         }
+        /** 16n bytes */
         async encrypt(open, salt) {
             return new Uint8Array(await $mol_crypto_native.subtle.encrypt({
                 ...algorithm,
@@ -12755,8 +13592,10 @@ var $;
         length: 128,
         tagLength: 32,
     };
+    /** Symmetric cipher with shortest payload */
     class $piterjs_secret extends Object {
         native;
+        /** Key size in bytes. */
         static size = 16;
         constructor(native) {
             super();
@@ -12794,9 +13633,11 @@ var $;
             }, private_key, algorithm, true, ["encrypt", "decrypt"]);
             return new this(secret);
         }
+        /** 16 bytes */
         async serial() {
             return await $mol_crypto_native.subtle.exportKey('raw', this.native);
         }
+        /** 16n bytes */
         async encrypt(open, salt) {
             return await $mol_crypto_native.subtle.encrypt({
                 ...algorithm,
@@ -12865,21 +13706,24 @@ var $;
 var $;
 (function ($) {
     let sponge = new Uint32Array(80);
-    function $mol_crypto_hash(input) {
+    /** Fast small sync SHA-1 (20 bytes, 160 bits) */
+    function $mol_crypto2_hash(input) {
         const data = input instanceof Uint8Array
             ? input
             : new Uint8Array(input.buffer, input.byteOffset, input.byteLength);
         const bits = data.byteLength << 3;
         const kbits = bits >> 5;
         const kword = 0x80 << (24 - bits & 0b11111);
-        const bytes = 16 + (bits + 64 >>> 9 << 4);
+        const bytes = 16 + ((bits + 64) >>> 9 << 4);
         const klens = bytes - 1;
-        const words = new DataView(data.buffer, data.byteOffset, data.byteLength >> 2 << 2);
+        const wlen = data.byteLength >> 2 << 2;
         let tail = 0;
-        for (let i = words.byteLength; i < data.length; ++i) {
+        for (let i = wlen; i < data.length; ++i) {
             tail |= data[i] << ((3 - i & 0b11) << 3);
         }
+        // Initial
         const hash = new Int32Array([1732584193, -271733879, -1732584194, 271733878, -1009589776]);
+        // Digest
         for (let i = 0; i < bytes; i += 16) {
             let h0 = hash[0];
             let h1 = hash[1];
@@ -12893,9 +13737,9 @@ var $;
                 }
                 else {
                     const pos = k << 2;
-                    let word = pos === words.byteLength ? tail :
-                        pos > words.byteLength ? 0 :
-                            words.getInt32(pos, false);
+                    let word = pos === wlen ? tail :
+                        pos > wlen ? 0 :
+                            (data[pos] << 24 | data[pos + 1] << 16 | data[pos + 2] << 8 | data[pos + 3]);
                     if (k === kbits)
                         word |= kword;
                     sponge[j] = word;
@@ -12955,11 +13799,19 @@ var $;
         }
         for (let i = 0; i < 20; ++i) {
             const word = hash[i];
-            hash[i] = word << 24 | word << 8 & 0xFF0000 | word >>> 8 & 0xFF00 | word >>> 24 & 0xFF;
+            hash[i] = word << 24 | word << 8 & 0xFF0000 | word >>> 8 & 0xFF00 | word >>> 24 & 0xFF; // BE -> LE
         }
         return new Uint8Array(hash.buffer);
     }
-    $.$mol_crypto_hash = $mol_crypto_hash;
+    $.$mol_crypto2_hash = $mol_crypto2_hash;
+})($ || ($ = {}));
+
+;
+"use strict";
+var $;
+(function ($) {
+    /** @deprecated Use $mol_crypto2_hash */
+    $.$mol_crypto_hash = $mol_crypto2_hash;
 })($ || ($ = {}));
 
 ;
@@ -13298,6 +14150,12 @@ var $;
 "use strict";
 var $;
 (function ($) {
+    /**
+     * Small, simple, powerful, and fast TypeScript/JavaScript library for proper date/time/duration/interval arithmetic.
+     *
+     * Immutable iso8601 time interval representation.
+     * @see http://localhost:9080/mol/app/docs/-/test.html#!demo=mol_time_demo
+     */
     class $mol_time_interval extends $mol_time_base {
         constructor(config) {
             super();
@@ -13375,12 +14233,18 @@ var $;
 var $;
 (function ($) {
     class $hyoo_crowd_blob extends $hyoo_crowd_list {
+        /**
+         * URI to Blob.
+         * @todo persistent uri instead of temporary
+         */
         uri() {
             return URL.createObjectURL(this.blob());
         }
+        /** Mime type */
         type(next) {
             return this.as($hyoo_crowd_struct).sub('type', $hyoo_crowd_reg).str(next);
         }
+        /** Blob, File etc. */
         blob(next) {
             if (next) {
                 this.buffer(new Uint8Array($mol_wire_sync(next).arrayBuffer()), next.type);
@@ -13390,6 +14254,7 @@ var $;
                 type: this.type(),
             });
         }
+        /** Solid byte buffer. */
         buffer(next, type = 'application/octet-stream') {
             if (next) {
                 const chunks = [];
@@ -13673,6 +14538,7 @@ var $;
 ;
 "use strict";
 
+
 ;
 "use strict";
 var $;
@@ -13693,6 +14559,8 @@ var $;
             maxHeight: per(100),
             boxSizing: 'border-box',
             color: $mol_theme.text,
+            // backdropFilter: blur( `3px` ), enforces layering
+            // zIndex: 0 ,
             ':focus': {
                 outline: 'none',
             },
@@ -13817,6 +14685,7 @@ var $;
 ;
 "use strict";
 
+
 ;
 	($.$mol_icon_calendar_plus) = class $mol_icon_calendar_plus extends ($.$mol_icon) {
 		path(){
@@ -13827,6 +14696,7 @@ var $;
 
 ;
 "use strict";
+
 
 ;
 	($.$mol_link_calendar) = class $mol_link_calendar extends ($.$mol_link) {
@@ -13865,6 +14735,7 @@ var $;
 ;
 "use strict";
 
+
 ;
 "use strict";
 var $;
@@ -13900,6 +14771,7 @@ var $;
 ;
 "use strict";
 
+
 ;
 	($.$mol_format) = class $mol_format extends ($.$mol_string) {
 		mask(id){
@@ -13920,12 +14792,17 @@ var $;
 ;
 "use strict";
 
+
 ;
 "use strict";
 var $;
 (function ($) {
     var $$;
     (function ($$) {
+        /**
+         * Formatted string input/output
+         * @see https://mol.hyoo.ru/#!section=demos/demo=mol_format_demo
+         */
         class $mol_format extends $.$mol_format {
             selection([from, to] = [0, 0]) {
                 const prev = $mol_wire_probe(() => this.selection());
@@ -13997,6 +14874,7 @@ var $;
 ;
 "use strict";
 
+
 ;
 	($.$mol_icon_trash_can_outline) = class $mol_icon_trash_can_outline extends ($.$mol_icon) {
 		path(){
@@ -14007,6 +14885,7 @@ var $;
 
 ;
 "use strict";
+
 
 ;
 	($.$mol_icon_chevron) = class $mol_icon_chevron extends ($.$mol_icon) {
@@ -14019,6 +14898,19 @@ var $;
 ;
 "use strict";
 
+
+;
+	($.$mol_icon_chevron_double_left) = class $mol_icon_chevron_double_left extends ($.$mol_icon) {
+		path(){
+			return "M18.41,7.41L17,6L11,12L17,18L18.41,16.59L13.83,12L18.41,7.41M12.41,7.41L11,6L5,12L11,18L12.41,16.59L7.83,12L12.41,7.41Z";
+		}
+	};
+
+
+;
+"use strict";
+
+
 ;
 	($.$mol_icon_chevron_left) = class $mol_icon_chevron_left extends ($.$mol_icon) {
 		path(){
@@ -14029,6 +14921,7 @@ var $;
 
 ;
 "use strict";
+
 
 ;
 	($.$mol_icon_chevron_right) = class $mol_icon_chevron_right extends ($.$mol_icon) {
@@ -14041,6 +14934,19 @@ var $;
 ;
 "use strict";
 
+
+;
+	($.$mol_icon_chevron_double_right) = class $mol_icon_chevron_double_right extends ($.$mol_icon) {
+		path(){
+			return "M5.59,7.41L7,6L13,12L7,18L5.59,16.59L10.17,12L5.59,7.41M11.59,7.41L13,6L19,12L13,18L11.59,16.59L16.17,12L11.59,7.41Z";
+		}
+	};
+
+
+;
+"use strict";
+
+
 ;
 	($.$mol_hor) = class $mol_hor extends ($.$mol_view) {};
 
@@ -14048,12 +14954,14 @@ var $;
 ;
 "use strict";
 
+
 ;
 "use strict";
 var $;
 (function ($) {
     var $$;
     (function ($$) {
+        /** Horizontal list of blocks. */
         class $mol_hor extends $.$mol_hor {
             minimal_width() {
                 let min = 0;
@@ -14228,12 +15136,17 @@ var $;
 ;
 "use strict";
 
+
 ;
 "use strict";
 var $;
 (function ($) {
     var $$;
     (function ($$) {
+        /**
+         * Draws all days of month as table.
+         * @see https://mol.hyoo.ru/#!section=demos/demo=mol_calendar_demo_holiday
+         */
         class $mol_calendar extends $.$mol_calendar {
             month_moment() {
                 const moment = new $mol_time_moment(this.month_string() || undefined);
@@ -14438,48 +15351,110 @@ var $;
 		Calendar_title(){
 			return (this.Calendar().Title());
 		}
-		prev_hint(){
-			return (this.$.$mol_locale.text("$mol_date_prev_hint"));
+		year_prev_hint(){
+			return (this.$.$mol_locale.text("$mol_date_year_prev_hint"));
 		}
-		prev(next){
+		year_prev(next){
 			if(next !== undefined) return next;
 			return null;
 		}
-		Prev_icon(){
+		Year_prev_icon(){
+			const obj = new this.$.$mol_icon_chevron_double_left();
+			return obj;
+		}
+		Year_prev(){
+			const obj = new this.$.$mol_button_minor();
+			(obj.hint) = () => ((this.year_prev_hint()));
+			(obj.click) = (next) => ((this.year_prev(next)));
+			(obj.sub) = () => ([(this.Year_prev_icon())]);
+			return obj;
+		}
+		month_prev_hint(){
+			return (this.$.$mol_locale.text("$mol_date_month_prev_hint"));
+		}
+		prev_hint(){
+			return (this.month_prev_hint());
+		}
+		month_prev(next){
+			if(next !== undefined) return next;
+			return null;
+		}
+		prev(next){
+			return (this.month_prev(next));
+		}
+		Month_prev_icon(){
 			const obj = new this.$.$mol_icon_chevron_left();
 			return obj;
 		}
-		Prev(){
+		Prev_icon(){
+			return (this.Month_prev_icon());
+		}
+		Month_prev(){
 			const obj = new this.$.$mol_button_minor();
 			(obj.hint) = () => ((this.prev_hint()));
 			(obj.click) = (next) => ((this.prev(next)));
 			(obj.sub) = () => ([(this.Prev_icon())]);
 			return obj;
 		}
-		next_hint(){
-			return (this.$.$mol_locale.text("$mol_date_next_hint"));
+		Prev(){
+			return (this.Month_prev());
 		}
-		next(next){
+		month_next_hint(){
+			return (this.$.$mol_locale.text("$mol_date_month_next_hint"));
+		}
+		next_hint(){
+			return (this.month_next_hint());
+		}
+		month_next(next){
 			if(next !== undefined) return next;
 			return null;
 		}
-		Next_icon(){
+		next(next){
+			return (this.month_next(next));
+		}
+		Month_next_icon(){
 			const obj = new this.$.$mol_icon_chevron_right();
 			return obj;
 		}
-		Next(){
+		Next_icon(){
+			return (this.Month_next_icon());
+		}
+		Month_next(){
 			const obj = new this.$.$mol_button_minor();
 			(obj.hint) = () => ((this.next_hint()));
 			(obj.click) = (next) => ((this.next(next)));
 			(obj.sub) = () => ([(this.Next_icon())]);
 			return obj;
 		}
+		Next(){
+			return (this.Month_next());
+		}
+		year_next_hint(){
+			return (this.$.$mol_locale.text("$mol_date_year_next_hint"));
+		}
+		year_next(next){
+			if(next !== undefined) return next;
+			return null;
+		}
+		Year_next_icon(){
+			const obj = new this.$.$mol_icon_chevron_double_right();
+			return obj;
+		}
+		Year_next(){
+			const obj = new this.$.$mol_button_minor();
+			(obj.hint) = () => ((this.year_next_hint()));
+			(obj.click) = (next) => ((this.year_next(next)));
+			(obj.sub) = () => ([(this.Year_next_icon())]);
+			return obj;
+		}
 		Calendar_tools(){
 			const obj = new this.$.$mol_view();
 			(obj.sub) = () => ([
+				(this.Year_prev()), 
 				(this.Prev()), 
 				(this.Calendar_title()), 
-				(this.Next())
+				(this.Next()), 
+				(this.Year_next())
 			]);
 			return obj;
 		}
@@ -14519,12 +15494,18 @@ var $;
 	($mol_mem(($.$mol_date.prototype), "Clear"));
 	($mol_mem(($.$mol_date.prototype), "Input_row"));
 	($mol_mem_key(($.$mol_date.prototype), "day_click"));
-	($mol_mem(($.$mol_date.prototype), "prev"));
-	($mol_mem(($.$mol_date.prototype), "Prev_icon"));
-	($mol_mem(($.$mol_date.prototype), "Prev"));
-	($mol_mem(($.$mol_date.prototype), "next"));
-	($mol_mem(($.$mol_date.prototype), "Next_icon"));
-	($mol_mem(($.$mol_date.prototype), "Next"));
+	($mol_mem(($.$mol_date.prototype), "year_prev"));
+	($mol_mem(($.$mol_date.prototype), "Year_prev_icon"));
+	($mol_mem(($.$mol_date.prototype), "Year_prev"));
+	($mol_mem(($.$mol_date.prototype), "month_prev"));
+	($mol_mem(($.$mol_date.prototype), "Month_prev_icon"));
+	($mol_mem(($.$mol_date.prototype), "Month_prev"));
+	($mol_mem(($.$mol_date.prototype), "month_next"));
+	($mol_mem(($.$mol_date.prototype), "Month_next_icon"));
+	($mol_mem(($.$mol_date.prototype), "Month_next"));
+	($mol_mem(($.$mol_date.prototype), "year_next"));
+	($mol_mem(($.$mol_date.prototype), "Year_next_icon"));
+	($mol_mem(($.$mol_date.prototype), "Year_next"));
 	($mol_mem(($.$mol_date.prototype), "Calendar_tools"));
 	($mol_mem(($.$mol_date.prototype), "Calendar"));
 	($mol_mem(($.$mol_date.prototype), "Icon"));
@@ -14557,12 +15538,17 @@ var $;
 ;
 "use strict";
 
+
 ;
 "use strict";
 var $;
 (function ($) {
     var $$;
     (function ($$) {
+        /**
+         * Date presenter and picker.
+         * @see https://mol.hyoo.ru/#!section=demos/demo=mol_date_demo
+         */
         class $mol_date extends $.$mol_date {
             trigger_content() {
                 return [this.value() || this.Icon()];
@@ -14638,11 +15624,17 @@ var $;
                 this.value_moment(this.value_moment()?.merge(moment) ?? moment);
                 this.showed(false);
             }
-            prev() {
+            month_prev() {
                 this.month_moment(this.month_moment().shift({ month: -1 }));
             }
-            next() {
+            month_next() {
                 this.month_moment(this.month_moment().shift({ month: +1 }));
+            }
+            year_prev() {
+                this.month_moment(this.month_moment().shift({ year: -1 }));
+            }
+            year_next() {
+                this.month_moment(this.month_moment().shift({ year: +1 }));
             }
             today_click() {
                 this.value_moment(this.value_moment_today());
@@ -14671,7 +15663,7 @@ var $;
 "use strict";
 var $;
 (function ($) {
-    $mol_style_attach("mol/date/date.view.css", "/* [mol_date_bubble] {\n\tpadding: .5rem;\n} */\n\n[mol_date_input] {\n\tflex-shrink: 0;\n}\n\n[mol_date_prev] ,\n[mol_date_next] {\n\tflex-grow: 1;\n}\n[mol_date_prev] {\n\tjustify-content: flex-end;\n}\n\n[mol_date_calendar_title] {\n\tpadding: var(--mol_gap_text);\n}\n\n[mol_date_calendar_day] {\n\tpadding: 0;\n}\n\n[mol_date_calendar_day_button] {\n\twidth: 100%;\n\t/* padding: .25rem .5rem; */\n\tjustify-content: center;\n\tcursor: pointer;\n\tcolor: inherit;\n}\n");
+    $mol_style_attach("mol/date/date.view.css", "/* [mol_date_bubble] {\n\tpadding: .5rem;\n} */\n\n[mol_date_input] {\n\tflex-shrink: 0;\n}\n\n[mol_date_month_prev] ,\n[mol_date_month_next] {\n\tflex-grow: 1;\n}\n[mol_date_month_prev] {\n\tjustify-content: flex-end;\n}\n\n[mol_date_calendar_title] {\n\tpadding: var(--mol_gap_text);\n}\n\n[mol_date_calendar_day] {\n\tpadding: 0;\n}\n\n[mol_date_calendar_day_button] {\n\twidth: 100%;\n\t/* padding: .25rem .5rem; */\n\tjustify-content: center;\n\tcursor: pointer;\n\tcolor: inherit;\n}\n");
 })($ || ($ = {}));
 
 ;
@@ -14688,10 +15680,12 @@ var $;
 ;
 "use strict";
 
+
 ;
 "use strict";
 var $;
 (function ($) {
+    /** Creates lexer by dictionary of lexems. Lexem that started first wins. Then lexem that declared earlier wins. Use regexp capture to take parts of token. */
     class $mol_syntax2 {
         lexems;
         constructor(lexems) {
@@ -14772,6 +15766,7 @@ var $;
 
 ;
 "use strict";
+
 
 ;
 "use strict";
@@ -14899,7 +15894,7 @@ var $;
         'spoiler': /^((?:(?:[\?] )(?:[^]*?)$(\r?\n?))+)([\n\r]*)/,
         'header': /^([#=]+)(\s+)(.*?)$([\n\r]*)/,
         'list': /^((?:(?: ?([*+-])|(?:\d+[\.\)])+) +(?:[^]*?)$(?:\r?\n?)(?:  (?:[^]*?)$(?:\r?\n?))*)+)((?:\r?\n)*)/,
-        'code': /^(```\s*)([\w.-]*)[\r\n]+([^]*?)^(```)$([\n\r]*)/,
+        'code': /^(```)([\w.-]*)[\r\n]+([^]*?)^(```)$([\n\r]*)/,
         'code-indent': /^((?:(?: |\t)(?:[^]*?)$\r?\n?)+)([\n\r]*)/,
         'table': /((?:^\|.+?$\r?\n?)+)([\n\r]*)/,
         'grid': /((?:^ *! .*?$\r?\n?)+)([\n\r]*)/,
@@ -14912,6 +15907,8 @@ var $;
         'code': /```(.+?)```|;;(.+?);;|`(.+?)`/,
         'insert': /\+\+(.+?)\+\+/,
         'delete': /~~(.+?)~~|--(.+?)--/,
+        // 'remark' : /(\()(.+?)(\))/ ,
+        // 'quote' : /(")(.+?)(")/ ,
         'embed': /""(?:(.*?)\\)?(.*?)""/,
         'link': /\\\\(?:(.*?)\\)?(.*?)\\\\/,
         'image-link': /!\[([^\[\]]*?)\]\((.*?)\)/,
@@ -14941,6 +15938,7 @@ var $;
 ;
 "use strict";
 
+
 ;
 "use strict";
 var $;
@@ -14957,6 +15955,7 @@ var $;
             tokens(path) {
                 const tokens = [];
                 const text = (path.length > 0)
+                    // @FIXME: this logic compatible only with `string`
                     ? this.tokens(path.slice(0, path.length - 1))[path[path.length - 1]].found.slice(1, -1)
                     : this.text();
                 this.syntax().tokenize(text, (name, found, chunks) => {
@@ -15096,6 +16095,7 @@ var $;
 ;
 "use strict";
 
+
 ;
 	($.$mol_icon_clipboard_outline) = class $mol_icon_clipboard_outline extends ($.$mol_icon) {
 		path(){
@@ -15106,6 +16106,7 @@ var $;
 
 ;
 "use strict";
+
 
 ;
 	($.$mol_button_copy) = class $mol_button_copy extends ($.$mol_button_minor) {
@@ -15166,12 +16167,17 @@ var $;
 ;
 "use strict";
 
+
 ;
 "use strict";
 var $;
 (function ($) {
     var $$;
     (function ($$) {
+        /**
+         * Button copy text() value to clipboard
+         * @see https://mol.hyoo.ru/#!section=demos/demo=mol_button_demo
+         */
         class $mol_button_copy extends $.$mol_button_copy {
             data() {
                 return Object.fromEntries(this.blobs().map(blob => [blob.type, blob]));
@@ -15286,12 +16292,17 @@ var $;
 ;
 "use strict";
 
+
 ;
 "use strict";
 var $;
 (function ($) {
     var $$;
     (function ($$) {
+        /**
+         * Code visualizer.
+         * @see https://mol.hyoo.ru/#!section=demos/demo=mol_text_code_demo
+         */
         class $mol_text_code extends $.$mol_text_code {
             render_visible_only() {
                 return this.$.$mol_support_css_overflow_anchor();
@@ -15578,12 +16589,17 @@ var $;
 ;
 "use strict";
 
+
 ;
 "use strict";
 var $;
 (function ($) {
     var $$;
     (function ($$) {
+        /**
+         * An input field for entering multiline text.
+         * @see https://mol.hyoo.ru/#!section=demos/demo=mol_textarea_demo
+         */
         class $mol_textarea extends $.$mol_textarea {
             indent_inc() {
                 let text = this.value();
@@ -15717,6 +16733,7 @@ var $;
 ;
 "use strict";
 
+
 ;
 	($.$mol_form_field) = class $mol_form_field extends ($.$mol_labeler) {
 		name(){
@@ -15749,12 +16766,16 @@ var $;
 ;
 "use strict";
 
+
 ;
 "use strict";
 var $;
 (function ($) {
     var $$;
     (function ($$) {
+        /**
+         * @see https://mol.hyoo.ru/#!section=demos/demo=mol_form_demo
+         */
         class $mol_form_field extends $.$mol_form_field {
             bid() {
                 return this.bids().filter(Boolean)[0] ?? '';
@@ -15918,12 +16939,17 @@ var $;
 ;
 "use strict";
 
+
 ;
 "use strict";
 var $;
 (function ($) {
     var $$;
     (function ($$) {
+        /**
+         * Component for entering, incrementing and decrementing numeric values.
+         * @see https://mol.hyoo.ru/#!section=demos/demo=mol_number_demo
+         */
         class $mol_number extends $.$mol_number {
             value_limited(val) {
                 if (Number.isNaN(val))
@@ -15973,30 +16999,43 @@ var $;
                 }
             }
             value_string(next) {
+                // Вытягиваем value
+                // Если кто-то поменяет из вне value, value_string надо обновить
                 const current = this.round(this.value_limited());
                 if (next === undefined)
                     return current;
                 const precision = this.precision_view();
+                // Точку в конце поставить нельзя, если precision_view целое число > 0
                 if (precision - Math.floor(precision) === 0)
                     next = next.replace(/[.,]/g, '');
+                // Запятые меняем на точки, удаляем не-цифры и не-точки и лишние ноли в начале целой части.
+                // Минус получится ввести только в начале.
                 next = (this.value_min() < 0 && next.startsWith('-') ? '-' : '')
                     + next.replace(/,/g, '.').replace(/[^\d\.]/g, '').replace(/^0{2,}/, '0');
                 let dot_pos = next.indexOf('.');
                 if (dot_pos !== -1) {
                     const prev = $mol_wire_probe(() => this.value_string()) ?? '';
                     const dot_pos_prev = prev.indexOf('.');
+                    // Определяем где относительно предыдущей точки юзер поставил новую
                     if (dot_pos_prev === dot_pos)
                         dot_pos = next.lastIndexOf('.');
+                    // Из частей до и после новой точки старую точку удаляем
                     const frac = next.slice(dot_pos + 1).replace(/\./g, '');
+                    // Если точка идет первой, перед ней пишем 0, что бы форматирование выглядело нормально в mask
                     next = (next.slice(0, dot_pos) || '0').replace(/\./g, '') + '.' + frac;
                 }
+                // Оставляем старое значение в value есть сочетание, приводящие к NaN, например -.
                 if (Number.isNaN(Number(next)))
                     return next;
                 if (next.endsWith('.'))
                     return next;
                 if (next.endsWith('-'))
                     return next;
+                // Если пустая строка - сетим NaN
+                // Применяем округления.
                 this.value_limited(Number(next || Number.NaN));
+                // Возвращаем все-равно не нормализованное значение
+                // Иначе нельзя ввести будет 10, если min/max 5..10
                 return next;
             }
             dec_enabled() {
@@ -16030,6 +17069,7 @@ var $;
 ;
 "use strict";
 
+
 ;
 	($.$mol_icon_heart_box) = class $mol_icon_heart_box extends ($.$mol_icon) {
 		path(){
@@ -16040,6 +17080,7 @@ var $;
 
 ;
 "use strict";
+
 
 ;
 	($.$mol_icon_heart_box_outline) = class $mol_icon_heart_box_outline extends ($.$mol_icon) {
@@ -16052,6 +17093,7 @@ var $;
 ;
 "use strict";
 
+
 ;
 	($.$mol_icon_tick) = class $mol_icon_tick extends ($.$mol_icon) {
 		path(){
@@ -16062,6 +17104,7 @@ var $;
 
 ;
 "use strict";
+
 
 ;
 	($.$mol_check_box) = class $mol_check_box extends ($.$mol_check) {
@@ -16082,6 +17125,7 @@ var $;
 
 ;
 "use strict";
+
 
 ;
 	($.$mol_section) = class $mol_section extends ($.$mol_list) {
@@ -16134,12 +17178,17 @@ var $;
 ;
 "use strict";
 
+
 ;
 "use strict";
 var $;
 (function ($) {
     var $$;
     (function ($$) {
+        /**
+         * The component which contains head and content.
+         * @see https://mol.hyoo.ru/#!section=demos/demo=mol_section_demo
+         */
         class $mol_section extends $.$mol_section {
             title_dom_name() {
                 return 'h' + this.level();
@@ -16173,6 +17222,7 @@ var $;
 
 ;
 "use strict";
+
 
 ;
 	($.$mol_check_expand) = class $mol_check_expand extends ($.$mol_check) {
@@ -16210,12 +17260,17 @@ var $;
 ;
 "use strict";
 
+
 ;
 "use strict";
 var $;
 (function ($) {
     var $$;
     (function ($$) {
+        /**
+         * Expander for trees, lists, etc
+         * @see https://mol.hyoo.ru/#!section=demos/demo=mol_check_expand_demo
+         */
         class $mol_check_expand extends $.$mol_check_expand {
             level_style() {
                 return `${this.level() * 1 - 1}rem`;
@@ -16440,6 +17495,7 @@ var $;
 ;
 "use strict";
 
+
 ;
 "use strict";
 var $;
@@ -16645,6 +17701,7 @@ var $;
 ;
 "use strict";
 
+
 ;
 "use strict";
 var $;
@@ -16718,6 +17775,7 @@ var $;
 ;
 "use strict";
 
+
 ;
 "use strict";
 var $;
@@ -16727,6 +17785,7 @@ var $;
         class $mol_link_iconed extends $.$mol_link_iconed {
             icon() {
                 return `https://favicon.yandex.net/favicon/${this.host()}?color=0,0,0,0&size=32&stub=1`;
+                // return `https://api.faviconkit.com/${ this.host() }/16`
             }
             host() {
                 const base = this.$.$mol_state_arg.href();
@@ -16811,6 +17870,7 @@ var $;
 
 ;
 "use strict";
+
 
 ;
 "use strict";
@@ -16901,6 +17961,7 @@ var $;
 ;
 "use strict";
 
+
 ;
 	($.$mol_frame) = class $mol_frame extends ($.$mol_embed_native) {
 		allow(){
@@ -16947,14 +18008,19 @@ var $;
 ;
 "use strict";
 
+
 ;
 "use strict";
 var $;
 (function ($) {
     var $$;
     (function ($$) {
+        /**
+         * @see https://mol.hyoo.ru/#!section=demos/demo=mol_frame_demo
+         */
         class $mol_frame extends $.$mol_frame {
             window() {
+                // if( this.html() ) return ( this.dom_node() as HTMLIFrameElement ).contentWindow!
                 return super.window();
             }
             allow() {
@@ -17043,6 +18109,7 @@ var $;
 ;
 "use strict";
 
+
 ;
 "use strict";
 var $;
@@ -17076,6 +18143,7 @@ var $;
 
 ;
 "use strict";
+
 
 ;
 "use strict";
@@ -17116,6 +18184,7 @@ var $;
 ;
 "use strict";
 
+
 ;
 "use strict";
 var $;
@@ -17152,6 +18221,7 @@ var $;
 
 ;
 "use strict";
+
 
 ;
 "use strict";
@@ -17237,6 +18307,7 @@ var $;
 
 ;
 "use strict";
+
 
 ;
 "use strict";
@@ -17333,12 +18404,17 @@ var $;
 ;
 "use strict";
 
+
 ;
 "use strict";
 var $;
 (function ($) {
     var $$;
     (function ($$) {
+        /**
+         * Component which expands any content on title click.
+         * @see https://mol.hyoo.ru/#!section=demos/demo=mol_expander_demo
+         */
         class $mol_expander extends $.$mol_expander {
             rows() {
                 return [
@@ -17668,12 +18744,17 @@ var $;
 ;
 "use strict";
 
+
 ;
 "use strict";
 var $;
 (function ($) {
     var $$;
     (function ($$) {
+        /**
+         * Markdown visualizer.
+         * @see https://mol.hyoo.ru/#!section=demos/demo=mol_text_demo
+         */
         class $mol_text extends $.$mol_text {
             flow_tokens() {
                 const tokens = [];
@@ -18020,6 +19101,7 @@ var $;
 ;
 "use strict";
 
+
 ;
 	($.$mol_icon_gift_outline) = class $mol_icon_gift_outline extends ($.$mol_icon) {
 		path(){
@@ -18030,6 +19112,7 @@ var $;
 
 ;
 "use strict";
+
 
 ;
 	($.$mol_icon_eye) = class $mol_icon_eye extends ($.$mol_icon) {
@@ -18042,6 +19125,7 @@ var $;
 ;
 "use strict";
 
+
 ;
 	($.$mol_icon_account) = class $mol_icon_account extends ($.$mol_icon) {
 		path(){
@@ -18052,6 +19136,7 @@ var $;
 
 ;
 "use strict";
+
 
 ;
 	($.$mol_icon_account_group) = class $mol_icon_account_group extends ($.$mol_icon) {
@@ -18064,6 +19149,7 @@ var $;
 ;
 "use strict";
 
+
 ;
 	($.$mol_icon_account_group_outline) = class $mol_icon_account_group_outline extends ($.$mol_icon) {
 		path(){
@@ -18074,6 +19160,7 @@ var $;
 
 ;
 "use strict";
+
 
 ;
 	($.$mol_icon_bullhorn) = class $mol_icon_bullhorn extends ($.$mol_icon) {
@@ -18086,6 +19173,7 @@ var $;
 ;
 "use strict";
 
+
 ;
 	($.$mol_icon_bullhorn_outline) = class $mol_icon_bullhorn_outline extends ($.$mol_icon) {
 		path(){
@@ -18096,6 +19184,7 @@ var $;
 
 ;
 "use strict";
+
 
 ;
 	($.$mol_icon_chart_bar) = class $mol_icon_chart_bar extends ($.$mol_icon) {
@@ -18108,6 +19197,7 @@ var $;
 ;
 "use strict";
 
+
 ;
 	($.$mol_icon_chart_bar_stacked) = class $mol_icon_chart_bar_stacked extends ($.$mol_icon) {
 		path(){
@@ -18118,6 +19208,7 @@ var $;
 
 ;
 "use strict";
+
 
 ;
 	($.$mol_string_button) = class $mol_string_button extends ($.$mol_string) {};
@@ -18133,6 +19224,7 @@ var $;
 ;
 "use strict";
 
+
 ;
 	($.$piterjs_image) = class $piterjs_image extends ($.$mol_image) {
 		link(){
@@ -18146,6 +19238,7 @@ var $;
 
 ;
 "use strict";
+
 
 ;
 	($.$piterjs_speech_snippet) = class $piterjs_speech_snippet extends ($.$mol_link) {
@@ -18221,6 +19314,7 @@ var $;
 ;
 "use strict";
 
+
 ;
 "use strict";
 var $;
@@ -18264,6 +19358,7 @@ var $;
             alignItems: 'flex-start',
             Photo: {
                 width: rem(5),
+                // aspectRatio: 1,
                 height: `100%`,
             },
             Info: {
@@ -18316,6 +19411,7 @@ var $;
 ;
 "use strict";
 
+
 ;
 	($.$mol_status) = class $mol_status extends ($.$mol_view) {
 		message(){
@@ -18338,6 +19434,7 @@ var $;
 
 ;
 "use strict";
+
 
 ;
 "use strict";
@@ -18382,6 +19479,7 @@ var $;
 
 ;
 "use strict";
+
 
 ;
 	($.$mol_form) = class $mol_form extends ($.$mol_list) {
@@ -18486,12 +19584,17 @@ var $;
 ;
 "use strict";
 
+
 ;
 "use strict";
 var $;
 (function ($) {
     var $$;
     (function ($$) {
+        /**
+         * Form, that contains form fields and action buttons.
+         * @see https://mol.hyoo.ru/#!section=demos/demo=mol_form_demo
+         */
         class $mol_form extends $.$mol_form {
             form_fields() {
                 return [...this.view_find(view => view instanceof $mol_form_field)]
@@ -18593,6 +19696,7 @@ var $;
 
 ;
 "use strict";
+
 
 ;
 	($.$piterjs_meetup_page) = class $piterjs_meetup_page extends ($.$mol_page) {
@@ -19100,6 +20204,7 @@ var $;
 ;
 "use strict";
 
+
 ;
 "use strict";
 var $;
@@ -19265,6 +20370,7 @@ var $;
 ;
 "use strict";
 
+
 ;
 	($.$mol_button_download) = class $mol_button_download extends ($.$mol_button_minor) {
 		Icon(){
@@ -19292,10 +20398,15 @@ var $;
 
 ;
 "use strict";
+/** @jsx $mol_jsx */
 var $;
 (function ($) {
     var $$;
     (function ($$) {
+        /**
+         * Button download file from uri() or a blob()
+         * @see https://mol.hyoo.ru/#!section=demos/demo=mol_button_demo
+         */
         class $mol_button_download extends $.$mol_button_download {
             uri() {
                 return URL.createObjectURL(this.blob());
@@ -19314,6 +20425,7 @@ var $;
 
 ;
 "use strict";
+
 
 ;
 	($.$piterjs_meetup_guests) = class $piterjs_meetup_guests extends ($.$mol_page) {
@@ -19426,6 +20538,7 @@ var $;
 ;
 "use strict";
 
+
 ;
 "use strict";
 var $;
@@ -19521,6 +20634,7 @@ var $;
 ;
 "use strict";
 
+
 ;
 	($.$mol_icon_pencil_outline) = class $mol_icon_pencil_outline extends ($.$mol_icon) {
 		path(){
@@ -19531,6 +20645,7 @@ var $;
 
 ;
 "use strict";
+
 
 ;
 	($.$piterjs_meetup_texts) = class $piterjs_meetup_texts extends ($.$mol_page) {
@@ -19700,6 +20815,7 @@ var $;
 
 ;
 "use strict";
+
 
 ;
 "use strict";
@@ -19871,6 +20987,7 @@ var $;
 ;
 "use strict";
 
+
 ;
 "use strict";
 var $;
@@ -19896,6 +21013,7 @@ var $;
 ;
 "use strict";
 
+
 ;
 	($.$mol_svg_title) = class $mol_svg_title extends ($.$mol_svg) {
 		dom_name(){
@@ -19909,6 +21027,7 @@ var $;
 
 ;
 "use strict";
+
 
 ;
 	($.$mol_plot_graph) = class $mol_plot_graph extends ($.$mol_svg_group) {
@@ -20064,6 +21183,7 @@ var $;
 ;
 "use strict";
 
+
 ;
 "use strict";
 var $;
@@ -20179,6 +21299,7 @@ var $;
 ;
 "use strict";
 
+
 ;
 "use strict";
 var $;
@@ -20240,6 +21361,7 @@ var $;
 
 ;
 "use strict";
+
 
 ;
 "use strict";
@@ -20406,6 +21528,7 @@ var $;
 ;
 "use strict";
 
+
 ;
 "use strict";
 var $;
@@ -20475,6 +21598,7 @@ var $;
             }
             front() {
                 return [
+                    // this.Background(),
                     ...this.labels_formatted(),
                     this.Title()
                 ];
@@ -20525,6 +21649,7 @@ var $;
 
 ;
 "use strict";
+
 
 ;
 "use strict";
@@ -20591,6 +21716,7 @@ var $;
 
 ;
 "use strict";
+
 
 ;
 "use strict";
@@ -20717,6 +21843,7 @@ var $;
 ;
 "use strict";
 
+
 ;
 "use strict";
 var $;
@@ -20797,6 +21924,7 @@ var $;
 
 ;
 "use strict";
+
 
 ;
 "use strict";
@@ -20928,6 +22056,7 @@ var $;
 "use strict";
 var $;
 (function ($) {
+    // 00 HHHHH HHHHH HHHHH LLLLL LLLLL LLLLL
     const mask = 0b11111_11111_11111;
     function $mol_coord_pack(high, low) {
         return (high << 17 >>> 2) | (low & mask);
@@ -20946,6 +22075,7 @@ var $;
 ;
 "use strict";
 
+
 ;
 "use strict";
 var $;
@@ -20958,6 +22088,7 @@ var $;
             }
             indexes() {
                 const radius = this.diameter() / 2;
+                // calculate by cpu
                 const points_max = this.points_max();
                 const viewport = this.viewport();
                 const viewport_left = viewport.x.min - radius;
@@ -21120,6 +22251,7 @@ var $;
 ;
 "use strict";
 
+
 ;
 "use strict";
 var $;
@@ -21246,6 +22378,7 @@ var $;
 
 ;
 "use strict";
+
 
 ;
 "use strict";
@@ -21375,12 +22508,16 @@ var $;
 ;
 "use strict";
 
+
 ;
 "use strict";
 var $;
 (function ($) {
     var $$;
     (function ($$) {
+        /**
+         * @see https://mol.hyoo.ru/#!section=demos/demo=mol_gallery_demo
+         */
         class $mol_gallery extends $.$mol_gallery {
             sub() {
                 const items = this.items();
@@ -21470,6 +22607,7 @@ var $;
 
 ;
 "use strict";
+
 
 ;
 "use strict";
@@ -21689,12 +22827,17 @@ var $;
 ;
 "use strict";
 
+
 ;
 "use strict";
 var $;
 (function ($) {
     var $$;
     (function ($$) {
+        /**
+         * Plugin for touch gestures.
+         * @see [mol_plugin](../plugin/readme.md)
+         */
         class $mol_touch extends $.$mol_touch {
             auto() {
                 this.pointer_events();
@@ -22163,12 +23306,17 @@ var $;
 ;
 "use strict";
 
+
 ;
 "use strict";
 var $;
 (function ($) {
     var $$;
     (function ($$) {
+        /**
+         * Fastest plot lib for vector graphics.
+         * @see https://mol.hyoo.ru/#!section=demos/demo=mol_plot_demo
+         */
         class $mol_plot_pane extends $.$mol_plot_pane {
             dimensions() {
                 const graphs = this.graphs();
@@ -22442,6 +23590,7 @@ var $;
 ;
 "use strict";
 
+
 ;
 	($.$piterjs_meetup_stats) = class $piterjs_meetup_stats extends ($.$mol_page) {
 		joined_moments(){
@@ -22607,6 +23756,7 @@ var $;
 ;
 "use strict";
 
+
 ;
 "use strict";
 var $;
@@ -22757,12 +23907,17 @@ var $;
 ;
 "use strict";
 
+
 ;
 "use strict";
 var $;
 (function ($) {
     var $$;
     (function ($$) {
+        /**
+         * List of checkboxes
+         * @see https://mol.hyoo.ru/#!section=demos/demo=mol_check_list_demo
+         */
         class $mol_check_list extends $.$mol_check_list {
             options() {
                 return {};
@@ -22819,12 +23974,17 @@ var $;
 ;
 "use strict";
 
+
 ;
 "use strict";
 var $;
 (function ($) {
     var $$;
     (function ($$) {
+        /**
+         * Buttons which switching the state
+         * @see https://mol.hyoo.ru/#!section=demos/demo=mol_switch_demo
+         */
         class $mol_switch extends $.$mol_switch {
             value(next) {
                 return $mol_state_session.value(`${this}.value()`, next) ?? '';
@@ -22851,6 +24011,7 @@ var $;
 ;
 "use strict";
 
+
 ;
 	($.$mol_icon_clock_outline) = class $mol_icon_clock_outline extends ($.$mol_icon) {
 		path(){
@@ -22861,6 +24022,7 @@ var $;
 
 ;
 "use strict";
+
 
 ;
 	($.$mol_pick_time) = class $mol_pick_time extends ($.$mol_pick) {
@@ -22950,12 +24112,17 @@ var $;
 ;
 "use strict";
 
+
 ;
 "use strict";
 var $;
 (function ($) {
     var $$;
     (function ($$) {
+        /**
+         * Time picker.
+         * @see https://mol.hyoo.ru/#!section=demos/demo=mol_pick_time_demo
+         */
         class $mol_pick_time extends $.$mol_pick_time {
             trigger_content() {
                 return [this.value_moment().toString('hh:mm.sss') || this.Icon()];
@@ -23132,6 +24299,7 @@ var $;
 ;
 "use strict";
 
+
 ;
 "use strict";
 var $;
@@ -23276,6 +24444,7 @@ var $;
 ;
 "use strict";
 
+
 ;
 "use strict";
 var $;
@@ -23304,6 +24473,7 @@ var $;
 
 ;
 "use strict";
+
 
 ;
 	($.$mol_button_open) = class $mol_button_open extends ($.$mol_button_minor) {
@@ -23374,6 +24544,7 @@ var $;
 ;
 "use strict";
 
+
 ;
 "use strict";
 var $;
@@ -23388,12 +24559,17 @@ var $;
                     return files;
                 }
                 catch (error) {
+                    // Calling actions from catch section, if throwing promise breaks idempotency
                     Promise.resolve().then(() => this.status([error]));
                     $mol_fail_hidden(error);
                 }
             }
         }
         $$.$mol_button_open = $mol_button_open;
+        /**
+         * File open button
+         * @see https://mol.hyoo.ru/#!section=demos/demo=mol_button_demo
+         */
         class $mol_button_open_native extends $.$mol_button_open_native {
             dom_node() {
                 return super.dom_node();
@@ -23500,6 +24676,7 @@ var $;
 "use strict";
 var $;
 (function ($) {
+    /** Image processing. */
     class $mol_picture extends $mol_object2 {
         canvas;
         constructor(canvas) {
@@ -23579,6 +24756,7 @@ var $;
 ;
 "use strict";
 
+
 ;
 "use strict";
 var $;
@@ -23631,6 +24809,8 @@ var $;
             alignItems: 'flex-start',
             flexWrap: 'wrap',
             Photo: {
+                // width: rem(21),
+                // height: rem(21),
                 flex: {
                     grow: 0,
                     shrink: 1,
@@ -23682,6 +24862,7 @@ var $;
 
 ;
 "use strict";
+
 
 ;
 	($.$piterjs_speech_page) = class $piterjs_speech_page extends ($.$mol_page) {
@@ -23970,6 +25151,7 @@ var $;
 
 ;
 "use strict";
+/** @jsx $mol_jsx */
 var $;
 (function ($) {
     async function $mol_dom_capture_svg(root) {
@@ -23984,16 +25166,17 @@ var $;
         }
         function clone(el) {
             const re = el.cloneNode();
+            // if( el === root ) document.body.appendChild( re )
             if (el instanceof HTMLImageElement && !/^(data|blob):/.test(el.src)) {
                 const canvas = $mol_jsx("canvas", { width: el.naturalWidth, height: el.naturalHeight });
                 const context = canvas.getContext('2d');
                 context.drawImage(el, 0, 0);
                 try {
                     ;
-                    re.src = canvas.toDataURL();
+                    re.src = canvas.toDataURL(); // external urls don't works
                 }
                 catch (error) {
-                    $mol_fail_log(error);
+                    $mol_fail_log(error); // CORS don't supported
                 }
             }
             if (re instanceof HTMLInputElement) {
@@ -24024,6 +25207,7 @@ var $;
                 restyle(kid, after);
                 re.appendChild(kid);
             }
+            // if( el === root ) document.body.removeChild( re )
             return re;
         }
         const { width, height } = root.getBoundingClientRect();
@@ -24059,6 +25243,7 @@ var $;
 
 ;
 "use strict";
+
 
 ;
 "use strict";
@@ -24150,6 +25335,12 @@ var $;
                 },
             },
             Links: {
+                // margin: {
+                // 	top : rem(-1),
+                // 	right : 0,
+                // 	bottom : 0,
+                // 	left : 0,
+                // },
                 flex: {
                     wrap: 'wrap',
                 },
@@ -24220,6 +25411,7 @@ var $;
 
 ;
 "use strict";
+
 
 ;
 "use strict";
@@ -24306,6 +25498,7 @@ var $;
 ;
 "use strict";
 
+
 ;
 "use strict";
 var $;
@@ -24341,6 +25534,7 @@ var $;
 ;
 "use strict";
 
+
 ;
 	($.$mol_icon_lead_pencil) = class $mol_icon_lead_pencil extends ($.$mol_icon) {
 		path(){
@@ -24351,6 +25545,7 @@ var $;
 
 ;
 "use strict";
+
 
 ;
 	($.$mol_icon_script) = class $mol_icon_script extends ($.$mol_icon) {
@@ -24363,6 +25558,7 @@ var $;
 ;
 "use strict";
 
+
 ;
 	($.$mol_icon_script_text) = class $mol_icon_script_text extends ($.$mol_icon) {
 		path(){
@@ -24373,6 +25569,7 @@ var $;
 
 ;
 "use strict";
+
 
 ;
 	($.$mol_link_source) = class $mol_link_source extends ($.$mol_link) {
@@ -24392,6 +25589,7 @@ var $;
 
 ;
 "use strict";
+
 
 ;
 	($.$mol_svg_image) = class $mol_svg_image extends ($.$mol_svg) {
@@ -24438,6 +25636,7 @@ var $;
 
 ;
 "use strict";
+
 
 ;
 "use strict";
@@ -24517,6 +25716,7 @@ var $;
 ;
 "use strict";
 
+
 ;
 "use strict";
 var $;
@@ -24571,6 +25771,18 @@ var $;
                 const scale = scale_x / 2 ** level + .5 / tile_size[1];
                 return `translate3d(${pos_x}px,${pos_y}px,0px) scale(${scale})`;
             }
+            // @ $mol_mem_key
+            // override tile_pos( id: Id ) {
+            // 	const [ level, x, y ] = id
+            // 	const [ shift_x, shift_y ] = this.shift()
+            // 	const [ scale_x, scale_y ] = this.scale()
+            // 	const count = 1 << level
+            // 	const tile_size = this.tile_size_real()
+            // 	return [
+            // 		Math.floor( ( x / count - .5 ) * tile_size * scale_x + shift_x ) ,
+            // 		Math.floor( ( y / count - .5 ) * tile_size * scale_y + shift_y ) ,
+            // 	]
+            // }
             tile_at(pos) {
                 const [level, x, y] = pos;
                 const count = 1 << level;
@@ -24580,6 +25792,16 @@ var $;
                     Math.floor((y / tile_size[1] + .5) * count),
                 ];
             }
+            // @ $mol_mem_key
+            // override tile_size( id: Id ) {
+            // 	const [ level ] = id
+            // 	const [ scale_x, scale_y ] = this.scale()
+            // 	const tile_size = this.tile_size_real()
+            // 	return [
+            // 		Math.ceil( tile_size * scale_x / 2**level ) ,
+            // 		Math.ceil( tile_size * scale_y / 2**level ) ,
+            // 	]
+            // }
             back() {
                 return [this];
             }
@@ -24633,6 +25855,7 @@ var $;
 
 ;
 "use strict";
+
 
 ;
 "use strict";
@@ -24866,6 +26089,11 @@ var $;
 "use strict";
 var $;
 (function ($) {
+    /**
+     * Combines list of unary functions/classes to one function.
+     *
+     * 	const reparse = $mol_data_pipe( JSON.stringify , JSON.parse )
+     **/
     function $mol_data_pipe(...funcs) {
         return $mol_data_setup(function (input) {
             let value = input;
@@ -24881,6 +26109,10 @@ var $;
 "use strict";
 var $;
 (function ($) {
+    /**
+     * Checks for string and returns string type.
+     * @see https://mol.hyoo.ru/#!section=demos/demo=mol_data_string_demo
+     */
     $.$mol_data_string = (val) => {
         if (typeof val === 'string')
             return val;
@@ -24892,6 +26124,10 @@ var $;
 "use strict";
 var $;
 (function ($) {
+    /**
+     * Checks for array of given runtype and returns expected type.
+     * @see https://mol.hyoo.ru/#!section=demos/demo=mol_data_array_demo
+     */
     function $mol_data_array(sub) {
         return $mol_data_setup((val) => {
             if (!Array.isArray(val))
@@ -24919,6 +26155,10 @@ var $;
 "use strict";
 var $;
 (function ($) {
+    /**
+     * Checks for record of given fields with by its runtypes and returns expected type.
+     * @see https://mol.hyoo.ru/#!section=demos/demo=mol_data_record_demo
+     */
     function $mol_data_record(sub) {
         return $mol_data_setup((val) => {
             let res = {};
@@ -25143,6 +26383,7 @@ var $;
             });
             return Object.assign(promise, {
                 destructor: () => {
+                    // Abort of done request breaks response parsing
                     if (!done && !controller.signal.aborted)
                         controller.abort();
                 },
@@ -25257,6 +26498,7 @@ var $;
 
 ;
 "use strict";
+
 
 ;
 "use strict";
@@ -25437,6 +26679,7 @@ var $;
 ;
 "use strict";
 
+
 ;
 "use strict";
 var $;
@@ -25521,6 +26764,7 @@ var $;
 
 ;
 "use strict";
+
 
 ;
 "use strict";
@@ -25623,6 +26867,10 @@ var $;
 "use strict";
 var $;
 (function ($) {
+    /**
+     * Checks for undefined or passing given runtype.
+     * @see https://mol.hyoo.ru/#!section=demos/demo=mol_data_optional_demo
+     */
     function $mol_data_optional(sub, fallback) {
         return $mol_data_setup((val) => {
             if (val === undefined) {
@@ -25638,6 +26886,10 @@ var $;
 "use strict";
 var $;
 (function ($) {
+    /**
+     * Checks for boolean and returns boolean type.
+     * @see https://mol.hyoo.ru/#!section=demos/demo=mol_data_boolean_demo
+     */
     $.$mol_data_boolean = (val) => {
         if (typeof val === 'boolean')
             return val;
@@ -25647,6 +26899,7 @@ var $;
 
 ;
 "use strict";
+
 
 ;
 "use strict";
@@ -25779,6 +27032,7 @@ var $;
 ;
 "use strict";
 
+
 ;
 "use strict";
 var $;
@@ -25831,6 +27085,7 @@ var $;
 
 ;
 "use strict";
+
 
 ;
 	($.$hyoo_meta_rights) = class $hyoo_meta_rights extends ($.$mol_page) {
@@ -25972,6 +27227,7 @@ var $;
 
 ;
 "use strict";
+
 
 ;
 "use strict";
@@ -26172,6 +27428,12 @@ var $;
         }
         pages_node() {
             const pages = this.sub('pages', $hyoo_crowd_list);
+            // if( this.editable() ) {
+            // 	for( const bookmark of this.bookmarks() ) {
+            // 		if( bookmark.book() !== this ) continue
+            // 		pages.add( bookmark.id() )
+            // 	}
+            // }
             return pages;
         }
         pages(next) {
@@ -26409,6 +27671,7 @@ var $;
 ;
 "use strict";
 
+
 ;
 "use strict";
 var $;
@@ -26456,6 +27719,7 @@ var $;
 
 ;
 "use strict";
+
 
 ;
 	($.$mol_drag) = class $mol_drag extends ($.$mol_ghost) {
@@ -26523,12 +27787,16 @@ var $;
 ;
 "use strict";
 
+
 ;
 "use strict";
 var $;
 (function ($) {
     var $$;
     (function ($$) {
+        /**
+         * @see https://mol.hyoo.ru/#!section=demos/demo=mol_drag_demo
+         */
         class $mol_drag extends $.$mol_drag {
             status(next = 'ready') { return next; }
             drag_start(event) {
@@ -26629,6 +27897,7 @@ var $;
 ;
 "use strict";
 
+
 ;
 "use strict";
 var $;
@@ -26643,6 +27912,7 @@ var $;
                     return;
                 if (!this.enabled())
                     return;
+                // if( !this.adopt( event.dataTransfer! ) ) return
                 const action = this.decide_action(event);
                 event.dataTransfer.dropEffect = action;
                 if (action !== 'none')
@@ -26655,6 +27925,7 @@ var $;
                     return;
                 if (!this.enabled())
                     return;
+                // if( !this.adopt( event.dataTransfer! ) ) return
                 event.dataTransfer.dropEffect = this.decide_action(event);
                 event.preventDefault();
             }
@@ -26706,6 +27977,7 @@ var $;
 ;
 "use strict";
 
+
 ;
 	($.$mol_icon_pin_outline) = class $mol_icon_pin_outline extends ($.$mol_icon) {
 		path(){
@@ -26716,6 +27988,7 @@ var $;
 
 ;
 "use strict";
+
 
 ;
 	($.$hyoo_meta_menu_items) = class $hyoo_meta_menu_items extends ($.$mol_list) {
@@ -26951,6 +28224,7 @@ var $;
 
 ;
 "use strict";
+/* @jsx $mol_jsx */
 var $;
 (function ($) {
     var $$;
@@ -27078,6 +28352,7 @@ var $;
 
 ;
 "use strict";
+
 
 ;
 "use strict";
@@ -27380,6 +28655,7 @@ var $;
 
 ;
 "use strict";
+/* @jsx $mol_jsx */
 var $;
 (function ($) {
     var $$;
@@ -27474,6 +28750,7 @@ var $;
 ;
 "use strict";
 
+
 ;
 "use strict";
 var $;
@@ -27535,6 +28812,7 @@ var $;
 
 ;
 "use strict";
+
 
 ;
 "use strict";
@@ -27653,12 +28931,17 @@ var $;
 ;
 "use strict";
 
+
 ;
 "use strict";
 var $;
 (function ($) {
     var $$;
     (function ($$) {
+        /**
+         * Paginator UI component
+         * @see https://mol.hyoo.ru/#!section=demos/demo=mol_paginator_demo
+         */
         class $mol_paginator extends $.$mol_paginator {
             backward(event) {
                 if (event.defaultPrevented)
@@ -27739,6 +29022,7 @@ var $;
 ;
 "use strict";
 
+
 ;
 "use strict";
 var $;
@@ -27810,6 +29094,7 @@ var $;
 ;
 "use strict";
 
+
 ;
 	($.$mol_icon_information_outline) = class $mol_icon_information_outline extends ($.$mol_icon) {
 		path(){
@@ -27820,6 +29105,7 @@ var $;
 
 ;
 "use strict";
+
 
 ;
 	($.$mol_icon_bookmark) = class $mol_icon_bookmark extends ($.$mol_icon) {
@@ -27832,6 +29118,7 @@ var $;
 ;
 "use strict";
 
+
 ;
 	($.$mol_icon_bookmark_outline) = class $mol_icon_bookmark_outline extends ($.$mol_icon) {
 		path(){
@@ -27842,6 +29129,7 @@ var $;
 
 ;
 "use strict";
+
 
 ;
 	($.$hyoo_page_side_view) = class $hyoo_page_side_view extends ($.$mol_page) {
@@ -28115,6 +29403,7 @@ var $;
 ;
 "use strict";
 
+
 ;
 "use strict";
 var $;
@@ -28241,6 +29530,13 @@ var $;
             },
             color: $mol_theme.special,
         },
+        // Author_list: {
+        // 	flex: {
+        // 		wrap: 'wrap',
+        // 		shrink: 1,
+        // 	},
+        // 	justifyContent: 'flex-end',
+        // },
     });
 })($ || ($ = {}));
 
@@ -28255,6 +29551,7 @@ var $;
 ;
 "use strict";
 
+
 ;
 	($.$mol_icon_export) = class $mol_icon_export extends ($.$mol_icon) {
 		path(){
@@ -28265,6 +29562,7 @@ var $;
 
 ;
 "use strict";
+
 
 ;
 	($.$hyoo_page_side_edit) = class $hyoo_page_side_edit extends ($.$mol_page) {
@@ -28601,6 +29899,7 @@ var $;
 
 ;
 "use strict";
+/** @jsx $mol_jsx */
 var $;
 (function ($) {
     const NL = '\n';
@@ -28778,6 +30077,7 @@ var $;
 ;
 "use strict";
 
+
 ;
 "use strict";
 var $;
@@ -28800,6 +30100,8 @@ var $;
             copy_text() {
                 const view = this.Details_edit().View();
                 let details = this.content_full()
+                    // .replaceAll( /^=+ /gm, ( prefix: string )=> prefix.replaceAll( '=', '#' ) ) // MD heading
+                    // .replaceAll( /^(" )+/gm, ( prefix: string )=> prefix.replaceAll( '" ', '> ' ) ) // MD quotes
                     .replaceAll(/\\\\(?:([^\\]+?)\\)?([^\\]+?)\\\\/gm, (whole, title, link) => title
                     ? `\\\\${title}\\${view.uri_resolve(link)}\\\\`
                     : `\\\\${view.uri_resolve(link)}\\\\`);
@@ -29150,6 +30452,7 @@ var $;
 ;
 "use strict";
 
+
 ;
 "use strict";
 var $;
@@ -29374,12 +30677,17 @@ var $;
 ;
 "use strict";
 
+
 ;
 "use strict";
 var $;
 (function ($) {
     var $$;
     (function ($$) {
+        /**
+         * Password input field
+         * @see https://mol.hyoo.ru/#!section=demos/demo=mol_password_demo
+         */
         class $mol_password extends $.$mol_password {
             checked(next) {
                 this.type(next ? 'text' : 'password');
@@ -29598,6 +30906,7 @@ var $;
 ;
 "use strict";
 
+
 ;
 "use strict";
 var $;
@@ -29658,9 +30967,9 @@ var $;
             import_switch() {
                 this.yard().peer(this.key_new());
                 this.password('');
-                this.key_import(null);
-                this.$.$mol_wait_rest();
-                this.$.$mol_dom_context.location.reload();
+                this.key_import(null); // 
+                this.$.$mol_wait_rest(); // wait for url sync
+                this.$.$mol_dom_context.location.reload(); // peer isn't reactive yet
             }
             key_export() {
                 const pass = this.password();
@@ -29755,6 +31064,7 @@ var $;
 
 ;
 "use strict";
+
 
 ;
 	($.$hyoo_page_menu) = class $hyoo_page_menu extends ($.$hyoo_meta_menu) {
@@ -29857,6 +31167,7 @@ var $;
 
 ;
 "use strict";
+
 
 ;
 "use strict";
@@ -30143,6 +31454,7 @@ var $;
 ;
 "use strict";
 
+
 ;
 "use strict";
 var $;
@@ -30241,6 +31553,7 @@ var $;
                 const id = this.side_current_id();
                 const book = this.book_id();
                 return [
+                    // this.News(),
                     this.Gap('left'),
                     ...book ? [this.Side_menu()] : [],
                     this.View(id),
@@ -30773,6 +32086,7 @@ var $;
 ;
 "use strict";
 
+
 ;
 "use strict";
 var $;
@@ -30820,6 +32134,7 @@ var $;
             speech_id(next) { return this.$.$mol_state_arg.value('speech', next); }
             speech(id) { return this.Domain().world().Fund($piterjs_speech).Item(id); }
             speaker_id(next) { return this.$.$mol_state_arg.value('speaker', next); }
+            // speaker( id : string ) { return $piterjs_speaker.item( id ) }
             pages() {
                 if (this.intro() != null)
                     return [this.Intro()];
@@ -30996,6 +32311,7 @@ var $node = $node || {} ; $node[ "/piterjs/app/n6cy9h_41olxb!n6cy9h_41olxb.bin" 
 ;
 "use strict";
 
+
 ;
 	($.$piterjs_link) = class $piterjs_link extends ($.$mol_link) {
 		Button(){
@@ -31020,6 +32336,7 @@ var $;
 ;
 "use strict";
 
+
 ;
 	($.$mol_icon_help) = class $mol_icon_help extends ($.$mol_icon) {
 		path(){
@@ -31030,6 +32347,7 @@ var $;
 
 ;
 "use strict";
+
 
 ;
 	($.$mol_icon_help_circle) = class $mol_icon_help_circle extends ($.$mol_icon) {
@@ -31042,6 +32360,7 @@ var $;
 ;
 "use strict";
 
+
 ;
 	($.$mol_icon_help_circle_outline) = class $mol_icon_help_circle_outline extends ($.$mol_icon) {
 		path(){
@@ -31052,6 +32371,7 @@ var $;
 
 ;
 "use strict";
+
 
 ;
 	($.$mol_hint) = class $mol_hint extends ($.$mol_check) {
@@ -31084,6 +32404,7 @@ var $;
 
 ;
 "use strict";
+
 
 ;
 "use strict";
@@ -31342,6 +32663,7 @@ var $;
 ;
 "use strict";
 
+
 ;
 	($.$piterjs_intro_page) = class $piterjs_intro_page extends ($.$mol_view) {
 		title(){
@@ -31386,6 +32708,7 @@ var $;
 
 ;
 "use strict";
+
 
 ;
 	($.$piterjs_logo) = class $piterjs_logo extends ($.$mol_svg_root) {
@@ -31438,6 +32761,7 @@ var $;
 ;
 "use strict";
 
+
 ;
 var $node = $node || {} ; $node[ "/piterjs/logo/logo_1024.png" ] = "data:image/png;base64,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TlTl/5AWRCMBEiABEiABEiABEnARoAOAT0LcErj28mzJz+UjHrc3mBMjAT8EmP/vBxA/JgESIAESIAESaHYEuDpqdre8+Uw4R4X/jhiS3XwmzJmSAAm4ETixM/P/3YDwBxIgARIgARIggWZPgA6AZv8IxDeAAednSmZLhgDH913m7EjAm8ABeycLUoFoJEACJEACJEACJEACBgE6AAwWfBeHBLKzWki/czLjcGacEgmQQGMEunXh7n9jfPgZCZAACZAACZBA8yRAB0DzvO/NatZD+9EB0KxuOCdLAopAt65p5EACJEACJEACJEACJOBBgA4ADyD8Mf4I7LJjshzGUmDxd2M5IxLwQSArM0E6HZrq41MeJgESIAESIAESIIHmS4AOgOZ775vVzI86jIuBZnXDOdlmTeD4o9MkKYnaH836IeDkSYAESIAESIAELAkkVP7Rod7yEx4kgTgiUFtbL7W1cTShZjyVvY79T1aV2r+ZE+7Kk/7UgWhWT0yi0v5LTKQDoFnddE6WBEiABEiABEjAFoEkW63YiARinAAWA1gU0GKfQEKA67okde9TUgI8KfYxcQYkQAIkQAIkQAIkQAIk4EWAKQBeSHiABEiABEiABEiABEiABEiABEiABOKPAB0A8XdPOSMSIAESIAESIAESIAESIAESIAES8CJAB4AXEh4gARIgARIgARIgARIgARIgARIggfgjQAdA/N1TzogESIAESIAESIAESIAESIAESIAEvAjQAeCFhAdIgARIgARIgARIgARIgARIgARIIP4I0AEQf/eUMyIBEiABEiABEiABEiABEiABEiABLwJ0AHgh4QESIAESIAESIAESIAESIAESIAESiD8CdADE3z3ljEiABEiABEiABEiABEiABEiABEjAiwAdAF5IeIAESIAESIAESIAESIAESIAESIAE4o8AHQDxd085IxIgARIgARIgARIgARIgARIgARLwIkAHgBcSHiABEiABEiABEiABEiABEiABEiCB+CNAB0D83VPOiARIgARIgARIgARIgARIgARIgAS8CNAB4IWEB0iABEiABEiABEiABEiABEiABEgg/gjQARB/95QzIgESIAESIAESIAESIAESIAESIAEvAnQAeCHhARIgARIgARIgARIgARIgARIgARKIPwJ0AMTfPeWMSIAESIAESIAESIAESIAESIAESMCLAB0AXkh4gARIgARIgARIgARIgARIgARIgATijwAdAPF3TzkjEiABEiABEiABEiABEiABEiABEvAiQAeAFxIeIAESIAESIAESIAESIAESIAESIIH4I0AHQPzdU86IBEiABEiABEiABEiABEiABEiABLwI0AHghYQHSIAESIAESIAESIAESIAESIAESCD+CNABEH/3lDMiARIgARIgARIgARIgARIgARIgAS8CdAB4IeEBEiABEiABEiABEiABEiABEiABEog/AnQAxN895YxIgARIgARIgARIgARIgARIgARIwIsAHQBeSHiABEiABEiABEiABEiABEiABEiABOKPAB0A8XdPOSMSiEsCdXX18to7lbJxc11A8/vgs62yqrQ2oHPYmARIgARIgARIgARIgATikUBC5R8d6uNxYpwTCZBAfBBYs65WJj2xSeY+UyErVwe3kG+hXJ0ndU6Tof2zpFuX9PgAw1mQAAmQAAmQAAmQAAmQQIAE6AAIEBibkwAJRIZAdXW9PDp7k4yZuEE2bHLOT3nc0Wky5qZcOWCflMhMhFchARIgARIgARIgARIggSghQAdAlNwIDoMESMAg8L/ft8l5Q8rlh1+2GQcdfJeQIHLrNTlyw7BsScAPNBIgARIgARIgARIgARJoBgSoAdAMbjKnSAKxROD5l7fIUaevDtviHyzqVUDBnQ9ukN4DymT9xsA0BWKJJcdKAiRAAiRAAiRAAiRAAmYCdACYafA9CZBAkxJY8EKFXDC0XDZXOBfy39iEXn6zSnpeXCqbAhQWbKxPfkYCJEACJEACJEACJEAC0UqADoBovTMcFwk0MwJLX9kiA69bo+3OR3Lqn39TrUUCVFYxEiCS3HktEiABEiABEiABEiCByBOgAyDyzHlFEiABDwK//blN+l29RmqDE/n36C3wH9/7ZKtcd8e6wE/kGSRAAiRAAiRAAiRAAiQQQwToAIihm8WhkkA8EqitrZcB166RyqrIhP37YjhzQYW8/Galr495nARIgARIgARIgARIgARingAdADF/CzkBEohtAtPmbpaPv6yOikkMvWGtVG1tWkdEVIDgIEiABEiABEiABEiABOKSAB0AcXlbOSkSiA0C27bVy0PTN0bNYFeV1srcZzZHzXg4EBIgARIgARIgARIgARJwkgAdAE7SZF8kQAIBEYDq/7+rmijx38dIH5q+SWkRMArABx4eJgESIAESIAESIAESiGECdADE8M3j0Ekg1gnMf35L1E3hj79roiYlIergcEAkQAIkQAIkQAIkQAIxTYAOgJi+fRw8CcQuAZTd++DTqqicwOvvUgwwKm8MB0UCJEACJEACJEACJBASAToAQsLHk0mABIIl8OFn1bI1OrT/vKbwxnvR6ZjwGigPkAAJkAAJkAAJkAAJkEAABOgACAAWm5IACThH4Le/tjnXmcM9/a7SAGgkQAIkQAIkQAIkQAIkEG8E6ACItzvK+ZBAjBAoKauL2pGWr62TujoKAUbtDeLASIAESIAESIAESIAEgiJAB0BQ2HgSCZBAqATWrIsu9X/zfOqUb2Ldhuh1UJjHyvckQAIkQAIkQAIkQAIkYJcAHQB2SbEdCZCAowTycqL3z09Cgkh2ZvSOz9Ebwc5IgARIgARIgARIgASaDQF+w202t5oTJYHoItCuddL/2bsP8CjKtY3j96YnJAFC6Bbs5RM59t4Litiw9469HNuxK/au2EXsggXsotgVBbGBHVGBA0p673X3m1nEQ0lCkp3Zaf+5Li6S3Zm3/J4hZJ59i7satExr+ucmKDnZyAJwIIAAAggggAACCCDgIwESAD4KJl1BwEsCgwcmura5gwe6NznhWjQahgACCCCAAAIIIOB6ARIArg8RDUTAnwIbrpvs2o5ttJ572+ZaNBqGAAIIIIAAAggg4HoBEgCuDxENRMCfAkNWT9K//s+dD9oH75vhT3R6hQACCCCAAAIIIBBoARIAgQ4/nUfAWYFDR/ZwtgFt1N4zK6Q9d0pr4x1eQgABBBBAAAEEEEDA2wIkALwdP1qPgKcFDh2ZIXPFfTcdBxmf/qekuKxRbgKiLQgggAACCCCAAAKeFWClK8+GjoYj4H2BNVdL0qlHZ+qxCTWu6ExaakiXn9vTFW2hEQgggAACCNghEIlEVFMbUUVVWFXVxp+aiJqb//7ToiVfm3+3LHktHFZ0Z5wUY3ecZGPmnvm3+SfJeIowE+ZLvl9yTqrxfS9jm19zNF3IbRl+OzApEwEPCpAA8GDQaDICfhK47uKeenlKncoqjN8wHD4uPTtbZlKCAwEEEEAAAS8JNDVFlF/UqrzCVuUbf/IKWpZ8X2B8b7xeURmOPvBXVkWMB/6wzId6Ow/z2b+3kQjo3StBOcYf8+vo39HvE6Nf98lJ0BqDk4z/dxM1sF8iCQM7A0LZCCwjEKpfsEZkme/5EgEEEIi7wBPP1+jsK8riXu+yFa69ZpJmvTtQqcYoAA4EEEAAAQTcJtDYGNH8RS36Y0Gzfl9g/P3fZuNr8/slD/tua29X2mOOLFiSDEgy/k6MJuPNhPySP4ka1J8EQVc8OReBjgRIAHSkw3sIIBA3gXOvLNP4ic5MBTA/lfhocn9tsI47dyWIWxCoCAEEEEDAFQLmp/bf/9yk74w/S/5u1sK/WmSM3g/kkZUZ0tANU7TpxsnadKMUDd0oWf+3QbLS01jOLJA3BJ2OSYAEQEx8XIwAAlYJhMMRHXVmid54r96qIjtVTnpaSO9M7KdtNkvt1PmchAACCCCAgJUC5lz8md826otvGjX7J+OB/5cmFZXYPEbfyg44VFaC8ey/3lpJSxICfycGthyWoj69Ex1qEdUi4A0BEgDeiBOtRCAQAg3G8MajzizW1I8b4tJf8xOFCQ/kaq9d0uNSH5UggAACCCBgfro//asGTf+6Mfrnp1+bA/vJvh13wyYbJmvnbVO1y3Zp2nHrVGO9ARICdjhTpncFSAB4N3a0HAFfCpirE9/5SJWuu7PS1kWKhhmfFkx8KFdrr8mwf1/eSDZ1aqOd89RirIzN4YzAs0bCbtvNGa3jjD61dlegviGsT79oNJLb9Xp/WoPmLzSW2OeIm4A5XWDnbdOiSQESAnFjpyIXC5AAcHFwaBoCQRb43Ph05NSLSo05j62WMphDBk8/LlO3XN6bBf8slQ1GYdnrLzK2yApGX93Yy6nGdB3zUz0OBNwuMM9YoM8czfbuJ/WaNrNBjU1ub3Ew2mfuTjDUGCEwcq90HbRPhrGWQEowOk4vEVhGgATAMhh8iQAC7hIwP2md8Eqtbn2gSv/9M7ZPTBKNEYBHHdRDl52TrXWG8Km/uyLtndaQAHA2ViQAnPWn9o4Ffp7bpMlv1enlt+v0+/zY/s/quCbetUrA3AHo4H0zjGRAurYcxugiq1wpx90CJADcHR9ahwAChoCZCJg8pU5vGgsEfvhZvSqrOz8Ee7NNUjR81zQdf1im1lojCU8EYhIgARATX8wXkwCImZACLBb49Y/m6EP/5LdqNXceD/0W88a1uNUHJerA4UYyYN90bbdFqhIS2BY4rgGgsrgJkACIGzUVIYCAFQKtrRF9ObspulpygbGQUlFJqwqKW1XfEFG/3ETjT4IG9E3Uumsla8+d0qKvWVEvZSBgCpAAcPY+IAHgrD+1LxEw/98xR6eZf36ey5wgP94X/Y3fJQ4/oIdOPTpT67NFsB9DHOg+kQAIdPjpPAIIIIBAVwRIAHRFy/pzSQBYb0qJnRMwt6r98LMGPfFCjd76oN4Ymda56zjL+wLmjgKnHZMZHR2QnMyoAO9HlB4wHpZ7AAEEEEAAAQQQQACBNgT+ym/RUy/W6plJNfozz9pFaduojpdcKDBtZqOxkGOj+vYp1wnGdMJTjFEBQ1bnEcqFoaJJnRRgBEAnoTgNAQQQQAABRgA4ew8wAsBZ/yDVPuvHJo19rCq6oF8rz/1BCv0q+2ruJGBOMTRHBYzYI12JiYwKWCUaJ7hKgPSVq8JBYxBAAAEEEEAAAQScEIhEInr7w3qNHV+tz75sdKIJ1OkBAeM20fvTGqJ/zF0EzN2FzF2GkpJIBHggfDTREDB2xOZAAAEEEEAAAQQQQCCYAs3NET0+sUab7pGvQ08r4eE/mLdBt3o9f2GLRl9SpqG75+vpl2qiuxZ1qyAuQiCOAiQA4ohNVQgggAACCCCAAALuEDC3mH3qxRptsluezrmyTH8sYGU/d0TGe634758tOuM/Zfq/XfP0xPM1MpNKHAi4VYAEgFsjQ7sQQAABBBBAAAEELBcwt5N9dnJN9FPbMy8r06LFTPK3HDmgBZr30tlXlEWTSuMnVKupiURAQG8FV3ebBICrw0PjEEAAAQQQQAABBKwSeOnNWg3bMz86bNv81JYDATsEzETAuVeVRxMBk4x7jgMBNwmQAHBTNGgLAggggAACCCCAgOUCX3/XqF1HFeiE80o17788+FsOTIFtCphbRx5v3HPDjyrUL781tXkOLyIQbwESAPEWpz4EEEAAAQQQQACBuAgsLmjRKReWaOeDC/XlbB7A4oJOJSsJTJvZqK1HFOjSG8pVVR1e6X1eQCCeAiQA4qlNXQgggAACCCCAAAK2CzQ0RnTzfZXa1FidfeKrdbbXRwUIrEqg1Vhq4v4nqo17Mk/PvVwjc9tJDgScECAB4IQ6dSKAAAIIIIAAAgjYIjBtZoO23CdfN9xTqbp6HrJsQabQbgsUloR12sVl2v3QQn3/C6NSug3Jhd0WIAHQbTouRAABBBBAAAEEEHCLQEVVWGdeZs63LmKev1uCQjvaFZg5q0nbjSzQlbeWs1tAu0q8YYcACQA7VCkTAQQQQAABBBBAIG4Cr75Tp3/tkaenXmTF9bihU1HMAuYsgLsfrdZOBxVozu/NMZdHAQh0RoAEQGeUOAcBBBBAAAEEEEDAdQKl5a068oxiHX1Wicyh1RwIeFHghznNxmiAfD38dLUXm0+bPSZAAsBjAaO5CCCAAAIIIIAAAtLH0xu01T4Fev3dejgQ8LxAo7EcwIXXleuAE4pUUGysGMiBgE0CJABsgqVYBBBAAAEEEEAAAesFmpoiuuKWco04tkj5RTwoWS9MiU4KvD/NWMRyeL7eeI/dK5yMg5/rJgHg5+jSNwQQQAABBBBAwEcCv81r1i6jCnTPOIZK+yisdGUFgdLysI44vSS6qGVdPVNbVuDh2xgFSADECMjlCCCAAAIIIIAAAvYLTH6rVtvtX6DvfmaxNPu1qcENAuailuZ2gX/mtbihObTBJwIkAHwSSLqBAAIIIIAAAgj4UaC1dcmQ/+POLVVdvbFsOgcCARL4/pdm7XhggWbOagxQr+mqnQIkAOzUpWwEEEAAAQQQQACBbguYq/zvf0IxQ/67LciFfhAoMna4GH5UoZ6dXOOH7tAHhwVIADgcAKpHAAEEEEAAAQQQWFngu5+btL0x5N9c7Z8DgaALNBm7BIy+pEyX31yucJiRMEG/H2LpPwmAWPS4FgEEEEAAAQQQQMBygSkf1EXnPi9azCr/luNSoKcF7n2sWqNOKVZVNYsDejqQDjaeBICD+FSNAAIIIIAAAgggsLzAYxOqdbixAnp9A59yLi/DdwgsEXj3kwbtfHCB5i9kQUzuia4LkADouhlXIIAAAggggAACCNggcM3tFTrvKnOIsw2FUyQCPhKYO6/FSAIUGrtiGHMDOBDoggAJgC5gcSoCCCCAAAIIIICA9QLNzRGd/O8S3fFwlfWFUyICPhUoLQ9rH2NxwC9ns0OAT0NsS7dIANjCSqEIIIAAAggggAACnRFoaIzokFOL9fxrdZ05nXMQQGAZgcrqiPY7tkjTZrJY5jIsfNmBAAmADnB4CwEEEEAAAQQQQMA+gbr6cHRBs/en8fBinzIl+12gti6iA08s1vuf1vu9q/TPAgESABYgUgQCCCCAAAIIIIBA1wRq68I66KRitvnrGhtnI9CmQHQkzWnFevM9RtK0CcSL/wiQAPiHgi8QQAABBBBAAAEE4iFQXRPWAScU67MvmbscD2/qCIZAs7EpwFFnleilN2uD0WF62S0BEgDdYuMiBBBAAAEEEEAAge4I1NSGtf/xRZrxDQ//3fHjGgQ6EmhtlU48v1TPTKrp6DTeC7AACYAAB5+uI4AAAggggAAC8RRoaoroiDNKjFXL2bosnu7UFSyBSEQ6/dIyY2FNRgIEK/Kd6y0JgM45cRYCCCCAAAIIIIBADALhsLHV34Wl+uhzFvyLgZFLEei0wOhLSlkYsNNawTmRBEBwYk1PEUAAAQQQQAABxwTOv7pcL09hgTLHAkDFgRNoaVmyJsC3PzDdJnDB76DDJAA6wOEtBBBAAAEEEEAAgdgFxtxVofETmZMcuyQlINA1AXOLQHO3jT8WGCsEciBgCJAA4DZAAAEEEEAAAQQQsE3gyRdqdOsDVbaVT8EIINCxQElZWCONhTcLio0VAjkCL0ACIPC3AAAIIIAAAggggIA9Ap992aDzri6zp3BKRQCBTgss/KtVB55QpKrqcKev4UR/CpAA8Gdc6RUCCCCAAAIIIOCowMK/WnTUmSUy5yFzIICA8wI/zGnWYaOL1dhobBPAEVgBEgCBDT0dRwABBBBAAAEE7BGoqQ3rkFOLVVrOp432CFMqAt0TmDazMbobR8TcK5AjkAIkAAIZdjqNAAIIIIAAAgjYI2A+WJx4Qal+nsuiY/YIUyoCsQm88nadbhrLuhyxKXr3ahIA3o0dLUcAAQQQQAABBFwncMfDVZryQb3r2kWDEEDgfwI3ja3U1I/5d/o/keB8RQIgOLGmpwgggAACCCCAgK0CM75p1PV3V9paB4UjgIA1AieeX6L5CxmpY42md0ohAeCdWNFSBBBAAAEEEEDAtQJlFa064bwStbLTmGtjRMMQWFagsjqiI84oUV09a3Us6+L3r0kA+D3C9A8BBBBAAAEEEIiDwOhLyvRXPk//caCmCgQsE/jp12adfTlbdVoG6oGCSAB4IEg0EQEEEEAAAQQQcLPA/U8w79/N8aFtCHQk8MLrdXrwyeqOTuE9HwmQAPBRMOkKAggggAACCCAQb4G585p19W0V8a6W+hBAwEKBy24u1/SvGywskaLcKkACwK2RoV0IIIAAAggggIDLBcLhiEZfXKrGJpc3lOYhgECHAi0t0jFnlSi/iGk8HUL54E0SAD4IIl1AAAEEEEAAAQScEBg7vlpffcfTvxP21ImA1QKFJWEdf26JzMQeh38FSAD4N7b0DAEEEEAAAQQQsE3g9/nNGnMXQ/9tA6ZgBBwQ+PyrRt37GOsBOEAftypJAMSNmooQQAABBBBAAAF/CJifEJ5+KUP//RFNeoHA8gJj7q7QT78ysmd5Ff98RwLAP7GkJwgggAACCCCAQFwEnni+Rl98ywNCXLCpBIE4CzQZ/7RPvrBUTU1MBYgzfVyqIwEQF2YqQQABBBBAAAEE/CFQXhnWtXdW+qMz9AIBBNoU+HFOs268l3/nbeJ4/EUSAB4PIM1HAAEEEEAAAQTiKXDdnRUqqwjHs0rqQgABBwTuerRKM2c1OlAzVdopQALATl3KRgABBBBAAAEEfCTwwy9NGj+xxkc9oisIINCeQNjI851iTAWorSPh156RF18nAeDFqNFmBBBAAAEEEEDAAYELrys3tghzoGKqRAABRwTmL2zRZTex24cj+DZVSgLAJliKRQABBBBAAAEE/CTw8pQ6Tf+a4cB+iil9QaAzAuaon/c+re/MqZzjAQESAB4IEk1EAAEEEEAAAQScFGhtjcjcGowDAQSCKXDGpWWqqGL4jx+iTwLAD1GkDwgggAACCCCAgI0CE1+t1e/zW2ysgaIRQMDNAvlFrTIXAOXwvgAJAO/HkB4ggAACCCCAAAK2CZh7gbMdmG28FIyAZwTGPVej2T81eaa9NLRtARIAbbvwKgIIIIAAAggggIAh8MQLNVq0uBULBBAIuEAkIp1/dZki5hccnhUgAeDZ0NFwBBBAAAEEEEDAXoH6hrBue6DS3kooHQEEPCPw9XdNeurFWs+0l4auLEACYGUTXkEAAQQQQAABBBAwBJ6ZVKuCYhb+4mZAAIH/CVx1W4VKyxkV9D8Rb31FAsBb8aK1CCCAAAIIIIBAXATC4YjGjq+OS11UggAC3hEoqwjr6ttZENA7EVu+pSQAlvfgOwQQQAABBBBAAAFD4PV367VgESv/czMggMDKAk++UKuvZjeu/AavuF6ABIDrQ0QDEUAAAQQQQACB+AvcM64q/pVSIwIIeEbAXBDQHCnE4S0BEgDeihetRQABBBBAAAEEbBf4/KsGmYt9cSCAAALtCXz3c7PMrQE5vCVAAsBb8aK1CCCAAAIIIICA7QL3MfffdmMqQMAPAg89Xc0oAI8FkgSAxwJGcxFAAAEEEEAAATsF8ota9fZH9XZWQdkIIOADgWMP6aFPXu6vhISQD3oTnC4kBaer9BQBBBBAAAEEEEBgVQLPTKpRKzt8rYqJ9xEIrMCQ1ZP04M052n3HtMAaeLnjJAC8HD3ajgACCCCAAAIIWCgQiUT05AvM6bWQlKIQ8I1AgjF2/JyTsnTtRT2Vkc5Acq8GlgSAVyNHuxFAAAEEEEAAAYsFPp7eqIV/8fG/xawUh4DnBYZulKyHb83RFpumer4vQe8ACYCg3wH0HwEEEEAAAQQQ+FvgCT79515AAIFlBFJTpMvP66mLTs9WUhJz/Zeh8eyXJAA8GzoajgACCCCAAAIIWCdQXhnWG+/VWVcgJSGAgKcFdtw6Nfqp/7prJXu6HzR+eQESAMt78B0CCCCAAAIIIBBIgTeNh//m5kB2PdCdDhkf6g7qn6g1V0tS/74J0bnd6Wkh4++QemSElJwcMu6LiBqbzD9SY2NEdfVhFZeaf1pVVGL8XdbKveOjuyg7K6SbL+utk4/qoZB5g3D4SoAEgK/CSWcQQAABBBBAAIHuCUx+i0//uyfnnavWGJyorf6VavxJ0bCNU6IP/asNTIw+5Mfai6KSVv02v1m/zWuJ/j13XrNm/dgUTRDEWjbXx09g/73Sde8NvY2kEI+J8VOPb01ENr7e1IYAAggggAACCLhOoKyiVR/PaHBdu2hQbAK5OQnad/d07bdnurbbIlX9chNjK7CDq82yzT87br38SfMXNuuLb5uMP42aNrNBv89vWf4EvnOFQP/cBN1zfY4O3jfDFe2hEfYJkACwz5aSEUAAAQQQQAABTwi8+V69Wngu80SsVtXIfsaD3FEH9dD+ey956E9IcHYI99prJsv8c8yoHtGm/2aMDHjDuN/eer9OX8425hRwOC5wwuE9dOuVvdUrm639HA9GHBpAAiAOyFSBAAIIIIAAAgi4WWDyFIb/uzk+nWnbdluk6PTjs3TwPhlKSXH2ob+j9q6/TrIuPtP8k63FBS16ZlKtnnqxRosWs/1kR252vLfWGknRRf522S7NjuIp06UCofoFa0Rc2jaahQACCCCAgKsEstdfxEJXDkZk6sR+4hdV6wNQWRXW4M3/UivPX9bjxqHEg/ZJ1+Xn9tSmxpx+rx7hcETvfdqgxybU6O0P673aDc+0O8H4oP+C07J01QU9lZ7Gp/6eCZxFDWUEgEWQFIMAAggggAACCHhRwJz7z8O/9yK387apuvE/vaKL+nmv9cu32JymsM9u6dE/P/zSpJvGVkanCSx/Ft9ZITBs42Q9fFsfbbaJdxNGVjgEuQxSPkGOPn1HAAEEEEAAgcALvD+Nxf+8dBOsPihRrz7RV+8+398XD/8r2psjGV58tK++nDJAI40V6TmsEUhLDUUTRp+/PoCHf2tIPVsKCQDPho6GI4AAAggggAACsQt8MI0h17ErxqeEE4/ooW/fHRj9pDw+NTpXi5kImDSur15/qq+xiCCDlmOJhDla5JupA3TRGdlKSnLv+hCx9JFrOy9AAqDzVpyJAAIIIIAAAgj4SsDcq53F19wf0gF9E/SG8SD88K19lJUZrF/f994lXbOMpIc5Xz2VUetdull7ZoX00C050dEi6wxJ7tK1nOxfgWD9BPFvHOkZAggggAACCCDQZYH3PuXT/y6jxfmCf/1fsj5/Y4D2Mh6Eg3qkGsPXrzy/p758e6CGbsSDbGfugwOHp2v2B4N00pGZnTmdcwIkQAIgQMGmqwgggAACCCCAwLICH33O/P9lPdz29cH7puvDSf01eABD4M3YbGBsIfjZqwN09klZbguVa9ozsF+isYZCrl54pK/MrzkQWFGABMCKInyPAAIIIIAAAggEQCASiWjmt00B6Kk3u3jeKVma8GCuMtL5dX3ZCJqjAe68pnd0IcScXtgsa3PyUZma/f5AHbB3xrIv8zUCywnwr2Y5Dr5BAAEEEEAAAQSCIfDb/BZVVIWD0VmP9fKsEzN121W9FQqxYFt7oTO3DZz2an+ttzajI9YZkmTM8++nB2/OUc9sHu/au2d4fYkAdwh3AgIIIIAAAgggEECBmd82BrDX7u/yqUdn6q5rc9zfUBe00FzY7tNXBmiX7VJd0Jr4NyHRGOF/sbGy/zdTB2rnbdPi3wBq9KQACQBPho1GI4AAAggggAACsQl8QQIgNkAbrjbn/N93Y28bSvZvkb17JujNp/vp+MN6+LeTbfRss01SNMNYHPKG//RSmjEtggOBzgowZqazUpyHAAIIIIAAAgj4SODLWYwAcFM4N1w3SePu6MOw/24EJTk5pEdv76PMHsa2d0/VdKME71ySnhaKbol4/qlZSkzkwd87kXNPS0kAuCcWtAQBBBBAAAEEEIiLQKUx9//XP1riUheVrFogKzOkF41V2zN7MDh31Vrtn2FOnUhOCmns+Or2T/LwO7tun6qHbumjtdbgEc7DYXS86dw9joeABiCAAAIIIIAAAvEV+Gkuq//HV7zj2h66JUfrG1vcccQucOuVvZVijAi44+Gq2AtzSQm9jIX9bruqlzHNIdMlLaIZXhYgAeDl6NF2BBBAAAEEEECgGwI/z23uxlVcYofAiD3SdejIYM1ft8Nx2TKvv7SX6hsieuBJ748EGDUiQ3df11v9+xor/nEgYIEACQALECkCAQQQQAABBBDwkgAJAHdEq0dGSPdez6J/dkTj9qt7qaC4VZPfqrOjeNvLHNQ/UWNv6K2Re2XYXhcVBEuAiUbBije9RQABBBBAAAEE9MtvjABww21wzYU9tfogPo+zIxahUEiP39XHk1sEmltBzn5/IA//dtwYlCkSANwECCCAAAIIIIBAwAQYAeB8wFcbmKgzjstyviE+bkFKSkgvPdpXQzfyxvoK662dpPdf7Kf7b8pRdhaPaT6+NR3tGneWo/xUjgACCCCAAAIIxFcgv6hV5ZXh+FZKbSsJXHxmtswHVA57BcwH6Unj+iqnl3sfe5KMQSCXnpWtr98eqB23TrMXhNIDL+DefwmBDw0ACCCAAAIIIICA9QK/z2f4v/WqXStxYL9EnXg4K7p3Ta37Z6+5WpKeeyBXCS588tli0xTNeGOAxlzSS6mpJIS6H2Wu7KyAC/8ZdLbpnIcAAggggAACCCDQVYFFi1u6egnnWyxwzslZPOxZbLqq4nbbIU03GLsDuOVITwtFt/b79JX+xhSFFLc0i3YEQIAEQACCTBcRQAABBBBAAIGlAosWty79kr8dEDA/hT56FNv+OUCvC0/P1iH7Ob+q/u47pmnWewN13inZSkzkU38n7oUg10kCIMjRp+8IIIAAAgggEDgBRgA4G/I9jIe/Aezp7lgQHr41R0NWd2bnhd49EzTujhxNebafY21wDJ6KXSNAAsA1oaAhCCCAAAIIIICA/QKMALDfuKMajjmET/878rH7vazMBD01tk/c1wM4dGSGvvtgoI47lLUf7I4x5XcsQAKgYx/eRQABBBBAAAEEfCWw8C/WAHAqoMnGbnT775XuVPXU+7fANpul6vJze8bFY/CARL08vq+evT9X/XIT41InlSDQkQAJgI50eA8BBBBAAAEEEPCZwF/5JACcCulWw1KVkc6v3075L1vv5edma9vN7V18b/SxmZr9/kCN2IOkz7L2fO2sAD+BnPWndgQQQAABBBBAIG4CNbVhNTXFrToqWkFgl+1SV3iFb50SMBffe/LeXCMhY/0ifBusk6QPJ/XX2BtyZE454EDATQLckW6KBm1BAAEEEEAAAQRsFCirCNtYOkWvSmCX7dJWdQrvx1HAXAzwuoutmwqQZKwtaI4s+HLKQG2/JcmeOIaSqrogQAKgC1icigACCCCAAAIIeFmABICz0dvqX/YOOXe2d96s/ewTs7TlsNjjYsZ25lsDdM2FvZSaav2oAm/q0mo3CpAAcGNUaBMCCCCAAAIIIGCDQDkjAGxQ7VyRqw9KZP5/56jielZCQkjm1oDmp/fdOcwpBHdc3UufvNxf/7dB7ImE7rSBaxDoigAJgK5ocS4CCCCAAAIIIOBhgdLyVg+33ttNX2dIN58wvd1tT7R+kw1TdNHp2V1u6147p2nWewN1zsnZxraCfOrfZUAucESABIAj7FSKAAIIIIAAAgjEX4ApAPE3X1rjemsZewByuFbA3BZw7TU7l6Tp0ztBj9/dR2883U9rrta5a1zbcRoWOAESAIELOR1GAAEEEEAAgaAKVNdEgtp1x/ttLjjH4V4Bc97+HVf3XmUDjzggI7q139EH91jluZyAgBsFSAC4MSq0CQEEEEAAAQQQsEGgqZkEgA2snSqyZxa/dncKysGTRuyRLnNYf1uHuYbDa0/21VNjc9W3T2Jbp/AaAp4Q4CeRJ8JEIxFAAAEEEEAAgdgFmkkAxI7YzRJ69GCOeDfp4nrZndf0Xm5BwJARtjNPyIzO9R++a3pc20JlCNghQALADlXKRAABBBBAAAEEXCjQ1OzCRgWkSZkZJAC8EOr110mWuTWgeWy0XrI+mtxfd1+Xo8wePDZ5IX60cdUCTEZatRFnIIAAAggggAACvhBoamIKgFOB5AHSKfmu13vFeT2Vm5Oo807JUkoKiZuuC3KFmwVIALg5OrQNAQQQQAABBBCwUIA1ACzE7GJRTL/oIpiDp2cb6zVcfGbXtwV0sMlUjUCnBRjL0mkqTkQAAQQQQAABBLwtQALAufjVNTD6wjl9akYAgaUCJACWSvA3AggggAACCCDgc4GQuaIZhyMCtXUkAByBp1IEEFhOgATAchx8gwACCCCAAAII+FcgmcmfjgW3vp4EgGP4VIwAAv8IkAD4h4IvEEAAAQQQQAABfwskJzECwKkI1zWEnaqaehFAAIF/BEgA/EPBFwgggAACCCCAgL8FkpP93T83966wmASAm+ND2xAIigAJgKBEmn4igAACCCCAQOAFkhIZAeDUTbBgUYtTVVMvAggg8I8ACYB/KPgCAQQQQAABBBDwtwAjAJyL73//JAHgnD41I4DAUgESAEsl+BsBBBBAAAEEEPC5QBJrADgWYUYAOEZPxQggsIwACYBlMPgSAQQQQAABBBDws0BGOlMAnIpveWVYlVWsA+CUP/UigMASARIA3AkIIIAAAggggEBABLIz+dXPyVB/+0OTk9VTNwIIICD+F+AmQAABBBBAAAEEAiKQncWvfk6GesY3DU5WT90IIIAACQDuAQQQQAABBBBAICgCPbOYAuBkrD//qtHJ6qkbAQQQIAHAPYAAAggggAACCARFIIsRAI6G+qvZTWpujjjaBipHAIFgCzAOLNjxp/cIIIAAAgggECCBniQAHI12fUNEX3zLKABHg0DlCARcgARAwG8Auo8AAggggAACwRHIymQKgNPRfvGNOqebQP0IIBBgARIAAQ4+XUcAAQQQQACBYAnk9k4MVodd2NtXptSpqYlpAC4MDU1CIBACJAACEWY6iQACCCCAAAIISKmpIfXuya9/Tt4LFVVhvfNxvZNNoG4EEAiwAP8DBDj4dB0BBBBAAAEEgicwoB+jAJyO+jOTap1uAvUjgEBABUgABDTwdBsBBBBAAAEEgilAAsD5uL/9Yb1+nNPkfENoAQIIBE6ABEDgQk6HEUAAAQQQQCDIAgP78eufG+J/832VbmgGbUAAgYAJ8D9AwAJOdxFAAAEEEEAg2AKMAHBH/F+bWq+ffmUUgDuiQSsQCI4ACYDgxJqeIoAAAggggAACIgHgnpvgursYBeCeaNASBIIhQAIgGHGmlwgggAACCCCAQFRgyGpJSLhEYMoH9Xrl7TqXtIZmIIBAEARIAAQhyvQRAQQQQAABBBD4W2CdISQA3HQz/PvaMpVVtLqpSbQFAQR8LEACwMfBpWsIIIAAAggggMCKAmutQQJgRRMnvy8qCeuS68udbAJ1I4BAgARIAAQo2HQVAQQQQAABBBBIT0vQ4AGJQLhIYOKrdXrpzVoXtYimIICAXwVIAPg1svQLAQQQQAABBBBoR2DtNRkF0A6NYy+ffkmZZv3IrgCOBYCKEQiIAAmAgASabiKAAAIIIIAAAksFWAdgqYR7/m5ojOjw0cUqKGY9APdEhZYg4D8BEgD+iyk9QgABBBBAAAEEOhRYb63kDt/nTWcEFhe06ggjCVDfEHamAdSKAAK+FyAB4PsQ00EEEEAAAQQQQGB5gWEbkwBYXsQ93331XZNGnUISwD0RoSUI+EuABIC/4klvEEAAAQQQQACBVQoM3ShlledwgnMCn8xo1MEnkwRwLgLUjIB/BUgA+De29AwBBBBAAAEEEGhToF9uovrn8mtgmzguefHTL5YkAerqmQ7gkpDQDAR8IcBPfl+EkU4ggAACCCCAAAJdE9h0Y0YBdE0s/mebSYB9jy5SIQsDxh+fGhHwqQAJAJ8Glm4hgAACCCCAAAIdCZAA6EjHPe+ZawLsdFCBfpzDFoHuiQotQcC7AiQAvBs7Wo4AAggggAACCHRbgIUAu00X9wv/zGvVbocWasoHdXGvmwoRQMBfAiQA/BVPeoMAAggggAACCHRKYJvNUzt1Hie5Q6C2LqLDRpfoprGVam2NuKNRtAIBBDwnQALAcyGjwQgggAACCCCAQOwCawxO0uABibEXRAlxE4gYz/033lup4UcV6c+8lrjVS0UIIOAfARIA/oklPUEAAQQQQAABBLoksP2WjALoEphLTp7+daO23rdAr7zNlACXhIRmIOAZARIAngkVDUUAAQQQQAABBKwV2I4EgLWgcSytoiqsY84u0emXlsr8mgMBBBDojAAJgM4ocQ4CCCCAAAIIIOBDge23YgSA18P6zKRa/WuPPL08hdEAXo8l7UcgHgIkAOKhTB0IIIAAAggggIALBTbZIFlZmSEXtowmdUWgsCSsY88p0ahTWBugK26ci0AQBUgABDHq9BkBBBBAAAEEEDAEEhND2nW7NCx8IvDORw3abK983fd4lZqb2SnAJ2GlGwhYKkACwFJOCkMAAQQQQAABBLwlsPcuJAC8FbGOW2tuF/ifGyu0+fB8vf1hfccn8y4CCAROgARA4EJOhxFAAAEEEEAAgf8J7LVL+v++4SvfCPyxoEWHnFqs/Y4r0s9zm3zTLzqCAAKxCZAAiM2PqxFAAAEEEEAAAU8LrLlakjZYJ8nTfaDx7Qt89HmDth5RoHOvLFN+UWv7J/IOAggEQoAEQCDCTCcRQAABBBBAAIH2BfZmFED7OD54J2zsEjh+Yo023jlPV95arrIKEgE+CCtdQKBbAiQAusXGRQgggAACCCCAgH8Ehu/KOgD+iWb7PWlojOjuR6u14U55uvHeSlXXGJkBDgQQCJQACYBAhZvOIoAAAggggAACKwvsvG2aevfk18KVZfz5SnVNRDeNrYwmAu5+tEq1dSQC/BlpeoXAygL8pF/ZhFcQQAABBBBAAIFACSQnh7T/3iwGGKigG50tqwgbUwIqtMGOebr1gUpVVpEICNo9QH+DJ0ACIHgxp8cIIIAAAggggMBKAoful7HSa7wQDIHS8rDG3FWp9XdcbPxdodJy1ggIRuTpZRAFSAAEMer0GQEEEEAAAQQQWEFgtx2YBrACSeC+raqOGCMBqqIjAq64pZxdAwJ3B9DhIAiQAAhClOkjAggggAACCCCwCoGkpJAOGM40gFUwBeLt2rqI7hlXbSQCFuuM/5Tq1z+aA9FvOolAEARIAAQhyvQRAQQQQAABBBDohMCRB/boxFmcEhSBZuO5/+mXarXZXvk65NRiTf+6IShdp58I+FaABIBvQ0vHEEAAAQQQQACBrgnssl2q1ls7qWsXcXYgBN7+sF57Hl6kXQ4u0Ovv1ikcjgSi33QSAb8JkADwW0TpDwIIIIAAAggg0E2BUCik04/N6ubVXBYEga++a9KRZ5Rok93y9eCT1aquYeeAIMSdPvpHgASAf2JJTxBAAAEEEEAAgZgFjj2khzLSQzGXQwH+FliwqEUXX1+udbdfrP/cWK6Ff7X4u8P0DgGfCJAA8Ekg6QYCCCCAAAIIIGCFQM/sBB15EGsBWGEZhDLMnQPue7xaG++Sp6PPKtaMbxqD0G36iIBnBUgAeDZ0NBwBBBBAAAEEELBH4IzjMu0pmFJ9KxA2ZgK8+k699jisUDseWKCJr9aqqYl1AnwbcDrmWQESAJ4NHQ1HAAEEEEAAAQTsERi6UYq23zLVnsIp1fcC3/7QpFMuLNV6OyzWDfdUKL+o1fd9poMIeEWABIBXIkU7EUAAAQQQQACBOAqMZhRAHLX9WVVRSVg331el9Y1EwInnl+jL2UwP8Gek6ZWXBEgAeClatBUBBBBAAAEEEIiTwKh9M9Qvl18V48Tt62pajPUBX3yjTruOYnqArwNN5zwhwE91T4SJRiKAAAIIIIAAAvEVSE4O6eQjWQsgvur+r43pAf6PMT10twAJAHfHh9YhgAACCCCAAAKOCZxydKYS+G3RMX8/V7zs9IATzmN6gJ9jTd/cJcCPdHfFg9YggAACCCCAAAKuEVhtYJKOOCDDNe2hIf4TMKcHvPQm0wP8F1l65FYBEgBujQztQgABBBBAAAEEXCBwzYW9lJzsgobQBN8LMD3A9yGmgy4QIAHggiDQBAQQQAABBBBAwK0CQ1ZP0mnHsBaAW+Pjx3YxPcCPUaVPbhEgAeCWSNAOBBBAAAEEEEDApQKXndNTmT1CLm0dzfKrwIrTAya8Uqumpohfu0u/EIiLAAmAuDBTCQIIIIAAAggg4F2Bvn0SdcFp2d7tAC33vIA5PeDUi0q13g6LdcM9FSosbvV8n+gAAk4IkABwQp06EUAAAQQQQAABjwmcf2qW+vbhV0ePhc13zf1nesCOizX6klL9OKfJd32kQwjYKcBPcTt1KRsBBBBAAAEEEPCJQGaPBF1+bk+f9IZueF2gyXjuf3ZyrbYeUaB9jynUOx/VKxJheoDX40r77RcgAWC/MTUggAACCCCAAAK+EDj16EyZiwJyIOAmgU9mNGrUKcUatme+xj1Xrbr6sJuaR1sQcJUACQBXhYPGIIAAAggggAAC7hVITg7puosZBeDeCAW7Zb/Pb9H5V5dr3e3ydPVtFVpc0BJsEHqPQBsCJADaQOElBBBAAAEEEEAAgbYFDt8/Q8M2Tm77TV5FwAUC5ZVh3flIlTbcKU8nXVCiWT+yToALwkITXCJAAsAlgaAZCCCAAAIIIICAFwRCoZBuv7q3F5pKGwMuYG4j+MLrddrhgALteXihXn+3TuEw6wQE/LYIfPdJAAT+FgAAAQQQQAABBBDomsDO26Zp9LGZXbuIsxFwUGD614068owSDd09X088X6OmJhIBDoaDqh0UIAHgID5VI4AAAggggAACXhW46bJeWnO1RK82n3YHVGD+whadfUVZdHrA2PFVqq1jwcCA3gqB7TYJgMCGno4jgAACCCCAAALdFzC3BXz09j7dL4ArEXBQIL+oVZfdVKH1ts/TjfdWqqyi1cHWUDUC8RMgARA/a2pCAAEEEEAAAQR8JbDLdmk6/TimAvgqqAHrjLlg4E1jK7X+DnlGQqBceboasZcAAEAASURBVIXsHBCwWyBw3SUBELiQ02EEEEAAAQQQQMA6AaYCWGdJSc4J1NZFNHZ8tTbaOS86RWD+wmbnGkPNCNgoQALARlyKRgABBBBAAAEE/C7QIyNB4+5gKoDf4xyU/jUZOwaaiwSaiwWecF6JfpzDFoJBiX1Q+kkCICiRpp8IIIAAAggggIBNAuauAEwFsAmXYh0RCBtrA770Zp22HlGgUacU6cvZjY60g0oRsFqABIDVopSHAAIIIIAAAggEUMCcCjBk9aQA9pwu+13gnY8atOuoQh18cpG++5kRAX6Pt9/7RwLA7xGmfwgggAACCCCAQBwEzKkAj96eo1AoDpVRBQIOCEz9uEHbjSzQUWcWa87vrBHgQAio0gIBEgAWIFIEAggggAACCCCAgGROBRhzSU8oEPC1wGtT67XF8Hyd/O8SzfsviQBfB9uHnSMB4MOg0iUEEEAAAQQQQMApgUvO7KlDR2Y4VT31IhAXgUhEev61Og3bM19nXlaqRYvZPjAu8FQSswAJgJgJKQABBBBAAAEEEEBgWQFzKsCmGyUv+xJfI+BLgdZW6akXa7XJbnm68LoyFRQbL3Ag4GIBEgAuDg5NQwABBBBAAAEEvCiQkZ6gl8b1VW4Ov2p6MX60uesCzcZMgIefrtHGO+fpilvKVVpOIqDrilwRDwF+KsdDmToQQAABBBBAAIGACay5WpImPJirxMSAdZzuBlqgviGie8ZVa8Od8nTjvRWqrTP2E+RAwEUCJABcFAyaggACCCCAAAII+EnAXBTwrmt7+6lL9AWBTgnU1EZ009gqDd0tX8+9XKOIuWgABwIuECAB4IIg0AQEEEAAAQQQQMCvAqcfl6UTj+jh1+7RLwQ6FMgvatVpF5dpp4MKNeObxg7P5U0E4iFAAiAeytSBAAIIIIAAAggEWGDs9TnadvOUAAvQ9aALfPtDk/Y4rFDHnVuihX+xY0DQ7wcn+08CwEl96kYAAQQQQAABBAIgkJIS0vOP9NUag1kQIADhposdCEx+y9g6cI88XXcn6wN0wMRbNgqQALARl6IRQAABBBBAAAEElggM6Juodyb008B+JAG4J4It0Ngk3fZglTbZNU/PTmZ9gGDfDfHvPQmA+JtTIwIIIIAAAgggEEiBtddM1jsT+6lvH34FDeQNQKeXEygoDmv0JWXa4YBCTf+6Ybn3+AYBuwT46WuXLOUigAACCCCAAAIIrCSwwTrJevu5furdk19DV8LhhUAKzP6pSXseXqRjzynR4gLWBwjkTRDHTvOTN47YVIUAAggggAACCCAgbbJhit56tp+ys0JwIIDA3wIvT6nTZnvl67EJ1WwbyF1hmwAJANtoKRgBBBBAAAEEEECgPYHNh6bo9af6qUcGSYD2jHg9eALVNRGdd1V5dETA3HnNwQOgx7YLkACwnZgKEEAAAQQQQAABBNoS2HbzVL3yeF+lpZIEaMuH14IrMOObRm09Il8331ep5uZIcCHoueUCJAAsJ6VABBBAAAEEEEAAgc4K7LxtmiY/lquUlM5ewXkIBEOgydgt4IZ7KrXNfgX6cnZjMDpNL20XIAFgOzEVIIAAAggggAACCHQksMdO6Xr+ob5KSuroLN5DIJgCc35v1m6HFOrC68pUUxsOJgK9tkyABIBllBSEAAIIIIAAAggg0F2BEXuk6w1jTYCsTKYDdNeQ6/wrEDFmATz8dE10kcB3Pqr3b0fpme0CJABsJ6YCBBBAAAEEEEAAgc4I7LZDmj58qb8G9U/szOmcg0DgBP7Kb9WoU4p1/LklKippDVz/6XDsAiQAYjekBAQQQAABBBBAAAGLBIZulKJPXumvjdZLtqhEikHAfwKT3qrTVvvm64NpjAbwX3Tt7REJAHt9KR0BBBBAAAEEEECgiwKrD0rSR5P7a6dtUrt4JacjEByBopKw9j+hWFfcUs5OAcEJe8w9JQEQMyEFIIAAAggggAACCFgt0Cs7QW8900+HjcywumjKQ8BXAveMq9auxiKB8/7b7Kt+0Rl7BEgA2ONKqQgggAACCCCAAAIxCqSkhPT0fX10wWlZMZbE5Qj4W2DWj03admSBJr5a6++O0ruYBUgAxExIAQgggAACCCCAAAJ2CYRCId1yRW/ddW1vGV9yIIBAOwI1tRGdcmGp8aeE7QLbMeJliQQAdwECCCCAAAIIIICA6wXOOjFLzz+cq4x0sgCuDxYNdFRg4qt12ma/ApmjAjgQWFGABMCKInyPAAIIIIAAAggg4EqBA4dnaPobA7ThukmubB+NQsAtAvMXtmiXUQW697EqRSIRtzSLdrhAgASAC4JAExBAAAEEEEAAAQQ6J7Dhusn6/PUBOvJAFgfsnBhnBVWgpUW6/OYKHXhiscorw0FloN8rCJAAWAGEbxFAAAEEEEAAAQTcLdAjI0FP3pursTf0VkqKu9tK6xBwWuD9aQ3a+eAC/bGAXQKcjoUb6icB4IYo0AYEEEAAAQQQQACBLguMPjZLH08eoDUGJ3b5Wi5AIEgCfyxo0U4HFeqTGQ1B6jZ9bUOABEAbKLyEAAIIIIAAAggg4A2BzYemaOaUgRqxR7o3GkwrEXBIoKIqrJHHF+nxiTUOtYBq3SBAAsANUaANCCCAAAIIIIAAAt0W6N0zQZMfy9UNl/ZSAr/ddtuRC/0v0NoqnXNlmS69oVzhMIsD+j/iK/eQH5Erm/AKAggggAACCCCAgMcEQqGQLj4zW+9M6KcBffkV12Pho7lxFrj/iWqNOqVY1TUsDhhneser46ej4yGgAQgggAACCCCAAAJWCey8bZq+fW+gDt+fXQKsMqUcfwq8+0mDdj2kUAv/MrYL4AiMAAmAwISajiKAAAIIIIAAAsEQyOmVqKfvy9ULj+Sqbx9+3Q1G1OlldwR++a3ZWBywQF9829idy7nGgwL8RPRg0GgyAggggAACCCCAwKoFDhyeoVnGaIBDRzIaYNVanBFUgeLSsPY5ulAvvVkbVIJA9ZsEQKDCTWcRQAABBBBAAIFgCeTmJOrZ+3M14cFc5ebwq2+wok9vOyvQ1CSdeH6pJrxCEqCzZl49j5+CXo0c7UYAAQQQQAABBBDotMCoEUtGA5h/cyCAwMoCEWNTgNMuLtWzk9kmcGUd/7xCAsA/saQnCCCAAAIIIIAAAh0I9O2TGB0J8Oz9fdSnN78Gd0DFWwEVMJMAoy8p01MvkgTw6y3ATz6/RpZ+IYAAAggggAACCLQpcOjIHtG1AQ7eN73N93kRgaALnHlZmcZPqA46gy/7TwLAl2GlUwgggAACCCCAAAIdCfTLTdTEh/rqzaf7ar21kzo6lfcQCKTAuVeV69FnSQL4LfgkAPwWUfqDAAIIIIAAAggg0GmBPXdO17dTB+qmy3qpR0ao09dxIgJBELjgmnI99BRJAD/FmgSAn6JJXxBAAAEEEEAAAQS6LJCcHNKFp2frh48G6ogDWCSwy4Bc4GuBi8aU6/4nqnzdxyB1jgRAkKJNXxFAAAEEEEAAAQTaFRjUP0lPjc3Vey/00yYbJrd7Hm8gEDSBS2+o0D3jSAL4Ie4kAPwQRfqAAAIIIIAAAgggYJnATtukaeZbA3TXtb3VM4tpAZbBUpCnBa64pULjnmM6gKeDaDSeBIDXI0j7EUAAAQQQQAABBCwXSEwM6awTs/Tjx4N0/GE9LC+fAhHwooC5JsCb79V5sem0+W8BEgDcCggggAACCCCAAAIItCPQt0+iHr29jz5/vb923T61nbN4GYFgCEQi0vHnlWrmrMZgdNiHvSQB4MOg0iUEEEAAAQQQQAABawW22DRV70zorynP9tPmQ1OsLZzSEPCQQENjRIecUqzf5jV7qNU0dakACYClEvyNAAIIIIAAAggggMAqBHbfMS06GmDCg7lab+2kVZzN2wj4U6CsIqz9TyhScWmrPzvo416RAPBxcOkaAggggAACCCCAgPUCoVBIo0ZkaNa7A/XgzTka1D/R+kooEQGXCyxa3KqjzypRc7MxL4DDMwIkADwTKhqKAAIIIIAAAggg4CaBpKSQTj4qUz9/Okg3XdZLvXvyq7Wb4kNb7Bf4/KtGXTSm3P6KqMEyAX5KWUZJQQgggAACCCCAAAJBFEhLDenC07M1Z9ogXXpWttLT2DowiPdBUPv82IQaPfF8TVC777l+kwDwXMhoMAIIIIAAAggggIAbBXpmJ2jMJb30i5EIOPukLBIBbgwSbbJF4IJry/TFt+wMYAuuxYWSALAYlOIQQAABBBBAAAEEgi0woG+i7rymt+Z+PkiXnJmtrExGBAT7jvB/75uNDQGOPrOYRQE9EGoSAB4IEk1EAAEEEEAAAQQQ8J5A3z6Juv7SXvpt+mBd/e+eyunFr97eiyIt7qxAQXFYp11cqkiERQE7a+bEefwUckKdOhFAAAEEEEAAAQQCI9DLmBpwxXk9oyMCbr68l/rn8it4YIIfsI6++0mD7nu8OmC99lZ3+enjrXjRWgQQQAABBBBAAAGPCmT2SNC/R2fr188H654xvbX6ILYP9GgoaXYHAlffXqFvf2A9gA6IHH2LBICj/FSOAAIIIIAAAgggEDQBc9eAM47P0s+fDNIjt+VonSFJQSOgvz4WMNcDOP68UlXXhH3cS+92jQSAd2NHyxFAAAEEEEAAAQQ8LJCcHNIJh2fq+w8G6rkHcrX1v1I83BuajsD/BOYvbNHlt1T87wW+co0ACQDXhIKGIIAAAggggAACCARRIDExpEP2y9Cnrw7QJ6/016gRGUrgt/Qg3gq+6vPjE2v0yYwGX/XJD53hR4sfokgfEEAAAQQQQAABBHwhsM1mqZrwYK7mTBuk80/NUnYWWwj6IrAB7cQZ/ylVbR1TAdwUfhIAbooGbUEAAQQQQAABBBBAwBBYY3CSbr2yt+Z9MVh3XN1LQ1ZnnQBuDO8JLPyrVeaigBzuESAB4J5Y0BIEEEAAAQQQQAABBJYTMHcOOOfkbGPBwIF64ZFc7bBV6nLv8w0Cbhd4+OkaTf+aqQBuiRMJALdEgnYggAACCCCAAAIIINCOQEJCSAcOz9AHL/XX56/31xEHZCiJQQHtaPGy2wTOv7pcra0RtzUrkO0hARDIsNNpBBBAAAEEEEAAAa8KbLFpqp4am6vfpg/W5edmq28ffqX3aiyD0u6f5zZr3HM1Qemuq/vJTwtXh4fGIYAAAggggAACCCDQtsDAfom65sJe+mPGYI2/q482H8o2gm1L8aobBK6/u1IlZa1uaEqg20ACINDhp/MIIIAAAggggAACXhdISQnpmFE9NP2NAfr45f46bCTTA7weUz+2v6IqrGvvrPRj1zzVJxIAngoXjUUAAQQQQAABBBBAoH2BbTdP1TP352ru54OYHtA+E+84JPDkCzWa/VOTQ7VTrSlAAoD7AAEEEEAAAQQQQAABnwkM6p8UnR7wu7FOwGN35mizTZge4LMQe7I7EWMdwKtuY1tAJ4NHAsBJfepGAAEEEEAAAQQQQMBGgdTUkI49JFMz3hygjyYzPcBGaorupMBHnzdo2ky2Bewkl+WnkQCwnJQCEUAAAQQQQAABBBBwn8B2W/xvesBl57B7gPsiFJwWXXsHowCcijYJAKfkqRcBBBBAAAEEEEAAAQcEzOkB117US+b0gHF3MD3AgRAEvsqZs5r0zkf1gXdwAoAEgBPq1IkAAggggAACCCCAgMMC5vSA4w793/SAQ43dAxITHW4U1QdG4Lo7KxQxFwXgiKsACYC4clMZAggggAACCCCAAALuEzCnBzz79+4B/zk7W7k5PCa4L0r+atEPc5o15QNGAcQ7qvzLjrc49SGAAAIIIIAAAggg4FKBwQOSdN3FvfTHjMF69PYcbbJhsktbSrP8IHDPuGo/dMNTfSAB4Klw0VgEEEAAAQQQQAABBOwXMKcHHH9Ypr5+Z6DemdBPI/ZIVyhkf73UECyBGd806svZjcHqtMO9JQHgcACoHgEEEEAAAQQQQAABNwvsun2aXh7fVz9+NFBnHJ+pHhlkAtwcL6+17Z5Hq7zWZE+3lwSAp8NH4xFAAAEEEEAAAQQQiI/AOkOSdc+YHM37YrBuuaKX1hjMioHxkfd3LW+8V68/FjT7u5Mu6h0JABcFg6YggAACCCCAAAIIIOB2gZ7ZCbrgtGz98ukgPXNfH205LMXtTaZ9LhYwNwK4/wnWAohXiEgAxEuaehBAAAEEEEAAAQQQ8JFAYmJIh+3fQ5+9NkAfTuqvA4ezToCPwhvXrjz/Wq1q68JxrTOolZEACGrk6TcCCCCAAAIIIIAAAhYJbL9lql54pK9+/mSQzjqRdQIsYg1MMdU1EU1+qy4w/XWyoyQAnNSnbgQQQAABBBBAAAEEfCSw1hpJuuvaHP1hrBMw5pKe6p/L44aPwmtrVx5/vsbW8il8iQD/IrkTEEAAAQQQQAABBBBAwFKBXsY6AZee1VNzPx+sB2/O0bprJVlaPoX5T+Dr75r0069N/uuYy3pEAsBlAaE5CCCAAAIIIIAAAgj4RSA1NaSTj8rU9x8MNKYI5GqbzVgw0C+xtaMfjAKwQ3X5MkkALO/BdwgggAACCCCAAAIIIGCxQEJCyFgkMEOfvDJA77/YT3vtnGZxDRTnB4EXX69Tc7OxLQCHbQIkAGyjpWAEEEAAAQQQQAABBBBYUWDHrdP0xtP9NP2NAdp/r/QV3+b7AAuUV4b10fSGAAvY33USAPYbUwMCCCCAAAIIIIAAAgisILD50BS9NK6vvpk6QIeNzFAotMIJfBtIAXYDsDfsJADs9aV0BBBAAAEEEEAAAQQQ6EDg/zZI0TP350bXCTj2kB5K4AmlAy3/v/XGe3VqamIagF2R5p+XXbKUiwACCCCAAAIIIIAAAp0WWG/tZD12Zx/Nem+gRo3I6PR1nOgvgarqiN77tN5fnXJRb0gAuCgYNAUBBBBAAAEEEEAAgaALbLBOsiY8mKuZUwZo391ZLDCI9wPTAOyLOgkA+2wpGQEEEEAAAQQQQAABBLopMGzjFL3yeD9j54D+2nnb1G6WwmVeFJj6cb1aW5kGYEfsSADYoUqZCCCAAAIIIIAAAgggYInANpul6t3n++vl8X217lpJlpRJIe4WqDSmAcyc1ejuRnq0dSQAPBo4mo0AAggggAACCCCAQJAERuyRrlnvDtQdV/dSr2weY/we+/c+YTtAO2LMvxw7VCkTAQQQQAABBBBAAAEELBdITg7pnJOz9fOnA3XmCZlKTLS8Cgp0icC7n7AQoB2hIAFghyplIoAAAggggAACCCCAgG0COb0Sdfd1Ofrq7QHaZrMU2+qhYOcEvv+lWQXFrc41wKc1kwDwaWDpFgIIIIAAAggggAACfhfYeP0UfTS5v+69vreyMkN+727g+vc+2wFaHnMSAJaTUiACCCCAAAIIIIAAAgjESyAhIaTTj8vS7PcHauRe6fGqlnriIDBtJgsBWs1MAsBqUcpDAAEEEEAAAQQQQACBuAsMHpCkSeP6asKDucrpxWNO3ANgQ4XTvyYBYDUr/zKsFqU8BBBAAAEEEEAAAQQQcExg1IgMffXOAO20TapjbaBiawQWLGphHQBrKP8phQTAPxR8gQACCCCAAAIIIIAAAn4QMEcDTJ3YT1f/u6cSeOLxdEhnMArA0vjxz8FSTgpDAAEEEEAAAQQQQAABNwiYawNccV5Pvf9if60+iP0C3RCT7rRhxjdMA+iOW3vXkABoT4bXEUAAAQQQQAABBBBAwPMC22+ZqulvDNC2m7NdoBeDyQgAa6NGAsBaT0pDAAEEEEAAAQQQQAABlwn07ZOodyb212EjM1zWMpqzKoEf5jSpsTGyqtN4v5MCJAA6CcVpCCCAAAIIIIAAAggg4F2BtNSQnr6vjy47J9u7nQhgy1tbpV9+bw5gz+3pMgkAe1wpFQEEEEAAAQQQQAABBFwmEAqFdO1FvTTujhwWB3RZbDpqzg+/NHX0Nu91QYAEQBewOBUBBBBAAAEEEEAAAQS8L3DcoZl69PYcGfkADg8ImNMAOKwRIAFgjSOlIIAAAggggAACCCCAgIcEjj0kUw/clOOhFge3qT/8whQAq6JPAsAqScpBAAEEEEAAAQQQQAABTwmcfFSm7hnT21NtDmJjf2QEgGVhJwFgGSUFIYAAAggggAACCCCAgNcEzjg+y1gXoKfXmh2o9lZWR7RocUug+mxXZ0kA2CVLuQgggAACCCCAAAIIIOAJgcvO6an990r3RFuD2sg/FpAAsCL2JACsUKQMBBBAAAEEEEAAAQQQ8LTA+Lv6aN21kjzdBz83ft5C1gGwIr4kAKxQpAwEEEAAAQQQQAABBBDwtEB2VoJefCRXGelsDeDGQM5fyAgAK+JCAsAKRcpAAAEEEEAAAQQQQAABzwtsvH6K7r2eRQHdGMh5/yUBYEVcSABYoUgZCCCAAAIIIIAAAggg4AuB4w7N1E7bpPqiL37qxDxGAFgSThIAljBSCAIIIIAAAggggAACCPhFYOwNOUpiOQBXhXPBohZFIhFXtcmLjSEB4MWo0WYEEEAAAQQQQAABBBCwTWCj9ZJ1zklZtpVPwV0XqG+IqKgk3PULuWI5ARIAy3HwDQIIIIAAAggggAACCCAgXXl+Tw3qnwiFiwQKiltd1BpvNoUEgDfjRqsRQAABBBBAAAEEEEDARoHMHgk6/zRGAdhI3OWiC4pIAHQZbYULSACsAMK3CCCAAAIIIIAAAggggIApcOLhmcrswbaAbrkbChkBEHMoSADETEgBCCCAAAIIIIAAAggg4EeB7KwEnWAkATjcIZDPCICYA0ECIGZCCkAAAQQQQAABBBBAAAG/Cpx9YpZCDAJwRXiZAhB7GEgAxG5ICQgggAACCCCAAAIIIOBTgbXWSNI+u6X5tHfe6hYJgNjjRQIgdkNKQAABBBBAAAEEEEAAAR8LHDg8w8e9807XSsvZBjDWaJEAiFWQ6xFAAAEEEEAAAQQQQMDXAsN3S/d1/7zSucoqEgCxxooEQKyCXI8AAgggEBiBML93BCbWdBQBBBBYVmBA30RtPjRl2Zf42gGBqpqIA7X6q0oSAP6KJ71BAAEEELBJIBKJqJXth23S7VyxLMLVOSfOQgABewT23Z11AOyR7XypVdVk4juv1faZJADaduFVBBBAAAEElhNobFruW75xQCAx0YFKqRIBBBD4W2DvXZgG4PTNUFVDAiDWGJAAiFWQ6xFAAAEEAiHQ2MiwQ6cDnZTEPlxOx8Dp+uf83qyDTirSj3PIyDkdiyDWP3SjZLYDdDjwLS1SA/8fxxSFpJiu5mIEEEAAAQQCItDYRALA6VAnkwBwOgSO1V9eGdbNYyv18DPV0ak4peVl+vSV/kpIICnkWFACWHF6WoKGrJ6kBYuMp1AOxwTMhQDTjDUZOLonwAiA7rlxFQIIIIBAwARIADgf8GQ+tnA+CHFuQWtrROMnVGuTXfP0wJNLHv7NJnzzfZMeeqo6zq2hOgSkjdZLhsFhgdo6pgHEEgISALHocS0CCCCAQGAEmhgB4HismQLgeAji2oBpMxu07cgCnXtVucoqVv6F/7q7KrVoMZ/ExjUoVEYCwAX3QDP/7GOKAgmAmPi4GAEEEEAgKAKMAHA+0owAcD4G8WjBwr9adMzZJRp+VJF++rW53Spr6yI6/+qydt/nDQTsENhwXYYi2eHalTJbWpiS1xWvFc8lAbCiCN8jgAACCCDQhgC7ALSBEueXkpOZ7x1n8rhWZw7rvf7uCg3bI0+vvF3XqbqnftygyW/VdupcTkLACoE1BpMAsMIxljIYARCLnkQCIDY/rkYAAQQQCIiAuegQh7MCbAPorL9dtUciEb3weq2G7pavW+6vUleTbReNKVdJWatdzaNcBJYTyMrk8Wk5EAe+YQRAbOjcwbH5cTUCCCCAQEAEikp5wHA61OwC4HQErK//2x8atdshhTrpglLlF3Xv31hRSVjnXslUAOujQ4ltCWT1YCRSWy7xfI0RALFpkwCIzY+rEUAAgVUKFBsPjmPHV63yPE5wt0BRcfceTtzdK2+1rkcGv3h7K2Ltt7bA+Pd0+qWl2vHAQn05u6n9Ezv5zmtT6zXhFaYCdJKL02IQYARADHgWXdrczBoAsVCSAIhFj2sRQACBDgTC4SXbV226e74uu6lCb39Y38HZvOV2geJSpgA4GaME4zeWzB782uJkDKyo29xN465Hqozh/nl6ZpK1D+wXXlemP/NYHtyKOFFG+wJZmSQi29eJzzut5ONjguZ/0pj4uBgBBBBoW+Cb7xu100GF0e2rKv6eO/6fm8pF1rptLy+8WljCbxxOximbebdO8ltSt5kE3WzvfF11W4Vqaq3/BK+qOmKMKiiTuaYABwJ2CWSkJyhEDsAu3k6Vy3ownWJq9yQSAO3S8AYCCCDQdYGyiladd1WZdj64ULN+XH5Y6x8LWvTQ09VdL5QrXCHACABnw5CdxW/czkag+7XP+b1ZI48v0iGnFmv+Qns/of94eoMefrqm+43lSgQ6IUACoBNINp6Smsr/B7HwkgCIRY9rEUAAgb8FzE+cnp1cI3O4/2MTaoxPoNqmufm+SplrAnB4T6CIEQCOBi07i19ZHA1ANyovrwzrojFl2mrffH34WUM3SujeJVfeWqFffls+Adu9krgKgZUFamrDCjMjbGWYOL6SwpawMWnzv2lMfFyMAAIISN/93BRdxXr0JWUqLe/4twJziOp1d1XC5kEBEgDOBo0pAM76d6X21tYl659ssmueHnqqRvGer9vQGNHRZ5Wotq7jn8dd6RPnIrBUoLKa+2qphVN/pyQ7VbM/6iUB4I840gsEEHBAwNwX/uLry7XDAQVdWsX6yRdq9MMvfDrlQMi6XWWj8UDxZx4jN7oNaMGFTAGwADEORUyb2aBtRxZE1z8pq3DuQWnuvJbodKw4dJkqAiZgJvI5nBVITWEKQCwRIAEQix7XIoBAYAVeeL1Ww/bI04NPVnd5KKA5PcBMHHB4R+C3+c3tTuvwTi+83dKeTAFwdQAX/tVifOperOFHFemnX5td0daJr9bp6ZdYD8AVwfBRIxgB4Hwwk5kCEFMQSADExMfFCCAQNIGf5zZp7yMLddIFpSos6f6nW5992ajXptYFjc+z/f31D3c80HgW0IKGswaABYg2FGEOs7/+7opoQvTVd9y31ekF15TL/LnNgYBVAnkFjAazyrK75aQwAqC7dNHrSADExMfFCCAQFAFz0Z8rby3XNvsVyHx4t+K4zNgW0BxazuF+gbnzSAA4HaV+uYlON4H6lxEwFz59/rXa6MKnt9xfpUaXPmOzHsAyQeNLSwR++tWlN7slvfNGIakp3minW1tJAsCtkaFdCCDgGoFX36kzPt3K192PVlu6mNXCv1p15yNVruknDWlf4Nc/7N26rP2aeWepwMB+JACWWjj997c/NEYXPj3536XKK3T/p6G/zW/RKReWGtN4SLg6fe/4of4fXTLFxQ+W3e0DU8K6K7fkOhIAsflxNQII+Fjgd2Pe937HFUVXk7brl9zbH6rUHwv4dNnttxFTAJyP0IB+/MridBQKilt1+qWl2vHAwi4tfOp0u836X3+3Xjfcww4sboiF19vw4xxGADgZw17ZCUpMZBHAWGLA/6ax6HEtAgj4UqC+Iaxr76jQFvvk66PP7d27usn4PeKcK8t86eiXTplbmv1OksbxcA5gBIBjMWhqihgjoKo0dLc8PTOp1rF2xFqxOVVh0pvebX+s/ef62AWqa8IyR+9xOCeQ05vH11j1EYxVkOsRQMBXAlM+qNO/9szX7Q9VqTlOH8x/+kWjJrzCL6VuvZFm/9QkM1HD4awACQBn/M2fiZvtnW+sgVKhmlrvD6EffUmZzCkMHAh0R+Dzr7h3uuNm5TW5JABi5iQBEDMhBSCAgB8EFixq0cEnF+nQ00q0aHH8s/vmgoBlFfGv1w+xs7sPVi36aHc7/V5+fxYBjGuI5/zerJHHL/mZOH+hf9bAMBcFPHx0ifKL+Hkb1xvKJ5W9+T679zgdSkYAxB4BEgCxG1ICAgh4WMBchf+W+yu12V55mvqxvcP9O2IqKQvr8psrOjqF9xwSmDbTufvCoS67rtq+fRKUlMScz3gEprwyrIvGlGmrffP14Wf+vPfNNV0OPbVY5haGHAh0VsBcRPLtD9y31WVn2++X8/r0ZkHYWGNJAiBWQa5HAAHPCrz3ab02H55v7GFd6YotrMy5tZ996c9fuL16k4TDEc34hiGfTseP4f/2R8Bc6+KxCdXaZNc8PfRUjaU7ntjf+q7XMOvHJh1+eokxvcf70xq63nuu6I7AV981qbCEpFF37Ky8pg9TAGLmJAEQMyEFIICA1wT+zGvRkWcU68ATi+W2oa3nGgsC8gupe+6o739pVlU1DwhOR2TwAD7xsTMGn37RoG32K9B5V5lTkYLzgGMu8nqSsZWhmejjQGBVAq9PZfj/qozi8X6uMSKMIzYBBGPz42oEEPCQQHNzRHc9UhVd5M/cEsqNx9x5LbrTaCOHOwQY/u+OOKy9ZpI7GuKzViz8q8XY5rRY+xxdpJ/nxmnVU5cZvvJ2nc67utxlraI5bhMwdwd6+iUW63VDXNZcjf8PYo0DCYBYBbkeAQQ8IfDJjIbotn5X3Vahunp3f9pz+4OVYt95d9xWb3/ozkSRO3Ti14p1hyTHr7IA1GTOfR9zV4WG7ZGnV9/hHn98Yo2uu5M1WAJw63e7i8+9XBuo0THdhorDhUNIAMSsTAIgZkIKQAABNwvkFbboxPNLtO8xRfp9vjdWsm40tpw72RiWao5Y4HBOwLx32AHAOf9la15nCJ/4LOvR3a/NRcyef61Wm+6er1sfqHLF2ifd7YvV1932YJXufYzRV1a7+qE889/NfY9X+6ErvujDkNX5/yDWQJIAiFWQ6xFAwJUCLS0R3f9ElfEJV75efMN78/bMvedvvq/SlbZBadSkN+tk/N7H4QKBdZgCEHMUvv2hUbsdUhhNLpqr4HOsLGDuxHL7Q/zcXVkm2K9MMVb+/2OBNz5A8Huk0tNC6seWsDGHmQRAzIQUgAACbhOY/nWDth1ZoEtvqFBNrXef4G5/qEpfzmYFeqfurxeMT0o5nBdINNb/Y85n9+NQUNyq0ZeUascDC42fJ8bwIo4OBa69o9LYGYbpAB0iBehNc3eMG+4hKeSWkPPpvzWRIAFgjSOlIICACwSKSlp12sWl2vNwfyxoFTYW4zanAtTUBmdVbhfcRtEmzJ3XrO9+DuaiaG6JwdJ2rDE4SUlJoaXf8ncnBczdRO5+tEpDd8vTs5NJZnWSLXraLfdX6YpbWBiwK2Z+PffRZ2v0wxz+L3BLfIeszo4wVsSCBIAVipSBAAKOCphbOD36bLUxrzVP5kI9fjrMbQrPuqzMT13yRF+ef9Vf95En0NtpJPP/24Hp4OUpH9Rps73zdeWt3h4F1UEXbX/rnnHV+ve1ZcY0IO+OIrMdyecVFBqjZ8YwGsRVUWYEgDXhYBUFaxwpBQEEHBL4yhgif/7VZb7+tHbSW3XafqtqnXF8lkPKwarWHHEx7rmaYHXaxb1dlwUAOx2dOb836+Lry2Xub88Ru8Ajz9REp5E9dEuOkpMZhRK7qLdKMEeBVFWTAHJT1DZYhx1hrIgHIwCsUKQMBBCIu0BpeavOvqJMu4wq9PXD/1LYS28s1zffsx7AUg87/zYf/ssrmXZhp3FXyt50o5SunB7Ic8379aIxZdpq33we/i2+A8xRZfsdV8TPBItd3V7c1I/rNfFV7y0g7HbXWNs3lP8PYiWMXk8CwBJGCkEAgXgJmMMxn3yhJrqN1RPPB+dT2mZjCuIxZ5cY+xCzered91pDY0Rjx7MVmJ3GXS170435xKc9M3OBsscmVGuTXfP00FM1auXHQ3tUMb1ubge688EFmvdf5oLHBOmRi//7Z4tOuqDUI60NVjOHbsj/B1ZEnASAFYqUgQACcRH47ucm7Wp84n/W5WXGg3DwPqFdtLhVR5xeInNxLw57BMzkUlFJ8O4tezRjLzXB+C3l/zZgBEBbktNmLtnt5LyrygP587AtEztfM7eB2+mgQn32JdMr7HR2umwzCXzkGcWqqOL/AadjsWL95vz/rEweXVd06c73KHZHjWsQQCCuApXGf8TmYkw7HFCgr74L9jZWn3/VGE2AxDUAAamsviEcXTU9IN31RDfXXztJaanMvV42WAv/atFRZxZr+FFF+ulXPpFe1sbur82pFuZ0gGcnB2f0md2mbivfXFPo+1/4d+W2uJjt2XQjPv23Ki4kAKySpBwEELBFYMIrtdp0jzyZizGZ2+JxSKbJLfezL7HV94K51/Nf+Yyhtto1lvKGbcyn/0v9auvCGnNXhYYZPw9fm1q/9GX+jrOAOR1r9CVlOuM/paqr5z+lOPPbWt2dD1fpmUnsAGMrcgyFM/8/BrwVLiUBsAII3yKAgDsEfvq1SXseXqhTLyplSHYbIbn+7ko9/xq/qLRB062XZv3YZMz9r+7WtVxkn8CmJACi29CZ/9Y33T1ftz5QpcZgD4Ky72brYslPv1QbHZX281wC0kU6V55+/xNVuvr2Cle2jUYtEWA9GOvuBBIA1llSEgIIWCBQXRPWZTeVa9uRBZr+Naved0R62sWlevUdVinuyKgz77W0RKKf5jHCpDNa8T1nWMAXAPz2h0btdkihTv53qfIKGZ0S37tv1bX9+keLdjywUI9PZErAqrXce8ajz1br0ht4+HdvhJa0bLNNGBFmVYxIAFglSTkIIBCzwKQ3a43hrfnRT2JZzXrVnKbR8eeV6K33SQKsWqv9M+58pEo/zmHOZ/tCzr0z7P+C+QtfQXGrMcy8NPpw+eVsPmF27g5cdc3monHnXFmmY88pkbleDYe3BMYbu2hccE25txodwNauMThRqw9KCmDP7ekyCQB7XCkVAQS6IPDbvGbte0yh8TBbqvwiPuXqAp1aWqSjje0B3/uUOcFdcVt67oef1evGe1lPYamHm/5ed60k5eYkuqlJtrfF3OHjLiMhNXS3PGOhOab42A5uYQUvT6nT5nvn6/V3SchayGpbUeFwRFfdVqFzjV00ONwvsOPWqe5vpIdaSALAQ8GiqQj4TcBcQOkaY87dlvvm65MZDPfvbnzNRakOH12sV97mF8+uGP7yW5OOOquEvdO7ghbHc3fYKli/8JkjeTYzHiDNh5KaWrb6jOOtZllV5jSNI88o0WHGz+O/8o3sLIcrBcyphoeNLokm21zZQBq1ksCOW6et9BovdF+ABED37bgSAQRiEHjjvTr9a8983WGsums+wHLEJmAuDGYOQTUXMuJYtUChMcT64JOLVV3Dg9aqtZw5IygJgDm/N2vk8UXRB5L5C3lodOZus7bWt96v12Z75euhp6qN3Wv4GWOtbmylLVjUol1GFertDxk1F5tkfK9mBIC13qH6BWvwk8laU0pDAIEOBOYvbNa/ry03hqw3dHAWb8UicO7JWbrtql4Khdg/vS3Hquole3l/8z1zq9vycctrP308UOsM8fe+z9NmNmjEsUWMQnHLTWdDO7YclqJ7xvTWlsOCNaLFBsqYizS30L14TLkqWKshZst4FtA/N0H//Xq1eFbp+7oYAeD7ENNBBNwhYC6UdOO9FdE5kjz82xuT+5+o1hGnl/BLThvMeYUt2sPYXpKH/zZwXPSS+Quf3x/+Te7ttkjVGoNZ2MpFt57lTTF/1ux0UKGOOrNYc431bjjiL2CuLXTIqcXRbYV5+I+/f6w17sDw/1gJV7qeBMBKJLyAAAJWC0z9uD764H/TWPawttq2vfLeNIagbjMiX1/NZm2FpUbmUOtdjaGfP/3KL+FLTdz69/YBmf+fnBzSDZf2cmsYaJeFAq9NXfL/oLm7w6LFTPWwkLbDoia+WqvNjekYDPnvkMnVb+6yHaNnrA4QCQCrRSkPAQT+EVj4V0t0cTpzrrU5744jvgKLFrdGP+2++9EqRSLBnu316RcN2v3QQv2Zxy4T8b0Lu1fb9lsG5xe+Q/bL0Fb/CuZ2h927O7x7VdjYJdDc3WHo7nm65PpyFZfy88iuaH77Q6P2ObpQp1xYymg4u5DjVO6+u6fHqabgVMMaAMGJNT1FIG4C5lZW946v0q33V6m+IdgPnnFDX0VFZgb9vhtytP46/p5TvSJDfUNY195RqQeerDaSICu+y/duFfhm6oD/b+8+wKOs0gWOv1PSJpmUSUKCIKiooCigWBAV9K4oK2JHZAVRFCuKba0ItgVRsFzFxupaV8V+se21LeoVWV1ddS24lrUhvaZnktxzhgWUJySTZOacr/y/55lnJlO+95zfOwzzvXO+c6R3T/8cFL/9txoZMnKpU9NBu9IkkKXe4iOPyJUJJ0dl1538835PE2dit199Wy9TZqxhVZx0Ihvcd5+dMmTBi50NRvRHKEYA+CPP9BIBYwKvv12TWNZPH3Rx8G+MvdVA8+bXJvJypVpiTC+/6Ift3Q9qZa9DF6uVETj4d1O+u3YO+ergX+dGL3E17CB+5XLT+zQVbdWrtzz4RGXic+rg45eIXh2HVQPaJ/vDoricO2ml9FPD/VkSt32GTnzVYUP4XExHXhgBkA5V9omADwV+WhyXS/+wWp58nrXonZ7+rbcKybTLi+ToQ3M8uVKAfi/eMGutzH6kgl/9nf5mbKZ940blyaypsWYe8fZdeoK43Q/+WR0Aeruf9K5lgW5dQnLm2Kj87qhc6VQSavnJPCpvLaiROx9Yp4on1aym4cH3w9vPlUn/Pv45JcxUCikAmJImDgIeFYjHm2SWWuv42pvXSGUVY6zdlOZe24flojMLZOThEQmH3b9koD7wn3HnWrnvsQqpY4U/N70Vf9XWx+8ukcMPjvzqPr/8MeGKlXLvnyv80l362YJAUI3RPWBgtow4LCJHDI1IUQGDdjdw6VO7Hn+uSu5QB/6ffM6krhtcvHbduVNIvn53K0/+UGE7VxQAbGeA+Ai4WEBX3s+bvEo++5L/gF2cRrUMWUjOPy1fxhybK7kR933JfP+jWrl/TqWaXIsDfze/D3XbM9QUFYs+7Cp5ue57H6bCfvGyBuk9eJE6TYdiaio8vbKPsFopcsigbDn2sFwZroZER/P89++jVi0l/Opb1Ynh/c+/Wi1r1/FvxCvv7y31w6+jwbbkkcr7KQCkUpN9IeATgSXqS+rl01bJn59huL+XUp6THUh8udSTUukvm3qJMqdu//4hLo8+W6neg5Xy1besMOHUPLW1XQcMzJKXHilr68s89fzrblkteslUNgSaE9ATB+6jVsnQowP0pf+umZ4YwdVcX2vUQf8r86rlmZeqRB/0r6vgoL85J6/eN/eBUjloEHMApCO/FADSoco+EfCwgD7oOm/ySqrvHs6x7lqsMKjmCIjIkMHZopdkK4nZPRd19dpGeVuNOHnz3Vp1qZGPPmPUiRffgtMuL5Tzxud7sWtJ96mislF2PXCRLF7GZABJo/n4iXm5ATWJ5KaCwK69MiQYdG7xtqVU6QlqF3xQJ3pVjLcW1MqCD2s5naslMA8/Vl4alK/md5FQyJ3vZaenhgKA0zNE+xBwmIAuAIw7f4XDWkVz0i2g5wvQM5Xvt3eW9FHLVW3bLSzZWan/j7lJrdX3488NsvCrevlCX76Oy9/VEH99wM8yfunOsv39f/xaZ9lhO38tVdmc+lMvVMnoCcube4j7EGhRIJITUKtoZCQuu/bKlF1UQUD/XVxkt4i7eaP1r/t64stPF+pLnbzzXq28/3GdxBnQtTmVL/8+b3w0MVmxLztvoNMUAAwgEwIBLwnoJYp2U8vsfPkN/0t7Ka/t6UuX8pBs1z2cuHTvGpZ8dV6q/jVKfwHVcwnkRgKSrU4rqK9vSvyKU6eua+v07abEOc5LVzTIsuWNskxdL13RKEuXN8i338eZTLI9yfDAa1jv+ddJPObUZfLia9W/vpO/EGingJ5QrbcqBmyniredy0Kylbro+7ZSn+P671hhagsE+rvC8pWNsnhpgxrNoi7q+pvv4ok5gz77V33iNkXddibTBy9776VyVbxS57uwpUWAAkBaWNkpAt4WmDO3UsaeyygAb2eZ3iFgVuCaiwvk92pVCrb1Aj/+HE8UWysqOe+Z90T6BfTcAp3LwmqkQDAxuksXb/UoLz03jL7O0rfVRd+ONzSJ/gVfX/TkfBtu19SKrFGna+mD/SWqoNvQkP52E8F7AhSD059TCgDpNyYCAp4T0JX9PYYuls9VFZ8NAQQQSIXAF29tJXokCdsmAb2++QVXrdp0B7cQQAABjwtMn1Qo557i77lg0p1i/60jkm5R9o+ADwT0BENXTOSXOh+kmi4iYERgz36ZHPw3I336mDzZS9mwIYAAAn4QCKkzUUYenuuHrlrtIwUAq/wER8C9AkcfmpOYWMi9PaDlCCDgFIERwyNOaYqj2qGLrXdOj6ll3hzVLBqDAAIIpEXgyKERKStN7XwUaWmoy3dKAcDlCaT5CNgSCAQCMuk8RgHY8icuAl4RUB8lcswwCgBbyufOO2aquREYDrslH+5HAAHvCJx9ctQ7nXFwTygAODg5NA0BpwsccUiOWhKOJbucnifah4CTBQYNyFIzkvMTd0s5uuTsArU8IkYtGfEYAgi4W2D3XTNln/5Z7u6ES1pPAcAliaKZCDhRQI8CmHwBowCcmBvahIBbBE4ZleeWplprp56BfdbUmLX4BEYAAQTSLcCv/+kW3rR/CgCbLLiFAALtEBh2UEQOGEjFth10vAQB3wuUxIJyxCEM/0/mjbD/3tlyyu8oliRjxXMQQMBdAmUlQTmWU8GMJY0CgDFqAiHgXYEZk4skyKeJdxNMzxBIk8CJI3IlM1NNAsCWlMANanmsnj04FSApLJ6EAAKuEThtTJT/Cwxmi6/sBrEJhYBXBXr3zJTTRvPLlFfzS78QSJcAw//bJhvJCcrDt5dItjolgA0BBBDwgkBuJMB3SMOJpABgGJxwCHhVYPIFhRIr5CPFq/mlXwikWuC/9suW7boziWhbXXfplSk3XlnY1pfxfAQQQMCRAmeNjUpJjKX/TCaHb+smtYmFgIcFigqCMuVCJgT0cIrpGgIpFTiV89nb7XnqCVE5+lDmTmg3IC9EAAFHCOTlBmTieJb+M50MCgCmxYmHgIcF9HDeXXrxi56HU0zXEEiJQLcuIRk+JCcl+/LrTu6YFpPuXfnVzK/5p98IeEFgwslRKS7ic8x0LikAmBYnHgIeFgiFAjJzSpGHe0jXEEAgFQITT82XcJjz2DtiWZAflIduK1GOHdkLr0UAAQTsCORHA3Ku+r+AzbwABQDz5kREwNMCgwZky1G/5Zc9TyeZziHQAYHioqCcNDK3A3vgpRsE9uyXJVdfxHwAGzy4RgAB9wicMy4q+vRRNvMCqJs3JyICnhe4/ooi0ed1sSGAAAKbC5ypJnzSs9mzpUbg/NOiMmRQdmp2xl4QQAABAwIlsaCcM45f/w1QNxuC/4GbZeFOBBDoiEC3LmGZdhm/SnXEkNci4EWBSE5AzhzLkqGpzG0gEJB7byqW8lK+0qXSlX0hgED6BPTIJX0aE5sdAeTtuBMVAc8LnKJm+D5gYJbn+0kHEUAgeQE9UWiskAmfkhdL7pmlxSF5eFaJZDAHa3JgPAsBBKwJ9N05g9PArOmvD0wBwHICCI+AVwX0r1J3TS+W3AinAng1x/QLgbYIZGaKmvCJ5Z7aYtaW5+67Z7bceX1xW17CcxFAAAHjAjOvKpJgkO+GxuF/EZACwC8wuIkAAqkV6N5VnQpwOacCpFaVvSHgToEzT4xK185MWZ/O7J1wdK5cdg7n1abTmH0jgED7BY4bHhFdrGSzKxCo/rZbk90mEB0BBLws0NTUJIeOXip/fafWy92kbwgg0IKAXu7p8ze3Yvh/C0apekh/5p547gp58vmqVO2S/SCAAAIdFsjJDsjHr3emENxhyY7vgBEAHTdkDwgg0IIApwK0gMNDCPhE4MIz8jn4N5Rr/Zk7e0ax7NVPnXPBhgACCDhE4MrzCzj4d0guKAA4JBE0AwEvC3AqgJezS98QaFmgc6eQTDiZc/9bVkrto9lZAXlidql068KEi6mVZW8IINAeAV2QnMgcMO2hS8trKACkhZWdIoDA5gKnsirA5iT8jYAvBK6YWCCRHL5umE52p5KQPH1vqUTzmGzLtD3xEEBgk4CeAPYeNSqJif82mdi+xf/ItjNAfAR8IqCHpf7plhIpK+Fjxycpp5sISM8eYRl7XC4SlgR698yUh28vUV+8LTWAsAgg4HuByecXqv8LWKPUSW8E/ktwUjZoCwIeFygvDcmDt/Fl1ONppnsIbBS49dqYhMP8Ar0RxMKNgwfnyMwpRRYiExIBBPwusEffTDlvPKeAOe19QAHAaRmhPQh4XGDQgGyZcmGBx3tJ9xBAYNSRERm8D8s9OeGdcIZaglFPxMiGAAIImBJIDP2/sVhCIYrApsyTjUMBIFkpnocAAikT+P2Z+TL0QA4MUgbKjhBwmECBWvZv2uX86uyktFx3SSGTMTopIbQFAY8LzJhcJDvtwNB/J6aZAoATs0KbEPC4gJ4P4N6bipmh2uN5pnv+Fbjm4kIpU6f8sDlL4Eb1hfz0MXnOahStQQABzwkce1hExp/A0H+nJpYCgFMzQ7sQ8LhArDAkj8wqkQyKwx7PNN3zm0D/PpmiV/1gc6bAzVcXybhR5MeZ2aFVCLhfoMc2YbljWsz9HfFwDygAeDi5dA0Bpwvs0TdLbpjEMGGn54n2IZCsQDgscvvUGMs9JQtm4Xl6BNbtfyiSMceyOoMFfkIi4GmBLLXk35/VjzvRPA4xnZxosuPk7NA2BHwgoCenGqGGirEhgID7BSadVyD9eqtvgGyOFtBFgLumx0RP1MiGAAIIpEpg5pSY9NmZ/wNS5Zmu/VAASJcs+0UAgaQF7r4xJnvvxn8YSYPxRAQcKDBg90y5iJnmHZiZ5psUDAZk9oxi0efqsiGAAAIdFThxRK6cwulfHWU08vpA9bfdmoxEIggCCCDQgsDylQ0y+Ogl8s138RaexUMIIOBEgdxIQN57qbNs202dA8DmKoF4vElGT1guz/2l2lXtprEIIOAcgf33zpIXHuqk5nViyT/nZGXLLWEEwJZteAQBBAwKlMRC8j/3l0pxER9LBtkJhUBKBPRyTxz8p4TS+E7C4YA8dFuJDDsox3hsAiKAgPsF9KR/j92lJ3Xm4N8t2eSbtlsyRTsR8IFAj20y5Kl7SyU7i/9EfJBuuugRgcOG5MhJI5lV3s3p1F/cH72jREYfw8SAbs4jbUfAtEBRQVCeva9U9MpObO4RoADgnlzRUgR8IbD3blly/63FouaoYkMAAYcLdO8akntuLHZ4K2leMgK6CKDnBLjk7Pxkns5zEEDA5wJ61Rf9y//227Kes9veChQA3JYx2ouADwSOOCQiN17J8oA+SDVddLGAHqnz+N2lon8BYvOOwFUXFaplAvVSjt7pEz1BAIHUC9w1vVgGDchO/Y7ZY9oF+HhPOzEBEECgPQJnnxyVc8ZF2/NSXoMAAgYEbp8ak74s92RA2nwIPZP3nLtLJCeboVjm9YmIgPMFbr22SE44mlOGnJ+p5ltIAaB5F+5FAAEHCFx/RaGMYIkqB2SCJiDwa4EzTszjy9+vSTz317CDIvKXRztJSYyvip5LLh1CoAMC111SKKeN5geaDhBafymf6tZTQAMQQGBLAnqd6j/dUizHDWed6i0ZcT8CpgX26Z8pN0ziFB3T7jbi7dkvS/76VBkrPNjAJyYCDhS47Jx8ufAM5glxYGra1CQKAG3i4skIIGBaIBQKyH03F8vIwykCmLYnHgKbC2yztV7uqZTlnjaH8fDfenWWeU+XSf8+mR7uJV1DAIHWBCaoUzMnX1DY2tN43AUCFADaotNZAAAXlUlEQVRckCSaiIDfBTYUAUYdSRHA7+8F+m9PoLgoKHMfKJVOJSz3ZC8LdiKXFofkfx/rJEMPZMIvOxkgKgJ2Bc46KU9uuJKDf7tZSF10CgCps2RPCCCQRgF9OsAfZxZz3nEajdk1AlsS0JPBPX1vKcs9bQnIB/dHcoLy5OxSufgshv/6IN10EYGNAnrY/8wpMbU8M5OCbkRx+Y1A9bfdmlzeB5qPAAI+EmhsbJLTL14pDz9V6aNe01UE7Ano5eD0jPB6Ujg2BLTAy29Uy7jzV8iqNY2AIICAhwWmXV4o542n6Oe1FDMCwGsZpT8IeFxAjwS4+4aYnDiC5Wc8nmq65xCB/742xsG/Q3LhlGYMPTBH5j9fLnv0ZV4Ap+SEdiCQSgH9Y/8stdQrB/+pVHXOvigAOCcXtAQBBJIU0EWAu6bHZNyovCRfwdMQQKA9AvrXH70mPBsCmwt07xqW1+aUyeljeH9sbsPfCLhZIBwWuf/WYr5juTmJrbSdUwBaAeJhBBBwtsD1t6+Rq2eucXYjaR0CLhRg6KcLk2apyXPmVspZl66UyirOKrWUAsIikBKBooKgWumlRAYNYMLPlIA6dCcUAByaGJqFAALJCzyhvnyOv2iF1NYl/xqeiQACWxbg4H/LNjzSvMDCr+tl1JnL5fN/1Tf/BO5FAAFHC+ywXVieUZO96qU/2bwtwCkA3s4vvUPAFwIjhufKy4+WSUmMjzRfJJxOplWAg/+08np25z17ZMjbz5UJy7V6NsV0zMMCBwzMkjefKefg38M5/mXX+Lb8Sw1uI4CAawUG7L7+P68dVQWbDQEE2icwfRIzPrdPjldpAb1U4H03lyQmD8uNsGQY7woE3CCg53mZ+0AnKcznsNAN+UpFGzkFIBWK7AMBBBwjsHptoxx/xjKZN7/WMW2iIQg4XSBDjfi8+4Zi9estq2s4PVduad93P8blrMtWyutv17ilybQTAV8JZKpFPGZMLpLxJ0R91W86K0IBgHcBAgh4TqC+vknOvnylPPRkpef6RocQSLVANC8gj99VKgfuy6RPqbZlfyIPzKmQS65bJWvWMUEg7wcEnCKwbbewPDKrRHbbhaU8nZITk+1grIdJbWIhgIARgYyMgNxzY7Fcd0mhhEJGQhIEAVcKdO4UklcfL+Pg35XZc0ejxx6XJx+80lkO/U2OOxpMKxHwuMCRQ3Nk/txyDv49nueWuscIgJZ0eAwBBFwvMP/vtXLSxOXy/U8Nru8LHUAglQK9tg/Lc/d3km5dmDcjla7sa8sCjz1XKRddvUpWrGrc8pN4BAEE0iKgT/WadlmRnH0yQ/7TAuyinTICwEXJoqkIINB2gX36Z8mCFzvLEYfw61Pb9XiFVwWGD8mReU+Xc/Dv1QQ7tF/HH5ErH6rRAMcMizi0hTQLAW8K6AmS33iyjIN/b6a3zb1iBECbyXgBAgi4VeCeh9fJxdeukto6t/aAdiPQMYGAmph9yoUFcvFZ+RLQf7AhYEngub9UycRJK2XJckYDWEoBYX0goD/mzz0lKlddVCjZWXzm+yDlSXWRAkBSTDwJAQS8IvDPL+pk9ITlsvDruFe6RD8QSEqgqCAoD9xaLEMGMxomKTCelHaBVWsaZdL01XL/4xXSSB0g7d4E8JeAnuhv9oyY7LsnE7z6K/Ot95ZTAFo34hkIIOAhgV16Zco7avKbscex3JmH0kpXWhHou3OGzH++nIP/Vpx42KyALkrNmhqT914ql4MHc5BiVp9oXhY4fUyevP9yOQf/Xk5yB/rGCIAO4PFSBBBwt8CcuZVy7hUrWZ7K3Wmk9a0I6OGf1/y+ULIY/tmKFA/bFnj97Rq5dOoq+eTzettNIT4CrhTYaYcMufXaItl/bwpqrkygoUZTADAETRgEEHCmwJJlDYl5AebMrXJmA2kVAu0U6No5pIZ/FssBA/ki2E5CXmZBoLGxSR5+qlKumrFGfl7K6i0WUkBIFwrkRgJyxcQCOWdcVMJhzvV3YQqNNpkCgFFugiGAgFMFXnurWs69cpV88x1zAzg1R7QreYHjhkfk1utiUpjPmX7Jq/FMJwlUVTfKLbPXyU13r5XKqiYnNY22IOAogaMPjcgNVxZKl3KWdHVUYhzcGAoADk4OTUMAAbMCNbVNMv32NTJTfeGsZwSqWXyipUQgVhiUm64ukpGHM8dFSkDZiXWBxWqU1jU3rZYH5lQyUaD1bNAAJwnopf1uuqpIfrM/E7s6KS9uaAsFADdkiTYigIBRgYVf18s5am6AtxbUGo1LMAQ6IjD6mFyZdnmhlMRCHdkNr0XAkQKfLqxLrBjw8hs1jmwfjULAlEB5aTAx3P+kkXkM9zeF7rE4FAA8llC6gwACqRN46MkKuWzqalmxivWpUqfKnlIt0LNHWG77Q4xJn1INy/4cKfDxZ3WJ0wKefKFKGpgiwJE5olHpEYjmBeSC0/NFT+wayeH0rvQo+2OvFAD8kWd6iQAC7RRYsaohMRnV/XMqJM70AO1U5GXpEMhWs/pfek6+XHBavmRkMOlTOozZp3MFvvsxruYIWJs4NaC6hjkCnJspWtZRgYwMkdNHR+WSCfmM8OooJq9PCFAA4I2AAAIIJCHw7x/ict0ta+TRZzkPNQkunpJmgeOPiMhVFxVK965M+pRmanbvcIHlKxvkzgfWyV0PVsjK1YzWcni6aF4bBLIyRU4ckScXnpHPZ30b3Hhq6wIUAFo34hkIIIDARgE9P8A1N62Rp19k2cCNKNwwJnDgvtky9bJC6ddbfTNkQwCBjQKVVY1y/+OVcusf18oPizg3YCMMN1wnoJf0G39Cnkwcny/lpczp4roEuqDBFABckCSaiAACzhP4SJ2HevXM1fLS60xI5bzseK9Fu/TKkKmXFsqQwcz27L3s0qNUCsTjTTJnblVinoBPF7KcSypt2Vd6BfSyrWedlCdnnxyVWCEH/unV9vfeKQD4O//0HgEEOiiw4MNaNUfAavnrO6wY0EFKXt6MwE47ZMjFZ+fLccMjEgxynn8zRNyFwBYFXplXLfc9ViEvvFbN0q5bVOIB2wI9tgnLGWPyZOxxeRLNY3I/2/nwQ3wKAH7IMn1EAIG0C8ybXyPTZ62VN/6PEQFpx/ZBgP59MhMH/sOH5EggwIG/D1JOF9MooCdzfezZKnnwiQr5+HNGBaSRml23QeCQA7LlzLFROXhwNp/zbXDjqR0XoADQcUP2gAACCGwU0HME6AmpHnm6UioqmZl6Iww3khLYf+8suUT94v+b/RnqnxQYT0KgjQL/+LQuUQh4/LkqJg1sox1P77hAfjQgY9XEfqerX/x7bKOm92dDwIIABQAL6IREAAHvC6yraJSHn6pUM1Ovky+/Yf1A72e8/T3MVPP5HTssImecGJU9+2W1f0e8EgEEkhaoq2uSua9UJ4oBr75VI40sIJC0HU9su8DgfbJkzLF5ctRvcySSwzD/tgvyilQKUABIpSb7QgABBJoReP3tGrlTFQJeeLVamhgU0IyQP+/q1iWkZnqOykkjc1nb2Z9vAXrtEIFFS+KJUVsPPlEpX31LwdYhaXF9M/S5/aOPyZXfHZUr3bqwZKvrE+qhDlAA8FAy6QoCCDhb4Lsf4zL7kQr5k5qUivWqnZ2rdLUuqH74OWj/bDX8MypDD8xmYr90QbNfBNop8P5HtYlirZ448BPmC2inon9fVhILyuGHRBIH/vv0Z0SXf98Jzu45BQBn54fWIYCABwX00FM95PSpFyrleTUqYO06hgV4MM2/6tJuu2TKqKMiajb/XCljXedf2fAHAk4V+P6nuLyoCgG6GPDmuzVSV+fUltIumwKdO4XUQX+OGt4fkf32ypJQiIlbbeaD2K0LUABo3YhnIIAAAmkT0MWAV96slqdfrKIYkDZlOzvWQ/xHHZmrDvxzpWcPJnuykwWiIpAagYrKxkThVp/K9fIb1bJ8JZMGpEbWnXvRn+9HDo3Ikeqgf8Dumczi7840+rbVFAB8m3o6jgACThOordUjA9YXA/TkVOsqGBngtBy11p6dd8wQvXTfsINyZI++fClszYvHEXCjQGNjk/ztH3XyoioG6FFcn/+LpQXdmMe2tDlLTda6397ZMmTQ+svOO6o72BBwqQAFAJcmjmYjgIC3BX5ZDNCnCyxdzq9NTsx4KCSy755Zcpg66B8+JCLbbM1ET07ME21CIJ0Cen4XfYrAux/Uybt/r5XPvqQgkE5vU/vecbuwDBmcIwcPzha9RGtONrP3m7InTnoFKACk15e9I4AAAikR+OKr+sQXzHnza+WtBTWybAUFgZTAtmMnO+2QIXpJpwMGZqvrbCnM50thOxh5CQKeFViztlEWfFibKAbMVwWB99RogcoqRnQ5OeEBddr+rr0yZKAq6Oqirr7eqoyCrpNzRtvaL0ABoP12vBIBBBCwJqCHnOpfnObNr1EFgVrOR01jJvRSToMG/OeAf0A2k/il0ZpdI+BFgYaGJvnki/pEQUCPENBFge9/avBiV13Tp7zcgOjJWQfusf5gf8DuWZIfpZjrmgTS0A4JUADoEB8vRgABBOwLNDU1Jc5B3TA64KPP6uXb7+Oi7mZro4Bewkmfu79H3yzZs1+m9O+TKcVFapw/GwIIIJBCgUVL4qogUKeWGqwTPcJr4ddx+erf9VLP2QMpVF6/q6KCoPTtnZE44O+nDvp3650p228bZuK+lEuzQ7cIUABwS6ZoJwIIINAGgarqxkRR4NOF9aIv/1SXzxbWyeJlnDqgGYPqhx79y/7Oaji/nrivd0990J8p3bsy5LMNbzOeigACKRTQIwV08XZDQUBff/m1Lg7UyxqWi21VOj8aSKy4oldd2bFHWHqp6z4787neKhxP8J0ABQDfpZwOI4CAnwVWrGpIFAQShQE1UdWnX9TJl9/EZeVqbxYGOpUEZRt1UK8P7PUBfy99wK8uO26XIVlZrNXs538L9B0BNwksXtYgCxMjBeo3Fgh+XBSXJep+PxUHSouD0q1LWLbeKpS41p/r+oC/5/YZUl7KaC03vadpqz0BCgD27ImMAAIIOEZArzqgv2AuWtIgP2+4LNW34xvvW6z+dsoXzUy1AlOn4pB0KgmJ/kKor8vUpav6Uqhn4tcH/N27hpi12THvMBqCAALpEtCf30uWNySKAUsT140b/9YFgsRFrSSjr504GaGegC9WGEx8lpeqz3V90adj6esu5fpAf/3B/tbqwD+bwm263kbs10cCFAB8lGy6igACCHRUoLqmMVEg0KcSVFY2So364rn5pbqmSfQX0g33b/pbEvfp4fcZaqR9OBSQsL4O/+da/Z2ZGZC8iLrkBiWat+k6Py+o7gskZtzXXwoLmHm/o6nk9Qgg4EMBfXrYEvX5vXSFKgZUNklFVaNUqOsqfa1WKkjcVs/RhYL6eJPE4yKNaoBYXN9W8xZuuNanK+gD9w2f4xn/+RwPbfhcV9dZ+vNcfW7rz/MN14nP9cj6v/Wke/rAv7goKPp1bAggYEaAAoAZZ6IggAACCCCAAAIIIIAAAgggYFWA9S6s8hMcAQQQQAABBBBAAAEEEEAAATMCFADMOBMFAQQQQAABBBBAAAEEEEAAAasCFACs8hMcAQQQQAABBBBAAAEEEEAAATMCFADMOBMFAQQQQAABBBBAAAEEEEAAAasCFACs8hMcAQQQQAABBBBAAAEEEEAAATMCFADMOBMFAQQQQAABBBBAAAEEEEAAAasCFACs8hMcAQQQQAABBBBAAAEEEEAAATMCFADMOBMFAQQQQAABBBBAAAEEEEAAAasCFACs8hMcAQQQQAABBBBAAAEEEEAAATMCFADMOBMFAQQQQAABBBBAAAEEEEAAAasCFACs8hMcAQQQQAABBBBAAAEEEEAAATMCFADMOBMFAQQQQAABBBBAAAEEEEAAAasCFACs8hMcAQQQQAABBBBAAAEEEEAAATMCFADMOBMFAQQQQAABBBBAAAEEEEAAAasCFACs8hMcAQQQQAABBBBAAAEEEEAAATMCFADMOBMFAQQQQAABBBBAAAEEEEAAAasCFACs8hMcAQQQQAABBBBAAAEEEEAAATMCFADMOBMFAQQQQAABBBBAAAEEEEAAAasCFACs8hMcAQQQQAABBBBAAAEEEEAAATMCFADMOBMFAQQQQAABBBBAAAEEEEAAAasCFACs8hMcAQQQQAABBBBAAAEEEEAAATMCFADMOBMFAQQQQAABBBBAAAEEEEAAAasCFACs8hMcAQQQQAABBBBAAAEEEEAAATMCFADMOBMFAQQQQAABBBBAAAEEEEAAAasCFACs8hMcAQQQQAABBBBAAAEEEEAAATMCFADMOBMFAQQQQAABBBBAAAEEEEAAAasCFACs8hMcAQQQQAABBBBAAAEEEEAAATMCFADMOBMFAQQQQAABBBBAAAEEEEAAAasCFACs8hMcAQQQQAABBBBAAAEEEEAAATMCFADMOBMFAQQQQAABBBBAAAEEEEAAAasCFACs8hMcAQQQQAABBBBAAAEEEEAAATMCFADMOBMFAQQQQAABBBBAAAEEEEAAAasCFACs8hMcAQQQQAABBBBAAAEEEEAAATMCFADMOBMFAQQQQAABBBBAAAEEEEAAAasCFACs8hMcAQQQQAABBBBAAAEEEEAAATMCFADMOBMFAQQQQAABBBBAAAEEEEAAAasCFACs8hMcAQQQQAABBBBAAAEEEEAAATMCFADMOBMFAQQQQAABBBBAAAEEEEAAAasCFACs8hMcAQQQQAABBBBAAAEEEEAAATMCFADMOBMFAQQQQAABBBBAAAEEEEAAAasCFACs8hMcAQQQQAABBBBAAAEEEEAAATMCFADMOBMFAQQQQAABBBBAAAEEEEAAAasCFACs8hMcAQQQQAABBBBAAAEEEEAAATMCFADMOBMFAQQQQAABBBBAAAEEEEAAAasCFACs8hMcAQQQQAABBBBAAAEEEEAAATMCFADMOBMFAQQQQAABBBBAAAEEEEAAAasCFACs8hMcAQQQQAABBBBAAAEEEEAAATMCFADMOBMFAQQQQAABBBBAAAEEEEAAAasCFACs8hMcAQQQQAABBBBAAAEEEEAAATMCFADMOBMFAQQQQAABBBBAAAEEEEAAAasCFACs8hMcAQQQQAABBBBAAAEEEEAAATMCFADMOBMFAQQQQAABBBBAAAEEEEAAAasCFACs8hMcAQQQQAABBBBAAAEEEEAAATMCFADMOBMFAQQQQAABBBBAAAEEEEAAAasCFACs8hMcAQQQQAABBBBAAAEEEEAAATMCFADMOBMFAQQQQAABBBBAAAEEEEAAAasCFACs8hMcAQQQQAABBBBAAAEEEEAAATMCFADMOBMFAQQQQAABBBBAAAEEEEAAAasCFACs8hMcAQQQQAABBBBAAAEEEEAAATMCFADMOBMFAQQQQAABBBBAAAEEEEAAAasCFACs8hMcAQQQQAABBBBAAAEEEEAAATMCFADMOBMFAQQQQAABBBBAAAEEEEAAAasCFACs8hMcAQQQQAABBBBAAAEEEEAAATMCFADMOBMFAQQQQAABBBBAAAEEEEAAAasCFACs8hMcAQQQQAABBBBAAAEEEEAAATMCFADMOBMFAQQQQAABBBBAAAEEEEAAAasCFACs8hMcAQQQQAABBBBAAAEEEEAAATMCFADMOBMFAQQQQAABBBBAAAEEEEAAAasCFACs8hMcAQQQQAABBBBAAAEEEEAAATMCFADMOBMFAQQQQAABBBBAAAEEEEAAAasCFACs8hMcAQQQQAABBBBAAAEEEEAAATMCFADMOBMFAQQQQAABBBBAAAEEEEAAAasCFACs8hMcAQQQQAABBBBAAAEEEEAAATMCFADMOBMFAQQQQAABBBBAAAEEEEAAAasCFACs8hMcAQQQQAABBBBAAAEEEEAAATMCFADMOBMFAQQQQAABBBBAAAEEEEAAAasCFACs8hMcAQQQQAABBBBAAAEEEEAAATMCFADMOBMFAQQQQAABBBBAAAEEEEAAAasCFACs8hMcAQQQQAABBBBAAAEEEEAAATMC/w+FnlVv0rKu2gAAAABJRU5ErkJggg=="
 
@@ -31464,6 +32788,7 @@ var $node = $node || {} ; $node[ "/piterjs/logo/logo_1024.png" ] = "data:image/p
 
 ;
 "use strict";
+
 
 ;
 "use strict";
@@ -31552,6 +32877,7 @@ var $;
 ;
 "use strict";
 
+
 ;
 "use strict";
 var $;
@@ -31592,6 +32918,8 @@ var $;
             flexWrap: 'wrap',
             display: 'flex',
             justifyContent: 'space-between',
+            // fontSize: '3vmin',
+            // lineHeight: '3vmin',
             Speeches: {
                 margin: 'auto',
                 display: 'flex',
@@ -31664,7 +32992,7 @@ var $;
 		Team(){
 			const obj = new this.$.$piterjs_intro_page();
 			(obj.title) = () => ("Команда");
-			(obj.text) = () => ("! \"\"https://habrastorage.org/webt/kf/qg/9l/kfqg9lp0ez5eey44-rlszbwozma.png\"\"\n ! \"\"https://habrastorage.org/webt/pd/ii/9l/pdii9lgzgihcg9vb3etx_hug4rg.jpeg\"\"\n   ! \"\"https://habrastorage.org/webt/c5/tf/-i/c5tf-il8mfpbxxegoi_i5h6egxu.png\"\"\n     ! \"\"https://habrastorage.org/webt/-8/6s/kw/-86skwqsvqzvodiauw3fv_vt1h8.png\"\"\n! \"\"https://habrastorage.org/webt/dw/3a/ui/dw3auiirk0vffjg3xnn4em775dq.png\"\"\n ! \"\"https://habrastorage.org/webt/8e/dq/rh/8edqrhvfwy92wyra4yulzc3uvyi.png\"\"\n   ! \"\"https://habrastorage.org/webt/vv/rj/2f/vvrj2ffi-kztfpzdsbiiv-goqso.png\"\"\n     ! \"\"https://habrastorage.org/webt/cd/po/2w/cdpo2wbzt2bd0lism1hvcui3bgs.png\"\"\n! \"\"https://habrastorage.org/webt/mb/oz/2-/mboz2-qxenahgayijecyblbo6ka.jpeg\"\"");
+			(obj.text) = () => ("! \"\"https://habrastorage.org/webt/kf/qg/9l/kfqg9lp0ez5eey44-rlszbwozma.png\"\"\n ! \"\"https://habrastorage.org/webt/pd/ii/9l/pdii9lgzgihcg9vb3etx_hug4rg.jpeg\"\"\n   ! \"\"https://habrastorage.org/webt/c5/tf/-i/c5tf-il8mfpbxxegoi_i5h6egxu.png\"\"\n     ! \"\"https://habrastorage.org/webt/-8/6s/kw/-86skwqsvqzvodiauw3fv_vt1h8.png\"\"\n! \"\"https://habrastorage.org/webt/dw/3a/ui/dw3auiirk0vffjg3xnn4em775dq.png\"\"\n ! \"\"https://habrastorage.org/webt/8e/dq/rh/8edqrhvfwy92wyra4yulzc3uvyi.png\"\"\n   ! \"\"https://habrastorage.org/webt/vv/rj/2f/vvrj2ffi-kztfpzdsbiiv-goqso.png\"\"\n     ! \"\"https://habrastorage.org/webt/cd/po/2w/cdpo2wbzt2bd0lism1hvcui3bgs.png\"\"\n! \"\"https://habrastorage.org/webt/mb/oz/2-/mboz2-qxenahgayijecyblbo6ka.jpeg\"\"\n  ! \"\"https://habrastorage.org/webt/7f/25/76/7f25769b6b84302ce88f14cf3e032ec2.png\"\"");
 			return obj;
 		}
 		Speakers(){
@@ -31809,6 +33137,7 @@ var $;
 "use strict";
 var $;
 (function ($) {
+    /** @deprecated Use $mol_wire_fiber..plan */
     function $mol_fiber_defer(calculate) {
         const host = {};
         const fiber = new $mol_wire_task(calculate.name, calculate, host, []);
@@ -31816,6 +33145,7 @@ var $;
         return fiber;
     }
     $.$mol_fiber_defer = $mol_fiber_defer;
+    /** @deprecated Use $mol_wire_async */
     function $mol_fiber_root(calculate) {
         const wrapper = function (...args) {
             const fiber = new $mol_wire_task(this + '.' + calculate.name, calculate, this, args);
@@ -31825,14 +33155,17 @@ var $;
         return wrapper;
     }
     $.$mol_fiber_root = $mol_fiber_root;
+    /** @deprecated Use $mol_wire_sync */
     function $mol_fiber_sync(request) {
         throw new Error('Use $mol_wire_sync instead');
     }
     $.$mol_fiber_sync = $mol_fiber_sync;
+    /** @deprecated Use $mol_wire_fiber.sync */
     async function $mol_fiber_warp() {
         $mol_wire_fiber.sync();
     }
     $.$mol_fiber_warp = $mol_fiber_warp;
+    /** @deprecated Don't use that */
     class $mol_fiber_solid extends $mol_wrapper {
         static func(task) {
             return task;
@@ -31840,6 +33173,7 @@ var $;
     }
     $.$mol_fiber_solid = $mol_fiber_solid;
     class $mol_fiber {
+        /** @deprecated Use $mol_wire_method */
         static method = $mol_action;
     }
     $.$mol_fiber = $mol_fiber;
@@ -31847,6 +33181,7 @@ var $;
 
 ;
 "use strict";
+
 
 ;
 "use strict";
