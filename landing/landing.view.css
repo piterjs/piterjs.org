@@ -1,0 +1,1047 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@300;400;500;700&family=Space+Grotesk:wght@300;400;500;700&display=swap');
+
+[piterjs_landing] {
+	display: flex;
+	flex-direction: column;
+	width: 100%;
+	min-height: 100vh;
+	background-color: #000000;
+	color: #eeeeee;
+	font-family: 'Inter', 'Space Grotesk', ui-sans-serif, system-ui, -apple-system, sans-serif;
+	position: relative;
+	overflow-x: hidden;
+	box-sizing: border-box;
+
+	--color-caution-yellow: #fff313;
+	--color-midnight-steel: #000000;
+	--color-industrial-white: #eeeeee;
+	--color-carbon: #333333;
+	--color-gunmetal: #4b4b4b;
+	--color-aluminum: #afafaf;
+	--font-mono: 'JetBrains Mono', monospace;
+}
+
+[piterjs_landing] * {
+	box-sizing: border-box;
+}
+
+/* ==========================================================================
+   HEADER & NAVIGATION
+   ========================================================================== */
+[piterjs_landing_header] {
+	position: sticky;
+	top: 0;
+	z-index: 100;
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	padding: 12px 32px;
+	background-color: rgba(0, 0, 0, 0.85);
+	backdrop-filter: blur(12px);
+	-webkit-backdrop-filter: blur(12px);
+	border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+[piterjs_landing_logo_link] {
+	display: flex;
+	align-items: center;
+	gap: 10px;
+	text-decoration: none;
+	color: #ffffff;
+}
+
+[piterjs_landing_logo_img] {
+	width: 28px;
+	height: 28px;
+	border-radius: 4px;
+}
+
+[piterjs_landing_logo_title] {
+	font-family: var(--font-mono);
+	font-weight: 700;
+	font-size: 16px;
+	letter-spacing: 1px;
+	color: #ffffff;
+}
+
+[piterjs_landing_logo_tag] {
+	font-family: var(--font-mono);
+	font-size: 10px;
+	padding: 2px 6px;
+	background-color: var(--color-caution-yellow);
+	color: #000000;
+	font-weight: 700;
+	border-radius: 4px;
+}
+
+[piterjs_landing_nav] {
+	display: flex;
+	align-items: center;
+	gap: 8px;
+	background: #1a1a1a;
+	padding: 4px 6px;
+	border-radius: 6px;
+	border: 1px solid #333333;
+}
+
+[piterjs_landing_nav] [mol_link] {
+	padding: 6px 14px;
+	font-size: 13px;
+	font-weight: 500;
+	color: #afafaf;
+	text-decoration: none;
+	border-radius: 4px;
+	transition: all 0.2s ease;
+}
+
+[piterjs_landing_nav] [mol_link]:hover {
+	color: #ffffff;
+	background: rgba(255, 255, 255, 0.08);
+}
+
+[piterjs_landing_nav_actions] {
+	display: flex;
+	align-items: center;
+	gap: 12px;
+}
+
+[piterjs_landing_back_link] {
+	font-family: var(--font-mono);
+	font-size: 12px;
+	color: #afafaf;
+	text-decoration: none;
+	padding: 8px 12px;
+	border: 1px solid #333333;
+	border-radius: 6px;
+	background: transparent;
+	transition: all 0.2s;
+}
+
+[piterjs_landing_back_link]:hover {
+	color: #ffffff;
+	border-color: #666666;
+}
+
+[piterjs_landing_rsvp_btn] {
+	background-color: var(--color-caution-yellow);
+	color: #000000;
+	font-family: var(--font-mono);
+	font-weight: 700;
+	font-size: 13px;
+	padding: 8px 16px;
+	border-radius: 6px;
+	border: none;
+	cursor: pointer;
+	transition: transform 0.15s ease, background-color 0.15s ease;
+}
+
+[piterjs_landing_rsvp_btn]:hover {
+	background-color: #ffe600;
+	transform: translateY(-1px);
+}
+
+[piterjs_landing_burger_btn] {
+	display: none;
+}
+
+/* ==========================================================================
+   MAIN WRAPPER & SECTIONS
+   ========================================================================== */
+[piterjs_landing_main] {
+	display: flex;
+	flex-direction: column;
+	width: 100%;
+}
+
+/* ==========================================================================
+   SECTION 1: HERO
+   ========================================================================== */
+[piterjs_landing_section_hero] {
+	position: relative;
+	min-height: 88vh;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	padding: 80px 32px 100px;
+	background: radial-gradient(circle at center 40%, #1a1a1a 0%, #000000 70%);
+	background-image: linear-gradient(rgba(0, 0, 0, 0.75), rgba(0, 0, 0, 0.9)), url('/piterjs/landing/assets/hero_bg.png');
+	background-size: cover;
+	background-position: center;
+}
+
+[piterjs_landing_hero_content] {
+	max-width: 1200px;
+	width: 100%;
+	display: flex;
+	flex-direction: column;
+	gap: 28px;
+	position: relative;
+	z-index: 2;
+}
+
+[piterjs_landing_hero_status_row] {
+	display: flex;
+	align-items: center;
+	gap: 16px;
+	flex-wrap: wrap;
+}
+
+[piterjs_landing_status_badge] {
+	display: inline-flex;
+	align-items: center;
+	gap: 8px;
+	background: #111111;
+	border: 1px solid #333333;
+	padding: 6px 14px;
+	border-radius: 6px;
+	font-family: var(--font-mono);
+	font-size: 11px;
+	font-weight: 600;
+	letter-spacing: 0.5px;
+	color: var(--color-caution-yellow);
+}
+
+[piterjs_landing_pulse_dot] {
+	width: 8px;
+	height: 8px;
+	background-color: var(--color-caution-yellow);
+	border-radius: 50%;
+	box-shadow: 0 0 10px var(--color-caution-yellow);
+	animation: pjs_pulse 2s infinite;
+}
+
+@keyframes pjs_pulse {
+	0% { opacity: 1; transform: scale(1); }
+	50% { opacity: 0.4; transform: scale(1.3); }
+	100% { opacity: 1; transform: scale(1); }
+}
+
+[piterjs_landing_slots_tag] {
+	font-family: var(--font-mono);
+	font-size: 11px;
+	color: #afafaf;
+	background: rgba(255, 255, 255, 0.05);
+	padding: 6px 12px;
+	border-radius: 6px;
+	border: 1px solid #222222;
+}
+
+[piterjs_landing_hero_title] {
+	font-size: clamp(36px, 6vw, 68px);
+	font-weight: 300;
+	line-height: 1.05;
+	letter-spacing: -0.04em;
+	color: #ffffff;
+	text-transform: uppercase;
+}
+
+[piterjs_landing_hero_title_accent] {
+	color: var(--color-caution-yellow);
+	font-weight: 400;
+	display: block;
+}
+
+[piterjs_landing_hero_subtitle] {
+	font-size: clamp(16px, 1.8vw, 20px);
+	color: #cccccc;
+	max-width: 780px;
+	line-height: 1.5;
+	font-weight: 300;
+}
+
+[piterjs_landing_hero_footer_grid] {
+	display: grid;
+	grid-template-columns: 1fr 1fr;
+	gap: 24px;
+	margin-top: 20px;
+}
+
+[piterjs_landing_countdown_box] {
+	background: #111111;
+	border: 1px solid #333333;
+	border-radius: 9px;
+	padding: 24px;
+	display: flex;
+	flex-direction: column;
+	gap: 16px;
+}
+
+[piterjs_landing_countdown_label] {
+	font-family: var(--font-mono);
+	font-size: 11px;
+	color: #afafaf;
+	letter-spacing: 1px;
+}
+
+[piterjs_landing_timer_units] {
+	display: flex;
+	gap: 16px;
+}
+
+[piterjs_landing_unit_days],
+[piterjs_landing_unit_hours],
+[piterjs_landing_unit_mins],
+[piterjs_landing_unit_secs] {
+	flex: 1;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	background: #1a1a1a;
+	padding: 12px 8px;
+	border-radius: 6px;
+	border: 1px solid #2a2a2a;
+}
+
+[piterjs_landing_days_val],
+[piterjs_landing_hours_val],
+[piterjs_landing_mins_val],
+[piterjs_landing_secs_val] {
+	font-family: var(--font-mono);
+	font-size: 28px;
+	font-weight: 700;
+	color: var(--color-caution-yellow);
+}
+
+[piterjs_landing_days_tag],
+[piterjs_landing_hours_tag],
+[piterjs_landing_mins_tag],
+[piterjs_landing_secs_tag] {
+	font-size: 11px;
+	color: #888888;
+	margin-top: 4px;
+	text-transform: uppercase;
+}
+
+[piterjs_landing_discovery_card] {
+	background: #111111;
+	border: 1px solid #333333;
+	border-radius: 9px;
+	padding: 24px;
+	display: flex;
+	flex-direction: column;
+	gap: 10px;
+}
+
+[piterjs_landing_disc_badge] {
+	font-family: var(--font-mono);
+	font-size: 10px;
+	color: var(--color-caution-yellow);
+	font-weight: 700;
+	letter-spacing: 1px;
+}
+
+[piterjs_landing_disc_title] {
+	font-size: 18px;
+	font-weight: 600;
+	color: #ffffff;
+	line-height: 1.3;
+}
+
+[piterjs_landing_disc_meta_time],
+[piterjs_landing_disc_meta_place] {
+	display: flex;
+	align-items: center;
+	gap: 8px;
+	font-family: var(--font-mono);
+	font-size: 13px;
+	color: #cccccc;
+}
+
+[piterjs_landing_map_link] {
+	color: var(--color-caution-yellow);
+	font-family: var(--font-mono);
+	font-size: 12px;
+	text-decoration: none;
+	margin-top: 4px;
+}
+
+/* ==========================================================================
+   SECTION 2: MANIFESTO (Caution Yellow #fff313)
+   ========================================================================== */
+[piterjs_landing_section_manifesto] {
+	background-color: var(--color-caution-yellow);
+	color: #000000;
+	padding: 90px 32px;
+	display: flex;
+	justify-content: center;
+}
+
+[piterjs_landing_manifesto_content] {
+	max-width: 1200px;
+	width: 100%;
+	display: flex;
+	flex-direction: column;
+	gap: 60px;
+}
+
+[piterjs_landing_manifesto_quote] {
+	font-size: clamp(24px, 3.8vw, 44px);
+	font-weight: 400;
+	line-height: 1.25;
+	letter-spacing: -0.03em;
+	color: #000000;
+	max-width: 1050px;
+}
+
+[piterjs_landing_stats_grid] {
+	display: grid;
+	grid-template-columns: repeat(4, 1fr);
+	gap: 24px;
+	border-top: 2px solid rgba(0, 0, 0, 0.15);
+	padding-top: 40px;
+}
+
+[piterjs_landing_stat1],
+[piterjs_landing_stat2],
+[piterjs_landing_stat3],
+[piterjs_landing_stat4] {
+	display: flex;
+	flex-direction: column;
+	gap: 6px;
+}
+
+[piterjs_landing_stat1_val],
+[piterjs_landing_stat2_val],
+[piterjs_landing_stat3_val],
+[piterjs_landing_stat4_val] {
+	font-family: var(--font-mono);
+	font-size: clamp(32px, 4vw, 48px);
+	font-weight: 700;
+	color: #000000;
+	letter-spacing: -1px;
+}
+
+[piterjs_landing_stat1_lbl],
+[piterjs_landing_stat2_lbl],
+[piterjs_landing_stat3_lbl],
+[piterjs_landing_stat4_lbl] {
+	font-size: 14px;
+	font-weight: 500;
+	color: #333333;
+	line-height: 1.3;
+}
+
+/* ==========================================================================
+   SECTION 3: SCHEDULE & SPEAKERS (Industrial White #eeeeee)
+   ========================================================================== */
+[piterjs_landing_section_schedule] {
+	background-color: var(--color-industrial-white);
+	color: #000000;
+	padding: 90px 32px;
+	display: flex;
+	justify-content: center;
+}
+
+[piterjs_landing_schedule_content] {
+	max-width: 1200px;
+	width: 100%;
+	display: flex;
+	flex-direction: column;
+	gap: 36px;
+}
+
+[piterjs_landing_schedule_heading] {
+	font-size: clamp(28px, 4vw, 44px);
+	font-weight: 300;
+	letter-spacing: -0.04em;
+	color: #000000;
+	text-transform: uppercase;
+}
+
+[piterjs_landing_schedule_intro] {
+	font-size: 18px;
+	color: #4b4b4b;
+	max-width: 800px;
+	line-height: 1.5;
+	margin-top: -16px;
+}
+
+[piterjs_landing_talks_grid] {
+	display: grid;
+	grid-template-columns: 1fr 1fr;
+	gap: 24px;
+}
+
+[piterjs_landing_talk1],
+[piterjs_landing_talk2] {
+	background: #ffffff;
+	border: 1px solid #dcdcdc;
+	border-radius: 9px;
+	padding: 28px;
+	display: flex;
+	flex-direction: column;
+	gap: 16px;
+	transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+[piterjs_landing_talk1]:hover,
+[piterjs_landing_talk2]:hover {
+	transform: translateY(-2px);
+	box-shadow: 0 10px 30px rgba(0, 0, 0, 0.06);
+}
+
+[piterjs_landing_talk1_top],
+[piterjs_landing_talk2_top] {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+}
+
+[piterjs_landing_talk1_tag],
+[piterjs_landing_talk2_tag] {
+	font-family: var(--font-mono);
+	font-size: 11px;
+	font-weight: 700;
+	background: #000000;
+	color: var(--color-caution-yellow);
+	padding: 4px 10px;
+	border-radius: 4px;
+}
+
+[piterjs_landing_talk1_time],
+[piterjs_landing_talk2_time] {
+	font-family: var(--font-mono);
+	font-size: 13px;
+	font-weight: 600;
+	color: #666666;
+}
+
+[piterjs_landing_talk1_title],
+[piterjs_landing_talk2_title] {
+	font-size: 20px;
+	font-weight: 600;
+	color: #000000;
+	line-height: 1.35;
+}
+
+[piterjs_landing_talk1_abstract],
+[piterjs_landing_talk2_abstract] {
+	font-size: 14px;
+	color: #555555;
+	line-height: 1.5;
+}
+
+[piterjs_landing_talk1_speaker],
+[piterjs_landing_talk2_speaker] {
+	display: flex;
+	align-items: center;
+	gap: 14px;
+	margin-top: auto;
+	padding-top: 16px;
+	border-top: 1px solid #eeeeee;
+}
+
+[piterjs_landing_speaker1_photo],
+[piterjs_landing_speaker2_photo] {
+	width: 52px;
+	height: 52px;
+	border-radius: 50%;
+	object-fit: cover;
+	border: 2px solid var(--color-caution-yellow);
+}
+
+[piterjs_landing_speaker1_name],
+[piterjs_landing_speaker2_name] {
+	font-weight: 600;
+	font-size: 15px;
+	color: #000000;
+}
+
+[piterjs_landing_speaker1_role],
+[piterjs_landing_speaker2_role] {
+	font-size: 12px;
+	color: #777777;
+	font-family: var(--font-mono);
+	margin-top: 2px;
+}
+
+[piterjs_landing_cfp_cta_card] {
+	background: #000000;
+	color: #ffffff;
+	border-radius: 9px;
+	padding: 32px;
+	display: flex;
+	flex-direction: column;
+	gap: 14px;
+}
+
+[piterjs_landing_cfp_cta_badge] {
+	font-family: var(--font-mono);
+	font-size: 11px;
+	font-weight: 700;
+	color: var(--color-caution-yellow);
+	letter-spacing: 1px;
+}
+
+[piterjs_landing_cfp_cta_title] {
+	font-size: 22px;
+	font-weight: 400;
+	letter-spacing: -0.02em;
+}
+
+[piterjs_landing_cfp_cta_text] {
+	font-size: 15px;
+	color: #afafaf;
+	line-height: 1.5;
+	max-width: 800px;
+}
+
+[piterjs_landing_cfp_open_btn] {
+	align-self: flex-start;
+	background: var(--color-caution-yellow);
+	color: #000000;
+	font-family: var(--font-mono);
+	font-weight: 700;
+	font-size: 13px;
+	padding: 10px 20px;
+	border-radius: 6px;
+	border: none;
+	cursor: pointer;
+	margin-top: 8px;
+}
+
+[piterjs_landing_venue_card] {
+	background: #ffffff;
+	border: 1px solid #dcdcdc;
+	border-radius: 9px;
+	padding: 28px;
+	display: flex;
+	flex-direction: column;
+	gap: 8px;
+}
+
+[piterjs_landing_venue_badge] {
+	font-family: var(--font-mono);
+	font-size: 11px;
+	font-weight: 700;
+	color: #777777;
+}
+
+[piterjs_landing_venue_title] {
+	font-size: 22px;
+	font-weight: 600;
+	color: #000000;
+}
+
+[piterjs_landing_venue_meta1],
+[piterjs_landing_venue_meta2],
+[piterjs_landing_venue_meta3] {
+	font-size: 14px;
+	color: #444444;
+}
+
+[piterjs_landing_venue_map_btn] {
+	color: #000000;
+	font-family: var(--font-mono);
+	font-weight: 600;
+	font-size: 13px;
+	margin-top: 6px;
+	text-decoration: underline;
+}
+
+/* ==========================================================================
+   SECTION 4: ARCHIVE (Midnight Steel #000000)
+   ========================================================================== */
+[piterjs_landing_section_archive] {
+	background-color: #0c0c0c;
+	color: #ffffff;
+	padding: 90px 32px;
+	display: flex;
+	justify-content: center;
+}
+
+[piterjs_landing_archive_content] {
+	max-width: 1200px;
+	width: 100%;
+	display: flex;
+	flex-direction: column;
+	gap: 32px;
+}
+
+[piterjs_landing_archive_heading] {
+	font-size: clamp(28px, 4vw, 44px);
+	font-weight: 300;
+	letter-spacing: -0.04em;
+	text-transform: uppercase;
+}
+
+[piterjs_landing_archive_filters] {
+	display: flex;
+	gap: 8px;
+	flex-wrap: wrap;
+}
+
+[piterjs_landing_archive_filters] [mol_button_minor] {
+	background: #1a1a1a;
+	color: #afafaf;
+	border: 1px solid #333333;
+	padding: 8px 18px;
+	border-radius: 6px;
+	font-family: var(--font-mono);
+	font-size: 13px;
+	cursor: pointer;
+	transition: all 0.15s;
+}
+
+[piterjs_landing_archive_filters] [mol_button_minor]:hover {
+	color: #ffffff;
+	border-color: #666666;
+}
+
+[piterjs_landing_archive_grid] {
+	display: grid;
+	grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+	gap: 20px;
+}
+
+[piterjs_landing_archive_card] {
+	background: #141414;
+	border: 1px solid #282828;
+	border-radius: 9px;
+	padding: 24px;
+	display: flex;
+	flex-direction: column;
+	gap: 12px;
+	transition: border-color 0.2s;
+}
+
+[piterjs_landing_archive_card]:hover {
+	border-color: #444444;
+}
+
+[piterjs_landing_card_event_tag] {
+	font-family: var(--font-mono);
+	font-size: 11px;
+	font-weight: 700;
+	color: var(--color-caution-yellow);
+}
+
+[piterjs_landing_card_title] {
+	font-size: 16px;
+	font-weight: 500;
+	color: #ffffff;
+	line-height: 1.4;
+}
+
+[piterjs_landing_card_meta] {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	font-family: var(--font-mono);
+	font-size: 12px;
+	color: #777777;
+	margin-top: auto;
+	padding-top: 12px;
+	border-top: 1px solid #222222;
+}
+
+/* ==========================================================================
+   SECTION 5: COMMUNITY
+   ========================================================================== */
+[piterjs_landing_section_community] {
+	background-color: #000000;
+	color: #ffffff;
+	padding: 90px 32px;
+	display: flex;
+	justify-content: center;
+}
+
+[piterjs_landing_community_content] {
+	max-width: 1200px;
+	width: 100%;
+	display: flex;
+	flex-direction: column;
+	gap: 32px;
+}
+
+[piterjs_landing_community_heading] {
+	font-size: clamp(28px, 4vw, 44px);
+	font-weight: 300;
+	letter-spacing: -0.04em;
+	text-transform: uppercase;
+}
+
+[piterjs_landing_community_cards] {
+	display: grid;
+	grid-template-columns: 1fr 1fr;
+	gap: 24px;
+}
+
+[piterjs_landing_comm_tg],
+[piterjs_landing_comm_vk] {
+	background: #111111;
+	border: 1px solid #333333;
+	border-radius: 9px;
+	padding: 32px;
+	display: flex;
+	flex-direction: column;
+	gap: 14px;
+}
+
+[piterjs_landing_comm_tg_badge],
+[piterjs_landing_comm_vk_badge] {
+	font-family: var(--font-mono);
+	font-size: 11px;
+	font-weight: 700;
+	color: var(--color-caution-yellow);
+	letter-spacing: 1px;
+}
+
+[piterjs_landing_comm_tg_title],
+[piterjs_landing_comm_vk_title] {
+	font-size: 22px;
+	font-weight: 600;
+	color: #ffffff;
+}
+
+[piterjs_landing_comm_tg_text],
+[piterjs_landing_comm_vk_text] {
+	font-size: 14px;
+	color: #aaaaaa;
+	line-height: 1.5;
+}
+
+[piterjs_landing_comm_tg_btn],
+[piterjs_landing_comm_vk_btn] {
+	align-self: flex-start;
+	font-family: var(--font-mono);
+	font-size: 12px;
+	color: var(--color-caution-yellow);
+	text-decoration: none;
+	padding: 8px 14px;
+	border: 1px solid var(--color-caution-yellow);
+	border-radius: 6px;
+	margin-top: 8px;
+	transition: background-color 0.2s, color 0.2s;
+}
+
+[piterjs_landing_comm_tg_btn]:hover,
+[piterjs_landing_comm_vk_btn]:hover {
+	background-color: var(--color-caution-yellow);
+	color: #000000;
+}
+
+/* ==========================================================================
+   FOOTER
+   ========================================================================== */
+[piterjs_landing_footer] {
+	background-color: #000000;
+	border-top: 1px solid #222222;
+	padding: 32px;
+	display: flex;
+	justify-content: center;
+}
+
+[piterjs_landing_footer_content] {
+	max-width: 1200px;
+	width: 100%;
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	flex-wrap: wrap;
+	gap: 20px;
+}
+
+[piterjs_landing_footer_copy] {
+	display: flex;
+	align-items: center;
+	gap: 12px;
+}
+
+[piterjs_landing_footer_logo] {
+	width: 24px;
+	height: 24px;
+	border-radius: 4px;
+}
+
+[piterjs_landing_footer_text] {
+	font-family: var(--font-mono);
+	font-size: 12px;
+	color: #777777;
+}
+
+[piterjs_landing_footer_links] {
+	display: flex;
+	gap: 16px;
+}
+
+[piterjs_landing_footer_links] [mol_link] {
+	font-family: var(--font-mono);
+	font-size: 12px;
+	color: #888888;
+	text-decoration: none;
+	transition: color 0.2s;
+}
+
+[piterjs_landing_footer_links] [mol_link]:hover {
+	color: var(--color-caution-yellow);
+}
+
+/* ==========================================================================
+   CFP MODAL
+   ========================================================================== */
+[piterjs_landing_cfp_modal] {
+	position: fixed;
+	top: 0;
+	left: 0;
+	width: 100vw;
+	height: 100vh;
+	background: rgba(0, 0, 0, 0.85);
+	backdrop-filter: blur(8px);
+	-webkit-backdrop-filter: blur(8px);
+	z-index: 1000;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	padding: 20px;
+}
+
+[piterjs_landing_cfp_modal_box] {
+	background: #111111;
+	border: 1px solid #333333;
+	border-radius: 9px;
+	max-width: 580px;
+	width: 100%;
+	max-height: 90vh;
+	overflow-y: auto;
+	padding: 32px;
+	display: flex;
+	flex-direction: column;
+	gap: 20px;
+	box-shadow: 0 20px 60px rgba(0, 0, 0, 0.8);
+}
+
+[piterjs_landing_cfp_header] {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+}
+
+[piterjs_landing_cfp_header_title] {
+	font-family: var(--font-mono);
+	font-size: 16px;
+	font-weight: 700;
+	color: var(--color-caution-yellow);
+}
+
+[piterjs_landing_cfp_close_btn] {
+	background: transparent;
+	border: none;
+	color: #ffffff;
+	font-size: 18px;
+	cursor: pointer;
+}
+
+[piterjs_landing_cfp_desc] {
+	font-size: 14px;
+	color: #aaaaaa;
+	line-height: 1.4;
+}
+
+[piterjs_landing_cfp_form] {
+	display: flex;
+	flex-direction: column;
+	gap: 16px;
+}
+
+[piterjs_landing] [piterjs_landing_cfp_form] [mol_string],
+[piterjs_landing] [piterjs_landing_cfp_form] [mol_textarea] {
+	background: #1a1a1a;
+	border: 1px solid #333333;
+	border-radius: 6px;
+	color: #ffffff;
+	padding: 8px 12px;
+	font-size: 14px;
+}
+
+[piterjs_landing_cfp_label_email],
+[piterjs_landing_cfp_label_contact],
+[piterjs_landing_cfp_label_name],
+[piterjs_landing_cfp_label_company],
+[piterjs_landing_cfp_label_title],
+[piterjs_landing_cfp_label_desc] {
+	font-family: var(--font-mono);
+	font-size: 11px;
+	font-weight: 600;
+	color: #bbbbbb;
+	margin-bottom: 4px;
+}
+
+[piterjs_landing_cfp_submit_btn] {
+	background: var(--color-caution-yellow);
+	color: #000000;
+	font-family: var(--font-mono);
+	font-weight: 700;
+	font-size: 13px;
+	padding: 12px;
+	border-radius: 6px;
+	border: none;
+	cursor: pointer;
+	margin-top: 10px;
+}
+
+/* ==========================================================================
+   TOAST NOTIFICATIONS
+   ========================================================================== */
+[piterjs_landing_toast] {
+	position: fixed;
+	bottom: 32px;
+	right: 32px;
+	background: #000000;
+	color: var(--color-caution-yellow);
+	border: 1px solid var(--color-caution-yellow);
+	border-radius: 6px;
+	padding: 14px 20px;
+	font-family: var(--font-mono);
+	font-size: 13px;
+	box-shadow: 0 10px 30px rgba(0, 0, 0, 0.7);
+	z-index: 2000;
+	animation: pjs_slidein 0.3s ease;
+}
+
+@keyframes pjs_slidein {
+	from { transform: translateY(20px); opacity: 0; }
+	to { transform: translateY(0); opacity: 1; }
+}
+
+/* ==========================================================================
+   RESPONSIVE BREAKPOINTS
+   ========================================================================== */
+@media (max-width: 992px) {
+	[piterjs_landing_hero_footer_grid],
+	[piterjs_landing_talks_grid],
+	[piterjs_landing_community_cards] {
+		grid-template-columns: 1fr;
+	}
+
+	[piterjs_landing_stats_grid] {
+		grid-template-columns: 1fr 1fr;
+	}
+
+	[piterjs_landing_nav] {
+		display: none;
+	}
+}
+
+@media (max-width: 600px) {
+	[piterjs_landing_header] {
+		padding: 12px 16px;
+	}
+
+	[piterjs_landing_section_hero],
+	[piterjs_landing_section_manifesto],
+	[piterjs_landing_section_schedule],
+	[piterjs_landing_section_archive],
+	[piterjs_landing_section_community] {
+		padding: 60px 16px;
+	}
+
+	[piterjs_landing_stats_grid] {
+		grid-template-columns: 1fr;
+	}
+
+	[piterjs_landing_timer_units] {
+		display: grid;
+		grid-template-columns: 1fr 1fr;
+	}
+}

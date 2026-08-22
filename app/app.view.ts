@@ -71,8 +71,14 @@ namespace $.$$ {
 		// speaker( id : string ) { return $piterjs_speaker.item( id ) }
 
 		@ $mol_mem
+		landing( next? : string | null ) {
+			return this.$.$mol_state_arg.value( 'landing' , next ) ?? this.$.$mol_state_arg.value( 'langing' , next )
+		}
+
+		@ $mol_mem
 		pages() {
 			if( this.intro() != null ) return [ this.Intro() ]
+			if( this.landing() != null ) return [ this.Landing() ]
 			const pages = [
 				this.Menu() ,
 				... this.rights() ? [ this.Rights() ] : [] ,
@@ -96,6 +102,7 @@ namespace $.$$ {
 		@ $mol_mem
 		title() {
 			if( this.intro() != null ) return this.Intro().title()
+			if( this.landing() != null ) return 'PiterJS — Сообщество JavaScript'
 			return this.Book().title()
 		}
 

@@ -43,10 +43,17 @@ $piterjs_app $mol_view
 		body /
 			<= Menu_content $mol_view sub /
 				<= Links $mol_list rows /
+					<= Landing_link $mol_link
+						arg *
+							landing \
+							wiki null
+							meetup null
+						title \Лендинг
 					<= Wiki_link $mol_link
 						arg *
 							wiki \
 							meetup null
+							landing null
 						title \База знаний
 					- <= Others_link $mol_link
 						uri \#others
@@ -61,6 +68,7 @@ $piterjs_app $mol_view
 								<= Conf_ext $mol_icon_share_outline
 						<= Conf_date $mol_view
 							sub / \сентябрь'19
+	Landing $piterjs_landing
 	Meetup* $piterjs_meetup_page
 		meetup <= meetup*
 		editing? <=> editing? false
@@ -118,3 +126,4 @@ $piterjs_app $mol_view
 				arg * safe null
 				sub /
 					<= Safe_close_icon $mol_icon_close
+
