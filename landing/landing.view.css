@@ -612,36 +612,48 @@
 
 [piterjs_landing_talk1_speaker],
 [piterjs_landing_talk2_speaker] {
-	display: flex;
-	align-items: center;
-	gap: 14px;
-	margin-top: auto;
-	padding-top: 16px;
-	border-top: 1px solid #eeeeee;
+	display: flex !important;
+	flex-direction: row !important;
+	align-items: center !important;
+	gap: 14px !important;
+	margin-top: auto !important;
+	padding-top: 16px !important;
+	border-top: 1px solid #eeeeee !important;
 }
 
 [piterjs_landing_speaker1_photo],
 [piterjs_landing_speaker2_photo] {
-	width: 52px;
-	height: 52px;
-	border-radius: 50%;
-	object-fit: cover;
-	border: 2px solid var(--color-caution-yellow);
+	width: 52px !important;
+	height: 52px !important;
+	border-radius: 50% !important;
+	object-fit: cover !important;
+	border: 2px solid var(--color-caution-yellow) !important;
+	flex-shrink: 0 !important;
+}
+
+[piterjs_landing_speaker1_info],
+[piterjs_landing_speaker2_info] {
+	display: flex !important;
+	flex-direction: column !important;
+	align-items: flex-start !important;
+	gap: 2px !important;
 }
 
 [piterjs_landing_speaker1_name],
 [piterjs_landing_speaker2_name] {
-	font-weight: 600;
-	font-size: 15px;
-	color: #000000;
+	font-weight: 600 !important;
+	font-size: 15px !important;
+	color: #000000 !important;
+	display: block !important;
 }
 
 [piterjs_landing_speaker1_role],
 [piterjs_landing_speaker2_role] {
-	font-size: 12px;
-	color: #777777;
-	font-family: var(--font-mono);
-	margin-top: 2px;
+	font-size: 12px !important;
+	color: #777777 !important;
+	font-family: var(--font-mono) !important;
+	display: block !important;
+	margin-top: 2px !important;
 }
 
 [piterjs_landing_cfp_cta_card] {
