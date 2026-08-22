@@ -55,6 +55,19 @@ namespace $.$$ {
 	export class $piterjs_landing extends $.$piterjs_landing {
 
 		@ $mol_mem
+		dom_node() {
+			const node = super.dom_node()
+			$mol_fiber_defer( () => {
+				const video = node.querySelector( 'video' ) as HTMLVideoElement | null
+				if( video ) {
+					video.muted = true
+					video.play().catch( () => {} )
+				}
+			} )
+			return node
+		}
+
+		@ $mol_mem
 		now_moment() {
 			new $mol_after_timeout( 1000, () => this.now_moment( new $mol_time_moment() ) )
 			return new $mol_time_moment()

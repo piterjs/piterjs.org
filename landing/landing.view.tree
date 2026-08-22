@@ -48,6 +48,15 @@ $piterjs_landing $mol_view
 				<= Section_hero $mol_view
 					attr * id \hero
 					sub /
+						<= Hero_video $mol_view
+							dom_name \video
+							attr *
+								autoplay true
+								loop true
+								muted true
+								playsinline true
+								poster \/piterjs/landing/assets/hero_poster.jpg
+								src \/piterjs/landing/assets/background.mp4
 						<= Hero_scrim $mol_view
 						<= Hero_content $mol_view
 							sub /
@@ -60,9 +69,11 @@ $piterjs_landing $mol_view
 										<= Slots_tag $mol_view sub / \250/300 СЛОТОВ ЗАНЯТО
 								<= Hero_title $mol_view
 									sub /
-										\SAINT PETERSBURG
-										<= Hero_title_accent $mol_view sub / \JAVASCRIPT
-										\COMMUNITY
+										<= Hero_title_line1 $mol_view sub / \SAINT PETERSBURG
+										<= Hero_title_line2 $mol_view
+											sub /
+												<= Hero_title_accent $mol_view sub / \JAVASCRIPT
+												<= Hero_title_rest $mol_view sub / \COMMUNITY
 								<= Hero_subtitle $mol_view
 									sub / \Сообщество разработчиков, создающих будущее веба. Живые встречи, глубокие хардкорные доклады, нетворк и технологический драйв в самом сердце Санкт-Петербурга.
 								<= Hero_footer_grid $mol_view

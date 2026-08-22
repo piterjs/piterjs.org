@@ -76,6 +76,12 @@ namespace $.$$ {
 		}
 
 		@ $mol_mem
+		sub() {
+			if( this.landing() != null ) return [ this.Landing() ]
+			return super.sub()
+		}
+
+		@ $mol_mem
 		pages() {
 			if( this.intro() != null ) return [ this.Intro() ]
 			if( this.landing() != null ) return [ this.Landing() ]

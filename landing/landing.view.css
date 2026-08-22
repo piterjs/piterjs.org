@@ -1,16 +1,22 @@
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@300;400;500;700&family=Space+Grotesk:wght@300;400;500;700&display=swap');
 
 [piterjs_landing] {
-	display: flex;
-	flex-direction: column;
-	width: 100%;
-	min-height: 100vh;
-	background-color: #000000;
-	color: #eeeeee;
-	font-family: 'Inter', 'Space Grotesk', ui-sans-serif, system-ui, -apple-system, sans-serif;
-	position: relative;
-	overflow-x: hidden;
-	box-sizing: border-box;
+	display: block !important;
+	width: 100vw !important;
+	min-width: 100vw !important;
+	max-width: 100vw !important;
+	min-height: 100vh !important;
+	height: 100vh !important;
+	overflow-y: auto !important;
+	overflow-x: hidden !important;
+	background-color: #000000 !important;
+	color: #eeeeee !important;
+	font-family: 'Inter', 'Space Grotesk', ui-sans-serif, system-ui, -apple-system, sans-serif !important;
+	position: relative !important;
+	box-sizing: border-box !important;
+	margin: 0 !important;
+	padding: 0 !important;
+	border: none !important;
 
 	--color-caution-yellow: #fff313;
 	--color-midnight-steel: #000000;
@@ -22,24 +28,26 @@
 }
 
 [piterjs_landing] * {
-	box-sizing: border-box;
+	box-sizing: border-box !important;
 }
 
 /* ==========================================================================
    HEADER & NAVIGATION
    ========================================================================== */
 [piterjs_landing_header] {
-	position: sticky;
-	top: 0;
-	z-index: 100;
-	display: flex;
-	align-items: center;
-	justify-content: space-between;
-	padding: 12px 32px;
-	background-color: rgba(0, 0, 0, 0.85);
-	backdrop-filter: blur(12px);
-	-webkit-backdrop-filter: blur(12px);
-	border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+	position: fixed !important;
+	top: 0 !important;
+	left: 0 !important;
+	width: 100% !important;
+	z-index: 1000 !important;
+	display: flex !important;
+	align-items: center !important;
+	justify-content: space-between !important;
+	padding: 16px 36px !important;
+	background-color: rgba(0, 0, 0, 0.85) !important;
+	backdrop-filter: blur(12px) !important;
+	-webkit-backdrop-filter: blur(12px) !important;
+	border-bottom: 1px solid rgba(255, 255, 255, 0.1) !important;
 }
 
 [piterjs_landing_logo_link] {
@@ -157,57 +165,82 @@
    SECTION 1: HERO
    ========================================================================== */
 [piterjs_landing_section_hero] {
-	position: relative;
-	min-height: 88vh;
-	display: flex;
-	align-items: center;
-	justify-content: center;
-	padding: 80px 32px 100px;
-	background: radial-gradient(circle at center 40%, #1a1a1a 0%, #000000 70%);
-	background-image: linear-gradient(rgba(0, 0, 0, 0.75), rgba(0, 0, 0, 0.9)), url('/piterjs/landing/assets/hero_bg.png');
-	background-size: cover;
-	background-position: center;
+	position: relative !important;
+	min-height: 100vh !important;
+	height: 100vh !important;
+	display: flex !important;
+	flex-direction: column !important;
+	justify-content: center !important;
+	padding: 140px 60px 60px 60px !important;
+	background-color: #000000 !important;
+	background-image: url('/piterjs/landing/assets/hero_bg.png') !important;
+	background-size: cover !important;
+	background-position: center !important;
+	overflow: hidden !important;
+	box-sizing: border-box !important;
+}
+
+[piterjs_landing_hero_video] {
+	position: absolute !important;
+	inset: 0 !important;
+	width: 100% !important;
+	height: 100% !important;
+	object-fit: cover !important;
+	object-position: center !important;
+	z-index: 0 !important;
+	pointer-events: none !important;
+	border: 0 !important;
+}
+
+[piterjs_landing_hero_scrim] {
+	position: absolute !important;
+	inset: 0 !important;
+	z-index: 1 !important;
+	pointer-events: none !important;
+	background-image: radial-gradient(circle at 80% 20%, rgba(255, 243, 19, 0.05) 0%, transparent 40%),
+	                  linear-gradient(to bottom, rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.95)) !important;
 }
 
 [piterjs_landing_hero_content] {
-	max-width: 1200px;
-	width: 100%;
-	display: flex;
-	flex-direction: column;
-	gap: 28px;
-	position: relative;
-	z-index: 2;
+	max-width: 1280px !important;
+	margin: 0 auto !important;
+	width: 100% !important;
+	position: relative !important;
+	z-index: 2 !important;
+	display: flex !important;
+	flex-direction: column !important;
+	gap: 24px !important;
 }
 
 [piterjs_landing_hero_status_row] {
-	display: flex;
-	align-items: center;
-	gap: 16px;
-	flex-wrap: wrap;
+	display: flex !important;
+	align-items: center !important;
+	gap: 16px !important;
+	flex-wrap: wrap !important;
 }
 
 [piterjs_landing_status_badge] {
-	display: inline-flex;
-	align-items: center;
-	gap: 8px;
-	background: #111111;
-	border: 1px solid #333333;
-	padding: 6px 14px;
-	border-radius: 6px;
-	font-family: var(--font-mono);
-	font-size: 11px;
-	font-weight: 600;
-	letter-spacing: 0.5px;
-	color: var(--color-caution-yellow);
+	display: inline-flex !important;
+	align-items: center !important;
+	gap: 8px !important;
+	background: #111111 !important;
+	border: 1px solid #333333 !important;
+	padding: 6px 14px !important;
+	border-radius: 6px !important;
+	font-family: var(--font-mono) !important;
+	font-size: 11px !important;
+	font-weight: 600 !important;
+	letter-spacing: 0.5px !important;
+	color: var(--color-caution-yellow) !important;
 }
 
 [piterjs_landing_pulse_dot] {
-	width: 8px;
-	height: 8px;
-	background-color: var(--color-caution-yellow);
-	border-radius: 50%;
-	box-shadow: 0 0 10px var(--color-caution-yellow);
-	animation: pjs_pulse 2s infinite;
+	width: 8px !important;
+	height: 8px !important;
+	background-color: var(--color-caution-yellow) !important;
+	border-radius: 50% !important;
+	box-shadow: 0 0 10px var(--color-caution-yellow) !important;
+	animation: pjs_pulse 2s infinite !important;
 }
 
 @keyframes pjs_pulse {
@@ -217,28 +250,51 @@
 }
 
 [piterjs_landing_slots_tag] {
-	font-family: var(--font-mono);
-	font-size: 11px;
-	color: #afafaf;
-	background: rgba(255, 255, 255, 0.05);
-	padding: 6px 12px;
-	border-radius: 6px;
-	border: 1px solid #222222;
+	font-family: var(--font-mono) !important;
+	font-size: 11px !important;
+	color: #afafaf !important;
+	background: rgba(255, 255, 255, 0.05) !important;
+	padding: 6px 12px !important;
+	border-radius: 6px !important;
+	border: 1px solid #222222 !important;
 }
 
 [piterjs_landing_hero_title] {
-	font-size: clamp(36px, 6vw, 68px);
-	font-weight: 300;
-	line-height: 1.05;
-	letter-spacing: -0.04em;
-	color: #ffffff;
-	text-transform: uppercase;
+	font-size: 64px !important;
+	line-height: 1.05 !important;
+	letter-spacing: -2.56px !important;
+	font-weight: 300 !important;
+	color: #eeeeee !important;
+	max-width: 900px !important;
+	margin-bottom: 8px !important;
+	text-transform: uppercase !important;
+	display: flex !important;
+	flex-direction: column !important;
+	gap: 4px !important;
+}
+
+[piterjs_landing_hero_title_line1] {
+	display: block !important;
+	color: #eeeeee !important;
+	font-weight: 300 !important;
+}
+
+[piterjs_landing_hero_title_line2] {
+	display: flex !important;
+	align-items: baseline !important;
+	gap: 16px !important;
 }
 
 [piterjs_landing_hero_title_accent] {
-	color: var(--color-caution-yellow);
-	font-weight: 400;
-	display: block;
+	color: #fff313 !important;
+	font-weight: 300 !important;
+	display: inline !important;
+}
+
+[piterjs_landing_hero_title_rest] {
+	color: #eeeeee !important;
+	font-weight: 300 !important;
+	display: inline !important;
 }
 
 [piterjs_landing_hero_subtitle] {
