@@ -483,35 +483,31 @@
 [piterjs_landing_stat2],
 [piterjs_landing_stat3],
 [piterjs_landing_stat4] {
-	display: flex !important;
-	flex-direction: column !important;
-	gap: 10px !important;
+	display: flex;
+	flex-direction: column;
+	gap: 6px;
 }
 
 [piterjs_landing_stat1_val],
 [piterjs_landing_stat2_val],
 [piterjs_landing_stat3_val],
 [piterjs_landing_stat4_val] {
-	font-family: 'Inter', 'Space Grotesk', ui-sans-serif, system-ui, sans-serif !important;
-	font-size: 48px !important;
-	font-weight: 300 !important;
-	letter-spacing: -2px !important;
-	line-height: 1 !important;
-	color: #000000 !important;
-	margin-bottom: 8px !important;
+	font-family: var(--font-mono);
+	font-size: clamp(32px, 4vw, 48px);
+	font-weight: 700;
+	color: #000000;
+	letter-spacing: -1px;
+	margin-bottom: 6px;
 }
 
 [piterjs_landing_stat1_lbl],
 [piterjs_landing_stat2_lbl],
 [piterjs_landing_stat3_lbl],
 [piterjs_landing_stat4_lbl] {
-	font-family: 'Inter', ui-sans-serif, system-ui, sans-serif !important;
-	font-size: 14px !important;
-	font-weight: 400 !important;
-	text-transform: uppercase !important;
-	letter-spacing: 0.5px !important;
-	color: #000000 !important;
-	line-height: 1.35 !important;
+	font-size: 14px;
+	font-weight: 500;
+	color: #333333;
+	line-height: 1.3;
 }
 
 /* ==========================================================================
