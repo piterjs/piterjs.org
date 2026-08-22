@@ -141,14 +141,11 @@
 	border-radius: 6px;
 	border: none;
 	cursor: pointer;
-	transition: background-color 0.15s ease, color 0.15s ease, outline 0.15s ease;
+	transition: background-color 0.15s ease;
 }
 
 [piterjs_landing_rsvp_btn]:hover {
-	background-color: #ffffff;
-	color: #000000;
-	outline: 2px solid var(--color-caution-yellow);
-	outline-offset: 1px;
+	background-color: #ffe600;
 }
 
 [piterjs_landing_burger_btn] {
@@ -694,14 +691,11 @@
 	border: none;
 	cursor: pointer;
 	margin-top: 8px;
-	transition: background-color 0.15s ease, color 0.15s ease, outline 0.15s ease;
+	transition: background-color 0.15s ease;
 }
 
 [piterjs_landing_cfp_open_btn]:hover {
-	background-color: #ffffff;
-	color: #000000;
-	outline: 2px solid var(--color-caution-yellow);
-	outline-offset: 1px;
+	background-color: #ffe600;
 }
 
 [piterjs_landing_venue_card] {
@@ -929,103 +923,101 @@
    FOOTER
    ========================================================================== */
 [piterjs_landing_footer] {
-	background-color: var(--surface-pure-black) !important;
-	border-top: 1px solid var(--color-gunmetal) !important;
-	padding: 60px 36px 36px 36px !important;
-	color: var(--color-aluminum) !important;
-	font-size: 13px !important;
-	display: block !important;
+	background-color: #000000;
+	border-top: 1px solid #222222;
+	padding: 32px;
+	display: flex;
+	justify-content: center;
 }
 
 [piterjs_landing_footer_content] {
-	max-width: 1280px !important;
-	margin: 0 auto !important;
-	display: flex !important;
-	justify-content: space-between !important;
-	align-items: center !important;
-	flex-wrap: wrap !important;
-	gap: 20px !important;
+	max-width: 1200px;
+	width: 100%;
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	flex-wrap: wrap;
+	gap: 20px;
 }
 
 [piterjs_landing_footer_copy] {
-	display: flex !important;
-	align-items: center !important;
-	gap: 12px !important;
-	font-family: var(--font-mono) !important;
+	display: flex;
+	align-items: center;
+	gap: 12px;
 }
 
 [piterjs_landing_footer_logo] {
-	width: 24px !important;
-	height: 24px !important;
-	border-radius: 4px !important;
+	width: 24px;
+	height: 24px;
+	border-radius: 4px;
 }
 
 [piterjs_landing_footer_text] {
-	font-family: var(--font-mono) !important;
-	font-size: 13px !important;
-	color: var(--color-aluminum) !important;
+	font-family: var(--font-mono);
+	font-size: 12px;
+	color: #777777;
 }
 
 [piterjs_landing_footer_links] {
-	display: flex !important;
-	align-items: center !important;
-	gap: 20px !important;
+	display: flex;
+	align-items: center;
+	gap: 16px;
 }
 
 [piterjs_landing_soc_gh],
 [piterjs_landing_soc_tg],
 [piterjs_landing_soc_yt],
 [piterjs_landing_soc_vk] {
-	color: var(--color-aluminum) !important;
-	text-decoration: none !important;
-	transition: color 0.2s ease !important;
-	display: flex !important;
-	align-items: center !important;
-	justify-content: center !important;
-	cursor: pointer !important;
+	color: #888888;
+	text-decoration: none;
+	transition: color 0.2s;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	cursor: pointer;
 }
 
 [piterjs_landing_soc_gh]:hover,
 [piterjs_landing_soc_tg]:hover,
 [piterjs_landing_soc_yt]:hover,
 [piterjs_landing_soc_vk]:hover {
-	color: var(--color-caution-yellow) !important;
+	color: var(--color-caution-yellow);
 }
 
 [piterjs_landing_soc_gh_icon],
 [piterjs_landing_soc_tg_icon],
 [piterjs_landing_soc_yt_icon],
 [piterjs_landing_soc_vk_icon] {
-	display: block !important;
-	width: 28px !important;
-	height: 28px !important;
-	background-color: currentColor !important;
-	-webkit-mask-position: center !important;
-	mask-position: center !important;
-	-webkit-mask-repeat: no-repeat !important;
-	mask-repeat: no-repeat !important;
-	-webkit-mask-size: contain !important;
-	mask-size: contain !important;
+	display: block;
+	width: 24px;
+	height: 24px;
+	background-color: currentColor;
+	-webkit-mask-position: center;
+	mask-position: center;
+	-webkit-mask-repeat: no-repeat;
+	mask-repeat: no-repeat;
+	-webkit-mask-size: contain;
+	mask-size: contain;
 }
 
 [piterjs_landing_soc_gh_icon] {
-	-webkit-mask-image: url('/piterjs/landing/assets/github.png') !important;
-	mask-image: url('/piterjs/landing/assets/github.png') !important;
+	-webkit-mask-image: url('/piterjs/landing/assets/github.png');
+	mask-image: url('/piterjs/landing/assets/github.png');
 }
 
 [piterjs_landing_soc_tg_icon] {
-	-webkit-mask-image: url('/piterjs/landing/assets/telegram.png') !important;
-	mask-image: url('/piterjs/landing/assets/telegram.png') !important;
+	-webkit-mask-image: url('/piterjs/landing/assets/telegram.png');
+	mask-image: url('/piterjs/landing/assets/telegram.png');
 }
 
 [piterjs_landing_soc_yt_icon] {
-	-webkit-mask-image: url('/piterjs/landing/assets/youtube.png') !important;
-	mask-image: url('/piterjs/landing/assets/youtube.png') !important;
+	-webkit-mask-image: url('/piterjs/landing/assets/youtube.png');
+	mask-image: url('/piterjs/landing/assets/youtube.png');
 }
 
 [piterjs_landing_soc_vk_icon] {
-	-webkit-mask-image: url('/piterjs/landing/assets/vk.png') !important;
-	mask-image: url('/piterjs/landing/assets/vk.png') !important;
+	-webkit-mask-image: url('/piterjs/landing/assets/vk.png');
+	mask-image: url('/piterjs/landing/assets/vk.png');
 }
 
 /* ==========================================================================
