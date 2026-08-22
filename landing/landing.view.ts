@@ -61,6 +61,8 @@ namespace $.$$ {
 				const video = node.querySelector( 'video' ) as HTMLVideoElement | null
 				if( video ) {
 					video.muted = true
+					video.defaultMuted = true
+					video.volume = 0
 					video.play().catch( () => {} )
 				}
 			} )
