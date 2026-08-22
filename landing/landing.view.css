@@ -924,17 +924,18 @@
 
 [piterjs_landing_comm_tg_btn],
 [piterjs_landing_comm_vk_btn] {
-	align-self: flex-start;
-	font-family: var(--font-mono);
-	font-size: 12px;
-	color: var(--color-caution-yellow);
-	text-decoration: none;
-	padding: 8px 14px;
-	border: 1px solid var(--color-caution-yellow);
-	border-radius: 6px;
-	margin-top: auto !important;
-	padding-top: 8px;
+	align-self: flex-start !important;
+	font-family: var(--font-mono) !important;
+	font-size: 12px !important;
+	color: var(--color-caution-yellow) !important;
+	text-decoration: none !important;
+	padding: 8px 14px !important;
+	border: 1px solid var(--color-caution-yellow) !important;
+	border-radius: 6px !important;
+	margin-top: 24px !important;
 	transition: background-color 0.2s, color 0.2s;
+	display: inline-flex !important;
+	align-items: center !important;
 }
 
 [piterjs_landing_comm_tg_btn]:hover,
