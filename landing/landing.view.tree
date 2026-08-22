@@ -266,22 +266,26 @@ $piterjs_landing $mol_view
 											uri \https://github.com/piterjs
 											target \_blank
 											hint \GitHub
-											sub / \[ GitHub ]
+											sub /
+												<= Soc_gh_icon $mol_view
 										<= Soc_tg $mol_link
 											uri \https://t.me/piterjs
 											target \_blank
 											hint \Telegram
-											sub / \[ Telegram ]
+											sub /
+												<= Soc_tg_icon $mol_view
 										<= Soc_yt $mol_link
 											uri \https://youtube.com
 											target \_blank
 											hint \YouTube
-											sub / \[ YouTube ]
+											sub /
+												<= Soc_yt_icon $mol_view
 										<= Soc_vk $mol_link
 											uri \https://vk.com/piterjs
 											target \_blank
 											hint \VK Video
-											sub / \[ VK Video ]
+											sub /
+												<= Soc_vk_icon $mol_view
 		<= Cfp_modal $mol_view
 			sub /
 				<= Cfp_modal_box $mol_view
