@@ -737,12 +737,25 @@
 }
 
 [piterjs_landing_venue_map_btn] {
-	color: #000000;
-	font-family: var(--font-mono);
-	font-weight: 600;
-	font-size: 13px;
-	margin-top: 6px;
-	text-decoration: underline;
+	align-self: flex-start !important;
+	display: inline-flex !important;
+	width: auto !important;
+	color: #000000 !important;
+	font-family: var(--font-mono) !important;
+	font-weight: 600 !important;
+	font-size: 13px !important;
+	margin-top: 8px !important;
+	text-decoration: underline !important;
+	background: transparent !important;
+	background-color: transparent !important;
+	padding: 0 !important;
+}
+
+[piterjs_landing_venue_map_btn]:hover {
+	color: #000000 !important;
+	background: transparent !important;
+	background-color: transparent !important;
+	text-decoration: none !important;
 }
 
 /* ==========================================================================
