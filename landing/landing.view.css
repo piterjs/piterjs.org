@@ -879,9 +879,11 @@
 	border: 1px solid #333333;
 	border-radius: 9px;
 	padding: 32px;
-	display: flex;
-	flex-direction: column;
+	display: flex !important;
+	flex-direction: column !important;
 	gap: 14px;
+	height: 100% !important;
+	box-sizing: border-box !important;
 }
 
 [piterjs_landing_comm_tg_badge],
@@ -917,7 +919,8 @@
 	padding: 8px 14px;
 	border: 1px solid var(--color-caution-yellow);
 	border-radius: 6px;
-	margin-top: 8px;
+	margin-top: auto !important;
+	padding-top: 8px;
 	transition: background-color 0.2s, color 0.2s;
 }
 
