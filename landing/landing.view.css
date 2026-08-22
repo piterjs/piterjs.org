@@ -968,56 +968,39 @@
 [piterjs_landing_soc_tg],
 [piterjs_landing_soc_yt],
 [piterjs_landing_soc_vk] {
-	color: #888888;
-	text-decoration: none;
-	transition: color 0.2s;
-	display: flex;
-	align-items: center;
-	justify-content: center;
-	cursor: pointer;
+	background: transparent !important;
+	background-color: transparent !important;
+	padding: 0 !important;
+	margin: 0 !important;
+	border: none !important;
+	box-shadow: none !important;
+	display: flex !important;
+	align-items: center !important;
+	justify-content: center !important;
+	opacity: 0.6;
+	transition: opacity 0.15s ease;
+	cursor: pointer !important;
 }
 
 [piterjs_landing_soc_gh]:hover,
 [piterjs_landing_soc_tg]:hover,
 [piterjs_landing_soc_yt]:hover,
 [piterjs_landing_soc_vk]:hover {
-	color: var(--color-caution-yellow);
+	background: transparent !important;
+	background-color: transparent !important;
+	opacity: 1;
 }
 
 [piterjs_landing_soc_gh_icon],
 [piterjs_landing_soc_tg_icon],
 [piterjs_landing_soc_yt_icon],
 [piterjs_landing_soc_vk_icon] {
-	display: block;
-	width: 24px;
-	height: 24px;
-	background-color: currentColor;
-	-webkit-mask-position: center;
-	mask-position: center;
-	-webkit-mask-repeat: no-repeat;
-	mask-repeat: no-repeat;
-	-webkit-mask-size: contain;
-	mask-size: contain;
-}
-
-[piterjs_landing_soc_gh_icon] {
-	-webkit-mask-image: url('/piterjs/landing/assets/github.png');
-	mask-image: url('/piterjs/landing/assets/github.png');
-}
-
-[piterjs_landing_soc_tg_icon] {
-	-webkit-mask-image: url('/piterjs/landing/assets/telegram.png');
-	mask-image: url('/piterjs/landing/assets/telegram.png');
-}
-
-[piterjs_landing_soc_yt_icon] {
-	-webkit-mask-image: url('/piterjs/landing/assets/youtube.png');
-	mask-image: url('/piterjs/landing/assets/youtube.png');
-}
-
-[piterjs_landing_soc_vk_icon] {
-	-webkit-mask-image: url('/piterjs/landing/assets/vk.png');
-	mask-image: url('/piterjs/landing/assets/vk.png');
+	width: 22px !important;
+	height: 22px !important;
+	object-fit: contain !important;
+	display: block !important;
+	background: transparent !important;
+	background-color: transparent !important;
 }
 
 /* ==========================================================================

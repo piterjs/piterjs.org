@@ -267,25 +267,29 @@ $piterjs_landing $mol_view
 											target \_blank
 											hint \GitHub
 											sub /
-												<= Soc_gh_icon $mol_view
+												<= Soc_gh_icon $mol_image
+													uri \/piterjs/landing/assets/github.png
 										<= Soc_tg $mol_link
 											uri \https://t.me/piterjs
 											target \_blank
 											hint \Telegram
 											sub /
-												<= Soc_tg_icon $mol_view
+												<= Soc_tg_icon $mol_image
+													uri \/piterjs/landing/assets/telegram.png
 										<= Soc_yt $mol_link
 											uri \https://youtube.com
 											target \_blank
 											hint \YouTube
 											sub /
-												<= Soc_yt_icon $mol_view
+												<= Soc_yt_icon $mol_image
+													uri \/piterjs/landing/assets/youtube.png
 										<= Soc_vk $mol_link
 											uri \https://vk.com/piterjs
 											target \_blank
 											hint \VK Video
 											sub /
-												<= Soc_vk_icon $mol_view
+												<= Soc_vk_icon $mol_image
+													uri \/piterjs/landing/assets/vk.png
 		<= Cfp_modal $mol_view
 			sub /
 				<= Cfp_modal_box $mol_view
