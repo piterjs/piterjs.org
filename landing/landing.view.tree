@@ -99,7 +99,7 @@ $piterjs_landing $mol_view
 																<= Secs_tag $mol_view sub / \Секунд
 										<= Discovery_card $mol_view
 											sub /
-												<= Disc_badge $mol_view sub / \NEXT EVENT DETAILS
+												<= Disc_badge $mol_view sub / \NEXT EVENT
 												<= Disc_title $mol_view sub / \PiterJS #56: WebGPU, Next-Gen Bundlers & AI Architecture
 												<= Disc_meta_time $mol_view
 													sub /
