@@ -281,8 +281,7 @@
 }
 
 [piterjs_landing_hero_content] {
-	max-width: 1280px !important;
-	margin: 0 auto !important;
+	max-width: 1200px !important;
 	width: 100% !important;
 	position: relative !important;
 	z-index: 2 !important;
@@ -1102,14 +1101,12 @@
 }
 
 [piterjs_landing_footer_inner] {
-	max-width: 1200px;
 	width: 100%;
 	display: flex;
 	justify-content: space-between;
 	align-items: center;
 	flex-wrap: wrap;
 	gap: 20px;
-	margin: 0 auto;
 }
 
 [piterjs_landing_footer_copy] {
