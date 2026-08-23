@@ -376,4 +376,4 @@ $piterjs_landing $mol_view
 					<= Card_viewers!id $mol_view sub / <= card_viewers!id \
 	Archive_more_btn $mol_button_minor
 		click? <=> archive_more_click? null
-		sub / \[ ПОКАЗАТЬ ЕЩЁ (+6) ]
+		sub / \[ ПОКАЗАТЬ ЕЩЁ ]
