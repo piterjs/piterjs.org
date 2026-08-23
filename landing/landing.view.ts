@@ -226,7 +226,8 @@ namespace $.$$ {
 
 		speaker_role( id: string ) {
 			const s = this.speech_item( id )
-			if( s?.speaker()?.about() ) return s.speaker().about()
+			const desc = s?.speaker()?.description() || s?.speaker()?.contact()
+			if( desc ) return desc
 			if( id === 'default_1' ) return 'Lead Graphics Engineer // VK'
 			if( id === 'default_2' ) return 'Staff Frontend Architect // JetBrains'
 			return 'Инженер-разработчик'
