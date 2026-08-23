@@ -152,6 +152,10 @@
 	display: none;
 	width: 32px !important;
 	height: 32px !important;
+	min-height: 32px !important;
+	max-height: 32px !important;
+	min-width: 32px !important;
+	max-width: 32px !important;
 	padding: 0 !important;
 	background: transparent !important;
 	background-color: transparent !important;
@@ -161,7 +165,6 @@
 	cursor: pointer !important;
 	position: relative !important;
 	margin: 0 !important;
-	min-width: 32px !important;
 	box-sizing: border-box !important;
 	align-self: center !important;
 }
@@ -181,7 +184,7 @@
 [piterjs_landing_burger_line2],
 [piterjs_landing_burger_line3] {
 	position: absolute !important;
-	left: 4px !important;
+	left: calc(50% - 12px) !important;
 	width: 24px !important;
 	height: 2px !important;
 	border-radius: 2px !important;
@@ -192,35 +195,35 @@
 }
 
 [piterjs_landing_burger_line1] {
-	top: 7px !important;
+	top: calc(50% - 8px) !important;
 	transform: none !important;
 }
 
 [piterjs_landing_burger_line2] {
-	top: 15px !important;
+	top: calc(50% - 1px) !important;
 	transform: none !important;
 	opacity: 1 !important;
 }
 
 [piterjs_landing_burger_line3] {
-	top: 23px !important;
+	top: calc(50% + 6px) !important;
 	transform: none !important;
 }
 
 /* Symmetrical X state */
 [piterjs_landing][piterjs_landing_menu_open="true"] [piterjs_landing_burger_line1] {
-	top: 15px !important;
+	top: calc(50% - 1px) !important;
 	transform: rotate(45deg) !important;
 }
 
 [piterjs_landing][piterjs_landing_menu_open="true"] [piterjs_landing_burger_line2] {
-	top: 15px !important;
+	top: calc(50% - 1px) !important;
 	opacity: 0 !important;
 	transform: scaleX(0) !important;
 }
 
 [piterjs_landing][piterjs_landing_menu_open="true"] [piterjs_landing_burger_line3] {
-	top: 15px !important;
+	top: calc(50% - 1px) !important;
 	transform: rotate(-45deg) !important;
 }
 
