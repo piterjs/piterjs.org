@@ -14,9 +14,16 @@ namespace $.$$ {
 		}
 
 		@ $mol_mem
+		Yard() {
+			const yard = super.Yard()
+			yard.master_list = () => [ 'wss://sync.hyoo.ru' ]
+			return yard
+		}
+
+		@ $mol_mem
 		Domain() {
 
-			const yard = super.Yard()
+			const yard = this.Yard()
 			
 			$mol_wire_sync( yard.world() ).apply( this.domain_rights() )
 
@@ -77,6 +84,7 @@ namespace $.$$ {
 
 		@ $mol_mem
 		sub() {
+			this.Online()
 			if( this.landing() != null ) return [ this.Landing() ]
 			return super.sub()
 		}
