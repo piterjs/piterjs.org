@@ -367,28 +367,78 @@ namespace $.$$ {
 		filter_conf_click() {
 			this.category_filter( 'conf' )
 			this.archive_limit( 6 )
-		}
-
 		@ $mol_mem
-		filtered_archive() {
-			const cat = this.category_filter()
+		items_for_category( cat: string ) {
+			const meetups = this.meetups()
+			if( meetups && meetups.length > 0 ) {
+				if( cat === 'all' ) return meetups
+				if( cat === 'piterjs' ) return meetups.filter( m => !m.title().includes('UX') && !m.title().includes('Conf') )
+				if( cat === 'piterux' ) return meetups.filter( m => m.title().includes('UX') )
+				if( cat === 'conf' ) return meetups.filter( m => m.title().includes('Conf') )
+				return []
+			}
 			const data = this.archive_preset_data()
 			if( cat === 'all' ) return data
 			return data.filter( item => item.category === cat )
 		}
 
+		count_all() {
+			return this.items_for_category( 'all' ).length
+		}
+
+		count_piterjs() {
+			return this.items_for_category( 'piterjs' ).length
+		}
+
+		count_piterux() {
+			return this.items_for_category( 'piterux' ).length
+		}
+
+		count_conf() {
+			return this.items_for_category( 'conf' ).length
+		}
+
+		@ $mol_mem
+		filter_buttons() {
+			const buttons: any[] = []
+			if( this.count_all() > 0 ) buttons.push( this.Filter_all() )
+			if( this.count_piterjs() > 0 ) buttons.push( this.Filter_piterjs() )
+			if( this.count_piterux() > 0 ) buttons.push( this.Filter_piterux() )
+			if( this.count_conf() > 0 ) buttons.push( this.Filter_conf() )
+			return buttons
+		}
+
+		filter_all_active() {
+			return this.category_filter() === 'all'
+		}
+
+		filter_piterjs_active() {
+			return this.category_filter() === 'piterjs'
+		}
+
+		filter_piterux_active() {
+			return this.category_filter() === 'piterux'
+		}
+
+		filter_conf_active() {
+			return this.category_filter() === 'conf'
+		}
+
+		@ $mol_mem
+		filtered_archive() {
+			const cat = this.category_filter()
+			return this.items_for_category( cat )
+		}
+
 		@ $mol_mem
 		all_filtered_items() {
+			const cat = this.category_filter()
+			const items = this.items_for_category( cat )
 			const meetups = this.meetups()
 			if( meetups && meetups.length > 0 ) {
-				const cat = this.category_filter()
-				let list = meetups
-				if( cat === 'piterjs' ) list = meetups.filter( m => !m.title().includes('UX') && !m.title().includes('Conf') )
-				else if( cat === 'piterux' ) list = meetups.filter( m => m.title().includes('UX') )
-				else if( cat === 'conf' ) list = meetups.filter( m => m.title().includes('Conf') )
-				return list.map( m => m.id() )
+				return ( items as $piterjs_meetup[] ).map( m => m.id() )
 			}
-			return this.filtered_archive().map( item => item.id )
+			return ( items as any[] ).map( item => item.id )
 		}
 
 		@ $mol_mem

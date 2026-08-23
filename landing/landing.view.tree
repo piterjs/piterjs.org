@@ -202,19 +202,7 @@ $piterjs_landing $mol_view
 							sub /
 								<= Archive_heading $mol_view sub / \АРХИВ МИТАПОВ
 								<= Archive_filters $mol_view
-									sub /
-										<= Filter_all $mol_button_minor
-											click? <=> filter_all_click? null
-											sub / \Все
-										<= Filter_piterjs $mol_button_minor
-											click? <=> filter_piterjs_click? null
-											sub / \PiterJS
-										<= Filter_piterux $mol_button_minor
-											click? <=> filter_piterux_click? null
-											sub / \PiterUX
-										<= Filter_conf $mol_button_minor
-											click? <=> filter_conf_click? null
-											sub / \Conf
+									sub <= filter_buttons /
 								<= Archive_grid $mol_view
 									sub <= archive_cards /
 								<= Archive_more_box $mol_view
@@ -377,3 +365,23 @@ $piterjs_landing $mol_view
 	Archive_more_btn $mol_button_minor
 		click? <=> archive_more_click? null
 		sub / \[ ПОКАЗАТЬ ЕЩЁ ]
+	Filter_all $mol_button_minor
+		attr *
+			piterjs_landing_filter_active <= filter_all_active false
+		click? <=> filter_all_click? null
+		sub / \Все
+	Filter_piterjs $mol_button_minor
+		attr *
+			piterjs_landing_filter_active <= filter_piterjs_active false
+		click? <=> filter_piterjs_click? null
+		sub / \PiterJS
+	Filter_piterux $mol_button_minor
+		attr *
+			piterjs_landing_filter_active <= filter_piterux_active false
+		click? <=> filter_piterux_click? null
+		sub / \PiterUX
+	Filter_conf $mol_button_minor
+		attr *
+			piterjs_landing_filter_active <= filter_conf_active false
+		click? <=> filter_conf_click? null
+		sub / \Conf
