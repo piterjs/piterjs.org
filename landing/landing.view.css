@@ -42,12 +42,21 @@
 	z-index: 1000 !important;
 	display: flex !important;
 	align-items: center !important;
-	justify-content: space-between !important;
+	justify-content: center !important;
 	padding: 16px 36px !important;
 	background-color: rgba(0, 0, 0, 0.85) !important;
 	backdrop-filter: blur(12px) !important;
 	-webkit-backdrop-filter: blur(12px) !important;
 	border-bottom: 1px solid rgba(255, 255, 255, 0.1) !important;
+	box-sizing: border-box !important;
+}
+
+[piterjs_landing_header_inner] {
+	max-width: 1200px !important;
+	width: 100% !important;
+	display: flex !important;
+	align-items: center !important;
+	justify-content: space-between !important;
 }
 
 [piterjs_landing_logo_link] {
@@ -253,8 +262,9 @@
 	height: auto !important;
 	display: flex !important;
 	flex-direction: column !important;
-	justify-content: space-between !important;
-	padding: 130px 36px 48px 36px !important;
+	justify-content: center !important;
+	align-items: center !important;
+	padding: 130px 36px 60px 36px !important;
 	background-color: #000000 !important;
 	background-image: url('/piterjs/landing/assets/hero_bg.png') !important;
 	background-size: cover !important;
@@ -285,7 +295,7 @@
 }
 
 [piterjs_landing_hero_content] {
-	max-width: 100% !important;
+	max-width: 1200px !important;
 	width: 100% !important;
 	position: relative !important;
 	z-index: 2 !important;
@@ -1105,18 +1115,19 @@
 	border-top: 1px solid #222222;
 	padding: 28px 36px;
 	display: flex;
-	justify-content: space-between;
+	justify-content: center;
 	align-items: center;
 	box-sizing: border-box;
 }
 
 [piterjs_landing_footer_inner] {
-	width: 100%;
-	display: flex;
-	justify-content: space-between;
-	align-items: center;
-	flex-wrap: wrap;
-	gap: 20px;
+	max-width: 1200px !important;
+	width: 100% !important;
+	display: flex !important;
+	justify-content: space-between !important;
+	align-items: center !important;
+	flex-wrap: wrap !important;
+	gap: 20px !important;
 }
 
 [piterjs_landing_footer_copy] {

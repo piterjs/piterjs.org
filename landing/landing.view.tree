@@ -8,45 +8,47 @@ $piterjs_landing $mol_view
 		<= Header $mol_view
 			dom_name \header
 			sub /
-				<= Logo_link $mol_link
-					arg * landing null
+				<= Header_inner $mol_view
 					sub /
-						<= Logo_img $mol_image
-							uri \/piterjs/landing/assets/logo.png
-						<= Logo_title $mol_view sub / \PITERJS
-						<= Logo_tag $mol_view sub / <= logo_version_tag \v.56.0
-				<= Nav $mol_view
-					dom_name \nav
-					sub /
-						<= Nav_hero $mol_link
-							uri \#hero
-							sub / \Главная
-						<= Nav_manifesto $mol_link
-							uri \#manifesto
-							sub / \Манифест
-						<= Nav_schedule $mol_link
-							uri \#schedule
-							sub / \Доклады
-						<= Nav_archive $mol_link
-							uri \#archive
-							sub / \Архив
-						<= Nav_community $mol_link
-							uri \#community
-							sub / \Сообщество
-				<= Nav_actions $mol_view
-					sub /
-						<= Back_link $mol_link
+						<= Logo_link $mol_link
 							arg * landing null
-							sub / \[ Все митапы ]
-						<= Rsvp_btn $mol_button_minor
-							click? <=> rsvp_click? null
-							sub / <= rsvp_btn_text \[ Зарегистрироваться #56 ]
-						<= Burger_btn $mol_button_minor
-							click? <=> burger_toggle? null
 							sub /
-								<= Burger_line1 $mol_view
-								<= Burger_line2 $mol_view
-								<= Burger_line3 $mol_view
+								<= Logo_img $mol_image
+									uri \/piterjs/landing/assets/logo.png
+								<= Logo_title $mol_view sub / \PITERJS
+								<= Logo_tag $mol_view sub / <= logo_version_tag \v.56.0
+						<= Nav $mol_view
+							dom_name \nav
+							sub /
+								<= Nav_hero $mol_link
+									uri \#hero
+									sub / \Главная
+								<= Nav_manifesto $mol_link
+									uri \#manifesto
+									sub / \Манифест
+								<= Nav_schedule $mol_link
+									uri \#schedule
+									sub / \Доклады
+								<= Nav_archive $mol_link
+									uri \#archive
+									sub / \Архив
+								<= Nav_community $mol_link
+									uri \#community
+									sub / \Сообщество
+						<= Nav_actions $mol_view
+							sub /
+								<= Back_link $mol_link
+									arg * landing null
+									sub / \[ Все митапы ]
+								<= Rsvp_btn $mol_button_minor
+									click? <=> rsvp_click? null
+									sub / <= rsvp_btn_text \[ Зарегистрироваться #56 ]
+								<= Burger_btn $mol_button_minor
+									click? <=> burger_toggle? null
+									sub /
+										<= Burger_line1 $mol_view
+										<= Burger_line2 $mol_view
+										<= Burger_line3 $mol_view
 		<= Nav_mobile $mol_view
 			sub /
 				<= Nav_m_hero $mol_link
