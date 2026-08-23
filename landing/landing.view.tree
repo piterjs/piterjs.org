@@ -1,4 +1,6 @@
 $piterjs_landing $mol_view
+	meetup null $piterjs_meetup
+	meetups / $piterjs_meetup
 	attr *
 		^
 		piterjs_landing_menu_open <= burger_open false
@@ -89,7 +91,7 @@ $piterjs_landing $mol_view
 									sub /
 										<= Status_badge $mol_view
 											sub /
-												<= Status_badge_text $mol_view sub / \PITERJS #56 // 13 МЕСТ СВОБОДНО
+												<= Status_badge_text $mol_view sub / <= hero_badge \PITERJS #56 // 13 МЕСТ СВОБОДНО
 								<= Hero_title $mol_view
 									sub /
 										<= Hero_title_line1 $mol_view sub / \SAINT PETERSBURG
@@ -125,19 +127,19 @@ $piterjs_landing $mol_view
 										<= Discovery_card $mol_view
 											sub /
 												<= Disc_badge $mol_view sub / \NEXT EVENT
-												<= Disc_title $mol_view sub / \PiterJS #56: WebGPU, Next-Gen Bundlers & AI Architecture
+												<= Disc_title $mol_view sub / <= next_event_title \PiterJS #56: WebGPU, Next-Gen Bundlers & AI Architecture
 												<= Disc_meta_time $mol_view
 													sub /
 														<= Disc_icon_time $mol_view sub / \⚡
-														<= Disc_text_time $mol_view sub / \15 АВГУСТА 2026 // 19:00
+														<= Disc_text_time $mol_view sub / <= next_event_time \15 АВГУСТА 2026 // 19:00
 												<= Disc_meta_place $mol_view
 													sub /
 														<= Disc_icon_place $mol_view sub / \📍
-														<= Disc_text_place $mol_view sub / \ИТ-ХАБ, САНКТ-ПЕТЕРБУРГ
+														<= Disc_text_place $mol_view sub / <= next_event_place \ИТ-ХАБ, САНКТ-ПЕТЕРБУРГ
 												<= Disc_meta_map $mol_view
 													sub /
 														<= Map_link $mol_link
-															uri \https://yandex.ru/maps/?text=Санкт-Петербург,+Аптекарский+проспект,+4
+															uri <= next_event_map_uri \https://yandex.ru/maps/?text=Санкт-Петербург,+Аптекарский+проспект,+4
 															target \_blank
 															sub / \[ На карте ]
 				<= Section_manifesto $mol_view
@@ -170,42 +172,10 @@ $piterjs_landing $mol_view
 					sub /
 						<= Schedule_content $mol_view
 							sub /
-								<= Schedule_heading $mol_view sub / \ПРОГРАММА PITERJS #56
-								<= Schedule_intro $mol_view sub / \Три больших инспекции современного стека: от графических пайплайнов до высокопроизводительного инструментария на Rust.
+								<= Schedule_heading $mol_view sub / <= schedule_heading \ПРОГРАММА PITERJS #56
+								<= Schedule_intro $mol_view sub / <= schedule_intro \Три больших инспекции современного стека: от графических пайплайнов до высокопроизводительного инструментария на Rust.
 								<= Talks_grid $mol_view
-									sub /
-										<= Talk1 $mol_view
-											sub /
-												<= Talk1_top $mol_view
-													sub /
-														<= Talk1_tag $mol_view sub / \WebGPU & Graphics
-														<= Talk1_time $mol_view sub / \19:15
-												<= Talk1_title $mol_view sub / \Реалистичный рендеринг в браузере: рендерим миллионы объектов с WebGPU в 2026
-												<= Talk1_abstract $mol_view sub / \Разбираем практический опыт перевода сложных визуализаций с WebGL2 на WebGPU. Кон compute-шейдеры, оптимизация пайплайн-кэша и минимизация GPU stalling.
-												<= Talk1_speaker $mol_view
-													sub /
-														<= Speaker1_photo $mol_image
-															uri \/piterjs/landing/assets/speaker_alex.png
-														<= Speaker1_info $mol_view
-															sub /
-																<= Speaker1_name $mol_view sub / \Александр Громов
-																<= Speaker1_role $mol_view sub / \Lead Graphics Engineer // VK
-										<= Talk2 $mol_view
-											sub /
-												<= Talk2_top $mol_view
-													sub /
-														<= Talk2_tag $mol_view sub / \Architecture & AI
-														<= Talk2_time $mol_view sub / \20:00
-												<= Talk2_title $mol_view sub / \Автономные AI-агенты внутри React-приложений: Паттерны и Безопасность
-												<= Talk2_abstract $mol_view sub / \Как интегрировать агентные системы напрямую в клиентский интерфейс, сохраняя реактивность state management, изоляцию вызовов и защиту данных пользователя.
-												<= Talk2_speaker $mol_view
-													sub /
-														<= Speaker2_photo $mol_image
-															uri \/piterjs/landing/assets/speaker_maria.png
-														<= Speaker2_info $mol_view
-															sub /
-																<= Speaker2_name $mol_view sub / \Мария Соколова
-																<= Speaker2_role $mol_view sub / \Staff Frontend Architect // JetBrains
+									sub <= talks /
 								<= Cfp_cta_card $mol_view
 									sub /
 										<= Cfp_cta_badge $mol_view sub / \CALL FOR PAPERS // PITERJS #57
@@ -217,12 +187,12 @@ $piterjs_landing $mol_view
 								<= Venue_card $mol_view
 									sub /
 										<= Venue_badge $mol_view sub / \VENUE // ПЛОЩАДКА ПРОВЕДЕНИЯ
-										<= Venue_title $mol_view sub / \ИТ-Хаб Санкт-Петербург
-										<= Venue_meta1 $mol_view sub / \📍 Аптекарский проспект, 4 (СПб, 197022)
-										<= Venue_meta2 $mol_view sub / \🚇 Метро «Петроградская» (10 минут пешком)
-										<= Venue_meta3 $mol_view sub / \🚶 Вход со стороны набережной Карповки
+										<= Venue_title $mol_view sub / <= venue_title \ИТ-Хаб Санкт-Петербург
+										<= Venue_meta1 $mol_view sub / <= venue_meta1 \📍 Аптекарский проспект, 4 (СПб, 197022)
+										<= Venue_meta2 $mol_view sub / <= venue_meta2 \🚇 Метро «Петроградская» (10 минут пешком)
+										<= Venue_meta3 $mol_view sub / <= venue_meta3 \🚶 Вход со стороны набережной Карповки
 										<= Venue_map_btn $mol_link
-											uri \https://yandex.ru/maps/?text=Санкт-Петербург,+Аптекарский+проспект,+4
+											uri <= venue_map_uri \https://yandex.ru/maps/?text=Санкт-Петербург,+Аптекарский+проспект,+4
 											target \_blank
 											sub / \[ Открыть на Яндекс Картах ↗ ]
 				<= Section_archive $mol_view
@@ -378,6 +348,22 @@ $piterjs_landing $mol_view
 									sub / \[ ОТПРАВИТЬ ЗАЯВКУ ]
 		<= Toast $mol_view
 			sub / <= toast_message \
+	Talk!id $mol_view
+		sub /
+			<= Talk_top!id $mol_view
+				sub /
+					<= Talk_tag!id $mol_view sub / <= talk_tag!id \Web & Tech
+					<= Talk_time!id $mol_view sub / <= talk_time!id \19:15
+			<= Talk_title!id $mol_view sub / <= talk_title!id \Тема доклада
+			<= Talk_abstract!id $mol_view sub / <= talk_abstract!id \Описание доклада
+			<= Talk_speaker!id $mol_view
+				sub /
+					<= Speaker_photo!id $mol_image
+						uri <= speaker_photo!id \/piterjs/landing/assets/speaker_alex.png
+					<= Speaker_info!id $mol_view
+						sub /
+							<= Speaker_name!id $mol_view sub / <= speaker_name!id \Александр Громов
+							<= Speaker_role!id $mol_view sub / <= speaker_role!id \Lead Graphics Engineer // VK
 	Archive_card!id $mol_view
 		sub /
 			<= Card_event_tag!id $mol_view sub / <= card_event_tag!id \

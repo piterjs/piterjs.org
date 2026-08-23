@@ -630,6 +630,7 @@
 	gap: 24px;
 }
 
+[piterjs_landing_talk],
 [piterjs_landing_talk1],
 [piterjs_landing_talk2] {
 	background: #ffffff;
@@ -642,12 +643,14 @@
 	transition: border-color 0.15s ease, background-color 0.15s ease;
 }
 
+[piterjs_landing_talk]:hover,
 [piterjs_landing_talk1]:hover,
 [piterjs_landing_talk2]:hover {
 	border-color: #000000;
 	background-color: #fcfcfc;
 }
 
+[piterjs_landing_talk_top],
 [piterjs_landing_talk1_top],
 [piterjs_landing_talk2_top] {
 	display: flex;
@@ -655,6 +658,7 @@
 	align-items: center;
 }
 
+[piterjs_landing_talk_tag],
 [piterjs_landing_talk1_tag],
 [piterjs_landing_talk2_tag] {
 	font-family: var(--font-mono);
@@ -666,6 +670,7 @@
 	border-radius: 4px;
 }
 
+[piterjs_landing_talk_time],
 [piterjs_landing_talk1_time],
 [piterjs_landing_talk2_time] {
 	font-family: var(--font-mono);
@@ -674,6 +679,7 @@
 	color: #666666;
 }
 
+[piterjs_landing_talk_title],
 [piterjs_landing_talk1_title],
 [piterjs_landing_talk2_title] {
 	font-size: 20px;
@@ -682,6 +688,7 @@
 	line-height: 1.35;
 }
 
+[piterjs_landing_talk_abstract],
 [piterjs_landing_talk1_abstract],
 [piterjs_landing_talk2_abstract] {
 	font-size: 14px;
@@ -689,6 +696,7 @@
 	line-height: 1.5;
 }
 
+[piterjs_landing_talk_speaker],
 [piterjs_landing_talk1_speaker],
 [piterjs_landing_talk2_speaker] {
 	display: flex !important;
@@ -700,6 +708,7 @@
 	border-top: 1px solid #eeeeee !important;
 }
 
+[piterjs_landing_speaker_photo],
 [piterjs_landing_speaker1_photo],
 [piterjs_landing_speaker2_photo] {
 	width: 52px !important;
@@ -710,6 +719,7 @@
 	flex-shrink: 0 !important;
 }
 
+[piterjs_landing_speaker_info],
 [piterjs_landing_speaker1_info],
 [piterjs_landing_speaker2_info] {
 	display: flex !important;
@@ -718,6 +728,7 @@
 	gap: 2px !important;
 }
 
+[piterjs_landing_speaker_name],
 [piterjs_landing_speaker1_name],
 [piterjs_landing_speaker2_name] {
 	font-weight: 600 !important;
@@ -726,6 +737,7 @@
 	display: block !important;
 }
 
+[piterjs_landing_speaker_role],
 [piterjs_landing_speaker1_role],
 [piterjs_landing_speaker2_role] {
 	font-size: 12px !important;
