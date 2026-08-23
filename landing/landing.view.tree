@@ -333,6 +333,7 @@ $piterjs_landing $mol_view
 									sub /
 										<= Cfp_label_desc $mol_view sub / \ТЕЗИСЫ И ОПИСАНИЕ ДОКЛАДА *
 										<= Cfp_input_desc $mol_textarea
+											sidebar_showed false
 											value? <=> cfp_desc? \
 											hint \Подробные тезисы, проблемы, решение и практическая польза доклада...
 								<= Cfp_submit_btn $mol_button_major
