@@ -1430,6 +1430,14 @@
 		gap: 24px !important;
 	}
 
+	[piterjs_landing_discovery_card] {
+		order: 1 !important;
+	}
+
+	[piterjs_landing_countdown_box] {
+		order: 2 !important;
+	}
+
 	[piterjs_landing_stats_grid] {
 		grid-template-columns: 1fr 1fr !important;
 		gap: 24px !important;
