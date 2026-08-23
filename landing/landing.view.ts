@@ -91,6 +91,24 @@ namespace $.$$ {
 			return String( this.countdown_diff().seconds ).padStart( 2, '0' )
 		}
 
+		format_ru_date( moment?: $mol_time_moment, with_time = false ) {
+			if( !moment ) return ''
+			const months = [
+				'января', 'февраля', 'марта', 'апреля', 'мая', 'июня',
+				'июля', 'августа', 'сентября', 'октября', 'ноября', 'декабря'
+			]
+			const day = moment.day ? String( moment.day ) : ''
+			const month = moment.month ? ( months[ moment.month - 1 ] || '' ) : ''
+			const year = moment.year ? String( moment.year ) : ''
+			let str = [ day, month, year ].filter( Boolean ).join( ' ' )
+			if( with_time && moment.hour !== undefined ) {
+				const h = String( moment.hour ).padStart( 2, '0' )
+				const m = String( moment.minute ?? 0 ).padStart( 2, '0' )
+				str += ` // ${h}:${m}`
+			}
+			return str
+		}
+
 		// Next Event Card
 		@ $mol_mem
 		next_event_title() {
@@ -105,7 +123,7 @@ namespace $.$$ {
 		@ $mol_mem
 		next_event_time() {
 			const start = this.meetup()?.start()
-			if( start ) return start.toString( 'DD Month YYYY // hh:mm' ).toUpperCase()
+			if( start ) return this.format_ru_date( start, true ).toUpperCase()
 			return '15 АВГУСТА 2026 // 19:00'
 		}
 
@@ -480,7 +498,7 @@ namespace $.$$ {
 
 		card_date( id: string ) {
 			const m = this.meetups()?.find( item => item.id() === id )
-			if( m ) return m.start()?.toString( 'DD Month YYYY' ) || ''
+			if( m?.start() ) return this.format_ru_date( m.start(), false )
 			return this.archive_item( id )?.dateLabel ?? ''
 		}
 
