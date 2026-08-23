@@ -1445,9 +1445,19 @@
 	}
 
 	[piterjs_landing_timer_units] {
-		display: grid !important;
-		grid-template-columns: 1fr 1fr !important;
-		gap: 20px !important;
+		display: flex !important;
+		flex-direction: row !important;
+		gap: 16px !important;
+		flex-wrap: nowrap !important;
+		justify-content: flex-start !important;
+		align-items: flex-start !important;
+	}
+
+	[piterjs_landing_days_val],
+	[piterjs_landing_hours_val],
+	[piterjs_landing_mins_val],
+	[piterjs_landing_secs_val] {
+		font-size: 28px !important;
 	}
 
 	[piterjs_landing_archive_filters] {
