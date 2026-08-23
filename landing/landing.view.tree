@@ -14,7 +14,7 @@ $piterjs_landing $mol_view
 						<= Logo_img $mol_image
 							uri \/piterjs/landing/assets/logo.png
 						<= Logo_title $mol_view sub / \PITERJS
-						<= Logo_tag $mol_view sub / \v.56.0
+						<= Logo_tag $mol_view sub / <= logo_version_tag \v.56.0
 				<= Nav $mol_view
 					dom_name \nav
 					sub /
@@ -40,7 +40,7 @@ $piterjs_landing $mol_view
 							sub / \[ Все митапы ]
 						<= Rsvp_btn $mol_button_minor
 							click? <=> rsvp_click? null
-							sub / \[ Зарегистрироваться #56 ]
+							sub / <= rsvp_btn_text \[ Зарегистрироваться #56 ]
 						<= Burger_btn $mol_button_minor
 							click? <=> burger_toggle? null
 							sub /

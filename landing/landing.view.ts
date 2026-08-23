@@ -24,6 +24,22 @@ namespace $.$$ {
 		}
 
 		@ $mol_mem
+		meetup_num() {
+			const match = this.meetup_title().match( /\d+/ )
+			return match ? match[0] : '56'
+		}
+
+		@ $mol_mem
+		logo_version_tag() {
+			return `v.${this.meetup_num()}.0`
+		}
+
+		@ $mol_mem
+		rsvp_btn_text() {
+			return `[ Зарегистрироваться #${this.meetup_num()} ]`
+		}
+
+		@ $mol_mem
 		free_slots() {
 			const capacity = this.meetup()?.place()?.capacity_max() || 300
 			const visitors = this.meetup()?.visitors_list()?.length || 287
