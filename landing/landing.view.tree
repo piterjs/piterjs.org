@@ -238,43 +238,11 @@ $piterjs_landing $mol_view
 					sub /
 						<= Footer_inner $mol_view
 							sub /
-								<= Footer_content $mol_view
+								<= Footer_copy $mol_view
 									sub /
-										<= Footer_copy $mol_view
-											sub /
-												<= Footer_logo $mol_image
-													uri \/piterjs/landing/assets/logo.png
-												<= Footer_text $mol_view sub / \© 2026 PITERJS COMMUNITY // ST. PETERSBURG
-										<= Footer_links $mol_view
-											sub /
-												<= Soc_gh $mol_link
-													uri \https://github.com/piterjs
-													target \_blank
-													hint \GitHub
-													sub /
-														<= Soc_gh_icon $mol_image
-															uri \/piterjs/landing/assets/github.png
-												<= Soc_tg $mol_link
-													uri \https://t.me/piterjs
-													target \_blank
-													hint \Telegram
-													sub /
-														<= Soc_tg_icon $mol_image
-															uri \/piterjs/landing/assets/telegram.png
-												<= Soc_yt $mol_link
-													uri \https://youtube.com
-													target \_blank
-													hint \YouTube
-													sub /
-														<= Soc_yt_icon $mol_image
-															uri \/piterjs/landing/assets/youtube.png
-												<= Soc_vk $mol_link
-													uri \https://vk.com/piterjs
-													target \_blank
-													hint \VK Video
-													sub /
-														<= Soc_vk_icon $mol_image
-															uri \/piterjs/landing/assets/vk.png
+										<= Footer_logo $mol_image
+											uri \/piterjs/landing/assets/logo.png
+										<= Footer_text $mol_view sub / \© 2026 PITERJS COMMUNITY // ST. PETERSBURG
 								<= Footer_bottom $mol_view
 									sub /
 										<= Footer_author_prefix $mol_view sub / \ENGINE & UI /
@@ -282,6 +250,36 @@ $piterjs_landing $mol_view
 											uri \https://dev-by-yurii.vercel.app
 											target \_blank
 											sub / \DEV-BY-YURII.RU
+								<= Footer_links $mol_view
+									sub /
+										<= Soc_gh $mol_link
+											uri \https://github.com/piterjs
+											target \_blank
+											hint \GitHub
+											sub /
+												<= Soc_gh_icon $mol_image
+													uri \/piterjs/landing/assets/github.png
+										<= Soc_tg $mol_link
+											uri \https://t.me/piterjs
+											target \_blank
+											hint \Telegram
+											sub /
+												<= Soc_tg_icon $mol_image
+													uri \/piterjs/landing/assets/telegram.png
+										<= Soc_yt $mol_link
+											uri \https://youtube.com
+											target \_blank
+											hint \YouTube
+											sub /
+												<= Soc_yt_icon $mol_image
+													uri \/piterjs/landing/assets/youtube.png
+										<= Soc_vk $mol_link
+											uri \https://vk.com/piterjs
+											target \_blank
+											hint \VK Video
+											sub /
+												<= Soc_vk_icon $mol_image
+													uri \/piterjs/landing/assets/vk.png
 		<= Cfp_modal $mol_view
 			sub /
 				<= Cfp_modal_box $mol_view
