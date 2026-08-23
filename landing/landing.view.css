@@ -1374,11 +1374,11 @@
 	}
 
 	[piterjs_landing_rsvp_btn] {
-		padding: 4px 10px !important;
-		height: 28px !important;
-		min-height: 28px !important;
-		max-height: 28px !important;
-		font-size: 11px !important;
+		padding: 6px 12px !important;
+		height: 32px !important;
+		min-height: 32px !important;
+		max-height: 32px !important;
+		font-size: 12px !important;
 		display: inline-flex !important;
 		align-items: center !important;
 		justify-content: center !important;
@@ -1396,10 +1396,10 @@
 	}
 
 	[piterjs_landing_rsvp_btn] {
-		padding: 4px 8px !important;
-		height: 28px !important;
-		min-height: 28px !important;
-		max-height: 28px !important;
+		padding: 6px 10px !important;
+		height: 32px !important;
+		min-height: 32px !important;
+		max-height: 32px !important;
 		font-size: 11px !important;
 		display: inline-flex !important;
 		align-items: center !important;
