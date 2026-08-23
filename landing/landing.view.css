@@ -951,6 +951,37 @@
 	border-top: 1px solid #1c2130;
 }
 
+[piterjs_landing_archive_more_box] {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	padding-top: 16px;
+	width: 100%;
+}
+
+[piterjs_landing_archive_more_btn] {
+	background: #11141c !important;
+	border: 1px solid #242938 !important;
+	color: var(--color-caution-yellow) !important;
+	font-family: var(--font-mono) !important;
+	font-size: 13px !important;
+	font-weight: 700 !important;
+	padding: 12px 36px !important;
+	border-radius: 6px !important;
+	letter-spacing: 0.5px !important;
+	cursor: pointer !important;
+	transition: all 0.2s ease !important;
+	box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4) !important;
+}
+
+[piterjs_landing_archive_more_btn]:hover {
+	background: var(--color-caution-yellow) !important;
+	color: #000000 !important;
+	border-color: var(--color-caution-yellow) !important;
+	box-shadow: 0 0 24px rgba(255, 243, 19, 0.35) !important;
+	transform: translateY(-1px);
+}
+
 /* ==========================================================================
    SECTION 5: COMMUNITY
    ========================================================================== */

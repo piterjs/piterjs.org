@@ -216,7 +216,7 @@ namespace $.$$ {
 			return 'https://yandex.ru/maps/?text=' + encodeURIComponent( this.meetup()?.place()?.address() || 'Санкт-Петербург, Аптекарский проспект, 4' )
 		}
 
-		// Archive Filtering
+		// Archive Filtering & Pagination (6 per page)
 		@ $mol_mem
 		archive_preset_data() {
 			return [
@@ -260,7 +260,72 @@ namespace $.$$ {
 					dateLabel: 'Сентябрь 2019',
 					viewers: 950,
 				},
+				{
+					id: 'piterjs-52',
+					category: 'piterjs',
+					eventLabel: 'PITERJS #52',
+					title: 'WebAssembly и вычисления на стороне клиента',
+					dateLabel: '15 Декабря 2025',
+					viewers: 460,
+				},
+				{
+					id: 'piterjs-51',
+					category: 'piterjs',
+					eventLabel: 'PITERJS #51',
+					title: 'React Server Components: от теории к продакшену',
+					dateLabel: '20 Октября 2025',
+					viewers: 530,
+				},
+				{
+					id: 'piterux-11',
+					category: 'piterux',
+					eventLabel: 'PITERUX #11',
+					title: 'Интерфейсная анимация и микро-взаимодействия',
+					dateLabel: '12 Сентября 2025',
+					viewers: 310,
+				},
+				{
+					id: 'piterjs-50',
+					category: 'piterjs',
+					eventLabel: 'PITERJS #50',
+					title: 'Юбилейный митап: 10 лет сообществу PiterJS!',
+					dateLabel: '15 Августа 2025',
+					viewers: 820,
+				},
+				{
+					id: 'piterjs-49',
+					category: 'piterjs',
+					eventLabel: 'PITERJS #49',
+					title: 'Оптимизация Core Web Vitals в сверхнагруженных сервисах',
+					dateLabel: '28 Июня 2025',
+					viewers: 390,
+				},
+				{
+					id: 'piterux-10',
+					category: 'piterux',
+					eventLabel: 'PITERUX #10',
+					title: 'Доступность (a11y) в сложных веб-приложениях',
+					dateLabel: '14 Мая 2025',
+					viewers: 270,
+				},
+				{
+					id: 'piterjs-48',
+					category: 'piterjs',
+					eventLabel: 'PITERJS #48',
+					title: 'State Management в 2025: Signals vs Stores vs Atoms',
+					dateLabel: '18 Апреля 2025',
+					viewers: 480,
+				},
 			]
+		}
+
+		@ $mol_mem
+		archive_limit( next?: number ) {
+			return next ?? 6
+		}
+
+		archive_more_click() {
+			this.archive_limit( this.archive_limit() + 6 )
 		}
 
 		@ $mol_mem
@@ -270,18 +335,22 @@ namespace $.$$ {
 
 		filter_all_click() {
 			this.category_filter( 'all' )
+			this.archive_limit( 6 )
 		}
 
 		filter_piterjs_click() {
 			this.category_filter( 'piterjs' )
+			this.archive_limit( 6 )
 		}
 
 		filter_piterux_click() {
 			this.category_filter( 'piterux' )
+			this.archive_limit( 6 )
 		}
 
 		filter_conf_click() {
 			this.category_filter( 'conf' )
+			this.archive_limit( 6 )
 		}
 
 		@ $mol_mem
@@ -293,7 +362,7 @@ namespace $.$$ {
 		}
 
 		@ $mol_mem
-		archive_cards() {
+		all_filtered_items() {
 			const meetups = this.meetups()
 			if( meetups && meetups.length > 0 ) {
 				const cat = this.category_filter()
@@ -301,9 +370,30 @@ namespace $.$$ {
 				if( cat === 'piterjs' ) list = meetups.filter( m => !m.title().includes('UX') && !m.title().includes('Conf') )
 				else if( cat === 'piterux' ) list = meetups.filter( m => m.title().includes('UX') )
 				else if( cat === 'conf' ) list = meetups.filter( m => m.title().includes('Conf') )
-				return list.map( m => this.Archive_card( m.id() ) )
+				return list.map( m => m.id() )
 			}
-			return this.filtered_archive().map( item => this.Archive_card( item.id ) )
+			return this.filtered_archive().map( item => item.id )
+		}
+
+		@ $mol_mem
+		visible_archive_ids() {
+			const items = this.all_filtered_items()
+			return items.slice( 0, this.archive_limit() )
+		}
+
+		@ $mol_mem
+		archive_has_more() {
+			return this.all_filtered_items().length > this.archive_limit()
+		}
+
+		@ $mol_mem
+		archive_cards() {
+			return this.visible_archive_ids().map( id => this.Archive_card( id ) )
+		}
+
+		@ $mol_mem
+		archive_more_slot() {
+			return this.archive_has_more() ? [ this.Archive_more_btn() ] : []
 		}
 
 		archive_item( id: string ) {

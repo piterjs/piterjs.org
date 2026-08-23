@@ -217,6 +217,8 @@ $piterjs_landing $mol_view
 											sub / \Conf
 								<= Archive_grid $mol_view
 									sub <= archive_cards /
+								<= Archive_more_box $mol_view
+									sub <= archive_more_slot /
 				<= Section_community $mol_view
 					attr * id \community
 					sub /
@@ -372,3 +374,6 @@ $piterjs_landing $mol_view
 				sub /
 					<= Card_date!id $mol_view sub / <= card_date!id \
 					<= Card_viewers!id $mol_view sub / <= card_viewers!id \
+	Archive_more_btn $mol_button_minor
+		click? <=> archive_more_click? null
+		sub / \[ ПОКАЗАТЬ ЕЩЁ (+6) ]
