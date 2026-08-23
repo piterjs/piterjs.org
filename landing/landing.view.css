@@ -1472,3 +1472,9 @@
 		text-align: center !important;
 	}
 }
+
+@media (max-width: 480px) {
+	[piterjs_landing_rsvp_btn] {
+		display: none !important;
+	}
+}
