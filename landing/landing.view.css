@@ -1033,13 +1033,20 @@
 [piterjs_landing_footer] {
 	background-color: #000000;
 	border-top: 1px solid #222222;
-	padding: 32px;
+	padding: 32px 36px;
 	display: flex;
 	justify-content: center;
 }
 
-[piterjs_landing_footer_content] {
+[piterjs_landing_footer_inner] {
 	max-width: 1200px;
+	width: 100%;
+	display: flex;
+	flex-direction: column;
+	gap: 16px;
+}
+
+[piterjs_landing_footer_content] {
 	width: 100%;
 	display: flex;
 	justify-content: space-between;
@@ -1060,16 +1067,25 @@
 	border-radius: 4px;
 }
 
-[piterjs_landing_footer_info] {
-	display: flex;
-	flex-direction: column;
-	gap: 2px;
-}
-
 [piterjs_landing_footer_text] {
 	font-family: var(--font-mono);
 	font-size: 12px;
 	color: #777777;
+}
+
+[piterjs_landing_footer_bottom] {
+	display: flex;
+	align-items: center;
+	gap: 6px;
+	padding-top: 12px;
+	border-top: 1px solid #161616;
+}
+
+[piterjs_landing_footer_author_prefix] {
+	font-family: var(--font-mono);
+	font-size: 11px;
+	color: #555555;
+	letter-spacing: 0.5px;
 }
 
 [piterjs_landing_footer_author] {
@@ -1082,7 +1098,7 @@
 	outline: none !important;
 	font-family: var(--font-mono) !important;
 	font-size: 11px !important;
-	color: #666666 !important;
+	color: #777777 !important;
 	text-decoration: none !important;
 	text-transform: uppercase !important;
 	letter-spacing: 0.5px !important;
@@ -1090,7 +1106,7 @@
 	display: inline-block !important;
 	height: auto !important;
 	min-height: 0 !important;
-	line-height: 1.2 !important;
+	line-height: 1 !important;
 }
 
 [piterjs_landing_footer_author]:hover,
