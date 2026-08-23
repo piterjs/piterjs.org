@@ -51,11 +51,15 @@
 }
 
 [piterjs_landing_logo_link] {
-	display: flex;
-	align-items: center;
-	gap: 10px;
-	text-decoration: none;
-	color: #ffffff;
+	display: flex !important;
+	align-items: center !important;
+	gap: 10px !important;
+	text-decoration: none !important;
+	color: #ffffff !important;
+	padding-left: 0 !important;
+	margin-left: 0 !important;
+	padding-top: 0 !important;
+	padding-bottom: 0 !important;
 }
 
 [piterjs_landing_logo_img] {
