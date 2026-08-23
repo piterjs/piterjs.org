@@ -246,11 +246,11 @@
 [piterjs_landing_section_hero] {
 	position: relative !important;
 	min-height: 100vh !important;
-	height: 100vh !important;
+	height: auto !important;
 	display: flex !important;
 	flex-direction: column !important;
-	justify-content: center !important;
-	padding: 140px 60px 60px 60px !important;
+	justify-content: space-between !important;
+	padding: 130px 36px 48px 36px !important;
 	background-color: #000000 !important;
 	background-image: url('/piterjs/landing/assets/hero_bg.png') !important;
 	background-size: cover !important;
@@ -281,7 +281,7 @@
 }
 
 [piterjs_landing_hero_content] {
-	max-width: 1200px !important;
+	max-width: 100% !important;
 	width: 100% !important;
 	position: relative !important;
 	z-index: 2 !important;
@@ -343,7 +343,7 @@
 	letter-spacing: -2.56px !important;
 	font-weight: 300 !important;
 	color: #eeeeee !important;
-	max-width: 900px !important;
+	max-width: 1200px !important;
 	margin-bottom: 8px !important;
 	text-transform: uppercase !important;
 	display: flex !important;
@@ -378,7 +378,7 @@
 [piterjs_landing_hero_subtitle] {
 	font-size: clamp(16px, 1.8vw, 20px);
 	color: #cccccc;
-	max-width: 780px;
+	max-width: 1000px;
 	line-height: 1.5;
 	font-weight: 300;
 }
