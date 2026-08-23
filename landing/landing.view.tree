@@ -1,6 +1,6 @@
 $piterjs_landing $mol_view
 	meetup $piterjs_meetup
-	meetups / $piterjs_meetup
+	meetups /
 	attr *
 		^
 		piterjs_landing_menu_open <= burger_open false
