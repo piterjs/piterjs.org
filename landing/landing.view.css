@@ -1073,17 +1073,37 @@
 }
 
 [piterjs_landing_footer_author] {
-	font-family: var(--font-mono);
-	font-size: 11px;
-	color: #555555;
-	text-decoration: none;
-	transition: color 0.15s ease;
-	display: inline-block;
+	background: transparent !important;
+	background-color: transparent !important;
+	padding: 0 !important;
+	margin: 0 !important;
+	border: none !important;
+	box-shadow: none !important;
+	outline: none !important;
+	font-family: var(--font-mono) !important;
+	font-size: 11px !important;
+	color: #666666 !important;
+	text-decoration: none !important;
+	text-transform: uppercase !important;
+	letter-spacing: 0.5px !important;
+	transition: color 0.15s ease !important;
+	display: inline-block !important;
+	height: auto !important;
+	min-height: 0 !important;
+	line-height: 1.2 !important;
 }
 
-[piterjs_landing_footer_author]:hover {
-	color: var(--color-caution-yellow);
-	text-decoration: underline;
+[piterjs_landing_footer_author]:hover,
+[piterjs_landing_footer_author]:focus,
+[piterjs_landing_footer_author]:active,
+[piterjs_landing] [piterjs_landing_footer_author]:hover {
+	background: transparent !important;
+	background-color: transparent !important;
+	color: var(--color-caution-yellow) !important;
+	text-decoration: underline !important;
+	box-shadow: none !important;
+	border: none !important;
+	outline: none !important;
 }
 
 [piterjs_landing_footer_links] {

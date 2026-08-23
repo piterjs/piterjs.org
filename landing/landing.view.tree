@@ -288,7 +288,7 @@ $piterjs_landing $mol_view
 												<= Footer_author $mol_link
 													uri \https://dev-by-yurii.vercel.app
 													target \_blank
-													sub / \dev-by-yurii.ru
+													sub / \DEV-BY-YURII.RU
 								<= Footer_links $mol_view
 									sub /
 										<= Soc_gh $mol_link
