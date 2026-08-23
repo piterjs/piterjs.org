@@ -1344,8 +1344,12 @@
 	display: block !important;
 }
 
-[piterjs_landing] [piterjs_landing_cfp_form] [mol_string],
-[piterjs_landing] [piterjs_landing_cfp_form] [mol_textarea] {
+/* Standard inputs */
+[piterjs_landing_cfp_form] > [piterjs_landing_cfp_field_email] [mol_string],
+[piterjs_landing_cfp_form] > [piterjs_landing_cfp_field_contact] [mol_string],
+[piterjs_landing_cfp_form] > [piterjs_landing_cfp_field_name] [mol_string],
+[piterjs_landing_cfp_form] > [piterjs_landing_cfp_field_company] [mol_string],
+[piterjs_landing_cfp_form] > [piterjs_landing_cfp_field_title] [mol_string] {
 	background: #1a1a1a !important;
 	border: 1px solid #333333 !important;
 	border-radius: 6px !important;
@@ -1354,6 +1358,50 @@
 	font-size: 14px !important;
 	width: 100% !important;
 	box-sizing: border-box !important;
+}
+
+[piterjs_landing_cfp_form] > [piterjs_landing_cfp_field_email] [mol_string]:focus-within,
+[piterjs_landing_cfp_form] > [piterjs_landing_cfp_field_contact] [mol_string]:focus-within,
+[piterjs_landing_cfp_form] > [piterjs_landing_cfp_field_name] [mol_string]:focus-within,
+[piterjs_landing_cfp_form] > [piterjs_landing_cfp_field_company] [mol_string]:focus-within,
+[piterjs_landing_cfp_form] > [piterjs_landing_cfp_field_title] [mol_string]:focus-within {
+	border-color: var(--color-caution-yellow) !important;
+	box-shadow: 0 0 8px rgba(255, 243, 19, 0.2) !important;
+}
+
+/* Multiline Textarea */
+[piterjs_landing_cfp_form] [mol_textarea] {
+	background: #1a1a1a !important;
+	border: 1px solid #333333 !important;
+	border-radius: 6px !important;
+	min-height: 120px !important;
+	width: 100% !important;
+	box-sizing: border-box !important;
+	font-size: 14px !important;
+}
+
+[piterjs_landing_cfp_form] [mol_textarea]:focus-within {
+	border-color: var(--color-caution-yellow) !important;
+	box-shadow: 0 0 8px rgba(255, 243, 19, 0.2) !important;
+}
+
+[piterjs_landing_cfp_form] [mol_textarea_edit] {
+	background: transparent !important;
+	border: none !important;
+	color: transparent !important;
+	caret-color: #fff313 !important;
+	padding: 10px 14px !important;
+	font-size: 14px !important;
+	line-height: 1.5 !important;
+	box-shadow: none !important;
+	outline: none !important;
+}
+
+[piterjs_landing_cfp_form] [mol_textarea_view] {
+	color: #ffffff !important;
+	padding: 10px 14px !important;
+	font-size: 14px !important;
+	line-height: 1.5 !important;
 }
 
 [piterjs_landing_cfp_submit_btn] {
