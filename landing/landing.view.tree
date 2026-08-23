@@ -317,7 +317,7 @@ $piterjs_landing $mol_view
 															uri \/piterjs/landing/assets/vk.png
 								<= Footer_bottom $mol_view
 									sub /
-										<= Footer_author_prefix $mol_view sub / \ENGINE & UI /\
+										<= Footer_author_prefix $mol_view sub / \ENGINE & UI /
 										<= Footer_author $mol_link
 											uri \https://dev-by-yurii.vercel.app
 											target \_blank
