@@ -1113,7 +1113,7 @@
 [piterjs_landing_footer] {
 	background-color: #000000;
 	border-top: 1px solid #222222;
-	padding: 28px 36px;
+	padding: 32px 36px;
 	display: flex;
 	justify-content: center;
 	align-items: center;
@@ -1122,6 +1122,13 @@
 
 [piterjs_landing_footer_inner] {
 	max-width: 1200px !important;
+	width: 100% !important;
+	display: flex !important;
+	flex-direction: column !important;
+	gap: 16px !important;
+}
+
+[piterjs_landing_footer_content] {
 	width: 100% !important;
 	display: flex !important;
 	justify-content: space-between !important;
