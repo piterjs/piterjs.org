@@ -841,8 +841,9 @@
    SECTION 4: ARCHIVE (Midnight Steel #000000)
    ========================================================================== */
 [piterjs_landing_section_archive] {
-	background-color: #0c0c0c;
+	background-color: #000000;
 	color: #ffffff;
+	border-top: 1px solid #222222;
 	padding: 90px 32px;
 	display: flex;
 	justify-content: center;
@@ -870,7 +871,7 @@
 }
 
 [piterjs_landing_archive_filters] [mol_button_minor] {
-	background: #1a1a1a;
+	background: #111111;
 	color: #afafaf;
 	border: 1px solid #333333;
 	padding: 8px 18px;
@@ -893,8 +894,8 @@
 }
 
 [piterjs_landing_archive_card] {
-	background: #141414;
-	border: 1px solid #282828;
+	background: #111111;
+	border: 1px solid #222222;
 	border-radius: 9px;
 	padding: 24px;
 	display: flex;
@@ -937,8 +938,9 @@
    SECTION 5: COMMUNITY
    ========================================================================== */
 [piterjs_landing_section_community] {
-	background-color: #000000;
+	background-color: #161616;
 	color: #ffffff;
+	border-top: 1px solid #282828;
 	padding: 90px 32px;
 	display: flex;
 	justify-content: center;
@@ -967,8 +969,8 @@
 
 [piterjs_landing_comm_tg],
 [piterjs_landing_comm_vk] {
-	background: #111111;
-	border: 1px solid #333333;
+	background: #0d0d0d;
+	border: 1px solid #2e2e2e;
 	border-radius: 9px;
 	padding: 32px;
 	display: flex !important;
