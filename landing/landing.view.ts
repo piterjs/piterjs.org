@@ -385,6 +385,8 @@ namespace $.$$ {
 		filter_conf_click() {
 			this.category_filter( 'conf' )
 			this.archive_limit( 6 )
+		}
+
 		@ $mol_mem
 		items_for_category( cat: string ) {
 			const meetups = this.meetups()
