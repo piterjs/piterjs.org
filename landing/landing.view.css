@@ -152,7 +152,7 @@
 	display: none;
 	width: 32px !important;
 	height: 32px !important;
-	padding: 7px 4px !important;
+	padding: 0 !important;
 	background: transparent !important;
 	background-color: transparent !important;
 	border: none !important;
@@ -160,11 +160,9 @@
 	outline: none !important;
 	cursor: pointer !important;
 	position: relative !important;
-	flex-direction: column !important;
-	justify-content: space-between !important;
-	align-items: center !important;
 	margin: 0 !important;
 	min-width: 32px !important;
+	box-sizing: border-box !important;
 }
 
 [piterjs_landing_burger_btn]:hover,
@@ -181,28 +179,48 @@
 [piterjs_landing_burger_line1],
 [piterjs_landing_burger_line2],
 [piterjs_landing_burger_line3] {
-	display: block !important;
+	position: absolute !important;
+	left: 4px !important;
 	width: 24px !important;
 	height: 2px !important;
 	border-radius: 2px !important;
 	background-color: #fff313 !important;
-	transition: transform 0.25s ease, opacity 0.25s ease !important;
+	transition: top 0.25s ease, transform 0.25s ease, opacity 0.25s ease !important;
 	transform-origin: 50% 50% !important;
 	box-sizing: border-box !important;
 }
 
-/* Perfect symmetrical X */
+[piterjs_landing_burger_line1] {
+	top: 7px !important;
+	transform: none !important;
+}
+
+[piterjs_landing_burger_line2] {
+	top: 15px !important;
+	transform: none !important;
+	opacity: 1 !important;
+}
+
+[piterjs_landing_burger_line3] {
+	top: 23px !important;
+	transform: none !important;
+}
+
+/* Symmetrical X state */
 [piterjs_landing][piterjs_landing_menu_open="true"] [piterjs_landing_burger_line1] {
-	transform: translateY(8px) rotate(45deg) !important;
+	top: 15px !important;
+	transform: rotate(45deg) !important;
 }
 
 [piterjs_landing][piterjs_landing_menu_open="true"] [piterjs_landing_burger_line2] {
+	top: 15px !important;
 	opacity: 0 !important;
 	transform: scaleX(0) !important;
 }
 
 [piterjs_landing][piterjs_landing_menu_open="true"] [piterjs_landing_burger_line3] {
-	transform: translateY(-8px) rotate(-45deg) !important;
+	top: 15px !important;
+	transform: rotate(-45deg) !important;
 }
 
 [piterjs_landing_nav_mobile] {
