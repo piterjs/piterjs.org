@@ -386,9 +386,9 @@
 
 [piterjs_landing_hero_footer_grid] {
 	display: grid !important;
-	grid-template-columns: 1fr 380px !important;
-	gap: 40px !important;
-	align-items: flex-end !important;
+	grid-template-columns: 1fr 480px !important;
+	gap: 32px !important;
+	align-items: stretch !important;
 	margin-top: auto !important;
 	width: 100% !important;
 }
@@ -402,6 +402,7 @@
 	-webkit-backdrop-filter: blur(10px) !important;
 	display: flex !important;
 	flex-direction: column !important;
+	justify-content: center !important;
 	gap: 16px !important;
 	box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5) !important;
 }
@@ -460,7 +461,7 @@
 	background-color: #2b2b2b !important;
 	border: 1px solid #4b4b4b !important;
 	border-radius: 12px !important;
-	padding: 28px 24px !important;
+	padding: 26px 28px !important;
 	display: flex !important;
 	flex-direction: column !important;
 	gap: 14px !important;
@@ -479,10 +480,10 @@
 }
 
 [piterjs_landing_disc_title] {
-	font-size: 18px !important;
-	font-weight: 400 !important;
+	font-size: 19px !important;
+	font-weight: 500 !important;
 	color: #ffffff !important;
-	line-height: 1.35 !important;
+	line-height: 1.4 !important;
 }
 
 [piterjs_landing_disc_meta_time],
