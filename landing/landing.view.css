@@ -1060,10 +1060,30 @@
 	border-radius: 4px;
 }
 
+[piterjs_landing_footer_info] {
+	display: flex;
+	flex-direction: column;
+	gap: 2px;
+}
+
 [piterjs_landing_footer_text] {
 	font-family: var(--font-mono);
 	font-size: 12px;
 	color: #777777;
+}
+
+[piterjs_landing_footer_author] {
+	font-family: var(--font-mono);
+	font-size: 11px;
+	color: #555555;
+	text-decoration: none;
+	transition: color 0.15s ease;
+	display: inline-block;
+}
+
+[piterjs_landing_footer_author]:hover {
+	color: var(--color-caution-yellow);
+	text-decoration: underline;
 }
 
 [piterjs_landing_footer_links] {

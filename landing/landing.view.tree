@@ -282,7 +282,13 @@ $piterjs_landing $mol_view
 									sub /
 										<= Footer_logo $mol_image
 											uri \/piterjs/landing/assets/logo.png
-										<= Footer_text $mol_view sub / \© 2026 PITERJS COMMUNITY // ST. PETERSBURG
+										<= Footer_info $mol_view
+											sub /
+												<= Footer_text $mol_view sub / \© 2026 PITERJS COMMUNITY // ST. PETERSBURG
+												<= Footer_author $mol_link
+													uri \https://dev-by-yurii.vercel.app
+													target \_blank
+													sub / \dev-by-yurii.ru
 								<= Footer_links $mol_view
 									sub /
 										<= Soc_gh $mol_link
