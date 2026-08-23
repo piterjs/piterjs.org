@@ -226,6 +226,7 @@ namespace $.$$ {
 		sub() {
 			return [
 				this.Header(),
+				this.Nav_mobile(),
 				this.Main(),
 				... this.modal_open() ? [ this.Cfp_modal() ] : [],
 				... this.toast_message() ? [ this.Toast() ] : [],

@@ -108,9 +108,9 @@
 }
 
 [piterjs_landing_nav_actions] {
-	display: flex;
-	align-items: center;
-	gap: 12px;
+	display: flex !important;
+	align-items: center !important;
+	gap: 12px !important;
 }
 
 [piterjs_landing_back_link] {
@@ -163,6 +163,7 @@
 	margin: 0 !important;
 	min-width: 32px !important;
 	box-sizing: border-box !important;
+	align-self: center !important;
 }
 
 [piterjs_landing_burger_btn]:hover,
