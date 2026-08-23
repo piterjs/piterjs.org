@@ -388,7 +388,7 @@
 	display: grid !important;
 	grid-template-columns: 1fr 480px !important;
 	gap: 32px !important;
-	align-items: stretch !important;
+	align-items: flex-end !important;
 	margin-top: auto !important;
 	width: 100% !important;
 }
@@ -402,7 +402,6 @@
 	-webkit-backdrop-filter: blur(10px) !important;
 	display: flex !important;
 	flex-direction: column !important;
-	justify-content: center !important;
 	gap: 16px !important;
 	box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5) !important;
 }
