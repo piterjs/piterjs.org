@@ -89,9 +89,8 @@ namespace $.$$ {
 		}
 
 		@ $mol_mem
-		now_moment() {
-			new $mol_after_timeout( 1000, () => this.now_moment( new $mol_time_moment() ) )
-			return new $mol_time_moment()
+		now_time() {
+			return $mol_state_time.now( 1000 )
 		}
 
 		@ $mol_mem
@@ -103,8 +102,8 @@ namespace $.$$ {
 
 		@ $mol_mem
 		countdown_diff() {
-			this.now_moment()
-			const diff = Math.max( 0, this.target_timestamp() - Date.now() )
+			const now = this.now_time()
+			const diff = Math.max( 0, this.target_timestamp() - now )
 			const days = Math.floor( diff / ( 1000 * 60 * 60 * 24 ) )
 			const hours = Math.floor( ( diff % ( 1000 * 60 * 60 * 24 ) ) / ( 1000 * 60 * 60 ) )
 			const minutes = Math.floor( ( diff % ( 1000 * 60 * 60 ) ) / ( 1000 * 60 ) )
