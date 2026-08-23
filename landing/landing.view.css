@@ -1311,19 +1311,23 @@
 }
 
 [piterjs_landing_cfp_form] {
-	display: flex;
-	flex-direction: column;
-	gap: 16px;
+	display: flex !important;
+	flex-direction: column !important;
+	gap: 16px !important;
+	width: 100% !important;
 }
 
-[piterjs_landing] [piterjs_landing_cfp_form] [mol_string],
-[piterjs_landing] [piterjs_landing_cfp_form] [mol_textarea] {
-	background: #1a1a1a;
-	border: 1px solid #333333;
-	border-radius: 6px;
-	color: #ffffff;
-	padding: 8px 12px;
-	font-size: 14px;
+[piterjs_landing_cfp_field_email],
+[piterjs_landing_cfp_field_contact],
+[piterjs_landing_cfp_field_name],
+[piterjs_landing_cfp_field_company],
+[piterjs_landing_cfp_field_title],
+[piterjs_landing_cfp_field_desc] {
+	display: flex !important;
+	flex-direction: column !important;
+	align-items: stretch !important;
+	gap: 6px !important;
+	width: 100% !important;
 }
 
 [piterjs_landing_cfp_label_email],
@@ -1332,24 +1336,39 @@
 [piterjs_landing_cfp_label_company],
 [piterjs_landing_cfp_label_title],
 [piterjs_landing_cfp_label_desc] {
-	font-family: var(--font-mono);
-	font-size: 11px;
-	font-weight: 600;
-	color: #bbbbbb;
-	margin-bottom: 4px;
+	font-family: var(--font-mono) !important;
+	font-size: 11px !important;
+	font-weight: 600 !important;
+	color: #bbbbbb !important;
+	margin-bottom: 2px !important;
+	display: block !important;
+}
+
+[piterjs_landing] [piterjs_landing_cfp_form] [mol_string],
+[piterjs_landing] [piterjs_landing_cfp_form] [mol_textarea] {
+	background: #1a1a1a !important;
+	border: 1px solid #333333 !important;
+	border-radius: 6px !important;
+	color: #ffffff !important;
+	padding: 10px 14px !important;
+	font-size: 14px !important;
+	width: 100% !important;
+	box-sizing: border-box !important;
 }
 
 [piterjs_landing_cfp_submit_btn] {
-	background: var(--color-caution-yellow);
-	color: #000000;
-	font-family: var(--font-mono);
-	font-weight: 700;
-	font-size: 13px;
-	padding: 12px;
-	border-radius: 6px;
-	border: none;
-	cursor: pointer;
-	margin-top: 10px;
+	background: var(--color-caution-yellow) !important;
+	color: #000000 !important;
+	font-family: var(--font-mono) !important;
+	font-weight: 700 !important;
+	font-size: 13px !important;
+	padding: 12px !important;
+	border-radius: 6px !important;
+	border: none !important;
+	cursor: pointer !important;
+	margin-top: 10px !important;
+	width: 100% !important;
+	justify-content: center !important;
 }
 
 /* ==========================================================================
