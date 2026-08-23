@@ -1,57 +1,5 @@
 namespace $.$$ {
 
-	interface ArchiveItem {
-		id: string
-		category: string
-		eventLabel: string
-		title: string
-		dateLabel: string
-		viewers: number
-	}
-
-	const archive_data: ArchiveItem[] = [
-		{
-			id: 'piterjs-55',
-			category: 'piterjs',
-			eventLabel: 'PITERJS #55',
-			title: 'Rust-базированные бандлеры в продакшене',
-			dateLabel: '12 Июня 2026',
-			viewers: 420,
-		},
-		{
-			id: 'piterjs-54',
-			category: 'piterjs',
-			eventLabel: 'PITERJS #54',
-			title: 'Micro-frontends в масштабных порталах',
-			dateLabel: '24 Апреля 2026',
-			viewers: 380,
-		},
-		{
-			id: 'piterjs-53',
-			category: 'piterjs',
-			eventLabel: 'PITERJS #53',
-			title: 'Canvas 2D vs WebGL для финансовых графиков',
-			dateLabel: '10 Февраля 2026',
-			viewers: 510,
-		},
-		{
-			id: 'piterux-12',
-			category: 'piterux',
-			eventLabel: 'PITERUX #12',
-			title: 'Дизайн-системы и токены в инженерном контуре',
-			dateLabel: '18 Мая 2026',
-			viewers: 290,
-		},
-		{
-			id: 'conf-19',
-			category: 'conf',
-			eventLabel: 'PITERJS CONF',
-			title: 'Большая конференция веб-разработчиков в Санкт-Петербурге',
-			dateLabel: 'Сентябрь 2019',
-			viewers: 950,
-		},
-	]
-
 	export class $piterjs_landing extends $.$piterjs_landing {
 
 		@ $mol_mem
@@ -270,6 +218,52 @@ namespace $.$$ {
 
 		// Archive Filtering
 		@ $mol_mem
+		archive_preset_data() {
+			return [
+				{
+					id: 'piterjs-55',
+					category: 'piterjs',
+					eventLabel: 'PITERJS #55',
+					title: 'Rust-базированные бандлеры в продакшене',
+					dateLabel: '12 Июня 2026',
+					viewers: 420,
+				},
+				{
+					id: 'piterjs-54',
+					category: 'piterjs',
+					eventLabel: 'PITERJS #54',
+					title: 'Micro-frontends в масштабных порталах',
+					dateLabel: '24 Апреля 2026',
+					viewers: 380,
+				},
+				{
+					id: 'piterjs-53',
+					category: 'piterjs',
+					eventLabel: 'PITERJS #53',
+					title: 'Canvas 2D vs WebGL для финансовых графиков',
+					dateLabel: '10 Февраля 2026',
+					viewers: 510,
+				},
+				{
+					id: 'piterux-12',
+					category: 'piterux',
+					eventLabel: 'PITERUX #12',
+					title: 'Дизайн-системы и токены в инженерном контуре',
+					dateLabel: '18 Мая 2026',
+					viewers: 290,
+				},
+				{
+					id: 'conf-19',
+					category: 'conf',
+					eventLabel: 'PITERJS CONF',
+					title: 'Большая конференция веб-разработчиков в Санкт-Петербурге',
+					dateLabel: 'Сентябрь 2019',
+					viewers: 950,
+				},
+			]
+		}
+
+		@ $mol_mem
 		category_filter( next?: string ) {
 			return next ?? 'all'
 		}
@@ -293,8 +287,9 @@ namespace $.$$ {
 		@ $mol_mem
 		filtered_archive() {
 			const cat = this.category_filter()
-			if( cat === 'all' ) return archive_data
-			return archive_data.filter( item => item.category === cat )
+			const data = this.archive_preset_data()
+			if( cat === 'all' ) return data
+			return data.filter( item => item.category === cat )
 		}
 
 		@ $mol_mem
@@ -312,7 +307,7 @@ namespace $.$$ {
 		}
 
 		archive_item( id: string ) {
-			return archive_data.find( it => it.id === id )
+			return this.archive_preset_data().find( it => it.id === id )
 		}
 
 		card_event_tag( id: string ) {
