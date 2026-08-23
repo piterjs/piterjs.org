@@ -1241,6 +1241,12 @@
 /* ==========================================================================
    RESPONSIVE BREAKPOINTS (Matching Prototype)
    ========================================================================== */
+@media (max-width: 1200px) {
+	[piterjs_landing_back_link] {
+		display: none !important;
+	}
+}
+
 @media (max-width: 992px) {
 	[piterjs_landing_burger_btn] {
 		display: flex !important;
