@@ -97,9 +97,9 @@ namespace $.$$ {
 				'января', 'февраля', 'марта', 'апреля', 'мая', 'июня',
 				'июля', 'августа', 'сентября', 'октября', 'ноября', 'декабря'
 			]
-			const day = moment.day ? String( moment.day ) : ''
-			const month = moment.month ? ( months[ moment.month - 1 ] || '' ) : ''
-			const year = moment.year ? String( moment.year ) : ''
+			const day = moment.day !== undefined ? String( moment.day + 1 ) : ''
+			const month = moment.month !== undefined ? ( months[ moment.month ] || '' ) : ''
+			const year = moment.year !== undefined ? String( moment.year ) : ''
 			let str = [ day, month, year ].filter( Boolean ).join( ' ' )
 			if( with_time && moment.hour !== undefined ) {
 				const h = String( moment.hour ).padStart( 2, '0' )
