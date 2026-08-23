@@ -700,7 +700,7 @@
 [piterjs_landing_talk2_speaker] {
 	display: flex !important;
 	flex-direction: row !important;
-	align-items: center !important;
+	align-items: flex-start !important;
 	gap: 14px !important;
 	margin-top: auto !important;
 	padding-top: 16px !important;
@@ -724,7 +724,9 @@
 	display: flex !important;
 	flex-direction: column !important;
 	align-items: flex-start !important;
-	gap: 2px !important;
+	gap: 4px !important;
+	flex: 1 1 auto !important;
+	min-width: 0 !important;
 }
 
 [piterjs_landing_speaker_name],
@@ -734,16 +736,20 @@
 	font-size: 15px !important;
 	color: #000000 !important;
 	display: block !important;
+	line-height: 1.3 !important;
 }
 
 [piterjs_landing_speaker_role],
 [piterjs_landing_speaker1_role],
 [piterjs_landing_speaker2_role] {
 	font-size: 12px !important;
-	color: #777777 !important;
+	color: #666666 !important;
 	font-family: var(--font-mono) !important;
 	display: block !important;
-	margin-top: 2px !important;
+	white-space: normal !important;
+	word-break: break-word !important;
+	line-height: 1.45 !important;
+	width: 100% !important;
 }
 
 [piterjs_landing_cfp_cta_card] {
