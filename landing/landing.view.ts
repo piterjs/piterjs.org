@@ -387,7 +387,7 @@ namespace $.$$ {
 			this.archive_limit( 6 )
 		}
 
-		@ $mol_mem
+		@ $mol_mem_key
 		items_for_category( cat: string ) {
 			const meetups = this.meetups()
 			if( meetups && meetups.length > 0 ) {
