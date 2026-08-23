@@ -1077,8 +1077,8 @@
 	display: flex;
 	align-items: center;
 	gap: 6px;
-	padding-top: 12px;
-	border-top: 1px solid #161616;
+	padding-top: 0;
+	border-top: none;
 }
 
 [piterjs_landing_footer_author_prefix] {
