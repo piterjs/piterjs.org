@@ -218,6 +218,10 @@ namespace $.$$ {
 			this.burger_open( !this.burger_open() )
 		}
 
+		nav_mobile_close() {
+			this.burger_open( false )
+		}
+
 		@ $mol_mem
 		sub() {
 			return [
