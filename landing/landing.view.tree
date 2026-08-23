@@ -272,7 +272,7 @@ $piterjs_landing $mol_view
 												<= Comm_vk_btn $mol_link
 													uri \https://vk.com/piterjs
 													target \_blank
-													sub / \[ Открыть группу ВКонтакте ]
+													sub / \[ Открыть группу VK ]
 				<= Footer $mol_view
 					dom_name \footer
 					sub /
