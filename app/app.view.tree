@@ -69,8 +69,8 @@ $piterjs_app $mol_view
 						<= Conf_date $mol_view
 							sub / \сентябрь'19
 	Landing $piterjs_landing
-		meetup <= meetup_current $piterjs_meetup
-		meetups <= meetups /
+		meetup <= meetup_current
+		meetups <= meetups
 	Meetup* $piterjs_meetup_page
 		meetup <= meetup*
 		editing? <=> editing? false

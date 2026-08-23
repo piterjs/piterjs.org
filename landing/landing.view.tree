@@ -1,5 +1,5 @@
 $piterjs_landing $mol_view
-	meetup null $piterjs_meetup
+	meetup $piterjs_meetup
 	meetups / $piterjs_meetup
 	attr *
 		^
