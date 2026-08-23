@@ -45,28 +45,28 @@ $piterjs_landing $mol_view
 								<= Burger_line1 $mol_view
 								<= Burger_line2 $mol_view
 								<= Burger_line3 $mol_view
-				<= Nav_mobile $mol_view
-					sub /
-						<= Nav_m_hero $mol_link
-							uri \#hero
-							click? <=> nav_mobile_close? null
-							sub / \Главная
-						<= Nav_m_manifesto $mol_link
-							uri \#manifesto
-							click? <=> nav_mobile_close? null
-							sub / \Манифест
-						<= Nav_m_schedule $mol_link
-							uri \#schedule
-							click? <=> nav_mobile_close? null
-							sub / \Доклады
-						<= Nav_m_archive $mol_link
-							uri \#archive
-							click? <=> nav_mobile_close? null
-							sub / \Архив
-						<= Nav_m_community $mol_link
-							uri \#community
-							click? <=> nav_mobile_close? null
-							sub / \Сообщество
+		<= Nav_mobile $mol_view
+			sub /
+				<= Nav_m_hero $mol_link
+					uri \#hero
+					click? <=> nav_mobile_close? null
+					sub / \Главная
+				<= Nav_m_manifesto $mol_link
+					uri \#manifesto
+					click? <=> nav_mobile_close? null
+					sub / \Манифест
+				<= Nav_m_schedule $mol_link
+					uri \#schedule
+					click? <=> nav_mobile_close? null
+					sub / \Доклады
+				<= Nav_m_archive $mol_link
+					uri \#archive
+					click? <=> nav_mobile_close? null
+					sub / \Архив
+				<= Nav_m_community $mol_link
+					uri \#community
+					click? <=> nav_mobile_close? null
+					sub / \Сообщество
 		<= Main $mol_view
 			dom_name \main
 			sub /
