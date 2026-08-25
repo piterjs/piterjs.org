@@ -7,7 +7,7 @@ namespace $ {
 			{descr}
 			
 			⏰ Когда: **{date} {time}**
-			📍 Где: {place} (**{address}**)
+			📍 Где: {place} ( **{address}** )
 			
 			📰 Программа
 			
