@@ -2,7 +2,7 @@ namespace $ {
 
 	export let $piterjs_post_template = {
 		init: `
-			✨ Ура! Скоро **PiterJS {title}**
+			✨ Ура! Скоро **{title}**
 			
 			{descr}
 			
@@ -29,14 +29,14 @@ namespace $ {
 			✔️ А если передумал идти — отмени регистрацию там же.
 		`,
 		place: `
-			🎉 PiterJS {title} уже завтра в {place}: **{address}**
+			🎉 {title} уже завтра в {place}: **{address}**
 			
 			🤗 Ждем тебя к {time}.
 			🙏 Если не придёшь — отмени регистрацию: {meetup}
 			📽️ Но всё равно смотри трансляцию: {video}
 		`,
 		air: `
-			🎬 PiterJS {title} начинается!
+			🎬 {title} начинается!
 			📽️ Занимайте места и смотрите трансляцию: **{video}**
 		`,
 		afterparty: `

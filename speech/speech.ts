@@ -73,7 +73,7 @@ namespace $ {
 			const descr = this.description()
 			const speaker = this.speaker().title()
 			const meetup = this.$.$mol_state_arg.make_link({ meetup: this.meetup()!.id() })
-			const date = this.start()?.toString( 'DD Month' ) ?? 'скоро'
+			const date = this.start()?.toString( 'DD Month', 'ru' ) ?? 'скоро'
 			const time = this.start()?.toString( 'hh:mm' ) ?? ''
 
 			return this.post_template()

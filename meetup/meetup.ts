@@ -232,7 +232,7 @@ namespace $ {
 
 			const title = this.title()
 			const descr = this.description()
-			const date = this.start()?.toString( 'DD Month' ) ?? 'скоро'
+			const date = this.start()?.toString( 'DD Month', 'ru' ) ?? 'скоро'
 			const time = this.start()?.toString( 'hh:mm' ) ?? ''
 			const place = this.place().title()
 			const address = this.place().address()
