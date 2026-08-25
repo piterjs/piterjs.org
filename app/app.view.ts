@@ -60,8 +60,21 @@ namespace $.$$ {
 			this.meetup_id( meetup.id() )
 		}
 		
-		speech_id( next? : string ) { return this.$.$mol_state_arg.value( 'speech' , next ) }
+		@ $mol_mem
+		speech_id( next? : string | null ) {
+			const id = this.$.$mol_state_arg.value( 'speech' , next )
+			if( !id ) return null
+			const ids2 = $mol_int62_string_ensure( id )
+			if( ids2 ) return ids2
+			return null
+		}
 		speech( id : $mol_int62_string ) { return this.Domain().world()!.Fund( $piterjs_speech ).Item( id ) }
+
+		@ $mol_mem
+		speech_current() {
+			const id = this.speech_id()
+			return id ? this.speech( id ) : null
+		}
 		
 		speaker_id( next? : string ) { return this.$.$mol_state_arg.value( 'speaker' , next ) }
 		// speaker( id : string ) { return $piterjs_speaker.item( id ) }
@@ -70,8 +83,8 @@ namespace $.$$ {
 		pages() {
 			if( this.intro() != null ) return [ this.Intro() ]
 
-			const meetup = this.meetup_current()
-			const meetup_id = meetup?.id() ?? null
+			const speech_id = this.speech_id()
+			const meetup_id = this.meetup_open()?.id() ?? null
 
 			const pages = [
 				this.Menu() ,
@@ -79,7 +92,7 @@ namespace $.$$ {
 				... this.safe() ? [ this.Safe() ] : [],
 				... meetup_id ? [ this.Meetup( meetup_id ) ] : [] ,
 				... this.rights_meetup() ? [ this.Rights_meetup() ] : [] ,
-				... this.speech_id() ? [ this.Speech( this.speech_id() ) ] : [] ,
+				... speech_id ? [ this.Speech( speech_id ) ] : [] ,
 				... this.place_show() ? [ this.Place() ] : [] ,
 				... this.video() ? [ this.Video() ] : [] ,
 				... this.guests() ? [ this.Meetup_guests( meetup_id ) ] : [] ,
@@ -100,16 +113,15 @@ namespace $.$$ {
 		}
 
 		@ $mol_mem
+		meetup_open() {
+			const id = this.meetup_id()
+			if( id ) return this.meetup( id )
+			return this.speech_current()?.meetup() ?? null
+		}
+
+		@ $mol_mem
 		meetup_current() {
-			if( this.meetup_id() ) return this.meetup( this.meetup_id() )
-
-			const speech_id = this.speech_id()
-			if( speech_id ) {
-				const meetup = this.speech( speech_id as $mol_int62_string ).meetup()
-				if( meetup ) return meetup
-			}
-
-			return this.meetups()[0]
+			return this.meetup_open() ?? this.meetups()[0]
 		}
 
 		@ $mol_mem
