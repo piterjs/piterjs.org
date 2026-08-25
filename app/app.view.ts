@@ -47,11 +47,7 @@ namespace $.$$ {
 		
 		@ $mol_mem
 		meetup_id( next? : string | null ) {
-			const id = this.$.$mol_state_arg.value( 'meetup' , next )
-			if( !id ) return null
-			const ids2 = $mol_int62_string_ensure( id )
-			if( ids2 ) return ids2
-			return null
+			return $mol_int62_string_ensure( this.$.$mol_state_arg.value( 'meetup' , next ) )
 		}
 
 		@ $mol_action
@@ -62,11 +58,7 @@ namespace $.$$ {
 		
 		@ $mol_mem
 		speech_id( next? : string | null ) {
-			const id = this.$.$mol_state_arg.value( 'speech' , next )
-			if( !id ) return null
-			const ids2 = $mol_int62_string_ensure( id )
-			if( ids2 ) return ids2
-			return null
+			return $mol_int62_string_ensure( this.$.$mol_state_arg.value( 'speech' , next ) )
 		}
 		speech( id : $mol_int62_string ) { return this.Domain().world()!.Fund( $piterjs_speech ).Item( id ) }
 
@@ -82,23 +74,19 @@ namespace $.$$ {
 		@ $mol_mem
 		pages() {
 			if( this.intro() != null ) return [ this.Intro() ]
-
-			const speech_id = this.speech_id()
-			const meetup_id = this.meetup_open()?.id() ?? null
-
 			const pages = [
 				this.Menu() ,
 				... this.rights() ? [ this.Rights() ] : [] ,
 				... this.safe() ? [ this.Safe() ] : [],
-				... meetup_id ? [ this.Meetup( meetup_id ) ] : [] ,
+				... this.meetup_id() ? [ this.Meetup( this.meetup_id() ) ] : [] ,
 				... this.rights_meetup() ? [ this.Rights_meetup() ] : [] ,
-				... speech_id ? [ this.Speech( speech_id ) ] : [] ,
+				... this.speech_id() ? [ this.Speech( this.speech_id() ) ] : [] ,
 				... this.place_show() ? [ this.Place() ] : [] ,
 				... this.video() ? [ this.Video() ] : [] ,
-				... this.guests() ? [ this.Meetup_guests( meetup_id ) ] : [] ,
-				... this.texts() ? [ this.Meetup_texts( meetup_id ) ] : [] ,
-				... this.templates() ? [ this.Meetup_templates( meetup_id ) ] : [] ,
-				... this.stats() ? [ this.Meetup_stats( meetup_id ) ] : [] ,
+				... this.guests() ? [ this.Meetup_guests( this.meetup_id() ) ] : [] ,
+				... this.texts() ? [ this.Meetup_texts( this.meetup_id() ) ] : [] ,
+				... this.templates() ? [ this.Meetup_templates( this.meetup_id() ) ] : [] ,
+				... this.stats() ? [ this.Meetup_stats( this.meetup_id() ) ] : [] ,
 				... this.others() ? [ this.Others() ] : [] ,
 				... this.wiki() ? this.Wiki().pages() : [],
 			]
@@ -113,15 +101,9 @@ namespace $.$$ {
 		}
 
 		@ $mol_mem
-		meetup_open() {
-			const id = this.meetup_id()
-			if( id ) return this.meetup( id )
-			return this.speech_current()?.meetup() ?? null
-		}
-
-		@ $mol_mem
 		meetup_current() {
-			return this.meetup_open() ?? this.meetups()[0]
+			const id = this.meetup_id()
+			return id ? this.meetup( id ) : this.speech_current()?.meetup() ?? this.meetups()[0]
 		}
 
 		@ $mol_mem
