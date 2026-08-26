@@ -112,10 +112,10 @@ namespace $ {
 			
 			$mol_wire_solid()
 			
-			const secret = $mol_wire_sync( this.peer_secret( id )! )
 			const salt = $mol_crypto_hash( $mol_charset_encode( this.id() ) ).slice( 0, 16 )
 
 			if( next ) {
+				const secret = $mol_wire_sync( this.peer_secret( id )! )
 				const closed = secret.encrypt( $mol_charset_encode( next ), salt )
 				this.joined_node()?.sub( id, $hyoo_crowd_reg ).value( new Uint8Array( closed ) )
 				return next
@@ -128,6 +128,10 @@ namespace $ {
 			if( !closed ) return ''
 
 			if( typeof closed === 'string' ) return closed
+
+			const secret_key = this.peer_secret( id )
+			if( !secret_key ) return ''
+			const secret = $mol_wire_sync( secret_key )
 
 			try {
 				return $mol_charset_decode( secret.decrypt( closed as Uint8Array<ArrayBuffer>, salt ) )

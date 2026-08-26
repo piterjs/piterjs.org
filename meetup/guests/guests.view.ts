@@ -20,8 +20,8 @@ namespace $.$$ {
 			try {
 				return this.meetup().joined_name( id ) || id
 			} catch( error ) {
-				if( $mol_promise_like( error ) ) return id
-				throw error
+				$mol_fail_log( error )
+				return id
 			}
 		}
 
