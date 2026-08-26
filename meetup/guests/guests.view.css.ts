@@ -32,7 +32,7 @@ namespace $.$$ {
 			padding: 0,
 		},
 
-		Person_join_moment: {
+		Person_join_time: {
 			padding: $mol_gap.text,
 			color: $mol_theme.shade,
 		},
