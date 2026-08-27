@@ -16,7 +16,7 @@ namespace $.$$ {
 		@ $mol_mem
 		Domain() {
 
-			const yard = super.Yard()
+			const yard = this.Yard()
 			
 			$mol_wire_sync( yard.world() ).apply( this.domain_rights() )
 
@@ -71,6 +71,18 @@ namespace $.$$ {
 		// speaker( id : string ) { return $piterjs_speaker.item( id ) }
 
 		@ $mol_mem
+		landing( next? : string | null ) {
+			return this.$.$mol_state_arg.value( 'landing' , next )
+		}
+
+		@ $mol_mem
+		sub() {
+			this.Online()
+			if( this.landing() != null ) return [ this.Landing() ]
+			return super.sub()
+		}
+
+		@ $mol_mem
 		pages() {
 			if( this.intro() != null ) return [ this.Intro() ]
 			const pages = [
@@ -96,6 +108,7 @@ namespace $.$$ {
 		@ $mol_mem
 		title() {
 			if( this.intro() != null ) return this.Intro().title()
+			if( this.landing() != null ) return 'PiterJS — Сообщество JavaScript'
 			return this.Book().title()
 		}
 
