@@ -101,6 +101,7 @@ $piterjs_intro $mol_view
 			title <= place_title \Мы в {place}
 			text \
 				\""/piterjs/logo-sponsors/tbank-logo.svg""
+				- \""https://habrastorage.org/webt/nh/np/oy/nhnpoyyb6ayimlhpxcyxptxwtza.jpeg""  - Юмани
 		follow <= Follow $piterjs_intro_page
 			title \Следите за новостями
 			text \
