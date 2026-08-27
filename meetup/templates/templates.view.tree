@@ -20,13 +20,13 @@ $piterjs_meetup_templates $mol_page
 				title \🗣️ Анонс доклада
 				template? <=> post_template*speech?
 			<= Place_template_labeler $piterjs_meetup_templates_field
-				title \⌛ На кануне
+				title \⌛ Накануне
 				template? <=> post_template*place?
 			<= Air_template_labeler $piterjs_meetup_templates_field
 				title \⏰ Выход в эфир
 				template? <=> post_template*air?
 			<= Afterparty_template_labeler $piterjs_meetup_templates_field
-				title \🎊 Афтепати
+				title \🎊 Афтерпати
 				template? <=> post_template*afterparty?
 			<= Retro_template_labeler $piterjs_meetup_templates_field
 				title \🙏 Ретроспектива

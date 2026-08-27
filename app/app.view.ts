@@ -47,15 +47,7 @@ namespace $.$$ {
 		
 		@ $mol_mem
 		meetup_id( next? : string | null ) {
-			
-			const id = this.$.$mol_state_arg.value( 'meetup' , next )
-			if( !id ) return id
-
-			const ids2 = $mol_int62_string_ensure( id )
-			if( ids2 ) return ids2
-
-			return null
-
+			return $mol_int62_string_ensure( this.$.$mol_state_arg.value( 'meetup' , next ) )
 		}
 
 		@ $mol_action
@@ -64,7 +56,10 @@ namespace $.$$ {
 			this.meetup_id( meetup.id() )
 		}
 		
-		speech_id( next? : string ) { return this.$.$mol_state_arg.value( 'speech' , next ) }
+		@ $mol_mem
+		speech_id( next? : string | null ) {
+			return $mol_int62_string_ensure( this.$.$mol_state_arg.value( 'speech' , next ) )
+		}
 		speech( id : $mol_int62_string ) { return this.Domain().world()!.Fund( $piterjs_speech ).Item( id ) }
 		
 		speaker_id( next? : string ) { return this.$.$mol_state_arg.value( 'speaker' , next ) }
@@ -193,7 +188,7 @@ namespace $.$$ {
 		}
 
 		speech_public( id: $mol_int62_string, next?: boolean ) {
-			return this.meetup_current().speech_public( id, next )
+			return this.speech( id ).meetup()?.speech_public( id, next ) ?? false
 		}
 
 	}

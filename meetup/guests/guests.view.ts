@@ -1,23 +1,33 @@
 namespace $.$$ {
 	export class $piterjs_meetup_guests extends $.$piterjs_meetup_guests {
-		
+
+		@ $mol_mem
+		joined_list_unique() {
+			return [ ... new Set( this.meetup().joined_list() ) ]
+		}
+
 		@ $mol_mem
 		person_list() {
 			const moments = this.meetup().joined_moments()
-			return this.meetup().joined_list()
+			return this.joined_list_unique()
 				.filter( $mol_match_text( this.filter(), person => [ this.person( person ), person ] ) )
-				.sort( ( a, b )=> moments[ a ].valueOf() - moments[ b ].valueOf() )
+				.sort( ( a, b )=> ( moments[ a ]?.valueOf() ?? 0 ) - ( moments[ b ]?.valueOf() ?? 0 ) )
 				.map( person => this.Person( person ) )
 		}
 
 		@ $mol_mem_key
-		person( person: $mol_int62_string ) {
-			return this.meetup().joined_name( person ) || person
+		person( id: $mol_int62_string ) {
+			try {
+				return this.meetup().joined_name( id ) || id
+			} catch( error ) {
+				$mol_fail_log( error )
+				return id
+			}
 		}
 
 		@ $mol_mem
 		dump_blob() {
-			const text = this.meetup().joined_list()
+			const text = this.joined_list_unique()
 				.map( person => this.person( person ) )
 				.sort()
 				.join( '\n' )
@@ -25,9 +35,9 @@ namespace $.$$ {
 		}
 
 		@ $mol_mem_key
-		person_join_moment( id: $mol_int62_string ) {
-			return this.meetup().joined_moments()[ id ].toString( `DD WD hh:mm` )
+		person_join_time( id: $mol_int62_string ) {
+			return this.meetup().joined_moments()[ id ]?.toString( `DD WD hh:mm` ) ?? ''
 		}
-		
+
 	}
 }
