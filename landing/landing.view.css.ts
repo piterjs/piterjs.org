@@ -1,8 +1,7 @@
+// @ts-nocheck
 namespace $.$$ {
-
 	$mol_style_define( $piterjs_landing, {
-		'400;500;600&family=JetBrains+Mono:wght@300;400;500;700&family=Space+Grotesk:wght@300;400;500;700&display=swap');': {
-			display: 'block',
+		display: 'block',
 			width: '100vw',
 			minWidth: '100vw',
 			maxWidth: '100vw',
@@ -12,7 +11,7 @@ namespace $.$$ {
 			overflowX: 'hidden',
 			backgroundColor: '#000000',
 			color: '#eeeeee',
-			fontFamily: 'Inter', 'Space Grotesk', ui-sans-serif, system-ui, -apple-system, sans-serif,
+			fontFamily: '\'Inter\', \'Space Grotesk\', ui-sans-serif, system-ui, -apple-system, sans-serif',
 			position: 'relative',
 			boxSizing: 'border-box',
 			margin: '0',
@@ -24,8 +23,7 @@ namespace $.$$ {
 			'--color-carbon': '#333333',
 			'--color-gunmetal': '#4b4b4b',
 			'--color-aluminum': '#afafaf',
-			'--font-mono': 'JetBrains Mono', monospace,
-		},
+			'--font-mono': '\'JetBrains Mono\', monospace',
 		'*': {
 			boxSizing: 'border-box',
 		},
@@ -295,8 +293,7 @@ namespace $.$$ {
 			inset: '0',
 			zIndex: '1',
 			pointerEvents: 'none',
-			backgroundImage: 'radial-gradient(circle at 80% 20%, rgba(255, 243, 19, 0.05) 0%, transparent 40%),
-	                  linear-gradient(to bottom, rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.95))',
+			backgroundImage: 'radial-gradient(circle at 80% 20%, rgba(255, 243, 19, 0.05) 0%, transparent 40%), 	                  linear-gradient(to bottom, rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.95))',
 		},
 		Hero_content: {
 			maxWidth: '1200px',
@@ -405,7 +402,7 @@ namespace $.$$ {
 			boxShadow: '0 10px 30px rgba(0, 0, 0, 0.5)',
 		},
 		Countdown_label: {
-			fontFamily: 'JetBrains Mono', monospace,
+			fontFamily: '\'JetBrains Mono\', monospace',
 			fontSize: '11px',
 			color: '#afafaf',
 			textTransform: 'uppercase',
@@ -450,7 +447,7 @@ namespace $.$$ {
 			padding: '0',
 		},
 		Days_val: {
-			fontFamily: 'JetBrains Mono', monospace,
+			fontFamily: '\'JetBrains Mono\', monospace',
 			fontSize: '38px',
 			fontWeight: '400',
 			color: '#fff313',
@@ -458,7 +455,7 @@ namespace $.$$ {
 			marginBottom: '6px',
 		},
 		Hours_val: {
-			fontFamily: 'JetBrains Mono', monospace,
+			fontFamily: '\'JetBrains Mono\', monospace',
 			fontSize: '38px',
 			fontWeight: '400',
 			color: '#fff313',
@@ -466,7 +463,7 @@ namespace $.$$ {
 			marginBottom: '6px',
 		},
 		Mins_val: {
-			fontFamily: 'JetBrains Mono', monospace,
+			fontFamily: '\'JetBrains Mono\', monospace',
 			fontSize: '38px',
 			fontWeight: '400',
 			color: '#fff313',
@@ -474,7 +471,7 @@ namespace $.$$ {
 			marginBottom: '6px',
 		},
 		Secs_val: {
-			fontFamily: 'JetBrains Mono', monospace,
+			fontFamily: '\'JetBrains Mono\', monospace',
 			fontSize: '38px',
 			fontWeight: '400',
 			color: '#fff313',
@@ -482,28 +479,28 @@ namespace $.$$ {
 			marginBottom: '6px',
 		},
 		Days_tag: {
-			fontFamily: 'Inter', sans-serif,
+			fontFamily: '\'Inter\', sans-serif',
 			fontSize: '10px',
 			color: '#afafaf',
 			textTransform: 'uppercase',
 			letterSpacing: '0.5px',
 		},
 		Hours_tag: {
-			fontFamily: 'Inter', sans-serif,
+			fontFamily: '\'Inter\', sans-serif',
 			fontSize: '10px',
 			color: '#afafaf',
 			textTransform: 'uppercase',
 			letterSpacing: '0.5px',
 		},
 		Mins_tag: {
-			fontFamily: 'Inter', sans-serif,
+			fontFamily: '\'Inter\', sans-serif',
 			fontSize: '10px',
 			color: '#afafaf',
 			textTransform: 'uppercase',
 			letterSpacing: '0.5px',
 		},
 		Secs_tag: {
-			fontFamily: 'Inter', sans-serif,
+			fontFamily: '\'Inter\', sans-serif',
 			fontSize: '10px',
 			color: '#afafaf',
 			textTransform: 'uppercase',
@@ -522,7 +519,7 @@ namespace $.$$ {
 			boxShadow: '0 20px 40px rgba(0, 0, 0, 0.6)',
 		},
 		Disc_badge: {
-			fontFamily: 'JetBrains Mono', monospace,
+			fontFamily: '\'JetBrains Mono\', monospace',
 			fontSize: '11px',
 			color: '#fff313',
 			textTransform: 'uppercase',
@@ -565,7 +562,7 @@ namespace $.$$ {
 			fontSize: '13px',
 		},
 		Map_link: {
-			fontFamily: 'JetBrains Mono', monospace,
+			fontFamily: '\'JetBrains Mono\', monospace',
 			fontSize: '11px',
 			color: '#fff313',
 			background: 'rgba(255, 243, 19, 0.08)',
@@ -1860,283 +1857,285 @@ namespace $.$$ {
 			zIndex: '2000',
 			animation: 'pjs_slidein 0.3s ease',
 		},
-		'@media (max-width: 1200px)': {
-			Back_link: {
-				display: 'none',
+		'@media': {
+			'(max-width: 1200px)': {
+				Back_link: {
+					display: 'none',
+				},
 			},
-		},
-		'@media (max-width: 992px)': {
-			Burger_btn: {
-				display: 'flex',
-			},
-			Nav: {
-				display: 'none',
-			},
-			Header: {
-				position: 'fixed',
-				top: '0',
-				left: '0',
-				width: '100%',
-				zIndex: '1000',
-				backgroundColor: 'rgba(0, 0, 0, 0.95)',
-				backdropFilter: 'blur(12px)',
-				WebkitBackdropFilter: 'blur(12px)',
-			},
-			Nav_mobile: {
-				display: 'flex',
-				position: 'fixed',
-				top: '60px',
-				left: '0',
-				width: '100%',
-				backgroundColor: '#161616',
-				borderBottom: '1px solid #4b4b4b',
-				flexDirection: 'column',
-				padding: '20px',
-				gap: '12px',
-				borderRadius: '0 0 16px 16px',
-				transform: 'translateY(-110%)',
-				opacity: '0',
-				pointerEvents: 'none',
-				transition: 'transform 0.35s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.25s ease',
-				boxShadow: '0 16px 32px rgba(0, 0, 0, 0.8)',
-				zIndex: '900',
-				'@piterjs_landing_menu_open': {
-					'true': {
-						'[piterjs_landing]': {
-							transform: 'translateY(0)',
-							opacity: '1',
-							pointerEvents: 'auto',
+			'(max-width: 992px)': {
+				Burger_btn: {
+					display: 'flex',
+				},
+				Nav: {
+					display: 'none',
+				},
+				Header: {
+					position: 'fixed',
+					top: '0',
+					left: '0',
+					width: '100%',
+					zIndex: '1000',
+					backgroundColor: 'rgba(0, 0, 0, 0.95)',
+					backdropFilter: 'blur(12px)',
+					WebkitBackdropFilter: 'blur(12px)',
+				},
+				Nav_mobile: {
+					display: 'flex',
+					position: 'fixed',
+					top: '60px',
+					left: '0',
+					width: '100%',
+					backgroundColor: '#161616',
+					borderBottom: '1px solid #4b4b4b',
+					flexDirection: 'column',
+					padding: '20px',
+					gap: '12px',
+					borderRadius: '0 0 16px 16px',
+					transform: 'translateY(-110%)',
+					opacity: '0',
+					pointerEvents: 'none',
+					transition: 'transform 0.35s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.25s ease',
+					boxShadow: '0 16px 32px rgba(0, 0, 0, 0.8)',
+					zIndex: '900',
+					'@piterjs_landing_menu_open': {
+						'true': {
+							'[piterjs_landing]': {
+								transform: 'translateY(0)',
+								opacity: '1',
+								pointerEvents: 'auto',
+							},
 						},
 					},
+					'[mol_link]': {
+						textAlign: 'center',
+						padding: '12px',
+						fontSize: '16px',
+						color: '#eeeeee',
+						textDecoration: 'none',
+						borderRadius: '8px',
+						background: '#111111',
+						border: '1px solid #2a2a2a',
+					},
+					'[mol_link]:hover': {
+						color: '#fff313',
+						background: '#222222',
+					},
 				},
-				'[mol_link]': {
+				Hero_title: {
+					fontSize: '44px',
+					letterSpacing: '-1.5px',
+				},
+				Manifesto_quote: {
+					fontSize: '32px',
+					lineHeight: '1.25',
+				},
+				Hero_footer_grid: {
+					gridTemplateColumns: '1fr',
+					gap: '24px',
+				},
+				Discovery_card: {
+					order: '1',
+				},
+				Countdown_box: {
+					order: '2',
+				},
+				Stats_grid: {
+					gridTemplateColumns: '1fr 1fr',
+					gap: '24px',
+				},
+				Talks_grid: {
+					gridTemplateColumns: '1fr',
+				},
+				Archive_grid: {
+					gridTemplateColumns: '1fr 1fr',
+				},
+				Cfp_cta_card: {
+					flexDirection: 'column',
+					gap: '24px',
 					textAlign: 'center',
-					padding: '12px',
-					fontSize: '16px',
-					color: '#eeeeee',
-					textDecoration: 'none',
-					borderRadius: '8px',
-					background: '#111111',
-					border: '1px solid #2a2a2a',
+					alignItems: 'center',
 				},
-				'[mol_link]:hover': {
-					color: '#fff313',
-					background: '#222222',
+				Cfp_open_btn: {
+					alignSelf: 'center',
+				},
+				Community_cards: {
+					gridTemplateColumns: '1fr',
+				},
+				Footer_inner: {
+					flexDirection: 'column',
+					gap: '16px',
+					textAlign: 'center',
+					justifyContent: 'center',
+				},
+				Footer_copy: {
+					flexDirection: 'column',
+					gap: '12px',
 				},
 			},
-			Hero_title: {
-				fontSize: '44px',
-				letterSpacing: '-1.5px',
+			'(max-width: 768px)': {
+				Header: {
+					padding: '12px 16px',
+				},
+				Nav_actions: {
+					gap: '8px',
+				},
+				Rsvp_btn: {
+					padding: '6px 12px',
+					height: '32px',
+					minHeight: '32px',
+					maxHeight: '32px',
+					fontSize: '12px',
+					display: 'inline-flex',
+					alignItems: 'center',
+					justifyContent: 'center',
+					lineHeight: '1',
+				},
 			},
-			Manifesto_quote: {
-				fontSize: '32px',
-				lineHeight: '1.25',
+			'(max-width: 600px)': {
+				Header: {
+					padding: '10px 12px',
+				},
+				Back_link: {
+					display: 'none',
+				},
+				Rsvp_btn: {
+					padding: '6px 10px',
+					height: '32px',
+					minHeight: '32px',
+					maxHeight: '32px',
+					fontSize: '11px',
+					display: 'inline-flex',
+					alignItems: 'center',
+					justifyContent: 'center',
+					lineHeight: '1',
+				},
+				Section_hero: {
+					padding: '90px 12px 48px 12px',
+					height: 'auto',
+					minHeight: '100vh',
+				},
+				Section_manifesto: {
+					padding: '48px 12px',
+				},
+				Section_schedule: {
+					padding: '48px 12px',
+				},
+				Section_archive: {
+					padding: '48px 12px',
+				},
+				Section_community: {
+					padding: '48px 12px',
+				},
+				Footer: {
+					padding: '32px 12px',
+				},
+				Countdown_box: {
+					padding: '20px 16px',
+				},
+				Next_card: {
+					padding: '20px 16px',
+				},
+				Talk_card: {
+					padding: '20px 16px',
+				},
+				Venue_card: {
+					padding: '20px 16px',
+				},
+				Archive_card: {
+					padding: '20px 16px',
+				},
+				Cfp_cta_card: {
+					padding: '24px 16px',
+				},
+				Community_card: {
+					padding: '24px 16px',
+				},
+				Hero_title: {
+					fontSize: '30px',
+					letterSpacing: '-1px',
+				},
+				Hero_title_line2: {
+					flexWrap: 'wrap',
+					gap: '8px',
+				},
+				Manifesto_quote: {
+					fontSize: '22px',
+					lineHeight: '1.3',
+				},
+				Stats_grid: {
+					gridTemplateColumns: '1fr',
+					gap: '20px',
+				},
+				Archive_grid: {
+					gridTemplateColumns: '1fr',
+					gap: '16px',
+				},
+				Talks_grid: {
+					gap: '20px',
+				},
+				Community_cards: {
+					gap: '20px',
+				},
+				Timer_units: {
+					display: 'flex',
+					flexDirection: 'row',
+					gap: '14px',
+					flexWrap: 'nowrap',
+					justifyContent: 'flex-start',
+					alignItems: 'flex-start',
+				},
+				Days_val: {
+					fontSize: '26px',
+				},
+				Hours_val: {
+					fontSize: '26px',
+				},
+				Mins_val: {
+					fontSize: '26px',
+				},
+				Secs_val: {
+					fontSize: '26px',
+				},
+				Archive_filters: {
+					flexWrap: 'wrap',
+					gap: '8px',
+				},
+				Toast: {
+					left: '12px',
+					right: '12px',
+					bottom: '12px',
+					textAlign: 'center',
+				},
 			},
-			Hero_footer_grid: {
-				gridTemplateColumns: '1fr',
-				gap: '24px',
-			},
-			Discovery_card: {
-				order: '1',
-			},
-			Countdown_box: {
-				order: '2',
-			},
-			Stats_grid: {
-				gridTemplateColumns: '1fr 1fr',
-				gap: '24px',
-			},
-			Talks_grid: {
-				gridTemplateColumns: '1fr',
-			},
-			Archive_grid: {
-				gridTemplateColumns: '1fr 1fr',
-			},
-			Cfp_cta_card: {
-				flexDirection: 'column',
-				gap: '24px',
-				textAlign: 'center',
-				alignItems: 'center',
-			},
-			Cfp_open_btn: {
-				alignSelf: 'center',
-			},
-			Community_cards: {
-				gridTemplateColumns: '1fr',
-			},
-			Footer_inner: {
-				flexDirection: 'column',
-				gap: '16px',
-				textAlign: 'center',
-				justifyContent: 'center',
-			},
-			Footer_copy: {
-				flexDirection: 'column',
-				gap: '12px',
-			},
-		},
-		'@media (max-width: 768px)': {
-			Header: {
-				padding: '12px 16px',
-			},
-			Nav_actions: {
-				gap: '8px',
-			},
-			Rsvp_btn: {
-				padding: '6px 12px',
-				height: '32px',
-				minHeight: '32px',
-				maxHeight: '32px',
-				fontSize: '12px',
-				display: 'inline-flex',
-				alignItems: 'center',
-				justifyContent: 'center',
-				lineHeight: '1',
-			},
-		},
-		'@media (max-width: 600px)': {
-			Header: {
-				padding: '10px 12px',
-			},
-			Back_link: {
-				display: 'none',
-			},
-			Rsvp_btn: {
-				padding: '6px 10px',
-				height: '32px',
-				minHeight: '32px',
-				maxHeight: '32px',
-				fontSize: '11px',
-				display: 'inline-flex',
-				alignItems: 'center',
-				justifyContent: 'center',
-				lineHeight: '1',
-			},
-			Section_hero: {
-				padding: '90px 12px 48px 12px',
-				height: 'auto',
-				minHeight: '100vh',
-			},
-			Section_manifesto: {
-				padding: '48px 12px',
-			},
-			Section_schedule: {
-				padding: '48px 12px',
-			},
-			Section_archive: {
-				padding: '48px 12px',
-			},
-			Section_community: {
-				padding: '48px 12px',
-			},
-			Footer: {
-				padding: '32px 12px',
-			},
-			Countdown_box: {
-				padding: '20px 16px',
-			},
-			Next_card: {
-				padding: '20px 16px',
-			},
-			Talk_card: {
-				padding: '20px 16px',
-			},
-			Venue_card: {
-				padding: '20px 16px',
-			},
-			Archive_card: {
-				padding: '20px 16px',
-			},
-			Cfp_cta_card: {
-				padding: '24px 16px',
-			},
-			Community_card: {
-				padding: '24px 16px',
-			},
-			Hero_title: {
-				fontSize: '30px',
-				letterSpacing: '-1px',
-			},
-			Hero_title_line2: {
-				flexWrap: 'wrap',
-				gap: '8px',
-			},
-			Manifesto_quote: {
-				fontSize: '22px',
-				lineHeight: '1.3',
-			},
-			Stats_grid: {
-				gridTemplateColumns: '1fr',
-				gap: '20px',
-			},
-			Archive_grid: {
-				gridTemplateColumns: '1fr',
-				gap: '16px',
-			},
-			Talks_grid: {
-				gap: '20px',
-			},
-			Community_cards: {
-				gap: '20px',
-			},
-			Timer_units: {
-				display: 'flex',
-				flexDirection: 'row',
-				gap: '14px',
-				flexWrap: 'nowrap',
-				justifyContent: 'flex-start',
-				alignItems: 'flex-start',
-			},
-			Days_val: {
-				fontSize: '26px',
-			},
-			Hours_val: {
-				fontSize: '26px',
-			},
-			Mins_val: {
-				fontSize: '26px',
-			},
-			Secs_val: {
-				fontSize: '26px',
-			},
-			Archive_filters: {
-				flexWrap: 'wrap',
-				gap: '8px',
-			},
-			Toast: {
-				left: '12px',
-				right: '12px',
-				bottom: '12px',
-				textAlign: 'center',
-			},
-		},
-		'@media (max-width: 480px)': {
-			Rsvp_btn: {
-				display: 'none',
-			},
-			Hero_title: {
-				fontSize: '26px',
-			},
-			Manifesto_quote: {
-				fontSize: '20px',
-			},
-			Section_hero: {
-				padding: '80px 10px 40px 10px',
-			},
-			Section_manifesto: {
-				padding: '40px 10px',
-			},
-			Section_schedule: {
-				padding: '40px 10px',
-			},
-			Section_archive: {
-				padding: '40px 10px',
-			},
-			Section_community: {
-				padding: '40px 10px',
-			},
-			Footer: {
-				padding: '24px 10px',
+			'(max-width: 480px)': {
+				Rsvp_btn: {
+					display: 'none',
+				},
+				Hero_title: {
+					fontSize: '26px',
+				},
+				Manifesto_quote: {
+					fontSize: '20px',
+				},
+				Section_hero: {
+					padding: '80px 10px 40px 10px',
+				},
+				Section_manifesto: {
+					padding: '40px 10px',
+				},
+				Section_schedule: {
+					padding: '40px 10px',
+				},
+				Section_archive: {
+					padding: '40px 10px',
+				},
+				Section_community: {
+					padding: '40px 10px',
+				},
+				Footer: {
+					padding: '24px 10px',
+				},
 			},
 		},
 	} )

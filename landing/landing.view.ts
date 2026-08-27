@@ -127,11 +127,12 @@ namespace $.$$ {
 
 		@ $mol_mem
 		visitor_joined( next?: boolean ) {
-			const name = this.visitor_name()
-			if( next !== undefined ) {
-				this.meetup_current()?.joined_name( name, next )
-			}
-			return this.meetup_current()?.joined_name( name ) ?? false
+			const peer = this.meetup_current()?.land.peer_id()
+			if( !peer ) return false
+			
+			if( next === true ) this.meetup_current()?.joined_name( peer, this.visitor_name() )
+			if( next === false ) this.meetup_current()?.joined_name( peer, '' )
+			return Boolean( this.meetup_current()?.joined_name( peer ) )
 		}
 
 		// Next Event Card
