@@ -14,13 +14,6 @@ namespace $.$$ {
 		}
 
 		@ $mol_mem
-		Yard() {
-			const yard = super.Yard()
-			yard.master_list = () => [ 'wss://sync.hyoo.ru' ]
-			return yard
-		}
-
-		@ $mol_mem
 		Domain() {
 
 			const yard = this.Yard()
@@ -79,7 +72,7 @@ namespace $.$$ {
 
 		@ $mol_mem
 		landing( next? : string | null ) {
-			return this.$.$mol_state_arg.value( 'landing' , next ) ?? this.$.$mol_state_arg.value( 'langing' , next )
+			return this.$.$mol_state_arg.value( 'landing' , next )
 		}
 
 		@ $mol_mem
@@ -92,7 +85,6 @@ namespace $.$$ {
 		@ $mol_mem
 		pages() {
 			if( this.intro() != null ) return [ this.Intro() ]
-			if( this.landing() != null ) return [ this.Landing() ]
 			const pages = [
 				this.Menu() ,
 				... this.rights() ? [ this.Rights() ] : [] ,

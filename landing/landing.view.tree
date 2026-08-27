@@ -4,6 +4,17 @@ $piterjs_landing $mol_view
 	attr *
 		^
 		piterjs_landing_menu_open <= burger_open false
+	nav_titles *
+		hero \Главная
+		manifesto \Манифест
+		schedule \Доклады
+		archive \Архив
+		community \Сообщество
+	filter_titles *
+		all \Все
+		piterjs \PiterJS
+		piterux \PiterUX
+		conf \Conf
 	sub /
 		<= Header $mol_view
 			dom_name \header
@@ -14,27 +25,12 @@ $piterjs_landing $mol_view
 							arg * landing null
 							sub /
 								<= Logo_img $mol_image
-									uri \/piterjs/landing/assets/logo.png
+									uri \/piterjs/landing/assets/logo.webp
 								<= Logo_title $mol_view sub / \PITERJS
 								<= Logo_tag $mol_view sub / <= logo_version_tag \v.56.0
 						<= Nav $mol_view
 							dom_name \nav
-							sub /
-								<= Nav_hero $mol_link
-									uri \#hero
-									sub / \Главная
-								<= Nav_manifesto $mol_link
-									uri \#manifesto
-									sub / \Манифест
-								<= Nav_schedule $mol_link
-									uri \#schedule
-									sub / \Доклады
-								<= Nav_archive $mol_link
-									uri \#archive
-									sub / \Архив
-								<= Nav_community $mol_link
-									uri \#community
-									sub / \Сообщество
+							sub <= nav_links /
 						<= Nav_actions $mol_view
 							sub /
 								<= Back_link $mol_link
@@ -49,28 +45,6 @@ $piterjs_landing $mol_view
 										<= Burger_line1 $mol_view
 										<= Burger_line2 $mol_view
 										<= Burger_line3 $mol_view
-		<= Nav_mobile $mol_view
-			sub /
-				<= Nav_m_hero $mol_link
-					uri \#hero
-					click? <=> nav_mobile_close? null
-					sub / \Главная
-				<= Nav_m_manifesto $mol_link
-					uri \#manifesto
-					click? <=> nav_mobile_close? null
-					sub / \Манифест
-				<= Nav_m_schedule $mol_link
-					uri \#schedule
-					click? <=> nav_mobile_close? null
-					sub / \Доклады
-				<= Nav_m_archive $mol_link
-					uri \#archive
-					click? <=> nav_mobile_close? null
-					sub / \Архив
-				<= Nav_m_community $mol_link
-					uri \#community
-					click? <=> nav_mobile_close? null
-					sub / \Сообщество
 		<= Main $mol_view
 			dom_name \main
 			sub /
@@ -79,12 +53,14 @@ $piterjs_landing $mol_view
 					sub /
 						<= Hero_video $mol_view
 							dom_name \video
-							attr *
+							field *
+								^
 								autoplay true
 								loop true
 								muted true
-								playsinline true
-								poster \/piterjs/landing/assets/hero_poster.jpg
+								playsInline true
+							attr *
+								poster \/piterjs/landing/assets/hero_poster.webp
 								src \/piterjs/landing/assets/background.mp4
 						<= Hero_scrim $mol_view
 						<= Hero_content $mol_view
@@ -109,23 +85,7 @@ $piterjs_landing $mol_view
 											sub /
 												<= Countdown_label $mol_view sub / \ДО СЛЕДУЮЩЕЙ ВСТРЕЧИ ОСТАЛОСЬ:
 												<= Timer_units $mol_view
-													sub /
-														<= Unit_days $mol_view
-															sub /
-																<= Days_val $mol_view sub / <= days_str \12
-																<= Days_tag $mol_view sub / \Дней
-														<= Unit_hours $mol_view
-															sub /
-																<= Hours_val $mol_view sub / <= hours_str \14
-																<= Hours_tag $mol_view sub / \Часов
-														<= Unit_mins $mol_view
-															sub /
-																<= Mins_val $mol_view sub / <= mins_str \38
-																<= Mins_tag $mol_view sub / \Минут
-														<= Unit_secs $mol_view
-															sub /
-																<= Secs_val $mol_view sub / <= secs_str \45
-																<= Secs_tag $mol_view sub / \Секунд
+													sub <= timer_units /
 										<= Discovery_card $mol_view
 											sub /
 												<= Disc_badge $mol_view sub / \NEXT EVENT
@@ -144,6 +104,15 @@ $piterjs_landing $mol_view
 															uri <= next_event_map_uri \https://yandex.ru/maps/?text=Санкт-Петербург,+Аптекарский+проспект,+4
 															target \_blank
 															sub / \[ На карте ]
+												<= Next_event_reg $mol_view
+													sub /
+														<= Next_event_reg_label $mol_view sub / \Ваше имя и фамилия *
+														<= Next_event_reg_input $mol_string
+															value? <=> visitor_name? \
+															hint \Иван Иванов
+														<= Next_event_reg_check $mol_check_box
+															checked? <=> visitor_joined? false
+															title \Я приду на митап
 				<= Section_manifesto $mol_view
 					attr * id \manifesto
 					sub /
@@ -152,23 +121,7 @@ $piterjs_landing $mol_view
 								<= Manifesto_quote $mol_view
 									sub / \«МЫ ПИШЕМ КОД БУДУЩЕГО В СТОЛИЦЕ МОСТОВ И ВЕБ-ТЕХНОЛОГИЙ. БЕЗ СУЕТЫ. БЕЗ ФИЛЬТРОВ. С МАКСИМАЛЬНОЙ ИНЖЕНЕРНОЙ ТОЧНОСТЬЮ»
 								<= Stats_grid $mol_view
-									sub /
-										<= Stat1 $mol_view
-											sub /
-												<= Stat1_val $mol_view sub / \56+
-												<= Stat1_lbl $mol_view sub / \Проведенных Митапов
-										<= Stat2 $mol_view
-											sub /
-												<= Stat2_val $mol_view sub / \3,500+
-												<= Stat2_lbl $mol_view sub / \Участников Сообщества
-										<= Stat3 $mol_view
-											sub /
-												<= Stat3_val $mol_view sub / \130+
-												<= Stat3_lbl $mol_view sub / \Хардкорных Докладов
-										<= Stat4 $mol_view
-											sub /
-												<= Stat4_val $mol_view sub / \100%
-												<= Stat4_lbl $mol_view sub / \Open Source & Community
+									sub <= stats /
 				<= Section_schedule $mol_view
 					attr * id \schedule
 					sub /
@@ -183,9 +136,11 @@ $piterjs_landing $mol_view
 										<= Cfp_cta_badge $mol_view sub / \CALL FOR PAPERS // PITERJS #57
 										<= Cfp_cta_title $mol_view sub / \ХОТИТЕ ВЫСТУПИТЬ С ДОКЛАДОМ НА СЛЕДУЮЩЕМ МИТАПЕ?
 										<= Cfp_cta_text $mol_view sub / \Мы всегда ищем уникальный инженерный опыт, кейсы оптимизации, разборы фреймворков и дерзкие эксперименты. Поможем с подготовкой и презентацией!
-										<= Cfp_open_btn $mol_button_minor
-											click? <=> cfp_open? null
-											sub / \[ ПОДАТЬ ЗАЯВКУ НА ДОКЛАД ]
+										<= Cfp_open_btn $mol_link
+											arg *
+												wiki \
+												landing null
+											sub / \[ СТАТЬ СПИКЕРОМ ]
 								<= Venue_card $mol_view
 									sub /
 										<= Venue_badge $mol_view sub / \VENUE // ПЛОЩАДКА ПРОВЕДЕНИЯ
@@ -216,25 +171,7 @@ $piterjs_landing $mol_view
 							sub /
 								<= Community_heading $mol_view sub / \СООБЩЕСТВО
 								<= Community_cards $mol_view
-									sub /
-										<= Comm_tg $mol_view
-											sub /
-												<= Comm_tg_badge $mol_view sub / \TELEGRAM COMMUNITY
-												<= Comm_tg_title $mol_view sub / \@piterjs // Чат и Анонсы
-												<= Comm_tg_text $mol_view sub / \Более 2000 инженеров в крупнейшем js-сообществе Санкт-Петербурга. Обсуждения, вакансии и оперативные новости.
-												<= Comm_tg_btn $mol_link
-													uri \https://t.me/piterjs
-													target \_blank
-													sub / \[ Вступить в Telegram-канал ]
-										<= Comm_vk $mol_view
-											sub /
-												<= Comm_vk_badge $mol_view sub / \VK COMMUNITY
-												<= Comm_vk_title $mol_view sub / \vk.com/piterjs // Записи и Медиа
-												<= Comm_vk_text $mol_view sub / \Видеозаписи докладов, фотоотчёты со встреч и анонсы новых митапов.
-												<= Comm_vk_btn $mol_link
-													uri \https://vk.com/piterjs
-													target \_blank
-													sub / \[ Открыть группу VK ]
+									sub <= comms /
 				<= Footer $mol_view
 					dom_name \footer
 					sub /
@@ -245,38 +182,10 @@ $piterjs_landing $mol_view
 										<= Footer_copy $mol_view
 											sub /
 												<= Footer_logo $mol_image
-													uri \/piterjs/landing/assets/logo.png
+													uri \/piterjs/landing/assets/logo.webp
 												<= Footer_text $mol_view sub / \© 2026 PITERJS COMMUNITY // ST. PETERSBURG
 										<= Footer_links $mol_view
-											sub /
-												<= Soc_gh $mol_link
-													uri \https://github.com/piterjs
-													target \_blank
-													hint \GitHub
-													sub /
-														<= Soc_gh_icon $mol_image
-															uri \/piterjs/landing/assets/github.png
-												<= Soc_tg $mol_link
-													uri \https://t.me/piterjs
-													target \_blank
-													hint \Telegram
-													sub /
-														<= Soc_tg_icon $mol_image
-															uri \/piterjs/landing/assets/telegram.png
-												<= Soc_yt $mol_link
-													uri \https://youtube.com
-													target \_blank
-													hint \YouTube
-													sub /
-														<= Soc_yt_icon $mol_image
-															uri \/piterjs/landing/assets/youtube.png
-												<= Soc_vk $mol_link
-													uri \https://vk.com/piterjs
-													target \_blank
-													hint \VK Video
-													sub /
-														<= Soc_vk_icon $mol_image
-															uri \/piterjs/landing/assets/vk.png
+											sub <= socs /
 								<= Footer_bottom $mol_view
 									sub /
 										<= Footer_author_prefix $mol_view sub / \ENGINE & UI /
@@ -284,63 +193,34 @@ $piterjs_landing $mol_view
 											uri \https://dev-by-yurii.vercel.app
 											target \_blank
 											sub / \DEV-BY-YURII.RU
-		<= Cfp_modal $mol_view
-			sub /
-				<= Cfp_modal_box $mol_view
-					sub /
-						<= Cfp_header $mol_view
-							sub /
-								<= Cfp_header_title $mol_view sub / \ЗАЯВКА НА ДОКЛАД // CFP
-								<= Cfp_close_btn $mol_button_minor
-									click? <=> cfp_close? null
-									sub / \✕
-						<= Cfp_desc $mol_view
-							sub /
-								\Заполните заявку спикера. Программный комитет PiterJS свяжется с вами для подготовки.
-						<= Cfp_form $mol_view
-							sub /
-								<= Cfp_field_email $mol_view
-									sub /
-										<= Cfp_label_email $mol_view sub / \EMAIL *
-										<= Cfp_input_email $mol_string
-											value? <=> cfp_email? \
-											hint \name@example.com
-								<= Cfp_field_contact $mol_view
-									sub /
-										<= Cfp_label_contact $mol_view sub / \КОНТАКТ ДЛЯ СВЯЗИ (TELEGRAM) *
-										<= Cfp_input_contact $mol_string
-											value? <=> cfp_contact? \
-											hint \@telegram_handle
-								<= Cfp_field_name $mol_view
-									sub /
-										<= Cfp_label_name $mol_view sub / \ИМЯ И ФАМИЛИЯ *
-										<= Cfp_input_name $mol_string
-											value? <=> cfp_name? \
-											hint \Иван Иванов
-								<= Cfp_field_company $mol_view
-									sub /
-										<= Cfp_label_company $mol_view sub / \КОМПАНИЯ И ДОЛЖНОСТЬ
-										<= Cfp_input_company $mol_string
-											value? <=> cfp_company? \
-											hint \Senior Frontend Developer в VK
-								<= Cfp_field_title $mol_view
-									sub /
-										<= Cfp_label_title $mol_view sub / \ТЕМА ДОКЛАДА *
-										<= Cfp_input_title $mol_string
-											value? <=> cfp_title? \
-											hint \Высокопроизводительный WebGPU рендеринг
-								<= Cfp_field_desc $mol_view
-									sub /
-										<= Cfp_label_desc $mol_view sub / \ТЕЗИСЫ И ОПИСАНИЕ ДОКЛАДА *
-										<= Cfp_input_desc $mol_textarea
-											sidebar_showed false
-											value? <=> cfp_desc? \
-											hint \Подробные тезисы, проблемы, решение и практическая польза доклада...
-								<= Cfp_submit_btn $mol_button_major
-									click? <=> cfp_submit? null
-									sub / \[ ОТПРАВИТЬ ЗАЯВКУ ]
-		<= Toast $mol_view
-			sub / <= toast_message \
+	Nav_link!id $mol_link
+		uri <= nav_uri!id \
+		click? <=> nav_mobile_close? null
+		sub / <= nav_title!id \
+	Unit!id $mol_view
+		sub /
+			<= Unit_val!id $mol_view sub / <= unit_str!id \00
+			<= Unit_tag!id $mol_view sub / <= unit_title!id \
+	Stat!id $mol_view
+		sub /
+			<= Stat_val!id $mol_view sub / <= stat_val!id \
+			<= Stat_lbl!id $mol_view sub / <= stat_lbl!id \
+	Comm!id $mol_view
+		sub /
+			<= Comm_badge!id $mol_view sub / <= comm_badge!id \
+			<= Comm_title!id $mol_view sub / <= comm_title!id \
+			<= Comm_text!id $mol_view sub / <= comm_text!id \
+			<= Comm_btn!id $mol_link
+				uri <= comm_uri!id \
+				target \_blank
+				sub / <= comm_btn_text!id \
+	Soc!id $mol_link
+		uri <= soc_uri!id \
+		target \_blank
+		hint <= soc_hint!id \
+		sub /
+			<= Soc_icon!id $mol_image
+				uri <= soc_icon!id \
 	Talk!id $mol_view
 		sub /
 			<= Talk_top!id $mol_view
@@ -352,43 +232,27 @@ $piterjs_landing $mol_view
 			<= Talk_speaker!id $mol_view
 				sub /
 					<= Speaker_photo!id $mol_image
-						uri <= speaker_photo!id \/piterjs/landing/assets/speaker_alex.png
+						uri <= speaker_photo!id \
 					<= Speaker_info!id $mol_view
 						sub /
-							<= Speaker_name!id $mol_view sub / <= speaker_name!id \Александр Громов
-							<= Speaker_role!id $mol_view sub / <= speaker_role!id \Lead Graphics Engineer // VK
-	Archive_card!id $mol_view
+							<= Speaker_name!id $mol_view sub / <= speaker_name!id \Имя Спикера
+							<= Speaker_role!id $mol_view sub / <= speaker_role!id \Должность
+	Archive_card!id $mol_link
+		arg *
+			landing null
+			meetup <= card_id!id \
 		sub /
 			<= Card_event_tag!id $mol_view sub / <= card_event_tag!id \
 			<= Card_title!id $mol_view sub / <= card_title!id \
 			<= Card_meta!id $mol_view
 				sub /
 					<= Card_date!id $mol_view sub / <= card_date!id \
-					<= Card_viewers!id $mol_view sub / <= card_viewers!id \
 	Archive_more_btn $mol_button_minor
 		click? <=> archive_more_click? null
 		sub / \[ ПОКАЗАТЬ ЕЩЁ ]
-	Filter_all $mol_button_minor
+	Filter_btn!id $mol_button_minor
 		attr *
 			^
-			piterjs_landing_filter_active <= filter_all_active false
-		click? <=> filter_all_click? null
-		sub / \Все
-	Filter_piterjs $mol_button_minor
-		attr *
-			^
-			piterjs_landing_filter_active <= filter_piterjs_active false
-		click? <=> filter_piterjs_click? null
-		sub / \PiterJS
-	Filter_piterux $mol_button_minor
-		attr *
-			^
-			piterjs_landing_filter_active <= filter_piterux_active false
-		click? <=> filter_piterux_click? null
-		sub / \PiterUX
-	Filter_conf $mol_button_minor
-		attr *
-			^
-			piterjs_landing_filter_active <= filter_conf_active false
-		click? <=> filter_conf_click? null
-		sub / \Conf
+			piterjs_landing_filter_active <= filter_active!id false
+		click? <=> filter_click!id? null
+		sub / <= filter_title!id \
