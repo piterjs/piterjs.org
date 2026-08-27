@@ -158,6 +158,10 @@ declare namespace $ {
         right?: Value;
         bottom?: Value;
         left?: Value;
+        blockStart?: Value;
+        blockEnd?: Value;
+        inlineStart?: Value;
+        inlineEnd?: Value;
     };
     type Directions<Value> = Value | readonly [Value, Value] | Sides<Value>;
     type Edges<Value> = {
@@ -1627,6 +1631,29 @@ declare namespace $ {
 }
 
 declare namespace $ {
+    class $mol_storage extends $mol_object2 {
+        /** Is storage a long term. */
+        static persisted(next?: boolean): boolean;
+        /** Total storage quota in bytes. */
+        static total(): number;
+        /** Total storage usage in bytes. */
+        static used(): number;
+        /** Minimum available free space in bytes. */
+        static free(): number;
+        /** Fulfillness of storage. */
+        static portion(): number;
+        /**
+         * Fulfillness logarithmic level.
+         * `0` - empty
+         * `1` - half free
+         * `2` - quart free
+         * `Infinity` - fulfilled
+         */
+        static level(): number;
+    }
+}
+
+declare namespace $ {
     let $mol_mem_persist: typeof $mol_wire_solid;
 }
 
@@ -1655,10 +1682,22 @@ declare namespace $ {
 }
 
 declare namespace $ {
-    class $mol_storage extends $mol_object2 {
+    /** State of time moment */
+    class $mol_state_time extends $mol_object {
+        static task(precision: number, reset?: null): $mol_after_timeout | $mol_after_frame;
+        static now(precision: number): number;
+    }
+}
+
+declare namespace $ {
+    class $mol_storage_web extends $mol_storage {
         static native(): StorageManager;
         static persisted(next?: boolean, cache?: 'cache'): boolean;
         static estimate(): StorageEstimate;
+        static total(): number;
+        static used(): number;
+        static free(): number;
+        static portion(): number;
         static dir(): FileSystemDirectoryHandle;
     }
 }
@@ -2665,14 +2704,6 @@ declare namespace $ {
 }
 
 declare namespace $ {
-    /** State of time moment */
-    class $mol_state_time extends $mol_object {
-        static task(precision: number, reset?: null): $mol_after_timeout | $mol_after_frame;
-        static now(precision: number): number;
-    }
-}
-
-declare namespace $ {
 
 	export class $mol_svg extends $mol_view {
 		dom_name( ): string
@@ -2941,9 +2972,17 @@ declare namespace $ {
 
 //# sourceMappingURL=variant.view.tree.d.ts.map
 declare namespace $ {
+    function $mol_dom_safe_uri(uri: string): string;
+    function $mol_dom_safe_attr(val: string): string;
+    let $mol_dom_safe_rules: Record<string, Record<string, (val: string) => string>>;
+    function $mol_dom_safe(this: $, nodes: ChildNode[]): ChildNode[];
+}
+
+declare namespace $ {
 
 	export class $mol_link extends $mol_view {
 		uri_toggle( ): string
+		uri_unsafe( ): ReturnType< $mol_link['uri_toggle'] >
 		hint( ): string
 		hint_safe( ): ReturnType< $mol_link['hint'] >
 		target( ): string
@@ -2958,7 +2997,7 @@ declare namespace $ {
 		uri_native( ): any
 		external( ): boolean
 		attr( ): ({ 
-			'href': ReturnType< $mol_link['uri_toggle'] >,
+			'href': ReturnType< $mol_link['uri_unsafe'] >,
 			'title': ReturnType< $mol_link['hint_safe'] >,
 			'target': ReturnType< $mol_link['target'] >,
 			'download': ReturnType< $mol_link['file_name'] >,
@@ -2991,6 +3030,7 @@ declare namespace $.$$ {
         external(): boolean;
         target(): '_self' | '_blank' | '_top' | '_parent' | string;
         hint_safe(): string;
+        uri_unsafe(): string;
     }
 }
 
@@ -3833,6 +3873,8 @@ declare namespace $ {
     class $mol_locale extends $mol_object {
         static lang_default(): string;
         static lang(next?: string): string;
+        static langs_rtl(): string[];
+        static direction(): "ltr" | "rtl";
         static source(lang: string): any;
         static texts(lang: string, next?: $mol_locale_dict): $mol_locale_dict;
         static text(key: string): string;
@@ -4625,8 +4667,8 @@ declare namespace $ {
 declare namespace $ {
     class $mol_time_base {
         static patterns: Record<string, (arg: any) => string>;
-        static formatter(pattern: string): (arg: any) => string;
-        toString(pattern: string): string;
+        static formatter(pattern: string): (arg: any, lang?: string) => string;
+        toString(pattern: string, lang?: string): string;
     }
 }
 
@@ -4728,25 +4770,27 @@ declare namespace $ {
         toOffset(config?: $mol_time_duration_config): $mol_time_moment;
         valueOf(): number;
         toJSON(): string;
-        toString(pattern?: string): string;
+        toString(pattern?: string, lang?: string): string;
         toArray(): readonly [number | undefined, number | undefined, number | undefined, number | undefined, number | undefined, number | undefined, number | undefined];
         [Symbol.toPrimitive](mode: 'default' | 'number' | 'string'): string | number;
         [$mol_dev_format_head](): any[];
+        protected static formatters: Record<string, Record<string, Intl.DateTimeFormat>>;
+        static intl(lang: string | undefined, pattern: string, options: Intl.DateTimeFormatOptions): Intl.DateTimeFormat;
         static patterns: {
             YYYY: (moment: $mol_time_moment) => string;
             AD: (moment: $mol_time_moment) => string;
             YY: (moment: $mol_time_moment) => string;
-            Month: (moment: $mol_time_moment) => string;
-            'DD Month': (moment: $mol_time_moment) => string;
-            'D Month': (moment: $mol_time_moment) => string;
-            Mon: (moment: $mol_time_moment) => string;
-            'DD Mon': (moment: $mol_time_moment) => string;
-            'D Mon': (moment: $mol_time_moment) => string;
+            Month: (moment: $mol_time_moment, lang?: string) => string;
+            'DD Month': (moment: $mol_time_moment, lang?: string) => string;
+            'D Month': (moment: $mol_time_moment, lang?: string) => string;
+            Mon: (moment: $mol_time_moment, lang?: string) => string;
+            'DD Mon': (moment: $mol_time_moment, lang?: string) => string;
+            'D Mon': (moment: $mol_time_moment, lang?: string) => string;
             '-MM': (moment: $mol_time_moment) => string;
             MM: (moment: $mol_time_moment) => string;
             M: (moment: $mol_time_moment) => string;
-            WeekDay: (moment: $mol_time_moment) => string;
-            WD: (moment: $mol_time_moment) => string;
+            WeekDay: (moment: $mol_time_moment, lang?: string) => string;
+            WD: (moment: $mol_time_moment, lang?: string) => string;
             '-DD': (moment: $mol_time_moment) => string;
             DD: (moment: $mol_time_moment) => string;
             D: (moment: $mol_time_moment) => string;
@@ -4815,6 +4859,7 @@ declare namespace $ {
         float32(offset: number, next?: number): number;
         /** 8-byte float little-endian channel for offset. */
         float64(offset: number, next?: number): number;
+        mix(mixin: Uint8Array<ArrayBuffer>): this;
         /** A Uint8Array view for the same buffer. */
         asArray(): Uint8Array<ArrayBuffer>;
         /** base64ae string from buffer. */
@@ -5434,6 +5479,7 @@ declare namespace $.$$ {
      */
     class $mol_calendar extends $.$mol_calendar {
         month_moment(): $mol_time_moment;
+        lang(): string;
         title(): string;
         day_first(): $mol_time_moment;
         day_last(): $mol_time_moment;
@@ -6318,10 +6364,14 @@ declare namespace $ {
 		ReturnType< $mol_view['sub'] >
 	>
 	export class $mol_form_field extends $mol_labeler {
+		state( ): string | null
 		name( ): string
 		bid( ): string
 		Bid( ): $mol_view
 		control( ): any
+		attr( ): ({ 
+			'mol_form_field_state': ReturnType< $mol_form_field['state'] >,
+		})  & ReturnType< $mol_labeler['attr'] >
 		bids( ): readonly(string)[]
 		label( ): readonly(any)[]
 		content( ): readonly(any)[]
@@ -6335,6 +6385,7 @@ declare namespace $.$$ {
      * @see https://mol.hyoo.ru/#!section=demos/demo=mol_form_demo
      */
     class $mol_form_field extends $.$mol_form_field {
+        state(): string | null;
         bid(): string;
     }
 }

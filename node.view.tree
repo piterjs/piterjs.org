@@ -113,7 +113,7 @@ $mol_link $mol_view
 	external false
 	attr *
 		^
-		href <= uri_toggle \
+		href <= uri_unsafe <= uri_toggle \
 		title <= hint_safe <= hint \
 		target <= target \_self
 		download <= file_name \
@@ -763,6 +763,9 @@ $mol_labeler $mol_list
 			sub <= content /
 
 $mol_form_field $mol_labeler
+	attr *
+		^
+		mol_form_field_state <= state null string
 	bids /string
 	label /
 		<= name \
@@ -1766,9 +1769,9 @@ $mol_touch $mol_plugin
 	swipe_to_left? null
 	swipe_to_top? null
 	-
-	draw_start?event null
-	draw?event null
-	draw_end?event null
+	draw_start? null
+	draw? null
+	draw_end? null
 	-
 	style *
 		^
@@ -1777,11 +1780,11 @@ $mol_touch $mol_plugin
 	-
 	event *
 		^
-		pointerdown?event <=> event_start?event null
-		pointermove?event <=> event_move?event null
-		pointerup?event <=> event_end?event null
-		pointerleave?event <=> event_leave?event null
-		wheel?event <=> event_wheel?event null
+		pointerdown? <=> event_start? null
+		pointermove? <=> event_move? null
+		pointerup? <=> event_end? null
+		pointerleave? <=> event_leave? null
+		wheel? <=> event_wheel? null
 
 $mol_plot_pane $mol_svg_root
 	aspect \none
@@ -1866,12 +1869,12 @@ $mol_plot_pane $mol_svg_root
 			allow_zoom <= allow_zoom true
 			action_type => action_type
 			action_point => action_point
-			draw_start?event <=> draw_start?event null
-			draw?event <=> draw?event null
-			draw_end?event <=> draw_end?event null
+			draw_start? <=> draw_start? null
+			draw? <=> draw? null
+			draw_end? <=> draw_end? null
 	- event *
 		^
-		dblclick?event <=> reset?event null
+		dblclick? <=> reset? null
 
 $mol_chart $mol_view
 	gap_hor 48
@@ -3275,17 +3278,17 @@ $piterjs_intro $mol_view
 		team <= Team $piterjs_intro_page
 			title \Команда
 			text \
-				\! ""https://habrastorage.org/webt/pd/ii/9l/pdii9lgzgihcg9vb3etx_hug4rg.jpeg""
-				\  ! ""https://habrastorage.org/webt/kf/qg/9l/kfqg9lp0ez5eey44-rlszbwozma.png""
-				\    ! ""https://habrastorage.org/webt/c5/tf/-i/c5tf-il8mfpbxxegoi_i5h6egxu.png""
-				\      ! ""https://habrastorage.org/webt/-8/6s/kw/-86skwqsvqzvodiauw3fv_vt1h8.png""
-				\        ! ""https://habrastorage.org/webt/dw/3a/ui/dw3auiirk0vffjg3xnn4em775dq.png""
-				- \! ""https://habrastorage.org/webt/mb/oz/2-/mboz2-qxenahgayijecyblbo6ka.jpeg""
-				\! ""https://habrastorage.org/webt/44/26/7f/44267f28895f1dd1fd609d851dd82ca3.png""
-				\  ! ""https://habrastorage.org/webt/8e/dq/rh/8edqrhvfwy92wyra4yulzc3uvyi.png""
+				\! ""https://habrastorage.org/webt/8e/dq/rh/8edqrhvfwy92wyra4yulzc3uvyi.png""
+				\  ! ""https://habrastorage.org/webt/7f/25/76/7f25769b6b84302ce88f14cf3e032ec2.png""
 				\    ! ""https://habrastorage.org/webt/vv/rj/2f/vvrj2ffi-kztfpzdsbiiv-goqso.png""
-				\      ! ""https://habrastorage.org/webt/cd/po/2w/cdpo2wbzt2bd0lism1hvcui3bgs.png""
-				\        ! ""https://habrastorage.org/webt/7f/25/76/7f25769b6b84302ce88f14cf3e032ec2.png""
+				\      ! ""https://habrastorage.org/webt/44/26/7f/44267f28895f1dd1fd609d851dd82ca3.png""
+				\        ! ""https://habrastorage.org/webt/dw/3a/ui/dw3auiirk0vffjg3xnn4em775dq.png""
+				- \! ""https://habrastorage.org/webt/pd/ii/9l/pdii9lgzgihcg9vb3etx_hug4rg.jpeg""
+				- \! ""https://habrastorage.org/webt/kf/qg/9l/kfqg9lp0ez5eey44-rlszbwozma.png""
+				- \! ""https://habrastorage.org/webt/c5/tf/-i/c5tf-il8mfpbxxegoi_i5h6egxu.png""
+				- \! ""https://habrastorage.org/webt/-8/6s/kw/-86skwqsvqzvodiauw3fv_vt1h8.png""
+				- \! ""https://habrastorage.org/webt/mb/oz/2-/mboz2-qxenahgayijecyblbo6ka.jpeg""
+				- \! ""https://habrastorage.org/webt/cd/po/2w/cdpo2wbzt2bd0lism1hvcui3bgs.png""
 		speakers <= Speakers $piterjs_intro_page
 			title \Стань докладчиком
 			text \
@@ -3326,7 +3329,8 @@ $piterjs_intro $mol_view
 			text <= place_notes \
 			title <= place_title \Мы в {place}
 			text \
-				\""https://habrastorage.org/webt/nh/np/oy/nhnpoyyb6ayimlhpxcyxptxwtza.jpeg""
+				\""/piterjs/logo-sponsors/tbank-logo.svg""
+				- \""https://habrastorage.org/webt/nh/np/oy/nhnpoyyb6ayimlhpxcyxptxwtza.jpeg""  - Юмани
 		follow <= Follow $piterjs_intro_page
 			title \Следите за новостями
 			text \
