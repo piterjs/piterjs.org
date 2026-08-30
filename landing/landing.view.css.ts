@@ -283,7 +283,7 @@ namespace $.$$ {
 			flexDirection: 'column',
 			justifyContent: 'center',
 			alignItems: 'center',
-			padding: '130px 36px 60px 36px',
+			padding: '130px 36px 96px 36px',
 			backgroundColor: '#000000',
 			backgroundImage: 'url(\'piterjs/landing/assets/hero_poster.webp\')',
 			backgroundSize: 'cover',
@@ -317,9 +317,19 @@ namespace $.$$ {
 			display: 'flex',
 			flexDirection: 'column',
 			gap: '24px',
-			// растягиваем на всю высоту героя, иначе marginTop: auto
-			// у Hero_footer_grid не к чему применить и грид не уезжает вниз
+			// растягиваем на всю высоту героя, иначе Hero_intro не к чему
+			// растягивать и карточки не уезжают вниз
 			flex: '1 1 auto',
+		},
+		// Заголовочная группа забирает всё свободное место и центрует себя
+		// внутри него: текст стоит по центру, а Hero_footer_grid прижат к низу.
+		Hero_intro: {
+			display: 'flex',
+			flexDirection: 'column',
+			justifyContent: 'center',
+			gap: '24px',
+			flex: '1 1 auto',
+			minHeight: '0',
 		},
 		Hero_status_row: {
 			display: 'flex',
@@ -1749,7 +1759,7 @@ namespace $.$$ {
 					lineHeight: '1',
 				},
 				Section_hero: {
-					padding: '90px 12px 48px 12px',
+					padding: '90px 12px 72px 12px',
 					height: 'auto',
 					minHeight: '100vh',
 				},
@@ -1839,7 +1849,7 @@ namespace $.$$ {
 					fontSize: '20px',
 				},
 				Section_hero: {
-					padding: '80px 10px 40px 10px',
+					padding: '80px 10px 64px 10px',
 				},
 				Section_manifesto: {
 					padding: '40px 10px',

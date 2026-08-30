@@ -69,20 +69,22 @@ $piterjs_landing $mol_view
 						<= Hero_scrim $mol_view
 						<= Hero_content $mol_view
 							sub /
-								<= Hero_status_row $mol_view
+								<= Hero_intro $mol_view
 									sub /
-										<= Status_badge $mol_view
+										<= Hero_status_row $mol_view
 											sub /
-												<= Status_badge_text $mol_view sub / <= hero_badge \PITERJS #56 // 13 МЕСТ СВОБОДНО
-								<= Hero_title $mol_view
-									sub /
-										<= Hero_title_line1 $mol_view sub / \SAINT PETERSBURG
-										<= Hero_title_line2 $mol_view
+												<= Status_badge $mol_view
+													sub /
+														<= Status_badge_text $mol_view sub / <= hero_badge \PITERJS #56 // 13 МЕСТ СВОБОДНО
+										<= Hero_title $mol_view
 											sub /
-												<= Hero_title_accent $mol_view sub / \JAVASCRIPT
-												<= Hero_title_rest $mol_view sub / \COMMUNITY
-								<= Hero_subtitle $mol_view
-									sub / \Сообщество разработчиков, создающих будущее веба. Живые встречи, глубокие хардкорные доклады, нетворк и технологический драйв в самом сердце Санкт-Петербурга.
+												<= Hero_title_line1 $mol_view sub / \SAINT PETERSBURG
+												<= Hero_title_line2 $mol_view
+													sub /
+														<= Hero_title_accent $mol_view sub / \JAVASCRIPT
+														<= Hero_title_rest $mol_view sub / \COMMUNITY
+										<= Hero_subtitle $mol_view
+											sub / \Сообщество разработчиков, создающих будущее веба. Живые встречи, глубокие хардкорные доклады, нетворк и технологический драйв в самом сердце Санкт-Петербурга.
 								<= Hero_footer_grid $mol_view
 									sub /
 										<= Countdown_box $mol_view
