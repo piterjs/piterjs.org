@@ -176,9 +176,27 @@ namespace $.$$ {
 			return Math.max( 0, capacity - ( meetup?.joined_count() ?? 0 ) )
 		}
 
+		// Ближайший митап в домене — meetups()[0]. Когда его дата прошла,
+		// «следующего» ещё нет: показываем номер+1 со статусом SOON,
+		// а карточка становится рассказом о прошедшем событии.
+		@ $mol_mem
+		meetup_passed() {
+			const start = this.meetup_current()?.start()?.valueOf()
+			if( !start ) return false
+			return start < this.now_time()
+		}
+
 		@ $mol_mem
 		hero_badge() {
+			if( this.meetup_passed() ) {
+				return `PITERJS #${ Number( this.meetup_num() ) + 1 } // SOON`
+			}
 			return `${this.meetup_title().toUpperCase()} // ${this.free_slots()}`
+		}
+
+		@ $mol_mem
+		event_badge() {
+			return this.meetup_passed() ? 'LAST EVENT' : 'NEXT EVENT'
 		}
 
 		@ $mol_mem
@@ -338,6 +356,68 @@ namespace $.$$ {
 
 		talk_abstract( id: string ) {
 			return this.speech_item( id )?.description() || 'Тезисы и подробности доклада формируются'
+		}
+
+		// Описание клипается в 6 строк, кнопка показывается только если текст
+		// реально не влез. Порогом по числу символов это не решить: ширина
+		// карточки меняется с раскладкой, на 530px в строку входит ~63 знака,
+		// на мобильном вдвое меньше. Поэтому меряем DOM после отрисовки.
+		@ $mol_mem_key
+		talk_expanded( id: string, next?: boolean ) {
+			return next ?? false
+		}
+
+		talk_clamped( id: string ) {
+			return !this.talk_expanded( id )
+		}
+
+		talk_toggle( id: string ) {
+			this.talk_expanded( id, !this.talk_expanded( id ) )
+		}
+
+		talk_toggle_title( id: string ) {
+			return this.talk_expanded( id ) ? '[ Скрыть ]' : '[ Показать больше ]'
+		}
+
+		@ $mol_mem_key
+		talk_overflow( id: string, next?: boolean ) {
+			return next ?? false
+		}
+
+		@ $mol_mem_key
+		talk_content( id: string ) {
+			return [
+				this.Talk_top( id ),
+				this.Talk_title( id ),
+				this.Talk_abstract( id ),
+				... this.talk_overflow( id ) ? [ this.Talk_more( id ) ] : [],
+				this.Talk_speaker( id ),
+			]
+		}
+
+		@ $mol_mem
+		auto() {
+			// size() делает пересчёт реактивным на ресайз: при другой ширине
+			// карточки текст переносится иначе и переполнение может исчезнуть
+			this.$.$mol_window.size()
+			// id забираем здесь, внутри фибры: speeches_list() тянет данные из
+			// домена и бросает промис, если они ещё не приехали, а колбэк
+			// $mol_after_frame выполняется вне фибры и поймать его некому
+			const ids = this.speeches_list().map( speech => speech.id() )
+			new this.$.$mol_after_frame( () => this.talks_measure( ids ) )
+			return super.auto()
+		}
+
+		talks_measure( ids: readonly string[] ) {
+			for( const id of ids ) {
+				// в раскрытом виде клипа нет, мерить нечего — оставляем прошлый вердикт,
+				// иначе кнопка «Скрыть» исчезла бы сразу после раскрытия
+				if( this.talk_expanded( id ) ) continue
+				try {
+					const node = this.Talk_abstract( id ).dom_node()
+					this.talk_overflow( id, node.scrollHeight > node.clientHeight + 1 )
+				} catch {}
+			}
 		}
 
 		speaker_name( id: string ) {

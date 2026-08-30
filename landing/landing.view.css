@@ -23,3 +23,17 @@
 	from { opacity: 0; }
 	to { opacity: 1; }
 }
+
+/* Клип описания доклада в 6 строк. Через $mol_style_define не выразить:
+   ключи WebkitLineClamp и WebkitBoxOrient начинаются с заглавной буквы, а
+   такие $mol_style_sheet трактует как вложенный компонент и уходит в
+   бесконечную рекурсию по символам значения. Специфичность (0,2,0) перебивает
+   правило модуля для [piterjs_landing_talk_abstract]. */
+
+[piterjs_landing_talk_abstract][piterjs_landing_talk_clamped="true"] {
+	display: -webkit-box;
+	-webkit-box-orient: vertical;
+	-webkit-line-clamp: 6;
+	line-clamp: 6;
+	overflow: hidden;
+}

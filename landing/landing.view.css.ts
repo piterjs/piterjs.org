@@ -635,6 +635,27 @@ namespace $.$$ {
 			fontSize: '14px',
 			color: '#555555',
 			lineHeight: '1.5',
+			// сам клип в 6 строк — в landing.view.css: -webkit-line-clamp
+			// через $mol_style_define не выразить, см. комментарий там
+		},
+		Talk_more: {
+			alignSelf: 'flex-start',
+			background: 'transparent',
+			border: 'none',
+			boxShadow: 'none',
+			padding: '0',
+			marginTop: '-8px',
+			color: '#000000',
+			fontFamily: 'var(--font-mono)',
+			fontSize: '12px',
+			cursor: 'pointer',
+			textDecoration: 'underline',
+			transition: 'color 0.15s ease',
+			':hover': {
+				background: 'transparent',
+				boxShadow: 'none',
+				color: '#666666',
+			},
 		},
 		Talk_speaker: {
 			display: 'flex',
@@ -902,7 +923,8 @@ namespace $.$$ {
 				background: 'var(--color-caution-yellow)',
 				color: '#000000',
 				borderColor: 'var(--color-caution-yellow)',
-				boxShadow: '0 0 24px rgba(255, 243, 19, 0.35)',
+				// без свечения: тень остаётся базовой, чтобы не было вспышки на transition
+				boxShadow: '0 4px 12px rgba(0, 0, 0, 0.4)',
 				transform: 'translateY(-1px)',
 			},
 		},

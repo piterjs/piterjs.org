@@ -92,7 +92,7 @@ $piterjs_landing $mol_view
 													sub <= timer_units /
 										<= Discovery_card $mol_view
 											sub /
-												<= Disc_badge $mol_view sub / \NEXT EVENT
+												<= Disc_badge $mol_view sub / <= event_badge \NEXT EVENT
 												<= Disc_title $mol_view sub / <= next_event_title \PiterJS #56: WebGPU, Next-Gen Bundlers & AI Architecture
 												<= Disc_meta_time $mol_view
 													sub /
@@ -307,13 +307,20 @@ $piterjs_landing $mol_view
 			<= Soc_icon!id $mol_image
 				uri <= soc_icon!id \
 	Talk!id $mol_view
-		sub /
+		sub <= talk_content!id /
 			<= Talk_top!id $mol_view
 				sub /
 					<= Talk_tag!id $mol_view sub / <= talk_tag!id \Web & Tech
 					<= Talk_time!id $mol_view sub / <= talk_time!id \19:15
 			<= Talk_title!id $mol_view sub / <= talk_title!id \Тема доклада
-			<= Talk_abstract!id $mol_view sub / <= talk_abstract!id \Описание доклада
+			<= Talk_abstract!id $mol_view
+				attr *
+					^
+					piterjs_landing_talk_clamped <= talk_clamped!id true
+				sub / <= talk_abstract!id \Описание доклада
+			<= Talk_more!id $mol_button_minor
+				click? <=> talk_toggle!id? null
+				sub / <= talk_toggle_title!id \[ Показать больше ]
 			<= Talk_speaker!id $mol_view
 				sub /
 					<= Speaker_photo!id $mol_image
