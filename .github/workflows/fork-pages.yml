@@ -1,0 +1,71 @@
+# Публикация форка на GitHub Pages: https://korolev2512.github.io/piterjs.org/
+#
+# Отдельный файл, а не правка deploy.yml — чтобы PR в upstream не тащил
+# изменения основного воркфлоу. Условие github.repository не даёт ему
+# запуститься, если ветку когда-нибудь смержат в piterjs/piterjs.org.
+#
+# Публикуем через артефакт (configure/upload/deploy-pages), а не пушем в
+# ветку gh-pages: на унаследованной от upstream gh-pages лежит CNAME с
+# piterjs.org, и при публикации в ветку GitHub попытался бы занять чужой
+# домен. Артефактному флоу эта ветка не нужна вовсе.
+
+name: Fork Pages
+
+on:
+  push:
+    branches:
+      - feature/landing
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+# Параллельные публикации ломают друг друга; отменяем предыдущую.
+concurrency:
+  group: fork-pages
+  cancel-in-progress: true
+
+jobs:
+
+  build:
+
+    if: github.repository == 'KoroLev2512/piterjs.org'
+    runs-on: ubuntu-latest
+
+    steps:
+
+      # Действие само клонирует репозиторий в MAM-воркспейс как piterjs/
+      # и подтягивает зависимые пакеты, поэтому actions/checkout не нужен.
+      - name: Build MAM app
+        uses: hyoo-ru/mam_build@master2
+        with:
+          package: 'piterjs'
+          modules: 'app'
+          # token намеренно не передаём: у входа default ${{ github.token }},
+          # а пустой secrets.GH_PAT (в форке секретов нет) затёр бы дефолт.
+
+      - name: Configure Pages
+        uses: actions/configure-pages@v5
+
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: 'piterjs/app/-'
+
+  deploy:
+
+    needs: build
+    if: github.repository == 'KoroLev2512/piterjs.org'
+    runs-on: ubuntu-latest
+
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+
+    steps:
+
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
