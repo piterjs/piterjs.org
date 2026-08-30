@@ -4,6 +4,7 @@ $piterjs_landing $mol_view
 	attr *
 		^
 		piterjs_landing_menu_open <= burger_open false
+		piterjs_landing_rsvp_open <= rsvp_open false
 	nav_titles *
 		hero \Главная
 		manifesto \Манифест
@@ -25,7 +26,7 @@ $piterjs_landing $mol_view
 							arg * landing null
 							sub /
 								<= Logo_img $mol_image
-									uri \/piterjs/landing/assets/logo.webp
+									uri \piterjs/landing/assets/logo.webp
 								<= Logo_title $mol_view sub / \PITERJS
 								<= Logo_tag $mol_view sub / <= logo_version_tag \v.56.0
 						<= Nav $mol_view
@@ -45,6 +46,9 @@ $piterjs_landing $mol_view
 										<= Burger_line1 $mol_view
 										<= Burger_line2 $mol_view
 										<= Burger_line3 $mol_view
+		<= Nav_mobile $mol_view
+			dom_name \nav
+			sub <= nav_mobile_links /
 		<= Main $mol_view
 			dom_name \main
 			sub /
@@ -60,8 +64,8 @@ $piterjs_landing $mol_view
 								muted true
 								playsInline true
 							attr *
-								poster \/piterjs/landing/assets/hero_poster.webp
-								src \/piterjs/landing/assets/background.mp4
+								poster \piterjs/landing/assets/hero_poster.webp
+								src \piterjs/landing/assets/background.mp4
 						<= Hero_scrim $mol_view
 						<= Hero_content $mol_view
 							sub /
@@ -104,15 +108,6 @@ $piterjs_landing $mol_view
 															uri <= next_event_map_uri \https://yandex.ru/maps/?text=Санкт-Петербург,+Аптекарский+проспект,+4
 															target \_blank
 															sub / \[ На карте ]
-												<= Next_event_reg $mol_view
-													sub /
-														<= Next_event_reg_label $mol_view sub / \Ваше имя и фамилия *
-														<= Next_event_reg_input $mol_string
-															value? <=> visitor_name? \
-															hint \Иван Иванов
-														<= Next_event_reg_check $mol_check_box
-															checked? <=> visitor_joined? false
-															title \Я приду на митап
 				<= Section_manifesto $mol_view
 					attr * id \manifesto
 					sub /
@@ -136,11 +131,9 @@ $piterjs_landing $mol_view
 										<= Cfp_cta_badge $mol_view sub / \CALL FOR PAPERS // PITERJS #57
 										<= Cfp_cta_title $mol_view sub / \ХОТИТЕ ВЫСТУПИТЬ С ДОКЛАДОМ НА СЛЕДУЮЩЕМ МИТАПЕ?
 										<= Cfp_cta_text $mol_view sub / \Мы всегда ищем уникальный инженерный опыт, кейсы оптимизации, разборы фреймворков и дерзкие эксперименты. Поможем с подготовкой и презентацией!
-										<= Cfp_open_btn $mol_link
-											arg *
-												wiki \
-												landing null
-											sub / \[ СТАТЬ СПИКЕРОМ ]
+										<= Cfp_open_btn $mol_button_minor
+											click? <=> cfp_open? null
+											sub / \[ ПОДАТЬ ЗАЯВКУ НА ДОКЛАД ]
 								<= Venue_card $mol_view
 									sub /
 										<= Venue_badge $mol_view sub / \VENUE // ПЛОЩАДКА ПРОВЕДЕНИЯ
@@ -182,7 +175,7 @@ $piterjs_landing $mol_view
 										<= Footer_copy $mol_view
 											sub /
 												<= Footer_logo $mol_image
-													uri \/piterjs/landing/assets/logo.webp
+													uri \piterjs/landing/assets/logo.webp
 												<= Footer_text $mol_view sub / \© 2026 PITERJS COMMUNITY // ST. PETERSBURG
 										<= Footer_links $mol_view
 											sub <= socs /
@@ -193,7 +186,99 @@ $piterjs_landing $mol_view
 											uri \https://dev-by-yurii.vercel.app
 											target \_blank
 											sub / \DEV-BY-YURII.RU
+		<= Rsvp_modal $mol_view
+			plugins /
+				<= Rsvp_hotkey $mol_hotkey
+					key * escape? <=> rsvp_close? null
+			sub /
+				<= Rsvp_backdrop $mol_view
+					event * click? <=> rsvp_close? null
+				<= Rsvp_dialog $mol_view
+					sub /
+						<= Rsvp_head $mol_view
+							sub /
+								<= Rsvp_badge $mol_view sub / \REGISTRATION
+								<= Rsvp_close_btn $mol_button_minor
+									click? <=> rsvp_close? null
+									sub / \[ ✕ ]
+						<= Rsvp_title $mol_view sub / <= rsvp_modal_title \РЕГИСТРАЦИЯ НА PITERJS #56
+						<= Rsvp_meta $mol_view sub / <= rsvp_modal_meta \15 АВГУСТА 2026 // 19:00 // ИТ-ХАБ, САНКТ-ПЕТЕРБУРГ
+						<= Next_event_reg $mol_view
+							sub /
+								<= Next_event_reg_label $mol_view sub / \Ваше имя и фамилия *
+								<= Next_event_reg_input $mol_string
+									value? <=> visitor_name? \
+									hint \Иван Иванов
+								<= Next_event_reg_check $mol_check
+									checked? <=> visitor_joined? false
+									title \Я приду на митап
+						<= Rsvp_note $mol_view sub / <= rsvp_modal_note \13 МЕСТ СВОБОДНО
+		<= Cfp_modal $mol_view
+			event * click? <=> cfp_backdrop_click? null
+			plugins /
+				<= Cfp_hotkey $mol_hotkey
+					key * escape? <=> cfp_close? null
+			sub /
+				<= Cfp_modal_box $mol_view
+					sub /
+						<= Cfp_header $mol_view
+							sub /
+								<= Cfp_header_title $mol_view sub / \ЗАЯВКА НА ДОКЛАД // CFP
+								<= Cfp_close_btn $mol_button_minor
+									click? <=> cfp_close? null
+									sub / \[ ✕ ]
+						<= Cfp_desc $mol_view
+							sub /
+								\Заполните заявку спикера. Программный комитет PiterJS свяжется с вами для подготовки.
+						<= Cfp_form $mol_view
+							sub /
+								<= Cfp_field_email $mol_view
+									sub /
+										<= Cfp_label_email $mol_view sub / \EMAIL *
+										<= Cfp_input_email $mol_string
+											value? <=> cfp_email? \
+											hint \name@example.com
+								<= Cfp_field_contact $mol_view
+									sub /
+										<= Cfp_label_contact $mol_view sub / \КОНТАКТ ДЛЯ СВЯЗИ (TELEGRAM) *
+										<= Cfp_input_contact $mol_string
+											value? <=> cfp_contact? \
+											hint \@telegram_handle
+								<= Cfp_field_name $mol_view
+									sub /
+										<= Cfp_label_name $mol_view sub / \ИМЯ И ФАМИЛИЯ *
+										<= Cfp_input_name $mol_string
+											value? <=> cfp_name? \
+											hint \Иван Иванов
+								<= Cfp_field_company $mol_view
+									sub /
+										<= Cfp_label_company $mol_view sub / \КОМПАНИЯ И ДОЛЖНОСТЬ
+										<= Cfp_input_company $mol_string
+											value? <=> cfp_company? \
+											hint \Senior Frontend Developer в VK
+								<= Cfp_field_title $mol_view
+									sub /
+										<= Cfp_label_title $mol_view sub / \ТЕМА ДОКЛАДА *
+										<= Cfp_input_title $mol_string
+											value? <=> cfp_title? \
+											hint \Высокопроизводительный WebGPU рендеринг
+								<= Cfp_field_desc $mol_view
+									sub /
+										<= Cfp_label_desc $mol_view sub / \ТЕЗИСЫ И ОПИСАНИЕ ДОКЛАДА *
+										<= Cfp_input_desc $mol_textarea
+											sidebar_showed false
+											value? <=> cfp_desc? \
+											hint \Подробные тезисы, проблемы, решение и практическая польза доклада...
+								<= Cfp_submit_btn $mol_button_major
+									click? <=> cfp_submit? null
+									sub / \[ ОТПРАВИТЬ ЗАЯВКУ ]
+		<= Toast $mol_view
+			sub / <= toast_message \
 	Nav_link!id $mol_link
+		uri <= nav_uri!id \
+		click? <=> nav_mobile_close? null
+		sub / <= nav_title!id \
+	Nav_m_link!id $mol_link
 		uri <= nav_uri!id \
 		click? <=> nav_mobile_close? null
 		sub / <= nav_title!id \

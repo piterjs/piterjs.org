@@ -13,6 +13,16 @@ namespace $.$$ {
 			return new Uint8Array( $mol_fetch.buffer( require( `/piterjs/app/${land_id}!${land_id}.bin` ) ) )
 		}
 
+		// $hyoo_sync_yard.master_list() берёт схему сокета из location.protocol, а sync.hyoo.ru
+		// отвечает 308 на ws:// (Caddy требует TLS). Без этого оверрайда локальный dev-сервер
+		// на http:// не может подключиться к мастеру и домен остаётся пустым.
+		@ $mol_mem
+		Yard() {
+			const yard = super.Yard()
+			yard.master_list = () => [ 'wss://sync.hyoo.ru' ]
+			return yard
+		}
+
 		@ $mol_mem
 		Domain() {
 

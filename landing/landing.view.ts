@@ -29,14 +29,110 @@ namespace $.$$ {
 			return `[ Зарегистрироваться #${this.meetup_num()} ]`
 		}
 
+		// Registration modal
+		@ $mol_mem
+		rsvp_open( next?: boolean ) {
+			return next ?? false
+		}
+
 		rsvp_click() {
-			const uri = '#schedule'
-			window.location.hash = uri
+			this.burger_open( false )
+			this.rsvp_open( true )
+		}
+
+		rsvp_close() {
+			this.rsvp_open( false )
+		}
+
+		@ $mol_mem
+		rsvp_slot() {
+			return this.rsvp_open() ? [ this.Rsvp_modal() ] : []
+		}
+
+		@ $mol_mem
+		rsvp_modal_title() {
+			return `РЕГИСТРАЦИЯ НА ${ this.meetup_title().toUpperCase() }`
+		}
+
+		@ $mol_mem
+		rsvp_modal_meta() {
+			return `${ this.next_event_time() } // ${ this.next_event_place() }`
+		}
+
+		@ $mol_mem
+		rsvp_modal_note() {
+			return this.visitor_joined()
+				? 'ВЫ В СПИСКЕ УЧАСТНИКОВ'
+				: this.free_slots()
+		}
+
+		// CFP modal (восстановлено из 1d6495d)
+		@ $mol_mem
+		modal_open( next?: boolean ) {
+			return next ?? false
+		}
+
+		cfp_open() {
+			this.burger_open( false )
+			this.modal_open( true )
+		}
+
+		cfp_close() {
+			this.modal_open( false )
+		}
+
+		cfp_backdrop_click( event?: Event ) {
+			// Cfp_modal сам является затемняющим оверлеем, поэтому закрываем
+			// только по клику мимо Cfp_modal_box
+			if( event && event.target !== event.currentTarget ) return
+			this.cfp_close()
+		}
+
+		@ $mol_mem
+		cfp_slot() {
+			return this.modal_open() ? [ this.Cfp_modal() ] : []
+		}
+
+		cfp_submit() {
+			if( !this.cfp_name() || !this.cfp_title() || !this.cfp_contact() ) {
+				this.toast_message( '⚠️ Пожалуйста, заполните обязательные поля формы' )
+				return
+			}
+			this.modal_open( false )
+			this.toast_message( '⚡ Заявка на доклад принята! Программный комитет PiterJS свяжется с вами.' )
+			this.cfp_email( '' )
+			this.cfp_contact( '' )
+			this.cfp_name( '' )
+			this.cfp_company( '' )
+			this.cfp_title( '' )
+			this.cfp_desc( '' )
+		}
+
+		// Toast
+		@ $mol_mem
+		toast_message( next?: string ) {
+			if( next ) {
+				new $mol_after_timeout( 4000, () => {
+					if( this.toast_message() === next ) this.toast_message( '' )
+				} )
+			}
+			return next ?? ''
+		}
+
+		@ $mol_mem
+		toast_slot() {
+			return this.toast_message() ? [ this.Toast() ] : []
 		}
 
 		@ $mol_mem
 		nav_links() {
 			return Object.keys( this.nav_titles() ).map( id => this.Nav_link( id ) )
+		}
+
+		// отдельные инстансы: один и тот же $mol_view не может жить в двух родителях
+		@ $mol_mem
+		nav_mobile_links() {
+			return Object.keys( this.nav_titles() ).map( id => this.Nav_m_link( id ) )
 		}
 
 		nav_uri( id: string ) {
@@ -63,10 +159,21 @@ namespace $.$$ {
 		// Hero & Countdown
 		@ $mol_mem
 		free_slots() {
-			const capacity = this.meetup_current()?.place()?.capacity_max() || 0
-			const visitors = this.meetup_current()?.visitors_list()?.length || 0
-			const free = Math.max( 0, capacity - visitors )
+			const free = this.free_slots_num()
+			// без известной вместимости нельзя утверждать, что мест нет
+			if( free === null ) return 'РЕГИСТРАЦИЯ ОТКРЫТА'
 			return free > 0 ? `${free} МЕСТ СВОБОДНО` : 'РЕГИСТРАЦИЯ ЗАКРЫТА'
+		}
+
+		// Та же формула, что на странице митапа ($piterjs_meetup_page.free_space):
+		// capacity_max - joined_count. Считать по visitors_list() нельзя — это узел
+		// 'visitors2' (кто пришёл), а не 'joined' (кто записался).
+		@ $mol_mem
+		free_slots_num() {
+			const meetup = this.meetup_current()
+			const capacity = meetup?.place()?.capacity_max() || 0
+			if( !capacity ) return null
+			return Math.max( 0, capacity - ( meetup?.joined_count() ?? 0 ) )
 		}
 
 		@ $mol_mem
@@ -169,17 +276,23 @@ namespace $.$$ {
 		// Manifesto Stats
 		@ $mol_mem
 		stats() {
-			return [ this.Stat( 'meetups' ), this.Stat( 'source' ) ]
+			return [ this.Stat( 'meetups' ), this.Stat( 'visitors' ), this.Stat( 'speeches' ), this.Stat( 'source' ) ]
 		}
 
 		stat_val( id: string ) {
 			if( id === 'meetups' ) return `${this.meetups().length}+`
+			// статичные цифры сообщества, как и в 1d6495d: считать их из домена значило бы
+			// подтянуть speeches()/visitors_list() для всех митапов сразу
+			if( id === 'visitors' ) return '3,500+'
+			if( id === 'speeches' ) return '130+'
 			if( id === 'source' ) return '100%'
 			return '0'
 		}
 
 		stat_lbl( id: string ) {
 			if( id === 'meetups' ) return 'Проведенных Митапов'
+			if( id === 'visitors' ) return 'Участников Сообщества'
+			if( id === 'speeches' ) return 'Хардкорных Докладов'
 			if( id === 'source' ) return 'Open Source & Community'
 			return ''
 		}
@@ -386,10 +499,10 @@ namespace $.$$ {
 			return ''
 		}
 		soc_icon( id: string ) {
-			if( id === 'gh' ) return '/piterjs/landing/assets/github.webp'
-			if( id === 'tg' ) return '/piterjs/landing/assets/telegram.webp'
-			if( id === 'yt' ) return '/piterjs/landing/assets/youtube.webp'
-			if( id === 'vk' ) return '/piterjs/landing/assets/vk.webp'
+			if( id === 'gh' ) return 'piterjs/landing/assets/github.webp'
+			if( id === 'tg' ) return 'piterjs/landing/assets/telegram.webp'
+			if( id === 'yt' ) return 'piterjs/landing/assets/youtube.webp'
+			if( id === 'vk' ) return 'piterjs/landing/assets/vk.webp'
 			return ''
 		}
 
@@ -397,7 +510,11 @@ namespace $.$$ {
 		sub() {
 			return [
 				this.Header(),
+				this.Nav_mobile(),
 				this.Main(),
+				... this.rsvp_slot(),
+				... this.cfp_slot(),
+				... this.toast_slot(),
 			]
 		}
 

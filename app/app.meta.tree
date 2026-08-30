@@ -11,15 +11,11 @@ deploy \/piterjs/app/app_lines.svg
 deploy \/piterjs/logo-sponsors/kvant-logo.png
 deploy \/piterjs/logo-sponsors/Nexign_Logo.png
 deploy \/piterjs/logo-sponsors/sprinthost.ru-2.png
-deploy \/piterjs/landing/assets/hero_bg.png
-deploy \/piterjs/landing/assets/hero_poster.jpg
-deploy \/piterjs/landing/assets/speaker_alex.png
-deploy \/piterjs/landing/assets/speaker_maria.png
-deploy \/piterjs/landing/assets/logo.png
-deploy \/piterjs/landing/assets/seo_image.jpg
-deploy \/piterjs/landing/assets/telegram.png
-deploy \/piterjs/landing/assets/vk.png
-deploy \/piterjs/landing/assets/github.png
-deploy \/piterjs/landing/assets/youtube.png
+deploy \/piterjs/landing/assets/hero_poster.webp
+deploy \/piterjs/landing/assets/logo.webp
+deploy \/piterjs/landing/assets/telegram.webp
+deploy \/piterjs/landing/assets/vk.webp
+deploy \/piterjs/landing/assets/github.webp
+deploy \/piterjs/landing/assets/youtube.webp
 deploy \/piterjs/landing/assets/background.mp4
 

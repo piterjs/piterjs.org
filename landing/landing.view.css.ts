@@ -1,29 +1,52 @@
 // @ts-nocheck
 namespace $.$$ {
+
+	// Одна и та же кнопка закрытия для всех модалок лендинга (Rsvp_modal, Cfp_modal).
+	// marginRight отрицательный, чтобы крестик выходил за padding диалога: замерено 17px
+	// от правого края вместо 33px. Ширина кнопки больше суммы padding'ов — $mol_button_minor
+	// добавляет свои, поэтому значение подобрано по факту, а не расчётом.
+	const close_btn = {
+		background: 'transparent',
+		border: 'none',
+		boxShadow: 'none',
+		color: '#aaaaaa',
+		fontFamily: 'var(--font-mono)',
+		fontSize: '12px',
+		padding: '6px 12px',
+		marginRight: '-16px',
+		cursor: 'pointer',
+		transition: 'color 0.2s ease',
+		':hover': {
+			color: 'var(--color-caution-yellow)',
+			background: 'transparent',
+			boxShadow: 'none',
+		},
+	}
+
 	$mol_style_define( $piterjs_landing, {
 		display: 'block',
-			width: '100vw',
-			minWidth: '100vw',
-			maxWidth: '100vw',
-			minHeight: '100vh',
-			height: '100vh',
-			overflowY: 'auto',
-			overflowX: 'hidden',
-			backgroundColor: '#000000',
-			color: '#eeeeee',
-			fontFamily: '\'Inter\', \'Space Grotesk\', ui-sans-serif, system-ui, -apple-system, sans-serif',
-			position: 'relative',
-			boxSizing: 'border-box',
-			margin: '0',
-			padding: '0',
-			border: 'none',
-			'--color-caution-yellow': '#fff313',
-			'--color-midnight-steel': '#000000',
-			'--color-industrial-white': '#eeeeee',
-			'--color-carbon': '#333333',
-			'--color-gunmetal': '#4b4b4b',
-			'--color-aluminum': '#afafaf',
-			'--font-mono': '\'JetBrains Mono\', monospace',
+		width: '100vw',
+		minWidth: '100vw',
+		maxWidth: '100vw',
+		minHeight: '100vh',
+		height: '100vh',
+		overflowY: 'auto',
+		overflowX: 'hidden',
+		backgroundColor: '#000000',
+		color: '#eeeeee',
+		fontFamily: '\'Inter\', \'Space Grotesk\', ui-sans-serif, system-ui, -apple-system, sans-serif',
+		position: 'relative',
+		boxSizing: 'border-box',
+		margin: '0',
+		padding: '0',
+		border: 'none',
+		'--color-caution-yellow': '#fff313',
+		'--color-midnight-steel': '#000000',
+		'--color-industrial-white': '#eeeeee',
+		'--color-carbon': '#333333',
+		'--color-gunmetal': '#4b4b4b',
+		'--color-aluminum': '#afafaf',
+		'--font-mono': '\'JetBrains Mono\', monospace',
 		'*': {
 			boxSizing: 'border-box',
 		},
@@ -39,7 +62,6 @@ namespace $.$$ {
 			padding: '16px 36px',
 			backgroundColor: 'rgba(0, 0, 0, 0.85)',
 			backdropFilter: 'blur(12px)',
-			WebkitBackdropFilter: 'blur(12px)',
 			borderBottom: '1px solid rgba(255, 255, 255, 0.1)',
 			boxSizing: 'border-box',
 		},
@@ -90,7 +112,7 @@ namespace $.$$ {
 			padding: '4px 6px',
 			borderRadius: '6px',
 			border: '1px solid #333333',
-			'[mol_link]': {
+			$mol_link: {
 				padding: '6px 14px',
 				fontSize: '13px',
 				fontWeight: '500',
@@ -98,10 +120,10 @@ namespace $.$$ {
 				textDecoration: 'none',
 				borderRadius: '4px',
 				transition: 'all 0.2s ease',
-			},
-			'[mol_link]:hover': {
-				color: '#ffffff',
-				background: 'rgba(255, 255, 255, 0.08)',
+				':hover': {
+					color: '#ffffff',
+					background: 'rgba(255, 255, 255, 0.08)',
+				},
 			},
 		},
 		Nav_actions: {
@@ -180,13 +202,6 @@ namespace $.$$ {
 				border: 'none',
 				outline: 'none',
 			},
-			'[piterjs_landing] :hover': {
-				background: 'transparent',
-				backgroundColor: 'transparent',
-				boxShadow: 'none',
-				border: 'none',
-				outline: 'none',
-			},
 		},
 		Burger_line1: {
 			position: 'absolute',
@@ -200,14 +215,6 @@ namespace $.$$ {
 			boxSizing: 'border-box',
 			top: 'calc(50% - 8px)',
 			transform: 'none',
-			'@piterjs_landing_menu_open': {
-				'true': {
-					'[piterjs_landing]': {
-						top: 'calc(50% - 1px)',
-						transform: 'rotate(45deg)',
-					},
-				},
-			},
 		},
 		Burger_line2: {
 			position: 'absolute',
@@ -222,15 +229,6 @@ namespace $.$$ {
 			top: 'calc(50% - 1px)',
 			transform: 'none',
 			opacity: '1',
-			'@piterjs_landing_menu_open': {
-				'true': {
-					'[piterjs_landing]': {
-						top: 'calc(50% - 1px)',
-						opacity: '0',
-						transform: 'scaleX(0)',
-					},
-				},
-			},
 		},
 		Burger_line3: {
 			position: 'absolute',
@@ -244,9 +242,25 @@ namespace $.$$ {
 			boxSizing: 'border-box',
 			top: 'calc(50% + 6px)',
 			transform: 'none',
-			'@piterjs_landing_menu_open': {
-				'true': {
-					'[piterjs_landing]': {
+		},
+		'@': {
+			piterjs_landing_rsvp_open: {
+				true: {
+					overflowY: 'hidden',
+				},
+			},
+			piterjs_landing_menu_open: {
+				true: {
+					Burger_line1: {
+						top: 'calc(50% - 1px)',
+						transform: 'rotate(45deg)',
+					},
+					Burger_line2: {
+						top: 'calc(50% - 1px)',
+						opacity: '0',
+						transform: 'scaleX(0)',
+					},
+					Burger_line3: {
 						top: 'calc(50% - 1px)',
 						transform: 'rotate(-45deg)',
 					},
@@ -271,7 +285,7 @@ namespace $.$$ {
 			alignItems: 'center',
 			padding: '130px 36px 60px 36px',
 			backgroundColor: '#000000',
-			backgroundImage: 'url(\'/piterjs/landing/assets/hero_bg.png\')',
+			backgroundImage: 'url(\'piterjs/landing/assets/hero_poster.webp\')',
 			backgroundSize: 'cover',
 			backgroundPosition: 'center',
 			overflow: 'hidden',
@@ -323,23 +337,6 @@ namespace $.$$ {
 			fontWeight: '600',
 			letterSpacing: '0.5px',
 			color: 'var(--color-caution-yellow)',
-		},
-		Pulse_dot: {
-			width: '8px',
-			height: '8px',
-			backgroundColor: 'var(--color-caution-yellow)',
-			borderRadius: '50%',
-			boxShadow: '0 0 10px var(--color-caution-yellow)',
-			animation: 'pjs_pulse 2s infinite',
-		},
-		Slots_tag: {
-			fontFamily: 'var(--font-mono)',
-			fontSize: '11px',
-			color: '#afafaf',
-			background: 'rgba(255, 255, 255, 0.05)',
-			padding: '6px 12px',
-			borderRadius: '6px',
-			border: '1px solid #222222',
 		},
 		Hero_title: {
 			fontSize: '64px',
@@ -395,7 +392,6 @@ namespace $.$$ {
 			borderRadius: '12px',
 			padding: '24px 32px',
 			backdropFilter: 'blur(10px)',
-			WebkitBackdropFilter: 'blur(10px)',
 			display: 'flex',
 			flexDirection: 'column',
 			gap: '16px',
@@ -414,7 +410,7 @@ namespace $.$$ {
 			gap: '36px',
 			alignItems: 'flex-start',
 		},
-		Unit_days: {
+		Unit: {
 			display: 'flex',
 			flexDirection: 'column',
 			alignItems: 'flex-start',
@@ -422,31 +418,7 @@ namespace $.$$ {
 			border: 'none',
 			padding: '0',
 		},
-		Unit_hours: {
-			display: 'flex',
-			flexDirection: 'column',
-			alignItems: 'flex-start',
-			background: 'transparent',
-			border: 'none',
-			padding: '0',
-		},
-		Unit_mins: {
-			display: 'flex',
-			flexDirection: 'column',
-			alignItems: 'flex-start',
-			background: 'transparent',
-			border: 'none',
-			padding: '0',
-		},
-		Unit_secs: {
-			display: 'flex',
-			flexDirection: 'column',
-			alignItems: 'flex-start',
-			background: 'transparent',
-			border: 'none',
-			padding: '0',
-		},
-		Days_val: {
+		Unit_val: {
 			fontFamily: '\'JetBrains Mono\', monospace',
 			fontSize: '38px',
 			fontWeight: '400',
@@ -454,52 +426,7 @@ namespace $.$$ {
 			lineHeight: '1',
 			marginBottom: '6px',
 		},
-		Hours_val: {
-			fontFamily: '\'JetBrains Mono\', monospace',
-			fontSize: '38px',
-			fontWeight: '400',
-			color: '#fff313',
-			lineHeight: '1',
-			marginBottom: '6px',
-		},
-		Mins_val: {
-			fontFamily: '\'JetBrains Mono\', monospace',
-			fontSize: '38px',
-			fontWeight: '400',
-			color: '#fff313',
-			lineHeight: '1',
-			marginBottom: '6px',
-		},
-		Secs_val: {
-			fontFamily: '\'JetBrains Mono\', monospace',
-			fontSize: '38px',
-			fontWeight: '400',
-			color: '#fff313',
-			lineHeight: '1',
-			marginBottom: '6px',
-		},
-		Days_tag: {
-			fontFamily: '\'Inter\', sans-serif',
-			fontSize: '10px',
-			color: '#afafaf',
-			textTransform: 'uppercase',
-			letterSpacing: '0.5px',
-		},
-		Hours_tag: {
-			fontFamily: '\'Inter\', sans-serif',
-			fontSize: '10px',
-			color: '#afafaf',
-			textTransform: 'uppercase',
-			letterSpacing: '0.5px',
-		},
-		Mins_tag: {
-			fontFamily: '\'Inter\', sans-serif',
-			fontSize: '10px',
-			color: '#afafaf',
-			textTransform: 'uppercase',
-			letterSpacing: '0.5px',
-		},
-		Secs_tag: {
+		Unit_tag: {
 			fontFamily: '\'Inter\', sans-serif',
 			fontSize: '10px',
 			color: '#afafaf',
@@ -609,27 +536,12 @@ namespace $.$$ {
 			borderTop: '2px solid rgba(0, 0, 0, 0.15)',
 			paddingTop: '40px',
 		},
-		Stat1: {
+		Stat: {
 			display: 'flex',
 			flexDirection: 'column',
 			gap: '6px',
 		},
-		Stat2: {
-			display: 'flex',
-			flexDirection: 'column',
-			gap: '6px',
-		},
-		Stat3: {
-			display: 'flex',
-			flexDirection: 'column',
-			gap: '6px',
-		},
-		Stat4: {
-			display: 'flex',
-			flexDirection: 'column',
-			gap: '6px',
-		},
-		Stat1_val: {
+		Stat_val: {
 			fontFamily: 'var(--font-mono)',
 			fontSize: 'clamp(32px, 4vw, 48px)',
 			fontWeight: '700',
@@ -637,49 +549,7 @@ namespace $.$$ {
 			letterSpacing: '-1px',
 			marginBottom: '6px',
 		},
-		Stat2_val: {
-			fontFamily: 'var(--font-mono)',
-			fontSize: 'clamp(32px, 4vw, 48px)',
-			fontWeight: '700',
-			color: '#000000',
-			letterSpacing: '-1px',
-			marginBottom: '6px',
-		},
-		Stat3_val: {
-			fontFamily: 'var(--font-mono)',
-			fontSize: 'clamp(32px, 4vw, 48px)',
-			fontWeight: '700',
-			color: '#000000',
-			letterSpacing: '-1px',
-			marginBottom: '6px',
-		},
-		Stat4_val: {
-			fontFamily: 'var(--font-mono)',
-			fontSize: 'clamp(32px, 4vw, 48px)',
-			fontWeight: '700',
-			color: '#000000',
-			letterSpacing: '-1px',
-			marginBottom: '6px',
-		},
-		Stat1_lbl: {
-			fontSize: '14px',
-			fontWeight: '500',
-			color: '#333333',
-			lineHeight: '1.3',
-		},
-		Stat2_lbl: {
-			fontSize: '14px',
-			fontWeight: '500',
-			color: '#333333',
-			lineHeight: '1.3',
-		},
-		Stat3_lbl: {
-			fontSize: '14px',
-			fontWeight: '500',
-			color: '#333333',
-			lineHeight: '1.3',
-		},
-		Stat4_lbl: {
+		Stat_lbl: {
 			fontSize: '14px',
 			fontWeight: '500',
 			color: '#333333',
@@ -732,68 +602,12 @@ namespace $.$$ {
 				backgroundColor: '#fcfcfc',
 			},
 		},
-		Talk1: {
-			background: '#ffffff',
-			border: '1px solid #dcdcdc',
-			borderRadius: '9px',
-			padding: '28px',
-			display: 'flex',
-			flexDirection: 'column',
-			gap: '16px',
-			transition: 'border-color 0.15s ease, background-color 0.15s ease',
-			':hover': {
-				borderColor: '#000000',
-				backgroundColor: '#fcfcfc',
-			},
-		},
-		Talk2: {
-			background: '#ffffff',
-			border: '1px solid #dcdcdc',
-			borderRadius: '9px',
-			padding: '28px',
-			display: 'flex',
-			flexDirection: 'column',
-			gap: '16px',
-			transition: 'border-color 0.15s ease, background-color 0.15s ease',
-			':hover': {
-				borderColor: '#000000',
-				backgroundColor: '#fcfcfc',
-			},
-		},
 		Talk_top: {
 			display: 'flex',
 			justifyContent: 'space-between',
 			alignItems: 'center',
 		},
-		Talk1_top: {
-			display: 'flex',
-			justifyContent: 'space-between',
-			alignItems: 'center',
-		},
-		Talk2_top: {
-			display: 'flex',
-			justifyContent: 'space-between',
-			alignItems: 'center',
-		},
 		Talk_tag: {
-			fontFamily: 'var(--font-mono)',
-			fontSize: '11px',
-			fontWeight: '700',
-			background: '#000000',
-			color: 'var(--color-caution-yellow)',
-			padding: '4px 10px',
-			borderRadius: '4px',
-		},
-		Talk1_tag: {
-			fontFamily: 'var(--font-mono)',
-			fontSize: '11px',
-			fontWeight: '700',
-			background: '#000000',
-			color: 'var(--color-caution-yellow)',
-			padding: '4px 10px',
-			borderRadius: '4px',
-		},
-		Talk2_tag: {
 			fontFamily: 'var(--font-mono)',
 			fontSize: '11px',
 			fontWeight: '700',
@@ -808,31 +622,7 @@ namespace $.$$ {
 			fontWeight: '600',
 			color: '#666666',
 		},
-		Talk1_time: {
-			fontFamily: 'var(--font-mono)',
-			fontSize: '13px',
-			fontWeight: '600',
-			color: '#666666',
-		},
-		Talk2_time: {
-			fontFamily: 'var(--font-mono)',
-			fontSize: '13px',
-			fontWeight: '600',
-			color: '#666666',
-		},
 		Talk_title: {
-			fontSize: '20px',
-			fontWeight: '600',
-			color: '#000000',
-			lineHeight: '1.35',
-		},
-		Talk1_title: {
-			fontSize: '20px',
-			fontWeight: '600',
-			color: '#000000',
-			lineHeight: '1.35',
-		},
-		Talk2_title: {
 			fontSize: '20px',
 			fontWeight: '600',
 			color: '#000000',
@@ -843,35 +633,7 @@ namespace $.$$ {
 			color: '#555555',
 			lineHeight: '1.5',
 		},
-		Talk1_abstract: {
-			fontSize: '14px',
-			color: '#555555',
-			lineHeight: '1.5',
-		},
-		Talk2_abstract: {
-			fontSize: '14px',
-			color: '#555555',
-			lineHeight: '1.5',
-		},
 		Talk_speaker: {
-			display: 'flex',
-			flexDirection: 'row',
-			alignItems: 'flex-start',
-			gap: '14px',
-			marginTop: 'auto',
-			paddingTop: '16px',
-			borderTop: '1px solid #eeeeee',
-		},
-		Talk1_speaker: {
-			display: 'flex',
-			flexDirection: 'row',
-			alignItems: 'flex-start',
-			gap: '14px',
-			marginTop: 'auto',
-			paddingTop: '16px',
-			borderTop: '1px solid #eeeeee',
-		},
-		Talk2_speaker: {
 			display: 'flex',
 			flexDirection: 'row',
 			alignItems: 'flex-start',
@@ -888,39 +650,7 @@ namespace $.$$ {
 			border: '2px solid var(--color-caution-yellow)',
 			flexShrink: '0',
 		},
-		Speaker1_photo: {
-			width: '52px',
-			height: '52px',
-			borderRadius: '50%',
-			objectFit: 'cover',
-			border: '2px solid var(--color-caution-yellow)',
-			flexShrink: '0',
-		},
-		Speaker2_photo: {
-			width: '52px',
-			height: '52px',
-			borderRadius: '50%',
-			objectFit: 'cover',
-			border: '2px solid var(--color-caution-yellow)',
-			flexShrink: '0',
-		},
 		Speaker_info: {
-			display: 'flex',
-			flexDirection: 'column',
-			alignItems: 'flex-start',
-			gap: '4px',
-			flex: '1 1 auto',
-			minWidth: '0',
-		},
-		Speaker1_info: {
-			display: 'flex',
-			flexDirection: 'column',
-			alignItems: 'flex-start',
-			gap: '4px',
-			flex: '1 1 auto',
-			minWidth: '0',
-		},
-		Speaker2_info: {
 			display: 'flex',
 			flexDirection: 'column',
 			alignItems: 'flex-start',
@@ -935,41 +665,7 @@ namespace $.$$ {
 			display: 'block',
 			lineHeight: '1.3',
 		},
-		Speaker1_name: {
-			fontWeight: '600',
-			fontSize: '15px',
-			color: '#000000',
-			display: 'block',
-			lineHeight: '1.3',
-		},
-		Speaker2_name: {
-			fontWeight: '600',
-			fontSize: '15px',
-			color: '#000000',
-			display: 'block',
-			lineHeight: '1.3',
-		},
 		Speaker_role: {
-			fontSize: '12px',
-			color: '#666666',
-			fontFamily: 'var(--font-mono)',
-			display: 'block',
-			whiteSpace: 'normal',
-			wordBreak: 'break-word',
-			lineHeight: '1.45',
-			width: '100%',
-		},
-		Speaker1_role: {
-			fontSize: '12px',
-			color: '#666666',
-			fontFamily: 'var(--font-mono)',
-			display: 'block',
-			whiteSpace: 'normal',
-			wordBreak: 'break-word',
-			lineHeight: '1.45',
-			width: '100%',
-		},
-		Speaker2_role: {
 			fontSize: '12px',
 			color: '#666666',
 			fontFamily: 'var(--font-mono)',
@@ -1103,7 +799,7 @@ namespace $.$$ {
 			display: 'flex',
 			gap: '8px',
 			flexWrap: 'wrap',
-			'[mol_button_minor]': {
+			$mol_button_minor: {
 				background: '#11141c',
 				color: '#9aa2b4',
 				border: '1px solid #242938',
@@ -1114,21 +810,25 @@ namespace $.$$ {
 				fontWeight: '500',
 				cursor: 'pointer',
 				transition: 'all 0.2s cubic-bezier(0.16, 1, 0.3, 1)',
-			},
-			'[mol_button_minor]:hover': {
-				color: '#ffffff',
-				borderColor: '#4a5368',
-				background: '#181d28',
-			},
-			'@piterjs_landing_filter_active': {
-				'true': {
-					'[mol_button_minor]': {
-						background: 'var(--color-caution-yellow)',
-						color: '#000000',
-						borderColor: 'var(--color-caution-yellow)',
-						fontWeight: '700',
-						boxShadow: '0 0 16px rgba(255, 243, 19, 0.4)',
-						transform: 'translateY(-1px)',
+				':hover': {
+					color: '#ffffff',
+					borderColor: '#4a5368',
+					background: '#181d28',
+				},
+				'@': {
+					piterjs_landing_filter_active: {
+						true: {
+							background: 'var(--color-caution-yellow)',
+							color: '#000000',
+							borderColor: 'var(--color-caution-yellow)',
+							fontWeight: '700',
+							transform: 'translateY(-1px)',
+							':hover': {
+								background: 'var(--color-caution-yellow)',
+								color: '#000000',
+								borderColor: 'var(--color-caution-yellow)',
+							},
+						},
 					},
 				},
 			},
@@ -1141,7 +841,6 @@ namespace $.$$ {
 		Archive_card: {
 			background: 'rgba(14, 17, 24, 0.92)',
 			backdropFilter: 'blur(8px)',
-			WebkitBackdropFilter: 'blur(8px)',
 			border: '1px solid #202636',
 			borderRadius: '9px',
 			padding: '24px',
@@ -1230,7 +929,7 @@ namespace $.$$ {
 			gridTemplateColumns: '1fr 1fr',
 			gap: '24px',
 		},
-		Comm_tg: {
+		Comm: {
 			background: '#0d0d0d',
 			border: '1px solid #2e2e2e',
 			borderRadius: '9px',
@@ -1241,73 +940,25 @@ namespace $.$$ {
 			height: '100%',
 			boxSizing: 'border-box',
 		},
-		Comm_vk: {
-			background: '#0d0d0d',
-			border: '1px solid #2e2e2e',
-			borderRadius: '9px',
-			padding: '32px',
-			display: 'flex',
-			flexDirection: 'column',
-			gap: '14px',
-			height: '100%',
-			boxSizing: 'border-box',
-		},
-		Comm_tg_badge: {
+		Comm_badge: {
 			fontFamily: 'var(--font-mono)',
 			fontSize: '11px',
 			fontWeight: '700',
 			color: 'var(--color-caution-yellow)',
 			letterSpacing: '1px',
 		},
-		Comm_vk_badge: {
-			fontFamily: 'var(--font-mono)',
-			fontSize: '11px',
-			fontWeight: '700',
-			color: 'var(--color-caution-yellow)',
-			letterSpacing: '1px',
-		},
-		Comm_tg_title: {
+		Comm_title: {
 			fontSize: '22px',
 			fontWeight: '600',
 			color: '#ffffff',
 		},
-		Comm_vk_title: {
-			fontSize: '22px',
-			fontWeight: '600',
-			color: '#ffffff',
-		},
-		Comm_tg_text: {
+		Comm_text: {
 			fontSize: '14px',
 			color: '#aaaaaa',
 			lineHeight: '1.5',
 			marginBottom: '14px',
 		},
-		Comm_vk_text: {
-			fontSize: '14px',
-			color: '#aaaaaa',
-			lineHeight: '1.5',
-			marginBottom: '14px',
-		},
-		Comm_tg_btn: {
-			alignSelf: 'flex-start',
-			fontFamily: 'var(--font-mono)',
-			fontSize: '12px',
-			color: 'var(--color-caution-yellow)',
-			textDecoration: 'none',
-			padding: '8px 14px',
-			border: '1px solid var(--color-caution-yellow)',
-			borderRadius: '6px',
-			marginTop: 'auto',
-			transition: 'background-color 0.2s ease, color 0.2s ease',
-			display: 'inline-flex',
-			alignItems: 'center',
-			cursor: 'pointer',
-			':hover': {
-				backgroundColor: 'var(--color-caution-yellow)',
-				color: '#000000',
-			},
-		},
-		Comm_vk_btn: {
+		Comm_btn: {
 			alignSelf: 'flex-start',
 			fontFamily: 'var(--font-mono)',
 			fontSize: '12px',
@@ -1424,22 +1075,13 @@ namespace $.$$ {
 				border: 'none',
 				outline: 'none',
 			},
-			'[piterjs_landing] :hover': {
-				background: 'transparent',
-				backgroundColor: 'transparent',
-				color: 'var(--color-caution-yellow)',
-				textDecoration: 'underline',
-				boxShadow: 'none',
-				border: 'none',
-				outline: 'none',
-			},
 		},
 		Footer_links: {
 			display: 'flex',
 			alignItems: 'center',
 			gap: '16px',
 		},
-		Soc_gh: {
+		Soc: {
 			background: 'transparent',
 			backgroundColor: 'transparent',
 			padding: '0',
@@ -1458,88 +1100,7 @@ namespace $.$$ {
 				opacity: '1',
 			},
 		},
-		Soc_tg: {
-			background: 'transparent',
-			backgroundColor: 'transparent',
-			padding: '0',
-			margin: '0',
-			border: 'none',
-			boxShadow: 'none',
-			display: 'flex',
-			alignItems: 'center',
-			justifyContent: 'center',
-			opacity: '0.6',
-			transition: 'opacity 0.15s ease',
-			cursor: 'pointer',
-			':hover': {
-				background: 'transparent',
-				backgroundColor: 'transparent',
-				opacity: '1',
-			},
-		},
-		Soc_yt: {
-			background: 'transparent',
-			backgroundColor: 'transparent',
-			padding: '0',
-			margin: '0',
-			border: 'none',
-			boxShadow: 'none',
-			display: 'flex',
-			alignItems: 'center',
-			justifyContent: 'center',
-			opacity: '0.6',
-			transition: 'opacity 0.15s ease',
-			cursor: 'pointer',
-			':hover': {
-				background: 'transparent',
-				backgroundColor: 'transparent',
-				opacity: '1',
-			},
-		},
-		Soc_vk: {
-			background: 'transparent',
-			backgroundColor: 'transparent',
-			padding: '0',
-			margin: '0',
-			border: 'none',
-			boxShadow: 'none',
-			display: 'flex',
-			alignItems: 'center',
-			justifyContent: 'center',
-			opacity: '0.6',
-			transition: 'opacity 0.15s ease',
-			cursor: 'pointer',
-			':hover': {
-				background: 'transparent',
-				backgroundColor: 'transparent',
-				opacity: '1',
-			},
-		},
-		Soc_gh_icon: {
-			width: '22px',
-			height: '22px',
-			objectFit: 'contain',
-			display: 'block',
-			background: 'transparent',
-			backgroundColor: 'transparent',
-		},
-		Soc_tg_icon: {
-			width: '22px',
-			height: '22px',
-			objectFit: 'contain',
-			display: 'block',
-			background: 'transparent',
-			backgroundColor: 'transparent',
-		},
-		Soc_yt_icon: {
-			width: '22px',
-			height: '22px',
-			objectFit: 'contain',
-			display: 'block',
-			background: 'transparent',
-			backgroundColor: 'transparent',
-		},
-		Soc_vk_icon: {
+		Soc_icon: {
 			width: '22px',
 			height: '22px',
 			objectFit: 'contain',
@@ -1555,7 +1116,6 @@ namespace $.$$ {
 			height: '100vh',
 			background: 'rgba(0, 0, 0, 0.85)',
 			backdropFilter: 'blur(8px)',
-			WebkitBackdropFilter: 'blur(8px)',
 			zIndex: '1000',
 			display: 'flex',
 			alignItems: 'center',
@@ -1587,13 +1147,7 @@ namespace $.$$ {
 			fontWeight: '700',
 			color: 'var(--color-caution-yellow)',
 		},
-		Cfp_close_btn: {
-			background: 'transparent',
-			border: 'none',
-			color: '#ffffff',
-			fontSize: '18px',
-			cursor: 'pointer',
-		},
+		Cfp_close_btn: close_btn,
 		Cfp_desc: {
 			fontSize: '14px',
 			color: '#aaaaaa',
@@ -1604,77 +1158,7 @@ namespace $.$$ {
 			flexDirection: 'column',
 			gap: '16px',
 			width: '100%',
-			'> [piterjs_landing_cfp_field_email] [mol_string]': {
-				background: '#1a1a1a',
-				border: '1px solid #333333',
-				borderRadius: '6px',
-				color: '#ffffff',
-				padding: '10px 14px',
-				fontSize: '14px',
-				width: '100%',
-				boxSizing: 'border-box',
-			},
-			'> [piterjs_landing_cfp_field_contact] [mol_string]': {
-				background: '#1a1a1a',
-				border: '1px solid #333333',
-				borderRadius: '6px',
-				color: '#ffffff',
-				padding: '10px 14px',
-				fontSize: '14px',
-				width: '100%',
-				boxSizing: 'border-box',
-			},
-			'> [piterjs_landing_cfp_field_name] [mol_string]': {
-				background: '#1a1a1a',
-				border: '1px solid #333333',
-				borderRadius: '6px',
-				color: '#ffffff',
-				padding: '10px 14px',
-				fontSize: '14px',
-				width: '100%',
-				boxSizing: 'border-box',
-			},
-			'> [piterjs_landing_cfp_field_company] [mol_string]': {
-				background: '#1a1a1a',
-				border: '1px solid #333333',
-				borderRadius: '6px',
-				color: '#ffffff',
-				padding: '10px 14px',
-				fontSize: '14px',
-				width: '100%',
-				boxSizing: 'border-box',
-			},
-			'> [piterjs_landing_cfp_field_title] [mol_string]': {
-				background: '#1a1a1a',
-				border: '1px solid #333333',
-				borderRadius: '6px',
-				color: '#ffffff',
-				padding: '10px 14px',
-				fontSize: '14px',
-				width: '100%',
-				boxSizing: 'border-box',
-			},
-			'> [piterjs_landing_cfp_field_email] [mol_string]:focus-within': {
-				borderColor: 'var(--color-caution-yellow)',
-				boxShadow: '0 0 8px rgba(255, 243, 19, 0.2)',
-			},
-			'> [piterjs_landing_cfp_field_contact] [mol_string]:focus-within': {
-				borderColor: 'var(--color-caution-yellow)',
-				boxShadow: '0 0 8px rgba(255, 243, 19, 0.2)',
-			},
-			'> [piterjs_landing_cfp_field_name] [mol_string]:focus-within': {
-				borderColor: 'var(--color-caution-yellow)',
-				boxShadow: '0 0 8px rgba(255, 243, 19, 0.2)',
-			},
-			'> [piterjs_landing_cfp_field_company] [mol_string]:focus-within': {
-				borderColor: 'var(--color-caution-yellow)',
-				boxShadow: '0 0 8px rgba(255, 243, 19, 0.2)',
-			},
-			'> [piterjs_landing_cfp_field_title] [mol_string]:focus-within': {
-				borderColor: 'var(--color-caution-yellow)',
-				boxShadow: '0 0 8px rgba(255, 243, 19, 0.2)',
-			},
-			'[mol_textarea]': {
+			$mol_textarea: {
 				background: '#1a1a1a',
 				border: '1px solid #333333',
 				borderRadius: '6px',
@@ -1687,12 +1171,12 @@ namespace $.$$ {
 				padding: '0',
 				position: 'relative',
 				overflow: 'hidden',
+				':focus-within': {
+					borderColor: 'var(--color-caution-yellow)',
+					boxShadow: '0 0 8px rgba(255, 243, 19, 0.2)',
+				},
 			},
-			'[mol_textarea]:focus-within': {
-				borderColor: 'var(--color-caution-yellow)',
-				boxShadow: '0 0 8px rgba(255, 243, 19, 0.2)',
-			},
-			'[mol_textarea_edit]': {
+			$mol_textarea_edit: {
 				position: 'absolute',
 				top: '0',
 				left: '0',
@@ -1712,7 +1196,7 @@ namespace $.$$ {
 				outline: 'none',
 				zIndex: '2',
 			},
-			'[mol_textarea_view]': {
+			$mol_textarea_view: {
 				background: 'transparent',
 				padding: '0',
 				margin: '0',
@@ -1724,18 +1208,18 @@ namespace $.$$ {
 				boxSizing: 'border-box',
 				zIndex: '1',
 				display: 'block',
-			},
-			'[mol_textarea_view] [mol_text_code_rows]': {
-				padding: '10px 14px',
-				margin: '0',
-				fontFamily: 'inherit',
-				fontSize: '14px',
-				lineHeight: '1.5',
-				color: '#ffffff',
-				boxSizing: 'border-box',
-			},
-			'[mol_textarea_view] [mol_button_copy]': {
-				display: 'none',
+				$mol_text_code_rows: {
+					padding: '10px 14px',
+					margin: '0',
+					fontFamily: 'inherit',
+					fontSize: '14px',
+					lineHeight: '1.5',
+					color: '#ffffff',
+					boxSizing: 'border-box',
+				},
+				$mol_button_copy: {
+					display: 'none',
+				},
 			},
 		},
 		Cfp_field_email: {
@@ -1744,6 +1228,20 @@ namespace $.$$ {
 			alignItems: 'stretch',
 			gap: '6px',
 			width: '100%',
+			$mol_string: {
+				background: '#1a1a1a',
+				border: '1px solid #333333',
+				borderRadius: '6px',
+				color: '#ffffff',
+				padding: '10px 14px',
+				fontSize: '14px',
+				width: '100%',
+				boxSizing: 'border-box',
+				':focus-within': {
+					borderColor: 'var(--color-caution-yellow)',
+					boxShadow: '0 0 8px rgba(255, 243, 19, 0.2)',
+				},
+			},
 		},
 		Cfp_field_contact: {
 			display: 'flex',
@@ -1751,6 +1249,20 @@ namespace $.$$ {
 			alignItems: 'stretch',
 			gap: '6px',
 			width: '100%',
+			$mol_string: {
+				background: '#1a1a1a',
+				border: '1px solid #333333',
+				borderRadius: '6px',
+				color: '#ffffff',
+				padding: '10px 14px',
+				fontSize: '14px',
+				width: '100%',
+				boxSizing: 'border-box',
+				':focus-within': {
+					borderColor: 'var(--color-caution-yellow)',
+					boxShadow: '0 0 8px rgba(255, 243, 19, 0.2)',
+				},
+			},
 		},
 		Cfp_field_name: {
 			display: 'flex',
@@ -1758,6 +1270,20 @@ namespace $.$$ {
 			alignItems: 'stretch',
 			gap: '6px',
 			width: '100%',
+			$mol_string: {
+				background: '#1a1a1a',
+				border: '1px solid #333333',
+				borderRadius: '6px',
+				color: '#ffffff',
+				padding: '10px 14px',
+				fontSize: '14px',
+				width: '100%',
+				boxSizing: 'border-box',
+				':focus-within': {
+					borderColor: 'var(--color-caution-yellow)',
+					boxShadow: '0 0 8px rgba(255, 243, 19, 0.2)',
+				},
+			},
 		},
 		Cfp_field_company: {
 			display: 'flex',
@@ -1765,6 +1291,20 @@ namespace $.$$ {
 			alignItems: 'stretch',
 			gap: '6px',
 			width: '100%',
+			$mol_string: {
+				background: '#1a1a1a',
+				border: '1px solid #333333',
+				borderRadius: '6px',
+				color: '#ffffff',
+				padding: '10px 14px',
+				fontSize: '14px',
+				width: '100%',
+				boxSizing: 'border-box',
+				':focus-within': {
+					borderColor: 'var(--color-caution-yellow)',
+					boxShadow: '0 0 8px rgba(255, 243, 19, 0.2)',
+				},
+			},
 		},
 		Cfp_field_title: {
 			display: 'flex',
@@ -1772,6 +1312,20 @@ namespace $.$$ {
 			alignItems: 'stretch',
 			gap: '6px',
 			width: '100%',
+			$mol_string: {
+				background: '#1a1a1a',
+				border: '1px solid #333333',
+				borderRadius: '6px',
+				color: '#ffffff',
+				padding: '10px 14px',
+				fontSize: '14px',
+				width: '100%',
+				boxSizing: 'border-box',
+				':focus-within': {
+					borderColor: 'var(--color-caution-yellow)',
+					boxShadow: '0 0 8px rgba(255, 243, 19, 0.2)',
+				},
+			},
 		},
 		Cfp_field_desc: {
 			display: 'flex',
@@ -1857,6 +1411,157 @@ namespace $.$$ {
 			zIndex: '2000',
 			animation: 'pjs_slidein 0.3s ease',
 		},
+		Rsvp_modal: {
+			position: 'fixed',
+			top: '0',
+			left: '0',
+			width: '100%',
+			height: '100%',
+			zIndex: '3000',
+			display: 'flex',
+			alignItems: 'center',
+			justifyContent: 'center',
+			padding: '24px',
+			boxSizing: 'border-box',
+		},
+		Rsvp_backdrop: {
+			position: 'absolute',
+			top: '0',
+			left: '0',
+			width: '100%',
+			height: '100%',
+			background: 'rgba(0, 0, 0, 0.82)',
+			backdropFilter: 'blur(8px)',
+			cursor: 'pointer',
+			animation: 'pjs_backdrop_in 0.2s ease',
+		},
+		Rsvp_dialog: {
+			position: 'relative',
+			zIndex: '1',
+			width: '100%',
+			maxWidth: '520px',
+			maxHeight: '100%',
+			overflowY: 'auto',
+			background: '#0d0d0d',
+			border: '1px solid #2e2e2e',
+			borderRadius: '12px',
+			padding: '32px',
+			display: 'flex',
+			flexDirection: 'column',
+			gap: '18px',
+			boxSizing: 'border-box',
+			boxShadow: '0 24px 60px rgba(0, 0, 0, 0.85)',
+			animation: 'pjs_modal_in 0.25s cubic-bezier(0.16, 1, 0.3, 1)',
+		},
+		Rsvp_head: {
+			display: 'flex',
+			alignItems: 'center',
+			justifyContent: 'space-between',
+			gap: '16px',
+		},
+		Rsvp_badge: {
+			fontFamily: 'var(--font-mono)',
+			fontSize: '11px',
+			fontWeight: '700',
+			color: 'var(--color-caution-yellow)',
+			letterSpacing: '1px',
+		},
+		Rsvp_close_btn: close_btn,
+		Rsvp_title: {
+			fontSize: 'clamp(22px, 3vw, 30px)',
+			fontWeight: '300',
+			letterSpacing: '-0.03em',
+			textTransform: 'uppercase',
+			color: '#ffffff',
+			lineHeight: '1.15',
+		},
+		Rsvp_meta: {
+			fontFamily: 'var(--font-mono)',
+			fontSize: '12px',
+			color: '#aaaaaa',
+			letterSpacing: '0.5px',
+		},
+		Rsvp_note: {
+			fontFamily: 'var(--font-mono)',
+			fontSize: '11px',
+			color: 'var(--color-caution-yellow)',
+			letterSpacing: '1px',
+			textTransform: 'uppercase',
+		},
+		Next_event_reg: {
+			display: 'flex',
+			flexDirection: 'column',
+			alignItems: 'stretch',
+			gap: '10px',
+			paddingTop: '4px',
+			borderTop: '1px solid #202020',
+		},
+		Next_event_reg_label: {
+			fontFamily: 'var(--font-mono)',
+			fontSize: '11px',
+			fontWeight: '700',
+			color: 'var(--color-aluminum)',
+			letterSpacing: '1px',
+			textTransform: 'uppercase',
+			paddingTop: '10px',
+		},
+		Next_event_reg_input: {
+			background: '#1a1a1a',
+			border: '1px solid #333333',
+			borderRadius: '6px',
+			color: '#ffffff',
+			padding: '12px 14px',
+			fontSize: '15px',
+			width: '100%',
+			boxSizing: 'border-box',
+			transition: 'border-color 0.2s ease, box-shadow 0.2s ease',
+			// $mol_string ставит себе inset-рамки через box-shadow — гасим, у нас свой border
+			boxShadow: 'none',
+			':hover': {
+				boxShadow: 'none',
+			},
+			':focus': {
+				borderColor: 'var(--color-caution-yellow)',
+				boxShadow: '0 0 8px rgba(255, 243, 19, 0.2)',
+				outline: 'none',
+			},
+			'::placeholder': {
+				color: '#5a5a5a',
+			},
+		},
+		Next_event_reg_check: {
+			alignSelf: 'flex-start',
+			background: '#11141c',
+			color: '#9aa2b4',
+			border: '1px solid #242938',
+			borderRadius: '6px',
+			padding: '10px 18px',
+			marginTop: '6px',
+			fontFamily: 'var(--font-mono)',
+			fontSize: '13px',
+			cursor: 'pointer',
+			transition: 'all 0.2s cubic-bezier(0.16, 1, 0.3, 1)',
+			':hover': {
+				color: '#ffffff',
+				borderColor: '#4a5368',
+				background: '#181d28',
+			},
+			'@': {
+				mol_check_checked: {
+					true: {
+						background: 'var(--color-caution-yellow)',
+						color: '#000000',
+						borderColor: 'var(--color-caution-yellow)',
+						fontWeight: '700',
+						':hover': {
+							background: 'var(--color-caution-yellow)',
+							color: '#000000',
+							borderColor: 'var(--color-caution-yellow)',
+						},
+					},
+				},
+			},
+		},
 		'@media': {
 			'(max-width: 1200px)': {
 				Back_link: {
@@ -1878,7 +1583,6 @@ namespace $.$$ {
 					zIndex: '1000',
 					backgroundColor: 'rgba(0, 0, 0, 0.95)',
 					backdropFilter: 'blur(12px)',
-					WebkitBackdropFilter: 'blur(12px)',
 				},
 				Nav_mobile: {
 					display: 'flex',
@@ -1898,16 +1602,7 @@ namespace $.$$ {
 					transition: 'transform 0.35s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.25s ease',
 					boxShadow: '0 16px 32px rgba(0, 0, 0, 0.8)',
 					zIndex: '900',
-					'@piterjs_landing_menu_open': {
-						'true': {
-							'[piterjs_landing]': {
-								transform: 'translateY(0)',
-								opacity: '1',
-								pointerEvents: 'auto',
-							},
-						},
-					},
-					'[mol_link]': {
+					$mol_link: {
 						textAlign: 'center',
 						padding: '12px',
 						fontSize: '16px',
@@ -1916,10 +1611,21 @@ namespace $.$$ {
 						borderRadius: '8px',
 						background: '#111111',
 						border: '1px solid #2a2a2a',
+						':hover': {
+							color: '#fff313',
+							background: '#222222',
+						},
 					},
-					'[mol_link]:hover': {
-						color: '#fff313',
-						background: '#222222',
+				},
+				'@': {
+					piterjs_landing_menu_open: {
+						true: {
+							Nav_mobile: {
+								transform: 'translateY(0)',
+								opacity: '1',
+								pointerEvents: 'auto',
+							},
+						},
 					},
 				},
 				Hero_title: {
@@ -1993,6 +1699,13 @@ namespace $.$$ {
 				},
 			},
 			'(max-width: 600px)': {
+				Rsvp_modal: {
+					padding: '12px',
+				},
+				Rsvp_dialog: {
+					padding: '24px 20px',
+					gap: '14px',
+				},
 				Header: {
 					padding: '10px 12px',
 				},
@@ -2033,12 +1746,6 @@ namespace $.$$ {
 				Countdown_box: {
 					padding: '20px 16px',
 				},
-				Next_card: {
-					padding: '20px 16px',
-				},
-				Talk_card: {
-					padding: '20px 16px',
-				},
 				Venue_card: {
 					padding: '20px 16px',
 				},
@@ -2046,9 +1753,6 @@ namespace $.$$ {
 					padding: '20px 16px',
 				},
 				Cfp_cta_card: {
-					padding: '24px 16px',
-				},
-				Community_card: {
 					padding: '24px 16px',
 				},
 				Hero_title: {
@@ -2085,16 +1789,7 @@ namespace $.$$ {
 					justifyContent: 'flex-start',
 					alignItems: 'flex-start',
 				},
-				Days_val: {
-					fontSize: '26px',
-				},
-				Hours_val: {
-					fontSize: '26px',
-				},
-				Mins_val: {
-					fontSize: '26px',
-				},
-				Secs_val: {
+				Unit_val: {
 					fontSize: '26px',
 				},
 				Archive_filters: {
