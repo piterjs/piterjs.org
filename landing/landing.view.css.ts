@@ -317,6 +317,9 @@ namespace $.$$ {
 			display: 'flex',
 			flexDirection: 'column',
 			gap: '24px',
+			// растягиваем на всю высоту героя, иначе marginTop: auto
+			// у Hero_footer_grid не к чему применить и грид не уезжает вниз
+			flex: '1 1 auto',
 		},
 		Hero_status_row: {
 			display: 'flex',
