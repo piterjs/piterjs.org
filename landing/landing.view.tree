@@ -33,7 +33,7 @@ $piterjs_landing $mol_view
 							dom_name \nav
 							sub <= nav_links /
 						<= Nav_actions $mol_view
-							sub /
+							sub <= nav_actions /
 								<= Back_link $mol_link
 									arg * landing null
 									sub / \[ Все митапы ]

@@ -199,6 +199,17 @@ namespace $.$$ {
 			return this.meetup_passed() ? 'LAST EVENT' : 'NEXT EVENT'
 		}
 
+		// Регистрироваться на прошедший митап некуда: убираем кнопку из хедера,
+		// а не прячем стилями — иначе она осталась бы в потоке фокуса и в DOM
+		@ $mol_mem
+		nav_actions() {
+			return [
+				this.Back_link(),
+				... this.meetup_passed() ? [] : [ this.Rsvp_btn() ],
+				this.Burger_btn(),
+			]
+		}
+
 		@ $mol_mem
 		now_time() {
 			return $mol_state_time.now( 1000 )
