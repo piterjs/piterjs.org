@@ -326,11 +326,14 @@ namespace $.$$ {
 		}
 
 		stat_val( id: string ) {
-			if( id === 'meetups' ) return `${this.meetups().length}+`
-			// статичные цифры сообщества, как и в 1d6495d: считать их из домена значило бы
-			// подтянуть speeches()/visitors_list() для всех митапов сразу
+			// Все четыре — статичные. Считать митапы из meetups().length нельзя:
+			// в домене лежат 49 записей, а проведено уже 100+, то есть счёт по
+			// данным занижал бы реальность почти вдвое. Остальные цифры из
+			// домена не достать без подтягивания speeches()/visitors_list()
+			// сразу для всех митапов.
+			if( id === 'meetups' ) return '100+'
 			if( id === 'visitors' ) return '3,500+'
-			if( id === 'speeches' ) return '130+'
+			if( id === 'speeches' ) return '250+'
 			if( id === 'source' ) return '100%'
 			return '0'
 		}
