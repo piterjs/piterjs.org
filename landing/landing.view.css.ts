@@ -404,11 +404,27 @@ namespace $.$$ {
 			border: '1px solid #4b4b4b',
 			borderRadius: '12px',
 			padding: '24px 32px',
+			// высота как в состоянии с отсчётом: 24+24 padding + подпись 14 +
+			// gap 16 + колонка Unit (38px цифра + 6 отступ + 10 подпись) ≈ 158px.
+			// Замерено на живой странице; на мобильном сбрасывается в auto,
+			// там цифры 26px и коробка ниже.
+			minHeight: '158px',
+			boxSizing: 'border-box',
+			justifyContent: 'center',
 			backdropFilter: 'blur(10px)',
 			display: 'flex',
 			flexDirection: 'column',
 			gap: '16px',
 			boxShadow: '0 10px 30px rgba(0, 0, 0, 0.5)',
+		},
+		// Тот же шрифт и кегль, что у цифр отсчёта (Unit_val)
+		Cfp_promo: {
+			fontFamily: '\'JetBrains Mono\', monospace',
+			fontSize: '38px',
+			fontWeight: '400',
+			color: '#fff313',
+			lineHeight: '1.15',
+			letterSpacing: '-0.5px',
 		},
 		Countdown_label: {
 			fontFamily: '\'JetBrains Mono\', monospace',
@@ -492,14 +508,6 @@ namespace $.$$ {
 			gap: '10px',
 			fontSize: '13px',
 			color: '#afafaf',
-		},
-		Disc_icon_time: {
-			color: '#fff313',
-			fontSize: '13px',
-		},
-		Disc_icon_place: {
-			color: '#fff313',
-			fontSize: '13px',
 		},
 		Map_link: {
 			fontFamily: '\'JetBrains Mono\', monospace',
@@ -1780,6 +1788,10 @@ namespace $.$$ {
 				},
 				Countdown_box: {
 					padding: '20px 16px',
+					minHeight: 'auto',
+				},
+				Cfp_promo: {
+					fontSize: '26px',
 				},
 				Venue_card: {
 					padding: '20px 16px',

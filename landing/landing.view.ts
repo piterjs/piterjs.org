@@ -238,21 +238,20 @@ namespace $.$$ {
 			return [ this.Unit( 'days' ), this.Unit( 'hours' ), this.Unit( 'mins' ), this.Unit( 'secs' ) ]
 		}
 
-		// Митап прошёл — отсчитывать не до чего: убираем цифры совсем, а не
-		// оставляем четыре нуля. Timer_units выкидываем из списка, а не прячем
-		// стилями, иначе пустой div съедал бы gap коробки.
+		// Митап прошёл — отсчитывать не до чего: вместо подписи и цифр в коробке
+		// стоит зов на CFP. Лишние виды выкидываем из списка детей, а не прячем
+		// стилями, иначе пустые div съедали бы gap коробки.
 		@ $mol_mem
-		countdown_label() {
-			return this.meetup_passed()
-				? 'ДАТА СЛЕДУЮЩЕЙ ВСТРЕЧИ УТОЧНЯЕТСЯ'
-				: 'ДО СЛЕДУЮЩЕЙ ВСТРЕЧИ ОСТАЛОСЬ:'
+		cfp_promo_text() {
+			return `СТАНЬ ДОКЛАДЧИКОМ на PITERJS #${ Number( this.meetup_num() ) + 1 }`
 		}
 
 		@ $mol_mem
 		countdown_content() {
+			if( this.meetup_passed() ) return [ this.Cfp_promo() ]
 			return [
 				this.Countdown_label(),
-				... this.meetup_passed() ? [] : [ this.Timer_units() ],
+				this.Timer_units(),
 			]
 		}
 

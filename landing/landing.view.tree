@@ -89,20 +89,19 @@ $piterjs_landing $mol_view
 									sub /
 										<= Countdown_box $mol_view
 											sub <= countdown_content /
-												<= Countdown_label $mol_view sub / <= countdown_label \ДО СЛЕДУЮЩЕЙ ВСТРЕЧИ ОСТАЛОСЬ:
+												<= Countdown_label $mol_view sub / \ДО СЛЕДУЮЩЕЙ ВСТРЕЧИ ОСТАЛОСЬ:
 												<= Timer_units $mol_view
 													sub <= timer_units /
+												<= Cfp_promo $mol_view sub / <= cfp_promo_text \СТАНЬ ДОКЛАДЧИКОМ на PITERJS #94
 										<= Discovery_card $mol_view
 											sub /
 												<= Disc_badge $mol_view sub / <= event_badge \NEXT EVENT
 												<= Disc_title $mol_view sub / <= next_event_title \PiterJS #56: WebGPU, Next-Gen Bundlers & AI Architecture
 												<= Disc_meta_time $mol_view
 													sub /
-														<= Disc_icon_time $mol_view sub / \⚡
 														<= Disc_text_time $mol_view sub / <= next_event_time \15 АВГУСТА 2026 // 19:00
 												<= Disc_meta_place $mol_view
 													sub /
-														<= Disc_icon_place $mol_view sub / \📍
 														<= Disc_text_place $mol_view sub / <= next_event_place \ИТ-ХАБ, САНКТ-ПЕТЕРБУРГ
 												<= Disc_meta_map $mol_view
 													sub /
