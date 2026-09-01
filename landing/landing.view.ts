@@ -7,10 +7,17 @@ namespace $.$$ {
 			return this.meetup() || this.meetups()[0]
 		}
 
+		@ $mol_mem
+		meetup_loading() {
+			if( this.meetup() ) return false
+			const list = this.meetups()
+			return !list || list.length === 0 || !list[0]?.title()
+		}
+
 		// Header & Dynamic Meetup Details
 		@ $mol_mem
 		meetup_title() {
-			return this.meetup_current()?.title() || 'PITERJS #56'
+			return this.meetup_current()?.title() || ( this.meetup_loading() ? 'PITERJS' : 'PITERJS #56' )
 		}
 
 		@ $mol_mem
@@ -21,6 +28,7 @@ namespace $.$$ {
 
 		@ $mol_mem
 		logo_version_tag() {
+			if( this.meetup_loading() ) return 'v...'
 			return `v.${this.meetup_num()}.0`
 		}
 
@@ -188,6 +196,9 @@ namespace $.$$ {
 
 		@ $mol_mem
 		hero_badge() {
+			if( this.meetup_loading() ) {
+				return 'PITERJS // ЗАГРУЗКА...'
+			}
 			if( this.meetup_passed() ) {
 				return `PITERJS #${ Number( this.meetup_num() ) + 1 } // SOON`
 			}
@@ -203,6 +214,12 @@ namespace $.$$ {
 		// а не прячем стилями — иначе она осталась бы в потоке фокуса и в DOM
 		@ $mol_mem
 		nav_actions() {
+			if( this.meetup_loading() ) {
+				return [
+					this.Back_link(),
+					this.Burger_btn(),
+				]
+			}
 			return [
 				this.Back_link(),
 				... this.meetup_passed() ? [] : [ this.Rsvp_btn() ],
@@ -243,15 +260,28 @@ namespace $.$$ {
 		// стилями, иначе пустые div съедали бы gap коробки.
 		@ $mol_mem
 		cfp_promo_text() {
-			return `СТАНЬ ДОКЛАДЧИКОМ на PITERJS #${ Number( this.meetup_num() ) + 1 }`
+			return `СТАНЬ ДОКЛАДЧИКОМ НА PITERJS #${ Number( this.meetup_num() ) + 1 }`
 		}
 
 		@ $mol_mem
 		countdown_content() {
-			if( this.meetup_passed() ) return [ this.Cfp_promo() ]
+			if( this.meetup_loading() ) return [ this.Countdown_skeleton() ]
+			if( this.meetup_passed() ) return [ this.Cfp_promo(), this.Cfp_promo_btn() ]
 			return [
 				this.Countdown_label(),
 				this.Timer_units(),
+			]
+		}
+
+		@ $mol_mem
+		discovery_content() {
+			if( this.meetup_loading() ) return [ this.Discovery_skeleton() ]
+			return [
+				this.Disc_badge(),
+				this.Disc_title(),
+				this.Disc_meta_time(),
+				this.Disc_meta_place(),
+				this.Disc_meta_map(),
 			]
 		}
 

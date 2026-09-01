@@ -92,9 +92,17 @@ $piterjs_landing $mol_view
 												<= Countdown_label $mol_view sub / \ДО СЛЕДУЮЩЕЙ ВСТРЕЧИ ОСТАЛОСЬ:
 												<= Timer_units $mol_view
 													sub <= timer_units /
-												<= Cfp_promo $mol_view sub / <= cfp_promo_text \СТАНЬ ДОКЛАДЧИКОМ на PITERJS #94
+												<= Cfp_promo $mol_view sub / <= cfp_promo_text \СТАНЬ ДОКЛАДЧИКОМ НА PITERJS #94
+												<= Cfp_promo_btn $mol_button_minor
+													click? <=> cfp_open? null
+													sub / \[ ПОДАТЬ ЗАЯВКУ ]
+												<= Countdown_skeleton $mol_view
+													sub /
+														<= Countdown_skel_line1 $mol_view
+														<= Countdown_skel_line2 $mol_view
+														<= Countdown_skel_btn $mol_view
 										<= Discovery_card $mol_view
-											sub /
+											sub <= discovery_content /
 												<= Disc_badge $mol_view sub / <= event_badge \NEXT EVENT
 												<= Disc_title $mol_view sub / <= next_event_title \PiterJS #56: WebGPU, Next-Gen Bundlers & AI Architecture
 												<= Disc_meta_time $mol_view
@@ -109,6 +117,13 @@ $piterjs_landing $mol_view
 															uri <= next_event_map_uri \https://yandex.ru/maps/?text=Санкт-Петербург,+Аптекарский+проспект,+4
 															target \_blank
 															sub / \[ На карте ]
+												<= Discovery_skeleton $mol_view
+													sub /
+														<= Disc_skel_badge $mol_view
+														<= Disc_skel_title1 $mol_view
+														<= Disc_skel_title2 $mol_view
+														<= Disc_skel_meta1 $mol_view
+														<= Disc_skel_meta2 $mol_view
 				<= Section_manifesto $mol_view
 					attr * id \manifesto
 					sub /

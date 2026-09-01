@@ -23,6 +23,34 @@ namespace $.$$ {
 		},
 	}
 
+	// Общий вид CFP-кнопки: одна в блоке «Программа», вторая в коробке
+	// отсчёта, когда митап прошёл. Выравнивание у каждой своё.
+	const cfp_btn = {
+		background: 'rgba(255, 243, 19, 0.08)',
+		color: 'var(--color-caution-yellow)',
+		fontFamily: 'var(--font-mono)',
+		fontWeight: '700',
+		fontSize: '13px',
+		padding: '8px 16px',
+		borderRadius: '6px',
+		border: '1px solid rgba(255, 243, 19, 0.35)',
+		boxShadow: 'none',
+		cursor: 'pointer',
+		transition: 'all 0.2s ease',
+		':hover': {
+			backgroundColor: 'var(--color-caution-yellow)',
+			color: '#000000',
+			borderColor: 'var(--color-caution-yellow)',
+		},
+	}
+
+	const skel_base = {
+		background: 'linear-gradient(90deg, rgba(255, 255, 255, 0.05) 25%, rgba(255, 255, 255, 0.12) 50%, rgba(255, 255, 255, 0.05) 75%)',
+		backgroundSize: '200% 100%',
+		animation: 'pjs_skeleton_shimmer 1.8s infinite ease-in-out',
+		borderRadius: '4px',
+	}
+
 	$mol_style_define( $piterjs_landing, {
 		display: 'block',
 		width: '100vw',
@@ -411,20 +439,35 @@ namespace $.$$ {
 			minHeight: '158px',
 			boxSizing: 'border-box',
 			justifyContent: 'center',
+			// точка отсчёта для cqw у Cfp_promo
+			containerType: 'inline-size',
 			backdropFilter: 'blur(10px)',
 			display: 'flex',
 			flexDirection: 'column',
 			gap: '16px',
 			boxShadow: '0 10px 30px rgba(0, 0, 0, 0.5)',
 		},
-		// Тот же шрифт и кегль, что у цифр отсчёта (Unit_val)
+		// Тот же шрифт, что у цифр отсчёта (Unit_val), но кегль подбирается под
+		// ширину коробки, чтобы строка не переносилась. Считаем в cqw, а не в vw:
+		// на 992px грид схлопывается в одну колонку и коробка резко расширяется,
+		// так что привязка к ширине окна дала бы разрыв.
+		//
+		// Замерено через Range: 32 знака с трекингом -0.5px занимают 18.6em - 16px.
+		// При 5cqw запас до края коробки не меньше 60px на всех брейкпоинтах от
+		// 390 до 1440, включая 993px, где колонка самая узкая (345px внутри).
 		Cfp_promo: {
 			fontFamily: '\'JetBrains Mono\', monospace',
-			fontSize: '38px',
+			fontSize: 'clamp(9px, calc((100cqi - 64px) / 20), 32px)',
 			fontWeight: '400',
 			color: '#fff313',
 			lineHeight: '1.15',
 			letterSpacing: '-0.5px',
+			whiteSpace: 'nowrap',
+			textTransform: 'uppercase',
+		},
+		Cfp_promo_btn: {
+			... cfp_btn,
+			alignSelf: 'flex-start',
 		},
 		Countdown_label: {
 			fontFamily: '\'JetBrains Mono\', monospace',
@@ -462,6 +505,30 @@ namespace $.$$ {
 			textTransform: 'uppercase',
 			letterSpacing: '0.5px',
 		},
+		Countdown_skeleton: {
+			display: 'flex',
+			flexDirection: 'column',
+			gap: '12px',
+			width: '100%',
+			boxSizing: 'border-box',
+		},
+		Countdown_skel_line1: {
+			... skel_base,
+			height: '14px',
+			width: '55%',
+		},
+		Countdown_skel_line2: {
+			... skel_base,
+			height: '32px',
+			width: '80%',
+		},
+		Countdown_skel_btn: {
+			... skel_base,
+			height: '32px',
+			width: '140px',
+			borderRadius: '6px',
+			marginTop: '4px',
+		},
 		Discovery_card: {
 			backgroundColor: '#2b2b2b',
 			border: '1px solid #4b4b4b',
@@ -473,6 +540,38 @@ namespace $.$$ {
 			position: 'relative',
 			overflow: 'hidden',
 			boxShadow: '0 20px 40px rgba(0, 0, 0, 0.6)',
+		},
+		Discovery_skeleton: {
+			display: 'flex',
+			flexDirection: 'column',
+			gap: '14px',
+			width: '100%',
+			boxSizing: 'border-box',
+		},
+		Disc_skel_badge: {
+			... skel_base,
+			height: '14px',
+			width: '90px',
+		},
+		Disc_skel_title1: {
+			... skel_base,
+			height: '20px',
+			width: '90%',
+		},
+		Disc_skel_title2: {
+			... skel_base,
+			height: '20px',
+			width: '65%',
+		},
+		Disc_skel_meta1: {
+			... skel_base,
+			height: '14px',
+			width: '50%',
+		},
+		Disc_skel_meta2: {
+			... skel_base,
+			height: '14px',
+			width: '40%',
 		},
 		Disc_badge: {
 			fontFamily: '\'JetBrains Mono\', monospace',
@@ -745,21 +844,9 @@ namespace $.$$ {
 			maxWidth: '800px',
 		},
 		Cfp_open_btn: {
+			... cfp_btn,
 			alignSelf: 'flex-start',
-			background: 'var(--color-caution-yellow)',
-			color: '#000000',
-			fontFamily: 'var(--font-mono)',
-			fontWeight: '700',
-			fontSize: '13px',
-			padding: '10px 20px',
-			borderRadius: '6px',
-			border: 'none',
-			cursor: 'pointer',
 			marginTop: '8px',
-			transition: 'background-color 0.15s ease',
-			':hover': {
-				backgroundColor: '#ffe600',
-			},
 		},
 		Venue_card: {
 			background: '#ffffff',
@@ -1790,9 +1877,7 @@ namespace $.$$ {
 					padding: '20px 16px',
 					minHeight: 'auto',
 				},
-				Cfp_promo: {
-					fontSize: '26px',
-				},
+
 				Venue_card: {
 					padding: '20px 16px',
 				},

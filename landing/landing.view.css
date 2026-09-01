@@ -24,6 +24,11 @@
 	to { opacity: 1; }
 }
 
+@keyframes pjs_skeleton_shimmer {
+	0% { background-position: -200% 0; }
+	100% { background-position: 200% 0; }
+}
+
 /* Клип описания доклада в 6 строк. Через $mol_style_define не выразить:
    ключи WebkitLineClamp и WebkitBoxOrient начинаются с заглавной буквы, а
    такие $mol_style_sheet трактует как вложенный компонент и уходит в
