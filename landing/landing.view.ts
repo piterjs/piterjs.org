@@ -321,12 +321,7 @@ namespace $.$$ {
 		// Next Event Card
 		@ $mol_mem
 		next_event_title() {
-			const m = this.meetup_current()
-			if( m?.title() ) {
-				const desc = m.description()
-				return desc ? `${m.title()}: ${desc}` : m.title()
-			}
-			return 'PiterJS #56: WebGPU, Next-Gen Bundlers & AI Architecture'
+			return this.meetup_current()?.title() || 'PITERJS #56'
 		}
 
 		@ $mol_mem

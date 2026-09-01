@@ -104,7 +104,7 @@ $piterjs_landing $mol_view
 										<= Discovery_card $mol_view
 											sub <= discovery_content /
 												<= Disc_badge $mol_view sub / <= event_badge \NEXT EVENT
-												<= Disc_title $mol_view sub / <= next_event_title \PiterJS #56: WebGPU, Next-Gen Bundlers & AI Architecture
+												<= Disc_title $mol_view sub / <= next_event_title \PiterJS #56
 												<= Disc_meta_time $mol_view
 													sub /
 														<= Disc_text_time $mol_view sub / <= next_event_time \15 АВГУСТА 2026 // 19:00
