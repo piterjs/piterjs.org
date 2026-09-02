@@ -26,6 +26,7 @@ namespace $.$$ {
 	// Общий вид CFP-кнопки: одна в блоке «Программа», вторая в коробке
 	// отсчёта, когда митап прошёл. Выравнивание у каждой своё.
 	const cfp_btn = {
+		textTransform: 'uppercase',
 		background: 'rgba(255, 243, 19, 0.08)',
 		color: 'var(--color-caution-yellow)',
 		fontFamily: 'var(--font-mono)',
@@ -54,6 +55,7 @@ namespace $.$$ {
 	// Общий вид жёлтой пилюли в карточке события: «На карте» до отзывов и
 	// «Оставить отзыв» в течение недели после митапа.
 	const pill_link = {
+		textTransform: 'uppercase',
 		fontFamily: '\'JetBrains Mono\', monospace',
 		fontSize: '11px',
 		color: '#fff313',
@@ -182,6 +184,7 @@ namespace $.$$ {
 			gap: '12px',
 		},
 		Back_link: {
+			textTransform: 'uppercase',
 			fontFamily: 'var(--font-mono)',
 			fontSize: '12px',
 			color: '#afafaf',
@@ -198,6 +201,7 @@ namespace $.$$ {
 			},
 		},
 		Rsvp_btn: {
+			textTransform: 'uppercase',
 			backgroundColor: 'var(--color-caution-yellow)',
 			color: '#000000',
 			fontFamily: 'var(--font-mono)',
@@ -761,6 +765,7 @@ namespace $.$$ {
 			// через $mol_style_define не выразить, см. комментарий там
 		},
 		Talk_more: {
+			textTransform: 'uppercase',
 			alignSelf: 'flex-start',
 			background: 'transparent',
 			border: 'none',
@@ -886,6 +891,7 @@ namespace $.$$ {
 			color: '#444444',
 		},
 		Venue_map_btn: {
+			textTransform: 'uppercase',
 			alignSelf: 'flex-start',
 			display: 'inline-flex',
 			width: 'auto',
@@ -1017,6 +1023,7 @@ namespace $.$$ {
 			width: '100%',
 		},
 		Archive_more_btn: {
+			textTransform: 'uppercase',
 			background: '#11141c',
 			border: '1px solid #242938',
 			color: 'var(--color-caution-yellow)',
@@ -1094,6 +1101,7 @@ namespace $.$$ {
 			marginBottom: '14px',
 		},
 		Comm_btn: {
+			textTransform: 'uppercase',
 			alignSelf: 'flex-start',
 			fontFamily: 'var(--font-mono)',
 			fontSize: '12px',
@@ -1518,6 +1526,7 @@ namespace $.$$ {
 			display: 'block',
 		},
 		Cfp_submit_btn: {
+			textTransform: 'uppercase',
 			background: 'var(--color-caution-yellow)',
 			color: '#000000',
 			fontFamily: 'var(--font-mono)',
@@ -1665,6 +1674,7 @@ namespace $.$$ {
 			},
 		},
 		Next_event_reg_check: {
+			textTransform: 'uppercase',
 			alignSelf: 'flex-start',
 			background: '#11141c',
 			color: '#9aa2b4',

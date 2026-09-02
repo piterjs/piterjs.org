@@ -165,7 +165,7 @@ $piterjs_landing $mol_view
 										<= Venue_map_btn $mol_link
 											uri <= venue_map_uri \https://yandex.ru/maps/?text=Санкт-Петербург,+Аптекарский+проспект,+4
 											target \_blank
-											sub / \[ Открыть на Яндекс Картах ↗ ]
+											sub / \[ ОТКРЫТЬ НА КАРТЕ ]
 				<= Section_archive $mol_view
 					attr * id \archive
 					sub /
