@@ -112,11 +112,16 @@ $piterjs_landing $mol_view
 													sub /
 														<= Disc_text_place $mol_view sub / <= next_event_place \ИТ-ХАБ, САНКТ-ПЕТЕРБУРГ
 												<= Disc_meta_map $mol_view
-													sub /
+													sub <= disc_meta_map_content /
 														<= Map_link $mol_link
 															uri <= next_event_map_uri \https://yandex.ru/maps/?text=Санкт-Петербург,+Аптекарский+проспект,+4
 															target \_blank
 															sub / \[ На карте ]
+														<= Review_link $mol_link
+															arg *
+																landing null
+																meetup <= meetup_current_id \
+															sub / \[ Оставить отзыв ]
 												<= Discovery_skeleton $mol_view
 													sub /
 														<= Disc_skel_badge $mol_view

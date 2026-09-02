@@ -51,6 +51,28 @@ namespace $.$$ {
 		borderRadius: '4px',
 	}
 
+	// Общий вид жёлтой пилюли в карточке события: «На карте» до отзывов и
+	// «Оставить отзыв» в течение недели после митапа.
+	const pill_link = {
+		fontFamily: '\'JetBrains Mono\', monospace',
+		fontSize: '11px',
+		color: '#fff313',
+		background: 'rgba(255, 243, 19, 0.08)',
+		border: '1px solid rgba(255, 243, 19, 0.4)',
+		padding: '4px 12px',
+		borderRadius: '6px',
+		textDecoration: 'none',
+		transition: 'all 0.2s ease',
+		display: 'inline-flex',
+		alignItems: 'center',
+		cursor: 'pointer',
+		':hover': {
+			background: '#fff313',
+			color: '#000000',
+			borderColor: '#fff313',
+		},
+	}
+
 	$mol_style_define( $piterjs_landing, {
 		display: 'block',
 		width: '100vw',
@@ -608,25 +630,8 @@ namespace $.$$ {
 			fontSize: '13px',
 			color: '#afafaf',
 		},
-		Map_link: {
-			fontFamily: '\'JetBrains Mono\', monospace',
-			fontSize: '11px',
-			color: '#fff313',
-			background: 'rgba(255, 243, 19, 0.08)',
-			border: '1px solid rgba(255, 243, 19, 0.4)',
-			padding: '4px 12px',
-			borderRadius: '6px',
-			textDecoration: 'none',
-			transition: 'all 0.2s ease',
-			display: 'inline-flex',
-			alignItems: 'center',
-			cursor: 'pointer',
-			':hover': {
-				background: '#fff313',
-				color: '#000000',
-				borderColor: '#fff313',
-			},
-		},
+		Map_link: pill_link,
+		Review_link: pill_link,
 		Section_manifesto: {
 			backgroundColor: 'var(--color-caution-yellow)',
 			color: '#000000',

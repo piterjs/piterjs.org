@@ -285,6 +285,24 @@ namespace $.$$ {
 			]
 		}
 
+		// Отзыв принимается только 7 суток после начала — см. $piterjs_meetup.review_allowed.
+		// Привязываем кнопку именно к этому окну, а не к meetup_passed(): тот верен
+		// бессрочно, и через неделю ссылка вела бы на страницу без формы отзыва.
+		@ $mol_mem
+		review_open() {
+			return this.meetup_current()?.review_allowed() ?? false
+		}
+
+		@ $mol_mem
+		meetup_current_id() {
+			return this.meetup_current()?.id() ?? ''
+		}
+
+		@ $mol_mem
+		disc_meta_map_content() {
+			return this.review_open() ? [ this.Review_link() ] : [ this.Map_link() ]
+		}
+
 		unit_str( id: string ) {
 			const diff = this.countdown_diff()
 			let val = 0
