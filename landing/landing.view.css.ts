@@ -52,27 +52,19 @@ namespace $.$$ {
 		borderRadius: '4px',
 	}
 
-	// Общий вид жёлтой пилюли в карточке события: «На карте» до отзывов и
-	// «Оставить отзыв» в течение недели после митапа.
+	// Ссылка-кнопка в карточке события: «На карте» до отзывов и «Оставить
+	// отзыв» в течение недели после митапа.
+	//
+	// Наследует cfp_btn целиком. Раньше это была отдельная, более мелкая
+	// ступень (11px/400 против 13px/700) — она выросла из Map_link, мелкой
+	// второстепенной ссылки под строками метаданных карточки. Сейчас обе
+	// кнопки стоят рядом в hero как две главные, и разница в кегле читалась
+	// как недоделка. Своего осталось только то, что нужно ссылке.
 	const pill_link = {
-		textTransform: 'uppercase',
-		fontFamily: '\'JetBrains Mono\', monospace',
-		fontSize: '11px',
-		color: '#fff313',
-		background: 'rgba(255, 243, 19, 0.08)',
-		border: '1px solid rgba(255, 243, 19, 0.4)',
-		padding: '4px 12px',
-		borderRadius: '6px',
+		... cfp_btn,
 		textDecoration: 'none',
-		transition: 'all 0.2s ease',
 		display: 'inline-flex',
 		alignItems: 'center',
-		cursor: 'pointer',
-		':hover': {
-			background: '#fff313',
-			color: '#000000',
-			borderColor: '#fff313',
-		},
 	}
 
 	$mol_style_define( $piterjs_landing, {
