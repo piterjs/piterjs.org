@@ -3339,13 +3339,14 @@ $piterjs_intro $mol_view
 				\Выступай сам
 				\Вступай в наши ряды
 				\Просто приходи
-		- profit <= Proft $piterjs_intro_page
+		profit <= Proft $piterjs_intro_page
 			title \Бонусы
 			text \
 				\За лучшие вопросы - призы
 				\Мы ведём трансляцию
 				\И записываем видео
 				\Улыбайтесь фотографу
+				\И сами снимайте друг друга
 		partners <= Partners $piterjs_intro_page
 			title \Партнёры
 			text \

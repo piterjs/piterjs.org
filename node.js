@@ -33286,6 +33286,12 @@ var $;
 			(obj.text) = () => ("Поддерживай рублём\nПривлекай партнёров\nЗазывай докладчиков\nВыступай сам\nВступай в наши ряды\nПросто приходи");
 			return obj;
 		}
+		Proft(){
+			const obj = new this.$.$piterjs_intro_page();
+			(obj.title) = () => ("Бонусы");
+			(obj.text) = () => ("За лучшие вопросы - призы\nМы ведём трансляцию\nИ записываем видео\nУлыбайтесь фотографу\nИ сами снимайте друг друга");
+			return obj;
+		}
 		Partners(){
 			const obj = new this.$.$piterjs_intro_page();
 			(obj.title) = () => ("Партнёры");
@@ -33374,6 +33380,7 @@ var $;
 				"speakers": (this.Speakers()), 
 				"partnering": (this.Partnering()), 
 				"contribution": (this.Contribution()), 
+				"profit": (this.Proft()), 
 				"partners": (this.Partners()), 
 				"place": (this.Place()), 
 				"follow": (this.Follow()), 
@@ -33401,6 +33408,7 @@ var $;
 	($mol_mem(($.$piterjs_intro.prototype), "Speakers"));
 	($mol_mem(($.$piterjs_intro.prototype), "Partnering"));
 	($mol_mem(($.$piterjs_intro.prototype), "Contribution"));
+	($mol_mem(($.$piterjs_intro.prototype), "Proft"));
 	($mol_mem(($.$piterjs_intro.prototype), "Partners"));
 	($mol_mem(($.$piterjs_intro.prototype), "Place"));
 	($mol_mem(($.$piterjs_intro.prototype), "Follow"));
