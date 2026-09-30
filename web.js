@@ -32788,10 +32788,10 @@ var $;
 			(obj.text) = () => ("Поддерживай рублём\nПривлекай партнёров\nЗазывай докладчиков\nВыступай сам\nВступай в наши ряды\nПросто приходи");
 			return obj;
 		}
-		Schedule(){
-			const obj = new this.$.$piterjs_schedule();
-			(obj.meetup) = () => ((this.meetup()));
-			(obj.title) = () => ("Сегодня");
+		Partners(){
+			const obj = new this.$.$piterjs_intro_page();
+			(obj.title) = () => ("Партнёры");
+			(obj.text) = () => ("\"\"https://static.tildacdn.com/tild6561-3739-4465-a432-333466316465/svg_1746604234103.svg\"\"");
 			return obj;
 		}
 		place_notes(){
@@ -32820,6 +32820,12 @@ var $;
 			const obj = new this.$.$piterjs_intro_page();
 			(obj.title) = () => ("Afterparty!");
 			(obj.text) = () => ((this.afterparty()));
+			return obj;
+		}
+		Schedule(){
+			const obj = new this.$.$piterjs_schedule();
+			(obj.meetup) = () => ((this.meetup()));
+			(obj.title) = () => ("Сегодня");
 			return obj;
 		}
 		place(){
@@ -32870,10 +32876,11 @@ var $;
 				"speakers": (this.Speakers()), 
 				"partnering": (this.Partnering()), 
 				"contribution": (this.Contribution()), 
-				"schedule": (this.Schedule()), 
+				"partners": (this.Partners()), 
 				"place": (this.Place()), 
 				"follow": (this.Follow()), 
-				"afterparty": (this.Afterparty())
+				"afterparty": (this.Afterparty()), 
+				"schedule": (this.Schedule())
 			};
 		}
 		sub(){
@@ -32896,10 +32903,11 @@ var $;
 	($mol_mem(($.$piterjs_intro.prototype), "Speakers"));
 	($mol_mem(($.$piterjs_intro.prototype), "Partnering"));
 	($mol_mem(($.$piterjs_intro.prototype), "Contribution"));
-	($mol_mem(($.$piterjs_intro.prototype), "Schedule"));
+	($mol_mem(($.$piterjs_intro.prototype), "Partners"));
 	($mol_mem(($.$piterjs_intro.prototype), "Place"));
 	($mol_mem(($.$piterjs_intro.prototype), "Follow"));
 	($mol_mem(($.$piterjs_intro.prototype), "Afterparty"));
+	($mol_mem(($.$piterjs_intro.prototype), "Schedule"));
 	($mol_mem(($.$piterjs_intro.prototype), "place"));
 	($mol_mem(($.$piterjs_intro.prototype), "Page"));
 	($mol_mem(($.$piterjs_intro.prototype), "Screen"));

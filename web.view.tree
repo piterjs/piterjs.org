@@ -3339,9 +3339,6 @@ $piterjs_intro $mol_view
 				\Выступай сам
 				\Вступай в наши ряды
 				\Просто приходи
-		schedule <= Schedule $piterjs_schedule
-			meetup <= meetup
-			title \Сегодня
 		- profit <= Proft $piterjs_intro_page
 			title \Бонусы
 			text \
@@ -3349,9 +3346,10 @@ $piterjs_intro $mol_view
 				\Мы ведём трансляцию
 				\И записываем видео
 				\Улыбайтесь фотографу
-		- partners <= Partners $piterjs_intro_page
+		partners <= Partners $piterjs_intro_page
 			title \Партнёры
 			text \
+				\""https://static.tildacdn.com/tild6561-3739-4465-a432-333466316465/svg_1746604234103.svg""
 		place <= Place $piterjs_intro_page
 			text <= place_notes \
 			title <= place_title \Мы в {place}
@@ -3369,6 +3367,9 @@ $piterjs_intro $mol_view
 		afterparty <= Afterparty $piterjs_intro_page
 			title \Afterparty!
 			text <= afterparty \
+		schedule <= Schedule $piterjs_schedule
+			meetup <= meetup
+			title \Сегодня
 	sub /
 		<= Screen $piterjs_screen
 			place <= place $piterjs_place
