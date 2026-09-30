@@ -5,7 +5,7 @@ $piterjs_intro $mol_view
 	pages *$piterjs_intro_page
 		main <= Main $piterjs_intro_main meetup <= meetup
 		about <= About $piterjs_intro_page
-			title \Кто мы??
+			title \Кто мы
 			text \
 				\Митапы в Питере
 				\JS и всё, что рядом
