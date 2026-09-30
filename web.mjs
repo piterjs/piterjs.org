@@ -32736,7 +32736,7 @@ var $;
 		}
 		About(){
 			const obj = new this.$.$piterjs_intro_page();
-			(obj.title) = () => ("Кто мы??");
+			(obj.title) = () => ("Кто мы");
 			(obj.text) = () => ("Митапы в Питере\nJS и всё, что рядом\nКаждый месяц с 2015");
 			return obj;
 		}
