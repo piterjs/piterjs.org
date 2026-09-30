@@ -18,6 +18,7 @@
 	pack bog git \https://github.com/b-on-g/bog.git
 	pack mws git \https://github.com/reatailret/milkywaystd_mol.git
 	pack raggu git \https://github.com/RaguTeam/raggu.git
+	pack vsqla git \https://github.com/vsqla/vsqla.git
 \/mol
 	pack icon git \https://github.com/nin-jin/mol_icon.git
 \/mol/view
@@ -89,9 +90,6 @@
 	pack intern git \https://github.com/hyoo-ru/intern.hyoo.ru.git
 \/piterjs/place
 	deploy \/piterjs/place/place.data.tree
-\/hyoo/sync
-	- build $hyoo_sync_revision \git rev-parse --short HEAD
-	build $hyoo_sync_revision \echo echo
 \/piterjs/meetup
 	deploy \/piterjs/meetup/meetup.data.tree
 \/piterjs/speaker

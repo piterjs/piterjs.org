@@ -145,7 +145,8 @@ $mol_pop $mol_view
 	showed? false
 	align_vert \
 	align_hor \
-	align \bottom_center
+	direction \ltr
+	align_enriched <= align \bottom_center
 	prefer \vert
 	auto /
 		<= bubble null
@@ -255,10 +256,13 @@ $mol_list $mol_view
 		0
 		0
 
-$mol_hotkey $mol_plugin
+$mol_hotkey2 $mol_plugin
 	event *
 		^
 		keydown? <=> keydown? null
+	action *
+
+$mol_hotkey $mol_hotkey2
 	key *
 	mod_ctrl false
 	mod_alt false
@@ -350,6 +354,7 @@ $mol_select $mol_pick
 	Option_row* $mol_button_minor
 		enabled <= enabled true
 		event_click? <=> event_select*? null
+		hint <= option_hint* null
 		sub <= option_content* /
 			<= Option_label* $mol_dimmer
 				haystack <= option_label* \
@@ -697,6 +702,9 @@ $mol_textarea $mol_stack
 			submit? <=> submit? null
 			submit_with_ctrl <= submit_with_ctrl true
 		<= View $mol_text_code
+			attr *
+				^
+				inert \
 			text <= value
 			render_visible_only false
 			row_numb* <= row_numb* 0
@@ -773,9 +781,19 @@ $mol_form_field $mol_labeler
 			sub / <= bid \
 	content / <= control null
 
+$mol_icon_menu $mol_icon path \M3,6H21V8H3V6M3,11H21V13H3V11M3,16H21V18H3V16Z
+
+$mol_icon_menu_down $mol_icon path \M7,10L12,15L17,10H7Z
+
+$mol_icon_menu_down_outline $mol_icon path \M18,9V10.5L12,16.5L6,10.5V9H18M12,13.67L14.67,11H9.33L12,13.67Z
+
+$mol_icon_menu_up $mol_icon path \M7,15L12,10L17,15H7Z
+
+$mol_icon_menu_up_outline $mol_icon path \M18,16V14.5L12,8.5L6,14.5V16H18M12,11.33L14.67,14H9.33L12,11.33Z
+
 $mol_number $mol_view
-	precision_view <= precision 1
-	precision_change <= precision 1
+	precision_view <= precision 0
+	precision_change <= precision 0
 	boost 10
 	value_min -Infinity
 	value_max +Infinity
@@ -789,10 +807,6 @@ $mol_number $mol_view
 				pageDown? <=> event_dec_boost? null
 				pageUp? <=> event_inc_boost? null
 	sub /
-		<= Dec $mol_button_minor
-			event_click? <=> event_dec? null
-			enabled <= dec_enabled <= enabled
-			sub / <= dec_icon $mol_icon_chevron_left
 		<= String $mol_string
 			- \ we don't want native number controls in mobile devices
 			- \ https://stackoverflow.com/questions/3790935/can-i-hide-the-html5-number-input-s-spin-box
@@ -802,10 +816,15 @@ $mol_number $mol_view
 			hint <= hint \ 
 			enabled <= string_enabled <= enabled
 			submit? <=> submit? null
+			selection? <=> selection? /number
+		<= Dec $mol_button_minor
+			event_click? <=> event_dec? null
+			enabled <= dec_enabled <= enabled
+			sub / <= dec_icon $mol_icon_menu_down_outline
 		<= Inc $mol_button_minor
 			event_click? <=> event_inc? null
 			enabled <= inc_enabled <= enabled
-			sub / <= inc_icon $mol_icon_chevron_right
+			sub / <= inc_icon $mol_icon_menu_up_outline
 
 $mol_icon_heart $mol_icon path \M12,21.35L10.55,20.03C5.4,15.36 2,12.27 2,8.5C2,5.41 4.42,3 7.5,3C9.24,3 10.91,3.81 12,5.08C13.09,3.81 14.76,3 16.5,3C19.58,3 22,5.41 22,8.5C22,12.27 18.6,15.36 13.45,20.03L12,21.35Z
 
@@ -1017,15 +1036,17 @@ $mol_text $mol_list
 	Paragraph* $mol_paragraph
 		sub <= block_content* /
 	Quote* $mol_text
-		uri_resolve* <= uri_resolve* \
 		text <= quote_text* \
-		highlight <= highlight \
 		auto_scroll null
-	List* $mol_text_list
+		highlight <= highlight \
 		uri_resolve* <= uri_resolve* \
+		code_sidebar_showed <= code_sidebar_showed true
+	List* $mol_text_list
 		type <= list_type* \-
 		text <= list_text* \
 		highlight <= highlight \
+		uri_resolve* <= uri_resolve* \
+		code_sidebar_showed <= code_sidebar_showed true
 	item_index* 0
 	Header* $mol_text_header
 		minimal_height 40
@@ -1037,7 +1058,7 @@ $mol_text $mol_list
 		row_themes <= pre_themes* /string
 		highlight <= highlight \
 		uri_resolve* <= uri_resolve* \
-		sidebar_showed <= pre_sidebar_showed <= code_sidebar_showed true
+		sidebar_showed <= code_sidebar_showed true
 	Cut* $mol_view dom_name \hr
 	- \Table
 	Table* $mol_grid
@@ -1047,9 +1068,10 @@ $mol_text $mol_list
 		cells <= table_cells* /
 	Table_cell* $mol_text
 		auto_scroll null
+		text <= table_cell_text* \
 		highlight <= highlight \
 		uri_resolve* <= uri_resolve* \
-		text <= table_cell_text* \
+		code_sidebar_showed <= code_sidebar_showed true
 	- \Grid
 	Grid* $mol_grid
 		rows <= grid_rows* /
@@ -1057,9 +1079,10 @@ $mol_text $mol_list
 		cells <= grid_cells* /
 	Grid_cell* $mol_text
 		auto_scroll null
+		text <= grid_cell_text* \
 		highlight <= highlight \
 		uri_resolve* <= uri_resolve* \
-		text <= grid_cell_text* \
+		code_sidebar_showed <= code_sidebar_showed true
 	- \Lines
 	String* $mol_dimmer
 		dom_name \span
@@ -1089,9 +1112,15 @@ $mol_text $mol_list
 		label /
 			<= Spoiler_label* $mol_text
 				text <= spoiler_label* \
+				highlight <= highlight \
+				uri_resolve* <= uri_resolve* \
+				code_sidebar_showed <= code_sidebar_showed true
 		content /
 			<= Spoiler_content* $mol_text
 				text <= spoiler_content* \
+				highlight <= highlight \
+				uri_resolve* <= uri_resolve* \
+				code_sidebar_showed <= code_sidebar_showed true
 
 $mol_text_header $mol_paragraph
 	level 1
@@ -3243,16 +3272,16 @@ $piterjs_intro $mol_view
 			title \Другие проекты
 			text \
 				\**PiterUX** - митапы о дизайне
-				\**PiterHUG** - прогулки, общение, софты
+				\**PiterHUG** - пикники, общение, софты
 		comunity <= Community $piterjs_intro_page
 			title \Сообщество PiterJS
 			text \
 				\! YouTube
-				\  ! 2.5K+
+				\  ! 2.6K+
 				\! VKontakte
-				\  ! 2.1K+
-				\! Telegram
 				\  ! 1.9K+
+				\! Telegram
+				\  ! 2.1K+
 				\! Offline
 				\  ! ~70
 		roles_org <= Roles_org $piterjs_intro_page
@@ -3323,14 +3352,12 @@ $piterjs_intro $mol_view
 		- partners <= Partners $piterjs_intro_page
 			title \Партнёры
 			text \
-				- \! ""https://i.imgur.com/ntlwbqL.png""
-				- \""https://i.imgur.com/tFCueVj.png""
 		place <= Place $piterjs_intro_page
 			text <= place_notes \
 			title <= place_title \Мы в {place}
 			text \
-				\""/piterjs/logo-sponsors/tbank-logo.svg""
-				- \""https://habrastorage.org/webt/nh/np/oy/nhnpoyyb6ayimlhpxcyxptxwtza.jpeg""  - Юмани
+				- \""/piterjs/logo-sponsors/tbank-logo.svg""
+				\""https://habrastorage.org/webt/nh/np/oy/nhnpoyyb6ayimlhpxcyxptxwtza.jpeg""
 		follow <= Follow $piterjs_intro_page
 			title \Следите за новостями
 			text \
