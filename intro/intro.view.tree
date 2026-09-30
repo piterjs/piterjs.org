@@ -14,16 +14,16 @@ $piterjs_intro $mol_view
 			title \Другие проекты
 			text \
 				\**PiterUX** - митапы о дизайне
-				\**PiterHUG** - прогулки, общение, софты
+				\**PiterHUG** - пикники, общение, софты
 		comunity <= Community $piterjs_intro_page
 			title \Сообщество PiterJS
 			text \
 				\! YouTube
-				\  ! 2.5K+
+				\  ! 2.6K+
 				\! VKontakte
-				\  ! 2.1K+
-				\! Telegram
 				\  ! 1.9K+
+				\! Telegram
+				\  ! 2.1K+
 				\! Offline
 				\  ! ~70
 		roles_org <= Roles_org $piterjs_intro_page
@@ -94,14 +94,12 @@ $piterjs_intro $mol_view
 		- partners <= Partners $piterjs_intro_page
 			title \Партнёры
 			text \
-				- \! ""https://i.imgur.com/ntlwbqL.png""
-				- \""https://i.imgur.com/tFCueVj.png""
 		place <= Place $piterjs_intro_page
 			text <= place_notes \
 			title <= place_title \Мы в {place}
 			text \
-				\""/piterjs/logo-sponsors/tbank-logo.svg""
-				- \""https://habrastorage.org/webt/nh/np/oy/nhnpoyyb6ayimlhpxcyxptxwtza.jpeg""  - Юмани
+				- \""/piterjs/logo-sponsors/tbank-logo.svg""
+				\""https://habrastorage.org/webt/nh/np/oy/nhnpoyyb6ayimlhpxcyxptxwtza.jpeg""
 		follow <= Follow $piterjs_intro_page
 			title \Следите за новостями
 			text \
