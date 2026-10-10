@@ -38,6 +38,6 @@ namespace $.$$ {
 		person_join_time( id: $mol_int62_string ) {
 			return this.meetup().joined_moments()[ id ]?.toString( `DD WD hh:mm` ) ?? ''
 		}
-
+		
 	}
 }
