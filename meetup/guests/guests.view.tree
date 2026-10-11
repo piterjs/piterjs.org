@@ -25,5 +25,5 @@ $piterjs_meetup_guests $mol_page
 								<= Person_snippet* $mol_dimmer
 									haystack <= person* \
 									needle <= filter
-						<= Person_join_moment* $mol_view
-							sub / <= person_join_moment* \
+						<= Person_join_time* $mol_view
+							sub / <= person_join_time* \

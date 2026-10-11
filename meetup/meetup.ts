@@ -125,7 +125,7 @@ namespace $ {
 			if( !this.joined_node()?.has( id ) ) return ''
 			
 			const closed = this.joined_node()?.sub( id, $hyoo_crowd_reg ).value()
-			if( !close ) return ''
+			if( !closed ) return ''
 
 			if( typeof closed === 'string' ) return closed
 
@@ -232,7 +232,7 @@ namespace $ {
 
 			const title = this.title()
 			const descr = this.description()
-			const date = this.start()?.toString( 'DD Month' ) ?? 'скоро'
+			const date = this.start()?.toString( 'DD Month', 'ru' ) ?? 'скоро'
 			const time = this.start()?.toString( 'hh:mm' ) ?? ''
 			const place = this.place().title()
 			const address = this.place().address()
