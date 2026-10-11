@@ -8917,8 +8917,8 @@ declare namespace $ {
 		person( id: any): string
 		Person_snippet( id: any): $mol_dimmer
 		Person_visitor( id: any): $mol_check_box
-		person_join_moment( id: any): string
-		Person_join_moment( id: any): $mol_view
+		person_join_time( id: any): string
+		Person_join_time( id: any): $mol_view
 		Person( id: any): $mol_view
 		person_list( ): readonly(any)[]
 		Person_list( ): $mol_list
@@ -8935,10 +8935,11 @@ declare namespace $ {
 //# sourceMappingURL=guests.view.tree.d.ts.map
 declare namespace $.$$ {
     class $piterjs_meetup_guests extends $.$piterjs_meetup_guests {
+        joined_list_unique(): `${string}_${string}`[];
         person_list(): $mol_view[];
-        person(person: $mol_int62_string): string;
+        person(id: $mol_int62_string): string;
         dump_blob(): Blob;
-        person_join_moment(id: $mol_int62_string): string;
+        person_join_time(id: $mol_int62_string): string;
     }
 }
 
@@ -9114,7 +9115,7 @@ declare namespace $ {
 		speech_post_texts( ): readonly(any)[]
 		Place_text( ): $piterjs_meetup_texts_card
 		Air_text( ): $piterjs_meetup_texts_card
-		Arterpaty_text( ): $piterjs_meetup_texts_card
+		Afterparty_text( ): $piterjs_meetup_texts_card
 		Retro_text( ): $piterjs_meetup_texts_card
 		Content( ): $mol_list
 		theme( ): string
@@ -10980,6 +10981,15 @@ declare namespace $.$$ {
 
 declare namespace $ {
 
+	export class $mol_icon_camera extends $mol_icon {
+		path( ): string
+	}
+	
+}
+
+//# sourceMappingURL=camera.view.tree.d.ts.map
+declare namespace $ {
+
 	export class $mol_icon_upload extends $mol_icon {
 		path( ): string
 	}
@@ -11084,7 +11094,7 @@ declare namespace $ {
 		ReturnType< $piterjs_image['link'] >
 	>
 	type $mol_button_open__Icon_piterjs_speaker_snippet_4 = $mol_type_enforce<
-		any
+		ReturnType< $piterjs_speaker_snippet['upload_icon'] >
 		,
 		ReturnType< $mol_button_open['Icon'] >
 	>
@@ -11144,6 +11154,7 @@ declare namespace $ {
 		description( next?: ReturnType< ReturnType< $piterjs_speaker_snippet['speaker'] >['description'] > ): ReturnType< ReturnType< $piterjs_speaker_snippet['speaker'] >['description'] >
 		photo( ): string
 		Photo( ): $piterjs_image
+		upload_icon( ): $mol_icon_camera
 		upload( next?: readonly(File)[] ): readonly(File)[]
 		editing( ): boolean
 		Upload( ): $mol_button_open
@@ -11173,15 +11184,6 @@ declare namespace $.$$ {
 declare namespace $.$$ {
 }
 
-declare namespace $ {
-
-	export class $mol_icon_camera extends $mol_icon {
-		path( ): string
-	}
-	
-}
-
-//# sourceMappingURL=camera.view.tree.d.ts.map
 declare namespace $ {
     function $mol_dom_serialize(node: Node): string;
 }
@@ -12734,21 +12736,21 @@ declare namespace $ {
 		drag_move( next?: ReturnType< $mol_drag['move'] > ): ReturnType< $mol_drag['move'] >
 		end( next?: any ): any
 		drag_end( next?: ReturnType< $mol_drag['end'] > ): ReturnType< $mol_drag['end'] >
+		draggable( ): boolean
 		status( next?: string ): string
+		plain( ): ReturnType< $mol_drag['title'] >
+		html( ): string
+		uris( ): string
 		event( ): ({ 
 			dragstart( next?: ReturnType< $mol_drag['drag_start'] > ): ReturnType< $mol_drag['drag_start'] >,
 			drag( next?: ReturnType< $mol_drag['drag_move'] > ): ReturnType< $mol_drag['drag_move'] >,
 			dragend( next?: ReturnType< $mol_drag['drag_end'] > ): ReturnType< $mol_drag['drag_end'] >,
-		}) 
+		})  & ReturnType< $mol_ghost['event'] >
 		attr( ): ({ 
-			'draggable': boolean,
+			'draggable': ReturnType< $mol_drag['draggable'] >,
 			'mol_drag_status': ReturnType< $mol_drag['status'] >,
-		}) 
-		transfer( ): ({ 
-			'text/plain': string,
-			'text/html': string,
-			'text/uri-list': string,
-		}) 
+		})  & ReturnType< $mol_ghost['attr'] >
+		transfer( ): Record<string, string>
 		allow_copy( ): boolean
 		allow_link( ): boolean
 		allow_move( ): boolean
@@ -12783,10 +12785,10 @@ declare namespace $ {
 			dragover( next?: ReturnType< $mol_drop['move'] > ): ReturnType< $mol_drop['move'] >,
 			dragleave( next?: ReturnType< $mol_drop['leave'] > ): ReturnType< $mol_drop['leave'] >,
 			drop( next?: ReturnType< $mol_drop['drop'] > ): ReturnType< $mol_drop['drop'] >,
-		}) 
+		})  & ReturnType< $mol_ghost['event'] >
 		attr( ): ({ 
 			'mol_drop_status': ReturnType< $mol_drop['status'] >,
-		}) 
+		})  & ReturnType< $mol_ghost['attr'] >
 		adopt( next?: Record<string, any> ): Record<string, any>
 		receive( next?: any ): any
 		allow( ): readonly(any)[]
@@ -15592,9 +15594,9 @@ declare namespace $.$$ {
         templates(): boolean;
         stats(): boolean;
         safe(): boolean;
-        meetup_id(next?: string | null): string | null;
+        meetup_id(next?: string | null): `${string}_${string}` | null;
         meetup_add(): void;
-        speech_id(next?: string): string | null;
+        speech_id(next?: string | null): `${string}_${string}` | null;
         speech(id: $mol_int62_string): $piterjs_speech;
         speaker_id(next?: string): string | null;
         pages(): any[];

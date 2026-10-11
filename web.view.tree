@@ -1416,8 +1416,8 @@ $piterjs_meetup_guests $mol_page
 								<= Person_snippet* $mol_dimmer
 									haystack <= person* \
 									needle <= filter
-						<= Person_join_moment* $mol_view
-							sub / <= person_join_moment* \
+						<= Person_join_time* $mol_view
+							sub / <= person_join_time* \
 
 $mol_icon_pencil $mol_icon path \M20.71,7.04C21.1,6.65 21.1,6 20.71,5.63L18.37,3.29C18,2.9 17.35,2.9 16.96,3.29L15.12,5.12L18.87,8.87M3,17.25V21H6.75L17.81,9.93L14.06,6.18L3,17.25Z
 
@@ -1450,14 +1450,14 @@ $piterjs_meetup_texts $mol_page
 					text <= speech_post_text* \
 					moment? <=> speech_post_moment*? $mol_time_moment
 			<= Place_text $piterjs_meetup_texts_card
-				title \⌛ На кануне
+				title \⌛ Накануне
 				text <= post_text*place
 				moment? <=> post_moment*place?
 			<= Air_text $piterjs_meetup_texts_card
 				title \⏰ Выход в эфир
 				text <= post_text*air
 				moment? <=> post_moment*air?
-			<= Arterpaty_text $piterjs_meetup_texts_card
+			<= Afterparty_text $piterjs_meetup_texts_card
 				title \🎊 Афтепати
 				text <= post_text*afterparty
 				moment? <=> post_moment*afterparty?
@@ -1496,13 +1496,13 @@ $piterjs_meetup_templates $mol_page
 				title \🗣️ Анонс доклада
 				template? <=> post_template*speech?
 			<= Place_template_labeler $piterjs_meetup_templates_field
-				title \⌛ На кануне
+				title \⌛ Накануне
 				template? <=> post_template*place?
 			<= Air_template_labeler $piterjs_meetup_templates_field
 				title \⏰ Выход в эфир
 				template? <=> post_template*air?
 			<= Afterparty_template_labeler $piterjs_meetup_templates_field
-				title \🎊 Афтепати
+				title \🎊 Афтерпати
 				template? <=> post_template*afterparty?
 			<= Retro_template_labeler $piterjs_meetup_templates_field
 				title \🙏 Ретроспектива
@@ -2044,6 +2044,8 @@ $mol_string_link $mol_view
 			value? <=> value? \
 			hint <= hint_edit <= hint <= title \
 
+$mol_icon_camera $mol_icon path \M4,4H7L9,2H15L17,4H20A2,2 0 0,1 22,6V18A2,2 0 0,1 20,20H4A2,2 0 0,1 2,18V6A2,2 0 0,1 4,4M12,7A5,5 0 0,0 7,12A5,5 0 0,0 12,17A5,5 0 0,0 17,12A5,5 0 0,0 12,7M12,9A3,3 0 0,1 15,12A3,3 0 0,1 12,15A3,3 0 0,1 9,12A3,3 0 0,1 12,9Z
+
 $mol_icon_upload $mol_icon path \M9,16V10H5L12,3L19,10H15V16H9M5,20V18H19V20H5Z
 
 $mol_button_open $mol_button_minor
@@ -2075,7 +2077,7 @@ $piterjs_speaker_snippet $mol_view
 			<= Photo $piterjs_image
 				link <= photo \
 			<= Upload $mol_button_open
-				Icon null
+				Icon <= upload_icon $mol_icon_camera
 				files? <=> upload? /File
 				enabled <= editing false
 		<= Info $mol_list sub /
@@ -2087,8 +2089,6 @@ $piterjs_speaker_snippet $mol_view
 				hint \Об авторе
 				value? <=> description?
 				enabled <= editing false
-
-$mol_icon_camera $mol_icon path \M4,4H7L9,2H15L17,4H20A2,2 0 0,1 22,6V18A2,2 0 0,1 20,20H4A2,2 0 0,1 2,18V6A2,2 0 0,1 4,4M12,7A5,5 0 0,0 7,12A5,5 0 0,0 12,17A5,5 0 0,0 17,12A5,5 0 0,0 12,7M12,9A3,3 0 0,1 15,12A3,3 0 0,1 12,15A3,3 0 0,1 9,12A3,3 0 0,1 12,9Z
 
 $piterjs_speech_page $mol_page
 	speech $piterjs_speech
@@ -2461,16 +2461,18 @@ $mol_icon_magnify $mol_icon path \M9.5,3A6.5,6.5 0 0,1 16,9.5C16,11.11 15.41,12.
 
 $mol_drag $mol_ghost
 	event *
+		^
 		dragstart? <=> drag_start? <=> start? null
 		drag? <=> drag_move? <=> move? null
 		dragend? <=> drag_end? <=> end? null
 	attr *
-		draggable true
+		^
+		draggable <= draggable true
 		mol_drag_status <= status? \ready
-	transfer *
-		text/plain \
-		text/html \
-		text/uri-list \
+	transfer *string
+		text/plain <= plain <= title
+		text/html <= html \
+		text/uri-list <= uris \
 	allow_copy true
 	allow_link true
 	allow_move true
@@ -2479,11 +2481,14 @@ $mol_drag $mol_ghost
 $mol_drop $mol_ghost
 	enabled? true
 	event *
+		^
 		dragenter? <=> enter? null
 		dragover? <=> move? null
 		dragleave? <=> leave? null
 		drop? <=> drop? null
-	attr * mol_drop_status <= status? \ready
+	attr *
+		^
+		mol_drop_status <= status? \ready
 	adopt? *
 	receive? null
 	allow /

@@ -13646,12 +13646,12 @@ var $;
 (function ($) {
     $.$piterjs_post_template = {
         init: `
-			✨ Ура! Скоро **PiterJS {title}**
+			✨ Ура! Скоро **{title}**
 			
 			{descr}
 			
 			⏰ Когда: **{date} {time}**
-			📍 Где: {place} (**{address}**)
+			📍 Где: {place} **{address}**
 			
 			📰 Программа
 			
@@ -13673,14 +13673,14 @@ var $;
 			✔️ А если передумал идти — отмени регистрацию там же.
 		`,
         place: `
-			🎉 PiterJS {title} уже завтра в {place}: **{address}**
+			🎉 {title} уже завтра в {place}: **{address}**
 			
 			🤗 Ждем тебя к {time}.
-			🙏 Если не придёщь — отмени регистрацию: {meetup}
-			📽️ Но всё-равно смотри трансляцию: {video}
+			🙏 Если не придёшь — отмени регистрацию: {meetup}
+			📽️ Но всё равно смотри трансляцию: {video}
 		`,
         air: `
-			🎬 PiterJS {title} начинается!
+			🎬 {title} начинается!
 			📽️ Занимайте места и смотрите трансляцию: **{video}**
 		`,
         afterparty: `
@@ -13791,7 +13791,7 @@ var $;
             if (!this.joined_node()?.has(id))
                 return '';
             const closed = this.joined_node()?.sub(id, $hyoo_crowd_reg).value();
-            if (!close)
+            if (!closed)
                 return '';
             if (typeof closed === 'string')
                 return closed;
@@ -13867,7 +13867,7 @@ var $;
         post_text(id) {
             const title = this.title();
             const descr = this.description();
-            const date = this.start()?.toString('DD Month') ?? 'скоро';
+            const date = this.start()?.toString('DD Month', 'ru') ?? 'скоро';
             const time = this.start()?.toString('hh:mm') ?? '';
             const place = this.place().title();
             const address = this.place().address();
@@ -14152,7 +14152,10 @@ var $;
             return this.sub('photo', $hyoo_crowd_blob).blob(next);
         }
         photo_uri() {
-            return URL.createObjectURL(this.photo_blob());
+            const blob = this.photo_blob();
+            if (!blob?.size)
+                return 'about:blank';
+            return URL.createObjectURL(blob);
         }
         speeches_node() {
             return this.sub('speeches', $hyoo_crowd_list);
@@ -14234,7 +14237,7 @@ var $;
             const descr = this.description();
             const speaker = this.speaker().title();
             const meetup = this.$.$mol_state_arg.make_link({ meetup: this.meetup().id() });
-            const date = this.start()?.toString('DD Month') ?? 'скоро';
+            const date = this.start()?.toString('DD Month', 'ru') ?? 'скоро';
             const time = this.start()?.toString('hh:mm') ?? '';
             return this.post_template()
                 .replaceAll('{title}', title)
@@ -18779,7 +18782,7 @@ var $;
                     .map((row, rowId) => {
                     const cells = [];
                     for (const line of row.trim().split(/\r?\n/)) {
-                        const [_, indent, content] = /^( *)! (.*)/.exec(line);
+                        const [_, indent, content] = /^( *)! (.*)/.exec(line) ?? ['', '', ''];
                         const col = Math.ceil(indent.length / 2);
                         cells[col] = (cells[col] ? cells[col] + '\n' : '') + content;
                     }
@@ -20408,17 +20411,17 @@ var $;
 			(obj.label) = () => ([(this.Person_snippet(id))]);
 			return obj;
 		}
-		person_join_moment(id){
+		person_join_time(id){
 			return "";
 		}
-		Person_join_moment(id){
+		Person_join_time(id){
 			const obj = new this.$.$mol_view();
-			(obj.sub) = () => ([(this.person_join_moment(id))]);
+			(obj.sub) = () => ([(this.person_join_time(id))]);
 			return obj;
 		}
 		Person(id){
 			const obj = new this.$.$mol_view();
-			(obj.sub) = () => ([(this.Person_visitor(id)), (this.Person_join_moment(id))]);
+			(obj.sub) = () => ([(this.Person_visitor(id)), (this.Person_join_time(id))]);
 			return obj;
 		}
 		person_list(){
@@ -20459,7 +20462,7 @@ var $;
 	($mol_mem(($.$piterjs_meetup_guests.prototype), "Filter"));
 	($mol_mem_key(($.$piterjs_meetup_guests.prototype), "Person_snippet"));
 	($mol_mem_key(($.$piterjs_meetup_guests.prototype), "Person_visitor"));
-	($mol_mem_key(($.$piterjs_meetup_guests.prototype), "Person_join_moment"));
+	($mol_mem_key(($.$piterjs_meetup_guests.prototype), "Person_join_time"));
 	($mol_mem_key(($.$piterjs_meetup_guests.prototype), "Person"));
 	($mol_mem(($.$piterjs_meetup_guests.prototype), "Person_list"));
 	($mol_mem(($.$piterjs_meetup_guests.prototype), "Content"));
@@ -20477,27 +20480,39 @@ var $;
     var $$;
     (function ($$) {
         class $piterjs_meetup_guests extends $.$piterjs_meetup_guests {
+            joined_list_unique() {
+                return [...new Set(this.meetup().joined_list())];
+            }
             person_list() {
                 const moments = this.meetup().joined_moments();
-                return this.meetup().joined_list()
+                return this.joined_list_unique()
                     .filter($mol_match_text(this.filter(), person => [this.person(person), person]))
-                    .sort((a, b) => moments[a].valueOf() - moments[b].valueOf())
+                    .sort((a, b) => (moments[a]?.valueOf() ?? 0) - (moments[b]?.valueOf() ?? 0))
                     .map(person => this.Person(person));
             }
-            person(person) {
-                return this.meetup().joined_name(person) || person;
+            person(id) {
+                try {
+                    return this.meetup().joined_name(id) || id;
+                }
+                catch (error) {
+                    $mol_fail_log(error);
+                    return id;
+                }
             }
             dump_blob() {
-                const text = this.meetup().joined_list()
+                const text = this.joined_list_unique()
                     .map(person => this.person(person))
                     .sort()
                     .join('\n');
                 return new $mol_blob([text], { type: 'text/plain' });
             }
-            person_join_moment(id) {
-                return this.meetup().joined_moments()[id].toString(`DD WD hh:mm`);
+            person_join_time(id) {
+                return this.meetup().joined_moments()[id]?.toString(`DD WD hh:mm`) ?? '';
             }
         }
+        __decorate([
+            $mol_mem
+        ], $piterjs_meetup_guests.prototype, "joined_list_unique", null);
         __decorate([
             $mol_mem
         ], $piterjs_meetup_guests.prototype, "person_list", null);
@@ -20509,7 +20524,7 @@ var $;
         ], $piterjs_meetup_guests.prototype, "dump_blob", null);
         __decorate([
             $mol_mem_key
-        ], $piterjs_meetup_guests.prototype, "person_join_moment", null);
+        ], $piterjs_meetup_guests.prototype, "person_join_time", null);
         $$.$piterjs_meetup_guests = $piterjs_meetup_guests;
     })($$ = $.$$ || ($.$$ = {}));
 })($ || ($ = {}));
@@ -20546,7 +20561,7 @@ var $;
             Person_snippet: {
                 padding: 0,
             },
-            Person_join_moment: {
+            Person_join_time: {
                 padding: $mol_gap.text,
                 color: $mol_theme.shade,
             },
@@ -20636,7 +20651,7 @@ var $;
 		}
 		Place_text(){
 			const obj = new this.$.$piterjs_meetup_texts_card();
-			(obj.title) = () => ("⌛ На кануне");
+			(obj.title) = () => ("⌛ Накануне");
 			(obj.text) = () => ((this.post_text("place")));
 			(obj.moment) = (next) => ((this.post_moment("place", next)));
 			return obj;
@@ -20648,7 +20663,7 @@ var $;
 			(obj.moment) = (next) => ((this.post_moment("air", next)));
 			return obj;
 		}
-		Arterpaty_text(){
+		Afterparty_text(){
 			const obj = new this.$.$piterjs_meetup_texts_card();
 			(obj.title) = () => ("🎊 Афтепати");
 			(obj.text) = () => ((this.post_text("afterparty")));
@@ -20669,7 +20684,7 @@ var $;
 				...(this.speech_post_texts()), 
 				(this.Place_text()), 
 				(this.Air_text()), 
-				(this.Arterpaty_text()), 
+				(this.Afterparty_text()), 
 				(this.Retro_text())
 			]);
 			return obj;
@@ -20700,7 +20715,7 @@ var $;
 	($mol_mem_key(($.$piterjs_meetup_texts.prototype), "Speech_post_text"));
 	($mol_mem(($.$piterjs_meetup_texts.prototype), "Place_text"));
 	($mol_mem(($.$piterjs_meetup_texts.prototype), "Air_text"));
-	($mol_mem(($.$piterjs_meetup_texts.prototype), "Arterpaty_text"));
+	($mol_mem(($.$piterjs_meetup_texts.prototype), "Afterparty_text"));
 	($mol_mem(($.$piterjs_meetup_texts.prototype), "Retro_text"));
 	($mol_mem(($.$piterjs_meetup_texts.prototype), "Content"));
 	($mol_mem(($.$piterjs_meetup_texts.prototype), "meetup"));
@@ -20834,7 +20849,7 @@ var $;
 		}
 		Place_template_labeler(){
 			const obj = new this.$.$piterjs_meetup_templates_field();
-			(obj.title) = () => ("⌛ На кануне");
+			(obj.title) = () => ("⌛ Накануне");
 			(obj.template) = (next) => ((this.post_template("place", next)));
 			return obj;
 		}
@@ -20846,7 +20861,7 @@ var $;
 		}
 		Afterparty_template_labeler(){
 			const obj = new this.$.$piterjs_meetup_templates_field();
-			(obj.title) = () => ("🎊 Афтепати");
+			(obj.title) = () => ("🎊 Афтерпати");
 			(obj.template) = (next) => ((this.post_template("afterparty", next)));
 			return obj;
 		}
@@ -24395,6 +24410,18 @@ var $;
 })($ || ($ = {}));
 
 ;
+	($.$mol_icon_camera) = class $mol_icon_camera extends ($.$mol_icon) {
+		path(){
+			return "M4,4H7L9,2H15L17,4H20A2,2 0 0,1 22,6V18A2,2 0 0,1 20,20H4A2,2 0 0,1 2,18V6A2,2 0 0,1 4,4M12,7A5,5 0 0,0 7,12A5,5 0 0,0 12,17A5,5 0 0,0 17,12A5,5 0 0,0 12,7M12,9A3,3 0 0,1 15,12A3,3 0 0,1 12,15A3,3 0 0,1 9,12A3,3 0 0,1 12,9Z";
+		}
+	};
+
+
+;
+"use strict";
+
+
+;
 	($.$mol_icon_upload) = class $mol_icon_upload extends ($.$mol_icon) {
 		path(){
 			return "M9,16V10H5L12,3L19,10H15V16H9M5,20V18H19V20H5Z";
@@ -24543,6 +24570,10 @@ var $;
 			(obj.link) = () => ((this.photo()));
 			return obj;
 		}
+		upload_icon(){
+			const obj = new this.$.$mol_icon_camera();
+			return obj;
+		}
 		upload(next){
 			if(next !== undefined) return next;
 			return [];
@@ -24552,7 +24583,7 @@ var $;
 		}
 		Upload(){
 			const obj = new this.$.$mol_button_open();
-			(obj.Icon) = () => (null);
+			(obj.Icon) = () => ((this.upload_icon()));
 			(obj.files) = (next) => ((this.upload(next)));
 			(obj.enabled) = () => ((this.editing()));
 			return obj;
@@ -24594,6 +24625,7 @@ var $;
 	};
 	($mol_mem(($.$piterjs_speaker_snippet.prototype), "paste"));
 	($mol_mem(($.$piterjs_speaker_snippet.prototype), "Photo"));
+	($mol_mem(($.$piterjs_speaker_snippet.prototype), "upload_icon"));
 	($mol_mem(($.$piterjs_speaker_snippet.prototype), "upload"));
 	($mol_mem(($.$piterjs_speaker_snippet.prototype), "Upload"));
 	($mol_mem(($.$piterjs_speaker_snippet.prototype), "Photo_block"));
@@ -24782,18 +24814,6 @@ var $;
         });
     })($$ = $.$$ || ($.$$ = {}));
 })($ || ($ = {}));
-
-;
-	($.$mol_icon_camera) = class $mol_icon_camera extends ($.$mol_icon) {
-		path(){
-			return "M4,4H7L9,2H15L17,4H20A2,2 0 0,1 22,6V18A2,2 0 0,1 20,20H4A2,2 0 0,1 2,18V6A2,2 0 0,1 4,4M12,7A5,5 0 0,0 7,12A5,5 0 0,0 12,17A5,5 0 0,0 17,12A5,5 0 0,0 12,7M12,9A3,3 0 0,1 15,12A3,3 0 0,1 12,15A3,3 0 0,1 9,12A3,3 0 0,1 12,9Z";
-		}
-	};
-
-
-;
-"use strict";
-
 
 ;
 	($.$piterjs_speech_page) = class $piterjs_speech_page extends ($.$mol_page) {
@@ -27519,25 +27539,42 @@ var $;
 		drag_end(next){
 			return (this.end(next));
 		}
+		draggable(){
+			return true;
+		}
 		status(next){
 			if(next !== undefined) return next;
 			return "ready";
 		}
+		plain(){
+			return (this.title());
+		}
+		html(){
+			return "";
+		}
+		uris(){
+			return "";
+		}
 		event(){
 			return {
+				...(super.event()), 
 				"dragstart": (next) => (this.drag_start(next)), 
 				"drag": (next) => (this.drag_move(next)), 
 				"dragend": (next) => (this.drag_end(next))
 			};
 		}
 		attr(){
-			return {"draggable": true, "mol_drag_status": (this.status())};
+			return {
+				...(super.attr()), 
+				"draggable": (this.draggable()), 
+				"mol_drag_status": (this.status())
+			};
 		}
 		transfer(){
 			return {
-				"text/plain": "", 
-				"text/html": "", 
-				"text/uri-list": ""
+				"text/plain": (this.plain()), 
+				"text/html": (this.html()), 
+				"text/uri-list": (this.uris())
 			};
 		}
 		allow_copy(){
@@ -27634,6 +27671,7 @@ var $;
 		}
 		event(){
 			return {
+				...(super.event()), 
 				"dragenter": (next) => (this.enter(next)), 
 				"dragover": (next) => (this.move(next)), 
 				"dragleave": (next) => (this.leave(next)), 
@@ -27641,7 +27679,7 @@ var $;
 			};
 		}
 		attr(){
-			return {"mol_drop_status": (this.status())};
+			return {...(super.attr()), "mol_drop_status": (this.status())};
 		}
 		adopt(next){
 			if(next !== undefined) return next;
@@ -27724,9 +27762,10 @@ var $;
                 return transfer;
             }
             drop(event) {
-                if (event.defaultPrevented)
+                const e = $mol_dom_event.wrap(event);
+                if (e.prevented())
                     return;
-                event.preventDefault();
+                e.prevented(true);
                 setTimeout(() => this.status('ready'));
                 const obj = this.adopt(event.dataTransfer);
                 if (!obj)
@@ -29614,7 +29653,7 @@ var $;
         { indent: $mol_regexp.repeat('  ') },
         { marker: '!' },
         ' ',
-        { content: $hyoo_marked_line_content },
+        [{ content: $hyoo_marked_line_content }],
         $mol_regexp.line_end,
     ]);
     $.$hyoo_marked_table_row = $mol_regexp.from({ content: [
@@ -29708,10 +29747,7 @@ var $;
                     NL);
             }
             if (token.script) {
-                return $mol_jsx("pre", null,
-                    NL,
-                    script_lines(token.script),
-                    NL);
+                return $mol_jsx("pre", null, script_lines(token.script));
             }
             if (token.quote) {
                 return $mol_jsx("blockquote", { style: "break-before: avoid" },
@@ -31894,19 +31930,15 @@ var $;
             stats() { return this.$.$mol_state_arg.value('stats') !== null; }
             safe() { return this.$.$mol_state_arg.value('safe') !== null; }
             meetup_id(next) {
-                const id = this.$.$mol_state_arg.value('meetup', next);
-                if (!id)
-                    return id;
-                const ids2 = $mol_int62_string_ensure(id);
-                if (ids2)
-                    return ids2;
-                return null;
+                return $mol_int62_string_ensure(this.$.$mol_state_arg.value('meetup', next));
             }
             meetup_add() {
                 const meetup = this.Domain().meetup_make();
                 this.meetup_id(meetup.id());
             }
-            speech_id(next) { return this.$.$mol_state_arg.value('speech', next); }
+            speech_id(next) {
+                return $mol_int62_string_ensure(this.$.$mol_state_arg.value('speech', next));
+            }
             speech(id) { return this.Domain().world().Fund($piterjs_speech).Item(id); }
             speaker_id(next) { return this.$.$mol_state_arg.value('speaker', next); }
             // speaker( id : string ) { return $piterjs_speaker.item( id ) }
@@ -32007,7 +32039,7 @@ var $;
                 return this.Yard().peer().id;
             }
             speech_public(id, next) {
-                return this.meetup_current().speech_public(id, next);
+                return this.speech(id).meetup()?.speech_public(id, next) ?? false;
             }
         }
         __decorate([
@@ -32031,6 +32063,9 @@ var $;
         __decorate([
             $mol_action
         ], $piterjs_app.prototype, "meetup_add", null);
+        __decorate([
+            $mol_mem
+        ], $piterjs_app.prototype, "speech_id", null);
         __decorate([
             $mol_mem
         ], $piterjs_app.prototype, "pages", null);
