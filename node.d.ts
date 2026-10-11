@@ -11065,15 +11065,6 @@ declare namespace $.$$ {
 
 declare namespace $ {
 
-	export class $mol_icon_camera extends $mol_icon {
-		path( ): string
-	}
-	
-}
-
-//# sourceMappingURL=camera.view.tree.d.ts.map
-declare namespace $ {
-
 	export class $mol_icon_upload extends $mol_icon {
 		path( ): string
 	}
@@ -11178,7 +11169,7 @@ declare namespace $ {
 		ReturnType< $piterjs_image['link'] >
 	>
 	type $mol_button_open__Icon_piterjs_speaker_snippet_4 = $mol_type_enforce<
-		ReturnType< $piterjs_speaker_snippet['upload_icon'] >
+		any
 		,
 		ReturnType< $mol_button_open['Icon'] >
 	>
@@ -11238,7 +11229,6 @@ declare namespace $ {
 		description( next?: ReturnType< ReturnType< $piterjs_speaker_snippet['speaker'] >['description'] > ): ReturnType< ReturnType< $piterjs_speaker_snippet['speaker'] >['description'] >
 		photo( ): string
 		Photo( ): $piterjs_image
-		upload_icon( ): $mol_icon_camera
 		upload( next?: readonly(File)[] ): readonly(File)[]
 		editing( ): boolean
 		Upload( ): $mol_button_open
@@ -11268,6 +11258,15 @@ declare namespace $.$$ {
 declare namespace $.$$ {
 }
 
+declare namespace $ {
+
+	export class $mol_icon_camera extends $mol_icon {
+		path( ): string
+	}
+	
+}
+
+//# sourceMappingURL=camera.view.tree.d.ts.map
 declare namespace $ {
     function $mol_dom_serialize(node: Node): string;
 }

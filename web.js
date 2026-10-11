@@ -24410,18 +24410,6 @@ var $;
 })($ || ($ = {}));
 
 ;
-	($.$mol_icon_camera) = class $mol_icon_camera extends ($.$mol_icon) {
-		path(){
-			return "M4,4H7L9,2H15L17,4H20A2,2 0 0,1 22,6V18A2,2 0 0,1 20,20H4A2,2 0 0,1 2,18V6A2,2 0 0,1 4,4M12,7A5,5 0 0,0 7,12A5,5 0 0,0 12,17A5,5 0 0,0 17,12A5,5 0 0,0 12,7M12,9A3,3 0 0,1 15,12A3,3 0 0,1 12,15A3,3 0 0,1 9,12A3,3 0 0,1 12,9Z";
-		}
-	};
-
-
-;
-"use strict";
-
-
-;
 	($.$mol_icon_upload) = class $mol_icon_upload extends ($.$mol_icon) {
 		path(){
 			return "M9,16V10H5L12,3L19,10H15V16H9M5,20V18H19V20H5Z";
@@ -24570,10 +24558,6 @@ var $;
 			(obj.link) = () => ((this.photo()));
 			return obj;
 		}
-		upload_icon(){
-			const obj = new this.$.$mol_icon_camera();
-			return obj;
-		}
 		upload(next){
 			if(next !== undefined) return next;
 			return [];
@@ -24583,7 +24567,7 @@ var $;
 		}
 		Upload(){
 			const obj = new this.$.$mol_button_open();
-			(obj.Icon) = () => ((this.upload_icon()));
+			(obj.Icon) = () => (null);
 			(obj.files) = (next) => ((this.upload(next)));
 			(obj.enabled) = () => ((this.editing()));
 			return obj;
@@ -24625,7 +24609,6 @@ var $;
 	};
 	($mol_mem(($.$piterjs_speaker_snippet.prototype), "paste"));
 	($mol_mem(($.$piterjs_speaker_snippet.prototype), "Photo"));
-	($mol_mem(($.$piterjs_speaker_snippet.prototype), "upload_icon"));
 	($mol_mem(($.$piterjs_speaker_snippet.prototype), "upload"));
 	($mol_mem(($.$piterjs_speaker_snippet.prototype), "Upload"));
 	($mol_mem(($.$piterjs_speaker_snippet.prototype), "Photo_block"));
@@ -24814,6 +24797,18 @@ var $;
         });
     })($$ = $.$$ || ($.$$ = {}));
 })($ || ($ = {}));
+
+;
+	($.$mol_icon_camera) = class $mol_icon_camera extends ($.$mol_icon) {
+		path(){
+			return "M4,4H7L9,2H15L17,4H20A2,2 0 0,1 22,6V18A2,2 0 0,1 20,20H4A2,2 0 0,1 2,18V6A2,2 0 0,1 4,4M12,7A5,5 0 0,0 7,12A5,5 0 0,0 12,17A5,5 0 0,0 17,12A5,5 0 0,0 12,7M12,9A3,3 0 0,1 15,12A3,3 0 0,1 12,15A3,3 0 0,1 9,12A3,3 0 0,1 12,9Z";
+		}
+	};
+
+
+;
+"use strict";
+
 
 ;
 	($.$piterjs_speech_page) = class $piterjs_speech_page extends ($.$mol_page) {

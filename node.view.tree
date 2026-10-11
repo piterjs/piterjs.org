@@ -2044,8 +2044,6 @@ $mol_string_link $mol_view
 			value? <=> value? \
 			hint <= hint_edit <= hint <= title \
 
-$mol_icon_camera $mol_icon path \M4,4H7L9,2H15L17,4H20A2,2 0 0,1 22,6V18A2,2 0 0,1 20,20H4A2,2 0 0,1 2,18V6A2,2 0 0,1 4,4M12,7A5,5 0 0,0 7,12A5,5 0 0,0 12,17A5,5 0 0,0 17,12A5,5 0 0,0 12,7M12,9A3,3 0 0,1 15,12A3,3 0 0,1 12,15A3,3 0 0,1 9,12A3,3 0 0,1 12,9Z
-
 $mol_icon_upload $mol_icon path \M9,16V10H5L12,3L19,10H15V16H9M5,20V18H19V20H5Z
 
 $mol_button_open $mol_button_minor
@@ -2077,7 +2075,7 @@ $piterjs_speaker_snippet $mol_view
 			<= Photo $piterjs_image
 				link <= photo \
 			<= Upload $mol_button_open
-				Icon <= upload_icon $mol_icon_camera
+				Icon null
 				files? <=> upload? /File
 				enabled <= editing false
 		<= Info $mol_list sub /
@@ -2089,6 +2087,8 @@ $piterjs_speaker_snippet $mol_view
 				hint \Об авторе
 				value? <=> description?
 				enabled <= editing false
+
+$mol_icon_camera $mol_icon path \M4,4H7L9,2H15L17,4H20A2,2 0 0,1 22,6V18A2,2 0 0,1 20,20H4A2,2 0 0,1 2,18V6A2,2 0 0,1 4,4M12,7A5,5 0 0,0 7,12A5,5 0 0,0 12,17A5,5 0 0,0 17,12A5,5 0 0,0 12,7M12,9A3,3 0 0,1 15,12A3,3 0 0,1 12,15A3,3 0 0,1 9,12A3,3 0 0,1 12,9Z
 
 $piterjs_speech_page $mol_page
 	speech $piterjs_speech
