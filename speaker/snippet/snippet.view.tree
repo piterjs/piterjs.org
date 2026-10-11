@@ -9,7 +9,7 @@ $piterjs_speaker_snippet $mol_view
 			<= Photo $piterjs_image
 				link <= photo \
 			<= Upload $mol_button_open
-				Icon <= upload_icon $mol_icon_camera
+				Icon null
 				files? <=> upload? /File
 				enabled <= editing false
 		<= Info $mol_list sub /
