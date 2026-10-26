@@ -702,9 +702,6 @@ $mol_textarea $mol_stack
 			submit? <=> submit? null
 			submit_with_ctrl <= submit_with_ctrl true
 		<= View $mol_text_code
-			attr *
-				^
-				inert \
 			text <= value
 			render_visible_only false
 			row_numb* <= row_numb* 0
@@ -2207,8 +2204,6 @@ $piterjs_video_page $mol_page
 
 $mol_icon_terrain $mol_icon path \M14,6L10.25,11L13.1,14.8L11.5,16C9.81,13.75 7,10 7,10L1,18H23L14,6Z
 
-$mol_icon_lead_pencil $mol_icon path \M16.84,2.73C16.45,2.73 16.07,2.88 15.77,3.17L13.65,5.29L18.95,10.6L21.07,8.5C21.67,7.89 21.67,6.94 21.07,6.36L17.9,3.17C17.6,2.88 17.22,2.73 16.84,2.73M12.94,6L4.84,14.11L7.4,14.39L7.58,16.68L9.86,16.85L10.15,19.41L18.25,11.3M4.25,15.04L2.5,21.73L9.2,19.94L8.96,17.78L6.65,17.61L6.47,15.29
-
 $mol_icon_script $mol_icon path \M17.8,20C17.4,21.2 16.3,22 15,22H5C3.3,22 2,20.7 2,19V18H5L14.2,18C14.6,19.2 15.7,20 17,20H17.8M19,2H8C6.3,2 5,3.3 5,5V16H16V17C16,17.6 16.4,18 17,18H18V5C18,4.4 18.4,4 19,4C19.6,4 20,4.4 20,5V6H22V5C22,3.3 20.7,2 19,2Z
 
 $mol_icon_script_text $mol_icon path \M17.8,20C17.4,21.2 16.3,22 15,22H5C3.3,22 2,20.7 2,19V18H5L14.2,18C14.6,19.2 15.7,20 17,20H17.8M19,2C20.7,2 22,3.3 22,5V6H20V5C20,4.4 19.6,4 19,4C18.4,4 18,4.4 18,5V18H17C16.4,18 16,17.6 16,17V16H5V5C5,3.3 6.3,2 8,2H19M8,6V8H15V6H8M8,10V12H14V10H8Z
@@ -2267,7 +2262,7 @@ $hyoo_map $mol_view
 	attr *
 		hyoo_map_photo <= photo? false
 	tiles_options *
-		sketch \https://basemaps.cartocdn.com/rastertiles/voyager/{level}/{x}/{y}.png
+		sketch \https://basemaps.cartocdn.com/rastertiles/voyager/{level}/{x}/{y}.png?key=cb1_4v16_1_a33c33a2599cee21cb0c699f
 		photo \https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{level}/{y}/{x}
 	auto /
 		<= center_offset null
@@ -2278,13 +2273,13 @@ $hyoo_map $mol_view
 			head /
 				<= Search $mol_search
 					query?val <=> query?val \
-					submit?event <=> search?event null
+					submit? <=> search? null
 				<= Lights $mol_lights_toggle
 				<= Photo $mol_check_icon
 					hint @ \Real Photos
 					checked?val <=> photo?val false
 					Icon <= Photo_icon $mol_icon_terrain
-				<= Draw $mol_link_iconed
+				- <= Draw $mol_link_iconed
 					hint @ \Draw on map
 					uri <= draw_uri \https://draw.hyoo.ru/#!map=true/zoom={zoom}/center={center}
 					sub /

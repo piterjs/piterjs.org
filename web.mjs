@@ -2773,27 +2773,6 @@ var $;
 "use strict";
 var $;
 (function ($) {
-    /**
-     * Disable reaping of current subscriber
-     */
-    function $mol_wire_solid() {
-        let current = $mol_wire_auto();
-        if (current.temp)
-            current = current.host;
-        if (current.reap !== nothing) {
-            current?.sub_on(sub, sub.data.length);
-        }
-        current.reap = nothing;
-    }
-    $.$mol_wire_solid = $mol_wire_solid;
-    const nothing = () => { };
-    const sub = new $mol_wire_pub_sub;
-})($ || ($ = {}));
-
-;
-"use strict";
-var $;
-(function ($) {
     function $mol_dom_render_attributes(el, attrs) {
         for (let name in attrs) {
             let val = attrs[name];
@@ -3098,7 +3077,7 @@ var $;
             return node;
         }
         dom_node(next) {
-            $mol_wire_solid();
+            // $mol_wire_solid()
             const node = this.dom_node_external(next);
             $mol_dom_render_attributes(node, this.attr_static());
             const events = this.event_async();
@@ -3670,6 +3649,27 @@ var $;
 "use strict";
 var $;
 (function ($) {
+    /**
+     * Disable reaping of current subscriber
+     */
+    function $mol_wire_solid() {
+        let current = $mol_wire_auto();
+        if (current.temp)
+            current = current.host;
+        if (current.reap !== nothing) {
+            current?.sub_on(sub, sub.data.length);
+        }
+        current.reap = nothing;
+    }
+    $.$mol_wire_solid = $mol_wire_solid;
+    const nothing = () => { };
+    const sub = new $mol_wire_pub_sub;
+})($ || ($ = {}));
+
+;
+"use strict";
+var $;
+(function ($) {
     $.$mol_mem_persist = $mol_wire_solid;
 })($ || ($ = {}));
 
@@ -3824,7 +3824,16 @@ var $;
         }
         static estimate() {
             $mol_state_time.now(1000);
-            return $mol_wire_sync(this.native() ?? {}).estimate();
+            try {
+                return $mol_wire_sync(this.native() ?? {}).estimate();
+            }
+            catch (error) {
+                $mol_fail_log(error);
+                return {
+                    usage: 0,
+                    quota: 0,
+                };
+            }
         }
         static total() {
             return this.estimate().quota ?? 0;
@@ -6780,7 +6789,7 @@ var $;
                         }
                     }
                 }
-                else if (key === '@media' || key === '@container') {
+                else if (key === '@media' || key === '@container' || key === '@supports') {
                     const media = config[key];
                     for (let query of Object.keys(media).reverse()) {
                         rules.push('}\n');
@@ -6903,7 +6912,7 @@ var $;
             boxSizing: 'border-box',
             willChange: 'scroll-position',
             scroll: {
-                padding: [rem(.75), 0],
+                padding: ['2.5rem', 0],
             },
             maxHeight: per(100),
             maxWidth: per(100),
@@ -7700,7 +7709,11 @@ var $;
         '': { id: $mol_dom_safe_attr },
         // special
         a: { href: $mol_dom_safe_uri },
-        img: { src: $mol_dom_safe_uri },
+        img: {
+            src: $mol_dom_safe_uri,
+            width: $mol_dom_safe_attr,
+            height: $mol_dom_safe_attr,
+        },
         object: { src: $mol_dom_safe_uri },
         // blocks
         div: {},
@@ -7863,7 +7876,7 @@ var $;
     $mol_style_define($mol_link, {
         textDecoration: 'none',
         color: $mol_theme.control,
-        stroke: 'currentcolor',
+        stroke: 'currentColor',
         cursor: 'pointer',
         padding: $mol_gap.text,
         boxSizing: 'border-box',
@@ -10239,8 +10252,40 @@ var $;
 "use strict";
 var $;
 (function ($) {
+    class $mol_dom_transfer extends $mol_object {
+        native;
+        static wrap(native) {
+            return new this(native);
+        }
+        constructor(native) {
+            super();
+            this.native = native;
+        }
+        get(type) {
+            return this.native.getData(type);
+        }
+        files() {
+            return $mol_wire_sync(this.native.files);
+        }
+    }
+    __decorate([
+        $mol_action
+    ], $mol_dom_transfer.prototype, "files", null);
+    __decorate([
+        $mol_action
+    ], $mol_dom_transfer, "wrap", null);
+    $.$mol_dom_transfer = $mol_dom_transfer;
+})($ || ($ = {}));
+
+;
+"use strict";
+var $;
+(function ($) {
     class $mol_dom_event extends $mol_object {
         native;
+        static wrap(event) {
+            return new this(event);
+        }
         constructor(native) {
             super();
             this.native = native;
@@ -10250,13 +10295,19 @@ var $;
                 this.native.preventDefault();
             return this.native.defaultPrevented;
         }
-        static wrap(event) {
-            return new this.$.$mol_dom_event(event);
+        transfer() {
+            const transfer = this.native instanceof ClipboardEvent ? this.native.clipboardData
+                : this.native instanceof DragEvent ? this.native.dataTransfer
+                    : null;
+            return transfer && $mol_dom_transfer.wrap(transfer);
         }
     }
     __decorate([
         $mol_action
     ], $mol_dom_event.prototype, "prevented", null);
+    __decorate([
+        $mol_action
+    ], $mol_dom_event.prototype, "transfer", null);
     __decorate([
         $mol_action
     ], $mol_dom_event, "wrap", null);
@@ -14390,14 +14441,11 @@ var $;
                 basis: 'auto',
                 direction: 'column',
             },
-            position: 'relative',
             alignSelf: 'stretch',
             maxWidth: per(100),
             maxHeight: per(100),
             boxSizing: 'border-box',
             color: $mol_theme.text,
-            // backdropFilter: blur( `3px` ), enforces layering
-            // zIndex: 0 ,
             ':focus': {
                 outline: 'none',
             },
@@ -14406,7 +14454,6 @@ var $;
                 flexWrap: 'wrap',
                 justifyContent: 'flex-end',
                 flex: 'none',
-                position: 'relative',
                 margin: 0,
                 minHeight: rem(4),
                 padding: $mol_gap.block,
@@ -14422,7 +14469,6 @@ var $;
                         [0, `0.5rem`, `0.5rem`, `-0.5rem`, hsla(0, 0, 0, .25)],
                     ],
                 },
-                zIndex: 2,
                 '@media': {
                     'print': {
                         box: {
@@ -14501,7 +14547,6 @@ var $;
                         [0, `0.5rem`, `0.5rem`, `-0.5rem`, hsla(0, 0, 0, .25)],
                     ],
                 },
-                zIndex: 1,
                 padding: $mol_gap.block,
                 ':empty': {
                     display: 'none',
@@ -16332,7 +16377,6 @@ var $;
 		}
 		View(){
 			const obj = new this.$.$mol_text_code();
-			(obj.attr) = () => ({...(this.$.$mol_text_code.prototype.attr.call(obj)), "inert": ""});
 			(obj.text) = () => ((this.value()));
 			(obj.render_visible_only) = () => (false);
 			(obj.row_numb) = (id) => ((this.row_numb(id)));
@@ -16531,7 +16575,7 @@ var $;
 "use strict";
 var $;
 (function ($) {
-    $mol_style_attach("mol/textarea/textarea.view.css", "[mol_textarea] {\n\tflex: 1 0 auto;\n\tflex-direction: column;\n\tvertical-align: top;\n\tmin-height: max-content;\n\twhite-space: pre-wrap;\n\tword-break: break-word;\n\tborder-radius: var(--mol_gap_round);\n\tfont-family: monospace;\n\tposition: relative;\n\ttab-size: 4;\n}\n\n[mol_textarea_view] {\n\tpointer-events: none;\n\twhite-space: inherit;\n\tfont-family: inherit;\n\ttab-size: inherit;\n\tuser-select: none;\n}\n\n[mol_textarea_view_copy] {\n\tpointer-events: all;\n}\n\n[mol_textarea_clickable] > [mol_textarea_view] {\n\tpointer-events: all;\n\tuser-select: auto;\n}\n\n[mol_textarea_clickable] > [mol_textarea_edit] {\n\tuser-select: none;\n}\n\n[mol_textarea_edit] {\n\tfont-family: inherit;\n\tpadding: var(--mol_gap_text);\n\tcolor: transparent !important;\n\tcaret-color: var(--mol_theme_text);\n\tresize: none;\n\ttext-align: inherit;\n\twhite-space: inherit;\n\tborder-radius: inherit;\n\toverflow-anchor: none;\n\tposition: absolute;\n\theight: 100%;\n\twidth: 100%;\n\ttab-size: inherit;\n}\n\n[mol_textarea_sidebar_showed] [mol_textarea_edit] {\n\tleft: 1.75rem;\n\twidth: calc( 100% - 1.75rem );\n}\n\n[mol_textarea_edit]:hover + [mol_textarea_view] {\n\tz-index: var(--mol_layer_hover);\n}\n\n[mol_textarea_edit]:focus + [mol_textarea_view] {\n\tz-index: var(--mol_layer_focus);\n}\n");
+    $mol_style_attach("mol/textarea/textarea.view.css", "[mol_textarea] {\n\tflex: 1 0 auto;\n\tflex-direction: column;\n\tvertical-align: top;\n\tmin-height: max-content;\n\twhite-space: pre-wrap;\n\tword-break: break-word;\n\tborder-radius: var(--mol_gap_round);\n\tfont-family: monospace;\n\tposition: relative;\n\ttab-size: 4;\n}\n\n[mol_textarea_view] {\n    interactivity: inert;\n\twhite-space: inherit;\n\tfont-family: inherit;\n\ttab-size: inherit;\n}\n\n[mol_textarea_view_copy] {\n    interactivity: initial;\n}\n\n[mol_textarea_clickable] > [mol_textarea_view] {\n    interactivity: initial;\n}\n\n[mol_textarea_clickable] > [mol_textarea_edit] {\n    interactivity: inert;\n}\n\n[mol_textarea_edit] {\n\tfont-family: inherit;\n\tpadding: var(--mol_gap_text);\n\tcolor: transparent !important;\n\tcaret-color: var(--mol_theme_text);\n\tresize: none;\n\ttext-align: inherit;\n\twhite-space: inherit;\n\tborder-radius: inherit;\n\toverflow-anchor: none;\n\tposition: absolute;\n\theight: 100%;\n\twidth: 100%;\n\ttab-size: inherit;\n}\n\n[mol_textarea_sidebar_showed] [mol_textarea_edit] {\n\tleft: 1.75rem;\n\twidth: calc( 100% - 1.75rem );\n}\n\n[mol_textarea_edit]:hover + [mol_textarea_view] {\n\tz-index: var(--mol_layer_hover);\n}\n\n[mol_textarea_edit]:focus + [mol_textarea_view] {\n\tz-index: var(--mol_layer_focus);\n}\n");
 })($ || ($ = {}));
 
 ;
@@ -25482,18 +25526,6 @@ var $;
 
 
 ;
-	($.$mol_icon_lead_pencil) = class $mol_icon_lead_pencil extends ($.$mol_icon) {
-		path(){
-			return "M16.84,2.73C16.45,2.73 16.07,2.88 15.77,3.17L13.65,5.29L18.95,10.6L21.07,8.5C21.67,7.89 21.67,6.94 21.07,6.36L17.9,3.17C17.6,2.88 17.22,2.73 16.84,2.73M12.94,6L4.84,14.11L7.4,14.39L7.58,16.68L9.86,16.85L10.15,19.41L18.25,11.3M4.25,15.04L2.5,21.73L9.2,19.94L8.96,17.78L6.65,17.61L6.47,15.29";
-		}
-	};
-
-
-;
-"use strict";
-
-
-;
 	($.$mol_icon_script) = class $mol_icon_script extends ($.$mol_icon) {
 		path(){
 			return "M17.8,20C17.4,21.2 16.3,22 15,22H5C3.3,22 2,20.7 2,19V18H5L14.2,18C14.6,19.2 15.7,20 17,20H17.8M19,2H8C6.3,2 5,3.3 5,5V16H16V17C16,17.6 16.4,18 17,18H18V5C18,4.4 18.4,4 19,4C19.6,4 20,4.4 20,5V6H22V5C22,3.3 20.7,2 19,2Z";
@@ -25867,20 +25899,6 @@ var $;
 			(obj.Icon) = () => ((this.Photo_icon()));
 			return obj;
 		}
-		draw_uri(){
-			return "https://draw.hyoo.ru/#!map=true/zoom={zoom}/center={center}";
-		}
-		Draw_icon(){
-			const obj = new this.$.$mol_icon_lead_pencil();
-			return obj;
-		}
-		Draw(){
-			const obj = new this.$.$mol_link_iconed();
-			(obj.hint) = () => ((this.$.$mol_locale.text("$hyoo_map_Draw_hint")));
-			(obj.uri) = () => ((this.draw_uri()));
-			(obj.sub) = () => ([(this.Draw_icon())]);
-			return obj;
-		}
 		Source(){
 			const obj = new this.$.$mol_link_source();
 			(obj.uri) = () => ("https://github.com/hyoo-ru/map.hyoo.ru/");
@@ -25968,7 +25986,6 @@ var $;
 				(this.Search()), 
 				(this.Lights()), 
 				(this.Photo()), 
-				(this.Draw()), 
 				(this.Source())
 			]);
 			(obj.sub) = () => ((this.main_sub()));
@@ -25978,7 +25995,7 @@ var $;
 			return {"hyoo_map_photo": (this.photo())};
 		}
 		tiles_options(){
-			return {"sketch": "https://basemaps.cartocdn.com/rastertiles/voyager/{level}/{x}/{y}.png", "photo": "https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{level}/{y}/{x}"};
+			return {"sketch": "https://basemaps.cartocdn.com/rastertiles/voyager/{level}/{x}/{y}.png?key=cb1_4v16_1_a33c33a2599cee21cb0c699f", "photo": "https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{level}/{y}/{x}"};
 		}
 		auto(){
 			return [(this.center_offset())];
@@ -25998,8 +26015,6 @@ var $;
 	($mol_mem(($.$hyoo_map.prototype), "Lights"));
 	($mol_mem(($.$hyoo_map.prototype), "Photo_icon"));
 	($mol_mem(($.$hyoo_map.prototype), "Photo"));
-	($mol_mem(($.$hyoo_map.prototype), "Draw_icon"));
-	($mol_mem(($.$hyoo_map.prototype), "Draw"));
 	($mol_mem(($.$hyoo_map.prototype), "Source"));
 	($mol_mem(($.$hyoo_map.prototype), "zoom"));
 	($mol_mem(($.$hyoo_map.prototype), "center"));
@@ -26341,11 +26356,12 @@ var $;
                 this.zoom(zoom);
                 this.center(this.Pane().geo_to_tile(coord).multed0(-zoom).added1(this.center_offset()));
             }
-            draw_uri() {
-                return super.draw_uri()
-                    .replace('{zoom}', this.$.$mol_state_arg.value('zoom') ?? '')
-                    .replace('{center}', this.$.$mol_state_arg.value('center') ?? '');
-            }
+            // @ $mol_mem
+            // draw_uri() {
+            // 	return super.draw_uri()
+            // 		.replace( '{zoom}', this.$.$mol_state_arg.value( 'zoom' ) ?? '' )
+            // 		.replace( '{center}', this.$.$mol_state_arg.value( 'center' ) ?? '' )
+            // }
             tiles_uri() {
                 return this.tiles_options()[this.photo() ? 'photo' : 'sketch'];
             }
@@ -26368,9 +26384,6 @@ var $;
         __decorate([
             $mol_action
         ], $hyoo_map.prototype, "geo_jump", null);
-        __decorate([
-            $mol_mem
-        ], $hyoo_map.prototype, "draw_uri", null);
         $$.$hyoo_map = $hyoo_map;
     })($$ = $.$$ || ($.$$ = {}));
 })($ || ($ = {}));
