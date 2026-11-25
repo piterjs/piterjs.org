@@ -53,14 +53,10 @@ $piterjs_intro $mol_view
 				\  ! ""https://habrastorage.org/webt/vv/rj/2f/vvrj2ffi-kztfpzdsbiiv-goqso.png""
 				\    ! ""https://habrastorage.org/webt/0b/5e/c9/0b5ec9df6a0d4c79c12948dbcd4d6c4a.png""
 				\      ! ""https://habrastorage.org/webt/87/b7/49/87b749dcd6be7e5653df1be4e022c046.png""
-				\! ""https://habrastorage.org/webt/7f/25/76/7f25769b6b84302ce88f14cf3e032ec2.png""
+				\! ""https://habrastorage.org/webt/dd/0c/e0/dd0ce05ff9c2e8f8041934c89f62e816.png""
 				\  ! ""https://habrastorage.org/webt/c5/tf/-i/c5tf-il8mfpbxxegoi_i5h6egxu.png""
-				\    ! ""https://habrastorage.org/webt/dw/3a/ui/dw3auiirk0vffjg3xnn4em775dq.png""
-				\      ! ""https://habrastorage.org/webt/-8/6s/kw/-86skwqsvqzvodiauw3fv_vt1h8.png""
-				- \! ""https://habrastorage.org/webt/pd/ii/9l/pdii9lgzgihcg9vb3etx_hug4rg.jpeg""
-				- \! ""https://habrastorage.org/webt/kf/qg/9l/kfqg9lp0ez5eey44-rlszbwozma.png""
-				- \! ""https://habrastorage.org/webt/mb/oz/2-/mboz2-qxenahgayijecyblbo6ka.jpeg""
-				- \! ""https://habrastorage.org/webt/cd/po/2w/cdpo2wbzt2bd0lism1hvcui3bgs.png""
+				\    ! ""https://habrastorage.org/webt/-8/6s/kw/-86skwqsvqzvodiauw3fv_vt1h8.png""
+				\      ! ""https://habrastorage.org/webt/dw/3a/ui/dw3auiirk0vffjg3xnn4em775dq.png""
 		speakers <= Speakers $piterjs_intro_page
 			title \Стань докладчиком
 			text \
