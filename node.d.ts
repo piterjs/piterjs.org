@@ -1700,6 +1700,12 @@ declare namespace $ {
 }
 
 declare namespace $ {
+    class $mol_media extends $mol_object2 {
+        static match(query: string, next?: boolean): boolean;
+    }
+}
+
+declare namespace $ {
     /**
      * Decorates method to fiber to ensure it is executed only once inside other fiber from [mol_wire](../wire/README.md)
      * @see https://mol.hyoo.ru/#!section=docs/=1fcpsq_1wh0h2
@@ -1735,12 +1741,6 @@ declare namespace $ {
 }
 
 declare namespace $ {
-    class $mol_media extends $mol_object2 {
-        static match(query: string, next?: boolean): boolean;
-    }
-}
-
-declare namespace $ {
     class $mol_storage extends $mol_object2 {
         /** Is storage a long term. */
         static persisted(next?: boolean): boolean;
@@ -1761,6 +1761,17 @@ declare namespace $ {
          */
         static level(): number;
     }
+}
+
+declare namespace $ {
+    /**
+     * Disable reaping of current subscriber
+     */
+    function $mol_wire_solid(): void;
+}
+
+declare namespace $ {
+    let $mol_mem_persist: typeof $mol_wire_solid;
 }
 
 declare namespace $ {
@@ -1850,13 +1861,6 @@ declare namespace $ {
         close(): void;
         destructor(): void;
     }
-}
-
-declare namespace $ {
-    /**
-     * Disable reaping of current subscriber
-     */
-    function $mol_wire_solid(): void;
 }
 
 declare namespace $ {
@@ -3629,6 +3633,26 @@ declare namespace $.$$ {
 }
 
 declare namespace $ {
+    interface $mol_locale_dict {
+        [key: string]: string;
+    }
+    /**
+     * Localisation in $mol framework
+     * @see https://mol.hyoo.ru/#!section=docs/=s5aqnb_odub8l
+     */
+    class $mol_locale extends $mol_object {
+        static lang_default(): string;
+        static lang(next?: string): string;
+        static langs_rtl(): string[];
+        static direction(): "ltr" | "rtl";
+        static source(lang: string): any;
+        static texts(lang: string, next?: $mol_locale_dict): $mol_locale_dict;
+        static text(key: string): string;
+        static warn(key: string): null;
+    }
+}
+
+declare namespace $ {
 
 	export class $mol_follower extends $mol_ghost {
 		transform( ): string
@@ -3652,6 +3676,7 @@ declare namespace $.$$ {
             left: number;
             top: number;
         } | null;
+        locale(): typeof $mol_locale;
         transform(): string;
     }
 }
@@ -3660,53 +3685,38 @@ declare namespace $ {
 }
 
 declare namespace $ {
-    interface $mol_locale_dict {
-        [key: string]: string;
-    }
-    /**
-     * Localisation in $mol framework
-     * @see https://mol.hyoo.ru/#!section=docs/=s5aqnb_odub8l
-     */
-    class $mol_locale extends $mol_object {
-        static lang_default(): string;
-        static lang(next?: string): string;
-        static langs_rtl(): string[];
-        static direction(): "ltr" | "rtl";
-        static source(lang: string): any;
-        static texts(lang: string, next?: $mol_locale_dict): $mol_locale_dict;
-        static text(key: string): string;
-        static warn(key: string): null;
-    }
-}
 
-declare namespace $ {
-
-	type $mol_pop_bubble__content_mol_pop_1 = $mol_type_enforce<
+	type $mol_pop_bubble__visible_mol_pop_1 = $mol_type_enforce<
+		ReturnType< $mol_pop['anchor_visible'] >
+		,
+		ReturnType< $mol_pop_bubble['visible'] >
+	>
+	type $mol_pop_bubble__content_mol_pop_2 = $mol_type_enforce<
 		ReturnType< $mol_pop['bubble_content'] >
 		,
 		ReturnType< $mol_pop_bubble['content'] >
 	>
-	type $mol_pop_bubble__height_max_mol_pop_2 = $mol_type_enforce<
+	type $mol_pop_bubble__height_max_mol_pop_3 = $mol_type_enforce<
 		ReturnType< $mol_pop['height_max'] >
 		,
 		ReturnType< $mol_pop_bubble['height_max'] >
 	>
-	type $mol_follower__offset_mol_pop_3 = $mol_type_enforce<
+	type $mol_follower__offset_mol_pop_4 = $mol_type_enforce<
 		ReturnType< $mol_pop['bubble_offset'] >
 		,
 		ReturnType< $mol_follower['offset'] >
 	>
-	type $mol_follower__align_mol_pop_4 = $mol_type_enforce<
+	type $mol_follower__align_mol_pop_5 = $mol_type_enforce<
 		ReturnType< $mol_pop['bubble_align'] >
 		,
 		ReturnType< $mol_follower['align'] >
 	>
-	type $mol_follower__Anchor_mol_pop_5 = $mol_type_enforce<
+	type $mol_follower__Anchor_mol_pop_6 = $mol_type_enforce<
 		ReturnType< $mol_pop['Anchor'] >
 		,
 		ReturnType< $mol_follower['Anchor'] >
 	>
-	type $mol_follower__Sub_mol_pop_6 = $mol_type_enforce<
+	type $mol_follower__Sub_mol_pop_7 = $mol_type_enforce<
 		ReturnType< $mol_pop['Bubble'] >
 		,
 		ReturnType< $mol_follower['Sub'] >
@@ -3717,6 +3727,7 @@ declare namespace $ {
 		Anchor( ): any
 		bubble_offset( ): readonly(number)[]
 		bubble_align( ): readonly(number)[]
+		anchor_visible( ): boolean
 		bubble_content( ): readonly($mol_view_content)[]
 		height_max( ): number
 		Bubble( ): $mol_pop_bubble
@@ -3735,11 +3746,13 @@ declare namespace $ {
 	export class $mol_pop_bubble extends $mol_view {
 		content( ): readonly($mol_view_content)[]
 		height_max( ): number
+		visible( ): boolean
 		sub( ): ReturnType< $mol_pop_bubble['content'] >
 		style( ): ({ 
 			'maxHeight': ReturnType< $mol_pop_bubble['height_max'] >,
 		})  & ReturnType< $mol_view['style'] >
 		attr( ): ({ 
+			'mol_pop_bubble_visible': ReturnType< $mol_pop_bubble['visible'] >,
 			'tabindex': number,
 			'popover': string,
 		})  & ReturnType< $mol_view['attr'] >
@@ -3755,6 +3768,7 @@ declare namespace $.$$ {
      */
     class $mol_pop extends $.$mol_pop {
         showed(next?: boolean): boolean;
+        anchor_visible(): boolean;
         sub_visible(): any[];
         height_max(): number;
         align(): string;
@@ -5635,6 +5649,10 @@ declare namespace $ {
 }
 
 declare namespace $ {
+    function $mol_error_fence<Data>(task: () => Data, fallback: (parent: Error) => Error | Data | PromiseLike<Data>, loading?: (parent: PromiseLike<Data>) => Error | Data | PromiseLike<Data>): Data;
+}
+
+declare namespace $ {
 
 	type $mol_button_minor__hint_mol_date_1 = $mol_type_enforce<
 		string
@@ -5791,7 +5809,13 @@ declare namespace $ {
 		,
 		ReturnType< $mol_date_calendar['head'] >
 	>
+	type $mol_speck__value_mol_date_32 = $mol_type_enforce<
+		ReturnType< $mol_date['error'] >
+		,
+		ReturnType< $mol_speck['value'] >
+	>
 	export class $mol_date extends $mol_pick {
+		error( ): string
 		enabled( ): boolean
 		today_click( next?: any ): any
 		Today_icon( ): $mol_icon_calendar_today
@@ -5836,6 +5860,7 @@ declare namespace $ {
 		Calendar_tools( ): $mol_view
 		Calendar( ): $mol_date_calendar
 		Icon( ): $mol_icon_calendar
+		Error( ): $mol_speck
 		bubble_content( ): readonly(any)[]
 		value_number( next?: number ): number
 		value_moment( next?: $mol_time_moment ): $mol_time_moment
@@ -5877,15 +5902,17 @@ declare namespace $.$$ {
      * @see https://mol.hyoo.ru/#!section=demos/demo=mol_date_demo
      */
     class $mol_date extends $.$mol_date {
-        trigger_content(): (string | $mol_icon_calendar)[];
+        trigger_content(): ($mol_speck | $mol_icon_calendar)[] | (string | $mol_icon_calendar)[];
         input_mask(val: string): "____-__-__ __:__" | "____-__-__ ";
         input_content(): ($mol_button_minor | $.$mol_format)[];
+        error(): string;
         value(val?: string): string;
         value_moment(next?: $mol_time_moment): $mol_time_moment;
         value_number(next?: number): number;
         value_moment_today(): $mol_time_moment;
         clear(): void;
         month_moment(next?: $mol_time_moment): $mol_time_moment;
+        protected value_moment_safe(): $mol_time_moment | null;
         day_selected(day: string): boolean;
         day_click(day: string): void;
         month_prev(): void;
@@ -6518,6 +6545,7 @@ declare namespace $.$$ {
      */
     class $mol_form_field extends $.$mol_form_field {
         state(): string | null;
+        label(): readonly any[];
         bid(): string;
     }
 }
@@ -12065,10 +12093,6 @@ declare namespace $ {
 }
 
 declare namespace $ {
-    function $mol_error_fence<Data>(task: () => Data, fallback: (parent: Error) => Error | Data | PromiseLike<Data>, loading?: (parent: PromiseLike<Data>) => Error | Data | PromiseLike<Data>): Data;
-}
-
-declare namespace $ {
     function $mol_error_enriched<V>(cause: {}, cb: () => V): V;
 }
 
@@ -12290,6 +12314,7 @@ declare namespace $ {
 		Attribution( ): $mol_view
 		main_sub( ): readonly(any)[]
 		Main( ): $mol_page
+		title( ): string
 		attr( ): ({ 
 			'hyoo_map_photo': ReturnType< $hyoo_map['photo'] >,
 		}) 
@@ -14103,6 +14128,25 @@ declare namespace $ {
 }
 
 declare namespace $ {
+    let $hyoo_marked_spoiler_line: $mol_regexp<{
+        [x: string]: string;
+        readonly win_end: string;
+        readonly mac_end: string;
+        readonly marker: string;
+        readonly content: string;
+    }>;
+    let $hyoo_marked_spoiler: $mol_regexp<{
+        [key: string]: string;
+    } & {
+        [x: string]: string;
+        readonly win_end: string;
+        readonly mac_end: string;
+        readonly marker: string;
+        readonly content: string;
+    }>;
+}
+
+declare namespace $ {
     let $hyoo_marked_paragraph: $mol_regexp<{
         [x: string]: string;
         readonly win_end: string;
@@ -14118,6 +14162,7 @@ declare namespace $ {
         readonly table: string;
         readonly list: string;
         readonly quote: string;
+        readonly spoiler: string;
         readonly cut: string;
         readonly paragraph: string;
         readonly script: string;
@@ -16332,23 +16377,23 @@ declare namespace $ {
 		,
 		ReturnType< $piterjs_intro_page['text'] >
 	>
-	type $piterjs_intro_page__title_piterjs_intro_22 = $mol_type_enforce<
-		string
-		,
-		ReturnType< $piterjs_intro_page['title'] >
-	>
-	type $piterjs_intro_page__text_piterjs_intro_23 = $mol_type_enforce<
-		string
-		,
-		ReturnType< $piterjs_intro_page['text'] >
-	>
-	type $piterjs_intro_page__text_piterjs_intro_24 = $mol_type_enforce<
+	type $piterjs_intro_page__text_piterjs_intro_22 = $mol_type_enforce<
 		ReturnType< $piterjs_intro['place_notes'] >
 		,
 		ReturnType< $piterjs_intro_page['text'] >
 	>
-	type $piterjs_intro_page__title_piterjs_intro_25 = $mol_type_enforce<
+	type $piterjs_intro_page__title_piterjs_intro_23 = $mol_type_enforce<
 		ReturnType< $piterjs_intro['place_title'] >
+		,
+		ReturnType< $piterjs_intro_page['title'] >
+	>
+	type $piterjs_intro_page__text_piterjs_intro_24 = $mol_type_enforce<
+		string
+		,
+		ReturnType< $piterjs_intro_page['text'] >
+	>
+	type $piterjs_intro_page__title_piterjs_intro_25 = $mol_type_enforce<
+		string
 		,
 		ReturnType< $piterjs_intro_page['title'] >
 	>
@@ -16363,56 +16408,46 @@ declare namespace $ {
 		ReturnType< $piterjs_intro_page['title'] >
 	>
 	type $piterjs_intro_page__text_piterjs_intro_28 = $mol_type_enforce<
-		string
-		,
-		ReturnType< $piterjs_intro_page['text'] >
-	>
-	type $piterjs_intro_page__title_piterjs_intro_29 = $mol_type_enforce<
-		string
-		,
-		ReturnType< $piterjs_intro_page['title'] >
-	>
-	type $piterjs_intro_page__text_piterjs_intro_30 = $mol_type_enforce<
 		ReturnType< $piterjs_intro['afterparty'] >
 		,
 		ReturnType< $piterjs_intro_page['text'] >
 	>
-	type $piterjs_schedule__meetup_piterjs_intro_31 = $mol_type_enforce<
+	type $piterjs_schedule__meetup_piterjs_intro_29 = $mol_type_enforce<
 		ReturnType< $piterjs_intro['meetup'] >
 		,
 		ReturnType< $piterjs_schedule['meetup'] >
 	>
-	type $piterjs_schedule__title_piterjs_intro_32 = $mol_type_enforce<
+	type $piterjs_schedule__title_piterjs_intro_30 = $mol_type_enforce<
 		string
 		,
 		ReturnType< $piterjs_schedule['title'] >
 	>
-	type $piterjs_screen__place_piterjs_intro_33 = $mol_type_enforce<
+	type $piterjs_screen__place_piterjs_intro_31 = $mol_type_enforce<
 		ReturnType< $piterjs_intro['place'] >
 		,
 		ReturnType< $piterjs_screen['place'] >
 	>
-	type $piterjs_screen__content_piterjs_intro_34 = $mol_type_enforce<
+	type $piterjs_screen__content_piterjs_intro_32 = $mol_type_enforce<
 		readonly(any)[]
 		,
 		ReturnType< $piterjs_screen['content'] >
 	>
-	type $mol_nav__keys_x_piterjs_intro_35 = $mol_type_enforce<
+	type $mol_nav__keys_x_piterjs_intro_33 = $mol_type_enforce<
 		ReturnType< $piterjs_intro['page_ids'] >
 		,
 		ReturnType< $mol_nav['keys_x'] >
 	>
-	type $mol_nav__keys_y_piterjs_intro_36 = $mol_type_enforce<
+	type $mol_nav__keys_y_piterjs_intro_34 = $mol_type_enforce<
 		ReturnType< $piterjs_intro['page_ids'] >
 		,
 		ReturnType< $mol_nav['keys_y'] >
 	>
-	type $mol_nav__current_x_piterjs_intro_37 = $mol_type_enforce<
+	type $mol_nav__current_x_piterjs_intro_35 = $mol_type_enforce<
 		ReturnType< $piterjs_intro['page'] >
 		,
 		ReturnType< $mol_nav['current_x'] >
 	>
-	type $mol_nav__current_y_piterjs_intro_38 = $mol_type_enforce<
+	type $mol_nav__current_y_piterjs_intro_36 = $mol_type_enforce<
 		ReturnType< $piterjs_intro['page'] >
 		,
 		ReturnType< $mol_nav['current_y'] >
@@ -16429,7 +16464,6 @@ declare namespace $ {
 		Partnering( ): $piterjs_intro_page
 		Contribution( ): $piterjs_intro_page
 		Proft( ): $piterjs_intro_page
-		Partners( ): $piterjs_intro_page
 		place_notes( ): string
 		place_title( ): string
 		Place( ): $piterjs_intro_page

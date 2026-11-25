@@ -163,6 +163,7 @@ $mol_pop $mol_view
 				0
 			Anchor <= Anchor
 			Sub <= Bubble $mol_pop_bubble
+				visible <= anchor_visible false
 				content <= bubble_content /$mol_view_content
 				height_max <= height_max 9999
 
@@ -173,6 +174,7 @@ $mol_pop_bubble $mol_view
 		maxHeight <= height_max 9999
 	attr *
 		^
+		mol_pop_bubble_visible <= visible false
 		tabindex 0
 		popover \manual
 
@@ -545,6 +547,7 @@ $mol_calendar_day $mol_view
 $mol_date $mol_pick
 	Icon $mol_icon_calendar
 	-
+	Error $mol_speck value <= error \
 	bubble_content /
 		<= Input_row $mol_view sub <= input_content /
 			<= Today $mol_button_minor
@@ -2259,6 +2262,7 @@ $hyoo_map_pane $mol_plot_pane
 		<= zoom
 
 $hyoo_map $mol_view
+	title \Giper Map
 	attr *
 		hyoo_map_photo <= photo? false
 	tiles_options *
@@ -3347,7 +3351,7 @@ $piterjs_intro $mol_view
 				\И записываем видео
 				\Улыбайтесь фотографу
 				\И сами снимайте друг друга
-		partners <= Partners $piterjs_intro_page
+		- partners <= Partners $piterjs_intro_page
 			title \Партнёры
 			text \
 				\""https://static.tildacdn.com/tild6561-3739-4465-a432-333466316465/svg_1746604234103.svg""
@@ -3355,8 +3359,8 @@ $piterjs_intro $mol_view
 			text <= place_notes \
 			title <= place_title \Мы в {place}
 			text \
-				- \""/piterjs/logo-sponsors/tbank-logo.svg""
-				\""https://habrastorage.org/webt/nh/np/oy/nhnpoyyb6ayimlhpxcyxptxwtza.jpeg""
+				\""/piterjs/logo-sponsors/tbank-logo.svg""
+				- \""https://habrastorage.org/webt/nh/np/oy/nhnpoyyb6ayimlhpxcyxptxwtza.jpeg""
 		follow <= Follow $piterjs_intro_page
 			title \Следите за новостями
 			text \

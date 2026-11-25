@@ -2434,6 +2434,18 @@ var $;
 var $;
 (function ($) {
     $mol_test({
+        async 'storage level'() {
+            // prevent async in tests
+            await $mol_wire_async($mol_storage).level();
+        }
+    });
+})($ || ($ = {}));
+
+;
+"use strict";
+var $;
+(function ($) {
+    $mol_test({
         'local get set delete'() {
             var key = '$mol_state_local_test:' + Math.random();
             $mol_assert_equal($mol_state_local.value(key), null);
@@ -5790,6 +5802,12 @@ var $;
 			`.slice(1).replace(/^\t+/gm, '');
             const res = [...text.matchAll($hyoo_marked_flow)][0].groups;
             $mol_assert_equal(res.quote, '" foo\n" bar\n');
+        },
+        'spoiler'() {
+            const text = `? title\n? content\n? more content\nparagraph\n`;
+            const res = [...text.matchAll($hyoo_marked_flow)];
+            $mol_assert_equal(res[0].groups.spoiler, '? title\n? content\n? more content\n');
+            $mol_assert_equal(res[1].groups.paragraph, 'paragraph\n');
         },
         'quote in list'() {
             const text = `
