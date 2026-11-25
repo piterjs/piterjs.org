@@ -32891,7 +32891,7 @@ var $;
 		Team(){
 			const obj = new this.$.$piterjs_intro_page();
 			(obj.title) = () => ("Команда");
-			(obj.text) = () => ("! \"\"https://habrastorage.org/webt/8e/dq/rh/8edqrhvfwy92wyra4yulzc3uvyi.png\"\"\n  ! \"\"https://habrastorage.org/webt/vv/rj/2f/vvrj2ffi-kztfpzdsbiiv-goqso.png\"\"\n    ! \"\"https://habrastorage.org/webt/0b/5e/c9/0b5ec9df6a0d4c79c12948dbcd4d6c4a.png\"\"\n      ! \"\"https://habrastorage.org/webt/87/b7/49/87b749dcd6be7e5653df1be4e022c046.png\"\"\n! \"\"https://habrastorage.org/webt/7f/25/76/7f25769b6b84302ce88f14cf3e032ec2.png\"\"\n  ! \"\"https://habrastorage.org/webt/c5/tf/-i/c5tf-il8mfpbxxegoi_i5h6egxu.png\"\"\n    ! \"\"https://habrastorage.org/webt/dw/3a/ui/dw3auiirk0vffjg3xnn4em775dq.png\"\"\n      ! \"\"https://habrastorage.org/webt/-8/6s/kw/-86skwqsvqzvodiauw3fv_vt1h8.png\"\"");
+			(obj.text) = () => ("! \"\"https://habrastorage.org/webt/8e/dq/rh/8edqrhvfwy92wyra4yulzc3uvyi.png\"\"\n  ! \"\"https://habrastorage.org/webt/vv/rj/2f/vvrj2ffi-kztfpzdsbiiv-goqso.png\"\"\n    ! \"\"https://habrastorage.org/webt/0b/5e/c9/0b5ec9df6a0d4c79c12948dbcd4d6c4a.png\"\"\n      ! \"\"https://habrastorage.org/webt/87/b7/49/87b749dcd6be7e5653df1be4e022c046.png\"\"\n! \"\"https://habrastorage.org/webt/dd/0c/e0/dd0ce05ff9c2e8f8041934c89f62e816.png\"\"\n  ! \"\"https://habrastorage.org/webt/c5/tf/-i/c5tf-il8mfpbxxegoi_i5h6egxu.png\"\"\n    ! \"\"https://habrastorage.org/webt/-8/6s/kw/-86skwqsvqzvodiauw3fv_vt1h8.png\"\"\n      ! \"\"https://habrastorage.org/webt/dw/3a/ui/dw3auiirk0vffjg3xnn4em775dq.png\"\"");
 			return obj;
 		}
 		Speakers(){
